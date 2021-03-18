@@ -556,6 +556,12 @@
             {required: true, message: "预约时间不能为空", trigger: "blur"},
             {required: true, validator: checkComplaintTime, trigger: "blur"}
           ],
+          'contactsPerson.mobilePhone': [
+            {required: true,
+              message: "目前只支持中国大陆的手机号码",
+              pattern: /^1[34578]\d{9}$/,
+              trigger: ['blur','change']},
+          ],
           'callPerson.mobilePhone': [
             //{required: true, message: "来电号码不能为空", trigger: "blur"},
             {required: true,

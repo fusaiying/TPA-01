@@ -739,6 +739,8 @@ export default {
     this.cs_action_type = this.dictList.find(item => {
       return item.dictType === 'cs_action_type'
     }).dictDate
+
+    this.isBusinessProcess(this.ruleForm.businessProcess);
   },
   methods: {
     //取消

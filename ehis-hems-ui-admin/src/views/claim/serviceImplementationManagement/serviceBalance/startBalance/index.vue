@@ -90,6 +90,7 @@
           :data="balanceList"
           v-loading="loading"
           size="mini"
+          :cell-style="changeCellStyle"
           tooltip-effect="dark"
           class="receive_table"
           :header-cell-style="{color:'black',background:'#f8f8ff'}"
@@ -449,7 +450,15 @@ export default {
     /** 上传中 */
     uploadProgress() {
       this.upload.isUploading = true;
-    }
+    },
+    //退回状态行飘红
+    changeCellStyle (rows, column, rowIndex, columnIndex) {
+      if(rows.row.bussinessStatus === "03"){
+        return 'color: red'  // 修改的样式
+      }else{
+        return ''
+      }
+    },
 
   }
 };

@@ -299,14 +299,11 @@ export default {
     },
     /** 查询服务结算列表 */
     getList() {
-      let query;
+      let query=JSON.parse(JSON.stringify(this.queryParams));
       if (this.isDefault) {
-        query = JSON.parse(JSON.stringify(this.queryParams))
-        const flag = atLeastOne2(query,["params","status","pageNum","pageSize"]);
-        if (!flag) {
           query.beginTime = moment().subtract(3,"months").format('YYYY-MM-DD');
           query.endTime = moment().format('YYYY-MM-DD');
-        }
+
       } else {
         query = this.queryParams;
       }
@@ -328,7 +325,14 @@ export default {
     },
     /** 搜索按钮操作 */
     handleQuery() {
-      this.isDefault = false;
+      let query = JSON.parse(JSON.stringify(this.queryParams))
+      const flag = atLeastOne2(query,["params","status","pageNum","pageSize"]);
+      if(flag){
+        this.isDefault = false
+      }
+      else {
+        this.isDefault = true
+      }
       this.queryParams.pageNum = 1;
       this.queryParams.pageSize = 10;
       this.getList();

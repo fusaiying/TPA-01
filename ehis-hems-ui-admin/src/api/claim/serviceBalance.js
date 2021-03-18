@@ -53,6 +53,14 @@ export function listBalanceDetail_2(query) {
     data: query
   })
 }
+//结算清单
+export function listBalanceDetail_3(query) {
+  return request({
+    url: '/order/balanceDetail/list3',
+    method: 'post',
+    data: query
+  })
+}
 
 //获取按结算审核日志列表
 export function listBalanceExamLog(query) {

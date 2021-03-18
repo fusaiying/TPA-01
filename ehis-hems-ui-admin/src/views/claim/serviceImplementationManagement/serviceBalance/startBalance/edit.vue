@@ -99,7 +99,7 @@
       <pagination
         v-show="total>0"
         :total="total"
-        :page.sync="queryParams.currentPage"
+        :page.sync="queryParams.pageNum"
         :limit.sync="queryParams.pageSize"
         @pagination="getList()"
       />

@@ -165,9 +165,10 @@ export default {
     //清单导出
     listExport(){
       listBalanceDetail_2(this.queryParams).then(res => {
+
         if (res != null && res.rows.length>0){
           this.download('order/balanceDetail/export2', {
-            ...query}, `invoice_${new Date().getTime()}.xlsx`).catch(res=>{
+            ...this.queryParams}, `invoice_${new Date().getTime()}.xlsx`).catch(res=>{
             this.$message({
               message: res,
               type: 'error',

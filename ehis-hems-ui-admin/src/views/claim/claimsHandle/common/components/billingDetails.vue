@@ -742,47 +742,39 @@
           } else if (!regx.test(value)) {
             callback(new Error("允许录入正数，保留两位小数"));
           } else {
-            let dataSum = 0
-            for (let i = 0; i < this.costForm.costData.length; i++) {
-              dataSum = dataSum + parseFloat(this.getZero(this.costForm.costData[i].billDetailAmount))
-            }
-            if (dataSum == parseFloat(this.baseForm.billAmount)) {
-              if (this.baseForm.isShareAp === '01') {
-                let paymentSum = 0
-                for (let i = 0; i < this.costForm.costData.length - 1; i++) {
-                  this.costForm.costData[i].advancePayment = (this.costForm.costData[i].billDetailAmount / this.baseForm.billAmount * (parseFloat(this.getZero(this.baseForm.ssAdvancePayment)) + parseFloat(this.getZero(this.baseForm.tpAdvancePayment))).toFixed(2)).toFixed(2)
-                  paymentSum = paymentSum + parseFloat(this.costForm.costData[i].advancePayment)
-                }
-                this.costForm.costData[this.costForm.costData.length - 1].advancePayment = ((parseFloat(this.getZero(this.baseForm.ssAdvancePayment)) + parseFloat(this.getZero(this.baseForm.tpAdvancePayment))).toFixed(2) - paymentSum).toFixed(2)
+            if (this.baseForm.isShareAp === '01') {
+              let paymentSum = 0
+              for (let i = 0; i < this.costForm.costData.length - 1; i++) {
+                this.costForm.costData[i].advancePayment = (this.costForm.costData[i].billDetailAmount / this.baseForm.billAmount * (parseFloat(this.getZero(this.baseForm.ssAdvancePayment)) + parseFloat(this.getZero(this.baseForm.tpAdvancePayment))).toFixed(2)).toFixed(2)
+                paymentSum = paymentSum + parseFloat(this.costForm.costData[i].advancePayment)
               }
-              if (this.baseForm.isShareDisAmount === '01') {
-                let hosDiscountAmountNum = 0
-                for (let i = 0; i < this.costForm.costData.length - 1; i++) {
-                  this.costForm.costData[i].hosDiscountAmount = (this.costForm.costData[i].billDetailAmount / this.baseForm.billAmount * this.getZero(this.baseForm.hosDiscountAmount)).toFixed(2)
-                  hosDiscountAmountNum = hosDiscountAmountNum + parseFloat(this.costForm.costData[i].hosDiscountAmount)
-                }
+              this.costForm.costData[this.costForm.costData.length - 1].advancePayment = ((parseFloat(this.getZero(this.baseForm.ssAdvancePayment)) + parseFloat(this.getZero(this.baseForm.tpAdvancePayment))).toFixed(2) - paymentSum).toFixed(2)
+            }
+            if (this.baseForm.isShareDisAmount === '01') {
+              let hosDiscountAmountNum = 0
+              for (let i = 0; i < this.costForm.costData.length - 1; i++) {
+                this.costForm.costData[i].hosDiscountAmount = (this.costForm.costData[i].billDetailAmount / this.baseForm.billAmount * this.getZero(this.baseForm.hosDiscountAmount)).toFixed(2)
+                hosDiscountAmountNum = hosDiscountAmountNum + parseFloat(this.costForm.costData[i].hosDiscountAmount)
+              }
 
-                this.costForm.costData[this.costForm.costData.length - 1].hosDiscountAmount = (this.getZero(this.baseForm.hosDiscountAmount) - hosDiscountAmountNum).toFixed(2)
-              }
-              if (this.baseForm.isShareCopay === '01' && (this.baseForm.transSerialCopay == null || this.baseForm.transSerialCopay === '')) {
-                let copayNum = 0
-                for (let i = 0; i < this.costForm.costData.length - 1; i++) {
-                  this.costForm.costData[i].billDetailCopay = (this.costForm.costData[i].billDetailAmount / this.baseForm.billAmount * this.getZero(this.baseForm.copay)).toFixed(2)
-                  copayNum = copayNum + parseFloat(this.costForm.costData[i].billDetailCopay)
-                }
-                this.costForm.costData[this.costForm.costData.length - 1].billDetailCopay = (this.getZero(this.baseForm.copay) - copayNum).toFixed(2)
-              } else if (this.baseForm.isShareCopay === '01' && (this.baseForm.transSerialCopay !== null || this.baseForm.transSerialCopay !== '')) {
-                let copayNum = 0
-                for (let i = 0; i < this.costForm.costData.length - 1; i++) {
-                  this.costForm.costData[i].billDetailCopay = (this.costForm.costData[i].billDetailAmount / this.baseForm.billAmount * this.getZero(this.baseForm.transSerialCopay)).toFixed(2)
-                  copayNum = copayNum + parseFloat(this.costForm.costData[i].billDetailCopay)
-                }
-                this.costForm.costData[this.costForm.costData.length - 1].billDetailCopay = (this.getZero(this.baseForm.transSerialCopay) - copayNum).toFixed(2)
-              }
-              callback();
-            } else {
-              callback(new Error("录入费用金额有误，请检查！"));
+              this.costForm.costData[this.costForm.costData.length - 1].hosDiscountAmount = (this.getZero(this.baseForm.hosDiscountAmount) - hosDiscountAmountNum).toFixed(2)
             }
+            if (this.baseForm.isShareCopay === '01' && (this.baseForm.transSerialCopay == null || this.baseForm.transSerialCopay === '')) {
+              let copayNum = 0
+              for (let i = 0; i < this.costForm.costData.length - 1; i++) {
+                this.costForm.costData[i].billDetailCopay = (this.costForm.costData[i].billDetailAmount / this.baseForm.billAmount * this.getZero(this.baseForm.copay)).toFixed(2)
+                copayNum = copayNum + parseFloat(this.costForm.costData[i].billDetailCopay)
+              }
+              this.costForm.costData[this.costForm.costData.length - 1].billDetailCopay = (this.getZero(this.baseForm.copay) - copayNum).toFixed(2)
+            } else if (this.baseForm.isShareCopay === '01' && (this.baseForm.transSerialCopay !== null || this.baseForm.transSerialCopay !== '')) {
+              let copayNum = 0
+              for (let i = 0; i < this.costForm.costData.length - 1; i++) {
+                this.costForm.costData[i].billDetailCopay = (this.costForm.costData[i].billDetailAmount / this.baseForm.billAmount * this.getZero(this.baseForm.transSerialCopay)).toFixed(2)
+                copayNum = copayNum + parseFloat(this.costForm.costData[i].billDetailCopay)
+              }
+              this.costForm.costData[this.costForm.costData.length - 1].billDetailCopay = (this.getZero(this.baseForm.transSerialCopay) - copayNum).toFixed(2)
+            }
+            callback();
           }
         } else {
           callback(new Error("请录入费用金额"));
@@ -1391,124 +1383,132 @@
           if (valid) {
             this.$refs.costForm.validate((valid) => {
               if (valid) {
-                let feeSum = 0
-                let number = 0
+                /*let dataSum = 0
                 for (let i = 0; i < this.costForm.costData.length; i++) {
-                  number = parseFloat(this.getZero(this.costForm.costData[i].billDetailAmount)) - parseFloat(this.getZero(this.costForm.costData[i].hosDiscountAmount)) - parseFloat(this.getZero(this.costForm.costData[i].selfAmount))
-                    - parseFloat(this.getZero(this.costForm.costData[i].partSelfAmount)) - parseFloat(this.getZero(this.costForm.costData[i].unableAmount)) -
-                    parseFloat(this.getZero(this.costForm.costData[i].advancePayment)) - parseFloat(this.getZero(this.costForm.costData[i].copay))
-                  if (number <= 0) {
-                    return this.$message.warning(
-                      "录入的金额有误,请检查！"
-                    )
-                  }
-                  break
+                  dataSum = dataSum + parseFloat(this.getZero(this.costForm.costData[i].billDetailAmount))
                 }
-                this.costForm.costData.forEach(item => {
-                  feeSum = feeSum + parseFloat(item.billDetailAmount)
-                })
-                if (number >= 0 && feeSum != parseFloat(this.baseForm.billAmount)) {
-                  return this.$message.warning(
-                    "录入的费用金额与账单金额不一致,请检查！")
-                } else if (number >= 0 && feeSum == parseFloat(this.baseForm.billAmount)) {
-                  let data = {
-                    bill: this.baseForm,
-                    billDetail: this.costForm.costData
+                if (dataSum == parseFloat(this.baseForm.billAmount)) {*/
+                  let feeSum = 0
+                  let number = 0
+                  for (let i = 0; i < this.costForm.costData.length; i++) {
+                    number = parseFloat(this.getZero(this.costForm.costData[i].billDetailAmount)) - parseFloat(this.getZero(this.costForm.costData[i].hosDiscountAmount)) - parseFloat(this.getZero(this.costForm.costData[i].selfAmount))
+                      - parseFloat(this.getZero(this.costForm.costData[i].partSelfAmount)) - parseFloat(this.getZero(this.costForm.costData[i].unableAmount)) -
+                      parseFloat(this.getZero(this.costForm.costData[i].advancePayment)) - parseFloat(this.getZero(this.costForm.costData[i].copay))
+                    if (number <= 0) {
+                      return this.$message.warning(
+                        "录入的金额有误,请检查！"
+                      )
+                    }
                   }
-                  saveBill(data).then(res => {
-                    if (res !== null && res.code === 200) {
+                  this.costForm.costData.forEach(item => {
+                    feeSum = feeSum + parseFloat(item.billDetailAmount)
+                  })
+                  if (number >= 0 && feeSum != parseFloat(this.baseForm.billAmount)) {
+                    return this.$message.warning(
+                      "录入的费用金额与账单金额不一致,请检查！")
+                  } else if (number >= 0 && feeSum == parseFloat(this.baseForm.billAmount)) {
+                    let data = {
+                      bill: this.baseForm,
+                      billDetail: this.costForm.costData
+                    }
+                    saveBill(data).then(res => {
+                      if (res !== null && res.code === 200) {
+                        this.$message({
+                          message: '保存成功！',
+                          type: 'success',
+                          center: true,
+                          showClose: true
+                        })
+                        this.getBillSum()
+                        this.isBillInfoSave = true
+                        if (this.node === 'calculateReview') {
+                          this.$emit("refresh-item", 'calculate')
+                        }
+
+                      }
+                      let data = {
+                        rptNo: this.fixInfo.rptNo
+                      }
+                      getBillList(data).then(res => {
+                        if (res !== null && res.code === 200) {
+                          this.tableData = res.rows
+                        }
+                      }).catch(res => {
+                      })
+                      if (this.node === 'input') {
+                        this.$refs.baseForm.resetFields()
+                        this.baseForm = {
+                          billId: undefined,
+                          rptNo: '',
+                          hospitalCode: undefined,
+                          hospitalName: undefined,
+                          firstAttribute: undefined,//医院性质
+                          secondAttribute: undefined,//医院等级
+                          department: undefined,
+                          isDesHospital: undefined,
+                          accType: undefined,
+                          billCurrency: undefined,
+                          billAmount: undefined,
+                          visNumber: undefined,
+                          treatmentType: undefined,
+                          treatmentStartDate: undefined,
+                          treatmentEndDate: undefined,
+                          treatmentDays: undefined,
+                          invoiceNo: undefined,
+                          billNo: undefined,
+                          billType: undefined,//
+                          ssAdvancePayment: undefined,
+                          tpAdvancePayment: undefined,
+                          isShareAp: '01',
+                          transSerialNo: undefined,
+                          transSerialCopay: undefined,
+                          copay: undefined,
+                          isShareCopay: '01',
+                          hosDiscountAmount: undefined,
+                          flag: undefined,
+                          isShareDisAmount: '01',
+                          icdCode: undefined,
+                          icdCodes: [{
+                            icdCode: ''
+                          }],
+                          clinicalDiagnosis: undefined,
+                        }
+                        if (this.batchData !== null && this.batchData !== undefined) {
+                          let val = this.hospitalOptions.find(item => {
+                            return item.providerCode === this.batchData.hospitalcode
+                          })
+                          if (val !== null && val !== undefined) {
+                            if (val.enname1 != null && val.enname1 !== '') {
+                              this.$set(this.baseForm, 'hospitalName', val.chname1 + '|' + val.enname1)
+                            } else {
+                              this.$set(this.baseForm, 'hospitalName', val.chname1)
+                            }
+                            this.$set(this.baseForm, 'hospitalCode', val.providerCode)
+                            this.$set(this.baseForm, 'firstAttribute', val.firstAttribute)
+                            this.$set(this.baseForm, 'secondAttribute', val.secondAttribute)
+                            this.$set(this.baseForm, 'isDesHospital', val.flag)
+                          }
+                        }
+                        if (this.batchData !== null && this.batchData !== undefined) {
+                          this.baseForm.billCurrency = this.batchData.currency
+                        }
+                        this.costForm.costData = []
+                      }
+                      console.log(this.baseForm);
+                    }).catch(res => {
                       this.$message({
-                        message: '保存成功！',
-                        type: 'success',
+                        message: '保存失败!',
+                        type: 'error',
                         center: true,
                         showClose: true
                       })
-                      this.getBillSum()
-                      this.isBillInfoSave = true
-                      if (this.node === 'calculateReview') {
-                        this.$emit("refresh-item", 'calculate')
-                      }
-
-                    }
-                    let data = {
-                      rptNo: this.fixInfo.rptNo
-                    }
-                    getBillList(data).then(res => {
-                      if (res !== null && res.code === 200) {
-                        this.tableData = res.rows
-                      }
-                    }).catch(res => {
                     })
-                    if (this.node === 'input') {
-                      this.$refs.baseForm.resetFields()
-                      this.baseForm = {
-                        billId: undefined,
-                        rptNo: '',
-                        hospitalCode: undefined,
-                        hospitalName: undefined,
-                        firstAttribute: undefined,//医院性质
-                        secondAttribute: undefined,//医院等级
-                        department: undefined,
-                        isDesHospital: undefined,
-                        accType: undefined,
-                        billCurrency: undefined,
-                        billAmount: undefined,
-                        visNumber: undefined,
-                        treatmentType: undefined,
-                        treatmentStartDate: undefined,
-                        treatmentEndDate: undefined,
-                        treatmentDays: undefined,
-                        invoiceNo: undefined,
-                        billNo: undefined,
-                        billType: undefined,//
-                        ssAdvancePayment: undefined,
-                        tpAdvancePayment: undefined,
-                        isShareAp: '01',
-                        transSerialNo: undefined,
-                        transSerialCopay: undefined,
-                        copay: undefined,
-                        isShareCopay: '01',
-                        hosDiscountAmount: undefined,
-                        flag: undefined,
-                        isShareDisAmount: '01',
-                        icdCode: undefined,
-                        icdCodes: [{
-                          icdCode: ''
-                        }],
-                        clinicalDiagnosis: undefined,
-                      }
-                      if (this.batchData !== null && this.batchData !== undefined) {
-                        let val = this.hospitalOptions.find(item => {
-                          return item.providerCode === this.batchData.hospitalcode
-                        })
-                        if (val !== null && val !== undefined) {
-                          if (val.enname1 != null && val.enname1 !== '') {
-                            this.$set(this.baseForm, 'hospitalName', val.chname1 + '|' + val.enname1)
-                          } else {
-                            this.$set(this.baseForm, 'hospitalName', val.chname1)
-                          }
-                          this.$set(this.baseForm, 'hospitalCode', val.providerCode)
-                          this.$set(this.baseForm, 'firstAttribute', val.firstAttribute)
-                          this.$set(this.baseForm, 'secondAttribute', val.secondAttribute)
-                          this.$set(this.baseForm, 'isDesHospital', val.flag)
-                        }
-                      }
-                      if (this.batchData !== null && this.batchData !== undefined) {
-                        this.baseForm.billCurrency = this.batchData.currency
-                      }
-                      this.costForm.costData = []
-                    }
-                    console.log(this.baseForm);
-                  }).catch(res => {
-                    this.$message({
-                      message: '保存失败!',
-                      type: 'error',
-                      center: true,
-                      showClose: true
-                    })
-                  })
-                }
-
+                  }
+               /* } else {
+                  return  this.$message.warning(
+                    "录入费用金额有误，请检查！"
+                  )
+                }*/
               } else {
                 return this.$message.warning(
                   "费用项信息录入不完整，请检查！"

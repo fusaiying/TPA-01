@@ -392,7 +392,7 @@
         <el-form-item label="业务内容：" prop="content">
         <el-input
           type="textarea"
-          :rows="2"
+          :rows="3"
           placeholder="请输入内容"
           v-model="ruleForm.content">
         </el-input>
@@ -558,7 +558,7 @@
           ],
           'callPerson.mobilePhone': [
             //{required: true, message: "来电号码不能为空", trigger: "blur"},
-            {required: false,
+            {required: true,
               message: "目前只支持录入数字",
               pattern: /^\d+$/,//可以写正则表达式呦呦呦,
               trigger: ['blur','change']},
@@ -628,13 +628,6 @@
               pattern: /^\d*$/,
               trigger: ['change','blur']
             }
-          ],
-          'E-MAIL': [
-            {required: true, message: "Email不能为空", trigger: "blur"},
-            {required: true,
-              message: "请输入正确的格式",
-              pattern:  /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/,//可以写正则表达式呦呦呦,
-              trigger: "blur"},
           ],
           email: [
             {required: false,

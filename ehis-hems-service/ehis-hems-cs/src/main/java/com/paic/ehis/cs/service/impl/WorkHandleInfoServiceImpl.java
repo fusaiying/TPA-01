@@ -568,6 +568,7 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
             flowLog.setUmNum(SecurityUtils.getUsername());
             flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
             flowLog.setUpdatedBy(SecurityUtils.getUsername());
+            flowLog.setCreatedBy(SecurityUtils.getUsername());
             flowLog.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
             flowLog.setWorkOrderNo(reservationDealVo.getWorkOrderNo());
             if(reservationDealVo.getBusinessProcess().equals("01")){
@@ -625,6 +626,7 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
             flowLog.setUmNum(SecurityUtils.getUsername());
             flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
             flowLog.setUpdatedBy(SecurityUtils.getUsername());
+            flowLog.setCreatedBy(SecurityUtils.getUsername());
             flowLog.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
             flowLog.setWorkOrderNo(reservationDealVo.getWorkOrderNo());
             if(reservationDealVo.getBusinessProcess().equals("01")){

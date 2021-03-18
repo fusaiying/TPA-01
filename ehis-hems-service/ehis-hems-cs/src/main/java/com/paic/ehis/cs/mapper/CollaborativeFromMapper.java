@@ -31,6 +31,8 @@ public interface CollaborativeFromMapper
 
     public List<CollaborativeFrom> selectCollaborativeFromListNew(ConsultationDTO consultationDTO);
 
+    public List<CollaborativeFrom> selectCollaborativeFromListPublicNew(ConsultationDTO consultationDTO);
+
     /**
      * 新增协办信息 
      * 

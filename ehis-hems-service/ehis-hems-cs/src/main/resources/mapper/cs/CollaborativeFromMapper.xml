@@ -27,6 +27,30 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="businessType"    column="business_type"    />
     </resultMap>
 
+    <resultMap type="com.paic.ehis.cs.domain.vo.CollaborativeFromVO" id="CollaborativeFromVOResult">
+        <result property="collaborativeId"    column="collaborative_id"    />
+        <result property="workOrderNo"    column="work_order_no"    />
+        <result property="fromUserId"    column="from_user_id"    />
+        <result property="umCode"    column="um_code"    />
+        <result property="solicitOpinion"    column="solicit_opinion"    />
+        <result property="attachmentFlag"    column="attachment_flag"    />
+        <result property="handleState"    column="handle_state"    />
+        <result property="status"    column="status"    />
+        <result property="opinion"    column="opinion"    />
+        <result property="validFlag"    column="valid_flag"    />
+        <result property="nonReason"    column="non_reason"    />
+        <result property="treatmentPlan"    column="treatment_plan"    />
+        <result property="treatmentBasis"    column="treatment_basis"    />
+        <result property="createdBy"    column="created_by"    />
+        <result property="createdTime"    column="created_time"    />
+        <result property="updatedBy"    column="updated_by"    />
+        <result property="updatedTime"    column="updated_time"    />
+        <result property="itemCode"    column="item_code"    />
+        <result property="organCode"    column="organ_code"    />
+        <result property="businessType"    column="business_type"    />
+        <result property="processingTime"    column="processingTime"    />
+    </resultMap>
+
     <sql id="selectCollaborativeFromVo">
         select collaborative_id, work_order_no, from_user_id, um_code, solicit_opinion, attachment_flag, handle_state, status, opinion, valid_flag, non_reason, treatment_plan, treatment_basis, created_by, created_time, updated_by, updated_time from collaborative_from
     </sql>
@@ -93,6 +117,67 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         b.item_code,
         b.organ_code,
         c.business_type
+        FROM
+        collaborative_from a,
+        accept_detail_info b,
+        work_order_accept c
+        WHERE
+        a.work_order_no = b.work_order_no
+        AND a.work_order_no = c.work_order_no
+        <if test="workOrderNo != null  and workOrderNo != ''"> and a.work_order_no = #{workOrderNo}</if>
+        <if test="collaborativeId != null  and collaborativeId != ''"> and a.collaborative_id = #{collaborativeId}</if>
+        <if test="createdTimeStart != null   and createdTimeEnd != null ">
+            and(a.create_time between  #{createdTimeStart} and  #{createdTimeEnd})</if>
+        <if test="handleState != null  and handleState != ''"> and a.handle_state = #{handleState}</if>
+        <if test="itemCode != null  and itemCode != ''"> and b.item_code = #{itemCode}</if>
+        <if test="policyNo != null  and policyNo != ''"> and c.policy_no = #{policyNo}</if>
+        <if test="policyItemNo != null  and policyItemNo != ''"> and c.policy_item_no = #{policyItemNo}</if>
+        <if test="operation != null and operation !=''"> and a.um_code = #{operation}</if>
+    </select>
+
+    <select id="selectCollaborativeFromListPublicNew" parameterType="com.paic.ehis.cs.domain.dto.ConsultationDTO" resultMap="CollaborativeFromVOResult">
+        SELECT
+        a.work_order_no,
+        a.collaborative_id,
+        a.created_by,
+        a.created_time,
+        a.updated_time,
+        a.handle_state,
+        a.status,
+        b.item_code,
+        b.organ_code,
+        c.business_type,
+        TIMESTAMPDIFF(Hour,a.created_time , NOW()) processingTime
+        FROM
+        collaborative_from a,
+        accept_detail_info b,
+        work_order_accept c
+        WHERE
+        a.work_order_no = b.work_order_no
+        AND a.work_order_no = c.work_order_no
+        <if test="workOrderNo != null  and workOrderNo != ''"> and a.work_order_no = #{workOrderNo}</if>
+        <if test="collaborativeId != null  and collaborativeId != ''"> and a.collaborative_id = #{collaborativeId}</if>
+        <if test="createdTimeStart != null   and createdTimeEnd != null ">
+            and(a.create_time between  #{createdTimeStart} and  #{createdTimeEnd})</if>
+        <if test="handleState != null  and handleState != ''"> and a.handle_state = #{handleState}</if>
+        <if test="handleState == null  or handleState == ''"> and a.handle_state != '01' </if>
+        <if test="itemCode != null  and itemCode != ''"> and b.item_code = #{itemCode}</if>
+        <if test="policyNo != null  and policyNo != ''"> and c.policy_no = #{policyNo}</if>
+        <if test="policyItemNo != null  and policyItemNo != ''"> and c.policy_item_no = #{policyItemNo}</if>
+        <if test="operation != null and operation !=''"> and a.created_by = #{operation}</if>
+        union
+        SELECT
+        a.work_order_no,
+        a.collaborative_id,
+        a.created_by,
+        a.created_time,
+        a.updated_time,
+        a.handle_state,
+        a.status,
+        b.item_code,
+        b.organ_code,
+        c.business_type,
+        TIMESTAMPDIFF(Hour,a.created_time , NOW()) processingTime
         FROM
         collaborative_from a,
         accept_detail_info b,

@@ -67,6 +67,11 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
         return collaborativeFromMapper.selectCollaborativeFromListNew(consultationDTO);
     }
 
+    @Override
+    public List<CollaborativeFrom> selectCollaborativeFromListPublicNew(ConsultationDTO consultationDTO) {
+        return collaborativeFromMapper.selectCollaborativeFromListPublicNew(consultationDTO);
+    }
+
     /**
      * 新增协办信息 
      * 

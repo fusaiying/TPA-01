@@ -173,7 +173,7 @@
         CASE
         WHEN (
         a.STATUS = '02'
-        AND ( SELECT 1 FROM collaborative_from cf WHERE cf.STATUS = '02' AND cf.work_order_no = a.work_order_no ) = 1
+        AND ( SELECT 1 FROM collaborative_from cf WHERE cf.STATUS = '02' AND cf.work_order_no = a.work_order_no limit 1) = 1
         ) THEN
         '06' ELSE a.STATUS
         END,

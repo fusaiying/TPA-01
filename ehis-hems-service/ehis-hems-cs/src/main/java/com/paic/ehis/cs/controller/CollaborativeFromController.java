@@ -63,6 +63,16 @@ public class CollaborativeFromController extends BaseController
         return getDataTable(list);
     }
 
+    @GetMapping("/listPublicNew")
+    //征求意见处理
+    public TableDataInfo listNew(ConsultationDTO consultationDTO)
+    {
+        startPage();
+        consultationDTO.setOperation(SecurityUtils.getUsername());
+        List<CollaborativeFrom> list = collaborativeFromService.selectCollaborativeFromListPublicNew(consultationDTO);
+        return getDataTable(list);
+    }
+
     /**
      * 导出协办信息 列表
      */

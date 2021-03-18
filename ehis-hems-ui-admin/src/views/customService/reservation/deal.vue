@@ -502,7 +502,7 @@
     </el-card>
 
     <el-card>
-      <el-form ref="submitForm" :model="ruleForm" :rules="rules" style="padding-bottom: 30px;" label-width="130px"
+      <el-form ref="submitForm" :model="submitForm" :rules="changeForm.rules" style="padding-bottom: 30px;" label-width="130px"
                label-position="right" size="mini">
         <span style="color: blue">服务处理
           <div style="text-align: right; margin-right: 8px;">
@@ -514,13 +514,13 @@
         <el-divider/>
         <el-row>
           <el-form-item label="处理时长：" prop="times">
-            <el-input v-model="submitForm.times" class="width-full" size="mini" placeholder="请输入"/>
+            <el-input v-model="submitForm.times" class="width-full" size="mini" disabled/>
           </el-form-item>
         </el-row>
         <el-row>
           <el-col :span="8">
             <el-form-item label="业务处理情况：" prop="businessProcess">
-              <el-radio-group v-model="submitForm.businessProcess">
+              <el-radio-group v-model="submitForm.businessProcess"@change="isBusinessProcess(submitForm.businessProcess)">
                 <el-radio label="01">成功</el-radio>
                 <el-radio label="02">响应</el-radio>
               </el-radio-group>
@@ -540,8 +540,11 @@
         <el-row>
           <el-form-item label="客户反馈：" prop="customerFeedback">
             <el-radio-group v-model="submitForm.customerFeedback">
-              <el-radio :label="item.dictValue" :key="item.dictValue" v-for="item in cs_feedback_type" ma>
-                {{ item.dictLabel }}
+              <el-radio
+                v-for="dict in cs_feedback_type"
+                :key="dict.dictValue"
+                :label="dict.dictValue"
+              >{{ dict.dictLabel }}
               </el-radio>
             </el-radio-group>
           </el-form-item>
@@ -590,14 +593,15 @@
         </el-table>
       </div>
       <div style="text-align: right; margin-right: 1px;">
-        <transfer ref="transfer"></transfer>
+        <modify-details ref="modifyDetails"></modify-details>
+        <transfer ref="transfer"@checkButton="checkButton"></transfer>
         <up-load ref="upload"></up-load>
-        <co-organizer ref="coOrganizer"></co-organizer>
-        <el-button type="primary" size="mini" @click="transfer">转办</el-button>
+        <co-organizer ref="coOrganizer"@checkButton="checkButton"></co-organizer>
+        <el-button type="primary" size="mini" @click="transfer":disabled="checkButtonFlag.transferFlag">转办</el-button>
         <el-button type="primary" size="mini" @click="coOrganizer" disabled>担保函导出</el-button>
         <el-button type="primary" size="mini" @click="upload" disabled>保单信息查询</el-button>
-        <el-button type="primary" size="mini" @click="temporary">暂存</el-button>
-        <el-button type="primary" size="mini" @click="submit">提交</el-button>
+        <el-button type="primary" size="mini" @click="temporary":disabled="checkButtonFlag.temporaryFlag">暂存</el-button>
+        <el-button type="primary" size="mini" @click="submit" :disabled="checkButtonFlag.submitFlag">提交</el-button>
         <el-button type="primary" size="mini" @click="upload" disabled>发送短信</el-button>
 
       </div>
@@ -637,7 +641,6 @@ let dictss = [
   {dictType: 'cs_direct_settlement'},
   {dictType: 'cs_consultation_type'},
   {dictType: 'cs_time_unit'},
-  {dictType: 'cs_feedback_type'},
   {dictType: 'cs_service_item'},
   {dictType: 'cs_action_type'},
   {dictType: 'cs_order_state'},
@@ -657,9 +660,51 @@ export default {
     }
   },
   data() {
+    // 表单校验
+    const isRule = {
+      Service: [
+        {required: true, message: "服务项目不能为空", trigger: "blur"}
+      ],
+        priority: [
+        {required: true, message: "优先级不能为空", trigger: "blur"}
+      ],
+        lxperson: [
+        {required: true, message: "联系人不能为空", trigger: "blur"}
+      ],
+        orderNum: [
+        {required: true, message: "联系人与被保人关系不能为空", trigger: "blur"}
+      ],
+        times: [
+        {required: true, message: "处理时长关系不能为空", trigger: "blur"}
+      ],
+        businessProcess: [
+        {required: true, message: "业务处理情况不能为空", trigger: "blur"}
+      ],
+        remark: [
+        {required: true, message: "处理说明不能为空", trigger: "blur"},
+        {min: 0, max: 2000, message: '长度2000 个字符'}
 
+      ],
+        customerFeedback: [
+        {required: true, message: "客户反馈不能为空", trigger: "blur"}
+      ],
+        costsIncurred: [
+        {required: true, message: "是否需要担保函不能为空", trigger: "blur"}
+      ],
+    };
+    // 表单校验
+    const noRules = {
+      businessProcess: [
+        {required: true, message: "业务处理情况不能为空", trigger: "blur"}
+      ],
+    };
     return {
       isDisabled: true,
+      rules1: isRule,
+      rules2: noRules,
+      changeForm: {
+        rules: isRule
+      },
       //流转用
       flowLogData: [],
       flowLogCount: 0,
@@ -679,23 +724,37 @@ export default {
         closeType: "",
         costsIncurred: ""
       },
-      // 表单校验
-      rules: {
-        Service: [
-          {required: true, message: "服务项目不能为空", trigger: "blur"}
-        ],
-        priority: [
-          {required: true, message: "优先级不能为空", trigger: "blur"}
-        ],
-        lxperson: [
-          {required: true, message: "联系人不能为空", trigger: "blur"}
-        ],
-        orderNum: [
-          {required: true, message: "联系人与被保人关系不能为空", trigger: "blur"}
-        ],
-
-
+      checkButtonFlag: {
+        transferFlag: false,//协办
+        coOrganizerFlag: false,//转办
+        temporaryFlag: false,//暂存
+        submitFlag: false//提交
       },
+      checkButtonFrom: {//传值给后台
+        acceptorTime:undefined,//受理时间数组
+        appointmentTime:undefined,//预约时间数组
+        handlerTime:undefined,//处理时间数组
+        pageNum: 1,
+        pageSize: 10,
+        itemCode: "",//服务信息
+        channelCode: "",//受理渠道
+        acceptBy: "",//受理人
+        modifyBy: "",//处理人
+        workOrderNo: "",//工单编号
+        policyNo: "",//保单号
+        policyItemNo: "",//分单号
+        holderName: "",//投保人
+        insuredName: "",//被保人
+        idNumber: "",//证件号
+        organCode: "",//出单机构
+        priorityLevel:"",//优先级
+        vipFlag:"",//VIP标识
+        mobilePhone:"",//移动电话
+        status:"",//状态
+        modifyTime:"",
+        updateTime:""
+      },
+
       readonly: true,
       dialogFormVisible: false,
       updateBy: undefined,
@@ -860,8 +919,53 @@ export default {
     this.cs_action_type = this.dictList.find(item => {
       return item.dictType === 'cs_action_type'
     }).dictDate
+    //初始化按钮状态
+    this.checkButton();
   },
   methods: {
+    //是否响应
+    isBusinessProcess(s) {
+      if (s == "01") {
+        this.changeForm.rules = this.rules1
+      } else {
+        this.changeForm.rules = this.rules2
+        this.$refs.submitForm.clearValidate()
+      }
+      //更新按钮状态
+      this.checkButton();
+    },
+    //设置按钮状态
+    checkButton(){
+      this.checkButtonFlag.transferFlag = false;//协办
+      this.checkButtonFlag.coOrganizerFlag = false;//转办
+      this.checkButtonFlag.temporaryFlag = false;//暂存
+      this.checkButtonFlag.submitFlag = false;//提交
+
+      //选择响应后  除【提交按钮外其余都置灰】
+      if(this.submitForm.businessProcess == '02'){
+        this.checkButtonFlag.transferFlag = true;//协办
+        this.checkButtonFlag.coOrganizerFlag = true;//转办
+        this.checkButtonFlag.temporaryFlag = true;//暂存
+      }
+
+      //存在协办 转办后  默认都置灰
+      let queryParams = JSON.parse(JSON.stringify(this.checkButtonFrom));
+      queryParams.workOrderNo = this.$route.query.workOrderNo;
+      demandListAndPersonalPool(queryParams).then(res => {
+        if (res != null && res.code === 200) {
+          if (res.total <= 0) {
+            //未查询到数据
+            this.checkButtonFlag.transferFlag = true;//协办
+            this.checkButtonFlag.coOrganizerFlag = true;//转办
+            this.checkButtonFlag.temporaryFlag = true;//暂存
+            this.checkButtonFlag.submitFlag = true;//提交
+          }
+        }
+      }).catch(res => {
+        console.log('error submit!!');
+      })
+
+    },
     //超链接用
     modifyDetails(s) {
       this.$refs.modifyDetails.queryParams.subId = s.subId,

@@ -332,8 +332,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             )
             WHERE
             oi. STATUS = 'Y'
-            AND oi.push_flag = '0' and oi.bussiness_status = '02' and oi.supplier_code = #{supplierCode}
-            AND bcs.settle_type =#{settleType} and bcs.serial_no = #{serviceCode}
+            AND oi.push_flag = '0' and oi.bussiness_status = '02'
+            <if test="supplierCode != null  and supplierCode != ''">and oi.supplier_code = #{supplierCode}</if>
+            <if test="settleType != null  and settleType != ''">and bcs.settle_type =#{settleType}</if>
+            <if test="serviceCode != null  and serviceCode != ''">and bcs.serial_no = #{serviceCode}</if>
         </if>
         <!-- 按人头（保单） -->
         <if test="settleType == '02'">

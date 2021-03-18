@@ -519,7 +519,7 @@ export default {
             let rows = this.supplierInfo.supplierData.filter(item => {
               return item.priority != null && item.priority != ''
             })
-            if(this.supplierInfo.supplierData.length>0){
+           /* if(this.supplierInfo.supplierData.length>0){
               if(this.supplierInfo.supplierData[0].issue=='03'){
 
                 this.showDisabled=true
@@ -529,7 +529,7 @@ export default {
             }
             else {
               this.showDisabled=false
-            }
+            }*/
 
             this.multipleSelection = rows
             this.indexList = []

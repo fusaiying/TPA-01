@@ -287,7 +287,7 @@ export default {
     this.getDicts("worksheetBussinessStatus").then(response => {
       this.worksheetBussinessStatusOptions = response.data;
     });
-    this.getDicts("cs_sex").then(response => {
+    this.getDicts("sys_user_sex").then(response => {
       this.cs_sexOptions = response.data;
     });
     this.getDicts("card_type").then(response => {

@@ -649,7 +649,6 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService {
             // 拼接
             String companyName = StringUtils.join(companyWithoutDup, "|");
             payInfo.setCompanyName(companyName);
-
             // 获取借款金额
             FinanceBorrowInfo financeBorrowInfo = financeBorrowInfoMapper.selectFinanceBorrowInfoByRptNo(payInfo.getRptNo());
             if (null != financeBorrowInfo) {

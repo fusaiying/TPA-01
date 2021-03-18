@@ -294,21 +294,24 @@ export default {
       this.resetInvoice();
       this.invoice.isShow = true;
       //先票后付-正常流程是不需要发票核销
+      //有票
       if (row.balanceInvoiceType == "01") {
         //确认前（01-待确认，03-待确认（退回））可修改，其他时候只能查看
         if (row.bussinessStatus == "01" || row.bussinessStatus == "03") {
-          this.invoice.isAdd = true;
+          this.invoice.isWrite = true;
         }
-      } else {
+      } else {//无票
         //未核销可添加
         if (row.invoiceStatus == "N") {
           this.invoice.isAdd = true;
+          this.invoice.isWrite = true;
         }
       }
       //确认前（04-已审核（待核销），05-核销 可发票核销
       if (row.bussinessStatus == "04" || row.bussinessStatus == "05") {
         //未核销可添加
         if (row.invoiceStatus == "N") {
+          this.invoice.isWrite = true;
           this.invoice.isWrite = true;
         }
       }

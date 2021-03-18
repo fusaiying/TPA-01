@@ -150,7 +150,7 @@ public class ServiceBalanceDetailController extends BaseController
                         errorTmp = new StringBuffer();
                         //匹配到置为有效
                         dataList.get(i).setStatus(StatusEnum.VALID.getCode());
-                        if (excelCaseDetail.getActualAmount() == null) {
+                        if ("".equals(excelCaseDetail.getActualAmount()) && excelCaseDetail.getActualAmount() == null) {
                             errorTmp.append("，实际服务费为空");
                         }
                         //表格实际服务费与数据库服务费一致存到数据库实际服务费
@@ -168,7 +168,7 @@ public class ServiceBalanceDetailController extends BaseController
                             dataList.get(i).setActualAmount(excelCaseDetail.getActualAmount());
                         }*/
                         if (errorTmp.length() > 0) {
-                            error.append("第" + (i + 1) + "行");
+                            error.append("第" + (i + 2) + "行");
                             error.append(errorTmp);
                         }
                         break;

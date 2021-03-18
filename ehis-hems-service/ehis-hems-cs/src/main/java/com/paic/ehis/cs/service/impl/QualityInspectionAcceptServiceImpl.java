@@ -17,6 +17,7 @@ import com.paic.ehis.cs.mapper.*;
 import com.paic.ehis.cs.service.IQualityInspectionAcceptService;
 import com.paic.ehis.cs.utils.CodeEnum;
 import com.paic.ehis.cs.utils.VoUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -89,6 +90,21 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
         }
         return list==null ? new ArrayList<AcceptVo>() : list;
     }
+
+    /**
+     * 工单获取
+     */
+    @Override
+    public AcceptVo updateSendByVoById(String workOrderNo) {
+        AcceptVo acceptVo = qualityInspectionAcceptMapper.selectSendByVoById1(workOrderNo);//先查询状态为处理中的工单
+        if (null != acceptVo) {
+            return acceptVo;//存在则获取处理中的工单数据
+        } else {
+            AcceptVo acceptVo1 = qualityInspectionAcceptMapper.selectSendByVoById2(workOrderNo);//不存在则获取最新的非处理的工单数据
+            return acceptVo1;
+        }
+    }
+
 
     @Override
     public List<AcceptVo> selectAcceptPoolData(WorkOrderQueryDTO workOrderQueryDTO) {
@@ -261,5 +277,6 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
     public List<QualityFlagVO> selectQualityFlagVO(QualityFlagDTO qualityFlagDTO) {
         return qualityInspectionAcceptMapper.selectQualityFlagVO(qualityFlagDTO);
     }
+
 }
 

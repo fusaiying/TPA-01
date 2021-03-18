@@ -26,6 +26,12 @@ public interface IQualityInspectionAcceptService
      */
     public List<AcceptVo> selectSendPoolData(WorkOrderQueryDTO workOrderQueryDTO);
 
+    /**
+     * 工单获取
+     */
+    public AcceptVo updateSendByVoById(String workOrderNo);
+
+
 
     /**
      * 质检工作池

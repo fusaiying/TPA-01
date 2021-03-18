@@ -237,6 +237,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             b.amount,
             b.actual_amount,
             b.reason,
+            b.supplier_service_name,
             a.bussiness_status
         FROM
             service_balance_info a,
@@ -276,6 +277,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         b.amount,
         b.actual_amount,
         b.reason,
+        b.supplier_service_name,
         a.bussiness_status
         FROM
         service_balance_info a,
@@ -286,7 +288,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         AND a.status = 'Y'
         AND b.status = 'Y'
         <if test="beforeDate != null   and nowDate != null ">
-            and (pi.create_time between  #{beforeDate} and  #{nowDate})
+            and (b.create_time between  #{beforeDate} and  #{nowDate})
         </if>
     </select>
 

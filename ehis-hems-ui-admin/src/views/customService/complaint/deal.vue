@@ -611,14 +611,14 @@
         <transfer ref="transfer"></transfer>
         <up-load ref="upload"></up-load>
         <co-organizer ref="coOrganizer"></co-organizer>
-        <hang-up ref="hangUp"></hang-up>
+        <hang-up @hangUpSearch="hangUpSearch" ref="hangUp"></hang-up>
         <el-button type="primary" size="mini" @click="hangUp">工单挂起</el-button>
-        <el-button type="primary" size="mini" @click="temporary" :disabled="this.hangUps.hangFlag=='01'">暂存</el-button>
-        <el-button type="primary" size="mini" @click="submit" :disabled="this.hangUps.hangFlag=='01'">提交</el-button>
-        <el-button type="primary" size="mini" @click="matching" :disabled="this.hangUps.hangFlag=='01'">客户信息匹配
+        <el-button type="primary" size="mini" @click="temporary" :disabled="this.hangUps.hangFlag==='01' || collaborative">暂存</el-button>
+        <el-button type="primary" size="mini" @click="submit" :disabled="this.hangUps.hangFlag==='01' || collaborative">提交</el-button>
+        <el-button type="primary" size="mini" @click="matching" :disabled="this.hangUps.hangFlag==='01' || collaborative">客户信息匹配
         </el-button>
-        <el-button type="primary" size="mini" @click="transfer" :disabled="this.hangUps.hangFlag=='01'">转办</el-button>
-        <el-button type="primary" size="mini" @click="coOrganizer" :disabled="this.hangUps.hangFlag=='01'">协办
+        <el-button type="primary" size="mini" @click="transfer" :disabled="this.hangUps.hangFlag==='01' || collaborative">转办</el-button>
+        <el-button type="primary" size="mini" @click="coOrganizer" :disabled="this.hangUps.hangFlag==='01' || collaborative">协办
         </el-button>
       </div>
     </el-card>
@@ -630,10 +630,13 @@
 <script>
 import moment from 'moment'
 import {FlowLogSearch, HMSSearch, dealADD} from '@/api/customService/demand'
-import {complaintDealSubmit, selectHangFlag, reasonThree, reasonTwo, classTwo, complainSearchServer} from '@/api/customService/complaint'
+import {complaintDealSubmit, selectHangFlag, reasonThree, reasonTwo, classTwo, complainSearchServer ,collaborative} from '@/api/customService/complaint'
 import {complainSearch, comSearch} from '@/api/customService/consultation'
-import hangUp from "../common/modul/hangUp";
 
+import {getUserInfo} from '@/api/claim/standingBookSearch'
+
+
+import hangUp from "../common/modul/hangUp";
 
 import transfer from "../common/modul/transfer";
 import upLoad from "../common/modul/upload";
@@ -897,6 +900,8 @@ export default {
       cs_mediation_appraisal: [],
       cs_risk_type: [],
       cs_question_circ: [],
+      logUserName:'',
+      collaborative : false,
     }
   },
   created() {
@@ -905,6 +910,7 @@ export default {
     this.queryParams.policyItemNo = this.$route.query.policyItemNo;
     this.queryParams.status = this.$route.query.status;
     //window.aaa = this;
+    this.getLogUserInfo();
     this.hangUpSearch();
     this.searchHandle();
     this.searchHandle1();
@@ -990,6 +996,16 @@ export default {
         this.showFlag=false
       }
     },*/
+    getLogUserInfo() {
+      getUserInfo().then(response => {
+        if (response.code === 200 && response.data) {
+          this.logUserName = response.data.userName;
+          //alert(this.logUserName)
+        }
+      }).catch(error => {
+        console.log(error);
+      });
+    },
     reasonTwo(flag) {
       const query = {}
       query.parentCode = this.sendForm.reason1;
@@ -1122,6 +1138,10 @@ export default {
           if (res.data != null) {
             this.hangUps = res.data
             this.$refs.hangUp.hangUpForm = res.data
+            console.log("res.data res.data" , res.data)
+            if(res.data.hangFlag === '02') {
+              this.collaborativeFromInfo();
+            }
           } else {
             this.$refs.hangUp.hangUpForm.workOrderNo = this.$route.query.workOrderNo
           }
@@ -1130,6 +1150,31 @@ export default {
               "失败！"
             )
           }
+        }
+      }).catch(res => {
+
+      })
+    },
+    collaborativeFromInfo() {
+      let query = {
+        workOrderNo: this.$route.query.workOrderNo,
+        handleState:'01'
+      }
+      collaborative(query).then(res => {
+        if (res != null && res.code === 200) {
+          if (res.rows.length > 0) {
+            this.collaborative =  true;
+          }
+          // if (res.rows.lenght > 0) {
+          //   let obj = {};
+          //   obj = res.rows.find((item)=>{
+          //     // 存在转办 和 协办人 不是当前登陆人
+          //     return item.createdBy == this.logUserName || item.umCode != this.logUserName;
+          //   });
+          //   if(obj != undefined) {
+          //     this.hangUps.hangFlag = '01';
+          //   }
+          // }
         }
       }).catch(res => {
 

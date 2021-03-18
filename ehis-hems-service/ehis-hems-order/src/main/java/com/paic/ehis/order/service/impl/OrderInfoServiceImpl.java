@@ -4,6 +4,7 @@ import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.PubFun;
 import com.paic.ehis.common.core.utils.StringUtils;
 import com.paic.ehis.common.core.utils.SecurityUtils;
+import com.paic.ehis.common.core.web.domain.AjaxResult;
 import com.paic.ehis.order.domain.*;
 import com.paic.ehis.order.utils.Dateutils;
 import com.paic.ehis.system.api.domain.HospitalInfoVo;

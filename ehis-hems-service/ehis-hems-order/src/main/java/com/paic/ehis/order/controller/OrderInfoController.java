@@ -202,6 +202,10 @@ public class OrderInfoController extends BaseController
     @PostMapping("/cancalOrder")
     public AjaxResult cancalOrder(@RequestBody OrderInfo orderInfo)
     {
+        List<OrderInfo> orderInfos = orderInfoService.selectOrderInfoList(orderInfo);
+        if(orderInfos.get(0).getDetailStatus() != null && "".equals(orderInfos.get(0).getDetailStatus())){
+            return AjaxResult.error("该工单已实施，不可取消");
+        }
         return toAjax(orderInfoService.cancalOrder(orderInfo));
     }
 

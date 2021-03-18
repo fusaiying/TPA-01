@@ -363,7 +363,12 @@
         </el-row>
         <el-row>
           <el-form-item label="联系地址：" maxlength="2000" style="white-space: nowrap" prop="contactsPerson.address">
-           <el-input class="width-full"  v-model="ruleForm.contactsPerson.address"  clearable size="mini" placeholder="请输入"></el-input>
+           <el-input
+              type="textarea"
+              :rows="3"
+              placeholder="请输入"
+              v-model="ruleForm.contactsPerson.address">
+            </el-input>
           </el-form-item>
 
         </el-row>
@@ -555,6 +560,12 @@
           complaintTime: [
             {required: true, message: "预约时间不能为空", trigger: "blur"},
             {required: true, validator: checkComplaintTime, trigger: "blur"}
+          ],
+          'contactsPerson.mobilePhone': [
+            {required: true,
+              message: "目前只支持中国大陆的手机号码",
+              pattern: /^1[34578]\d{9}$/,
+              trigger: ['blur','change']},
           ],
           'callPerson.mobilePhone': [
             //{required: true, message: "来电号码不能为空", trigger: "blur"},
@@ -784,9 +795,9 @@
             this.workPoolData = res.rows
             this.totalCount = res.total
             if (res.rows.length <= 0) {
-              return this.$message.warning(
+              /*return this.$message.warning(
                 "未查询到数据！"
-              )
+              )*/
             }
           }
         }).catch(res => {

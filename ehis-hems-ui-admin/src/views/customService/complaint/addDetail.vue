@@ -392,7 +392,7 @@
         <el-form-item label="业务内容：" prop="content">
         <el-input
           type="textarea"
-          :rows="2"
+          :rows="3"
           placeholder="请输入内容"
           v-model="ruleForm.content">
         </el-input>

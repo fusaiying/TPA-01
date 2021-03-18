@@ -116,6 +116,15 @@ public class ServiceBalanceDetail extends BaseEntity
 
     private String supplierServiceName;
 
+    /** 产品期限日期 */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date nowDate;
+
+
+    /** 产品期限日期 */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date beforeDate;
+
     public void setSerialNo(Long serialNo) 
     {
         this.serialNo = serialNo;

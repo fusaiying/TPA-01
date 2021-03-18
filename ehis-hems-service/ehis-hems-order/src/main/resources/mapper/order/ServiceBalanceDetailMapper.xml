@@ -255,6 +255,41 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <if test="policyItemNo != null  and policyItemNo != ''"> and b.policy_item_no = #{policyItemNo}</if>
     </select>
 
+    <select id="selectServiceBalanceDetailList3" parameterType="ServiceBalanceDetail" resultMap="ServiceBalanceDetailResult">
+        SELECT
+        b.task_no,
+        b.order_code,
+        b.balance_interval,
+        b.risk_code,
+        b.policy_no,
+        b.policy_item_no,
+        b.supplier_code,
+        b.service_code,
+        b.appnt_no,
+        b.appnt_name,
+        b.cust_no,
+        b.cust_name,
+        b.sex,
+        b.id_no,
+        b.service_date,
+        b.remark,
+        b.amount,
+        b.actual_amount,
+        b.reason,
+        a.bussiness_status
+        FROM
+        service_balance_info a,
+        service_balance_detail b
+        WHERE
+        a.task_no = b.task_no
+        AND a.settle_type = '01'
+        AND a.status = 'Y'
+        AND b.status = 'Y'
+        <if test="beforeDate != null   and nowDate != null ">
+            and (pi.create_time between  #{beforeDate} and  #{nowDate})
+        </if>
+    </select>
+
     <select id="selectDetailList" parameterType="ServiceBalanceInfo" resultMap="ServiceBalanceDetailResult">
         <!-- 按case（工单） -->
         <if test="settleType == '01'">

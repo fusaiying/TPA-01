@@ -67,10 +67,18 @@ public interface IServiceBalanceDetailService
     /**
      * 查询service_balance_detail(服务结算明细信息)列表
      *
-     * @param serviceBalanceDetail service_balance_detail(服务结算明细信息)
      * @return service_balance_detail(服务结算明细信息)集合
      */
     public List<ServiceBalanceDetail> selectServiceBalanceDetailList2(ServiceBalanceDetail serviceBalanceDetail);
+
+
+    /**
+     * 查询service_balance_detail(服务结算明细信息)列表
+     *
+     * @return service_balance_detail(服务结算明细信息)集合
+     */
+    public List<ServiceBalanceDetail> selectServiceBalanceDetailList3() throws Exception;
+
 
     /**
      * 查询service_balance_detail(服务结算明细信息)列表

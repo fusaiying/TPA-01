@@ -103,4 +103,7 @@ public class ClaimCaseForeignPayInfoVO implements Serializable {
     /** 币种标识，Y代表与批次账单币种一致，N代表不一致 */
     private String flag;
 
+    /** 案件性质（01-TPA案件、02-核心案件） */
+    private String caseProp;
+
 }

@@ -75,29 +75,32 @@
         tooltip-effect="dark"
         class="receive_table"
         :header-cell-style="{color:'black',background:'#f8f8ff'}"
+        style="width: 100%;"
       >
         <el-table-column type="index" label="序号" align="center" show-overflow-tooltip width="50px"/>
-        <el-table-column v-if="queryParams.settleType===settleTypeData.isPrice" key="supplierCode" prop="supplierCode" label="供应商名称" width="150%" align="center" show-overflow-tooltip/>
-        <el-table-column v-if="queryParams.settleType===settleTypeData.isCase" key="orderCode" prop="orderCode" label="工单编号" width="150%" align="center" show-overflow-tooltip/>
+        <el-table-column v-if="queryParams.settleType===settleTypeData.isPrice" key="supplierCode" prop="supplierCode" label="供应商名称" min-width="150%" align="center" show-overflow-tooltip/>
+        <el-table-column v-if="queryParams.settleType===settleTypeData.isCase" key="orderCode" prop="orderCode" label="工单编号" min-width="150%" align="center" show-overflow-tooltip/>
 
-        <el-table-column v-if="queryParams.settleType===settleTypeData.isCase || queryParams.settleType===settleTypeData.isCont || queryParams.settleType===settleTypeData.isPrice" key="settlementTime" prop="settlementTime" label="结算时间区间" width="150%" align="center" show-overflow-tooltip/>
+        <el-table-column v-if="queryParams.settleType===settleTypeData.isCase || queryParams.settleType===settleTypeData.isCont || queryParams.settleType===settleTypeData.isPrice" key="settlementTime" prop="settlementTime" label="结算时间区间" min-width="150%" align="center" show-overflow-tooltip/>
 
 
-        <el-table-column v-if="queryParams.settleType===settleTypeData.isCase || queryParams.settleType===settleTypeData.isCont" key="riskCode" prop="riskCode" label="险种" width="150%" align="center" show-overflow-tooltip/>
-        <el-table-column v-if="queryParams.settleType===settleTypeData.isCase" key="policyNo" prop="policyNo" label="保单号" width="150%" align="center" show-overflow-tooltip/>
+        <el-table-column v-if="queryParams.settleType===settleTypeData.isCase || queryParams.settleType===settleTypeData.isCont" key="riskCode" prop="riskCode" label="险种" min-width="150%" align="center" show-overflow-tooltip/>
+        <el-table-column v-if="queryParams.settleType===settleTypeData.isCase" key="policyNo" prop="policyNo" label="保单号" min-width="150%" align="center" show-overflow-tooltip/>
         <el-table-column v-if="queryParams.settleType===settleTypeData.isCase" key="policyItemNo" prop="policyItemNo" label="分单号" width="150%" align="center" show-overflow-tooltip/>
-        <el-table-column v-if="queryParams.settleType===settleTypeData.isCase || queryParams.settleType===settleTypeData.isPrice" key="serviceCode" prop="serviceCode" label="供应商项目名称" width="150%" align="center" show-overflow-tooltip/>
-        <el-table-column v-if="queryParams.settleType===settleTypeData.isCase" key="appntName" prop="appntName" label="投保人" width="150%" align="center" show-overflow-tooltip/>
-        <el-table-column v-if="queryParams.settleType===settleTypeData.isCase" key="custName" prop="custName" label="客户姓名" width="150%" align="center" show-overflow-tooltip/>
-        <el-table-column v-if="queryParams.settleType===settleTypeData.isCase" key="sex" prop="sex" label="性别" width="150%" align="center" :formatter="getSex" show-overflow-tooltip/>
-        <el-table-column v-if="queryParams.settleType===settleTypeData.isCase" key="idNo" prop="idNo" label="证件号码" width="150%" align="center" show-overflow-tooltip/>
-        <el-table-column v-if="queryParams.settleType===settleTypeData.isCase" key="serviceDate" prop="serviceDate" label="服务日期" width="150%" align="center" show-overflow-tooltip/>
-        <el-table-column v-if="queryParams.settleType===settleTypeData.isCont" key="insuredNum" prop="insuredNum" label="承保人数" width="150%" align="center" show-overflow-tooltip/>
-        <el-table-column v-if="queryParams.settleType===settleTypeData.isCont" key="unitPrice" prop="unitPrice" label="客单价" width="150%" align="center" show-overflow-tooltip/>
-        <el-table-column v-if="queryParams.settleType===settleTypeData.isCase || queryParams.settleType===settleTypeData.isCont" key="remark" prop="remark" label="备注" width="150%" align="center" show-overflow-tooltip/>
-        <el-table-column v-if="queryParams.settleType===settleTypeData.isCase || queryParams.settleType===settleTypeData.isCont || queryParams.settleType===settleTypeData.isPrice" key="amount" prop="amount" label="服务费" width="150%" align="center" show-overflow-tooltip/>
-        <el-table-column v-if="queryParams.settleType===settleTypeData.isCase || queryParams.settleType===settleTypeData.isCont || queryParams.settleType===settleTypeData.isPrice" key="actualAmount" prop="actualAmount" label="实际服务费用" width="150%" align="center" show-overflow-tooltip/>
-        <el-table-column v-if="queryParams.settleType===settleTypeData.isCase || queryParams.settleType===settleTypeData.isCont || queryParams.settleType===settleTypeData.isPrice" key="reason" prop="reason" label="编辑原因" width="150%" align="center" show-overflow-tooltip/>
+        <el-table-column v-if="queryParams.settleType===settleTypeData.isCase || queryParams.settleType===settleTypeData.isPrice" key="serviceCode" prop="serviceCode" label="供应商项目名称" min-width="150%" align="center" show-overflow-tooltip/>
+        <el-table-column v-if="queryParams.settleType===settleTypeData.isCase" key="appntName" prop="appntName" label="投保人" min-width="150%" align="center" show-overflow-tooltip/>
+        <el-table-column v-if="queryParams.settleType===settleTypeData.isCase" key="custName" prop="custName" label="客户姓名" min-width="150%" align="center" show-overflow-tooltip/>
+        <el-table-column v-if="queryParams.settleType===settleTypeData.isCase" key="sex" prop="sex" label="性别" min-width="150%" align="center" :formatter="getSex" show-overflow-tooltip/>
+        <el-table-column v-if="queryParams.settleType===settleTypeData.isCase" key="idNo" prop="idNo" label="证件号码" min-width="150%" align="center" show-overflow-tooltip/>
+        <el-table-column v-if="queryParams.settleType===settleTypeData.isCase" key="serviceDate" prop="serviceDate" label="服务日期" min-width="150%" align="center" show-overflow-tooltip/>
+        <el-table-column v-if="queryParams.settleType===settleTypeData.isCont" key="insuredNum" prop="insuredNum" label="承保人数" min-width="150%" align="center" show-overflow-tooltip/>
+        <el-table-column v-if="queryParams.settleType===settleTypeData.isCont" key="unitPrice" prop="unitPrice" label="客单价" min-width="150%" align="center" show-overflow-tooltip/>
+        <el-table-column v-if="queryParams.settleType===settleTypeData.isCase || queryParams.settleType===settleTypeData.isCont" key="remark" prop="remark" label="备注" min-width="150%" align="center" show-overflow-tooltip/>
+        <el-table-column v-if="queryParams.settleType===settleTypeData.isCont" key="allAmount" prop="allAmount" label="总费用" min-width="150%" align="center" show-overflow-tooltip/>
+
+        <el-table-column v-if="queryParams.settleType===settleTypeData.isCase || queryParams.settleType===settleTypeData.isCont || queryParams.settleType===settleTypeData.isPrice" key="amount" prop="amount" label="服务费" min-width="150%" align="center" show-overflow-tooltip/>
+        <el-table-column v-if="queryParams.settleType===settleTypeData.isCase || queryParams.settleType===settleTypeData.isCont || queryParams.settleType===settleTypeData.isPrice" key="actualAmount" prop="actualAmount" label="实际服务费用" min-width="150%" align="center" show-overflow-tooltip/>
+        <el-table-column v-if="queryParams.settleType===settleTypeData.isCase || queryParams.settleType===settleTypeData.isCont || queryParams.settleType===settleTypeData.isPrice" key="reason" prop="reason" label="编辑原因" min-width="150%" align="center" show-overflow-tooltip/>
       </el-table>
       <!--分页组件-->
       <pagination

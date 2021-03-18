@@ -244,12 +244,25 @@ public class SysUserController extends BaseController
 
     @GetMapping("/getUserInfo")
     public AjaxResult getUserInfo(){
-        return AjaxResult.success(userService.selectUserByUserName(SecurityUtils.getUsername()));
+        // 角色权限
+        SysUser sysUser = userService.selectUserByUserName(SecurityUtils.getUsername());
+        if(StringUtils.isNotNull(sysUser)) {
+            Set<String> rolePermission = permissionService.getRolePermission(sysUser.getUserId());
+            sysUser.setRolePermission(rolePermission);
+        }
+        return AjaxResult.success(sysUser);
     }
 
     @PostMapping("/getUsersByOrganCode")
     public TableDataInfo getUsersByOrganCode(@RequestBody SysUserByOrganCodeDTO sysUserByOrganCodeDTO){
         startPage(sysUserByOrganCodeDTO);
-        return getDataTable(userService.getUsersByOrganCode(sysUserByOrganCodeDTO));
+        List<SysUser> userList = userService.getUsersByOrganCode(sysUserByOrganCodeDTO);
+        for(SysUser user : userList) {
+            // 角色权限
+            Set<String> rolePermission = permissionService.getRolePermission(user.getUserId());
+            user.setRolePermission(rolePermission);
+        }
+
+        return getDataTable(userList);
     }
 }

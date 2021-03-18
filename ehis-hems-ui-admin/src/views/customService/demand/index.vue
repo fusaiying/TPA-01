@@ -280,8 +280,11 @@
           :row-class-name="setRowStyle"
         >
           <el-table-column prop="workOrderNo" align="center" width="150" label="工单号" show-overflow-toolti>
-            <template slot-scope="scope">
+            <!--<template slot-scope="scope">
               <el-link :underline="false" @click="dealButton(scope.row)">{{ scope.row.workOrderNo }}</el-link>
+            </template>-->
+            <template slot-scope="scope">
+              <el-button size="mini" type="text" @click="workOrderButton(scope.row)">{{scope.row.workOrderNo}}</el-button>
             </template>
           </el-table-column>
           <el-table-column prop="businessService" align="center" width="140" label="服务项目" show-overflow-tooltip>

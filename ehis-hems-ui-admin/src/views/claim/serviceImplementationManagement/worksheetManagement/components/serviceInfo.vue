@@ -136,7 +136,7 @@
             </el-select>
             <!--            <el-input v-model="baseForm.secondDept" class="item-width" clearable size="mini" style="width: 100px"/>-->
             <el-select v-model="baseForm.secondDept" class="item-width" clearable  size="mini" style="width: 100px" >
-              <el-option v-for="item in secondDeptList" :label="item.secondDeptName" :value="item.secondDeptName"
+              <el-option v-for="item in secondDeptList" :label="item.deptName" :value="item.deptName"
                          :key="item.index"/>
             </el-select>
 
@@ -277,7 +277,11 @@ export default {
 
 
   },
-
+  updated() {
+    this.$nextTick(function () {
+        this.$refs["baseForm"].clearValidate();
+    })
+  },
   methods: {
     async init() {
       await new Promise((resolve, reject) => {
@@ -313,6 +317,7 @@ export default {
           }
 //获取该产品下选中服务项目的所有供应商
           getAllProSuppInfo(queryData).then(res => {
+
             if (res.code == '200') {
               this.productTypeOptions = res.data
             }
@@ -386,7 +391,6 @@ export default {
               }
 
             })
-
 
 
 

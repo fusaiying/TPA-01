@@ -477,6 +477,7 @@
           let workOrderNo=s.workOrderNo
           complaintObtain(workOrderNo).then(res => {
             if (res != null && res.code === 200) {
+              this.searchHandles()
             }
           }).catch(res => {
           })

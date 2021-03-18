@@ -494,29 +494,29 @@
             return true
             break;
           case '05':
-            return type === 1 ? this.logRoleName.indexOf("受理") > -1 : this.checkRoleName.indexOf("受理") > -1
+            return type === 1 ? this.logRoleName.toLowerCase().indexOf("sl") > -1 : this.checkRoleName.toLowerCase().indexOf("sl") > -1
             break;
           case '30':
-            return type === 1 ? this.logRoleName.indexOf("问题件") > -1 : this.checkRoleName.indexOf("问题件") > -1
+            return type === 1 ? this.logRoleName.toLowerCase().indexOf("wtj") > -1 : this.checkRoleName.toLowerCase().indexOf("wtj") > -1
             break;
           case '97':
             return true
           case '98':
             return true
           case '06':
-            return type === 1 ? this.logRoleName.indexOf("录入") > -1 : this.checkRoleName.indexOf("录入") > -1
+            return type === 1 ? this.logRoleName.toLowerCase().indexOf("lr") > -1 : this.checkRoleName.toLowerCase().indexOf("lr") > -1
             break;
           case '07':
-            return type === 1 ? this.logRoleName.indexOf("审核") > 0 : this.checkRoleName.indexOf("审核") > -1
+            return type === 1 ? this.logRoleName.toLowerCase().indexOf("sh") > 0 : this.checkRoleName.toLowerCase().indexOf("sh") > -1
             break;
           case '31':
-            return type === 1 ? this.logRoleName.indexOf("协谈") > -1 : this.checkRoleName.indexOf("协谈") > -1
+            return type === 1 ? this.logRoleName.toLowerCase().indexOf("xt") > -1 : this.checkRoleName.toLowerCase().indexOf("xt") > -1
             break;
           case '32':
-            return type === 1 ? this.logRoleName.indexOf("调查") > -1 : this.checkRoleName.indexOf("调查") > -1
+            return type === 1 ? this.logRoleName.toLowerCase().indexOf("dc") > -1 : this.checkRoleName.toLowerCase().indexOf("dc") > -1
             break;
           case '08':
-            return type === 1 ? this.logRoleName.indexOf("抽检") > -1 : this.checkRoleName.indexOf("抽检") > -1
+            return type === 1 ? this.logRoleName.toLowerCase().indexOf("cj") > -1 : this.checkRoleName.toLowerCase().indexOf("cj") > -1
             break;
           case '99':
             return true
@@ -525,15 +525,15 @@
         }
       },
       getRole(value) {
-        this.userNameValue =value;
         if (value == '') {
           return false;
         }
+        this.userNameValue = this.userIdName[value];
       },
       getLogRole() {
         getUserInfo().then(response => {
-          if (response.code == '200' && response.data && response.data.roles) {
-            this.logRoleName = response.data.roles[0].roleName;
+          if (response.code === 200 && response.data) {
+            this.logRoleName = response.data.rolePermission[0];
           }
         }).catch(error => {
           console.log(error);
@@ -571,17 +571,18 @@
               pageSize: 200,
             }
             getUsersByOrganCode(option).then(response => {
-              if (res != null && res.code === 200) {
-               // this.operatorSelect = response.rows
+              if (response != null && response.code === 200) {
                 for (let i = 0; i < response.rows.length; i++) {
                   let obj = new Object();
-                  let userName = response.rows[i].userName;
-                  obj.dictLabel = response.rows[i].userName;
-                  obj.dictValue = response.rows[i].userName;
+                  let resdata = response.rows[i]
+                  let userName = resdata.userName;
+                  let rolePermission = resdata.rolePermission[0];
+                  obj.dictLabel = userName;
+                  obj.dictValue = userName;
                   this.operatorSelect.push(obj);
                   //根据用户名称映射用户角色
-                  if(response.rows[i].roles) {
-                    this.userIdName[userName] = response.rows[i].roles[0].roleName;
+                  if(rolePermission) {
+                    this.userIdName[userName] = rolePermission;
                   }
                 }
               }
@@ -832,7 +833,7 @@
         // 判断是否有权限
         for (let i = 0; i < this.checkSelection.length; i++) {
           let caseStatus = this.checkSelection[i].caseStatus;
-          if (this.logRoleName.indexOf("管理员") < 0) {
+          if (this.logRoleName.toLowerCase().indexOf("admin") < 0) {
             let permit = this.getPermit(caseStatus, 1);
             if (permit) {
               this.checkArra.push(this.checkSelection[i].rptNo)
@@ -842,7 +843,7 @@
           } else {
             this.checkArra.push(this.checkSelection[i].rptNo)
           }
-          if (this.checkRoleName.indexOf("管理员") < 0) {
+          if (this.checkRoleName.toLowerCase().indexOf("admin") < 0) {
             let permit = this.getPermit(caseStatus, 2);
             if (permit) {
               if (!this.arrayContain(this.checkArra, this.checkSelection[i].rptNo)) {

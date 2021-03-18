@@ -25,6 +25,6 @@ public class ClaimFlowServiceimpl implements IClaimFlowService {
     @Override
     public PolicyListVo getPolicyInfoBy(ClaimFlowDTO claimFlowDTO) {
         List<PolicyListVo> policyListVos = policyInfoMapper.selectPolicyList(claimFlowDTO);
-        return policyListVos!=null?policyListVos.get(0):null;
+        return policyListVos!=null && !policyListVos.isEmpty() ? policyListVos.get(0) : null;
     }
 }

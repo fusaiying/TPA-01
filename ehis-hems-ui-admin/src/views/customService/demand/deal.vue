@@ -814,6 +814,8 @@ export default {
       return item.dictType === 'cs_business_type'
     }).dictDate
 
+    this.isBusinessProcess(this.ruleForm.businessProcess);
+
     //初始化按钮状态
     this.checkButton();
   },

@@ -120,4 +120,15 @@ public interface ServiceBalanceDetailMapper
      */
     public List<ServiceBalanceDetailPriceVO> selectServiceBalanceDetailList_price(ServiceBalanceInfo serviceBalanceInfo);
 
+
+    /**
+     * 查询service_balance_detail(服务结算明细信息)工单编码列表
+     *
+     * @param serviceBalanceDetail service_balance_detail(服务结算明细信息)
+     * @return String(服务结算明细信息)集合
+     */
+    public List<String> orderCodeList(ServiceBalanceDetail serviceBalanceDetail);
+
+    public int updateOrderInfo(List<String> orderCodes);
+
 }

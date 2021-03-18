@@ -274,7 +274,7 @@ public class ServiceBalanceDetailController extends BaseController
     /**
      * 查询service_balance_detail(服务结算明细信息)列表30天的默认数据
      */
-    @PostMapping("/list3")
+    @GetMapping("/list3")
     public TableDataInfo list3() throws Exception
     {
         startPage();

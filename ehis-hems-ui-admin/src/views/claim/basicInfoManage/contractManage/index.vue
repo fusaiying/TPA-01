@@ -309,6 +309,7 @@
         };
         getAllBaseSupplierInfo(query).then(response => {
           if(response.data != null) {
+            response.data = response.data.reverse();
             for(let i=0; i<response.data.length; i++) {
               let obj= new Object();
               obj.dictLabel = response.data[i].chname + " - " + response.data[i].enname;

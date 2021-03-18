@@ -195,7 +195,7 @@ export default {
     };
   },
   created() {
-    this.getList();
+    this.getFirstList();
 
   },
   async mounted() {
@@ -257,6 +257,19 @@ export default {
         return item.supplierCode === this.queryParams.supplierCode;
       });
     },
+    //首次查询
+    getFirstList() {
+      this.loading = true;
+      listBalance2(this.queryParams).then(res => {
+        if (res != null && res.code === 200) {
+          this.balanceList = res.rows;
+          this.total = res.total;
+          this.loading = false;
+        }
+      }).catch(res => {
+        this.loading = false
+      });
+    },
     /** 查询服务结算列表 */
     getList() {
       this.loading = true;
@@ -273,16 +286,20 @@ export default {
         }
       }).catch(res => {
         this.loading = false
-      });;
+      });
     },
     /** 搜索按钮操作 */
     handleQuery() {
       this.queryParams.pageNum = 1;
+      this.queryParams.pageSize = 10;
       this.getList();
     },
     /** 重置按钮操作 */
     resetQuery() {
       this.resetForm("queryForm");
+      this.queryParams.pageNum = 1;
+      this.queryParams.pageSize = 10;
+      this.getList();
     },
     /** 清单审核 */
     handleExam(row) {

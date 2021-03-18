@@ -330,7 +330,7 @@
         </el-table>
 
         <pagination
-          v-show="totalCount>0"
+          v-show="totalPersonCount>0"
           :total="totalPersonCount"
           :page.sync="sendForm.pageNum"
           :limit.sync="sendForm.pageSize"

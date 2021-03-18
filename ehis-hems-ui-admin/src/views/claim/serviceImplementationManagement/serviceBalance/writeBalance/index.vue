@@ -163,12 +163,15 @@ import {
   getAllBaseSupplierInfo,
   getContractServerList
 } from '@/api/contractManage/contractManagement';
+import {atLeastOne2} from "@/utils/commenMethods";
 
 let dictss = [{dictType: 'currency'}, {dictType: 'clearing_form'},]
 export default {
   name: "writeBalance",
   data() {
     return {
+      // 是否默认3个月查询
+      isDefault: true,
       // 遮罩层
       loading: false,
       // 总条数
@@ -296,8 +299,19 @@ export default {
     },
     /** 查询服务结算列表 */
     getList() {
+      let query;
+      if (this.isDefault) {
+        query = JSON.parse(JSON.stringify(this.queryParams))
+        const flag = atLeastOne2(query,["params","status","pageNum","pageSize"]);
+        if (!flag) {
+          query.beginTime = moment().subtract(3,"months").format('YYYY-MM-DD');
+          query.endTime = moment().format('YYYY-MM-DD');
+        }
+      } else {
+        query = this.queryParams;
+      }
       this.loading = true;
-      listBalance2(this.queryParams).then(res => {
+      listBalance2(query).then(res => {
         if (res != null && res.code === 200) {
           this.balanceList = res.rows;
           this.total = res.total;
@@ -314,12 +328,18 @@ export default {
     },
     /** 搜索按钮操作 */
     handleQuery() {
+      this.isDefault = false;
       this.queryParams.pageNum = 1;
+      this.queryParams.pageSize = 10;
       this.getList();
     },
     /** 重置按钮操作 */
     resetQuery() {
+      this.isDefault = true;
       this.resetForm("queryForm");
+      this.queryParams.pageNum = 1;
+      this.queryParams.pageSize = 10;
+      this.getList();
     },
     /** 明细操作 */
     handelDetail(row) {

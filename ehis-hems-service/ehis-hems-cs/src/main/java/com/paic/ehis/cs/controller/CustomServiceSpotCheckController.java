@@ -289,6 +289,17 @@ public class CustomServiceSpotCheckController extends BaseController {
         return getDataTable(list);
 
     }
+
+
+    //************************************************************************************
+    /**
+     *工单获取
+     */
+    @GetMapping("/internal/updateGetWorkOrder")
+    public AjaxResult updateGetWorkOrder(String workOrderNo) {
+        return AjaxResult.success(qualityInspectionAcceptService.updateSendByVoById(workOrderNo));
+    }
+
     //************************************************
         /*
         工单查询清单导出

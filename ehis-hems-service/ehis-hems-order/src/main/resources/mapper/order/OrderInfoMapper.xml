@@ -25,6 +25,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="expectedDepartment"    column="expected_department"    />
         <result property="seriousDisease"    column="serious_disease"    />
         <result property="operation"    column="operation"    />
+        <result property="datailStatus"    column="datail_status"    />
         <result property="finalDiagnosis"    column="final_diagnosis"    />
         <result property="symptomDescription"    column="symptom_description"    />
         <result property="remark"    column="remark"    />
@@ -140,6 +141,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         pi.product_chname,
         oi.supplier_name chname,
         oi.service_name,
+        oi.detail_status,
         oi.supplier_code,
         policy_certificate_no,
         oi.product_code,

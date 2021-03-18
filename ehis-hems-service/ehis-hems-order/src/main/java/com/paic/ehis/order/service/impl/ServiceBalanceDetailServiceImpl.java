@@ -10,10 +10,13 @@ import com.paic.ehis.order.domain.vo.ServiceBalanceDetailPriceVO;
 import com.paic.ehis.order.mapper.ServiceBalanceDetailMapper;
 import com.paic.ehis.order.service.IServiceBalanceDetailService;
 import com.paic.ehis.order.service.enumeration.StatusEnum;
+import com.paic.ehis.order.utils.Dateutils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Map;
 
 /**
  * service_balance_detail(服务结算明细信息)Service业务层处理
@@ -116,6 +119,22 @@ public class ServiceBalanceDetailServiceImpl implements IServiceBalanceDetailSer
     public List<ServiceBalanceDetail> selectServiceBalanceDetailList2(ServiceBalanceDetail serviceBalanceDetail)
     {
         return serviceBalanceDetailMapper.selectServiceBalanceDetailList2(serviceBalanceDetail);
+    }
+
+    /**
+     * 查询service_balance_detail(服务结算明细信息)列表
+     *
+     * @return service_balance_detail(服务结算明细信息)
+     */
+    @Override
+    public List<ServiceBalanceDetail> selectServiceBalanceDetailList3() throws Exception
+    {
+        Map map = Dateutils.getCurrontTime1();
+        ServiceBalanceDetail serviceBalanceDetailInfo = new ServiceBalanceDetail();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        serviceBalanceDetailInfo.setBeforeDate(sdf.parse(String.valueOf(map.get("defaultStartDate"))));//一个月前
+        serviceBalanceDetailInfo.setNowDate(sdf.parse(String.valueOf(map.get("defaultEndDate")))); //当前时间
+        return serviceBalanceDetailMapper.selectServiceBalanceDetailList3(serviceBalanceDetailInfo);
     }
 
     /**

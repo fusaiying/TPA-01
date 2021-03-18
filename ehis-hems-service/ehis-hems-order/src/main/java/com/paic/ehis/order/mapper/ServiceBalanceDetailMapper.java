@@ -76,6 +76,14 @@ public interface ServiceBalanceDetailMapper
     /**
      * 查询service_balance_detail(服务结算明细信息)列表
      *
+     * @return service_balance_detail(服务结算明细信息)集合
+     */
+    public List<ServiceBalanceDetail> selectServiceBalanceDetailList3(ServiceBalanceDetail serviceBalanceDetailInfo);
+
+
+    /**
+     * 查询service_balance_detail(服务结算明细信息)列表
+     *
      * @param serviceBalanceInfo service_balance_info(服务结算基本信息)
      * @return service_balance_detail(服务结算明细信息)集合
      */

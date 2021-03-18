@@ -84,7 +84,7 @@ public class OrderInfoController extends BaseController
             list = orderInfoService.selectOrderInfoList(orderInfo);
         }
         ExcelUtil<OrderInfo> util = new ExcelUtil<OrderInfo>(OrderInfo.class);
-        util.exportExcel(response, list, "info");
+        util.exportExcel(response, list, "工单信息表");
     }
 
     /**

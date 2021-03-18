@@ -2,6 +2,7 @@ package com.paic.ehis.cs.service.impl;
 
 
 import com.alibaba.fastjson.JSONObject;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.PubFun;
 
@@ -246,26 +247,35 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
             claimFlowDTO.setPolicyNo(demandAcceptVo.getPolicyNo());
             claimFlowDTO.setPolicyItemNo(demandAcceptVo.getPolicyItemNo());
             AjaxResult policyInfoBy = claimFlowService.getPolicyInfoBy(claimFlowDTO);
-            PolicyListVo policyListVo = (PolicyListVo) policyInfoBy.get("data");
-            if(policyListVo!=null){
+            if(policyInfoBy.get("data")!=null){
+                ObjectMapper mapper = new ObjectMapper();
+                PolicyListVo policyListVo = mapper.convertValue(policyInfoBy.get("data"), PolicyListVo.class);
                 workOrderAccept.setPolicyNo(demandAcceptVo.getPolicyNo());
                 workOrderAccept.setPolicyItemNo(demandAcceptVo.getPolicyItemNo());
                 workOrderAccept.setRiskCode(policyListVo.getRiskCodesStr());
                 workOrderAccept.setInsuredName(policyListVo.getName());
                 workOrderAccept.setHolderName(policyListVo.getAppName());
                 //被保人信息保存
-                String insuredId = PubFun.createMySqlMaxNoUseCache("cs_person_id", 10, 6);
+                String insuredId = PubFun.createMySqlMaxNoUseCache("cs_person_id", 10, 10);
                 PersonInfo insuredPerson=new PersonInfo();
                 insuredPerson.setPersonId(insuredId);
+                workOrderAccept.setInsuredNo(insuredId);
                 insuredPerson.setName(policyListVo.getName());
                 insuredPerson.setEmail(policyListVo.getEmail());
                 insuredPerson.setBirthday(policyListVo.getBirthday());
+                insuredPerson.setProvince(policyListVo.getProvince());
+                insuredPerson.setCity(policyListVo.getCity());
+                insuredPerson.setDistrict(policyListVo.getDistrict());
                 insuredPerson.setAddress(policyListVo.getAddress());
                 insuredPerson.setIdType(policyListVo.getIdType());
                 insuredPerson.setIdNumber(policyListVo.getIdNo());
                 insuredPerson.setSex(policyListVo.getSex());
                 insuredPerson.setLinePhone(policyListVo.getPhone());
                 insuredPerson.setOtherCustomerNo(policyListVo.getInsuredNo());
+                insuredPerson.setCreatedBy(SecurityUtils.getUsername());
+                insuredPerson.setUpdatedBy(SecurityUtils.getUsername());
+                insuredPerson.setCreatedTime(DateUtils.getNowDate());
+                insuredPerson.setUpdatedTime(DateUtils.getNowDate());
                 personInfoMapper.insertPersonInfo(insuredPerson);
             }
         }

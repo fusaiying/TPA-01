@@ -558,7 +558,7 @@
           ],
           'callPerson.mobilePhone': [
             //{required: true, message: "来电号码不能为空", trigger: "blur"},
-            {required: false,
+            {required: true,
               message: "目前只支持录入数字",
               pattern: /^\d+$/,//可以写正则表达式呦呦呦,
               trigger: ['blur','change']},

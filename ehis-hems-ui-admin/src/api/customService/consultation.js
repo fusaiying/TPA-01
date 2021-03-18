@@ -10,6 +10,15 @@ export function consultationPool(query) {
 }
 
 //# 征求意见处理页面的池
+export function consultationPoolNew(query) {
+  return request({
+    url: '/cs/from/listPublicNew',
+    method: 'get',
+    params: query
+  })
+}
+
+//# 征求意见处理页面的池
 export function  complainSearch(workOrderNo) {
   return request({
     url: '/cs/complaint/'+workOrderNo,

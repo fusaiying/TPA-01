@@ -116,7 +116,7 @@
               <span>{{ scope.row.acceptTime | changeDate }}</span>
             </template>
           </el-table-column>
-          <el-table-column align="center" prop="policyNo" label="处理时效（工作日）" show-overflow-tooltip/>
+          <el-table-column align="center" prop="processingTime" label="处理时效（工作日）" show-overflow-tooltip/>
           <el-table-column align="center" fixed="right" label="操作" width="140">
             <template slot-scope="scope" v-if="scope.row.status!='02'">
               <el-button size="mini" type="text" @click="dealButton(scope.row)">处理</el-button>
@@ -138,7 +138,7 @@
 
 <script>
 import moment from 'moment'
-import {consultationPool} from '@/api/customService/consultation'
+import {consultationPool,consultationPoolNew} from '@/api/customService/consultation'
 
 
 let dictss = [
@@ -257,7 +257,7 @@ export default {
         queryParams.acceptTimeStart = this.sendForm.handlerTime[0];
         queryParams.acceptTimeEnd = this.sendForm.handlerTime[1];
       }
-      consultationPool(queryParams).then(res => {
+      consultationPoolNew(queryParams).then(res => {
         if (res != null && res.code === 200) {
           this.workPoolData = res.rows
           this.totalCount = res.total

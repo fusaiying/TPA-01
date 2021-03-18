@@ -25,6 +25,19 @@ public interface QualityInspectionAcceptMapper {
     public List<AcceptVo> selectSendByVo(WorkOrderQueryDTO workOrderQueryDTO);
 
     /**
+     * 可质检工单根据工单号查询是处理中的数据
+     */
+    public AcceptVo selectSendByVoById1(String workOrderNo);
+
+
+    /**
+     * 可质检工单根据工单号查询非处理中的最新数据
+     */
+    public AcceptVo selectSendByVoById2(String workOrderNo);
+
+
+
+    /**
      * 质检查询
      * @param qualityDTO
      * @return

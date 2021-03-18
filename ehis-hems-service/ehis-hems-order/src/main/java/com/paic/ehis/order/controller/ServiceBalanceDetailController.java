@@ -74,14 +74,14 @@ public class ServiceBalanceDetailController extends BaseController
             baseContractService.setStatus(StatusEnum.VALID.getCode());
             List<BaseContractService> contractServiceList = getProviderInfoService.selectBaseContractServiceInfo(baseContractService);
             for (ServiceBalanceDetailCaseVO serviceBalanceDetailCaseVO : list) {
-                if (StringUtils.isNotEmpty(serviceBalanceDetailCaseVO.getServiceCode())) {
+                /*if (StringUtils.isNotEmpty(serviceBalanceDetailCaseVO.getSupplierServiceName())) {
                     for (BaseContractService contractService : contractServiceList) {
-                        if (contractService.getSerialNo().equals(serviceBalanceDetailCaseVO.getServiceCode())) {
-                            serviceBalanceDetailCaseVO.setServiceCode(contractService.getSupplierServiceName());
+                        if (contractService.getSupplierServiceName().equals(serviceBalanceDetailCaseVO.getSupplierServiceName())) {
+                            serviceBalanceDetailCaseVO.setSupplierServiceName(contractService.getSupplierServiceName());
                             break;
                         }
                     }
-                }
+                }*/
             }
             ExcelUtil<ServiceBalanceDetailCaseVO> util = new ExcelUtil<ServiceBalanceDetailCaseVO>(ServiceBalanceDetailCaseVO.class);
             util.exportExcel(response, list, "按case（工单）");
@@ -152,21 +152,23 @@ public class ServiceBalanceDetailController extends BaseController
                         dataList.get(i).setStatus(StatusEnum.VALID.getCode());
                         if ("".equals(excelCaseDetail.getActualAmount()) || excelCaseDetail.getActualAmount() == null) {
                             errorTmp.append("，实际服务费为空");
-                        }
-                        //表格实际服务费与数据库服务费一致存到数据库实际服务费
-                        if (dataList.get(i).getAmount().compareTo(excelCaseDetail.getActualAmount()) == 0) {
-                            dataList.get(i).setActualAmount(excelCaseDetail.getActualAmount());
-                        } else if (dataList.get(i).getAmount().compareTo(excelCaseDetail.getActualAmount()) != 0) {
-                            //表格实际服务费<数据库服务费时，原因必填
-                            if (StringUtils.isNotEmpty(excelCaseDetail.getReason())) {
+                        }else{
+                            //表格实际服务费与数据库服务费一致存到数据库实际服务费
+                            if (dataList.get(i).getAmount().compareTo(excelCaseDetail.getActualAmount()) == 0) {
                                 dataList.get(i).setActualAmount(excelCaseDetail.getActualAmount());
-                            } else {
-                                errorTmp.append("，服务费不一致，原因未填");
-                            }
-                        } /*else {
-                            *//*errorTmp.append("，实际服务费不能低于服务费");*//*
+                            } else if (dataList.get(i).getAmount().compareTo(excelCaseDetail.getActualAmount()) != 0) {
+                                //表格实际服务费<数据库服务费时，原因必填
+                                if (StringUtils.isNotEmpty(excelCaseDetail.getReason())) {
+                                    dataList.get(i).setActualAmount(excelCaseDetail.getActualAmount());
+                                } else {
+                                    errorTmp.append("，服务费不一致，原因未填");
+                                }
+                            } /*else {
+                             *//*errorTmp.append("，实际服务费不能低于服务费");*//*
                             dataList.get(i).setActualAmount(excelCaseDetail.getActualAmount());
                         }*/
+                        }
+
                         if (errorTmp.length() > 0) {
                             error.append("第" + (i + 2) + "行");
                             error.append(errorTmp);

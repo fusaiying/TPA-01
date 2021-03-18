@@ -26,7 +26,7 @@ public class ServiceBalanceDetailCaseVO implements Serializable
 
     /** 险种 */
     @Excel(name = "险种")
-    private String riskCode;
+    private String riskName;
 
     /** 保单号 */
     @Excel(name = "保单号")
@@ -38,7 +38,7 @@ public class ServiceBalanceDetailCaseVO implements Serializable
 
     /** 供应商项目名称 */
     @Excel(name = "供应商项目名称")
-    private String serviceCode;
+    private String supplierServiceName;
 
     /** 投保人 */
     @Excel(name = "投保人")
@@ -76,5 +76,8 @@ public class ServiceBalanceDetailCaseVO implements Serializable
     /** 原因 */
     @Excel(name = "编辑原因")
     private String reason;
+
+
+
 
 }

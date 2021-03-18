@@ -241,6 +241,7 @@ public class OrderInfo extends BaseEntity
 
     private String role;
 
+    @Excel(name = "工单状态")
     private String detailInfo;
 
     /** 当前日期 */

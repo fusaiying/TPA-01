@@ -165,7 +165,7 @@ public class ServiceBalanceDetailController extends BaseController
                             }
                         } else {
                             /*errorTmp.append("，实际服务费不能低于服务费");*/
-                            break;
+                            dataList.get(i).setActualAmount(excelCaseDetail.getActualAmount());
                         }
                         if (errorTmp.length() > 0) {
                             error.append("第" + (i + 1) + "行");

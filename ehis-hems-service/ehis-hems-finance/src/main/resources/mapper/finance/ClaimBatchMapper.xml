@@ -42,9 +42,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
     <select id="selectPayBatchInit" parameterType="string" resultType="java.util.HashMap">
-select batchNo ,hospitalCode,caseload,batchTotal,isAppeal,organCode,submitDate,calAmount,soi.organ_name organName from (
+select batchNo ,hospitalCode,caseload,batchTotal,isAppeal,organCode,submitDate,calAmount,soi.organ_name organName,source,currency from (
 select distinct
     a.batch_no "batchNo",
+    a.source "source",
+    a.currency "currency",
     a.hospital_code "hospitalCode",
     a.caseload "caseload",
     a.batch_total "batchTotal",
@@ -80,9 +82,15 @@ WHERE
     ) a,
     claimmain.claim_case b,
     (
+
   select cc.batch_no ,ccc.bill_currency,sum(ccc.cal_amount) cal_amount
-  from claimmain.claim_case_cal ccc left join claimmain.claim_case cc on ccc.rpt_no=cc.rpt_no
-  where ccc.STATUS = 'Y' AND cc.STATUS = 'Y'
+  from claimmain.claim_case cc  left join claimmain.claim_case_cal ccc on ccc.rpt_no=cc.rpt_no
+  where cc.case_prop='01' and ccc.STATUS = 'Y' AND cc.STATUS = 'Y'
+  group by ccc.bill_currency,cc.batch_no
+	union
+	 select cc.batch_no ,ccc.bill_currency,sum(ccc.cal_amount) cal_amount
+  from claimmain.claim_case cc left join  claimmain.claim_case_cal_core ccc on ccc.rpt_no=cc.rpt_no
+  where cc.case_prop='02' and ccc.STATUS = 'Y' AND cc.STATUS = 'Y'
   group by ccc.bill_currency,cc.batch_no
  ) c
     ,(
@@ -109,9 +117,11 @@ where 1=1
     </select>
 
     <select id="selectPayBatchList" parameterType="com.paic.ehis.finance.domain.dto.ClaimCasePayDTO" resultType="java.util.HashMap">
-       select batchNo ,batchNo batch_no,hospitalCode,caseload,batchTotal,isAppeal,organCode,submitDate,submitDate submit_date,calAmount,soi.organ_name organName from (
+       select batchNo ,batchNo batch_no,hospitalCode,caseload,batchTotal,isAppeal,organCode,submitDate,submitDate submit_date,calAmount,soi.organ_name organName ,source,currency from (
 select distinct
     a.batch_no "batchNo",
+    a.source "source",
+    a.currency "currency",
     a.hospital_code "hospitalCode",
     a.caseload "caseload",
     a.batch_total "batchTotal",
@@ -123,10 +133,15 @@ FROM
      claimmain.claim_batch a,
     claimmain.claim_case b,
     (
-  select cc.batch_no ,ccc.bill_currency,sum(ccc.cal_amount) cal_amount
-  from claimmain.claim_case_cal ccc left join claimmain.claim_case cc on ccc.rpt_no=cc.rpt_no
-  where ccc.STATUS = 'Y' AND cc.STATUS = 'Y'
-  group by ccc.bill_currency,cc.batch_no
+        select cc.batch_no ,ccc.bill_currency,sum(ccc.cal_amount) cal_amount
+        from claimmain.claim_case cc  left join claimmain.claim_case_cal ccc on ccc.rpt_no=cc.rpt_no
+        where cc.case_prop='01' and ccc.STATUS = 'Y' AND cc.STATUS = 'Y'
+        group by ccc.bill_currency,cc.batch_no
+        union
+        select cc.batch_no ,ccc.bill_currency,sum(ccc.cal_amount) cal_amount
+        from claimmain.claim_case cc left join  claimmain.claim_case_cal_core ccc on ccc.rpt_no=cc.rpt_no
+        where cc.case_prop='02' and ccc.STATUS = 'Y' AND cc.STATUS = 'Y'
+        group by ccc.bill_currency,cc.batch_no
  ) c
     ,(
  select aa.batch_no from
@@ -156,9 +171,11 @@ where 1=1
     </select>
 
     <select id="selectPayForeignBatchInit" parameterType="string" resultType="java.util.HashMap">
-        select batchNo ,hospitalCode,caseload,batchTotal,isAppeal,organCode,submitDate,calAmount,soi.organ_name organName  from (
+        select batchNo ,hospitalCode,caseload,batchTotal,isAppeal,organCode,submitDate,calAmount,soi.organ_name organName,source,currency   from (
 select distinct
     a.batch_no "batchNo",
+    a.source "source",
+    a.currency "currency",
     a.hospital_code "hospitalCode",
     a.caseload "caseload",
     a.batch_total "batchTotal",
@@ -194,9 +211,15 @@ WHERE
     ) a,
     claimmain.claim_case b,
     (
+
   select cc.batch_no ,ccc.bill_currency,sum(ccc.cal_amount) cal_amount
-  from claimmain.claim_case_cal ccc left join claimmain.claim_case cc on ccc.rpt_no=cc.rpt_no
-  where ccc.STATUS = 'Y' AND cc.STATUS = 'Y'
+  from claimmain.claim_case cc  left join claimmain.claim_case_cal ccc on ccc.rpt_no=cc.rpt_no
+  where cc.case_prop='01' and ccc.STATUS = 'Y' AND cc.STATUS = 'Y'
+  group by ccc.bill_currency,cc.batch_no
+	union
+	 select cc.batch_no ,ccc.bill_currency,sum(ccc.cal_amount) cal_amount
+  from claimmain.claim_case cc left join  claimmain.claim_case_cal_core ccc on ccc.rpt_no=cc.rpt_no
+  where cc.case_prop='02' and ccc.STATUS = 'Y' AND cc.STATUS = 'Y'
   group by ccc.bill_currency,cc.batch_no
  ) c
     ,(
@@ -223,9 +246,11 @@ where 1=1
     </select>
 
     <select id="selectPayForeignBatchList" parameterType="com.paic.ehis.finance.domain.dto.ClaimCasePayDTO" resultType="java.util.HashMap">
-        select batchNo ,batchNo batch_no,hospitalCode,caseload,batchTotal,isAppeal,organCode,submitDate,submitDate submit_date,calAmount,soi.organ_name organName from (
+        select batchNo ,batchNo batch_no,hospitalCode,caseload,batchTotal,isAppeal,organCode,submitDate,submitDate submit_date,calAmount,soi.organ_name organName ,source,currency from (
 select distinct
     a.batch_no "batchNo",
+    a.source "source",
+    a.currency "currency",
     a.hospital_code "hospitalCode",
     a.caseload "caseload",
     a.batch_total "batchTotal",
@@ -237,10 +262,16 @@ FROM
      claimmain.claim_batch a,
     claimmain.claim_case b,
     (
-  select cc.batch_no ,ccc.bill_currency,sum(ccc.cal_amount) cal_amount
-  from claimmain.claim_case_cal ccc left join claimmain.claim_case cc on ccc.rpt_no=cc.rpt_no
-  where ccc.STATUS = 'Y' AND cc.STATUS = 'Y'
-  group by ccc.bill_currency,cc.batch_no
+
+        select cc.batch_no ,ccc.bill_currency,sum(ccc.cal_amount) cal_amount
+        from claimmain.claim_case cc  left join claimmain.claim_case_cal ccc on ccc.rpt_no=cc.rpt_no
+        where cc.case_prop='01' and ccc.STATUS = 'Y' AND cc.STATUS = 'Y'
+        group by ccc.bill_currency,cc.batch_no
+        union
+        select cc.batch_no ,ccc.bill_currency,sum(ccc.cal_amount) cal_amount
+        from claimmain.claim_case cc left join  claimmain.claim_case_cal_core ccc on ccc.rpt_no=cc.rpt_no
+        where cc.case_prop='02' and ccc.STATUS = 'Y' AND cc.STATUS = 'Y'
+        group by ccc.bill_currency,cc.batch_no
  ) c
     ,(
  select aa.batch_no from

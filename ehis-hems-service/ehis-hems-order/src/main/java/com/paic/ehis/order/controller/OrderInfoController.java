@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -72,9 +73,14 @@ public class OrderInfoController extends BaseController
     //@PreAuthorize("@ss.hasPermi('system:info:export')")
     @Log(title = "order_info(工单信息)", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    public void export(HttpServletResponse response, OrderInfo orderInfo) throws IOException
+    public void export(HttpServletResponse response, OrderInfo orderInfo) throws Exception
     {
-        List<OrderInfo> list = orderInfoService.selectOrderInfoList(orderInfo);
+        List<OrderInfo> list= new ArrayList();
+        if(orderInfo == null){
+            list = orderInfoService.selectOrderInfoList3Months();
+        }else{
+            list = orderInfoService.selectOrderInfoList(orderInfo);
+        }
         ExcelUtil<OrderInfo> util = new ExcelUtil<OrderInfo>(OrderInfo.class);
         util.exportExcel(response, list, "info");
     }

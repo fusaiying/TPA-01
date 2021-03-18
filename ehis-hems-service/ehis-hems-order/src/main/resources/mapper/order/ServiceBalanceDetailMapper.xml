@@ -303,7 +303,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
              1 = 1-->
             SELECT
             oi.order_code,
-            oi.risk_code,
+            oi.risk_name,
             oi.policy_no,
             oi.policy_certificate_no policy_item_no,
             oi.appnt_name,

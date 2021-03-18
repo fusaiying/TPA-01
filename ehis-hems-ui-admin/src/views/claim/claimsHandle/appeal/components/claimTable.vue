@@ -94,7 +94,7 @@ export default {
        该案件还未支付，请在支付环节进行回退操作，请核实
        */
       if(row.appealClaim !== '0') {
-        this.$message({ type: 'info',  message: '无法获取，该案件在修正中'});
+        this.$message({ type: 'info',  message: '无法获取，该案件在申诉中'});
         return false;
       }
       if(row.payStatus !== '03') {

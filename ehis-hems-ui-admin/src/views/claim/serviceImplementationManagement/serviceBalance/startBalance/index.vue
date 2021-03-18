@@ -172,7 +172,7 @@ import {
 } from '@/api/contractManage/contractManagement';
 import {getToken} from "@/utils/auth";
 
-let dictss = [{dictType: 'currency'},{dictType: 'balance_invoice_type'}, {dictType: 'clearing_form'}, {dictType: 'balance_status'}]
+let dictss = [{dictType: 'currency'},{dictType: 'balance_invoice_type'}, {dictType: 'clearing_form'}, {dictType: 'balance_status_settlement'}]
 export default {
   name: "startBbalance",
   watch: {
@@ -264,7 +264,7 @@ export default {
       return item.dictType === 'clearing_form'
     }).dictDate
     this.balanceStatusOptions = this.dictList.find(item => {
-      return item.dictType === 'balance_status'
+      return item.dictType === 'balance_status_settlement'
     }).dictDate
   },
   methods: {

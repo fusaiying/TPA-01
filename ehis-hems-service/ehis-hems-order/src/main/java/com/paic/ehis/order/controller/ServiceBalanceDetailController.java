@@ -163,9 +163,9 @@ public class ServiceBalanceDetailController extends BaseController
                             } else {
                                 errorTmp.append("，服务费不一致，原因未填");
                             }
-                        } else {
+                        } /*else {
                             errorTmp.append("，实际服务费不能低于服务费");
-                        }
+                        }*/
                         if (errorTmp.length() > 0) {
                             error.append("第" + (i + 1) + "行");
                             error.append(errorTmp);

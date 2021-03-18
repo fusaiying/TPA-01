@@ -67,6 +67,7 @@
         send.hangFlag="02"
         cancelHangUp(send).then(res=>{
           if (res != null && res.code === 200) {
+            this.$emit('hangUpSearch');
             if (res.rows.length <= 0) {
               return this.$message.warning(
                 "解卦失败！"

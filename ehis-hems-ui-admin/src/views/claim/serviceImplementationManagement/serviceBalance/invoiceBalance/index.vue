@@ -172,7 +172,7 @@ export default {
         //支付时间
         payDate: null,
         //状态
-        invoiceStatus: null
+        invoiceStatus: 'N'
       },
       //发票信息
       invoice: {

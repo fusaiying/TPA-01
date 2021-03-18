@@ -133,4 +133,14 @@ export function classTwo(query) {
   })
 }
 
+export function collaborative(query) {
+  return request({
+    url: '/cs/from/list',
+    method: 'get',
+    params: query
+  })
+}
+
+
+
 

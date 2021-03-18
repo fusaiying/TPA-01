@@ -370,68 +370,96 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </if>
         <!-- 按一口价 -->
         <if test="settleType == '03'">
-            SELECT
-            *
-            FROM
-            (
-            SELECT
-            '2020-11-22~2020-12-03' balance_interval,
-            '1' supplier_code,
-            '11' service_code,
-            100 amount,
-            90 actual_amount,
-            '原因' reason
-            FROM
-            DUAL
-            UNION
-            SELECT
-            '2020-11-22~2020-12-04' balance_interval,
-            '2' supplier_code,
-            '22' service_code,
-            200 amount,
-            190 actual_amount,
-            '原因' reason
-            FROM
-            DUAL
-            ) t
-            WHERE
-            1 = 1
-        </if>
-    </select>
+    <!--SELECT
+    *
+    FROM
+    (
+    SELECT
+    '2020-11-22~2020-12-03' balance_interval,
+    '1' supplier_code,
+    '11' service_code,
+    100 amount,
+    90 actual_amount,
+    '原因' reason
+    FROM
+    DUAL
+    UNION
+    SELECT
+    '2020-11-22~2020-12-04' balance_interval,
+    '2' supplier_code,
+    '22' service_code,
+    200 amount,
+    190 actual_amount,
+    '原因' reason
+    FROM
+    DUAL
+    ) t
+    WHERE
+    1 = 1-->
 
-    <update id="updateServiceBalanceDetailByTaskNo" parameterType="ServiceBalanceDetail">
-        update service_balance_detail
-        <trim prefix="SET" suffixOverrides=",">
-            <if test="status != null">status = #{status},</if>
-            <if test="orderCode != null">order_code = #{orderCode},</if>
-            <if test="balanceInterval != null">balance_interval = #{balanceInterval},</if>
-            <if test="riskCode != null">risk_code = #{riskCode},</if>
-            <if test="policyNo != null">policy_no = #{policyNo},</if>
-            <if test="policyItemNo != null">policy_item_no = #{policyItemNo},</if>
-            <if test="supplierCode != null">supplier_code = #{supplierCode},</if>
-            <if test="serviceCode != null">service_code = #{serviceCode},</if>
-            <if test="appntNo != null">appnt_no = #{appntNo},</if>
-            <if test="appntName != null">appnt_name = #{appntName},</if>
-            <if test="custNo != null">cust_no = #{custNo},</if>
-            <if test="custName != null">cust_name = #{custName},</if>
-            <if test="sex != null">sex = #{sex},</if>
-            <if test="idNo != null">id_no = #{idNo},</if>
-            <if test="serviceDate != null">service_date = #{serviceDate},</if>
-            <if test="remark != null">remark = #{remark},</if>
-            <if test="amount != null">amount = #{amount},</if>
-            <if test="actualAmount != null">actual_amount = #{actualAmount},</if>
-            <if test="reason != null">reason = #{reason},</if>
-            <if test="insuredNum != null">insured_num = #{insuredNum},</if>
-            <if test="unitPrice != null">unit_price = #{unitPrice},</if>
-            <if test="createBy != null">create_by = #{createBy},</if>
-            <if test="createTime != null">create_time = #{createTime},</if>
-            <if test="updateBy != null">update_by = #{updateBy},</if>
-            <if test="updateTime != null">update_time = #{updateTime},</if>
-        </trim>
-        where task_no = #{taskNo}
-    </update>
+    SELECT
+    oi.order_code,
+    oi.supplier_name,
+    oi.service_name,
+    oi.remark,
+    oi.settle_price amount,
+    oi.reason,
+    bcs.supplier_service_name,
+    bcs.settle_type,
+    oi.push_flag
+    FROM
+    order_info oi
+    LEFT JOIN customer_info ci ON ci.customer_no = oi.customer_no
+    AND ci. STATUS = 'Y'
+    LEFT JOIN base_contract_service bcs ON bcs.serial_no = (
+    SELECT
+    max(serial_no)
+    FROM
+    base_contract_service
+    WHERE
+    base_contract_service.supplier_code = oi.supplier_code
+    AND base_contract_service.service_code = oi.service_code
+    )
+    WHERE
+    oi. STATUS = 'Y'
+    AND oi.push_flag = '0' and oi.bussiness_status = '02' and oi.supplier_code = #{supplierCode}
+    AND bcs.settle_type =#{settleType}
+</if>
+</select>
 
-    <!-- 导出（按case） -->
+<update id="updateServiceBalanceDetailByTaskNo" parameterType="ServiceBalanceDetail">
+update service_balance_detail
+<trim prefix="SET" suffixOverrides=",">
+    <if test="status != null">status = #{status},</if>
+    <if test="orderCode != null">order_code = #{orderCode},</if>
+    <if test="balanceInterval != null">balance_interval = #{balanceInterval},</if>
+    <if test="riskCode != null">risk_code = #{riskCode},</if>
+    <if test="policyNo != null">policy_no = #{policyNo},</if>
+    <if test="policyItemNo != null">policy_item_no = #{policyItemNo},</if>
+    <if test="supplierCode != null">supplier_code = #{supplierCode},</if>
+    <if test="serviceCode != null">service_code = #{serviceCode},</if>
+    <if test="appntNo != null">appnt_no = #{appntNo},</if>
+    <if test="appntName != null">appnt_name = #{appntName},</if>
+    <if test="custNo != null">cust_no = #{custNo},</if>
+    <if test="custName != null">cust_name = #{custName},</if>
+    <if test="sex != null">sex = #{sex},</if>
+    <if test="idNo != null">id_no = #{idNo},</if>
+    <if test="serviceDate != null">service_date = #{serviceDate},</if>
+    <if test="remark != null">remark = #{remark},</if>
+    <if test="amount != null">amount = #{amount},</if>
+    <if test="actualAmount != null">actual_amount = #{actualAmount},</if>
+    <if test="reason != null">reason = #{reason},</if>
+    <if test="insuredNum != null">insured_num = #{insuredNum},</if>
+    <if test="unitPrice != null">unit_price = #{unitPrice},</if>
+    <if test="createBy != null">create_by = #{createBy},</if>
+    <if test="createTime != null">create_time = #{createTime},</if>
+    <if test="updateBy != null">update_by = #{updateBy},</if>
+    <if test="updateTime != null">update_time = #{updateTime},</if>
+</trim>
+where task_no = #{taskNo}
+</update>
+
+<!-- 导出（按case） -->
     <select id="selectServiceBalanceDetailList_case" parameterType="ServiceBalanceInfo" resultMap="ServiceBalanceDetailCaseVOResult">
         SELECT
             a.order_code,

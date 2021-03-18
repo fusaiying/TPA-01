@@ -214,10 +214,10 @@
               <span>{{ scope.row.acceptTime | changeDate}}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="updateTime" label="修改时间" align="center" show-overflow-tooltip width="140">
-            <template slot-scope="scope">
+          <el-table-column prop="changeTime" label="修改时间" align="center" show-overflow-tooltip width="140">
+            <!--<template slot-scope="scope">
               <span>{{ scope.row.updateTime | changeDate}}</span>
-            </template>
+            </template>-->
           </el-table-column>
 
           <el-table-column prop="acceptBy" align="center" label="受理人" show-overflow-tooltip/>
@@ -302,10 +302,10 @@
               <span>{{ scope.row.acceptTime | changeDate}}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="updateTime" label="修改时间" align="center" show-overflow-tooltip width="140">
-            <template slot-scope="scope">
+          <el-table-column prop="changeTime" label="修改时间" align="center" show-overflow-tooltip width="140">
+            <!--<template slot-scope="scope">
               <span>{{ scope.row.updateTime | changeDate}}</span>
-            </template>
+            </template>-->
           </el-table-column>
           <el-table-column prop="oldmodifyBy" align="center" label="原处理人" show-overflow-tooltip/>
           <el-table-column prop="vipFlag" align="center" label="VIP标识" show-overflow-tooltip>

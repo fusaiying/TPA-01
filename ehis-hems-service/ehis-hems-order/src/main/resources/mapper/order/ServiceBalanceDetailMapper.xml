@@ -33,6 +33,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateBy"    column="update_by"    />
         <result property="updateTime"    column="update_time"    />
         <result property="bussinessStatus"    column="bussiness_status"    />
+        <result property="riskName"    column="risk_name"    />
+        <result property="supplierServiceName"    column="supplier_service_name"    />
+
     </resultMap>
 
     <!-- 明细导出（按case） -->

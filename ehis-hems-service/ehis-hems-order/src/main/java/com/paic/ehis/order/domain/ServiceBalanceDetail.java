@@ -16,6 +16,7 @@ import java.util.Date;
  * @author chenhaiming
  * @date 2021-01-21
  */
+@Data
 public class ServiceBalanceDetail extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
@@ -110,6 +111,10 @@ public class ServiceBalanceDetail extends BaseEntity
 
     /** 扩展字段 */
     private String bussinessStatus;
+
+    private String riskName;
+
+    private String supplierServiceName;
 
     public void setSerialNo(Long serialNo) 
     {
@@ -317,6 +322,22 @@ public class ServiceBalanceDetail extends BaseEntity
     public String getBussinessStatus()
     {
         return bussinessStatus;
+    }
+
+    public String getRiskName() {
+        return riskName;
+    }
+
+    public void setRiskName(String riskName) {
+        this.riskName = riskName;
+    }
+
+    public String getSupplierServiceName() {
+        return supplierServiceName;
+    }
+
+    public void setSupplierServiceName(String supplierServiceName) {
+        this.supplierServiceName = supplierServiceName;
     }
 
     @Override

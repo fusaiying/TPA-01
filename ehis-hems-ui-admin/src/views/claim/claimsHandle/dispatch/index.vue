@@ -317,8 +317,7 @@
                 <span>{{item.historyFlag === 'Y' ? '已完成' :'' }} {{item.historyFlag === 'N' ? '处理中' :'' }} </span>
                 <span style="margin-left: 70px">{{item.historyFlag === 'Y' ?  "处理人："+item.updateBy :'' }} </span>
               </div>
-              <div class="el-step__description is-finish"  style="height: 30px">
-              </div>
+              <div class="el-step__description is-finish"  style="height: 30px"></div>
             </div>
           </div>
 
@@ -368,10 +367,11 @@
             </div>
 
             <div class="el-step__main">
-              <div class=""  style="width: 200px; margin-left: 20px">
+              <div class=""  style="width: 100%; margin-left: 30px">
+                <span>{{item.historyFlag === 'N' ? '已完成' :'' }}</span>
+                <span style="margin-left: 70px">{{item.historyFlag === 'N' ?  "处理人："+item.createBy :'' }} </span>
               </div>
-              <div class="el-step__description is-process"  style="height: 30px">
-              </div>
+              <div class="el-step__description is-finish"  style="height: 30px"></div>
             </div>
           </div>
         </div>

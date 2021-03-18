@@ -76,13 +76,15 @@ public class OrderInfoController extends BaseController
     public void export(HttpServletResponse response, OrderInfo orderInfo) throws Exception
     {
         List<OrderInfo> list= new ArrayList();
-        if(orderInfo == null){
+        if(orderInfo.getApplyEndTime() == null && orderInfo.getApplyStartTime() == null && orderInfo.getBussinessStatus() == null
+         && orderInfo.getIdCode() ==null && orderInfo.getName() ==null && orderInfo.getOrderCode() ==null && orderInfo.getPhone() ==null && orderInfo.getOrderCode() ==null
+                && orderInfo.getPolicyCertificateNo() ==null && orderInfo.getPolicyNo() ==null && orderInfo.getProductCode() ==null && orderInfo.getSupplierCode() ==null){
             list = orderInfoService.selectOrderInfoList3Months();
         }else{
             list = orderInfoService.selectOrderInfoList(orderInfo);
         }
         ExcelUtil<OrderInfo> util = new ExcelUtil<OrderInfo>(OrderInfo.class);
-        util.exportExcel(response, list, "info");
+        util.exportExcel(response, list, "工单信息表");
     }
 
     /**

@@ -491,7 +491,7 @@
             return true
             break;
           case '04':
-            return true
+            return type === 1 ? this.logRoleName.toLowerCase().indexOf("jgjd") > -1 : this.checkRoleName.toLowerCase().indexOf("jgjd") > -1
             break;
           case '05':
             return type === 1 ? this.logRoleName.toLowerCase().indexOf("sl") > -1 : this.checkRoleName.toLowerCase().indexOf("sl") > -1
@@ -533,7 +533,7 @@
       getLogRole() {
         getUserInfo().then(response => {
           if (response.code === 200 && response.data) {
-            this.logRoleName = response.data.rolePermission[0];
+            this.logRoleName = response.data.rolePermission.toString();
           }
         }).catch(error => {
           console.log(error);
@@ -576,7 +576,7 @@
                   let obj = new Object();
                   let resdata = response.rows[i]
                   let userName = resdata.userName;
-                  let rolePermission = resdata.rolePermission[0];
+                  let rolePermission = resdata.rolePermission.toString();
                   obj.dictLabel = userName;
                   obj.dictValue = userName;
                   this.operatorSelect.push(obj);

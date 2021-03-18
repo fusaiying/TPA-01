@@ -201,7 +201,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="phone != null  and phone != ''"> and ci.phone = #{phone}</if>
             <if test="bussinessStatus != null  and bussinessStatus != ''"> and oi.bussiness_status = #{bussinessStatus}</if>
             <if test="applyStartTime != null  and applyEndTime != null">  and (oi.apply_time between  #{applyStartTime} and  #{applyEndTime})</if>
-             and oi.status = 'Y' and oi.bussiness_status in ('01','03','04','05')
+             and oi.status = 'Y' and oi.bussiness_status in ('01','03','04','02')
         </where>
     </select>
 
@@ -273,7 +273,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="phone != null  and phone != ''"> and ci.phone = #{phone}</if>
             <if test="bussinessStatus != null  and bussinessStatus != ''"> and oi.bussiness_status = #{bussinessStatus}</if>
             <if test="applyStartTime != null  and applyEndTime != null">  and (oi.apply_time between  #{applyStartTime} and  #{applyEndTime})</if>
-            and oi.status = 'Y' and oi.bussiness_status in ('01','03','04')
+            and oi.status = 'Y' and oi.bussiness_status in ('01','02','03','04')
             <if test="beforeDate != null   and nowDate != null ">
             and (oi.create_time between  #{beforeDate} and  #{nowDate})
             </if>

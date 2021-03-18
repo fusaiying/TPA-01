@@ -45,11 +45,11 @@ public class OrderInfo extends BaseEntity
     private String name;
 
     /** 性别 */
-    @Excel(name = "性别")
+    @Excel(name = "性别",readConverterExp = "0=男,1=女,2=未知")
     private String sex;
 
     /** 证件 */
-    @Excel(name = "证件类型")
+    @Excel(name = "证件类型",readConverterExp = "1=身份证,2=护照,3=军人证,4=少儿证")
     private String idType;
 
     /** 证件类型 */
@@ -245,7 +245,6 @@ public class OrderInfo extends BaseEntity
 
     /** 当前日期 */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @Excel(name = "当前时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date nowDate;
 
 
@@ -267,7 +266,6 @@ public class OrderInfo extends BaseEntity
 
     /** 三个月前日期 */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @Excel(name = "三个月前日期", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date beforeDate;
 
 

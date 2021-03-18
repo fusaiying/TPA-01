@@ -497,30 +497,31 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService {
         } else {
             List<ClaimCaseForeignPayInfoVO> caseInfoList = claimCasePayVO.getCaseInfoList();
             for (ClaimCaseForeignPayInfoVO caseInfo : caseInfoList) {
-                // 支付状态置为可支付
-                ClaimCase claimCase = new ClaimCase();
-                claimCase.setRptNo(caseInfo.getRptNo());
-                claimCase.setPayStatus("01");
-                claimCaseMapper.updateClaimCase(claimCase);
-                // 借款表生成数据
-                FinanceBorrowInfo financeBorrowInfo = financeBorrowInfoMapper.selectFinanceBorrowInfoByRptNo(caseInfo.getRptNo());
-                if (StringUtils.isNull(financeBorrowInfo)){
-                    FinanceBorrowInfo financeBorrowInfo1 = new FinanceBorrowInfo();
-                    financeBorrowInfo1.setBatchNo(claimCasePayVO.getBatchNo());
-                    financeBorrowInfo1.setRptNo(caseInfo.getRptNo());
-                    financeBorrowInfo1.setBorrowAmount(caseInfo.getDiscountedAmount());
-                    financeBorrowInfo1.setStatus("Y");
-                    financeBorrowInfo1.setCreateBy(username);
-                    financeBorrowInfo1.setCreateTime(DateUtils.getNowDate());
-                    financeBorrowInfo1.setDeptCode(claimCasePayVO.getOrganCode());
-                    financeBorrowInfoMapper.insertFinanceBorrowInfo(financeBorrowInfo1);
-                }else {
-                    financeBorrowInfo.setBorrowAmount(caseInfo.getDiscountedAmount());
-                    financeBorrowInfo.setUpdateBy(username);
-                    financeBorrowInfo.setUpdateTime(DateUtils.getNowDate());
-                    financeBorrowInfoMapper.updateFinanceBorrowInfo(financeBorrowInfo);
+                if (!"99".equals(caseInfo.getCaseStatus()) && !"98".equals(caseInfo.getCaseStatus())) {
+                    // 支付状态置为可支付
+                    ClaimCase claimCase = new ClaimCase();
+                    claimCase.setRptNo(caseInfo.getRptNo());
+                    claimCase.setPayStatus("01");
+                    claimCaseMapper.updateClaimCase(claimCase);
+                    // 借款表生成数据
+                    FinanceBorrowInfo financeBorrowInfo = financeBorrowInfoMapper.selectFinanceBorrowInfoByRptNo(caseInfo.getRptNo());
+                    if (StringUtils.isNull(financeBorrowInfo)){
+                        FinanceBorrowInfo financeBorrowInfo1 = new FinanceBorrowInfo();
+                        financeBorrowInfo1.setBatchNo(claimCasePayVO.getBatchNo());
+                        financeBorrowInfo1.setRptNo(caseInfo.getRptNo());
+                        financeBorrowInfo1.setBorrowAmount(caseInfo.getDiscountedAmount());
+                        financeBorrowInfo1.setStatus("Y");
+                        financeBorrowInfo1.setCreateBy(username);
+                        financeBorrowInfo1.setCreateTime(DateUtils.getNowDate());
+                        financeBorrowInfo1.setDeptCode(claimCasePayVO.getOrganCode());
+                        financeBorrowInfoMapper.insertFinanceBorrowInfo(financeBorrowInfo1);
+                    }else {
+                        financeBorrowInfo.setBorrowAmount(caseInfo.getDiscountedAmount());
+                        financeBorrowInfo.setUpdateBy(username);
+                        financeBorrowInfo.setUpdateTime(DateUtils.getNowDate());
+                        financeBorrowInfoMapper.updateFinanceBorrowInfo(financeBorrowInfo);
+                    }
                 }
-
             }
             return 1;
         }
@@ -649,7 +650,6 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService {
             // 拼接
             String companyName = StringUtils.join(companyWithoutDup, "|");
             payInfo.setCompanyName(companyName);
-
             // 获取借款金额
             FinanceBorrowInfo financeBorrowInfo = financeBorrowInfoMapper.selectFinanceBorrowInfoByRptNo(payInfo.getRptNo());
             if (null != financeBorrowInfo) {

@@ -159,7 +159,8 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
     public int insertConsultationDemand(DemandAcceptVo demandAcceptVo) {
         FlowLog flowLog=new FlowLog();
         flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id",20,20));
-        flowLog.setLinkCode("06");//状态置为已协办
+        flowLog.setLinkCode("04");//状态置为已协办
+        flowLog.setOperateCode("11");//节点为协办
         flowLog.setMakeBy(SecurityUtils.getUsername());
         //没有um帐号
         flowLog.setUmNum(SecurityUtils.getUsername());

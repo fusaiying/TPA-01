@@ -40,7 +40,8 @@
     </resultMap>
 
     <select id="selectPayInfoList" parameterType="string" resultMap="PayResult">
-        SELECT
+                 select * from (
+			SELECT
             a.rpt_no,
             min( b.treatment_start_date ) treatment_date,
             c.insured_no,
@@ -52,7 +53,8 @@
             ifNUll(d.cal_amount,0) pay_amount,
             ifNUll(d.debt_amount,0) debt_amount,
             a.case_status,
-            a.pay_status
+            a.pay_status,
+            a.case_prop
         FROM
             claim_case a
             LEFT JOIN claim_case_bill b ON a.rpt_no = b.rpt_no  AND b.`status` = 'Y'
@@ -60,19 +62,43 @@
             LEFT JOIN claim_case_cal d ON a.rpt_no = d.rpt_no  AND d.`status` = 'Y'
         WHERE
             a.batch_no = #{batchNo}
-            AND a.STATUS = 'Y'
+            AND a.STATUS = 'Y' and a.case_prop='01'
         GROUP BY
             a.rpt_no,
             c.`name`,
             d.cal_amount,
             d.debt_amount,
             c.insured_no
+				union
+		SELECT
+            a.rpt_no,
+            d.treatment_start_date treatment_date,
+            c.insured_no,
+            c.name,
+            d.bill_amount bill_amount,
+            (ifNUll(d.bill_amount,0)  - ifNUll(d.hos_discount_amount,0) ) discounted_amount,
+            ifNUll(d.tp_advance_payment +d.ss_advance_payment,0)  advance_payment,
+            ifNUll(d.copay,0) copay,
+            ifNUll(d.cal_amount,0) pay_amount,
+            ifNUll(c.fee_amount,0) debt_amount,
+            a.case_status,
+            a.pay_status,
+            a.case_prop
+        FROM
+            claim_case a
+            LEFT JOIN claim_case_cal_core_policy c ON a.rpt_no = c.rpt_no  AND c.`status` = 'Y' and c.amount_type='04'
+            LEFT JOIN claim_case_cal_core d ON a.rpt_no = d.rpt_no  AND d.`status` = 'Y'
+        WHERE
+            a.batch_no = #{batchNo}
+            AND a.STATUS = 'Y' and a.case_prop='02'
+						) h
 		ORDER BY
-			a.rpt_no
+			h.rpt_no
     </select>
 
     <select id="selectForeignPayInfoList" parameterType="string" resultMap="ForeignPayResult">
-        SELECT
+         select * from (
+		 SELECT
             a.rpt_no,
             min( b.treatment_start_date ) treatment_date,
             c.`name`,
@@ -86,6 +112,7 @@
 			ifNUll(d.pay_amount_foreign,0) pay_amount_foreign,
             a.case_status,
             a.pay_status,
+            a.case_prop,
 			d.bill_currency
         FROM
             claim_case a
@@ -94,7 +121,7 @@
             LEFT JOIN claim_case_cal d ON a.rpt_no = d.rpt_no AND d.`status` = 'Y'
         WHERE
             a.batch_no = #{batchNo}
-            AND a.STATUS = 'Y'
+            AND a.STATUS = 'Y' and a.case_prop='01'
         GROUP BY
             a.rpt_no,
             c.`name`,
@@ -102,9 +129,34 @@
             d.debt_amount,
             d.exchange_rate,
             d.pay_amount_foreign,
+			      d.bill_currency
+				union
+		SELECT
+            a.rpt_no,
+            d.treatment_start_date treatment_date,
+            c.name,
+            d.bill_amount bill_amount,
+            (ifNUll(d.bill_amount,0)  - ifNUll(d.hos_discount_amount,0) ) discounted_amount,
+            ifNUll(d.tp_advance_payment +d.ss_advance_payment,0)  advance_payment,
+            ifNUll(d.copay,0) copay,
+            ifNUll(d.cal_amount,0) pay_amount,
+            ifNUll(c.fee_amount,0) debt_amount,
+			d.exchange_rate,
+		    ifNUll(d.pay_amount_foreign,0) pay_amount_foreign,
+            a.case_status,
+            a.pay_status,
+            a.case_prop,
 			d.bill_currency
-        ORDER BY
-            a.rpt_no
+        FROM
+            claim_case a
+            LEFT JOIN claim_case_cal_core_policy c ON a.rpt_no = c.rpt_no  AND c.`status` = 'Y' and c.amount_type='04'
+            LEFT JOIN claim_case_cal_core d ON a.rpt_no = d.rpt_no  AND d.`status` = 'Y'
+        WHERE
+            a.batch_no =#{batchNo}
+            AND a.STATUS = 'Y' and a.case_prop='02'
+						) h
+		ORDER BY
+			h.rpt_no
     </select>
 
 </mapper>

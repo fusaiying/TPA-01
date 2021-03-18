@@ -36,6 +36,7 @@
         <result property="complaintPersonId" column="complaint_person_id"/>
         <result property="callCenterId" column="call_center_id"/>
         <result property="oldmodifyBy" column="oldmodify_by"/>
+        <result property="changeTime" column="change_time"/>
     </resultMap>
 <!--    信息需求公共池数据查询-->
     <select id="selectDemandAcceptVoList" parameterType="com.paic.ehis.cs.domain.dto.WorkOrderQueryDTO"
@@ -56,7 +57,7 @@
         a.modify_by,
         a.modify_time,
         a.vip_flag,
-        a.organ_code,
+        (case when ifnull(a.organ_code,'')='' then b.organ_code else a.organ_code end) organ_code,
         a.STATUS,
         a.create_by create_by1,
         a.create_time create_time1,
@@ -80,7 +81,8 @@
         CASE
         WHEN hm.nnn IS NOT NULL THEN
         1 ELSE 0
-        END AS isRedWord
+        END AS isRedWord,
+        (select make_time from flow_log where work_order_no = a.work_order_no and operate_code = '03' order by make_time desc limit 1) change_time
         FROM
         accept_detail_info b
         LEFT JOIN work_order_accept a ON b.work_order_no = a.work_order_no
@@ -147,7 +149,7 @@
         a.modify_by,
         a.modify_time,
         a.vip_flag,
-        a.organ_code,
+        (case when ifnull(a.organ_code,'')='' then b.organ_code else a.organ_code end ) organ_code,
         a.STATUS,
         a.create_by,
         a.create_time,
@@ -181,7 +183,8 @@
         WHEN hm.nnn IS NOT NULL THEN
         1 ELSE 0
         END AS isRedWord,
-        (case when (select 1 from transfer_by where work_order_no = b.work_order_no limit 1)=1 then b.create_by else '' end) oldmodify_by
+        (case when (select 1 from transfer_by where work_order_no = a.work_order_no limit 1)=1 then b.create_by else '' end) oldmodify_by,
+        (select make_time from flow_log where work_order_no = a.work_order_no and operate_code = '03' order by make_time desc limit 1) change_time
         FROM
         accept_detail_info b
         LEFT JOIN work_order_accept a ON b.work_order_no = a.work_order_no
@@ -290,7 +293,7 @@
                a.contacts_person_id,
                a.contacts_relation_by,
                a.email,
-               a.organ_code,
+               (case when ifnull(a.organ_code,'')='' then b.organ_code else a.organ_code end) organ_code,
                a.content,
                a.channel_code,
                a.priority_level,
@@ -522,7 +525,7 @@
 
     <select id="selectAssist" parameterType="com.paic.ehis.cs.domain.dto.WorkOrderQueryDTO" resultMap="DemandAcceptVoResult">
         select distinct t1.work_order_no,t2.channel_code,t2.item_code,concat( t1.business_type, '-', t2.item_code ) AS
-        business_service,t1.policy_no,t1.policy_item_no,t1.risk_code,t1.insured_name,t1.holder_name,t1.accept_time,t1.accept_by,t1.update_time,t1.modify_by,t1.vip_flag,t2.priority_level,t2.organ_code,t3.status,t1.business_type,t1.modify_time,
+        business_service,t1.policy_no,t1.policy_item_no,t1.risk_code,t1.insured_name,t1.holder_name,t1.accept_time,t1.accept_by,t1.update_time,t1.modify_by,t1.vip_flag,t2.priority_level,(case when ifnull(t1.organ_code,'')='' then  t2.organ_code else t1.organ_code end) organ_code,t3.status,t1.business_type,t1.modify_time,
         case when whi.handle_prop1='02'  then whi.remark  else null end  as  remark
         from collaborative_from t3
         left join accept_detail_info t2 on t3.work_order_no=t2.work_order_no

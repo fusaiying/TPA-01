@@ -90,6 +90,7 @@
           :data="balanceList"
           v-loading="loading"
           size="mini"
+          :cell-style="changeCellStyle"
           tooltip-effect="dark"
           class="receive_table"
           :header-cell-style="{color:'black',background:'#f8f8ff'}"
@@ -172,7 +173,7 @@ import {
 } from '@/api/contractManage/contractManagement';
 import {getToken} from "@/utils/auth";
 
-let dictss = [{dictType: 'currency'},{dictType: 'balance_invoice_type'}, {dictType: 'clearing_form'}, {dictType: 'balance_status'}]
+let dictss = [{dictType: 'currency'},{dictType: 'balance_invoice_type'}, {dictType: 'clearing_form'}, {dictType: 'balance_status_settlement'}]
 export default {
   name: "startBbalance",
   watch: {
@@ -264,7 +265,7 @@ export default {
       return item.dictType === 'clearing_form'
     }).dictDate
     this.balanceStatusOptions = this.dictList.find(item => {
-      return item.dictType === 'balance_status'
+      return item.dictType === 'balance_status_settlement'
     }).dictDate
   },
   methods: {
@@ -341,12 +342,16 @@ export default {
     handleQuery() {
       this.isDefault = false;
       this.queryParams.pageNum = 1;
+      this.queryParams.pageSize = 10;
       this.getList();
     },
     /** 重置按钮操作 */
     resetQuery() {
-      this.isDefault = false;
+      this.isDefault = true;
       this.resetForm("queryForm");
+      this.queryParams.pageNum = 1;
+      this.queryParams.pageSize = 10
+      this.getList();
     },
     //处理备注
     handleRemark(remark) {
@@ -449,7 +454,15 @@ export default {
     /** 上传中 */
     uploadProgress() {
       this.upload.isUploading = true;
-    }
+    },
+    //退回状态行飘红
+    changeCellStyle (rows, column, rowIndex, columnIndex) {
+      if(rows.row.bussinessStatus === "03"){
+        return 'color: red'  // 修改的样式
+      }else{
+        return ''
+      }
+    },
 
   }
 };

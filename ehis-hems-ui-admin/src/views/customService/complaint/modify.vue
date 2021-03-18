@@ -157,7 +157,7 @@
         <el-form-item label="投诉内容：" prop="content">
           <el-input
             v-model="workPoolData.content"
-            :rows="2"
+            :rows="3"
             type="textarea">
           </el-input>
         </el-form-item>
@@ -520,7 +520,7 @@
           ],
           content: [
             {required: true, message: "投诉内容不能为空", trigger: "blur"},
-            { min: 3, max: 100, message: '长度在 3 到 100 个字符' }
+            { min: 0, max: 2000, message: '长度不超过2000个字符' }
           ],
           'editInfo.editRemark':[
             {required: true, message: "修改说明不能为空", trigger: "blur"},

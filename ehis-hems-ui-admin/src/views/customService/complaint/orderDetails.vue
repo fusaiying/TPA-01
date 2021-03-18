@@ -330,7 +330,7 @@
             <el-input
               disabled
               type="textarea"
-              :rows="2"
+              :rows="3"
               v-model="workPoolData.content">
             </el-input>
           </el-form-item>

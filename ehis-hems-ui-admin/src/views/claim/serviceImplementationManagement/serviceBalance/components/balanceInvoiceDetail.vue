@@ -87,13 +87,13 @@
             <el-row>
               <el-col :span="8">
                 <el-form-item label="发票金额:" prop="amount">
-                  <el-input v-model="form.amount" placeholder="请输入发票金额" class="item-width" />
+                  <el-input v-model="form.amount" placeholder="请输入发票金额" class="item-width" @input="countTax"/>
                 </el-form-item>
               </el-col>
 
               <el-col :span="8">
                 <el-form-item label="发票金额（税）:" prop="amountTax">
-                  <el-input v-model="form.amountTax" placeholder="请输入发票金额（不含税）" class="item-width" />
+                  <el-input v-model="form.amountTax" placeholder="请输入发票金额（不含税）" class="item-width" @input="countTax"/>
                 </el-form-item>
               </el-col>
 
@@ -221,6 +221,15 @@ export default {
 
   },
   methods: {
+    //计算发票税额
+    countTax(){
+      if(this.form.amount && this.form.amountTax){
+          this.$set(this.form, 'tax', String(parseFloat(this.form.amount) - parseFloat(this.form.amountTax)))
+      }
+      else {
+        this.form.tax=''
+      }
+    },
     /** 初始化字典 */
     initDictData() {
       if (this.dictList != null && this.dictList.length != 0) {

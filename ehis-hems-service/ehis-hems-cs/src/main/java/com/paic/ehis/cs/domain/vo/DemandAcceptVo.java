@@ -222,4 +222,8 @@ public class DemandAcceptVo extends BaseEntity {
     /** 原处理人 */
     @Excel(name = "原处理人")
     private String oldmodifyBy;
+
+    /** 原处理人 */
+    @Excel(name = "修改时间")
+    private String changeTime;
 }

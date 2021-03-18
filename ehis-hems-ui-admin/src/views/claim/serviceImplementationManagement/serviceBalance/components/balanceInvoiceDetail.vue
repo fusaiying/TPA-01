@@ -59,7 +59,7 @@
         />
         <!-- 添加或修改base_balance_invoice(服务结算发票信息)对话框 -->
         <el-dialog title="开票信息" :visible.sync="open" width="70%" append-to-body>
-          <el-form ref="form" :model="form" :rules="rules" label-width="100px" label-position="right">
+          <el-form ref="form" :model="form" :rules="rules" label-width="170px" label-position="right">
             <el-input v-model="form.serialNo" type="hidden" />
             <el-input v-model="form.taskNo" type="hidden" />
             <el-row>

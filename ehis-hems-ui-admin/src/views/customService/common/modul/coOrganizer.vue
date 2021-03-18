@@ -164,6 +164,7 @@ export default {
           coOrganizerSubmit(insert).then(res => {
             if (res != null && res.code === 200) {
               this.$emit('checkButton');
+              this.$emit('collaborativeFromInfo');
               this.$message.success("协办成功");
               this.changeDialogVisable();
               if (res.rows.length <= 0) {

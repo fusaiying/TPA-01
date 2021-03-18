@@ -610,7 +610,7 @@
         <modify-details ref="modifyDetails"></modify-details>
         <transfer ref="transfer"></transfer>
         <up-load ref="upload"></up-load>
-        <co-organizer ref="coOrganizer"></co-organizer>
+        <co-organizer @collaborativeFromInfo="collaborativeFromInfo" ref="coOrganizer"></co-organizer>
         <hang-up @hangUpSearch="hangUpSearch" ref="hangUp"></hang-up>
         <el-button type="primary" size="mini" @click="hangUp">工单挂起</el-button>
         <el-button type="primary" size="mini" @click="temporary" :disabled="this.hangUps.hangFlag==='01' || collaborative">暂存</el-button>

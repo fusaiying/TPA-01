@@ -342,12 +342,16 @@ export default {
     handleQuery() {
       this.isDefault = false;
       this.queryParams.pageNum = 1;
+      this.queryParams.pageSize = 10;
       this.getList();
     },
     /** 重置按钮操作 */
     resetQuery() {
-      this.isDefault = false;
+      this.isDefault = true;
       this.resetForm("queryForm");
+      this.queryParams.pageNum = 1;
+      this.queryParams.pageSize = 10
+      this.getList();
     },
     //处理备注
     handleRemark(remark) {

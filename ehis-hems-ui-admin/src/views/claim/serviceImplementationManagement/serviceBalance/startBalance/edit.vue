@@ -122,7 +122,7 @@ import {
 } from '@/api/contractManage/contractManagement';
 import {listBalanceDetail, addBalance} from "@/api/claim/serviceBalance";
 
-let dictss = [{dictType: 'clearing_form'},{dictType: 'balance_invoice_type'},{dictType: 'cs_sex'}];
+let dictss = [{dictType: 'clearing_form'},{dictType: 'balance_invoice_type'},{dictType: 'sys_user_sex'}];
 export default {
   name: "balanceAdd",
   data() {
@@ -214,7 +214,7 @@ export default {
       return item.dictType === 'balance_invoice_type'
     }).dictDate;
     this.cs_sexOptions = this.dictList.find(item => {
-      return item.dictType === 'cs_sex'
+      return item.dictType === 'sys_user_sex'
     }).dictDate;
 
   },

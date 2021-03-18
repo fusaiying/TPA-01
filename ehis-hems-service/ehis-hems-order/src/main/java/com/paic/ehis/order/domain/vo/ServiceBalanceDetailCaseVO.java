@@ -77,6 +77,10 @@ public class ServiceBalanceDetailCaseVO implements Serializable
     @Excel(name = "编辑原因")
     private String reason;
 
+    private String riskCode;
+
+    private String serviceCode;
+
 
 
 

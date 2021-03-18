@@ -133,9 +133,19 @@ export function classTwo(query) {
   })
 }
 
+// 协办查询
 export function collaborative(query) {
   return request({
     url: '/cs/from/list',
+    method: 'get',
+    params: query
+  })
+}
+
+// 转办查询
+export function transferInfo(query) {
+  return request({
+    url: '/cs/by/list',
     method: 'get',
     params: query
   })

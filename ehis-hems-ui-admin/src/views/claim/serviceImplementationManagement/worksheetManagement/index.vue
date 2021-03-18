@@ -457,6 +457,8 @@ export default {
                 center: true,
                 showClose: true
               })
+              this.dialogVisable=false
+              this.getData()
             } else {
               this.$message({
                 message: '取消工单失败!',
@@ -554,10 +556,23 @@ export default {
         this.params.applyStartTime= this.formSearch.daterangeArr[0]
         this.params.applyEndTime= this.formSearch.daterangeArr[1]
       }
+      let query={}
+
+
       getList(this.params).then(res => {
+
         if (res.rows.length>0){
+          const values = Object.values(this.formSearch)
+          let flag= values.some(item => {return  item!=null && item !='' })
+          if(flag) {
+             query=this.params
+          }
+          else{
+            query={}
+          }
+
           this.download('order/info/export', {
-            ...this.params}, `order_${new Date().getTime()}.xlsx`).catch(res=>{
+            ...query}, `order_${new Date().getTime()}.xlsx`).catch(res=>{
             this.$message({
               message: res,
               type: 'error',

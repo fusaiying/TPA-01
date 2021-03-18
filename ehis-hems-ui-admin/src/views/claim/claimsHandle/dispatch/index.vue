@@ -491,7 +491,7 @@
             return true
             break;
           case '04':
-            return true
+            return type === 1 ? this.logRoleName.toLowerCase().indexOf("jgjd") > -1 : this.checkRoleName.toLowerCase().indexOf("jgjd") > -1
             break;
           case '05':
             return type === 1 ? this.logRoleName.toLowerCase().indexOf("sl") > -1 : this.checkRoleName.toLowerCase().indexOf("sl") > -1

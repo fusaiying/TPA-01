@@ -213,8 +213,6 @@ public class ServiceBalanceInfoServiceImpl implements IServiceBalanceInfoService
             serviceBalanceDetail.setTaskNo(serviceBalanceInfo.getTaskNo());
             serviceBalanceDetail.setStatus(StatusEnum.INVALID.getCode());
             int detailNum = serviceBalanceDetailMapper.updateServiceBalanceDetailByTaskNo(serviceBalanceDetail);
-            List<String> orderInfos = serviceBalanceDetailMapper.orderCodeList(serviceBalanceDetail);
-            serviceBalanceDetailMapper.updateOrderInfo(orderInfos);
             logger.info("更新-结算明细表行数：" + detailNum);
 
             ServiceBalanceExamLog serviceBalanceExamLog = new ServiceBalanceExamLog();
@@ -244,7 +242,12 @@ public class ServiceBalanceInfoServiceImpl implements IServiceBalanceInfoService
         } else if (BalanceStatusEnum.TYPE_CONFIRM.getCode().equals(serviceBalanceInfo.getParams().get("type"))) {
             //清单确认时
             serviceBalanceInfo.setBussinessStatus(BalanceStatusEnum.ALREADY_CONFIRM.getCode());
-
+            ServiceBalanceDetail serviceBalanceDetail = new ServiceBalanceDetail();
+            serviceBalanceDetail.setUpdateTime(nowDate);
+            serviceBalanceDetail.setUpdateBy(userName);
+            serviceBalanceDetail.setTaskNo(serviceBalanceInfo.getTaskNo());
+            List<String> orderInfos = serviceBalanceDetailMapper.orderCodeList(serviceBalanceDetail);
+            serviceBalanceDetailMapper.updateOrderInfo(orderInfos);
             ServiceBalanceExamLog serviceBalanceExamLog = new ServiceBalanceExamLog();
             serviceBalanceExamLog.setTaskNo(serviceBalanceInfo.getTaskNo());
             serviceBalanceExamLog.setStatus(StatusEnum.VALID.getCode());

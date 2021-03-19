@@ -296,16 +296,16 @@
           <el-col :span="16">
             <el-form-item label="联系人固定电话：" style="white-space: nowrap" prop="phone">
               国家区号+
-              <el-input v-model="workPoolData.contactsPerson.linePhone1[0]" class="item-width"
+              <el-input v-model="workPoolData.contactsPerson.linePhone0" class="item-width"
                         style="width: 75px"/>
               区号
-              <el-input v-model="workPoolData.contactsPerson.linePhone1[1]" class="item-width" size="mini"
+              <el-input v-model="workPoolData.contactsPerson.linePhone1" class="item-width" size="mini"
                         style="width: 75px" maxlength="50"/>
               号码
-              <el-input v-model="workPoolData.contactsPerson.linePhone1[2]" class="item-width" size="mini"
+              <el-input v-model="workPoolData.contactsPerson.linePhone2" class="item-width" size="mini"
                         style="width: 120px" maxlength="50"/>
               分机号
-              <el-input v-model="workPoolData.contactsPerson.linePhone1[3]" class="item-width" size="mini"
+              <el-input v-model="workPoolData.contactsPerson.linePhone3" class="item-width" size="mini"
                         style="width: 75px" maxlength="4"/>
             </el-form-item>
           </el-col>
@@ -858,7 +858,6 @@ export default {
       return item.dictType === 'card_type'
     }).dictDate
 
-    this.isBusinessProcess(this.ruleForm.businessProcess);
     //初始化按钮状态
     this.checkButton();
   },
@@ -908,6 +907,7 @@ export default {
       this.checkButtonFlag.temporaryFlag = false;//暂存
       this.checkButtonFlag.submitFlag = false;//提交
 
+      // alert(this.ruleForm.businessProcess);
       //选择响应后  除【提交按钮外其余都置灰】
       if(this.ruleForm.businessProcess == '02'){
         this.checkButtonFlag.transferFlag = true;//协办
@@ -970,14 +970,20 @@ export default {
     searchHandle() {
       let query = this.queryParams
       demandListAndPersonalPool(query).then(res => {
-        if (res != null && res.code === 200) {
+        if (res != null && res.code === 200 && res.rows) {
           this.workPoolData = res.rows[0]
           this.totalCount = res.total
-         /* if (res.rows.length <= 0) {
-            return this.$message.warning(
-              "未查询到数据！"
-            )
-          }*/
+
+          this.workPoolData.contactsPerson.linePhone0 = this.workPoolData.contactsPerson.linePhone1[0];
+          this.workPoolData.contactsPerson.linePhone1 = this.workPoolData.contactsPerson.linePhone1[1];
+          this.workPoolData.contactsPerson.linePhone2 = this.workPoolData.contactsPerson.linePhone1[2];
+          this.workPoolData.contactsPerson.linePhone3 = this.workPoolData.contactsPerson.linePhone1[3];
+
+          /* if (res.rows.length <= 0) {
+             return this.$message.warning(
+               "未查询到数据！"
+             )
+           }*/
         }
       }).catch(res => {
 
@@ -991,6 +997,8 @@ export default {
         if (res != null && res.code === 200) {
           console.log("信息需求页面server反显数据",res.data)
           this.ruleForm = res.data;
+          this.isBusinessProcess(this.ruleForm.businessProcess);
+          this.checkButton();
           if (res.rows.length <= 0) {
             return this.$message.warning(
             )

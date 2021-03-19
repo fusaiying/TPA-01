@@ -1,7 +1,7 @@
 <!-- 审核 -->
 <template>
   <div class="app-container">
-    <el-card class="box-card">
+
       <!-- 账号信息 START-->
       <account-detail ref="accountDetailTable" :params="accountParams" :dictList="dictList"/>
       <!-- 账号信息 END-->
@@ -57,7 +57,7 @@
       </el-tabs>
       <!-- 审核 END-->
 
-    </el-card>
+
   </div>
 </template>
 

@@ -22,7 +22,7 @@
           </el-table-column>
           <el-table-column align="center" prop="businessCode" label="银联商户代码" show-overflow-tooltip />
           <el-table-column align="center" prop="accountName" label="银行账户名称" show-overflow-tooltip />
-          <el-table-column align="center" prop="accountNo" label="账户号" show-overflow-tooltip />
+          <el-table-column align="center" prop="accountNo" label="银行账号" show-overflow-tooltip />
           <el-table-column align="center" prop="bankCode" label="开户银行代码" show-overflow-tooltip />
           <el-table-column align="center" prop="bankName" label="开户银行名称" show-overflow-tooltip />
           <el-table-column align="center" prop="bankDetail" label="银行信息描述" show-overflow-tooltip />

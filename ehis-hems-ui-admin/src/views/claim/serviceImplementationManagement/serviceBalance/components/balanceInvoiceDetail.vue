@@ -59,7 +59,7 @@
         />
         <!-- 添加或修改base_balance_invoice(服务结算发票信息)对话框 -->
         <el-dialog title="开票信息" :visible.sync="open" width="70%" append-to-body>
-          <el-form ref="form" :model="form" :rules="rules" label-width="100px" label-position="right">
+          <el-form ref="form" :model="form" :rules="rules" label-width="170px" label-position="right">
             <el-input v-model="form.serialNo" type="hidden" />
             <el-input v-model="form.taskNo" type="hidden" />
             <el-row>
@@ -87,13 +87,13 @@
             <el-row>
               <el-col :span="8">
                 <el-form-item label="发票金额:" prop="amount">
-                  <el-input v-model="form.amount" placeholder="请输入发票金额" class="item-width" />
+                  <el-input v-model="form.amount" placeholder="请输入发票金额" class="item-width" @input="countTax"/>
                 </el-form-item>
               </el-col>
 
               <el-col :span="8">
                 <el-form-item label="发票金额（税）:" prop="amountTax">
-                  <el-input v-model="form.amountTax" placeholder="请输入发票金额（不含税）" class="item-width" />
+                  <el-input v-model="form.amountTax" placeholder="请输入发票金额（不含税）" class="item-width" @input="countTax"/>
                 </el-form-item>
               </el-col>
 
@@ -221,6 +221,15 @@ export default {
 
   },
   methods: {
+    //计算发票税额
+    countTax(){
+      if(this.form.amount && this.form.amountTax){
+          this.$set(this.form, 'tax', String(parseFloat(this.form.amount) - parseFloat(this.form.amountTax)))
+      }
+      else {
+        this.form.tax=''
+      }
+    },
     /** 初始化字典 */
     initDictData() {
       if (this.dictList != null && this.dictList.length != 0) {

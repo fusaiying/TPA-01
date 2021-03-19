@@ -37,8 +37,6 @@
         <result property="callCenterId" column="call_center_id"/>
         <result property="oldmodifyBy" column="oldmodify_by"/>
         <result property="changeTime" column="change_time"/>
-        <result property="updateBy" column="update_by"/>
-        <result property="createBy" column="create_by"/>
     </resultMap>
 <!--    信息需求公共池数据查询-->
     <select id="selectDemandAcceptVoList" parameterType="com.paic.ehis.cs.domain.dto.WorkOrderQueryDTO"
@@ -61,10 +59,10 @@
         a.vip_flag,
         a.organ_code,
         a.STATUS,
-        a.create_by create_by1,
-        a.create_time create_time1,
-        a.update_by update_by1,
-        a.update_time update_time1,
+        a.create_by,
+        a.create_time,
+        a.update_by,
+        a.update_time,
         b.call_center_id,
         b.channel_code,
         b.item_code,
@@ -169,7 +167,7 @@
         b.organ_code,
         b.content,
         b.complaint_person_id,
-        b.create_by,
+        b.create_by create_by2,
         b.create_time create_time2,
         b.update_by update_by2,
         b.update_time update_time2,

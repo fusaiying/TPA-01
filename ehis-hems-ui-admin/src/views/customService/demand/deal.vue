@@ -863,6 +863,14 @@ export default {
     this.checkButton();
   },
   methods: {
+
+    hiddenShow:function () {
+      // 返回上级路由并关闭当前路由
+      this.$store.state.tagsView.visitedViews.splice(this.$store.state.tagsView.visitedViews.findIndex(item => item.path === this.$route.path), 1);
+      this.$router.push(this.$store.state.tagsView.visitedViews[this.$store.state.tagsView.visitedViews.length - 1].path);
+
+    },
+
     // 获取基本信息
     searchBaseInfo() {
       let query = {
@@ -1031,7 +1039,8 @@ export default {
               insert.workOrderNo = this.$route.query.workOrderNo
               dealADD(insert).then(res => {
                 if (res != null && res.code === 200) {
-                  this.$message.success("提交成功")
+                  this.$message.success("提交成功");
+                  this.hiddenShow();
                   if (res.rows.length <= 0) {
                     return this.$message.warning(
                       "失败！"

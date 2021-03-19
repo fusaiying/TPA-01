@@ -927,6 +927,14 @@
       this.checkButton();
     },
     methods: {
+
+      hiddenShow:function () {
+        // 返回上级路由并关闭当前路由
+        this.$store.state.tagsView.visitedViews.splice(this.$store.state.tagsView.visitedViews.findIndex(item => item.path === this.$route.path), 1)
+        this.$router.push(this.$store.state.tagsView.visitedViews[this.$store.state.tagsView.visitedViews.length - 1].path)
+
+      },
+
       //是否响应
       isBusinessProcess(s) {
         if (s == "01") {
@@ -1007,7 +1015,8 @@
             dealReservationSubmit(send).then(res => {
 
               if (res != null && res.code === 200) {
-                this.$message.success("保存成功！")
+                this.$message.success("保存成功！");
+                this.hiddenShow();
                 if (res.rows.length <= 0) {
                   return this.$message.warning(
                     "提交失败！"

@@ -23,6 +23,7 @@
           accept=".xls,.xlsx,.jpg,.png,.pdf"
           :file-list="fileList">
           <el-button slot="trigger" :disabled="!params.isAdd" size="small" type="primary">点击上传</el-button>
+          <el-button size="mini" type="text"  style="padding-left: 10px;color:red;" @click.stop="clearfile" :disabled="!params.isAdd">批量删除</el-button>
           <div slot="tip" class="el-upload__tip">只能上传excel/jpg/png/pdf文件，且不超过500kb</div>
         </el-upload>
       </el-collapse-item>
@@ -90,6 +91,11 @@ export default {
 
   },
   methods: {
+    //批量删除
+    clearfile(){
+      console.log(1111)
+      this.fileList=[]
+    },
     /** 初始化数据 */
     initData() {
       if (this.params.isShow) {

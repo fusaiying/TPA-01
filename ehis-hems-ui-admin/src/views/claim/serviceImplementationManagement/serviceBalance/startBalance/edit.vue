@@ -96,7 +96,7 @@
         <el-table-column v-if="queryParams.settleType===settleTypeData.isCont" key="insuredNum" prop="insuredNum" label="承保人数" min-width="150%" align="center" show-overflow-tooltip/>
         <el-table-column v-if="queryParams.settleType===settleTypeData.isCont" key="unitPrice" prop="unitPrice" label="客单价" min-width="150%" align="center" show-overflow-tooltip/>
         <el-table-column v-if="queryParams.settleType===settleTypeData.isCase || queryParams.settleType===settleTypeData.isCont" key="remark" prop="remark" label="备注" min-width="150%" align="center" show-overflow-tooltip/>
-        <el-table-column v-if="queryParams.settleType===settleTypeData.isCont" key="allAmount" prop="allAmount" label="总费用" min-width="150%" align="center" show-overflow-tooltip/>
+        <el-table-column v-if="queryParams.settleType===settleTypeData.isCont" key="allAmount" prop="allAmount" :formatter="getAllAmout" label="总费用" min-width="150%" align="center" show-overflow-tooltip/>
 
         <el-table-column v-if="queryParams.settleType===settleTypeData.isCase || queryParams.settleType===settleTypeData.isCont || queryParams.settleType===settleTypeData.isPrice" key="amount" prop="amount" label="服务费" min-width="150%" align="center" show-overflow-tooltip/>
         <el-table-column v-if="queryParams.settleType===settleTypeData.isCase || queryParams.settleType===settleTypeData.isCont || queryParams.settleType===settleTypeData.isPrice" key="actualAmount" prop="actualAmount" label="实际服务费用" min-width="150%" align="center" show-overflow-tooltip/>
@@ -219,6 +219,10 @@ export default {
 
   },
   methods: {
+    //反显总费用
+    getAllAmout(row){
+      return  parseFloat(row.insuredNum)*parseFloat(row.unitPrice)
+    },
     //反显性别
     getSex(row){
       return this.selectDictLabel(this.cs_sexOptions, row.sex);

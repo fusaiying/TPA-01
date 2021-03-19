@@ -195,6 +195,13 @@
         <el-divider/>
         <el-row>
           <el-col :span="8">
+            <el-form-item label="工单号：">
+              <el-input v-model="workPoolData.workOrderNo" class="item-width" clearable size="mini" disabled />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="8">
             <el-form-item label="电话中心业务流水号：" prop="phoneNumber">
               <el-input v-model="workPoolData.callCenterId" class="item-width" size="mini"/>
             </el-form-item>
@@ -287,16 +294,16 @@
           <el-col :span="16">
             <el-form-item label="联系人固定电话：" style="white-space: nowrap" prop="phone">
               国家区号+
-              <el-input v-model="workPoolData.contactsPerson.homePhone1[0]" class="item-width"
+              <el-input v-model="workPoolData.contactsPerson.linePhone1[0]" class="item-width"
                         style="width: 75px"/>
               区号
-              <el-input v-model="workPoolData.contactsPerson.homePhone1[1]" class="item-width" size="mini"
+              <el-input v-model="workPoolData.contactsPerson.linePhone1[1]" class="item-width" size="mini"
                         style="width: 75px" maxlength="50"/>
               号码
-              <el-input v-model="workPoolData.contactsPerson.homePhone1[2]" class="item-width" size="mini"
+              <el-input v-model="workPoolData.contactsPerson.linePhone1[2]" class="item-width" size="mini"
                         style="width: 120px" maxlength="50"/>
               分机号
-              <el-input v-model="workPoolData.contactsPerson.homePhone1[3]" class="item-width" size="mini"
+              <el-input v-model="workPoolData.contactsPerson.linePhone1[3]" class="item-width" size="mini"
                         style="width: 75px" maxlength="50"/>
             </el-form-item>
           </el-col>
@@ -362,7 +369,7 @@
           </el-table-column>
           <el-table-column prop="remarks" align="center" label="说明" show-overflow-tooltip>
             <template slot-scope="scope">
-              <el-link v-if="scope.row.operateCode=='01'" style="font-size:12px" type="primary"
+              <el-link v-if="scope.row.operateCode=='03'" style="font-size:12px" type="primary"
                        @click="modifyDetails(scope.row)">修改说明
               </el-link>
             </template>

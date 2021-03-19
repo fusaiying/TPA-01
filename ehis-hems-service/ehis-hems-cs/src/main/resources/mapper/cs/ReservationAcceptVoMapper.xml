@@ -297,6 +297,7 @@ SELECT
         <if test="idNumber != null  and idNumber != ''"> and c.id_number = #{idNumber}</if>
         <if test="mobilePhone != null  and mobilePhone != ''"> and c.mobile_phone = #{mobilePhone}</if>
         <!--<if test="complaintTime != null  and complaintTime != ''"> and complaintTime = #{complaintTime}</if>-->
+        <if test="operationBy != null and operationBy != ''"> and a.update_by = #{operationBy}</if>
         ORDER BY
         isRedWord DESC,b.priority_level ASC,a.accept_time asc
     </select>

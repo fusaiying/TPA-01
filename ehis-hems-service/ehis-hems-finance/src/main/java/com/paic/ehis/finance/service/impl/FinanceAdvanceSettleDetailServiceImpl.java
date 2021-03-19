@@ -2,16 +2,22 @@ package com.paic.ehis.finance.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.paic.ehis.common.core.utils.PubFun;
+import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.common.core.utils.StringUtils;
 import com.paic.ehis.common.core.utils.poi.ExcelUtils;
+import com.paic.ehis.common.core.web.page.TableDataInfo;
 import com.paic.ehis.finance.mapper.*;
 import com.paic.ehis.finance.service.IFinanceAdvanceSettleDetailService;
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.finance.domain.*;
 import com.paic.ehis.finance.domain.dto.FinanceAdvanceSettleDTO;
 import com.paic.ehis.finance.domain.vo.FinanceAdvanceSettleVO;
+import com.paic.ehis.system.api.ClaimFlowService;
+import com.paic.ehis.system.api.PolicyAndRiskService;
 import com.paic.ehis.system.api.RemoteUserService;
+import com.paic.ehis.system.api.domain.PolicyAndRiskRelation;
 import com.paic.ehis.system.api.domain.SysUser;
+import com.paic.ehis.system.api.domain.dto.ClaimFlowDTO;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.BeanUtils;
@@ -22,6 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -43,6 +50,190 @@ public class FinanceAdvanceSettleDetailServiceImpl implements IFinanceAdvanceSet
 
     @Autowired
     private RemoteUserService userService;
+
+    @Autowired
+    private BaseIssuingcompanyRiskrelaMapper baseIssuingcompanyRiskrelaMapper;
+
+    @Autowired
+    private PolicyAndRiskService policyAndRiskService;
+
+    @Autowired
+    private ClaimFlowService claimFlowService;
+
+
+    /**
+     * 发起垫付款任务
+     */
+    @Override
+    public List<FinanceAdvanceSettleVO> InitiateAdvancePaymentTask(FinanceAdvanceSettleDTO financeAdvanceSettleDTO) {
+        ArrayList<FinanceAdvanceSettleVO> financeAdvanceSettleVOS = new ArrayList<>();
+        FinanceAdvanceSettleVO financeAdvanceSettleVO = new FinanceAdvanceSettleVO();
+        //垫付款服务费及明细的新增
+        FinanceAdvanceSettleTask financeAdvanceSettleTask = new FinanceAdvanceSettleTask();
+        FinanceAdvanceSettleDetail financeAdvanceSettleDetail = new FinanceAdvanceSettleDetail();
+        FinanceSettleRecord financeSettleRecord = new FinanceSettleRecord();
+        PolicyAndRiskRelation policyAndRiskRelation = new PolicyAndRiskRelation();
+        Date earliestDay=new Date();
+        String username = SecurityUtils.getUsername();
+        ObjectMapper objectMapper = new ObjectMapper();
+        SysUser info = objectMapper.convertValue(userService.userInfo().get("data"), SysUser.class);
+        // 获取当前用户所属机构
+        String organCode = "";
+        if (null != info) {
+            organCode = info.getOrganCode();
+        }
+        financeAdvanceSettleTask.setSettleStatus("01");
+        financeAdvanceSettleTask.setSettleEndDate(financeAdvanceSettleDTO.getSettleEndDate());//录入结算止期
+        financeAdvanceSettleTask.setCompanyCode(financeAdvanceSettleDTO.getCompanyCode());//录入出单公司
+        financeAdvanceSettleTask.setStatus("Y");
+        financeAdvanceSettleTask.setDeptCode(organCode);
+        financeAdvanceSettleTask.setCreateBy(info.getUserName());
+        financeAdvanceSettleTask.setCreateTime(DateUtils.getNowDate());
+        financeAdvanceSettleTask.setUpdateBy(info.getUserName());
+        financeAdvanceSettleTask.setUpdateTime(DateUtils.getNowDate());
+
+        financeAdvanceSettleDetail.setStatus("Y");
+        financeAdvanceSettleDetail.setDeptCode(organCode);
+        financeAdvanceSettleDetail.setCompanyCode(financeAdvanceSettleDTO.getCompanyCode());//录入出单公司
+        financeAdvanceSettleDetail.setCreateBy(info.getUserName());
+        financeAdvanceSettleDetail.setCreateTime(DateUtils.getNowDate());
+        financeAdvanceSettleDetail.setUpdateBy(info.getUserName());
+        financeAdvanceSettleDetail.setUpdateTime(DateUtils.getNowDate());
+
+        financeSettleRecord.setTaskType("02");
+        financeSettleRecord.setOperator(info.getUserName());
+        financeSettleRecord.setHistoryFlag("N");
+        financeSettleRecord.setOperation("01");
+        financeSettleRecord.setStatus("Y");
+        financeSettleRecord.setDeptCode(organCode);
+        financeSettleRecord.setCreateBy(info.getUserName());
+        financeSettleRecord.setCreateTime(DateUtils.getNowDate());
+        financeSettleRecord.setUpdateBy(info.getUserName());
+        financeSettleRecord.setUpdateTime(DateUtils.getNowDate());
+
+        policyAndRiskRelation.setCompanyCode(financeAdvanceSettleDTO.getCompanyCode());
+      //  String taskNo = "AS" + PubFun.createMySqlMaxNoUseCache("finance_advance_settle_detail", 10, 10);
+        if (StringUtils.isNotNull(financeAdvanceSettleDTO.getSettleTaskNo())) {
+            List<FinanceAdvanceSettleDetail> financeAdvanceSettleDetails = financeAdvanceSettleDetailMapper.selectFinanceAdvanceSettleDetailList(financeAdvanceSettleDetail);
+            //设值 结算表的结算起期
+            if (StringUtils.isNotEmpty(financeAdvanceSettleDetails)) {
+                FinanceAdvanceSettleTask advanceSettleTask = new FinanceAdvanceSettleTask();
+                advanceSettleTask.setSettleTaskNo(financeAdvanceSettleDetails.get(0).getSettleTaskNo());
+                List<FinanceAdvanceSettleTask> financeAdvanceSettleTasks = financeAdvanceSettleTaskMapper.selectFinanceAdvanceSettleTaskList(financeAdvanceSettleTask);
+                financeAdvanceSettleTask.setSettleStartDate(financeAdvanceSettleTasks.get(0).getSettleEndDate());
+            }
+            List<BaseIssuingcompanyRule> baseIssuingRules = baseIssuingcompanyRiskrelaMapper.selectCompanyRiskAdvance(financeAdvanceSettleDTO);
+            for (BaseIssuingcompanyRule baseIssuingRule : baseIssuingRules) {
+                //通过险种、保单关联得到对应的保单数据
+                policyAndRiskRelation.setRiskCode(baseIssuingRule.getRiskcode());
+                policyAndRiskRelation.setStartTime(financeAdvanceSettleTask.getSettleStartDate());
+                policyAndRiskRelation.setEndTime(financeAdvanceSettleTask.getSettleEndDate());
+                policyAndRiskRelation.setCompanyCode(financeAdvanceSettleTask.getCompanyCode());
+                TableDataInfo relationCompanyList = policyAndRiskService.getRelationCompanyList(policyAndRiskRelation);//查询出单公司险种保单详情
+                CompanyRiskPolicy companyRiskPolicy = null;
+                for(Object row : relationCompanyList.getRows()){
+                    companyRiskPolicy = objectMapper.convertValue(row, CompanyRiskPolicy.class);
+                    BeanUtils.copyProperties(companyRiskPolicy, financeAdvanceSettleDetail);
+                    //financeAdvanceSettleDetail.setSettleTaskNo(taskNo);
+                    //String name=companyRiskPolicy.getName();
+                    //financeAdvanceSettleVO.setName(name);//被保人姓名赋值
+                    earliestDay=companyRiskPolicy.getValidStartDate().before(earliestDay)?companyRiskPolicy.getValidStartDate():earliestDay;//获取结算起期
+                }
+            }
+            if (StringUtils.isNotNull(financeAdvanceSettleTask.getSettleStartDate())) {
+                financeAdvanceSettleTask.setSettleStartDate(earliestDay);
+            }
+            financeAdvanceSettleDetailMapper.updateFinanceAdvanceSettleDetail(financeAdvanceSettleDetail);
+            financeAdvanceSettleTaskMapper.updateFinanceAdvanceSettleTask(financeAdvanceSettleTask);
+            financeSettleRecordMapper.insertFinanceSettleRecord(financeSettleRecord);
+        } else {
+            List<FinanceAdvanceSettleDetail> financeAdvanceSettleDetails = financeAdvanceSettleDetailMapper.selectFinanceAdvanceSettleDetailList(financeAdvanceSettleDetail);
+            //设值 结算表的结算起期
+            if (StringUtils.isNotEmpty(financeAdvanceSettleDetails)) {
+                FinanceAdvanceSettleTask advanceSettleTask = new FinanceAdvanceSettleTask();
+                advanceSettleTask.setSettleTaskNo(financeAdvanceSettleDetails.get(0).getSettleTaskNo());
+                List<FinanceAdvanceSettleTask> financeAdvanceSettleTasks = financeAdvanceSettleTaskMapper.selectFinanceAdvanceSettleTaskList(financeAdvanceSettleTask);
+                financeAdvanceSettleTask.setSettleStartDate(financeAdvanceSettleTasks.get(0).getSettleEndDate());
+            }
+            financeAdvanceSettleDetailMapper.updateFinanceAdvanceSettleDetail(financeAdvanceSettleDetail);
+            financeAdvanceSettleTaskMapper.updateFinanceAdvanceSettleTask(financeAdvanceSettleTask);
+            financeSettleRecordMapper.insertFinanceSettleRecord(financeSettleRecord);
+            financeAdvanceSettleVOS.add(financeAdvanceSettleVO);
+        }
+        return financeAdvanceSettleVOS;
+    }
+
+    /*导入垫付款清单*/
+    @Override
+    public int importAdvanceSettleTask(MultipartFile file) {
+        //先获取导入前的数据，然后查询导入后的数据进行比对
+        FinanceAdvanceSettleTask financeAdvanceSettleTask = new FinanceAdvanceSettleTask();
+        try {
+            InputStream is = file.getInputStream();
+            Workbook wb = ExcelUtils.getWorkbook(is, file.getName());
+            int sheetNum = wb.getNumberOfSheets();
+            ExcelUtils<FinanceAdvanceSettleVO> utils = new ExcelUtils<FinanceAdvanceSettleVO>(FinanceAdvanceSettleVO.class);
+            FinanceAdvanceSettleDetail financeAdvanceSettleDetail = new FinanceAdvanceSettleDetail();
+            FinanceAdvanceSettleVO financeAdvanceSettleVO = new FinanceAdvanceSettleVO();
+
+            for (int j = 0; j < sheetNum; j++) {
+                Sheet sheet = wb.getSheetAt(j);
+                if (1 == j) {//如果excel表里只有一条数据
+                    List<FinanceAdvanceSettleVO> taskList = utils.importExcel(sheet);
+                    BeanUtils.copyProperties(taskList.get(0), financeAdvanceSettleVO);
+                    String taskNo = "AS" + PubFun.createMySqlMaxNoUseCache("finance_advance_settle_detail", 10, 10);
+                    financeAdvanceSettleDetail.setSettleTaskNo(taskNo);
+                    financeAdvanceSettleTask.setSettleStatus("01");
+                    financeAdvanceSettleDetail.setAdvanceAmount(financeAdvanceSettleVO.getAdvanceAmount());//修改金额
+                    financeAdvanceSettleDetail.setRemark(financeAdvanceSettleVO.getRemark());//修改状态
+                    financeAdvanceSettleTaskMapper.updateFinanceAdvanceSettleTask(financeAdvanceSettleTask);
+                    financeAdvanceSettleDetailMapper.updateFinanceAdvanceSettleDetail(financeAdvanceSettleDetail);//单个修改
+                } else {//如果excel表里不止一条数据
+                    List<FinanceAdvanceSettleVO> taskList = utils.importExcel(sheet);
+                    List<FinanceAdvanceSettleVO> updateList = new ArrayList<>();//用来存有任务号的数据
+                    List<FinanceAdvanceSettleVO> insertList = new ArrayList<>();//用来存excel中没有任务号的数据
+                    for (int i = 0; i < taskList.size(); i++) {
+                        if (StringUtils.isNotEmpty(taskList.get(i).getSettleTaskNo())) {
+                            updateList.add(taskList.get(i));//取出excel集合中存在任务号的数据
+                            BeanUtils.copyProperties(taskList.get(i), financeAdvanceSettleVO);
+                            List<FinanceAdvanceSettleVO> financeAdvanceSettleVOS = financeAdvanceSettleDetailMapper.selectFinanceAdvanceSettleVOInfo(taskList.get(0).getSettleTaskNo());
+                            for (int p = 0; p < financeAdvanceSettleVOS.size(); p++) {
+                                String[] settleTaskNos = financeAdvanceSettleVOS.get(p).getSettleTaskNos();
+                                financeAdvanceSettleDetailMapper.deleteFinanceSettleDetailsettleTaskNos(settleTaskNos);//批量删除工作池的数据(修改状态不显示)
+                            }
+                            financeAdvanceSettleTask.setSettleStatus("01");//设置为待确认状态
+                            financeAdvanceSettleDetail.setStatus("Y");
+                            financeAdvanceSettleTask.setStatus("Y");
+                            financeAdvanceSettleDetail.setAdvanceAmount(financeAdvanceSettleVO.getAdvanceAmount());//修改金额
+                            financeAdvanceSettleDetail.setRemark(financeAdvanceSettleVO.getRemark());//修改状态
+                            financeAdvanceSettleTaskMapper.updateFinanceAdvanceSettleTask(financeAdvanceSettleTask);//单个修改
+                            financeAdvanceSettleDetailMapper.updateFinanceAdvanceSettleDetail(financeAdvanceSettleDetail);//单个修改
+                        } else {
+                            insertList.add(taskList.get(i));//取出excel集合中没有任务号的数据
+                            BeanUtils.copyProperties(taskList.get(i), financeAdvanceSettleVO);//新增没有任务号的数据
+                            List<FinanceAdvanceSettleVO> financeAdvanceSettleVOS = financeAdvanceSettleDetailMapper.selectFinanceAdvanceSettleVOInfo(taskList.get(0).getSettleTaskNo());
+                            for (int p = 0; p < financeAdvanceSettleVOS.size(); p++) {
+                                String[] settleTaskNos = financeAdvanceSettleVOS.get(p).getSettleTaskNos();
+                                financeAdvanceSettleDetailMapper.deleteFinanceSettleDetailsettleTaskNos(settleTaskNos);//批量删除工作池的数据(修改状态不显示)
+                            }
+                            String taskNo = "AS" + PubFun.createMySqlMaxNoUseCache("finance_advance_settle_detail", 10, 10);
+                            financeAdvanceSettleDetail.setSettleTaskNo(taskNo);
+                            financeAdvanceSettleTask.setSettleStatus("01");
+                            financeAdvanceSettleDetail.setStatus("Y");
+                            financeAdvanceSettleTask.setStatus("Y");
+                            financeAdvanceSettleDetail.setAdvanceAmount(financeAdvanceSettleVO.getAdvanceAmount());//修改金额
+                            financeAdvanceSettleDetail.setRemark(financeAdvanceSettleVO.getRemark());//修改状态
+                            financeAdvanceSettleTaskMapper.updateFinanceAdvanceSettleTask(financeAdvanceSettleTask);
+                            financeAdvanceSettleDetailMapper.updateFinanceAdvanceSettleDetail(financeAdvanceSettleDetail);//单个修改
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return financeAdvanceSettleTaskMapper.updateFinanceAdvanceSettleTask(financeAdvanceSettleTask);
+    }
 
     /**
      * 查询代垫费结算明细
@@ -167,155 +358,4 @@ public class FinanceAdvanceSettleDetailServiceImpl implements IFinanceAdvanceSet
         return financeAdvanceSettleDetailMapper.updateSettleStatus2(settleTaskNo);
     }
 
-
-    /**
-     * 发起垫付款任务
-     */
-    @Override
-    public List<FinanceAdvanceSettleVO> InitiateAdvancePaymentTask(FinanceAdvanceSettleDTO financeAdvanceSettleDTO) {
-        ArrayList<FinanceAdvanceSettleVO> financeAdvanceSettleVOS = new ArrayList<>();
-        FinanceAdvanceSettleVO financeAdvanceSettleVO = new FinanceAdvanceSettleVO();
-        //垫付款服务费及明细的新增
-        FinanceAdvanceSettleTask financeAdvanceSettleTask = new FinanceAdvanceSettleTask();
-        FinanceAdvanceSettleDetail financeAdvanceSettleDetail = new FinanceAdvanceSettleDetail();
-        FinanceSettleRecord financeSettleRecord = new FinanceSettleRecord();
-        ObjectMapper objectMapper = new ObjectMapper();
-        SysUser info = objectMapper.convertValue(userService.userInfo().get("data"), SysUser.class);
-        // 获取当前用户所属机构
-        String organCode = "";
-        if (null != info) {
-            organCode = info.getOrganCode();
-        }
-        financeAdvanceSettleTask.setSettleStatus("01");
-        financeAdvanceSettleTask.setSettleEndDate(financeAdvanceSettleDTO.getSettleEndDate());
-        financeAdvanceSettleTask.setCompanyCode(financeAdvanceSettleDTO.getCompanyCode());
-        financeAdvanceSettleTask.setStatus("Y");
-        financeAdvanceSettleTask.setDeptCode(organCode);
-        financeAdvanceSettleTask.setCreateBy(info.getUserName());
-        financeAdvanceSettleTask.setCreateTime(DateUtils.getNowDate());
-        financeAdvanceSettleTask.setUpdateBy(info.getUserName());
-        financeAdvanceSettleTask.setUpdateTime(DateUtils.getNowDate());
-
-        financeAdvanceSettleDetail.setStatus("Y");
-        financeAdvanceSettleDetail.setDeptCode(organCode);
-        financeAdvanceSettleDetail.setCreateBy(info.getUserName());
-        financeAdvanceSettleDetail.setCreateTime(DateUtils.getNowDate());
-        financeAdvanceSettleDetail.setUpdateBy(info.getUserName());
-        financeAdvanceSettleDetail.setUpdateTime(DateUtils.getNowDate());
-
-        financeSettleRecord.setTaskType("02");
-        financeSettleRecord.setOperator(info.getUserName());
-        financeSettleRecord.setHistoryFlag("N");
-        financeSettleRecord.setOperation("01");
-        financeSettleRecord.setStatus("Y");
-        financeSettleRecord.setDeptCode(organCode);
-        financeSettleRecord.setCreateBy(info.getUserName());
-        financeSettleRecord.setCreateTime(DateUtils.getNowDate());
-        financeSettleRecord.setUpdateBy(info.getUserName());
-        financeSettleRecord.setUpdateTime(DateUtils.getNowDate());
-
-        String taskNo = "AS" + PubFun.createMySqlMaxNoUseCache("finance_advance_settle_detail", 10, 10);
-        if (StringUtils.isNotNull(financeAdvanceSettleDTO.getSettleTaskNo())) {
-            List<FinanceAdvanceSettleDetail> financeAdvanceSettleDetails = financeAdvanceSettleDetailMapper.selectFinanceAdvanceSettleDetailList(financeAdvanceSettleDetail);
-            //设值 结算表的结算起期
-            if (StringUtils.isNotEmpty(financeAdvanceSettleDetails)) {
-                FinanceAdvanceSettleTask advanceSettleTask = new FinanceAdvanceSettleTask();
-                advanceSettleTask.setSettleTaskNo(financeAdvanceSettleDetails.get(0).getSettleTaskNo());
-                List<FinanceAdvanceSettleTask> financeAdvanceSettleTasks = financeAdvanceSettleTaskMapper.selectFinanceAdvanceSettleTaskList(financeAdvanceSettleTask);
-                financeAdvanceSettleTask.setSettleStartDate(financeAdvanceSettleTasks.get(0).getSettleEndDate());
-            }
-            financeAdvanceSettleTask.setSettleTaskNo(taskNo);
-
-            financeAdvanceSettleTaskMapper.insertFinanceAdvanceSettleTask(financeAdvanceSettleTask);
-            financeSettleRecord.setSettleTaskNo(taskNo);
-            financeSettleRecordMapper.insertFinanceSettleRecord(financeSettleRecord);
-        } else {
-            List<FinanceAdvanceSettleDetail> financeAdvanceSettleDetails = financeAdvanceSettleDetailMapper.selectFinanceAdvanceSettleDetailList(financeAdvanceSettleDetail);
-            //设值 结算表的结算起期
-            if (StringUtils.isNotEmpty(financeAdvanceSettleDetails)) {
-                FinanceAdvanceSettleTask advanceSettleTask = new FinanceAdvanceSettleTask();
-                advanceSettleTask.setSettleTaskNo(financeAdvanceSettleDetails.get(0).getSettleTaskNo());
-                List<FinanceAdvanceSettleTask> financeAdvanceSettleTasks = financeAdvanceSettleTaskMapper.selectFinanceAdvanceSettleTaskList(financeAdvanceSettleTask);
-                financeAdvanceSettleTask.setSettleStartDate(financeAdvanceSettleTasks.get(0).getSettleEndDate());
-            }
-            financeAdvanceSettleTask.setSettleTaskNo(taskNo);
-            financeAdvanceSettleTaskMapper.insertFinanceAdvanceSettleTask(financeAdvanceSettleTask);
-            financeSettleRecord.setSettleTaskNo(taskNo);
-            financeSettleRecordMapper.insertFinanceSettleRecord(financeSettleRecord);
-            financeAdvanceSettleVOS.add(financeAdvanceSettleVO);
-        }
-        return financeAdvanceSettleVOS;
-    }
-
-    /*导入垫付款清单*/
-    @Override
-    public int importAdvanceSettleTask(MultipartFile file) {
-        //先获取导入前的数据，然后查询导入后的数据进行比对
-        FinanceAdvanceSettleTask financeAdvanceSettleTask = new FinanceAdvanceSettleTask();
-        try {
-            InputStream is = file.getInputStream();
-            Workbook wb = ExcelUtils.getWorkbook(is, file.getName());
-            int sheetNum = wb.getNumberOfSheets();
-            ExcelUtils<FinanceAdvanceSettleVO> utils = new ExcelUtils<FinanceAdvanceSettleVO>(FinanceAdvanceSettleVO.class);
-            FinanceAdvanceSettleDetail financeAdvanceSettleDetail = new FinanceAdvanceSettleDetail();
-            FinanceAdvanceSettleVO financeAdvanceSettleVO = new FinanceAdvanceSettleVO();
-
-            for (int j = 0; j < sheetNum; j++) {
-                Sheet sheet = wb.getSheetAt(j);
-                if (1 == j) {//如果excel表里只有一条数据
-                    List<FinanceAdvanceSettleVO> taskList = utils.importExcel(sheet);
-                    BeanUtils.copyProperties(taskList.get(0), financeAdvanceSettleVO);
-                    String taskNo = "AS" + PubFun.createMySqlMaxNoUseCache("finance_advance_settle_detail", 10, 10);
-                    financeAdvanceSettleDetail.setSettleTaskNo(taskNo);
-                    financeAdvanceSettleTask.setSettleStatus("01");
-                    financeAdvanceSettleDetail.setAdvanceAmount(financeAdvanceSettleVO.getAdvanceAmount());//修改金额
-                    financeAdvanceSettleDetail.setRemark(financeAdvanceSettleVO.getRemark());//修改状态
-                    financeAdvanceSettleTaskMapper.updateFinanceAdvanceSettleTask(financeAdvanceSettleTask);
-                    financeAdvanceSettleDetailMapper.updateFinanceAdvanceSettleDetail(financeAdvanceSettleDetail);//单个修改
-                } else {//如果excel表里不止一条数据
-                    List<FinanceAdvanceSettleVO> taskList = utils.importExcel(sheet);
-                    List<FinanceAdvanceSettleVO> updateList = new ArrayList<>();//用来存有任务号的数据
-                    List<FinanceAdvanceSettleVO> insertList = new ArrayList<>();//用来存excel中没有任务号的数据
-                    for (int i = 0; i < taskList.size(); i++) {
-                        if (StringUtils.isNotEmpty(taskList.get(i).getSettleTaskNo())) {
-                            updateList.add(taskList.get(i));//取出excel集合中存在任务号的数据
-                            BeanUtils.copyProperties(taskList.get(i), financeAdvanceSettleVO);
-                            List<FinanceAdvanceSettleVO> financeAdvanceSettleVOS = financeAdvanceSettleDetailMapper.selectFinanceAdvanceSettleVOInfo(taskList.get(0).getSettleTaskNo());
-                            for (int p = 0; p < financeAdvanceSettleVOS.size(); p++) {
-                                String[] settleTaskNos = financeAdvanceSettleVOS.get(p).getSettleTaskNos();
-                                financeAdvanceSettleDetailMapper.deleteFinanceSettleDetailsettleTaskNos(settleTaskNos);//批量删除工作池的数据(修改状态不显示)
-                            }
-                            financeAdvanceSettleTask.setSettleStatus("01");//设置为待确认状态
-                            financeAdvanceSettleDetail.setStatus("Y");
-                            financeAdvanceSettleTask.setStatus("Y");
-                            financeAdvanceSettleDetail.setAdvanceAmount(financeAdvanceSettleVO.getAdvanceAmount());//修改金额
-                            financeAdvanceSettleDetail.setRemark(financeAdvanceSettleVO.getRemark());//修改状态
-                            financeAdvanceSettleTaskMapper.updateFinanceAdvanceSettleTask(financeAdvanceSettleTask);//单个修改
-                            financeAdvanceSettleDetailMapper.updateFinanceAdvanceSettleDetail(financeAdvanceSettleDetail);//单个修改
-                        } else {
-                            insertList.add(taskList.get(i));//取出excel集合中没有任务号的数据
-                            BeanUtils.copyProperties(taskList.get(i), financeAdvanceSettleVO);//新增没有任务号的数据
-                            List<FinanceAdvanceSettleVO> financeAdvanceSettleVOS = financeAdvanceSettleDetailMapper.selectFinanceAdvanceSettleVOInfo(taskList.get(0).getSettleTaskNo());
-                            for (int p = 0; p < financeAdvanceSettleVOS.size(); p++) {
-                                String[] settleTaskNos = financeAdvanceSettleVOS.get(p).getSettleTaskNos();
-                                financeAdvanceSettleDetailMapper.deleteFinanceSettleDetailsettleTaskNos(settleTaskNos);//批量删除工作池的数据(修改状态不显示)
-                            }
-                            String taskNo = "AS" + PubFun.createMySqlMaxNoUseCache("finance_advance_settle_detail", 10, 10);
-                            financeAdvanceSettleDetail.setSettleTaskNo(taskNo);
-                            financeAdvanceSettleTask.setSettleStatus("01");
-                            financeAdvanceSettleDetail.setStatus("Y");
-                            financeAdvanceSettleTask.setStatus("Y");
-                            financeAdvanceSettleDetail.setAdvanceAmount(financeAdvanceSettleVO.getAdvanceAmount());//修改金额
-                            financeAdvanceSettleDetail.setRemark(financeAdvanceSettleVO.getRemark());//修改状态
-                            financeAdvanceSettleTaskMapper.updateFinanceAdvanceSettleTask(financeAdvanceSettleTask);
-                            financeAdvanceSettleDetailMapper.updateFinanceAdvanceSettleDetail(financeAdvanceSettleDetail);//单个修改
-                        }
-                    }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return financeAdvanceSettleTaskMapper.updateFinanceAdvanceSettleTask(financeAdvanceSettleTask);
-    }
 }

@@ -9,6 +9,15 @@ export function listBalance2(query) {
   })
 }
 
+// 查询service_balance_info(服务结算基本信息)列表默认
+export function listBalance2Default(query) {
+  return request({
+    url: '/order/balance/list2Default',
+    method: 'post',
+    data: query
+  })
+}
+
 // 删除service_balance_info(服务结算基本信息)
 export function updateBalance(data) {
   return request({

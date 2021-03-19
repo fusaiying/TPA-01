@@ -427,6 +427,7 @@ export default {
         label: '服务4'
       }],
       sysUserOptions: [],
+      isRemind:true,
     }
   },
   created() {
@@ -576,9 +577,8 @@ export default {
           this.totalCount = res.rows.length
           console.log('response', res.total)
           if (res.rows.length <= 0) {
-            return this.$message.warning(
-              "公共池未查询到数据！"
-            )
+            this.isRemind=true;
+            console.info("预约公共池没有满足条件的数据！");
           }
         }
       }).catch(res => {
@@ -601,9 +601,9 @@ export default {
           this.workPersonPoolData = res.rows
           this.totalPersonCount = res.rows.length
           console.log('response', res.total)
-          if (res.rows.length <= 0) {
+          if (res.rows.length <= 0 && this.isRemind) {
             return this.$message.warning(
-              "个人池未查询到数据！"
+              "未查询到数据！"
             )
           }
         }

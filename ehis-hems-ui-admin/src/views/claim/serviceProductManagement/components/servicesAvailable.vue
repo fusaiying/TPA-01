@@ -231,8 +231,7 @@ export default {
 
       if (flag != null && flag >= 0) {
 
-        let reg = /^(\d+|\d+\.)$/
-
+        let reg = /^[1-9]\d*$/
         if (value != null && value != '') {
           //
           //判断优先次序是否重复

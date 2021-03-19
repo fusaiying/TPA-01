@@ -43,8 +43,8 @@ public class FinanceAdvanceSettleTask extends BaseEntity
     @Excel(name = "结算起期", width = 30, dateFormat = "yyyy-MM-dd")
     private Date settleStartDate;
 
-    /** 结算状态 (01-待结算、02-已结算) */
-    @Excel(name = "结算状态 (01-待结算、02-已结算)")
+    /** 结算状态 (01-待确认、02-待结算、03-已结算) */
+    @Excel(name = "结算状态 (01-待确认、01-待结算、02-已结算)")
     private String settleStatus;
 
     /** 核销日期 */

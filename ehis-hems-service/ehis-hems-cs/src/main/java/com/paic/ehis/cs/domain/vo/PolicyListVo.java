@@ -5,6 +5,7 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 @Data
 public class PolicyListVo implements Serializable {
@@ -88,4 +89,5 @@ public class PolicyListVo implements Serializable {
 
     private String riskCodesStr;
 
+    private List<PolicyRiskRelation> policyRiskRelations;
 }

@@ -92,7 +92,7 @@
               </el-col>
 
               <el-col :span="8">
-                <el-form-item label="发票金额（税）:" prop="amountTax">
+                <el-form-item label="发票金额（不含税）:" prop="amountTax">
                   <el-input v-model="form.amountTax" placeholder="请输入发票金额（不含税）" class="item-width" @input="countTax"/>
                 </el-form-item>
               </el-col>
@@ -199,7 +199,16 @@ export default {
       // 是否显示弹出层
       open: false,
       // 表单参数
-      form: {},
+      form: {
+        amount:'',
+        amountTax:'',
+        invoiceCode:'',
+        invoiceNo:'',
+        invoiceType:'',
+        serialNo:'',
+        taskNo:'',
+        tax:''
+      },
       // 表单校验
       rules: {
         invoiceType: [{required: true, message: "发票类型不能为空", trigger: "change"}],

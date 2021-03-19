@@ -114,4 +114,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="settlementType  != null  and status != ''"> and rule.settlement_type  = #{settlementType}</if>
         </where>
     </select>
+
+    <select id="selectCompanyRiskAdvance" parameterType="com.paic.ehis.finance.domain.dto.FinanceAdvanceSettleDTO" resultMap="BaseIssuingcompanyRuleResult">
+        SELECT DISTINCT
+        product.risk_name,
+        bir.risk_code,
+        rule.settlement_type,
+        rule.settlement_value
+        FROM
+        base_issuingcompany_riskrela bir
+        LEFT JOIN base_issuingcompany_rule rule ON rule.company_code = bir.company_code
+        AND rule.STATUS = 'Y'
+        LEFT JOIN claim_product product ON product.risk_code = bir.risk_code
+        AND product.STATUS = 'Y'
+        <where>
+            <if test="companyCode != null">and rule.company_code = #{companyCode}</if>
+            <if test="status != null  and status != ''"> and rule.status = #{status}</if>
+            <if test="settlementType  != null  and status != ''"> and rule.settlement_type  = #{settlementType}</if>
+        </where>
+    </select>
+
 </mapper>

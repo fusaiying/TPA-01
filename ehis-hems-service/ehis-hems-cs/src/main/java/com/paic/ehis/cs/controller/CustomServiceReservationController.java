@@ -1,6 +1,7 @@
 package com.paic.ehis.cs.controller;
 
 import com.paic.ehis.common.core.utils.PubFun;
+import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.common.core.web.controller.BaseController;
 import com.paic.ehis.common.core.web.domain.AjaxResult;
 import com.paic.ehis.common.core.web.page.TableDataInfo;
@@ -45,6 +46,7 @@ public class CustomServiceReservationController extends BaseController {
     @GetMapping("/internal/listAndPersonalPool")
     public TableDataInfo listAndPersonalPool(AcceptDTO acceptDTO) {
         startPage();
+        acceptDTO.setOperationBy(SecurityUtils.getUsername());
         List<ReservationAcceptVo> list = iReservationAcceptVoService.selectReservationAcceptVoList2(acceptDTO);
         return getDataTable(list);
     }

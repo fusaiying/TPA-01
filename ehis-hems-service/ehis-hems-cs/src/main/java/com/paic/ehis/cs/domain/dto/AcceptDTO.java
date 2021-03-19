@@ -105,4 +105,6 @@ public class AcceptDTO implements Serializable {
 
     private String updateBy;
 
+    /** 当前操作人*/
+    private String operationBy;
 }

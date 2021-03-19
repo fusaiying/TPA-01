@@ -135,6 +135,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="amount != null">amount,</if>
             <if test="actualAmount != null">actual_amount,</if>
             <if test="reason != null">reason,</if>
+            <if test="supplierServiceName != null">supplier_service_name,</if>
             <if test="insuredNum != null">insured_num,</if>
             <if test="unitPrice != null">unit_price,</if>
             <if test="createBy != null">create_by,</if>
@@ -163,6 +164,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="amount != null">#{amount},</if>
             <if test="actualAmount != null">#{actualAmount},</if>
             <if test="reason != null">#{reason},</if>
+            <if test="supplierServiceName != null">#{supplierServiceName},</if>
             <if test="insuredNum != null">#{insuredNum},</if>
             <if test="unitPrice != null">#{unitPrice},</if>
             <if test="createBy != null">#{createBy},</if>
@@ -237,6 +239,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             b.amount,
             b.actual_amount,
             b.reason,
+            b.supplier_service_name,
             a.bussiness_status
         FROM
             service_balance_info a,
@@ -276,6 +279,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         b.amount,
         b.actual_amount,
         b.reason,
+        b.supplier_service_name,
         a.bussiness_status
         FROM
         service_balance_info a,
@@ -286,7 +290,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         AND a.status = 'Y'
         AND b.status = 'Y'
         <if test="beforeDate != null   and nowDate != null ">
-            and (pi.create_time between  #{beforeDate} and  #{nowDate})
+            and (b.create_time between  #{beforeDate} and  #{nowDate})
         </if>
     </select>
 
@@ -370,7 +374,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             )
             WHERE
             oi. STATUS = 'Y'
-            AND oi.push_flag = '0' and oi.bussiness_status = '02'
+            AND oi.push_flag = '0' and oi.bussiness_status = '02' and oi.comfirm_flag = '1'
             <if test="supplierCode != null  and supplierCode != ''">and oi.supplier_code = #{supplierCode}</if>
             <if test="settleType != null  and settleType != ''">and bcs.settle_type =#{settleType}</if>
             <if test="serviceCode != null  and serviceCode != ''">and bcs.serial_no = #{serviceCode}</if>
@@ -559,5 +563,22 @@ where task_no = #{taskNo}
             <if test="status != null  and status != ''"> and a.status = #{status}</if>
         </where>
     </select>
+
+    <select id="orderCodeList" parameterType="ServiceBalanceDetail" resultType="String">
+        SELECT
+        a.order_code
+        FROM
+        service_balance_detail a
+        <where>
+            <if test="taskNo != null  and taskNo != ''"> and a.task_no = #{taskNo}</if>
+        </where>
+    </select>
+
+    <update id="updateOrderInfo" parameterType="String">
+        update order_info set confirm_flag = '0' where order_code in
+        <foreach item="orderCode" collection="list" open="(" separator="," close=")">
+            #{orderCode}
+        </foreach>
+    </update>
     
 </mapper>

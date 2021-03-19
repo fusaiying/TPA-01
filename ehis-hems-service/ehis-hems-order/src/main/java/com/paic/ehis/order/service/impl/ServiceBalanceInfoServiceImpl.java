@@ -222,6 +222,8 @@ public class ServiceBalanceInfoServiceImpl implements IServiceBalanceInfoService
             serviceBalanceDetail.setTaskNo(serviceBalanceInfo.getTaskNo());
             serviceBalanceDetail.setStatus(StatusEnum.INVALID.getCode());
             int detailNum = serviceBalanceDetailMapper.updateServiceBalanceDetailByTaskNo(serviceBalanceDetail);
+            List<String> orderInfos = serviceBalanceDetailMapper.orderCodeList(serviceBalanceDetail);
+            serviceBalanceDetailMapper.updateOrderInfo(orderInfos);
             logger.info("更新-结算明细表行数：" + detailNum);
 
             ServiceBalanceExamLog serviceBalanceExamLog = new ServiceBalanceExamLog();

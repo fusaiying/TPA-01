@@ -125,7 +125,7 @@
 <script>
 import balanceDetail from './../components/balanceDetail'
 import {getAllBaseSupplierInfo, getContractServerList} from "@/api/contractManage/contractManagement";
-import {listBalanceDetail_1, listBalanceDetail_2} from "@/api/claim/serviceBalance";
+import {listBalanceDetail_1, listBalanceDetail_2,listBalanceDetail_3} from "@/api/claim/serviceBalance";
 import {atLeastOne2} from "@/utils/commenMethods";
 import moment from "moment";
 
@@ -224,7 +224,6 @@ export default {
 
     /** 查询列表 */
     getList() {
-
       this.loading = true;
       //无查询参数查询默认30天
       if (this.isDefault) {
@@ -298,6 +297,7 @@ export default {
       }).catch(error => {
         console.log(error);
       });
+      this.getList()
     },
     /** 供应商事件 */
     changeSupplier() {

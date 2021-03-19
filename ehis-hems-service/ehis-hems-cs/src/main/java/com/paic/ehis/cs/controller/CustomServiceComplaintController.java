@@ -1,6 +1,7 @@
 package com.paic.ehis.cs.controller;
 
 import com.paic.ehis.common.core.utils.PubFun;
+import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.common.core.web.controller.BaseController;
 import com.paic.ehis.common.core.web.domain.AjaxResult;
 import com.paic.ehis.common.core.web.page.TableDataInfo;
@@ -63,6 +64,7 @@ public class CustomServiceComplaintController extends BaseController {
     @GetMapping("/complaint/selectComplaintAcceptVoListOne")
     public TableDataInfo selectComplaintAcceptVoListOne(AcceptDTO acceptDTO) {
         startPage();
+        acceptDTO.setOperationBy(SecurityUtils.getUsername());
         List<DemandAcceptVo> list = iComplaintAcceptVoService.selectComplaintAcceptVoListOne(acceptDTO);
         return getDataTable(list);
     }

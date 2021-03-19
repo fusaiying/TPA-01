@@ -384,7 +384,7 @@
     </el-card>
 
     <el-card>
-      <el-form :model="submitForm" style="padding-bottom: 30px;" :rules="rules" label-width="100px" label-position="right" size="mini">
+      <el-form ref="submitForm" :model="submitForm" style="padding-bottom: 30px;" :rules="rules" label-width="100px" label-position="right" size="mini">
         <span style="color: blue">服务处理</span>
         <el-divider/>
         <el-row>
@@ -661,24 +661,27 @@ export default {
 
     //提交
     submit() {
-      let insert = this.submitForm
-      insert.workOrderNo = this.$route.query.workOrderNo
-      insert.collaborativeId = this.$route.query.collaborativeId
-      dealSubmit(insert).then(res => {
-        if (res != null && res.code === 200) {
-          console.log("insert", insert)
-          this.$message.success("保存成功");
-          this.collaborativeFrom.status = "02";
-          if (res.rows.length <= 0) {
-            return this.$message.warning(
-              "失败！"
-            )
-          }
+      this.$refs.submitForm.validate((valid) => {
+        if (valid) {
+          let insert = this.submitForm
+          insert.workOrderNo = this.$route.query.workOrderNo
+          insert.collaborativeId = this.$route.query.collaborativeId
+          dealSubmit(insert).then(res => {
+            if (res != null && res.code === 200) {
+              console.log("insert", insert)
+              this.$message.success("保存成功");
+              this.collaborativeFrom.status = "02";
+              if (res.rows.length <= 0) {
+                return this.$message.warning(
+                  "失败！"
+                )
+              }
+            }
+          }).catch(res => {
+
+          })
         }
-      }).catch(res => {
-
       })
-
     },
     //查询轨迹表
     searchFlowLog() {

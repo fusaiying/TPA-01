@@ -66,8 +66,8 @@ export function listBalanceDetail_2(query) {
 export function listBalanceDetail_3(query) {
   return request({
     url: '/order/balanceDetail/list3',
-    method: 'post',
-    data: query
+    method: 'get',
+    params: query
   })
 }
 

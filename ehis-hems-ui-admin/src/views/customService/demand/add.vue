@@ -1,31 +1,31 @@
 <template>
   <div class="app-container">
     <el-card class="box-card" style="margin-top: 10px;">
-      <el-form ref="sendForm" :model="sendForm" style="padding-bottom: 30px;" label-width="100px"
+      <el-form ref="sendForm" :model="sendForm" style="padding-bottom: 30px;" label-width="100px" :role="ruleQuery"
                label-position="right" size="mini">
         <el-row>
           <el-col :span="8">
-            <el-form-item label="保单号：" prop="policyNumber">
+            <el-form-item label="保单号：" prop="policyNo">
               <el-input v-model="sendForm.policyNo" class="item-width" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="分单号：" prop="secondNumber">
+            <el-form-item label="分单号：" prop="policyItemNo">
               <el-input v-model="sendForm.policyItemNo" class="item-width" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="被保人姓名：" prop="beInsuredName">
+            <el-form-item label="被保人姓名：" prop="name">
               <el-input v-model="sendForm.name" class="item-width" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item style="white-space: nowrap" label="被保人证件号：" prop="beInsuredNo">
+            <el-form-item style="white-space: nowrap" label="被保人证件号：" prop="idNo">
               <el-input v-model="sendForm.idNo" class="item-width" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item style="white-space: nowrap" label="被保人生日：" prop="beBirthday">
+            <el-form-item style="white-space: nowrap" label="被保人生日：" prop="birthday">
               <el-input v-model="sendForm.birthday" class="item-width" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
@@ -117,7 +117,6 @@
           idNo: "",
           birthday: "",
         },
-        caseNumber: false,//查询条件（报案号）是否显示
         // 查询参数
         queryParams: {
           pageNum: 1,
@@ -183,10 +182,16 @@
                   "未查询到数据！"
                 );
               }
+            }else{
+              return this.$message.warning(
+                "调用接口查询异常！"
+              );
             }
           }
         ).catch(res => {
-
+          return this.$message.error(
+            "调用接口查询异常！"
+          );
         })
       },
       handleSelectionChange(val) {

@@ -37,6 +37,8 @@
         <result property="callCenterId" column="call_center_id"/>
         <result property="oldmodifyBy" column="oldmodify_by"/>
         <result property="changeTime" column="change_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="createBy" column="create_by"/>
     </resultMap>
 <!--    信息需求公共池数据查询-->
     <select id="selectDemandAcceptVoList" parameterType="com.paic.ehis.cs.domain.dto.WorkOrderQueryDTO"

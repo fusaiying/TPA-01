@@ -194,6 +194,15 @@ public class ServiceBalanceInfoServiceImpl implements IServiceBalanceInfoService
     }
 
     /**
+     * 查询service_balance_info(服务结算基本信息)列表 默认
+     * @return service_balance_info(服务结算基本信息)
+     */
+    @Override
+    public List<ServiceBalanceInfo> selectServiceBalanceInfoList2Default() {
+        return serviceBalanceInfoMapper.selectServiceBalanceInfoList2Default();
+    }
+
+    /**
      * 更新service_balance_info(服务结算基本信息)信息
      * @param serviceBalanceInfo service_balance_info(服务结算基本信息) status-删除，isImport-导入，bussinessStatus-流程
      * @return 结果

@@ -128,7 +128,7 @@
 import moment from 'moment';
 import balanceInvoiceDetail from './../components/balanceInvoiceDetail'
 
-import {listBalance2} from "@/api/claim/serviceBalance";
+import {listBalance2,listBalance2Default} from "@/api/claim/serviceBalance";
 import {getAllBaseSupplierInfo} from '@/api/contractManage/contractManagement';
 
 let dictss = [{dictType: 'invoice_status'},{dictType: 'balance_invoice_type2'},{dictType: 'invoice_auth'}]
@@ -172,7 +172,7 @@ export default {
         //支付时间
         payDate: null,
         //状态
-        invoiceStatus: 'N'
+        invoiceStatus: null
       },
       //发票信息
       invoice: {
@@ -198,11 +198,11 @@ export default {
       //供应商
       supplierOptions: [],
       //状态
-      invoiceStatusOptions: []
+      invoiceStatusOptions: [],
     };
   },
   created() {
-    this.getList();
+    this.getListDefault();
 
   },
   async mounted() {
@@ -263,6 +263,24 @@ export default {
         this.loading = false
       });
     },
+    /** 查询服务结算列表 默认*/
+    getListDefault() {
+      this.loading = true;
+      listBalance2Default(this.queryParams).then(res => {
+        if (res != null && res.code === 200) {
+          this.invoiceWriteList = res.rows;
+          this.total = res.total;
+          this.loading = false;
+          if (res.rows.length < 1) {
+            return this.$message.warning(
+              "未查询到数据！"
+            )
+          }
+        }
+      }).catch(res => {
+        this.loading = false
+      });
+    },
     /** 搜索按钮操作 */
     handleQuery() {
       this.resetInvoice();
@@ -274,7 +292,7 @@ export default {
       this.resetInvoice();
       this.resetForm("queryForm");
       this.queryParams.pageNum = 1;
-      this.getList();
+      this.getListDefault();
     },
     /** 重置发票信息 */
     resetInvoice() {

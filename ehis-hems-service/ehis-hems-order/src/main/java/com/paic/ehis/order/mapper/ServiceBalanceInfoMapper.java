@@ -78,9 +78,15 @@ public interface ServiceBalanceInfoMapper
     public List<ServiceBalanceInfo> selectServiceBalanceInfoList2(ServiceBalanceInfo serviceBalanceInfo);
 
     /**
+     * 查询service_balance_info(服务结算基本信息)列表 默认
+     */
+    public List<ServiceBalanceInfo> selectServiceBalanceInfoList2Default();
+
+    /**
      * 更新service_balance_info(服务结算基本信息)信息
      * @param serviceBalanceInfo service_balance_info(服务结算基本信息)
      * @return 结果
      */
     public int updateServiceBalanceInfoByTaskNo(ServiceBalanceInfo serviceBalanceInfo);
+
 }

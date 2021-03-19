@@ -219,6 +219,48 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
     </select>
 
+    <select id="selectServiceBalanceInfoList2Default" parameterType="ServiceBalanceInfo" resultMap="ServiceBalanceInfoResult">
+        <include refid="selectServiceBalanceInfoVo2"/>
+        <where>
+            <if test="taskNo != null  and taskNo != ''"> and task_no = #{taskNo}</if>
+            <if test="supplierCode != null  and supplierCode != ''"> and supplier_code = #{supplierCode}</if>
+            <if test="serviceCode != null  and serviceCode != ''"> and service_code = #{serviceCode}</if>
+            <if test="settleType != null  and settleType != ''"> and settle_type = #{settleType}</if>
+            <if test="settleCurrency != null  and settleCurrency != ''"> and settle_currency = #{settleCurrency}</if>
+            <if test="endDate != null "> and end_date &lt;= #{endDate}</if>
+            <if test="balanceInvoiceType != null "> and balance_invoice_type = #{balanceInvoiceType}</if>
+            <if test="serviceAmount != null "> and service_amount = #{serviceAmount}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="isImport != null  and isImport != ''"> and is_import = #{isImport}</if>
+            <if test="bussinessStatus != null  and bussinessStatus != ''"> and bussiness_status = #{bussinessStatus}</if>
+            <if test="bussinessStatus == null or bussinessStatus == ''">
+                <if test="params != null ">
+                    <if test="params.queryType != null  and params.queryType != ''">
+                        <if test="params.queryType == 'startBalance'">
+                            and bussiness_status in ('01','03')
+                        </if>
+                        <if test="params.queryType == 'examBalance'">
+                            and bussiness_status in ('02')
+                        </if>
+                        <if test="params.queryType == 'writeBalance'">
+                            and bussiness_status in ('04','05')
+                        </if>
+                    </if>
+                </if>
+            </if>
+            <if test="balanceDate != null "> and balance_date = #{balanceDate}</if>
+            <if test="logId != null "> and log_id = #{logId}</if>
+            and invoice_status = 'N'
+            <if test="areaCode != null  and areaCode != ''"> and area_code = #{areaCode}</if>
+            <if test="manageCom != null  and manageCom != ''"> and manage_com = #{manageCom}</if>
+            <if test="payNo != null  and payNo != ''"> and pay_no = #{payNo}</if>
+            <if test="payDate != null "> and pay_date = #{payDate}</if>
+            <if test="payAmount != null "> and pay_amount = #{payAmount}</if>
+            <if test="beginTime != null "> and end_date &gt;= #{beginTime}</if>
+            <if test="endTime != null "> and end_date &lt;= #{endTime}</if>
+        </where>
+    </select>
+
     <update id="updateServiceBalanceInfoByTaskNo" parameterType="ServiceBalanceInfo">
         update service_balance_info
         <trim prefix="SET" suffixOverrides=",">

@@ -54,6 +54,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="forNum"    column="for_num"    />
         <result property="millisecond"    column="millisecond"    />
         <result property="detailInfo"    column="detailInfo"    />
+        <result property="nodeStatus"    column="node_status"    />
     </resultMap>
 
 
@@ -146,6 +147,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         policy_certificate_no,
         oi.product_code,
         oi.bussiness_status,
+        oi.node_status,
         CASE
         WHEN oi.bussiness_status = '04' THEN
         concat_ws(

@@ -126,6 +126,7 @@ public class ServiceBalanceDetail extends BaseEntity
     private Date beforeDate;
 
     //结算区间
+    @Excel(name = "结算时间区间")
     private String settlementTime;
 
     public void setSerialNo(Long serialNo) 

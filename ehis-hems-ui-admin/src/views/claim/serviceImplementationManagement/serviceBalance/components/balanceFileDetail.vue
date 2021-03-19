@@ -157,6 +157,14 @@ export default {
     },
     /** 上传文件前 */
     beforeUpload(file) {
+      //console.log(file.size)
+      //限制文件不能超过500kb
+      if (file.size / 1024 > 500) {  // 限制文件大小
+        this.$message.warning(`当前限制文件大小不能大于500kb`)
+        return false;
+      }
+
+
       const fileName = file.name.substring(file.name.lastIndexOf('.')+1);
       //excel/jpg/png/pdf
       if (fileName === "xls" || fileName === "xlsx" || fileName === "jpg" || fileName === "png" || fileName === "pdf") {

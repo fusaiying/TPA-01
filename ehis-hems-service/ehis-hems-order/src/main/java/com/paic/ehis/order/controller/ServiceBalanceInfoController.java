@@ -98,7 +98,7 @@ public class ServiceBalanceInfoController extends BaseController
     /**
      * 查询service_balance_info(服务结算基本信息)列表 默认
      */
-    @PostMapping("/list2Default")
+    @GetMapping("/list2Default")
     public TableDataInfo list2Default()
     {
         startPage();

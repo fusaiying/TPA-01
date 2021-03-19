@@ -45,7 +45,7 @@ public class CustomServiceComplaintController extends BaseController {
     @GetMapping("/complaint/selectComplaintAcceptVoList")
     public TableDataInfo selectComplaintAcceptVoList(AcceptDTO acceptDTO) {
         startPage();
-        List<DemandAcceptVo> list = iComplaintAcceptVoService.selectComplaintAcceptVoList(acceptDTO);
+        List<ComplaintAcceptVo> list = iComplaintAcceptVoService.selectComplaintAcceptVoList(acceptDTO);
         return getDataTable(list);
     }
 
@@ -65,7 +65,7 @@ public class CustomServiceComplaintController extends BaseController {
     public TableDataInfo selectComplaintAcceptVoListOne(AcceptDTO acceptDTO) {
         startPage();
         acceptDTO.setOperationBy(SecurityUtils.getUsername());
-        List<DemandAcceptVo> list = iComplaintAcceptVoService.selectComplaintAcceptVoListOne(acceptDTO);
+        List<ComplaintAcceptVo> list = iComplaintAcceptVoService.selectComplaintAcceptVoListOne(acceptDTO);
         return getDataTable(list);
     }
 

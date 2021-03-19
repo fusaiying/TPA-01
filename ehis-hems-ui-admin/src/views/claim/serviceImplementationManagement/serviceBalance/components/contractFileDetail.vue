@@ -15,16 +15,17 @@
           class="receive_table"
           :header-cell-style="{color:'black',background:'#f8f8ff'}"
         >
+          <el-table-column align="center" min-width="50" type="selection" width="120px"></el-table-column>
           <el-table-column prop="annexName" label="附件名称"  align="center" show-overflow-tooltip />
           <el-table-column prop="annexType" label="附件类型"  align="center" show-overflow-tooltip />
           <el-table-column prop="uploadMan" label="上传人"  align="center" show-overflow-tooltip />
           <el-table-column prop="uploadTime" label="上传时间" align="center" show-overflow-tooltip />
           <el-table-column prop="remak" label="备注" align="center" show-overflow-tooltip />
-          <el-table-column label="操作" align="center" style="padding-top: 0px;">
+<!--          <el-table-column label="操作" align="center" style="padding-top: 0px;">
             <template slot-scope="scope">
               <el-button size="mini" type="text" @click="downloadFile(scope.row)">下载</el-button>
             </template>
-          </el-table-column>
+          </el-table-column>-->
         </el-table>
       </el-collapse-item>
     </el-collapse>
@@ -121,6 +122,12 @@ export default {
   padding: 0px;
   margin-left: 1%;
   margin-right: 1%;
+}
+::v-deep .el-table__header-wrapper .el-checkbox__input::after {
+  content: '全选';
+  position: absolute;
+  font-weight: bolder;
+  margin-left: 5px;
 }
 
 </style>

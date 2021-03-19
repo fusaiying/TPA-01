@@ -24,6 +24,9 @@ public class ServiceBalanceDetailCaseVO implements Serializable
     @Excel(name = "工单编号")
     private String orderCode;
 
+    @Excel(name = "结算时间区间")
+    private String settlementTime;
+
     /** 险种 */
     @Excel(name = "险种")
     private String riskName;

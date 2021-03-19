@@ -12,8 +12,8 @@ import java.util.List;
 public interface ComplaintAcceptVoMapper {
 
     /** 投诉主页面查询 */
-    public List<DemandAcceptVo> selectComplaintAcceptVoList(AcceptDTO acceptDTO);
-    public List<DemandAcceptVo> selectComplaintAcceptVoListOne(AcceptDTO acceptDTO);
+    public List<ComplaintAcceptVo> selectComplaintAcceptVoList(AcceptDTO acceptDTO);
+    public List<ComplaintAcceptVo> selectComplaintAcceptVoListOne(AcceptDTO acceptDTO);
 
     public ComplaintAcceptVo selectComplaintAcceptVo(String workOrderNo);
 

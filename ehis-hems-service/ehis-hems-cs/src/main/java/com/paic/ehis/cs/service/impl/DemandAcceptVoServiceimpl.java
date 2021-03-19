@@ -216,6 +216,10 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         workOrderAccept.setStatus("02");
         workOrderAccept.setUpdateBy(SecurityUtils.getUsername());
         workOrderAccept.setUpdateTime(DateUtils.getNowDate());
+
+        //投诉获取后更新受理人
+        workOrderAccept.setAcceptBy(SecurityUtils.getUsername());
+
         return workOrderAcceptMapper.updateWorkOrderAccept(workOrderAccept);
     }
 
@@ -228,6 +232,10 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
             workOrderAccept.setStatus("02");
             workOrderAccept.setUpdateBy(SecurityUtils.getUsername());
             workOrderAccept.setUpdateTime(DateUtils.getNowDate());
+
+            //投诉获取后更新受理人
+            workOrderAccept.setAcceptBy(SecurityUtils.getUsername());
+
             workOrderAcceptMapper.updateWorkOrderAccept(workOrderAccept);
             count ++;
         }

@@ -3,6 +3,7 @@ package com.paic.ehis.finance.mapper;
 
 import com.paic.ehis.finance.domain.BaseIssuingcompanyRiskrela;
 import com.paic.ehis.finance.domain.BaseIssuingcompanyRule;
+import com.paic.ehis.finance.domain.dto.FinanceAdvanceSettleDTO;
 import com.paic.ehis.finance.domain.dto.TpaSettleDTO;
 
 import java.util.List;
@@ -84,5 +85,14 @@ public interface BaseIssuingcompanyRiskrelaMapper
      * @return 出单公司产品关联 集合
      */
     public List<BaseIssuingcompanyRule> selectCompanyRiskrelaRiskByTpa(TpaSettleDTO tpaSettleDTO);
+
+
+    /**
+     * 查询出单公司产品关联 列表
+     *
+     * @param financeAdvanceSettleDTO 出单公司产品关联
+     * @return 出单公司产品关联 集合
+     */
+    public List<BaseIssuingcompanyRule> selectCompanyRiskAdvance(FinanceAdvanceSettleDTO financeAdvanceSettleDTO);
 
 }

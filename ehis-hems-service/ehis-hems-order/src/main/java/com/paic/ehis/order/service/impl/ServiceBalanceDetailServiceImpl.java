@@ -146,6 +146,9 @@ public class ServiceBalanceDetailServiceImpl implements IServiceBalanceDetailSer
     @Override
     public List<ServiceBalanceDetail> selectDetailList(ServiceBalanceInfo serviceBalanceInfo)
     {
+        if(serviceBalanceInfo.getEndDate() == null){
+            serviceBalanceInfo.setEndDate(DateUtils.getNowDate());
+        }
         return serviceBalanceDetailMapper.selectDetailList(serviceBalanceInfo);
     }
 

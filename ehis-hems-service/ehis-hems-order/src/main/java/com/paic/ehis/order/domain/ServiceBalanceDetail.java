@@ -125,6 +125,10 @@ public class ServiceBalanceDetail extends BaseEntity
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date beforeDate;
 
+    //结算区间
+    @Excel(name = "结算时间区间")
+    private String settlementTime;
+
     public void setSerialNo(Long serialNo) 
     {
         this.serialNo = serialNo;

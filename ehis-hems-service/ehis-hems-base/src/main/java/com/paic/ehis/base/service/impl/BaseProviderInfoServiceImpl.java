@@ -417,7 +417,11 @@ public class BaseProviderInfoServiceImpl implements IBaseProviderInfoService
             if("01".equals(baseProviderInfo.getBussinessStatus())){
                 baseProviderInfo.setBussinessStatus("03");
             }
+            baseProviderInfo.setType2Str(StringUtils.join(baseProviderInfo.getType2(), ","));
             baseProviderInfo.setCreateTime(DateUtils.getNowDate());
+            baseProviderInfo.setUpdateTime(DateUtils.getNowDate());
+            baseProviderInfo.setCreateBy(SecurityUtils.getUsername());
+            baseProviderInfo.setUpdateBy(SecurityUtils.getUsername());
             baseProviderInfo.setCheckStatus("1");
             baseProviderInfo.setUpdateFlag("0");
             i = baseProviderInfoMapper.insertBaseProviderInfo(baseProviderInfo);

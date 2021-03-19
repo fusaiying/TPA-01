@@ -32,10 +32,10 @@
       <!-- 第二行 -->
       <el-row>
         <el-col :span="8">
-          <el-form-item label="结算止期：" prop="endTime">
+          <el-form-item label="结算止期：" prop="endDate">
             <el-date-picker
               class="item-width"
-              v-model="queryParams.endTime"
+              v-model="queryParams.endDate"
               type="date"
               :picker-options="dateOptions"
               value-format="yyyy-MM-dd"
@@ -157,7 +157,7 @@ export default {
         //结算方式
         settleType: null,
         //结算止期
-        endTime: null,
+        endDate: null,
         //发票类型
         balanceInvoiceType: "01"
       },

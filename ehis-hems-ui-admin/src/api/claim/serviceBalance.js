@@ -13,8 +13,8 @@ export function listBalance2(query) {
 export function listBalance2Default(query) {
   return request({
     url: '/order/balance/list2Default',
-    method: 'post',
-    data: query
+    method: 'get',
+    params: query
   })
 }
 

@@ -209,13 +209,13 @@
               <span>{{ scope.row.acceptTime | changeDate }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="modifyTime" label="修改时间" align="center" show-overflow-tooltip width="140">
-            <template slot-scope="scope">
+          <el-table-column prop="changeTime" label="修改时间" align="center" show-overflow-tooltip width="140">
+            <!--<template slot-scope="scope">
               <span>{{ scope.row.modifyTime | changeDate }}</span>
-            </template>
+            </template>-->
           </el-table-column>
 
-          <el-table-column prop="acceptBy" align="center" label="受理人" show-overflow-tooltip/>
+          <el-table-column prop="createBy" align="center" label="受理人" show-overflow-tooltip/>
           <el-table-column prop="modifyBy" align="center" label="原处理人" show-overflow-tooltip/>
           <el-table-column prop="vipFlag" align="center" label="VIP标识" show-overflow-tooltip>
             <template slot-scope="scope" v-if="scope.row.vipFlag">
@@ -294,13 +294,13 @@
               <span>{{ scope.row.acceptTime | changeDate }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="modifyTime" label="修改时间" align="center" show-overflow-tooltip width="140">
-            <template slot-scope="scope">
+          <el-table-column prop="changeTime" label="修改时间" align="center" show-overflow-tooltip width="140">
+            <!--<template slot-scope="scope">
               <span>{{ scope.row.modifyTime | changeDate }}</span>
-            </template>
+            </template>-->
           </el-table-column>
-          <el-table-column prop="acceptBy" align="center" label="受理人" show-overflow-tooltip/>
-          <el-table-column prop="createBy" align="center" label="原处理人" show-overflow-tooltip/>
+          <el-table-column prop="createBy" align="center" label="受理人" show-overflow-tooltip/>
+          <el-table-column prop="oldmodifyBy" align="center" label="原处理人" show-overflow-tooltip/>
           <el-table-column prop="vipFlag" align="center" label="VIP标识" show-overflow-tooltip>
             <template slot-scope="scope" v-if="scope.row.vipFlag">
               <span>{{ selectDictLabel(cs_vip_flag, scope.row.vipFlag) }}</span>

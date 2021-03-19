@@ -2,65 +2,65 @@
   <div class="app-container">
 <!--    客户基本信息 -->
     <div id="#anchor-1" class="personInfo_class" style="margin-top: 5px;">
-      <personInfo ref="personForm" :policyNo="this.params.policyNo" :policyItemNo="this.params.policyItemNo" />
+      <personInfo :routerParams="params" ref="personForm" :policyNo="this.params.policyNo" :policyItemNo="this.params.policyItemNo" />
     </div>
 
 <!--    受理信息 -->
     <div id="#anchor-21" v-if="this.params.businessType=='01'" class="personInfo_class" style="margin-top: 5px;">
-      <demandAcceptInfo :acceptInfo="allList.acceptInfo" :isDisabled="isDisabled" />
+      <demandAcceptInfo :routerParams="params" :acceptInfo="allList.acceptInfo" :isDisabled="isDisabled" />
     </div>
     <div id="#anchor-22" v-if="this.params.businessType=='03'" class="personInfo_class" style="margin-top: 5px;">
-      <complaintAcceptInfo :acceptInfo="allList.acceptInfo" :isDisabled="isDisabled"/>
+      <complaintAcceptInfo :routerParams="params" :acceptInfo="allList.acceptInfo" :isAcceptInfo="isAcceptInfo"/>
     </div>
 <!--    流转信息-->
     <div id="#anchor-3" class="personInfo_class" style="margin-top: 5px;">
-      <flowLogInfo :acceptInfo="allList.acceptInfo" :disabled="true"/>
+      <flowLogInfo :routerParams="params" :acceptInfo="allList.acceptInfo" :disabled="true"/>
     </div>
 <!--    附件信息-->
     <div id="#anchor-4" class="personInfo_class" style="margin-top: 5px;">
-      <attachmentList :attachmentInfoData="allList.attachmentInfoData"/>
+      <attachmentList :routerParams="params" :attachmentInfoData="allList.attachmentInfoData"/>
     </div>
 <!--    处理信息-->
   <!--    信息需求-->
     <div id="#anchor-51" v-if="this.params.businessType=='01'"  style="margin-top: 5px;" class="personInfo_class">
-      <infohandle :acceptInfo="allList.acceptInfo"  :isDisabled="isDisabled" />
+      <infohandle :routerParams="params" :acceptInfo="allList.acceptInfo"  :isDisabled="isDisabled" />
     </div>
-  <!--    投诉-->
+  <!--    投诉投诉处理-->
     <div id="#anchor-52"  v-if="this.params.businessType=='03'"  style="margin-top: 5px;" class="personInfo_class">
-      <complaintHandle :form="allList.form" :isDisabled="isDisabled" />
+      <complaintHandle :routerParams="params" :form="allList.form" :isAcceptInfo="isAcceptInfo" />
     </div>
 <!--    质检处理-->
   <!--    信息需求-->
-    <div id="#anchor-61" v-if="this.params.businessType=='01'"  style="margin-top: 5px;" class="personInfo_class">
-      <inspectionProcessInfo :inspection="allList.inspection" ref="inspectionProcessInfo"
-                             @selectHandleStatus="searchHandleStatus" :isDisable="disableFlag" @getHandleInfoList="searchHandleList"/>
-    </div>
+ <!--   <div id="#anchor-61" v-if="this.params.businessType=='01'"  style="margin-top: 5px;" class="personInfo_class">
+      <inspectionProcessInfo :routerParams="params" :inspection="allList.inspection" ref="inspectionProcessInfo"
+                             @selectHandleStatus="searchHandleStatus" :isDisabled="disableFlag" @getHandleInfoList="searchHandleList"/>
+    </div>-->
   <!--    投诉-->
-    <div id="#anchor-62" v-if="this.params.businessType=='03'"  style="margin-top: 5px;" class="personInfo_class">
-      <complaintProcessInfo :acceptInfo="allList.acceptInfo" ref="complaintProcessInfo"
-                            @selectHandleStatus="searchHandleStatus" :isDisable="disableFlag" @getHandleInfoList="searchHandleList"/>
+    <div id="#anchor-62" style="margin-top: 5px;" class="personInfo_class">
+      <complaintProcessInfo :businessType="params.businessType" :routerParams="params" :acceptInfo="allList.acceptInfo" ref="complaintProcessInfo"
+                            @changeShowStatus="changeShowStatus" :isDisabled="disableFlag" @changeAppealFlag="changeAppealFlag"/>
     </div>
-    <div class="personInfo_class" style="margin-top: 5px;">
+    <div class="personInfo_class" style="margin-top: 10px;margin-bottom: 50px">
       <el-row :gutter=20 style="float: right"  >
-        <el-button style="margin-right: 20px" type="primary" @click="submit1()" v-if="this.params.businessType=='01'" size="mini">结案</el-button>
-        <el-button style="margin-right: 20px" type="primary" @click="submit2()" v-if="this.params.businessType=='01'" size="mini">案件复核</el-button>
-        <el-button style="margin-right: 20px" type="primary" @click="submit1()" v-if="this.params.businessType=='03'" size="mini">结案</el-button>
-        <el-button style="margin-right: 20px" type="primary" @click="submit2()" v-if="this.params.businessType=='03'" size="mini">退回修改</el-button>
+        <el-button :disabled="showCase || params.status=='show'" style="margin-right: 20px" type="primary" @click="submit1()" v-if="this.params.businessType=='01'" size="mini">结案</el-button>
+        <el-button :disabled="showReview || params.status=='show'" style="margin-right: 20px" type="primary" @click="submit2()" v-if="this.params.businessType=='01'" size="mini">案件复核</el-button>
+        <el-button :disabled="showCase || params.status=='show'" style="margin-right: 20px" type="primary" @click="submit1()" v-if="this.params.businessType=='03'" size="mini">结案</el-button>
+        <el-button :disabled="showReview || params.status=='show'" style="margin-right: 20px" type="primary" @click="submit2()" v-if="this.params.businessType=='03'" size="mini">退回修改</el-button>
       </el-row>
     </div>
   </div>
 </template>
 <script>
-import personInfo from '@/views/customService/common/moduel/personInfo'; //客户基本信息
-import demandAcceptInfo from "@/views/customService/common/moduel/demandAcceptInfo";//信息需求
-import complaintAcceptInfo from "@/views/customService/common/moduel/complaintAcceptInfo";//投诉
-import flowLogList from "@/views/customService/common/moduel/attachmentList";//流转记录列表
-import attachmentList from "@/views/customService/common/moduel/attachmentList"; //附件列表
-import complaintHandle from "@/views/customService/common/moduel/complaintHandle";//投诉处理
-import infohandle from "@/views/customService/common/moduel/infohandle";//服务处理
-import complaintProcessInfo from "@/views/customService/common/moduel/complaintProcessInfo";//投诉处理信息
-import inspectionProcessInfo from "@/views/customService/common/moduel/inspectionProcessInfo";//质检处理信息
-import flowLogInfo from "@/views/customService/common/moduel/flowLogInfo";
+import personInfo from '../../common/moduel/personInfo'; //客户基本信息
+import demandAcceptInfo from "../../common/moduel/demandAcceptInfo";//信息需求
+import complaintAcceptInfo from "../../common/moduel/complaintAcceptInfo";//投诉
+import flowLogList from "../../common/moduel/attachmentList";//流转记录列表
+import attachmentList from "../../common/moduel/attachmentList"; //附件列表
+import complaintHandle from "../../common/moduel/complaintHandle";//投诉处理
+import infohandle from "../../common/moduel/infohandle";//服务处理
+import complaintProcessInfo from "../../common/moduel/complaintProcessInfo";//投诉处理信息
+import inspectionProcessInfo from "../../common/moduel/inspectionProcessInfo";//质检处理信息
+import flowLogInfo from "../../common/moduel/flowLogInfo";
 import {
   getAcceptInfoByTypeOrId,
   getAttachmentListById,
@@ -98,6 +98,8 @@ export default {
   },
   data() {
     return {
+      showCase: false,
+      showReview: false,
       historicalProblemData: [],
       historicalProblemDialog: false,
       removeDialog: false,
@@ -326,6 +328,7 @@ export default {
       //接收的参数对象
       params: {},
       isDisabled:true,
+      isAcceptInfo:true,
       navFlag: true,
       reportData: [],
       dictList: [],
@@ -408,14 +411,14 @@ export default {
 
   methods: {
     searchHandleStatus(){
-      selectHandleStatus(query).then(res =>{
+      /*selectHandleStatus(query).then(res =>{
         if (res !== null && res.code === 200) {
           this.status = res.data;
         }
-      })
+      })*/
     },
     searchHandleList(){
-      getHandleInfoList(query).then(res => {
+     /* getHandleInfoList(query).then(res => {
         if(query.businessType === '01'){
           if (res !== null && res.code === 200) {
             this.inspectionList = res.rows;
@@ -429,7 +432,7 @@ export default {
         }
 
       }).catch( res => {
-      });
+      });*/
     },
     submit1(){
       const value1=[];//判断是否申诉
@@ -739,6 +742,24 @@ export default {
     goBack() {
       this.$router.go(-1)
     },
+    changeShowStatus(value){
+      if (value=='1'){
+        this.showCase=true
+          this.showReview=false
+      }else if(value=='2'){
+        this.showCase=false
+        this.showReview=true
+      }
+
+    },
+    changeAppealFlag(value){
+      if (value=='01'){
+        this.isAcceptInfo=false
+      }else if (value=='02'){
+        this.isAcceptInfo=true
+      }
+    }
+
     // selectHistoricalProblem() {
     //   this.historicalProblemDialog = true
     // },

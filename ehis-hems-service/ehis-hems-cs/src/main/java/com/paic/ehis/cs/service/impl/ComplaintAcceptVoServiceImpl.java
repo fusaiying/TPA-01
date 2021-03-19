@@ -43,14 +43,14 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
 
 
     @Override
-    public List<DemandAcceptVo> selectComplaintAcceptVoList(AcceptDTO acceptDTO) {
+    public List<ComplaintAcceptVo> selectComplaintAcceptVoList(AcceptDTO acceptDTO) {
         DemandAcceptVo demandAcceptVo=new DemandAcceptVo();
         demandAcceptVo.setStatus("01");
         return complaintAcceptVoMapper.selectComplaintAcceptVoList(acceptDTO);
     }
 
     @Override
-    public List<DemandAcceptVo> selectComplaintAcceptVoListOne(AcceptDTO acceptDTO) {
+    public List<ComplaintAcceptVo> selectComplaintAcceptVoListOne(AcceptDTO acceptDTO) {
         return complaintAcceptVoMapper.selectComplaintAcceptVoListOne(acceptDTO);
     }
 
@@ -138,8 +138,8 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
         workOrderAccept.setStatus("01");
         workOrderAccept.setOrganCode(complaintAcceptVo.getOrganCode());
         workOrderAccept.setCreateBy(SecurityUtils.getUsername());
-        workOrderAccept.setUpdateBy(SecurityUtils.getUsername());
-        workOrderAccept.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
+        //workOrderAccept.setUpdateBy(SecurityUtils.getUsername());
+        //workOrderAccept.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
         workOrderAccept.setWorkOrderNo(complaintAcceptVo.getWorkOrderNo());
         workOrderAccept.setCreateTime(DateUtils.parseDate(DateUtils.getTime()));
         workOrderAccept.setBusinessType(complaintAcceptVo.getBusinessType());

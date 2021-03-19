@@ -3,6 +3,7 @@ package com.paic.ehis.cs.service;
 import java.util.List;
 import com.paic.ehis.cs.domain.CollaborativeFrom;
 import com.paic.ehis.cs.domain.dto.ConsultationDTO;
+import com.paic.ehis.cs.domain.vo.CollaborativeFromVO;
 import com.paic.ehis.cs.domain.vo.ComplaintDealVo;
 import com.paic.ehis.cs.domain.vo.DemandAcceptVo;
 
@@ -32,7 +33,7 @@ public interface ICollaborativeFromService
 
     public List<CollaborativeFrom> selectCollaborativeFromListNew(ConsultationDTO consultationDTO);
 
-    public List<CollaborativeFrom> selectCollaborativeFromListPublicNew(ConsultationDTO consultationDTO);
+    public List<CollaborativeFromVO> selectCollaborativeFromListPublicNew(ConsultationDTO consultationDTO);
 
     /**
      * 新增协办信息 

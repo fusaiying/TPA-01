@@ -165,12 +165,14 @@ export default {
           workOrderNo: row.workOrderNo, //批次号
           policyNo: row.policyNo, //保单号
           policyItemNo: row.policyItemNo, //分单号
-          businessType: row.businessType
+          businessType: row.businessType,
+          node:'mistake',//质检差错确认
+          status:'edit'
         })
       )
       console.info("handleOne:"+data)
       this.$router.push({
-        path: '/workOrder/inspectionConfirmationConfirm',
+        path: '/workOrder/inspectionHandle',
         query: {
           data
         }

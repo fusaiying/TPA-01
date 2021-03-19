@@ -259,7 +259,8 @@ export default {
             workOrderNo: s.workOrderNo,
             policyNo: s.policyNo,
             policyItemNo: s.policyItemNo,
-            status: s.status
+            status: s.status,
+            flag: 'show'
           }
         })
       }else {
@@ -269,7 +270,8 @@ export default {
             workOrderNo:s.workOrderNo,
             policyNo:s.policyNo,
             policyItemNo:s.policyItemNo,
-            status:s.status
+            status:s.status,
+            flag: 'show'
           }
         })
       }

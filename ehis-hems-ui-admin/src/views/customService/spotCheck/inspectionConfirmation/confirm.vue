@@ -7,14 +7,14 @@
 
     <!--    受理信息 -->
     <div id="#anchor-21" v-if="this.params.businessType=='01'" class="personInfo_class" style="margin-top: 5px;">
-      <demandAcceptInfo :acceptInfo="allList.acceptInfo" :isDisabled="isDisabled" />
+      <demandAcceptInfo :acceptInfo="allList.acceptInfo" :disabled="isDisabled" />
     </div>
     <div id="#anchor-22" v-if="this.params.businessType=='03'" class="personInfo_class" style="margin-top: 5px;">
-      <complaintAcceptInfo :acceptInfo="allList.acceptInfo" :isDisabled="isDisabled"/>
+      <complaintAcceptInfo :acceptInfo="allList.acceptInfo" :disabled="isDisabled"/>
     </div>
     <!--    流转信息-->
     <div id="#anchor-3" class="personInfo_class" style="margin-top: 5px;">
-      <flowLogInfo :acceptInfo="allList.acceptInfo" :isDisabled="isDisabled"/>
+      <flowLogInfo :acceptInfo="allList.acceptInfo" :disabled="isDisabled"/>
     </div>
     <!--    附件信息-->
     <div id="#anchor-4" class="personInfo_class" style="margin-top: 5px;">
@@ -23,11 +23,11 @@
     <!--    处理信息-->
     <!--    信息需求-->
     <div id="#anchor-51" v-if="this.params.businessType=='01'"  style="margin-top: 5px;" class="personInfo_class">
-      <infohandle :acceptInfo="allList.acceptInfo"  :isDisabled="isDisabled" />
+      <infohandle :acceptInfo="allList.acceptInfo"  :disabled="isDisabled" />
     </div>
     <!--    投诉-->
     <div id="#anchor-52"  v-if="this.params.businessType=='03'"  style="margin-top: 5px;" class="personInfo_class">
-      <complaintHandle :form="allList.form" :isDisabled="isDisabled" />
+      <complaintHandle :form="allList.form" :disabled="isDisabled" />
     </div>
     <!--    质检处理-->
     <!--    信息需求-->

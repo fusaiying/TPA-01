@@ -236,4 +236,20 @@ public class ReservationAcceptVo extends BaseEntity {
 
     private String[] alterId;
 
+    /** 原处理人 */
+    @Excel(name = "原处理人")
+    private String oldmodifyBy;
+
+    /** 修改时间 */
+    @Excel(name = "修改时间")
+    private String changeTime;
+
+    /** 创建人 */
+    @Excel(name = "创建人")
+    private String createBy;
+
+    /** 最后一次修改人 */
+    @Excel(name = "最后一次修改人")
+    private String updateBy;
+
 }

@@ -35,6 +35,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="bussinessStatus"    column="bussiness_status"    />
         <result property="riskName"    column="risk_name"    />
         <result property="supplierServiceName"    column="supplier_service_name"    />
+        <result property="settlementTime"    column="settlementTime"    />
 
     </resultMap>
 
@@ -54,6 +55,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="amount"    column="amount"    />
         <result property="actualAmount"    column="actual_amount"    />
         <result property="reason"    column="reason"    />
+        <result property="riskName"    column="risk_name"    />
+        <result property="supplierServiceName"    column="supplier_service_name"    />
+        <result property="settlementTime"    column="settlement_time"    />
     </resultMap>
 
     <!-- 明细导出（按人头） -->
@@ -120,6 +124,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="orderCode != null">order_code,</if>
             <if test="balanceInterval != null">balance_interval,</if>
             <if test="riskCode != null">risk_code,</if>
+            <if test="riskName != null">risk_name,</if>
             <if test="policyNo != null">policy_no,</if>
             <if test="policyItemNo != null">policy_item_no,</if>
             <if test="supplierCode != null">supplier_code,</if>
@@ -136,6 +141,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="actualAmount != null">actual_amount,</if>
             <if test="reason != null">reason,</if>
             <if test="supplierServiceName != null">supplier_service_name,</if>
+            <if test="settlementTime != null">settlement_time,</if>
             <if test="insuredNum != null">insured_num,</if>
             <if test="unitPrice != null">unit_price,</if>
             <if test="createBy != null">create_by,</if>
@@ -149,6 +155,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="orderCode != null">#{orderCode},</if>
             <if test="balanceInterval != null">#{balanceInterval},</if>
             <if test="riskCode != null">#{riskCode},</if>
+            <if test="riskName != null">#{riskName},</if>
             <if test="policyNo != null">#{policyNo},</if>
             <if test="policyItemNo != null">#{policyItemNo},</if>
             <if test="supplierCode != null">#{supplierCode},</if>
@@ -165,6 +172,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="actualAmount != null">#{actualAmount},</if>
             <if test="reason != null">#{reason},</if>
             <if test="supplierServiceName != null">#{supplierServiceName},</if>
+            <if test="settlementTime != null">#{settlementTime},</if>
             <if test="insuredNum != null">#{insuredNum},</if>
             <if test="unitPrice != null">#{unitPrice},</if>
             <if test="createBy != null">#{createBy},</if>
@@ -358,6 +366,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             oi.reason,
             bcs.supplier_service_name,
             bcs.settle_type,
+            concat_ws(
+            '~~',
+            (
+            SELECT
+            DATE_FORMAT(max(end_date), '%Y-%m-%d')
+            FROM
+            service_balance_info
+            WHERE
+            supplier_code = #{supplierCode}
+            AND settle_type = '01'
+            ),
+            DATE_FORMAT(#{endDate}, '%Y-%m-%d')
+            ) settlementTime,
             oi.push_flag
             FROM
             order_info oi
@@ -507,7 +528,7 @@ where task_no = #{taskNo}
     <select id="selectServiceBalanceDetailList_case" parameterType="ServiceBalanceInfo" resultMap="ServiceBalanceDetailCaseVOResult">
         SELECT
             a.order_code,
-            a.risk_code,
+            a.risk_name,
             a.policy_no,
             a.policy_item_no,
             a.service_code,
@@ -519,6 +540,8 @@ where task_no = #{taskNo}
             a.remark,
             a.amount,
             a.actual_amount,
+            a.supplier_service_name,
+            a.settlement_time,
             a.reason
         FROM
             service_balance_detail a

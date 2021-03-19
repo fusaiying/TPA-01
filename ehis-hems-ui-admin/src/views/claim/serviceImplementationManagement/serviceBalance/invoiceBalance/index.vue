@@ -95,7 +95,7 @@
           <el-table-column prop="payNo" label="支付流水号" align="center" show-overflow-tooltip />
           <el-table-column prop="payDate" label="支付时间" align="center" show-overflow-tooltip>
             <template slot-scope="scope">
-              <span>{{ parseTime(scope.row.endDate, '{y}-{m}-{d}') }}</span>
+              <span>{{ parseTime(scope.row.payDate, '{y}-{m}-{d}') }}</span>
             </template>
           </el-table-column>
           <el-table-column prop="payAmount" label="支付金额" align="center" show-overflow-tooltip/>
@@ -130,6 +130,7 @@ import balanceInvoiceDetail from './../components/balanceInvoiceDetail'
 
 import {listBalance2,listBalance2Default} from "@/api/claim/serviceBalance";
 import {getAllBaseSupplierInfo} from '@/api/contractManage/contractManagement';
+import {atLeastOne2} from "@/utils/commenMethods";
 
 let dictss = [{dictType: 'invoice_status'},{dictType: 'balance_invoice_type2'},{dictType: 'invoice_auth'}]
 export default {
@@ -142,6 +143,7 @@ export default {
   },
   data() {
     return {
+      isDefault: true,
       // 遮罩层
       loading: false,
       // 总条数
@@ -247,21 +249,31 @@ export default {
     },
     /** 查询服务结算列表 */
     getList() {
-      this.loading = true;
-      listBalance2(this.queryParams).then(res => {
-        if (res != null && res.code === 200) {
-          this.invoiceWriteList = res.rows;
-          this.total = res.total;
-          this.loading = false;
-          if (res.rows.length < 1) {
-            return this.$message.warning(
-              "未查询到数据！"
-            )
+      //默认查询
+      if(this.isDefault){
+        this.getListDefault()
+      }
+      else {
+        this.loading = true;
+        listBalance2(this.queryParams).then(res => {
+          if (res != null && res.code === 200) {
+            this.invoiceWriteList = res.rows;
+            this.total = res.total;
+            this.loading = false;
+            if (res.rows.length < 1) {
+              return this.$message.warning(
+                "未查询到数据！"
+              )
+            }
           }
-        }
-      }).catch(res => {
-        this.loading = false
-      });
+        }).catch(res => {
+          this.loading = false
+        });
+      }
+
+
+
+
     },
     /** 查询服务结算列表 默认*/
     getListDefault() {
@@ -271,11 +283,6 @@ export default {
           this.invoiceWriteList = res.rows;
           this.total = res.total;
           this.loading = false;
-          if (res.rows.length < 1) {
-            return this.$message.warning(
-              "未查询到数据！"
-            )
-          }
         }
       }).catch(res => {
         this.loading = false
@@ -283,15 +290,26 @@ export default {
     },
     /** 搜索按钮操作 */
     handleQuery() {
+      let query = JSON.parse(JSON.stringify(this.queryParams))
+      const flag = atLeastOne2(query,["params","status","pageNum","pageSize"]);
+      if(flag){
+        this.isDefault = false
+      }
+      else {
+        this.isDefault = true
+      }
       this.resetInvoice();
       this.queryParams.pageNum = 1;
+      this.queryParams.pageSize = 10;
       this.getList();
     },
     /** 重置按钮操作 */
     resetQuery() {
+      this.isDefault=true
       this.resetInvoice();
       this.resetForm("queryForm");
       this.queryParams.pageNum = 1;
+      this.queryParams.pageSize = 10;
       this.getListDefault();
     },
     /** 重置发票信息 */

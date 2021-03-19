@@ -220,8 +220,8 @@
             </template>-->
           </el-table-column>
 
-          <el-table-column prop="acceptBy" align="center" label="受理人" show-overflow-tooltip/>
-          <el-table-column prop="modifyBy" align="center" label="处理人" show-overflow-tooltip/>
+          <el-table-column prop="createBy" align="center" label="受理人" show-overflow-tooltip/>
+          <el-table-column prop="updateBy" align="center" label="处理人" show-overflow-tooltip/>
           <el-table-column prop="vipFlag" align="center" label="VIP标识" show-overflow-tooltip>
             <template slot-scope="scope" v-if="scope.row.vipFlag">
               <span>{{selectDictLabel(cs_vip_flag, scope.row.vipFlag)}}</span>
@@ -284,7 +284,7 @@
               <el-link :underline="false" @click="dealButton(scope.row)">{{ scope.row.workOrderNo }}</el-link>
             </template>-->
             <template slot-scope="scope">
-              <el-button size="mini" type="text" @click="workOrderButton(scope.row)">{{scope.row.workOrderNo}}</el-button>
+              <el-button size="mini" type="text" @click="workDealButton(scope.row)">{{scope.row.workOrderNo}}</el-button>
             </template>
           </el-table-column>
           <el-table-column prop="businessService" align="center" width="140" label="服务项目" show-overflow-tooltip>
@@ -313,8 +313,8 @@
               <span>{{selectDictLabel(cs_vip_flag, scope.row.vipFlag)}}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="acceptBy" align="center" label="受理人" show-overflow-tooltip/>
-          <el-table-column prop="updateBy" align="center" label="处理人" show-overflow-tooltip/>
+          <el-table-column prop="createBy" align="center" label="受理人" show-overflow-tooltip/>
+          <el-table-column prop="acceptBy" align="center" label="处理人" show-overflow-tooltip/>
           <el-table-column prop="modifyTime" label="响应时间" align="center" show-overflow-tooltip width="140">
             <template slot-scope="scope">
               <span>{{ scope.row.modifyTime | changeDate}}</span>
@@ -548,6 +548,20 @@ export default {
         }
       })
     },
+
+    //工单处理页面超链接
+    workDealButton(s){
+      this.$router.push({
+        path: '/customService/deal',
+        query:{
+          workOrderNo:s.workOrderNo,
+          policyNo:s.policyNo,
+          policyItemNo:s.policyItemNo,
+          status:s.status
+        }
+      })
+    },
+
     //处理按钮
     dealButton(s){
       this.$router.push({

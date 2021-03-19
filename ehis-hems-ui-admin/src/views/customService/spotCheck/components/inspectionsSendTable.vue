@@ -12,9 +12,10 @@
     <el-table-column type="selection" align="center" content="全选"/>
     <el-table-column prop="workOrderNo" label="工单号" min-width="160" align="center" :show-overflow-tooltip="true">
       <template slot-scope="scope">
-        <router-link :to="'/dict/type/data/' + scope.row.workOrderNo" class="link-type">
+        <!--<router-link :to="'/dict/type/data/' + scope.row.workOrderNo" class="link-type" type="primary">
           <span :class="scope.row.isRedWord? 'info-row':'info-row2'">{{ scope.row.workOrderNo }}</span>
-        </router-link>
+        </router-link>-->
+        <el-link style="font-size: 11px" type="primary" @click="claimRouter(scope.row)">{{scope.row.workOrderNo}}</el-link>
       </template>
     </el-table-column>
     <!-- table中下拉属性转换 -->
@@ -139,7 +140,6 @@ export default {
       }
       return '';
     },
-
     handleSelectionChange(sel) {
       //调用父页面处理方法 并在父页面中引用处@定义
       this.$emit('getSelect', sel)
@@ -163,6 +163,47 @@ export default {
       //     data
       //   }
       // })
+    },
+    claimRouter(row){
+      console.log(row);
+      if (row.businessType=='01'){//跳需求
+        this.$router.push({
+          path: '/customService/orderDetails',
+          query:{
+            workOrderNo:row.workOrderNo,
+            policyNo:row.policyNo,
+            policyItemNo:row.policyItemNo,
+            status:row.status
+          }
+        })
+      }else if(row.businessType=='03'){//跳投诉
+        this.$router.push({
+          path: '/customService/complaint/orderDetails',
+          query:{
+            workOrderNo:row.workOrderNo,
+            policyNo:row.policyNo,
+            policyItemNo:row.policyItemNo,
+            status:row.status
+          }
+        })
+      }
+ /*
+      let data = encodeURI(
+        JSON.stringify({
+          workOrderNo: row.workOrderNo, //批次号
+          policyNo: row.policyNo, //保单号
+          policyItemNo: row.policyItemNo, //分单号
+          businessType: row.businessType,
+          status:'show'
+        })
+      )
+      console.info("handleOne:"+data)
+      this.$router.push({
+        path: '/workOrder/inspectionHandle',
+        query: {
+          data
+        }
+      })*/
     }
   }
 }

@@ -12,9 +12,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 public interface IComplaintAcceptVoService {
-    List<DemandAcceptVo> selectComplaintAcceptVoList(AcceptDTO acceptDTO);
+    List<ComplaintAcceptVo> selectComplaintAcceptVoList(AcceptDTO acceptDTO);
 
-    List<DemandAcceptVo> selectComplaintAcceptVoListOne(AcceptDTO acceptDTO);
+    List<ComplaintAcceptVo> selectComplaintAcceptVoListOne(AcceptDTO acceptDTO);
 
     public ComplaintAcceptVo selectComplaintAcceptVo(String workOrderNo);
     /**

@@ -377,13 +377,17 @@
         </el-row>
 
         <el-row>
-          <el-col :span="8">
-            <el-form-item label="预约医院：" prop="province">
+          <el-col :span="2">
+            <el-form-item label="预约医院：" style="white-space: nowrap;" :inline="true" prop="province">
               省份：<el-input v-model="ruleForm.province" style="width: 50px"  />
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item style="white-space: nowrap;" :inline="true" prop="city" >
               城市：<el-input v-model="ruleForm.city" style="width: 50px" />
             </el-form-item>
           </el-col>
-          <el-col :span="8">
+        <el-col :span="8">
             <el-form-item label="医疗机构：" prop="medicalInstitution" >
               <el-col :span="16">
                 <el-input v-model="ruleForm.medicalInstitution" input-w clearable size="mini" placeholder="请输入"/>
@@ -601,6 +605,9 @@ export default {
           {required: true, message: "预约时间不能为空", trigger: "blur"}
         ],
         province: [
+          {required: true, message: "预约医院不能为空", trigger: "blur"}
+        ],
+        city: [
           {required: true, message: "预约医院不能为空", trigger: "blur"}
         ],
         department: [

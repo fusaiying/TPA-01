@@ -34,6 +34,8 @@
         <result property="itemCode" column="item_code"/>
         <result property="oldmodifyBy" column="oldmodify_by"/>
         <result property="changeTime" column="change_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="createBy" column="create_by"/>
     </resultMap>
 
     <select id="selectComplaintAcceptVoList" parameterType="com.paic.ehis.cs.domain.dto.AcceptDTO" resultMap="ComplaintAcceptVoResult">
@@ -57,7 +59,9 @@
         WHEN hm.nnn IS NOT NULL THEN
         1 ELSE 0
         END AS isRedWord,
-        (select make_time from flow_log where work_order_no = t1.work_order_no and operate_code = '03' order by make_time desc limit 1) change_time
+        (select make_time from flow_log where work_order_no = t1.work_order_no and operate_code = '03' order by make_time desc limit 1) change_time,
+        t1.update_by,
+        t1.create_by
         FROM
         work_order_accept t1
         LEFT JOIN accept_detail_info t2 ON t1.work_order_no = t2.work_order_no
@@ -118,7 +122,9 @@
         1 ELSE 0
         END AS isRedWord,
         (case when (select 1 from transfer_by where work_order_no = t1.work_order_no limit 1)=1 then t1.create_by else '' end) oldmodify_by,
-        (select make_time from flow_log where work_order_no = t1.work_order_no and operate_code = '03' order by make_time desc limit 1) change_time
+        (select make_time from flow_log where work_order_no = t1.work_order_no and operate_code = '03' order by make_time desc limit 1) change_time,
+        t1.update_by,
+        t1.create_by
         FROM
         work_order_accept t1
         LEFT JOIN accept_detail_info t2 ON t1.work_order_no = t2.work_order_no

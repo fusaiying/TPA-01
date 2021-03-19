@@ -3,7 +3,7 @@
       <div slot="header" class="clearfix">
         <span style="color: blue">服务处理</span>
       </div>
-      <el-form ref="ruleForm" :model="infoForm" style="padding-bottom: 30px;" label-width="160px" :isDisabled="isDisabled"
+      <el-form ref="ruleForm" :model="infoForm" style="padding-bottom: 30px;" label-width="160px" :disabled="isDisabled || routerParams.status=='show'"
                label-position="right" size="mini" >
         <el-col :span="22">
           <el-form-item label="业务处理情况：">
@@ -27,6 +27,7 @@
 export default {
   name: "infohandle",
   props: {
+    routerParams:Object,
     isDisabled: {
       type:Boolean,
       default:false

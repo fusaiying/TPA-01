@@ -378,7 +378,9 @@ export default {
           workOrderNo: row.workOrderNo, //批次号
           policyNo: row.policyNo, //保单号
           policyItemNo: row.policyItemNo, //分单号
-          businessType: row.businessType
+          businessType: row.businessType,
+          node:'pool',//质检工作池
+          status:'edit'
         })
       )
       console.info("handleOne:"+data)

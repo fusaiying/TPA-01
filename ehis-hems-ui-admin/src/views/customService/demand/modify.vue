@@ -100,7 +100,7 @@
                         style="width: 120px" maxlength="50"/>
               分机号
               <el-input v-model="workPoolData.contactsPerson.linePhone1[3]" class="item-width" size="mini"
-                        style="width: 75px" maxlength="50"/>
+                        style="width: 75px" maxlength="4"/>
             </el-form-item>
           </el-col>
         </el-row>

@@ -66,7 +66,6 @@ public class OrderInfo extends BaseEntity
 
 
     /** 业务状态 */
-    @Excel(name = "工单状态")
     private String bussinessStatus;
 
     /** 生日 */

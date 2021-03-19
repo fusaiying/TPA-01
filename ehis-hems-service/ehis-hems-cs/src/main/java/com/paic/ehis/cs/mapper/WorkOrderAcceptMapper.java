@@ -84,4 +84,12 @@ public interface WorkOrderAcceptMapper
      * @return 结果
      */
     public int deleteWorkOrderAcceptByIds(String[] workOrderNos);
+
+    /**
+     * 查询工单距今处理时长
+     *
+     * @param workOrderNo 需要删除的数据ID
+     * @return 结果
+     */
+    public String selectProcessingTimeById(String workOrderNo);
 }

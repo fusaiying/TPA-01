@@ -153,7 +153,7 @@ export default {
         //供应商服务项目
         serviceCode: null,
         //供应商服务项目名称
-        supplierServiceName:'',
+        supplierServiceName:null,
         //结算方式
         settleType: null,
         //结算止期

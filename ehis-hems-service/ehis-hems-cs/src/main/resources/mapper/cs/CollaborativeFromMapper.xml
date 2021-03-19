@@ -155,6 +155,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         WHERE
         a.work_order_no = b.work_order_no
         AND a.work_order_no = c.work_order_no
+        and a.status != '03'
         <if test="workOrderNo != null  and workOrderNo != ''"> and a.work_order_no = #{workOrderNo}</if>
         <if test="collaborativeId != null  and collaborativeId != ''"> and a.collaborative_id = #{collaborativeId}</if>
         <if test="createdTimeStart != null   and createdTimeEnd != null ">
@@ -185,6 +186,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         WHERE
         a.work_order_no = b.work_order_no
         AND a.work_order_no = c.work_order_no
+        and a.status != '03'
         <if test="workOrderNo != null  and workOrderNo != ''"> and a.work_order_no = #{workOrderNo}</if>
         <if test="collaborativeId != null  and collaborativeId != ''"> and a.collaborative_id = #{collaborativeId}</if>
         <if test="createdTimeStart != null   and createdTimeEnd != null ">

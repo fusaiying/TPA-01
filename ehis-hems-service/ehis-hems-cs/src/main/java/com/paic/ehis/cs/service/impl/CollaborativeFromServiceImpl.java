@@ -150,6 +150,21 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
              collaborativeFromMapper.insertCollaborativeFrom(collaborativeFrom);
         }
 
+        //新增 发起协办流程节点信息
+        FlowLog flowLog=new FlowLog();
+        flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id",20,20));
+        flowLog.setLinkCode("04");//状态置为已协办
+        flowLog.setOperateCode("15");//节点为发起协办
+        flowLog.setMakeBy(SecurityUtils.getUsername());
+        //没有um帐号
+        flowLog.setUmNum(SecurityUtils.getUsername());
+        flowLog.setCreatedBy(SecurityUtils.getUsername());
+        flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+        flowLog.setUpdatedBy(SecurityUtils.getUsername());
+        flowLog.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+        flowLog.setWorkOrderNo(demandAcceptVo.getWorkOrderNo());
+        flowLogMapper.insertFlowLog(flowLog);
+
     }
     /**
      * 征求意见信息信息需求服务处理   加处理意见
@@ -256,6 +271,21 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
     @Override
     public int updateCollaborativeStatus(CollaborativeFrom collaborativeFrom) {
        // collaborativeFrom.getWorkOrderNo();
+        //新增撤销协办节点信息
+        FlowLog flowLog=new FlowLog();
+        flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id",20,20));
+        flowLog.setLinkCode("04");//状态置为已协办
+        flowLog.setOperateCode("16");//节点为撤销协办
+        flowLog.setMakeBy(SecurityUtils.getUsername());
+        //没有um帐号
+        flowLog.setUmNum(SecurityUtils.getUsername());
+        flowLog.setCreatedBy(SecurityUtils.getUsername());
+        flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+        flowLog.setUpdatedBy(SecurityUtils.getUsername());
+        flowLog.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+        flowLog.setWorkOrderNo(collaborativeFrom.getWorkOrderNo());
+        flowLogMapper.insertFlowLog(flowLog);
+
         return collaborativeFromMapper.updateCollaborativeStatus(collaborativeFrom);
     }
 }

@@ -901,24 +901,24 @@
           }
         }
       };
-      const checkSettleType = (rule, value, callback) => {
-        if (!value) {
-          callback(new Error("结算方式不可为空"));
-        } else {
-          let listData = this.serverForm.serverInfo;
-          let count = 0;
-          for (let i = 0; i < listData.length; i++) {
-            if (listData[i].settleType == value) {
-              count++;
-            }
-          }
-          if (count > 1) {
-            callback(new Error("结算方式重复"));
-          } else {
-            callback();
-          }
-        }
-      };
+      // const checkSettleType = (rule, value, callback) => {
+      //   if (!value) {
+      //     callback(new Error("结算方式不可为空"));
+      //   } else {
+      //     let listData = this.serverForm.serverInfo;
+      //     let count = 0;
+      //     for (let i = 0; i < listData.length; i++) {
+      //       if (listData[i].settleType == value) {
+      //         count++;
+      //       }
+      //     }
+      //     if (count > 1) {
+      //       callback(new Error("结算方式重复"));
+      //     } else {
+      //       callback();
+      //     }
+      //   }
+      // };
       const checkReSupplierCode = (rule, value, callback) => {
         if (!value) {
           callback(new Error("供应商项目名称不可为空"));
@@ -1421,7 +1421,7 @@
           minPrice: [{required: true, message: '最小价格', trigger: ['change', 'blur']}],
           maxPrice: [{required: true, validator: checkMaxPrice, trigger: ['change', 'blur']}],
           limitnum: [{required: true, message: '日限次数', trigger: ['change', 'blur']}],
-          settleType: [{required: true, validator: checkSettleType, trigger: ['change', 'blur']}],
+          settleType: [{required: true, message: '结算方式不可为空', trigger: ['change', 'blur']}],
           settleCurrency: [{required: true, message: '结算币种', trigger: ['change', 'blur']}],
         },
         dialogVisible: false,

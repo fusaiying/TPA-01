@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.cs.domain.dto.ConsultationDTO;
+import com.paic.ehis.cs.domain.vo.CollaborativeFromVO;
 import com.paic.ehis.cs.domain.vo.ComplaintDealVo;
 import com.paic.ehis.cs.service.IWorkHandleInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,7 +70,7 @@ public class CollaborativeFromController extends BaseController
     {
         startPage();
         consultationDTO.setOperation(SecurityUtils.getUsername());
-        List<CollaborativeFrom> list = collaborativeFromService.selectCollaborativeFromListPublicNew(consultationDTO);
+        List<CollaborativeFromVO> list = collaborativeFromService.selectCollaborativeFromListPublicNew(consultationDTO);
         return getDataTable(list);
     }
 

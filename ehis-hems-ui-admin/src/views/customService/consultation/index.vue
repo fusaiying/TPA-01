@@ -106,14 +106,14 @@
               <span>{{ selectDictLabel(cs_opinion_handle, scope.row.handleState) }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="modifyTime" label="流转时间" align="center" show-overflow-tooltip width="140">
+          <el-table-column prop="createdTime" label="流转时间" align="center" show-overflow-tooltip width="140">
             <template slot-scope="scope">
-              <span>{{ scope.row.modifyTime | changeDate }}</span>
+              <span>{{ scope.row.createdTime | changeDate }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="acceptTime" label="处理时间" align="center" show-overflow-tooltip width="140">
+          <el-table-column prop="updatedTime" label="处理时间" align="center" show-overflow-tooltip width="140">
             <template slot-scope="scope">
-              <span>{{ scope.row.acceptTime | changeDate }}</span>
+              <span>{{ scope.row.updatedTime | changeDate }}</span>
             </template>
           </el-table-column>
           <el-table-column align="center" prop="processingTime" label="处理时效（工作日）" show-overflow-tooltip/>

@@ -2,6 +2,7 @@ package com.paic.ehis.cs.mapper;
 
 import com.paic.ehis.cs.domain.CollaborativeFrom;
 import com.paic.ehis.cs.domain.dto.ConsultationDTO;
+import com.paic.ehis.cs.domain.vo.CollaborativeFromVO;
 
 import java.util.List;
 
@@ -31,7 +32,7 @@ public interface CollaborativeFromMapper
 
     public List<CollaborativeFrom> selectCollaborativeFromListNew(ConsultationDTO consultationDTO);
 
-    public List<CollaborativeFrom> selectCollaborativeFromListPublicNew(ConsultationDTO consultationDTO);
+    public List<CollaborativeFromVO> selectCollaborativeFromListPublicNew(ConsultationDTO consultationDTO);
 
     /**
      * 新增协办信息 

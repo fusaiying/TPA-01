@@ -8,6 +8,7 @@ import com.paic.ehis.cs.domain.dto.ConsultationDTO;
 
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.PubFun;
+import com.paic.ehis.cs.domain.vo.CollaborativeFromVO;
 import com.paic.ehis.cs.domain.vo.ComplaintDealVo;
 import com.paic.ehis.cs.domain.vo.DemandAcceptVo;
 import com.paic.ehis.cs.domain.vo.UmCode;
@@ -68,7 +69,7 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
     }
 
     @Override
-    public List<CollaborativeFrom> selectCollaborativeFromListPublicNew(ConsultationDTO consultationDTO) {
+    public List<CollaborativeFromVO> selectCollaborativeFromListPublicNew(ConsultationDTO consultationDTO) {
         return collaborativeFromMapper.selectCollaborativeFromListPublicNew(consultationDTO);
     }
 

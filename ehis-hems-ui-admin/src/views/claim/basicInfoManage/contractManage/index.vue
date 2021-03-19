@@ -403,6 +403,7 @@
           orderByColumn:'create_time',
           isAsc:'desc'
         };
+        this.loading = true
         getSupplierContractList(param).then(response => {
            this.pendingTotalNum = response.total;
            this.pendingTableData = response.rows;

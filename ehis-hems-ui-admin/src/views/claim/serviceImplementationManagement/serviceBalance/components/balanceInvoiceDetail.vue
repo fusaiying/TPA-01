@@ -199,7 +199,16 @@ export default {
       // 是否显示弹出层
       open: false,
       // 表单参数
-      form: {},
+      form: {
+        amount:'',
+        amountTax:'',
+        invoiceCode:'',
+        invoiceNo:'',
+        invoiceType:'',
+        serialNo:'',
+        taskNo:'',
+        tax:''
+      },
       // 表单校验
       rules: {
         invoiceType: [{required: true, message: "发票类型不能为空", trigger: "change"}],

@@ -224,7 +224,7 @@ export default {
 
     }
     const checkProductDeadline = (rules, value, callback) => {
-      let reg = /^(\d+|\d+\.)$/
+      let reg = /^[1-9]\d*$/
       if(this.baseForm.productTimeInfo){
         if (this.baseForm.productTimeInfo <= 0) {
           callback(new Error("请输入正整数"));

@@ -14,7 +14,7 @@
 
         <el-col :span="8">
           <el-form-item label="供应商项目名称：" prop="serviceCode">
-            <el-select v-model="queryParams.serviceCode" class="item-width" size="mini" placeholder="请先选择供应商" clearable filterable>
+            <el-select v-model="queryParams.serviceCode" class="item-width" size="mini" placeholder="请先选择供应商" clearable filterable @change="setSupplierServiceName">
               <el-option v-for="item in serviceOptions" :key="item.dictValue" :label="item.dictLabel" :value="item.dictValue"/>
             </el-select>
           </el-form-item>
@@ -153,7 +153,7 @@ export default {
         //供应商服务项目
         serviceCode: null,
         //供应商服务项目名称
-        serviceName:'',
+        supplierServiceName:'',
         //结算方式
         settleType: null,
         //结算止期
@@ -219,6 +219,14 @@ export default {
 
   },
   methods: {
+    //给供应商服务项目名称赋值
+    setSupplierServiceName(){
+      let arr=this.serviceOptions.filter(item=>{
+        return item.dictValue==this.queryParams.serviceCode
+      })
+      this.queryParams.supplierServiceName= arr[0].dictLabel
+    },
+
     //反显总费用
     getAllAmout(row){
       return  parseFloat(row.insuredNum)*parseFloat(row.unitPrice)
@@ -310,16 +318,6 @@ export default {
     /** 查询列表 */
     getList() {
       this.loading = true;
-      console.log(this.queryParams.serviceCode)
-      if(this.queryParams.serviceCode!=undefined && this.queryParams.serviceCode!=null && this.queryParams.serviceCode!=''){
-        let arr=this.serviceOptions.filter(item =>{
-          return item.dictValue==this.queryParams.serviceCode
-        })
-        console.log(arr)
-
-        this.queryParams.serviceName=arr[0].dictLabel
-        console.log(this.queryParams.serviceName)
-      }
       listBalanceDetail(this.queryParams).then(res => {
         if (res != null && res.code === 200) {
           this.balanceList = res.rows;
@@ -350,6 +348,7 @@ export default {
     resetQuery() {
       // 将查询表单重置
       this.$refs.queryForm.resetFields()
+      this.queryParams.supplierServiceName=null
       this.queryParams.balanceInvoiceType = "01";
     },
     /** 生成 */

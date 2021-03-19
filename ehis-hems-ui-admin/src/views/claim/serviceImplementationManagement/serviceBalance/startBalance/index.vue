@@ -15,7 +15,7 @@
 
           <el-col :span="8">
             <el-form-item label="供应商项目名称：" prop="serviceCode">
-              <el-select v-model="queryParams.serviceCode" class="item-width" size="mini" placeholder="请选择" clearable filterable>
+              <el-select v-model="queryParams.serviceCode" class="item-width" size="mini" placeholder="请选择" clearable @change="setSupplierServiceName" filterable>
                 <el-option v-for="item in serviceOptions" :key="item.dictValue" :label="item.dictLabel" :value="item.dictValue"/>
               </el-select>
             </el-form-item>
@@ -204,6 +204,8 @@ export default {
         supplierCode: null,
         //供应商服务项目
         serviceCode: null,
+        //供应商项目名称
+        supplierServiceName:null,
         //结算方式
         settleType: null,
         //结算止期
@@ -269,6 +271,14 @@ export default {
     }).dictDate
   },
   methods: {
+    //给供应商服务项目名称赋值
+    setSupplierServiceName(){
+      let arr=this.serviceOptions.filter(item=>{
+        return item.dictValue==this.queryParams.serviceCode
+      })
+     this.queryParams.supplierServiceName= arr[0].dictLabel
+    },
+
     initData (){
       /** 供应商 */
       const query ={
@@ -355,6 +365,7 @@ export default {
       this.resetForm("queryForm");
       this.queryParams.pageNum = 1;
       this.queryParams.pageSize = 10
+      this.queryParams.supplierServiceName=null
       this.getList();
     },
     //处理备注

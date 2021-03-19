@@ -8,6 +8,7 @@ import com.paic.ehis.cs.domain.dto.ConsultationDTO;
 
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.PubFun;
+import com.paic.ehis.cs.domain.vo.CollaborativeFromVO;
 import com.paic.ehis.cs.domain.vo.ComplaintDealVo;
 import com.paic.ehis.cs.domain.vo.DemandAcceptVo;
 import com.paic.ehis.cs.domain.vo.UmCode;
@@ -68,7 +69,7 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
     }
 
     @Override
-    public List<CollaborativeFrom> selectCollaborativeFromListPublicNew(ConsultationDTO consultationDTO) {
+    public List<CollaborativeFromVO> selectCollaborativeFromListPublicNew(ConsultationDTO consultationDTO) {
         return collaborativeFromMapper.selectCollaborativeFromListPublicNew(consultationDTO);
     }
 
@@ -148,6 +149,21 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
             collaborativeFrom.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
              collaborativeFromMapper.insertCollaborativeFrom(collaborativeFrom);
         }
+
+        //新增 发起协办流程节点信息
+        FlowLog flowLog=new FlowLog();
+        flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id",20,20));
+        flowLog.setLinkCode("04");//状态置为已协办
+        flowLog.setOperateCode("15");//节点为发起协办
+        flowLog.setMakeBy(SecurityUtils.getUsername());
+        //没有um帐号
+        flowLog.setUmNum(SecurityUtils.getUsername());
+        flowLog.setCreatedBy(SecurityUtils.getUsername());
+        flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+        flowLog.setUpdatedBy(SecurityUtils.getUsername());
+        flowLog.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+        flowLog.setWorkOrderNo(demandAcceptVo.getWorkOrderNo());
+        flowLogMapper.insertFlowLog(flowLog);
 
     }
     /**
@@ -255,6 +271,21 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
     @Override
     public int updateCollaborativeStatus(CollaborativeFrom collaborativeFrom) {
        // collaborativeFrom.getWorkOrderNo();
+        //新增撤销协办节点信息
+        FlowLog flowLog=new FlowLog();
+        flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id",20,20));
+        flowLog.setLinkCode("04");//状态置为已协办
+        flowLog.setOperateCode("16");//节点为撤销协办
+        flowLog.setMakeBy(SecurityUtils.getUsername());
+        //没有um帐号
+        flowLog.setUmNum(SecurityUtils.getUsername());
+        flowLog.setCreatedBy(SecurityUtils.getUsername());
+        flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+        flowLog.setUpdatedBy(SecurityUtils.getUsername());
+        flowLog.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+        flowLog.setWorkOrderNo(collaborativeFrom.getWorkOrderNo());
+        flowLogMapper.insertFlowLog(flowLog);
+
         return collaborativeFromMapper.updateCollaborativeStatus(collaborativeFrom);
     }
 }

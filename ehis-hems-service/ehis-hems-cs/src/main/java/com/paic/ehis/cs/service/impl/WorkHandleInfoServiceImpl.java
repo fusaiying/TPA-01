@@ -739,20 +739,24 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
     @Override
     public ReservationDealVo selectReservationDealVoByNo(String workOrderNo) {
         WorkHandleInfo workHandleInfo=workHandleInfoMapper.selectWorkHandleInfoByNo(workOrderNo);
+
+        //查询处理时长
+        String tTimes = workOrderAcceptMapper.selectProcessingTimeById(workOrderNo);
         if(workHandleInfo!=null){
-        ReservationDealVo reservationDealVo=workHandleInfoMapper.selectReservationDealVoByNo(workOrderNo);
-        String sourceName="ReservationDealVo";
-        String targetTableName="work_handle_info";
-        List<FieldMap> KVMap=fieldMapMapper.selectKVMap(targetTableName,sourceName);
-        for (FieldMap fieldMap:KVMap){
-            fieldMap.getTargetColumnName();
-            fieldMap.getSourceFiledName();
-            Map map=new HashMap<String,String>();
-            map.put(fieldMap.getSourceFiledName(),fieldMap.getTargetColumnName());
-            VoUtils voUtils=new VoUtils<ReservationDealVo>();
-            reservationDealVo= (ReservationDealVo) voUtils.fromVoToVo(reservationDealVo,map,workHandleInfo);
-        }
-        return reservationDealVo;
+            ReservationDealVo reservationDealVo=workHandleInfoMapper.selectReservationDealVoByNo(workOrderNo);
+            String sourceName="ReservationDealVo";
+            String targetTableName="work_handle_info";
+            List<FieldMap> KVMap=fieldMapMapper.selectKVMap(targetTableName,sourceName);
+            for (FieldMap fieldMap:KVMap){
+                fieldMap.getTargetColumnName();
+                fieldMap.getSourceFiledName();
+                Map map=new HashMap<String,String>();
+                map.put(fieldMap.getSourceFiledName(),fieldMap.getTargetColumnName());
+                VoUtils voUtils=new VoUtils<ReservationDealVo>();
+                reservationDealVo= (ReservationDealVo) voUtils.fromVoToVo(reservationDealVo,map,workHandleInfo);
+            }
+            reservationDealVo.setTimes(tTimes);
+            return reservationDealVo;
         }else {
             return new ReservationDealVo();
         }

@@ -627,6 +627,14 @@ export default {
     }).dictDate
   },
   methods: {
+
+    hiddenShow:function () {
+      // 返回上级路由并关闭当前路由
+      this.$store.state.tagsView.visitedViews.splice(this.$store.state.tagsView.visitedViews.findIndex(item => item.path === this.$route.path), 1)
+      this.$router.push(this.$store.state.tagsView.visitedViews[this.$store.state.tagsView.visitedViews.length - 1].path)
+
+    },
+
     //取消
     deal() {
     },
@@ -671,6 +679,7 @@ export default {
               console.log("insert", insert)
               this.$message.success("保存成功");
               this.collaborativeFrom.status = "02";
+              this.hiddenShow();
               if (res.rows.length <= 0) {
                 return this.$message.warning(
                   "失败！"

@@ -284,7 +284,7 @@
               <el-link :underline="false" @click="dealButton(scope.row)">{{ scope.row.workOrderNo }}</el-link>
             </template>-->
             <template slot-scope="scope">
-              <el-button size="mini" type="text" @click="workOrderButton(scope.row)">{{scope.row.workOrderNo}}</el-button>
+              <el-button size="mini" type="text" @click="workDealButton(scope.row)">{{scope.row.workOrderNo}}</el-button>
             </template>
           </el-table-column>
           <el-table-column prop="businessService" align="center" width="140" label="服务项目" show-overflow-tooltip>
@@ -548,6 +548,20 @@ export default {
         }
       })
     },
+
+    //工单处理页面超链接
+    workDealButton(s){
+      this.$router.push({
+        path: '/customService/deal',
+        query:{
+          workOrderNo:s.workOrderNo,
+          policyNo:s.policyNo,
+          policyItemNo:s.policyItemNo,
+          status:s.status
+        }
+      })
+    },
+
     //处理按钮
     dealButton(s){
       this.$router.push({

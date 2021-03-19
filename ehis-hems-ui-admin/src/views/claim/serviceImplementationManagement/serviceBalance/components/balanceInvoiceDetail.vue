@@ -92,7 +92,7 @@
               </el-col>
 
               <el-col :span="8">
-                <el-form-item label="发票金额（税）:" prop="amountTax">
+                <el-form-item label="发票金额（不含税）:" prop="amountTax">
                   <el-input v-model="form.amountTax" placeholder="请输入发票金额（不含税）" class="item-width" @input="countTax"/>
                 </el-form-item>
               </el-col>

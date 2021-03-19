@@ -323,6 +323,8 @@ export default {
     /** 重置按钮操作 */
     resetQuery() {
       this.isDefault=true
+      this.queryParams.pageNum = 1;
+      this.queryParams.pageSize = 10;
       this.resetForm("queryForm");
     this.getList()
     },

@@ -3,19 +3,19 @@
     <div slot="header" class="clearfix">
       <span style="color: blue">质检处理信息</span>
     </div>
-    <el-form ref="ruleForm" :model="inspection" style="padding-bottom: 30px;" label-width="100px">
-      <el-table :data="inspection.items"  :header-cell-style="{color:'black',background:'#f8f8ff'}">
+    <el-form ref="ruleForm" :model="inspection" style="padding-bottom: 30px;" label-width="100px" :disabled="routerParams.status=='show'">
+      <el-table :data="inspection.items"  :header-cell-style="{color:'black',background:'#f8f8ff'}" >
         <el-table-column  label="质检项目" show-overflow-tooltip align="center" disabled="true">
           <template slot-scope="scope">
             <el-form-item :prop="'items.' + scope.$index + '.itemKey'" >
-              <el-input v-model.trim="scope.row.itemKey" v-show="scope.row.show" size="mini" />
+              <el-input :disabled="routerParams=='show'" v-model.trim="scope.row.itemKey" v-show="scope.row.show" size="mini" />
               <span v-show="!scope.row.show">{{scope.row.itemKey}}</span>
             </el-form-item>
           </template>
         </el-table-column>
         <el-table-column  label="是否存在差错" show-overflow-tooltip align="center">
           <template slot-scope="scope">
-            <el-form-item :prop="'items.' + scope.$index + '.value'" >
+            <el-form-item  :prop="'items.' + scope.$index + '.value'" >
               <el-select v-model="scope.row.value" v-show="!scope.row.show"  size="mini" placeholder="请选择">
                 <el-option v-for="item in valueOptions" :key="item.dictValue" :label="item.dictLabel" :value="item.dictValue">
                 </el-option>
@@ -73,7 +73,7 @@ let dictss = [
 export default {
   name: "inspectionProcessInfo",
   props: {
-
+    routerParams:Object,
   },
 
 data(){

@@ -8,7 +8,11 @@
     @expand-change="getMinData"
     style="width: 100%;">
     <el-table-column type="selection" align="center" content="全选"/>
-    <el-table-column prop="workOrderNo" width="140" label="工单号" align="center"/>
+    <el-table-column prop="workOrderNo" width="140" label="工单号" align="center">
+      <template slot-scope="scope">
+        <el-link style="font-size: 11px" type="primary" @click="claimRouter(scope.row)">{{scope.row.workOrderNo}}</el-link>
+      </template>
+    </el-table-column>
     <el-table-column prop="channelCode" width="100" label="受理渠道" align="center">
       <template slot-scope="scope" v-if="scope.row.channelCode">
         <span>{{ selectDictLabel(cs_channel, scope.row.channelCode) }}</span>
@@ -189,11 +193,14 @@ export default {
       this.$router.push({
         path: url,
         query:{
-          workOrderNo:row.workOrderNo,
-          policyNo:row.policyNo,
-          policyItemNo:row.policyItemNo,
-          status:row.status,
-          businessType:row.businessType
+          data:{
+            workOrderNo:row.workOrderNo,
+            policyNo:row.policyNo,
+            policyItemNo:row.policyItemNo,
+            status:row.status,
+            businessType:row.businessType
+          }
+
         }
       })
       // let data = encodeURI(
@@ -242,6 +249,25 @@ export default {
           this.loading = false
         })
       }
+    },
+    claimRouter(row){
+      let data = encodeURI(
+        JSON.stringify({
+          workOrderNo: row.workOrderNo, //批次号
+          policyNo: row.policyNo, //保单号
+          policyItemNo: row.policyItemNo, //分单号
+          businessType: row.businessType,
+          status:'show'
+        })
+      )
+      console.info(row)
+      console.info("row")
+      this.$router.push({
+        path: '/workOrder/inspectionHandle',
+        query: {
+          data
+        }
+      })
     }
   }
 }

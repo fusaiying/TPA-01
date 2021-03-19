@@ -4,7 +4,7 @@
       <span style="color: blue">投诉处理</span>
     </div>
     <el-form ref="ruleForm" :model="form" style="padding-bottom: 30px;" label-width="200px"
-             label-position="right" size="mini" :isDisabled="isDisabled" >
+             label-position="right" size="mini" :disabled="isAcceptInfo || routerParams.status=='show'" >
       <el-row>
         <el-col :span="8">
           <el-form-item label="一级投诉分类：" prop="priority">
@@ -201,7 +201,8 @@
 
   export default {
     props: {
-      isDisabled: {
+      routerParams:Object,
+      isAcceptInfo: {
         type:Boolean,
         default:false
       },

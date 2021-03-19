@@ -3,73 +3,80 @@
     <div slot="header" class="clearfix">
       <span style="color: blue">投诉质检处理</span>
     </div>
-    <el-form  ref="ruleForm" :model="complaintProcess" style="padding-bottom: 30px;" label-width="100px">
-      <el-table :data="complaintProcess.items" :header-cell-style="{color:'black',background:'#f8f8ff'}">
-        <el-table-column  label="质检分类" show-overflow-tooltip align="center">
+    <el-form ref="ruleForm" :model="tableData" style="padding-bottom: 30px;" label-width="100px"
+             :disabled="routerParams.status=='show'">
+      <el-table :data="tableData.items" :header-cell-style="{color:'black',background:'#f8f8ff'}"
+                highlight-current-row
+                tooltip-effect="dark"
+                :span-method="objectSpanMethod"
+                lign="center">
+        <el-table-column v-if="businessType=='03'" label="质检分类" show-overflow-tooltip align="center">
           <template slot-scope="scope">
-            <el-form-item :prop="'items.' + scope.$index + '.itemType'" >
-              <el-input v-model.trim="scope.row.itemType" v-show="scope.row.show" size="mini" />
-              <span v-show="scope.$index === 0 || scope.$index === 3 || scope.$index === 19">{{scope.row.itemType }} </span>
+            <el-form-item>
+              <el-input v-model.trim="scope.row.className" v-show="scope.row.show" size="mini"/>
+              <span>{{scope.row.className }} </span>
             </el-form-item>
           </template>
         </el-table-column>
-        <el-table-column  label="质检项目" show-overflow-tooltip align="center">
+        <el-table-column label="质检项目" show-overflow-tooltip align="center">
           <template slot-scope="scope">
-            <el-form-item :prop="'items.' + scope.$index + '.itemKey'" >
-              <el-input v-model.trim="scope.row.itemKey" v-show="scope.row.show" size="mini" />
-              <span v-show="!scope.row.show">{{scope.row.itemKey}}</span>
+            <el-form-item>
+              <el-input v-model.trim="scope.row.itemName" v-show="scope.row.show" size="mini"/>
+              <span v-show="!scope.row.show">{{scope.row.itemName}}</span>
             </el-form-item>
           </template>
         </el-table-column>
-        <el-table-column  label="是否存在差错" show-overflow-tooltip align="center">
+        <el-table-column label="是否存在差错" show-overflow-tooltip align="center">
           <template slot-scope="scope">
-            <el-form-item :prop="'items.' + scope.$index + '.value'" >
-              <el-select v-model="scope.row.value" size="mini" placeholder="请选择">
-                <el-option v-for="item in valueOptions" :key="item.dictValue" :label="item.dictLabel" :value="item.dictValue">
-                  <span style="float: left">{{ item.dictValue }}</span>
-                  <span style="float: right; color: #8492a6; font-size: 13px">{{ item.dictLabel }}</span>
+            <el-form-item>
+              <el-select v-model="scope.row.itemValue" size="mini" placeholder="请选择" @change="changeValue">
+                <el-option v-for="option in valueOptions" :key="option.dictValue" :label="option.dictLabel"
+                           :value="option.dictValue">
+                  <!-- <span style="float: left">{{ item.dictValue }}</span>-->
+                  <!-- <span style="float: right; color: #8492a6; font-size: 13px">{{ item.dictLabel }}</span>-->
                 </el-option>
               </el-select>
             </el-form-item>
           </template>
         </el-table-column>
-        <el-table-column  label="质检说明" show-overflow-tooltip align="center">
+        <el-table-column label="质检说明" show-overflow-tooltip align="center">
           <template slot-scope="scope">
-            <el-form-item :prop="'items.' + scope.$index + '.itemRemark'">
-              <el-input v-model="scope.row.itemRemark" v-show="!scope.row.show" size="mini" />
-              <span v-show="!scope.row.show">{{scope.row.itemRemark}}</span>
+            <el-form-item>
+              <el-input v-model="scope.row.itemRemark" v-show="!scope.row.show" size="mini"/>
+              <span v-show="scope.row.show">{{scope.row.itemRemark}}</span>
             </el-form-item>
           </template>
         </el-table-column>
       </el-table>
-      <el-row>
+      <el-row v-if="businessType=='03'"><!--判断01 03-->
         <el-form-item label="质检评分">
-          <el-input v-model="complaintProcess.score"/>
+          <el-input v-model="tableData.score"/>
         </el-form-item>
       </el-row>
-      <el-table :data="complaintProcess.appeal" v-show="isshow">
-        <el-table-column   show-overflow-tooltip align="center">
+      <el-table :data="tableData.appeal" v-if="tableData.status!='04'">
+        <el-table-column show-overflow-tooltip align="center">
           <template slot-scope="scope">
-            <el-form-item :prop="'appeal.' + scope.$index + '.appealName'" >
-              <el-input v-model="scope.row.appealName" v-show="scope.row.show" size="mini" />
+            <el-form-item>
+              <el-input v-model="scope.row.appealName" v-show="scope.row.show" size="mini"/>
               <span v-show="!scope.row.show">{{scope.row.appealName}}</span>
             </el-form-item>
           </template>
         </el-table-column>
-        <el-table-column   show-overflow-tooltip align="center">
+        <el-table-column show-overflow-tooltip align="center">
           <template slot-scope="scope">
-            <el-form-item :prop="'appeal.' + scope.$index + '.appealFlag'" >
-              <el-select v-model="scope.row.appealFlag" size="mini" placeholder="请选择">
-                <el-option v-for="item in appealFlagOptions" :key="item.dictValue" :label="item.dictLabel" :value="item.dictValue">
+            <el-form-item>
+              <el-select v-model="scope.row.appealFlag" size="mini" placeholder="请选择" @change="changeAppealFlag">
+                <el-option v-for="option in appealFlagOptions" :key="option.dictValue" :label="option.dictLabel"
+                           :value="option.dictValue">
                 </el-option>
               </el-select>
             </el-form-item>
           </template>
         </el-table-column>
-        <el-table-column   show-overflow-tooltip align="center">
+        <el-table-column show-overflow-tooltip align="center">
           <template slot-scope="scope">
-            <el-form-item label="申诉理由：" :prop="'appeal.' + scope.$index + '.appealReason'">
-              <el-input v-model="scope.row.appealReason" size="mini" />
+            <el-form-item label="申诉理由：">
+              <el-input v-model="scope.row.appealReason" size="mini"/>
             </el-form-item>
           </template>
         </el-table-column>
@@ -80,198 +87,174 @@
 
 <script>
   let dictss = [
-    {dictType: 'cs_whether_flag' },
+    {dictType: 'cs_whether_flag'},
 
   ]
-export default {
+  export default {
     name: "complaintProcessInfo",
-data(){
-   return {
-     dictList: [],
-     complaintProcessList: [],
-     valueOptions: [],
-     appealFlagOptions: [],
-     isshow:true,
-     complaintProcess: {
-       appeal:[
-         {
-           appealName : '是否申诉',
-           appealFlag: '',
-           appealReason: '',
-         }
-       ],
-       score:'',
-       items: [
-         {
-           itemType:'时效性',
-           itemKey:'投诉件录入时效',
-           value:'',
-           itemRemark: '',
-         },
-         {
-           itemType:'时效性',
-           itemKey: '响应时间',
-           value: '',
-           itemRemark: '',
-         },
-         {
-           itemType:'时效性',
-           itemKey: '根因改善闭环时效',
-           value: '',
-           itemRemark: '',
-         },
-         {
-           itemType:'准确性',
-           itemKey: '受理渠道',
-           value: '',
-           itemRemark: '',
-         },
-         {
-           itemType:'准确性',
-           itemKey: '投诉分类',
-           value: '',
-           itemRemark: '',
-         },
-         {
-           itemType:'准确性',
-           itemKey: '监管计件',
-           value: '',
-           itemRemark: '',
-         },
-         {
-           itemType:'准确性',
-           itemKey: '监管撤诉状态',
-           value: '',
-           itemRemark: '',
-         },
-         {
-           itemType:'准确性',
-           itemKey: '投诉原因',
-           value: '',
-           itemRemark: '',
-         },
-         {
-           itemType:'准确性',
-           itemKey: '客户反馈',
-           value: '',
-           itemRemark: '',
-         },
-         {
-           itemType:'准确性',
-           itemKey: '投诉损失',
-           value: '',
-           itemRemark: '',
-         },
-         {
-           itemType:'准确性',
-           itemKey: '投诉是否成立',
-           value: '',
-           itemRemark: '',
-         },
-         {
-           itemType:'准确性',
-           itemKey: '投诉根因部门',
-           value: '',
-           itemRemark: '',
-         },
-         {
-           itemType:'准确性',
-           itemKey: '根因改善',
-           value: '',
-           itemRemark: '',
-         },
-         {
-           itemType:'准确性',
-           itemKey: '致诉根因',
-           value: '',
-           itemRemark: '',
-         },
-         {
-           itemType:'准确性',
-           itemKey: '处理结果',
-           value: '',
-           itemRemark: '',
-         },
-         {
-           itemType:'准确性',
-           itemKey: '附件完整性',
-           value: '',
-           itemRemark: '',
-         },
-         {
-           itemType:'准确性',
-           itemKey: '征求处理意见',
-           value: '',
-           itemRemark: '',
-         },
-         {
-           itemType:'准确性',
-           itemKey: '处理意见',
-           value: '',
-           itemRemark: '',
-         },
-         {
-           itemType:'准确性',
-           itemKey: '行协调解或外部鉴定状态',
-           value: '',
-           itemRemark: '',
-         },
-         {
-           itemType:'真实性',
-           itemKey: '案件真实性',
-           value: '',
-           itemRemark: '',
-         },
-       ]
-     }
-   }
-},
-created() {
-  this.params = JSON.parse(decodeURI(this.$route.query.data))
-  //获取受理信息
-  let query = {
-    workOrderNo: this.params.workOrderNo,
-    businessType: this.params.businessType,
-  }
-  if(this.complaintProcessList!==null){
-    this.data=this.complaintProcess;
-  }
-  getHandleInfoList(query).then(res => {
-    if(query.businessType === '01'){
-      if (res !== null && res.code === 200) {
-        this.inspectionList = res.rows;
-        console.log(this.inspectionList,'+++++++++5555555');
+    props: {
+      routerParams: Object,
+      businessType: String,
+    },
+    watch: {
+      businessType: {
+        handler(val) {
+        },
+        immediate: true
       }
-    }else if(query.businessType === '03'){
-      if (res !== null && res.code === 200) {
-        this.complaintProcessList = res.rows;
-        console.log(this.allList.complaintProcess)
+    },
+    data() {
+      return {
+        spanArr: [],//用于存放每一行记录的合并数
+        dictList: [],
+        complaintProcessList: [],
+        valueOptions: [],
+        appealFlagOptions: [],
+        isshow: true,
+        tableData: {
+          inspectionId: '',//质检号
+          score: '',//评分
+          status: '04',//01待确认02已确认03结案04无
+          appeal: [{
+            appealName: '是否申诉',
+            appealFlag: '',//是否申诉
+            appealReason: '',//申诉理由
+          }],
+          items: [ //质检项目
+            {
+              classType: '0101',//分类code
+              className: '啊啊啊',//分类名
+              itemType: '',//项目code
+              itemName: '投诉件录入时效1',//项目名
+              itemValue: '02',
+              itemRemark: ''
+            }, {
+              classType: '0101',//分类code
+              className: '啊啊啊',//分类名
+              itemType: '',//项目code
+              itemName: '投诉件录入时效2',//项目名
+              itemValue: '02',
+              itemRemark: ''
+            }, {
+              classType: '0202',//分类code
+              className: '呵呵呵',//分类名
+              itemType: '',//项目code
+              itemName: '投诉件录入时效3',//项目名
+              itemValue: '02',
+              itemRemark: ''
+            }, {
+              classType: '0202',//分类code
+              className: '呵呵呵',//分类名
+              itemType: '',//项目code
+              itemName: '投诉件录入时效4',//项目名
+              itemValue: '02',
+              itemRemark: ''
+            },
+          ]
+        },
+      }
+    },
+    created() {
+      this.params = JSON.parse(decodeURI(this.$route.query.data))
+      //获取受理信息
+      let query = {
+        workOrderNo: this.params.workOrderNo,
+        businessType: this.params.businessType,
+      }
+      //调用接口获取数据 changeValue
+      /* getHandleInfoList(query).then(res => {
+         if (res!=null && res.code=='200'){
+           this.tableData.appeal[0].appealFlag=res.data.appealFlag
+           this.tableData.appeal[0].appealReason=res.data.appealReason
+           this.tableData.inspectionId=res.data.inspectionId
+           this.tableData.score=res.data.score
+           this.tableData.status=res.data.status
+           this.changeValue()
+           if (this.businessType=='03'){
+             this.getSpanArr(this.tableData.items);
+           }
+         }
+       }).catch( res => {
+       });*/
+      this.getSpanArr(this.tableData.items);
+      this.selectAppealStatus();
+    },
+    async mounted() {
+      await this.getDictsList(dictss).then(response => {
+        this.dictList = response.data
+      })
+      this.valueOptions = this.dictList.find(item => {
+        return item.dictType === 'cs_whether_flag'
+      }).dictDate
+      this.appealFlagOptions = this.dictList.find(item => {
+        return item.dictType === 'cs_whether_flag'
+      }).dictDate
+    },
+    methods: {
+      selectAppealStatus() {
+        if (this.$emit('selectHandleStatus') !== null) {
+          this.isshow = false;
+        }
+      },
+      changeValue() {
+        if (this.tableData.status == '04') {
+          let flag = false
+          this.tableData.items.forEach(item => {
+            if (item.itemValue != '02') {
+              flag = true
+            }
+          })
+          if (flag) {
+            this.$emit('changeShowStatus', '1')
+          } else {
+            this.$emit('changeShowStatus', '2')
+          }
+
+        }
+      },
+      getSpanArr(data) {
+        // data就是我们从后台拿到的数据
+        for (var i = 0; i < data.length; i++) {
+          if (i === 0) {
+            this.spanArr.push(1);
+            this.pos = 0;
+          } else {
+            // 判断当前元素与上一个元素是否相同
+            if (data[i].classType === data[i - 1].classType) {
+              this.spanArr[this.pos] += 1;
+              this.spanArr.push(0);
+            } else {
+              this.spanArr.push(1);
+              this.pos = i;
+            }
+          }
+        }
+      },
+      objectSpanMethod({row, column, rowIndex, columnIndex}) {
+        if (columnIndex === 0) {
+          const _row = this.spanArr[rowIndex];
+          const _col = _row > 0 ? 1 : 0;
+          console.log(`rowspan:${_row} colspan:${_col}`);
+          return {
+            // [0,0] 表示这一行不显示， [2,1]表示行的合并数
+            rowspan: _row,
+            colspan: _col
+          };
+        }
+      },
+      changeAppealFlag(value) {
+        if (this.params.businessType == '03' && this.params.node == 'mistake' ) {
+          if (value == '01'){
+            this.$emit('changeAppealFlag','01')
+          }else {
+            this.$emit('changeAppealFlag','02')
+          }
+        }
       }
     }
 
-  }).catch( res => {
-  });
-  this.selectAppealStatus();
-},
-async mounted() {
-  await this.getDictsList(dictss).then(response => {
-    this.dictList = response.data
-  })
-  this.valueOptions = this.dictList.find(item => {
-    return item.dictType === 'cs_whether_flag'
-  }).dictDate
-  this.appealFlagOptions = this.dictList.find(item => {
-    return item.dictType === 'cs_whether_flag'
-  }).dictDate
-},
-methods: {
-  selectAppealStatus(){
-    if(this.$emit('selectHandleStatus')!==null){
-      this.isshow = false;
-    }
+
   }
-}
-}
 </script>
 
 <style scoped>

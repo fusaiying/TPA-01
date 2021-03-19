@@ -290,7 +290,7 @@
         </el-row>
         <el-row>
           <el-col :span="16">
-            <el-form-item label="联系人固定电话：" style="white-space: nowrap" prop="phone">
+            <el-form-item  label="联系人固定电话：" style="white-space: nowrap" prop="phone">
               国家区号+
               <el-input v-model="workPoolData.contactsPerson.linePhone1[0]" class="item-width"
                         style="width: 75px"/>
@@ -360,7 +360,7 @@
           </el-table-column>
           <el-table-column align="center" prop="makeBy" label="受/处理人" show-overflow-tooltip/>
           <el-table-column align="center" prop="umNum" label="UM账号" show-overflow-tooltip/>
-          <el-table-column prop="makeTime" label="时间" align="center" show-overflow-tooltip width="140">
+            <el-table-column prop="makeTime" label="时间" align="center" show-overflow-tooltip width="140">
             <template slot-scope="scope">
               <span>{{ scope.row.makeTime | changeDate }}</span>
             </template>
@@ -501,7 +501,7 @@ export default {
       //数据反显用
       workPoolData: {
         contactsPerson: {
-          homePhone1: []
+          linePhone1: ['','','','']
         },
         callPerson: {},
 
@@ -614,7 +614,7 @@ export default {
       let query = this.search
       orderDetailSearch(query).then(res => {
         if (res != null && res.code === 200) {
-          if (res.rows[0] != "undefined" && res.rows[0] != null) {
+          if (res.rows.length>0) {
             this.orderDetailSearch = res.rows[0]
             console.log('工单详情', this.orderDetailSearch)
           }
@@ -637,17 +637,20 @@ export default {
         const query = this.queryParams
         demandListAndPublicPool(query).then(res => {
           if (res != null && res.code === 200) {
-            let workPoolData = res.rows[0];
-            let editInfo = {
-              editReason: "",
-              editRemark: ""
-            };
-            workPoolData.editInfo = editInfo;
-            workPoolData.officeCountry = "";
-            workPoolData.officeNumber = "";
-            workPoolData.officeQuhao = "";
-            workPoolData.officeSecondNumber = "";
-            this.workPoolData = workPoolData;
+            if (res.rows.length>0){
+              let workPoolData = res.rows[0];
+              let editInfo = {
+                editReason: "",
+                editRemark: ""
+              };
+              workPoolData.editInfo = editInfo;
+              workPoolData.officeCountry = "";
+              workPoolData.officeNumber = "";
+              workPoolData.officeQuhao = "";
+              workPoolData.officeSecondNumber = "";
+              this.workPoolData = workPoolData;
+            }
+
           }
         }).catch(res => {
           return this.$message.error(
@@ -658,17 +661,20 @@ export default {
         let query = this.queryParams
         demandListAndPersonalPool(query).then(res => {
           if (res != null && res.code === 200) {
-            let workPoolData = res.rows[0];
-            let editInfo = {
-              editReason: "",
-              editRemark: ""
-            };
-            workPoolData.editInfo = editInfo
-            workPoolData.officeCountry = ""
-            workPoolData.officeNumber = ""
-            workPoolData.officeQuhao = ""
-            workPoolData.officeSecondNumber = ""
-            this.workPoolData = workPoolData;
+            if (res.rows.length>0){
+              let workPoolData = res.rows[0];
+              let editInfo = {
+                editReason: "",
+                editRemark: ""
+              };
+              workPoolData.editInfo = editInfo
+              workPoolData.officeCountry = ""
+              workPoolData.officeNumber = ""
+              workPoolData.officeQuhao = ""
+              workPoolData.officeSecondNumber = ""
+              this.workPoolData = workPoolData;
+            }
+
             console.log(this.workPoolData);
           }
         }).catch(res => {
@@ -685,8 +691,11 @@ export default {
       workOrderNo.status = ""
       FlowLogSearch(workOrderNo).then(res => {
         if (res != null && res.code === 200) {
-          this.flowLogData = res.rows;
-          this.flowLogCount = res.total;
+          if (res.rows.length>0){
+            this.flowLogData = res.rows;
+            this.flowLogCount = res.total;
+          }
+
         }
       }).catch(res => {
 

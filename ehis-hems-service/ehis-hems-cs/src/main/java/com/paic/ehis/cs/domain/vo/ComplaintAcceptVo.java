@@ -181,8 +181,15 @@ public class ComplaintAcceptVo extends BaseEntity {
     @Excel(name = "原处理人")
     private String oldmodifyBy;
 
-    /** 原处理人 */
+    /** 修改时间 */
     @Excel(name = "修改时间")
     private String changeTime;
 
+    /** 最后一次修改人 */
+    @Excel(name = "最后一次修改人")
+    private String updateBy;
+
+    /** 创建人 */
+    @Excel(name = "创建人")
+    private String createBy;
 }

@@ -563,5 +563,22 @@ where task_no = #{taskNo}
             <if test="status != null  and status != ''"> and a.status = #{status}</if>
         </where>
     </select>
+
+    <select id="orderCodeList" parameterType="ServiceBalanceDetail" resultType="String">
+        SELECT
+        a.order_code
+        FROM
+        service_balance_detail a
+        <where>
+            <if test="taskNo != null  and taskNo != ''"> and a.task_no = #{taskNo}</if>
+        </where>
+    </select>
+
+    <update id="updateOrderInfo" parameterType="String">
+        update order_info set confirm_flag = '0' where order_code in
+        <foreach item="orderCode" collection="list" open="(" separator="," close=")">
+            #{orderCode}
+        </foreach>
+    </update>
     
 </mapper>

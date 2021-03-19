@@ -1,6 +1,5 @@
 package com.paic.ehis.cs.service.impl;
 
-
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.PubFun;
 import com.paic.ehis.common.core.utils.SecurityUtils;
@@ -12,16 +11,17 @@ import com.paic.ehis.cs.domain.dto.WorkOrderQueryDTO;
 import com.paic.ehis.cs.domain.vo.AcceptVo;
 import com.paic.ehis.cs.domain.vo.QualityAcceptVo;
 import com.paic.ehis.cs.domain.vo.QualityFlagVO;
-import com.paic.ehis.cs.domain.vo.QualityVo;
 import com.paic.ehis.cs.mapper.*;
 import com.paic.ehis.cs.service.IQualityInspectionAcceptService;
 import com.paic.ehis.cs.utils.CodeEnum;
 import com.paic.ehis.cs.utils.VoUtils;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -276,6 +276,91 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
     @Override
     public List<QualityFlagVO> selectQualityFlagVO(QualityFlagDTO qualityFlagDTO) {
         return qualityInspectionAcceptMapper.selectQualityFlagVO(qualityFlagDTO);
+    }
+
+    //信息需求失效批处理
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    @Override
+    public List<AcceptVo> batchAcceptVo(String invalidDateStar) {
+        if (StringUtils.isEmpty(invalidDateStar)) {
+            throw new RuntimeException("日期为空！");
+        }
+        SimpleDateFormat foramt = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = null;
+        try {
+            date = foramt.parse(invalidDateStar);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        if (1 == cal.get(Calendar.DAY_OF_WEEK)) {
+            cal.add(Calendar.DATE, -1);
+        }
+        cal.add(Calendar.DAY_OF_MONTH, -7);//时间减去7天
+        cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);//Calendar.MONDAY 这个是周一
+
+        if (1 == cal.get(Calendar.DAY_OF_WEEK)) {
+            cal.add(Calendar.DATE, -1);
+        }
+        cal.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);//这个是周日
+
+        WorkOrderQueryDTO workOrderQueryDTO = new WorkOrderQueryDTO();//根据工单状态
+        workOrderQueryDTO.setEndCaseStartTime(foramt.format(cal.getTime()) + " 00:00:00");//获取上周一
+        workOrderQueryDTO.setEndCaseEndTime(foramt.format(cal.getTime()) + " 23:59:59");//获取上周天
+        //2.工单状态处理； 04-已完成的工单且没有被质检过
+        workOrderQueryDTO.setAcceptStatus(CodeEnum.ORDER_STATE_04.getCode());
+        //3.业务类型为： 01-信息需求和03-投诉的才可以质检
+        List<String> businessTypeList = new ArrayList<>();
+        businessTypeList.add(CodeEnum.BUSINESS_TYPE_01.getCode());
+        businessTypeList.add(CodeEnum.BUSINESS_TYPE_03.getCode());
+        workOrderQueryDTO.setBusinessTypeList(businessTypeList);
+        List<AcceptVo> acceptVos = new ArrayList<>();
+        List<AcceptVo> list = qualityInspectionAcceptMapper.getWorkOrderCountByUserId(workOrderQueryDTO);//根据操作人分组获取工单
+        int i = list.size();
+        for (AcceptVo acceptVo : list) {
+            String workOrderNos = acceptVo.getWorkOrderNos();
+            String[] strings = workOrderNos.split(",");
+            Set<String> set = new HashSet<String>();
+            Random random = new Random();
+            double h = i * 0.1;
+            if (h <= 1) {
+                int j = 1;//抽取总量的10%，如计算结果≤1，则取1
+                int a = 0;
+                while (true) {
+                    a = random.nextInt(strings.length);
+                    set.add(strings[a]);
+                    if (set.size() >= j) {
+                        break;
+                    }
+                }
+                for (String ran : set) {
+                    System.out.println(ran);
+                    workOrderQueryDTO.setWorkOrderNo(ran);
+                    acceptVos=qualityInspectionAcceptMapper.getWorkOrderCountByUserId(workOrderQueryDTO);
+                }
+            } else if (h > 1) {
+                int j = (int) h;//抽取总量的10%，计算结果＞1，则向下取整
+                int a = 0;
+                while (true) {
+                    a = random.nextInt(strings.length);
+                    set.add(strings[a]);
+                    if (set.size() >= j) {
+                        break;
+                    }
+                }
+                for (String ran : set) {
+                    System.out.println(ran);
+                    workOrderQueryDTO.setWorkOrderNo(ran);
+                    acceptVos=qualityInspectionAcceptMapper.getWorkOrderCountByUserId(workOrderQueryDTO);
+                }
+            } else if (h == 0) {
+                int j = 0;//抽取总量的10%，计算结果为0，则取0
+                System.out.println(j);
+                workOrderQueryDTO.setWorkOrderNo(null);
+            }
+        }
+        return acceptVos;
     }
 
 }

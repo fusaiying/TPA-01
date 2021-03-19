@@ -84,4 +84,7 @@ public interface IQualityInspectionAcceptService
 //     */
 //    public List<AttachmentInfo> getAttachmentList(WorkOrderQueryDTO workOrderQueryDTO);
     List<QualityFlagVO> selectQualityFlagVO(QualityFlagDTO qualityFlagDTO);
+
+    //批处理
+    List<AcceptVo> batchAcceptVo(String invalidDateStar);
 }

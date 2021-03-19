@@ -999,23 +999,26 @@
       },
       //新增按钮
       submit() {
-        const send = this.submitForm
-        send.sign = "02",
-          send.workOrderNo = this.queryParams.workOrderNo = this.$route.query.workOrderNo
-        dealReservationSubmit(send).then(res => {
+        this.$refs.submitForm.validate((valid) => {
+          if (valid) {
+            const send = this.submitForm
+            send.sign = "02",
+              send.workOrderNo = this.queryParams.workOrderNo = this.$route.query.workOrderNo
+            dealReservationSubmit(send).then(res => {
 
-          if (res != null && res.code === 200) {
-            this.$message.success("保存成功！")
-            if (res.rows.length <= 0) {
-              return this.$message.warning(
-                "提交失败！"
-              )
-            }
+              if (res != null && res.code === 200) {
+                this.$message.success("保存成功！")
+                if (res.rows.length <= 0) {
+                  return this.$message.warning(
+                    "提交失败！"
+                  )
+                }
+              }
+            }).catch(res => {
+
+            })
           }
-        }).catch(res => {
-
         })
-
       },
       temporary() {
         const send = this.submitForm

@@ -408,14 +408,14 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="二级投诉分类：" prop="level2">
-              <el-select v-model="sendForm.level2" class="item-width">
+              <el-select v-model="sendForm.level2" class="item-width" @change="checkLevel2()">
                 <el-option v-for="item in cs_classify_level2" :key="item.code" :label="item.codeName"
                            :value="item.code"/>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="是否计件：" prop="pieceworkFlag">
+            <el-form-item label="是否计件：" prop="pieceworkFlag"  v-show="sendForm.level2=='05'">
               <el-select v-model="sendForm.pieceworkFlag" class="item-width">
                 <el-option v-for="item in cs_whether_flag" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
@@ -426,7 +426,7 @@
 
         <el-row>
           <el-col :span="8">
-            <el-form-item label="撤诉状态：" prop="complaintStatus">
+            <el-form-item label="撤诉状态：" prop="complaintStatus" v-show="sendForm.level2=='05'">
               <el-select v-model="sendForm.complaintStatus" class="item-width" >
                 <el-option v-for="item in cs_drop_status" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
@@ -435,7 +435,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="投诉是否成立：" prop="complaintTenable">
-              <el-select v-model="sendForm.complaintTenable" class="item-width">
+              <el-select v-model="sendForm.complaintTenable" class="item-width" @change="checkComplaintTenable()">
                 <el-option v-for="item in cs_whether_flag" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
@@ -1064,6 +1064,21 @@ export default {
 
       })
 
+    },
+
+    //选中二级投诉分类后，控制是否计件、撤诉状态的显示与隐藏
+    checkLevel2(){
+      if(this.sendForm.level2 != "05"){
+        this.sendForm.pieceworkFlag = "";
+        this.sendForm.complaintStatus = "";
+      }
+    },
+
+    //投诉是否成立选择是，投诉不成立理由置灰，文本框内容清空
+    checkComplaintTenable(){
+      if(this.sendForm.complaintTenable == "01"){
+        this.sendForm.faseReason = "";
+      }
     },
 
     //取消

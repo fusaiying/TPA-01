@@ -437,7 +437,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             oi.insured_num,
             oi.unit_price,
             oi.remark,
-            oi.insured_Num*oi.unit_Price amount,
+            oi.insured_num*oi.unit_price amount,
             concat_ws(
             '~~',
             (

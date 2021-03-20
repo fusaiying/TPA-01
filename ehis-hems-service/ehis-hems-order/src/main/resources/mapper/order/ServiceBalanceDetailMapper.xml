@@ -36,7 +36,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="riskName"    column="risk_name"    />
         <result property="supplierServiceName"    column="supplier_service_name"    />
         <result property="settlementTime"    column="settlementTime"    />
-
+        <result property="supplierName"    column="supplier_name"    />
+        <result property="serviceName"    column="service_name"    />
     </resultMap>
 
     <!-- 明细导出（按case） -->
@@ -434,10 +435,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             1 = 1*/
             SELECT
             oi.risk_name,
-            oi.insured_Num,
-            oi.unit_Price,
+            oi.insured_num,
+            oi.unit_price,
             oi.remark,
-            oi.insured_Num*oi.unit_Price amount,
+            oi.insured_num*oi.unit_price amount,
             concat_ws(
             '~~',
             (
@@ -502,7 +503,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         SELECT
             oi.order_code,
             oi.supplier_name,
-            oi.service_name,
+            <!--oi.service_name,-->
             oi.remark,
             oi.settle_price amount,
             bcs.supplier_service_name,

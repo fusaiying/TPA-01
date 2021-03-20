@@ -633,7 +633,7 @@ where task_no = #{taskNo}
             a.reason
         FROM
             service_balance_detail a
-        LEFT JOIN order_info oi ON a.order_code = oi.order_code and oi.status = 'Y' and oi.flag
+        LEFT JOIN order_info oi ON a.order_code = oi.order_code and oi.status = 'Y' and oi.update_flag = '0'
         <where>
             <if test="taskNo != null  and taskNo != ''"> and a.task_no = #{taskNo}</if>
             <if test="status != null  and status != ''"> and a.status = #{status}</if>

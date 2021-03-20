@@ -93,13 +93,26 @@ export default {
   methods: {
     //批量删除
     clearfile(){
+      let count=0
       if(this.fileList.length>0){
-        this.fileList.forEach(file =>{
-          this.handleRemove(file,this.fileList)
+        new Promise(resolve => {
+          this.fileList.forEach(file => {
+            const data = {
+              serialNo: file.serialNo,
+              status: "N"
+            };
+            updateBalanceFile(data).then(res => {
+               count++
+                if(count==this.fileList.length){
+                  resolve()
+                }
+            });
+          })
+          }
+        ).then(res=>{
+          this.getList()
+          this.msgSuccess('删除成功！');
         })
-      }
-      else{
-        return false
       }
     },
     /** 初始化数据 */
@@ -201,7 +214,7 @@ export default {
     },
     /** 上传中 */
     uploadProgress() {
-      this.params.isAdd = false;
+     // this.params.isAdd = false;
     },
     /** 预览 */
     handlePreview(file) {

@@ -3,7 +3,7 @@
     <el-card class="box-card" style="margin-top: 10px;">
       <span style="color: blue">客户基本信息</span>
       <el-divider/>
-      <el-form ref="sendForm" :model="sendForm" style="padding-bottom: 30px;" label-width="130px"
+      <el-form ref="sendForm" :model="sendForm" style="padding-bottom: 30px;" label-width="170px"
                label-position="right" size="mini"disabled>
         <el-row>
           <!--clearable是清楚输入框内容 readly、只读不可以编辑 ；不可以共存-->
@@ -828,9 +828,6 @@ export default {
         actPromptly: [
           {required: true, message: "投诉损失不能为空", trigger: "blur"}
         ],
-        complaintTenable: [
-          {required: true, message: "投诉不成立理由不能为空", trigger: "blur"}
-        ],
 
       },
       caseNumber: false,//查询条件（报案号）是否显示
@@ -1233,9 +1230,6 @@ export default {
         this.$refs.modifyDetails.queryParams.workOrderNo = this.queryParams.workOrderNo;
       this.$refs.modifyDetails.open()
       ;
-    },
-    resetForm() {
-      this.$refs.sendForm.resetFields()
     },
     //打开修改对话框
 

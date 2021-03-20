@@ -39,6 +39,7 @@ import moment from "moment";
 
 export default {
   props: {
+    routerParams: Object,
     attachmentInfoData: {
       type: Array,
       default: function () {

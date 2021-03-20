@@ -95,7 +95,7 @@
           <el-table-column prop="payNo" label="支付流水号" align="center" show-overflow-tooltip />
           <el-table-column prop="payDate" label="支付时间" align="center" show-overflow-tooltip>
             <template slot-scope="scope">
-              <span>{{ parseTime(scope.row.endDate, '{y}-{m}-{d}') }}</span>
+              <span>{{ parseTime(scope.row.payDate, '{y}-{m}-{d}') }}</span>
             </template>
           </el-table-column>
           <el-table-column prop="payAmount" label="支付金额" align="center" show-overflow-tooltip/>

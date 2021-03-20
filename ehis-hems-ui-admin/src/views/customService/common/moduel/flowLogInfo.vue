@@ -34,7 +34,6 @@
             </el-link>
           </template>
         </el-table-column>
-        <modify-details ref="modifyDetails"></modify-details>
         <el-table-column prop="opinion" align="center" label="处理意见" show-overflow-tooltip/>
         <el-table-column prop="toDepartment" align="center" label="流转部门" show-overflow-tooltip/>
         <el-table-column prop="toReason" align="center" label="流传原因" show-overflow-tooltip/>
@@ -52,8 +51,9 @@
 </template>
 
 <script>
-  import {FlowLogSearch,}from '@/api/customService/demand'
   import moment from "moment";
+  import {FlowLogSearch} from '@/api/customService/demand'
+
   let dictss = [
     {dictType: 'cs_identity'},
     {dictType: 'cs_sex'},
@@ -66,8 +66,11 @@
     {dictType: 'cs_order_state'},
     {dictType: 'cs_action_type'},
   ]
-export default {
+  export default {
     name: "flowLogInfo",
+    props: {
+      routerParams: Object
+    },
     filters: {
       changeDate: function (value) {
         if (value !== null) {
@@ -75,72 +78,77 @@ export default {
         }
       }
     },
-  data(){
-    return{
-      flowLogData: [],
-      flowLogCount: 0,
-      totalCount: 0,
-      states: [],
-      queryParams: {
-        pageNum: 1,
-        pageSize: 10,
-        workOrderNo: "",
-        policyNo: "",
-        policyItemNo: "",
-        status: ""
-      },
-      dictList: [],
-    }
-  },
-
-  created() {
-    this.queryParams.workOrderNo = this.$route.query.workOrderNo;
-    this.queryParams.policyNo = this.$route.query.policyNo;
-    this.queryParams.policyItemNo = this.$route.query.policyItemNo;
-    this.queryParams.status = this.$route.query.status;
-    this.searchHandle()
-    this.searchFlowLog()
-  },
-  async mounted() {// 字典数据统一获取
-    await this.getDictsList(dictss).then(response => {
-        this.dictList = response.data
-        })
-        // 下拉项赋值
-        this.cs_action_type = this.dictList.find(item => {
-          return item.dictType === 'cs_action_type'
-        }).dictDate
-        this.cs_order_state = this.dictList.find(item => {
-          return item.dictType === 'cs_order_state'
-        }).dictDate
-        this.cs_communication_language = this.dictList.find(item => {
-          return item.dictType === 'cs_communication_language'
-        }).dictDate
-        this.cs_service_item = this.dictList.find(item => {
-          return item.dictType === 'cs_service_item'
-        }).dictDate
-        this.cs_organization = this.dictList.find(item => {
-          return item.dictType === 'cs_organization'
-        }).dictDate
-        this.cs_priority = this.dictList.find(item => {
-          return item.dictType === 'cs_priority'
-        }).dictDate
-        this.cs_channel = this.dictList.find(item => {
-          return item.dictType === 'cs_channel'
-        }).dictDate
-        this.cs_whether_flag = this.dictList.find(item => {
-          return item.dictType === 'cs_whether_flag'
-        }).dictDate
-        this.cs_sex = this.dictList.find(item => {
-          return item.dictType === 'cs_sex'
-        }).dictDate
-        this.cs_identity = this.dictList.find(item => {
-          return item.dictType === 'cs_identity'
-        }).dictDate
+    data() {
+      return {
+        flowLogData: [],
+        flowLogCount: 0,
+        totalCount: 0,
+        states: [],
+        queryParams: {
+          pageNum: 1,
+          pageSize: 10,
+          workOrderNo: "",
+          policyNo: "",
+          policyItemNo: "",
+          status: ""
+        },
+        dictList: [],
+        cs_order_state: [],
+        cs_action_type: [],
+        cs_service_item: [],
+        cs_communication_language: [],
+        cs_organization: [],
+      }
     },
-    methods:{
+
+    created() {
+      this.queryParams.workOrderNo = this.$route.query.workOrderNo;
+      this.queryParams.policyNo = this.$route.query.policyNo;
+      this.queryParams.policyItemNo = this.$route.query.policyItemNo;
+      this.queryParams.status = this.$route.query.status;
+      //this.searchHandle()
+      this.searchFlowLog()
+    },
+    async mounted() {// 字典数据统一获取
+      await this.getDictsList(dictss).then(response => {
+        this.dictList = response.data
+      })
+      // 下拉项赋值
+      this.cs_action_type = this.dictList.find(item => {
+        return item.dictType === 'cs_action_type'
+      }).dictDate
+      this.cs_order_state = this.dictList.find(item => {
+        return item.dictType === 'cs_order_state'
+      }).dictDate
+      this.cs_communication_language = this.dictList.find(item => {
+        return item.dictType === 'cs_communication_language'
+      }).dictDate
+      this.cs_service_item = this.dictList.find(item => {
+        return item.dictType === 'cs_service_item'
+      }).dictDate
+      this.cs_organization = this.dictList.find(item => {
+        return item.dictType === 'cs_organization'
+      }).dictDate
+      this.cs_priority = this.dictList.find(item => {
+        return item.dictType === 'cs_priority'
+      }).dictDate
+      this.cs_channel = this.dictList.find(item => {
+        return item.dictType === 'cs_channel'
+      }).dictDate
+      this.cs_whether_flag = this.dictList.find(item => {
+        return item.dictType === 'cs_whether_flag'
+      }).dictDate
+      this.cs_sex = this.dictList.find(item => {
+        return item.dictType === 'cs_sex'
+      }).dictDate
+      this.cs_identity = this.dictList.find(item => {
+        return item.dictType === 'cs_identity'
+      }).dictDate
+    },
+    methods: {
       modifyDetails(s) {
-        this.$refs.modifyDetails.queryParams.subId = s.subId,
-          this.$refs.modifyDetails.queryParams.workOrderNo = this.queryParams.workOrderNo;
+        this.$refs.modifyDetails.queryParams.subId = s.subId
+        this.$refs.modifyDetails.queryParams.workOrderNo = this.queryParams.workOrderNo;
         this.$refs.modifyDetails.open()
         ;
       },
@@ -162,7 +170,7 @@ export default {
         })
       },
     }
-}
+  }
 
 </script>
 

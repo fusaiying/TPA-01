@@ -93,7 +93,6 @@ export default {
   methods: {
     //批量删除
     clearfile(){
-      console.log(1111)
       this.fileList=[]
     },
     /** 初始化数据 */
@@ -132,31 +131,45 @@ export default {
     },
     /** 删除文件 */
     handleRemove(file, fileList) {
-      const data = {
-        serialNo: file.serialNo,
-        status: "N"
-      };
-      updateBalanceFile(data).then(res => {
-        if (res != null && res.code === 200) {
-          this.msgSuccess('删除成功！');
-        } else {
-          this.msgError('删除失败！');
-        }
-        this.getList();
-      });
+      if (file && file.status==="success") {
+        const data = {
+          serialNo: file.serialNo,
+          status: "N"
+        };
+        updateBalanceFile(data).then(res => {
+          if (res != null && res.code === 200) {
+            this.msgSuccess('删除成功！');
+          } else {
+            this.msgError('删除失败！');
+          }
+          this.getList();
+        });
+      }
+
     },
+
     /** 删除文件前 */
     beforeRemove(file, fileList) {
-      const fileName = file.name.substring(file.name.lastIndexOf('.')+1);
-      //excel/jpg/png/pdf
-      if (fileName === "xls" || fileName === "xlsx" || fileName === "jpg" || fileName === "png" || fileName === "pdf") {
-        return this.$confirm(`确定移除 ${ file.name }？`);
-      } else {
-        return true;
+      if (file && file.status==="success") {
+        const fileName = file.name.substring(file.name.lastIndexOf('.') + 1);
+        //excel/jpg/png/pdf
+        if (fileName === "xls" || fileName === "xlsx" || fileName === "jpg" || fileName === "png" || fileName === "pdf") {
+          return this.$confirm(`确定移除 ${file.name}？`);
+        } else {
+          return true;
+        }
       }
+
+      //return false
     },
     /** 上传文件前 */
     beforeUpload(file) {
+      //限制文件不能超过500kb
+      if (file.size / 1024 > 500) {  // 限制文件大小
+        this.$message.warning(`当前限制文件大小不能大于500kb`)
+        return false;
+      }
+
       const fileName = file.name.substring(file.name.lastIndexOf('.')+1);
       //excel/jpg/png/pdf
       if (fileName === "xls" || fileName === "xlsx" || fileName === "jpg" || fileName === "png" || fileName === "pdf") {
@@ -165,6 +178,9 @@ export default {
         this.$message.warning('只能上传excel/jpg/png/pdf文件！');
         return false;
       }
+
+
+
     },
     /** 导入成功后事件 */
     uploadSuccess(response, file, fileList){

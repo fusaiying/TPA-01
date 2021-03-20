@@ -4,7 +4,7 @@
       <span style="color: blue">客户基本信息</span>
     </div>
     <el-form ref="personInfo" :model="personInfo" label-width="100px"
-             label-position="right" size="mini">
+             label-position="right" size="mini" :disabled="routerParams.status=='show'">
       <el-row>
         <el-col :span="8">
           <span class="info_span to_right">保单号：</span><span class="info_span">{{ personInfo.policyNo }}</span>
@@ -130,11 +130,13 @@
 </template>
 <script>
 import {getPersonInfoData} from "@/api/customService/spotCheck";
+import {policyInfoData} from "@/api/customService/common";
 
 let dictss = [{dictType: 'claimType'},]
 
 export default {
   props: {
+    routerParams:Object,
     policyNo:String,
     policyItemNo:String,
     fixInfo: {
@@ -193,18 +195,22 @@ export default {
       }
       console.info(getQuery);
       //查询外部接口获取保单和被保人信息
-      getPersonInfoData(getQuery).then(res => {
-        console.log('++++++++------------: ', res)
-        if (res !== undefined && res.code === 200) {
-          if (res.total !== undefined && res.total >= 1) {
-            this.personInfo = res.rows[0]
+      if (getQuery.policyNo!=null && getQuery.policyNo!='' && getQuery.policyNo!=undefined
+        && getQuery.policyItemNo!=null && getQuery.policyItemNo!='' && getQuery.policyItemNo!=undefined){
+        policyInfoData(getQuery).then(res => {
+          console.log('++++++++------------: ', res)
+          if (res !== undefined && res.code === 200) {
+            if (res.data){
+              this.personInfo = res.data
+            }
           }
-        }
-      }).catch(res => {
+        }).catch(res => {
 
-      }).finally(() => {
+        }).finally(() => {
 
-      })
+        })
+      }
+
     }
   }
 }

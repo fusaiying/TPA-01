@@ -193,7 +193,7 @@
     </el-card>
 
 
-    <el-card class="box-card" style="margin-top: 10px;">
+    <el-card class="box-card" style="margin-top: 10px;" :disabled="flag=='show'">
       <el-form ref="ruleForm" :model="ruleForm" :rules="rules" style="padding-bottom: 30px;" label-width="160px" :disabled="true"
                label-position="right" size="mini">
         <span
@@ -699,6 +699,7 @@ export default {
       },
       // 表单校验
       rules: {},
+      flag: '',
       readonly: true,
       dialogFormVisible: false,
       updateBy: undefined,
@@ -809,6 +810,7 @@ export default {
     this.queryParams.policyNo = this.$route.query.policyNo;
     this.queryParams.policyItemNo = this.$route.query.policyItemNo;
     this.queryParams.status = this.$route.query.status;
+    this.flag= this.$route.query.flag;
     //window.aaa = this;
     this.searchHandle()
     this.searchFlowLog()

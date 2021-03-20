@@ -438,7 +438,7 @@ export default {
         settleType: row.settleType,
         status: "Y"
       };
-      this.download('order/balanceDetail/export', params, "balance_" + row.taskNo + '_' + new Date().getTime() + '.xlsx');
+      this.download('order/balance/export', params, "balance_" + row.taskNo + '_' + new Date().getTime() + '.xlsx');
     },
     /** 导入成功后事件 */
     uploadSuccess(response, file, fileList){

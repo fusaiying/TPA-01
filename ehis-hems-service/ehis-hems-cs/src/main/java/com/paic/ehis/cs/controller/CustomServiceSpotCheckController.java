@@ -1,5 +1,6 @@
 package com.paic.ehis.cs.controller;
 
+import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.common.core.utils.poi.ExcelUtil;
 import com.paic.ehis.common.core.web.controller.BaseController;
@@ -14,6 +15,9 @@ import com.paic.ehis.cs.domain.dto.*;
 import com.paic.ehis.cs.domain.vo.*;
 import com.paic.ehis.cs.service.*;
 import com.paic.ehis.cs.utils.CodeEnum;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.xmlbeans.impl.xb.xsdschema.Public;
+import org.omg.CORBA.PUBLIC_MEMBER;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -330,18 +334,21 @@ public class CustomServiceSpotCheckController extends BaseController {
          */
     @Log(title = "质检差错清单导出", businessType = BusinessType.EXPORT)
     @PostMapping("/internal/selectWorkOrder/exportTwo")
-    public void exportTwo(HttpServletResponse response, QualityFlagDTO qualityFlagDTO) throws IOException
+    public void exportTwo(HttpServletResponse response, QualityInspectionDTO qualityInspectionDTO) throws IOException
     {
-        List<QualityFlagVO> list = qualityInspectionAcceptService.selectQualityFlagVO(qualityFlagDTO);
-        ExcelUtil<QualityFlagVO> util = new ExcelUtil<QualityFlagVO>(QualityFlagVO.class);
+        List<QualityInspectionHandleVo> list = qualityInspectionAcceptService.selectQualityFlagVO(qualityInspectionDTO);
+        ExcelUtil<QualityInspectionHandleVo> util = new ExcelUtil<QualityInspectionHandleVo>(QualityInspectionHandleVo.class);
         util.exportExcel(response, list, "WorkOrderTwo");
     }
 
 
     //************************************************
-        /*
-        质检查询
-         */
+
+    /**
+     * 质检查询工作池
+     * @param qualityDTO
+     * @return
+     */
     @GetMapping("/internal/selectQualityVo")
     public TableDataInfo selectQualityVo(QualityDTO qualityDTO)
     {
@@ -349,34 +356,58 @@ public class CustomServiceSpotCheckController extends BaseController {
         List<QualityAcceptVo> list = qualityInspectionAcceptService.selectQualityVo(qualityDTO);
         return getDataTable(list);
     }
-    //获取质检确认池
+
+    /**
+     * 质检差错确认池查询
+     * @param qualityInspectionDTO
+     * @return
+     */
     @GetMapping("/internal/selectQualityFlagVO")
-    public TableDataInfo selectQualityFlagVo(QualityFlagDTO qualityFlagDTO){
+    public TableDataInfo selectQualityFlagVo(QualityInspectionDTO qualityInspectionDTO){
         startPage();
-        List<QualityFlagVO> list = qualityInspectionAcceptService.selectQualityFlagVO(qualityFlagDTO);
+        qualityInspectionDTO.setUpdatedBy(SecurityUtils.getUsername());
+        List<QualityInspectionHandleVo> list = qualityInspectionAcceptService.selectQualityFlagVO(qualityInspectionDTO);
         return getDataTable(list);
     }
-    //查询质检处理信息，申诉信息
-    @GetMapping("/internal/getHandleInfoList")
-    public TableDataInfo getHandleInfoList(HandleProcessInfoDTO handleProcessInfoDTO) {
-        List<HandleProcessInfoVO> list = qualityInspectionHandleService.getHandleInfoList(handleProcessInfoDTO);
-        return getDataTable(list);
-    }
-    //保存质检处理详情页全部信息
-    @PostMapping("/internal/insertHandleInfo")
-    public AjaxResult insertHandleInfo(HandleDTO handleDTO) {
-        return AjaxResult.success(qualityInspectionHandleService.insertHandleInfo(handleDTO));
+//    //查询质检处理信息，申诉信息
+//    @GetMapping("/internal/getHandleInfoList")
+//    public TableDataInfo getHandleInfoList(HandleProcessInfoDTO handleProcessInfoDTO) {
+//        List<HandleProcessInfoVO> list = qualityInspectionHandleService.getHandleInfoList(handleProcessInfoDTO);
+//        return getDataTable(list);
+//    }
+//    //保存质检处理详情页全部信息
+//    @PostMapping("/internal/insertHandleInfo")
+//    public AjaxResult insertHandleInfo(HandleDTO handleDTO) {
+//        return AjaxResult.success(qualityInspectionHandleService.insertHandleInfo(handleDTO));
+//    }
+
+    /**
+     * 根据条件获取质检项目信息及处理信息
+     * @param qualityInspectionDTO
+     * @return
+     */
+    @PostMapping("/internal/getQualityHandleInfo")
+    public AjaxResult getQualityHandleInfo(@RequestBody QualityInspectionDTO qualityInspectionDTO){
+        qualityInspectionDTO.setCodeType("cs_inspection_item_demand");
+        if(CodeEnum.BUSINESS_TYPE_03.getCode().equals(qualityInspectionDTO.getBusinessType())){
+            qualityInspectionDTO.setCodeType("cs_inspection_item_complaint");
+        }
+        return AjaxResult.success(qualityInspectionHandleService.getQualityHandleInfo(qualityInspectionDTO));
     }
 
-    //信息需求失效批处理
-    @GetMapping("/internal/batchAcceptVo/invalidDate")
-    public AjaxResult batchAcceptVo(@PathVariable("invalidDate") String invalidDate){
-        try{
-            qualityInspectionAcceptService.batchAcceptVo(invalidDate);
-        }catch(RuntimeException e){
-            return AjaxResult.error(e.getMessage());
-        }
-        return AjaxResult.success("执行成功");
+    /**
+     * 质检数据保存
+     * @param qualityInspectionDTO
+     * @return
+     */
+    @Transactional
+    @PostMapping("/internal/insetQualityHandleInfo")
+    public AjaxResult insertHandleInfo(@RequestBody QualityInspectionDTO qualityInspectionDTO){
+        qualityInspectionDTO.setCreatedBy(SecurityUtils.getUsername());
+        qualityInspectionDTO.setCreatedTime(DateUtils.getNowDate());
+        qualityInspectionDTO.setUpdatedBy(SecurityUtils.getUsername());
+        qualityInspectionDTO.setUpdatedTime(DateUtils.getNowDate());
+        return toAjax(qualityInspectionHandleService.insertHandleInfo(qualityInspectionDTO));
     }
 
 }

@@ -5,8 +5,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="com.paic.ehis.cs.mapper.QualityInspectionHandleMapper">
     
     <resultMap type="com.paic.ehis.cs.domain.QualityInspectionHandle" id="QualityInspectionHandleResult">
+        <result property="inspectionHandlerId"    column="inspection_handler_id"    />
         <result property="inspectionId"    column="inspection_id"    />
-        <result property="workOrderId"    column="work_order_id"    />
+        <result property="workOrderNo"    column="work_order_no"    />
         <result property="score"    column="score"    />
         <result property="appealFlag"    column="appeal_flag"    />
         <result property="appealReason"    column="appeal_reason"    />
@@ -18,13 +19,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectQualityInspectionHandleVo">
-        select inspection_id, work_order_id, score, appeal_flag, appeal_reason, status, created_by, created_time, updated_by, updated_time from quality_inspection_handle
+        select inspection_handler_id,inspection_id, work_order_id, score, appeal_flag, appeal_reason, status, created_by, created_time, updated_by, updated_time from quality_inspection_handle
     </sql>
 
     <select id="selectQualityInspectionHandleList" parameterType="com.paic.ehis.cs.domain.QualityInspectionHandle" resultMap="QualityInspectionHandleResult">
         <include refid="selectQualityInspectionHandleVo"/>
         <where>  
-            <if test="workOrderId != null  and workOrderId != ''"> and work_order_id = #{workOrderId}</if>
+            <if test="workOrderNo != null  and workOrderNo != ''"> and work_order_no = #{workOrderNo}</if>
             <if test="score != null  and score != ''"> and score = #{score}</if>
             <if test="appealFlag != null  and appealFlag != ''"> and appeal_flag = #{appealFlag}</if>
             <if test="appealReason != null  and appealReason != ''"> and appeal_reason = #{appealReason}</if>
@@ -45,7 +46,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         insert into quality_inspection_handle
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="inspectionId != null">inspection_id,</if>
-            <if test="workOrderId != null and workOrderId != ''">work_order_id,</if>
+            <if test="workOrderNo != null and workOrderNo != ''">work_order_no,</if>
             <if test="score != null">score,</if>
             <if test="appealFlag != null">appeal_flag,</if>
             <if test="appealReason != null">appeal_reason,</if>
@@ -57,7 +58,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="inspectionId != null">#{inspectionId},</if>
-            <if test="workOrderId != null and workOrderId != ''">#{workOrderId},</if>
+            <if test="workOrderNo != null and workOrderNo != ''">#{workOrderNo},</if>
             <if test="score != null">#{score},</if>
             <if test="appealFlag != null">#{appealFlag},</if>
             <if test="appealReason != null">#{appealReason},</if>
@@ -72,7 +73,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <update id="updateQualityInspectionHandle" parameterType="com.paic.ehis.cs.domain.QualityInspectionHandle">
         update quality_inspection_handle
         <trim prefix="SET" suffixOverrides=",">
-            <if test="workOrderId != null and workOrderId != ''">work_order_id = #{workOrderId},</if>
+            <if test="workOrderNo != null and workOrderNo != ''">work_order_no = #{workOrderNo},</if>
             <if test="score != null">score = #{score},</if>
             <if test="appealFlag != null">appeal_flag = #{appealFlag},</if>
             <if test="appealReason != null">appeal_reason = #{appealReason},</if>
@@ -98,7 +99,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <!-- 工作池返回对象 -->
     <resultMap type="com.paic.ehis.cs.domain.vo.AcceptVo" id="AcceptResult">
         <result property="workOrderNo" column="work_order_no"/>
-        <result property="workOrderId" column="work_order_id"/>
+        <result property="workOrderNo" column="work_order_no"/>
         <result property="businessType" column="business_type"/>
         <result property="serviceItem" column="item_code"/>
         <result property="businessService" column="business_service"/>
@@ -127,14 +128,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
     <select id="selectHandle" parameterType="com.paic.ehis.cs.domain.dto.WorkOrderQueryDTO" resultMap="AcceptResult">
         SELECT
-        qih.work_order_id,
+        qih.work_order_no,
         adi.item_code,
         woa.update_by,
         qih.updated_by
         FROM
         quality_inspection_handle qih
-        LEFT JOIN accept_detail_info adi ON adi.work_order_no = qih.work_order_id   and qih.status="01"
-        LEFT JOIN work_order_accept woa ON  woa.work_order_no =  qih.work_order_id
+        LEFT JOIN accept_detail_info adi ON adi.work_order_no = qih.work_order_no   and qih.status="01"
+        LEFT JOIN work_order_accept woa ON  woa.work_order_no =  qih.work_order_no
         where 1=1 and not exists (SELECT 1 FROM quality_inspection_accept qia WHERE qia.work_order_no=woa.work_order_no)
         <if test="endCaseStartTime != null ">
             and DATE_FORMAT(woa.end_date,'%Y-%m-%d') <![CDATA[>=]]> #{endCaseStartTime}
@@ -142,15 +143,104 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <if test="endCaseEndTime != null ">
             and DATE_FORMAT(woa.end_date,'%Y-%m-%d') <![CDATA[<=]]> #{endCaseEndTime}
         </if>
-        <if test="workOrderId != null and workOrderId != ''">
-             work_order_id,
+        <if test="workOrderNo != null and workOrderNo != ''">
+             work_order_no,
             </if>
     </select>
     <select id="getHandleInfoList" resultType="com.paic.ehis.cs.domain.vo.HandleProcessInfoVO">
         select a.appeal_flag appealFlag,a.appeal_reason appealReason,a.score,b.item_type itemType,b.item_key itemKey,b.value,b.item_remark itemRemark from quality_inspection_handle a
-        left join quality_inspection_item b on a.inspection_id = b.inspection_id where a.work_order_id = #{workOrderNo}
+        left join quality_inspection_item b on a.inspection_id = b.inspection_id where a.work_order_no = #{workOrderNo}
     </select>
     <select id="selectHandleStatus" resultType="java.lang.String">
-        select status from quality_inspection_handle where work_order_id = #{workOrderNo}
+        select status from quality_inspection_handle where work_order_no = #{workOrderNo}
     </select>
+    <resultMap id="qualityInspectionItemVoMap" type="com.paic.ehis.cs.domain.vo.QualityInspectionItemVo">
+        <result property="itemId" column="work_order_no"/>
+        <result property="inspectionHandlerId" column="inspection_handler_id"/>
+        <result property="inspectionId" column="inspection_id"/>
+        <result property="classType" column="class_type"/>
+        <result property="className" column="class_name"/>
+        <result property="itemType" column="item_type"/>
+        <result property="itemName" column="item_name"/>
+        <result property="itemValue" column="item_value"/>
+        <result property="itemRemark" column="item_remark"/>
+        <result property="status" column="status"/>
+    </resultMap>
+    <resultMap id="QualityInspectionHandleVoMap" type="com.paic.ehis.cs.domain.vo.QualityInspectionHandleVo">
+        <result property="inspectionHandlerId" column="inspection_handler_id"/>
+        <result property="inspectionId" column="inspection_id"/>
+        <result property="score" column="score"/>
+        <result property="appealFlag" column="appeal_flag"/>
+        <result property="appealReason" column="appeal_reason"/>
+        <result property="status" column="status"/>
+    </resultMap>
+    <!--    根据质检处理流水号查询质检处理信息-->
+    <select id="getQualityHandleInfoById" resultType="com.paic.ehis.cs.domain.dto.QualityInspectionDTO" resultMap="QualityInspectionHandleVoMap">
+        select qih.inspection_handler_id, qih.inspection_id,qih.score,qih.appeal_flag,qih.appeal_reason,qih.status
+        from quality_inspection_handle qih where qih.inspection_handler_id=#{inspectionHandlerId}
+    </select>
+    <!--    根据质检编号查出最新质检信息: 质检号和业务类型必须传-->
+    <select id="getQualityHandleItemInfo" resultType="com.paic.ehis.cs.domain.dto.QualityInspectionDTO" resultMap="qualityInspectionItemVoMap">
+        select
+            qii.inspection_handler_id,
+            qii.inspection_id,
+            IFNULL(cd.parent_code,'') as class_type,
+            case when cd.parent_code is null or cd.parent_code='' then '' else (select pcd.code_name from code_dict pcd where pcd.code_type=cd.parent_code_type and pcd.code=cd.parent_code) end as class_name,
+            cd.code as item_type,code_name as item_name,
+            IFNULL(qii.value,'02') as item_value,
+            qii.item_remark as item_remark
+        from code_dict cd left join quality_inspection_item qii on cd.code=qii.item_key and qii.inspection_id=#{inspectionId} and qii.status='Y'
+        where cd.code_type=#{codeType}
+    </select>
+    <!--    新增一条质检处理信息-->
+    <insert id="insertHandleInfo" parameterType="com.paic.ehis.cs.domain.dto.QualityInspectionDTO">
+        insert into quality_inspection_handle
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="inspectionHandlerId != null">inspection_handler_id,</if>
+            <if test="inspectionId != null">inspection_id,</if>
+            <if test="workOrderNo != null and workOrderNo != ''">work_order_no,</if>
+            <if test="score != null">score,</if>
+            <if test="appealFlag != null">appeal_flag,</if>
+            <if test="appealReason != null">appeal_reason,</if>
+            <if test="status != null">status,</if>
+            <if test="createdBy != null and createdBy != ''">created_by,</if>
+            <if test="createdTime != null">created_time,</if>
+            <if test="updatedBy != null and updatedBy != ''">updated_by,</if>
+            <if test="updatedTime != null">updated_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="inspectionHandlerId != null">#{inspectionHandlerId},</if>
+            <if test="inspectionId != null">#{inspectionId},</if>
+            <if test="workOrderNo != null and workOrderNo != ''">#{workOrderNo},</if>
+            <if test="score != null">#{score},</if>
+            <if test="appealFlag != null">#{appealFlag},</if>
+            <if test="appealReason != null">#{appealReason},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createdBy != null and createdBy != ''">#{createdBy},</if>
+            <if test="createdTime != null">#{createdTime},</if>
+            <if test="updatedBy != null and updatedBy != ''">#{updatedBy},</if>
+            <if test="updatedTime != null">#{updatedTime},</if>
+        </trim>
+
+    </insert>
+
+    <!--    根据质检处理编号更新质检处理信息-->
+    <update id="updateHandleInfoById" parameterType="com.paic.ehis.cs.domain.dto.QualityInspectionDTO">
+        update quality_inspection_handle
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="inspectionId != null and inspectionId != ''">inspection_id = #{inspectionId},</if>
+            <if test="workOrderNo != null and workOrderNo != ''">work_order_no = #{workOrderNo},</if>
+            <if test="score != null">score = #{score},</if>
+            <if test="appealFlag != null">appeal_flag = #{appealFlag},</if>
+            <if test="appealReason != null">appeal_reason = #{appealReason},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createdBy != null and createdBy != ''">created_by = #{createdBy},</if>
+            <if test="createdTime != null">created_time = #{createdTime},</if>
+            <if test="updatedBy != null and updatedBy != ''">updated_by = #{updatedBy},</if>
+            <if test="updatedTime != null">updated_time = #{updatedTime},</if>
+        </trim>
+        where inspection_handler_id = #{inspectionHandlerId}
+    </update>
+
+
 </mapper>

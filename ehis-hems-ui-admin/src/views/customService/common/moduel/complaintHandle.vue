@@ -239,7 +239,7 @@
             homePhone1: []
           },
           callPerson: {},
-          complainantPerson: {},
+          complaintPerson: {},
           insurer: {},
         },
         form:{

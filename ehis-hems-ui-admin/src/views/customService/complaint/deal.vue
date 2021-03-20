@@ -277,14 +277,14 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="投诉人姓名：" prop="phone">
-              <el-input v-model="workPoolData.complainantPerson.name" class="item-width" size="mini" />
+              <el-input v-model="workPoolData.complaintPerson.name" class="item-width" size="mini" />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="8">
             <el-form-item label="投诉人性别：" prop="phone">
-              <el-select v-model="workPoolData.complainantPerson.sex" class="item-width" placeholder="">
+              <el-select v-model="workPoolData.complaintPerson.sex" class="item-width" placeholder="">
                 <el-option v-for="item in cs_sex" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
@@ -292,7 +292,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="投诉人身份：" prop="phone">
-              <el-select v-model="workPoolData.complainantPerson.identity" class="item-width" placeholder="">
+              <el-select v-model="workPoolData.complaintPerson.identity" class="item-width" placeholder="">
                 <el-option v-for="item in cs_identity" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
@@ -847,7 +847,7 @@ export default {
           homePhone1: []
         },
         callPerson: {},
-        complainantPerson: {},
+        complaintPerson: {},
         insurer: {},
       },
       //HCS服务预约预修改记录

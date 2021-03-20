@@ -73,7 +73,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
     </insert>
 
-    <update id="updateQualityInspectionItem" parameterType="QualityInspectionItem">
+    <update id="updateQualityInspectionItem" parameterType="com.paic.ehis.cs.domain.QualityInspectionItem">
         update quality_inspection_item
         <trim prefix="SET" suffixOverrides=",">
             <if test="inspectionId != null and inspectionId != ''">inspection_id = #{inspectionId},</if>
@@ -152,19 +152,40 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where inspection_id = #{inspectionId}
     </select>
     <select id="selectHandleInspectionId" resultMap="QualityInspectionItemResult" >
-        select inspection_id from quality_inspection_handle where work_order_id = #{workOrderNo}
+        select inspection_id from quality_inspection_handle where work_order_no = #{workOrderNo}
     </select>
 
     <update id="updateQualityVO">
         update quality_inspection_handle set
         inspection_id=#{inspectionId},score=#{score},appeal_flag=#{appealFlag},appeal_reason=#{appealReason},status=#{status}
         ,updated_by=#{updatedBy},updated_time=#{updatedTime}
-         where work_order_id = #{workOrderNo}
+         where work_order_no = #{workOrderNo}
     </update>
     <insert id="insertQualityVO">
         insert into quality_inspection_handle
-        (inspection_id,work_order_id,score,appeal_flag,appeal_reason,status,created_by,created_time,updated_by,updated_time)
+        (inspection_id,work_order_no,score,appeal_flag,appeal_reason,status,created_by,created_time,updated_by,updated_time)
         values
         (#{inspectionId},#{workOrderNo},#{score},#{appealFlag},#{appealReason},#{status},#{createdBy},#{createdTime},#{updatedBy},#{updatedTime})
+    </insert>
+
+    <update id="updateQualityInspectionItemById" parameterType="com.paic.ehis.cs.domain.dto.QualityInspectionDTO">
+        update quality_inspection_item
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="inspectionHandlerId != null and inspectionHandlerId != ''">inspection_handler_id = #{inspectionHandlerId},</if>
+            <if test="status != null">status = #{itemStatus},</if>
+            <if test="createdTime != null">created_time = #{createdTime},</if>
+            <if test="updatedBy != null and updatedBy != ''">updated_by = #{updatedBy},</if>
+            <if test="updatedTime != null">updated_time = #{updatedTime},</if>
+        </trim>
+        where inspection_id = #{inspectionId}
+    </update>
+<!--    批量新增质检项目信息-->
+    <insert id="insertHandleItemInfoBatch" parameterType="com.paic.ehis.cs.domain.dto.QualityInspectionDTO">
+        INSERT INTO quality_inspection_item
+        (inspection_handler_id, inspection_id, item_type, item_key, value, item_remark, status, created_by, created_time, updated_by, updated_time)
+        VALUES
+        <foreach item="item" index="index" collection="items" separator=",">
+            (#{inspectionHandlerId},#{inspectionId},#{item.classType},#{item.itemType},#{item.itemValue},#{item.itemRemark},'Y',#{createdBy},#{createdTime},#{updatedBy},#{updatedTime})
+        </foreach>
     </insert>
 </mapper>

@@ -23,6 +23,8 @@ public class AcceptVo extends BaseEntity
     @Excel(name = "工单号")
     private String workOrderNo;
     private String workOrderNos;
+    /** 质检编号 */
+    private String inspectionId;
     private String workOrderId;
     /** 业务类型 */
     private String businessType;

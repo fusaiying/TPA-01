@@ -1,11 +1,11 @@
 package com.paic.ehis.cs.mapper;
 
-import java.util.List;
-
-import com.paic.ehis.cs.domain.QualityInspectionAccept;
 import com.paic.ehis.cs.domain.QualityInspectionItem;
 import com.paic.ehis.cs.domain.dto.QualityInspectionDTO;
+import com.paic.ehis.cs.domain.vo.QualityInspectionItemVo;
 import com.paic.ehis.cs.domain.vo.QualityVo;
+
+import java.util.List;
 
 /**
  * 质检项目 Mapper接口
@@ -48,7 +48,7 @@ public interface QualityInspectionItemMapper
 
     /**
      * 批量新增  质检处理信息
-     * @param qualityInspectionItemList
+     * @param itemList
      * @return
      */
     public int insertExtDocList(List<QualityInspectionItem> itemList);
@@ -91,4 +91,9 @@ public interface QualityInspectionItemMapper
     int updateInspectionAccept(QualityVo qualityVo);
 
    QualityInspectionItem selectHandleInspectionId(QualityVo qualityVo);
+
+    public int updateQualityInspectionItemById(QualityInspectionDTO qualityInspectionDTO);
+
+//    public int insertHandleItemInfoBatch(List<QualityInspectionItemVo> qualityInspectionItemVo);
+    public int insertHandleItemInfoBatch(QualityInspectionDTO qualityInspectionDTO);
 }

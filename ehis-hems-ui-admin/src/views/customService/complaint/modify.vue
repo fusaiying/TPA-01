@@ -85,21 +85,21 @@
         </el-row>
         <el-row >
           <el-col :span="8">
-            <el-form-item label="投诉人姓名：" prop="complainantPerson.name">
-              <el-input v-model="workPoolData.complainantPerson.name" class="item-width"  size="mini"/>
+            <el-form-item label="投诉人姓名：" prop="complaintPerson.name">
+              <el-input v-model="workPoolData.complaintPerson.name" class="item-width"  size="mini"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="投诉人性别：" prop="complainantPerson.sex">
-              <el-select v-model="workPoolData.complainantPerson.sex" class="item-width"  >
+            <el-form-item label="投诉人性别：" prop="complaintPerson.sex">
+              <el-select v-model="workPoolData.complaintPerson.sex" class="item-width"  >
                 <el-option v-for="item in cs_sex" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="投诉人身份：" prop="complainantPerson.identity">
-              <el-select v-model="workPoolData.complainantPerson.identity" class="item-width"  >
+            <el-form-item label="投诉人身份：" prop="complaintPerson.identity">
+              <el-select v-model="workPoolData.complaintPerson.identity" class="item-width"  >
                 <el-option v-for="item in cs_identity" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
@@ -490,7 +490,7 @@
           complaintTime:"",
           organCode:"",//出单机构
 
-          complainantPerson:{
+          complaintPerson:{
             name:"",
             sex:"",
             identity:"",
@@ -512,10 +512,10 @@
         totalCount: 0,
         // 表单校验
         rules: {
-          'complainantPerson.name': [
+          'complaintPerson.name': [
             {required: true, message: "投诉人姓名不能为空", trigger: "blur"}
           ],
-        'complainantPerson.sex': [
+        'complaintPerson.sex': [
             {required: true, message: "投诉人性别不能为空", trigger: "blur"}
           ],
           content: [

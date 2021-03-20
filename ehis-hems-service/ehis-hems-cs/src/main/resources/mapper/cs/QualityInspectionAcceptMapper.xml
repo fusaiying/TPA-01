@@ -6,6 +6,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <!-- 工作池返回对象 -->
     <resultMap type="com.paic.ehis.cs.domain.vo.AcceptVo" id="AcceptResult">
         <result property="workOrderNo" column="work_order_no"/>
+        <result property="inspectionId" column="inspection_id"/>
         <result property="workOrderNos" column="work_order_nos"/>
         <result property="businessType" column="business_type"/>
         <result property="serviceItem" column="item_code"/>
@@ -43,8 +44,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <!--可质检工单查询-->
     <sql id="selectAcceptVo">
         select woa.work_order_no,woa.business_type,adi.item_code,concat(woa.business_type,'-', adi.item_code) as business_service,adi.channel_code,
-            woa.policy_no,woa.policy_item_no,woa.end_date,qia.status,woa.organ_code,woa.accept_by,woa.accept_time,woa.modify_by,woa.modify_time,woa.update_by,woa.update_time
+               woa.policy_no,woa.policy_item_no,woa.end_date,qia.inspection_id,qia.status,woa.organ_code,woa.accept_by,woa.accept_time,woa.modify_by,woa.modify_time,woa.update_by,woa.update_time
         from quality_inspection_accept qia
+            left join (
+                select distinct qih.inspection_handler_id,qih.inspection_id,qih.status
+                from quality_inspection_item qii,quality_inspection_handle qih
+                where qii.inspection_handler_id=qih.inspection_handler_id and qii.status='Y') qihh on qia.inspection_id=qihh.inspection_id
             left join  work_order_accept woa on qia.work_order_no=woa.work_order_no
             left join accept_detail_info adi on woa.work_order_no = adi.work_order_no
     </sql>
@@ -135,42 +140,41 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updatedBy" column="updated_by"/>
         <result property="updatedTime" column="updated_time"/>
         <result property="result" column="result"/>
+        <result property="inspectionId" column="inspection_id"/>
+        <result property="businessType" column="business_type"/>
+        <result property="policyNo" column="policy_no"/>
+        <result property="policyItemNo" column="policy_item_no"/>
     </resultMap>
     <select id="selectQualityVo" parameterType="com.paic.ehis.cs.domain.dto.QualityDTO" resultMap="QualityResult">
     SELECT DISTINCT
+        qia.inspection_id,
         qia.work_order_no,
+        woa.business_type,
+        woa.policy_no,
+        woa.policy_item_no,
         qia.updated_by,
         qia.updated_time,
         qia.result,
         woa.organ_code,
         woa.end_date,
-        adi.item_code,
-        qii.item_type
-    FROM
-        quality_inspection_accept qia,
-        work_order_accept woa,
-        accept_detail_info adi,
-        quality_inspection_item qii,
-        quality_inspection_handle qih
-    WHERE
-        qia.work_order_no = qih.work_order_id
-        AND qih.inspection_id = qii.inspection_id
-        AND qia.work_order_no = woa.work_order_no
-        AND qia.work_order_no = adi.work_order_no
-	<where>
-        <if test="endDate != null and endDate != ''"> and woa.end_date = #{endDate}</if>
-        <if test="updatedTime != null and updatedTime != ''"> and qia.updated_time = #{updatedTime}</if>
-        <if test="organCode != null and organCode != ''"> and woa.organ_code = #{organCode}</if>
-        <if test="updatedBy != null and updatedBy != ''"> and qia.updated_by = #{updatedBy}</if>
-        <if test="itemCode != null and itemCode != ''"> and adi.item_code = #{itemCode}</if>
-        <if test="status != null and status != ''"> and qia.status = #{status}</if>
-        <if test="result != null and result != ''"> and qia.result = #{result}</if>
-    </where>
+        adi.item_code
+        FROM
+            quality_inspection_accept qia left join work_order_accept woa on qia.work_order_no=woa.work_order_no
+            left join accept_detail_info adi on woa.work_order_no=adi.work_order_no
+        <where>
+            <if test="endDate != null and endDate != ''"> and woa.end_date = #{endDate}</if>
+            <if test="updatedTime != null and updatedTime != ''"> and qia.updated_time = #{updatedTime}</if>
+            <if test="organCode != null and organCode != ''"> and woa.organ_code = #{organCode}</if>
+            <if test="updatedBy != null and updatedBy != ''"> and qia.updated_by = #{updatedBy}</if>
+            <if test="itemCode != null and itemCode != ''"> and adi.item_code = #{itemCode}</if>
+            <if test="status != null and status != ''"> and qia.status = #{status}</if>
+            <if test="result != null and result != ''"> and qia.result = #{result}</if>
+        </where>
     </select>
 
     <select id="selectAcceptByVo" parameterType="com.paic.ehis.cs.domain.dto.WorkOrderQueryDTO" resultMap="AcceptResult">
         <include refid="selectAcceptVo"/>
-        where 1=1
+        where 1=1 and (qihh.status is null or qihh.status not in ('01','03'))
 
         <if test="endCaseStartTime != null ">
             and DATE_FORMAT(woa.end_date,'%Y-%m-%d') <![CDATA[>=]]> #{endCaseStartTime}
@@ -205,22 +209,27 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where 1=1
         <if test="workOrderNo !=null and workOrderNo!=''">and adi.work_order_no = #{workOrderNo}</if>
     </select>
-    <select id="selectQualityFlagVO" resultType="com.paic.ehis.cs.domain.vo.QualityFlagVO">
+<!--    质检确认查询-->
+    <select id="selectQualityFlagVO" parameterType="com.paic.ehis.cs.domain.dto.QualityInspectionDTO" resultType="com.paic.ehis.cs.domain.vo.QualityInspectionHandleVo">
         select
-        c.work_order_no workOrderNo,
-        b.item_code itemCode,
-        a.modify_by modifyBy,
-        c.updated_by updatedBy,
-        a.business_type businessType
-        from quality_inspection_accept c
-        left join accept_detail_info b on c.work_order_no = b.work_order_no
-        left join work_order_accept a on a.work_order_no = c.work_order_no
-        <where>
+            c.inspection_id as inspectionId,
+            c.work_order_no as workOrderNo,
+            b.item_code as itemCode,
+            a.update_by as modifyBy,
+            c.updated_by as updatedBy,
+            a.business_type as businessType,
+            d.inspection_handler_id as inspectionHandlerId
+            from quality_inspection_accept c
+            left join (select distinct qih.inspection_handler_id,qih.inspection_id,qih.status from quality_inspection_item qii,quality_inspection_handle qih
+            where qii.inspection_handler_id=qih.inspection_handler_id and qii.status='Y') d on c.inspection_id=d.inspection_id
+            left join accept_detail_info b on c.work_order_no = b.work_order_no
+            left join work_order_accept a on a.work_order_no = c.work_order_no
+        where 1=1 and c.status = '02' and d.status ='01' and a.update_by=#{updatedBy}
             <if test="firstEndCaseStartTime != null and firstEndCaseStartTime != ''">
-                and end_date <![CDATA[>=]]> #{firstEndCaseStartTime}
+                and a.end_date <![CDATA[>=]]> #{firstEndCaseStartTime}
             </if>
             <if test="firstEndCaseEndTime != null and firstEndCaseEndTime != ''">
-                and end_date <![CDATA[<=]]> #{firstEndCaseEndTime}
+                and a.end_date <![CDATA[<=]]> #{firstEndCaseEndTime}
             </if>
             <if test="workOrderNo != null and workOrderNo != ''">
                 and c.work_order_no = #{workOrderNo}
@@ -228,8 +237,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="serviceItemCode != null and serviceItemCode != ''">
                 and b.item_code = #{serviceItemCode}
             </if>
-                and c.status = '02'
-        </where>
+
     </select>
     <!--    批量发起质检数据-->
     <insert id="insertAcceptBatch" parameterType="java.util.List">
@@ -254,14 +262,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         SET
         status = #{acceptStatus},
         updated_by = #{updateBy},
+        <if test="result != null and result != ''"> result = #{result},</if>
         updated_time = #{updateTime}
-        WHERE status='01' and
-        work_order_no IN (
-        <foreach collection="workOrderNoList" item="workOrderNo"
-                 separator=",">
-            #{workOrderNo}
-        </foreach>
-        )
+        WHERE status=#{status}
+        <if test="inspectionId != null and inspectionId != ''"> and inspection_id = #{inspectionId}</if>
+        <if test="workOrderNoList != null">
+            and work_order_no IN (
+            <foreach collection="workOrderNoList" item="workOrderNo"
+                     separator=",">
+                #{workOrderNo}
+            </foreach>
+            )
+        </if>
     </update>
 
     <select id="getWorkOrderCountByUserId" parameterType="com.paic.ehis.cs.domain.dto.WorkOrderQueryDTO" resultMap="AcceptResult">

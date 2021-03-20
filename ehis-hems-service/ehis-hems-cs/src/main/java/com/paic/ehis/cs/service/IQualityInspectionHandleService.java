@@ -6,10 +6,14 @@ import com.paic.ehis.common.core.web.domain.AjaxResult;
 import com.paic.ehis.cs.domain.QualityInspectionHandle;
 import com.paic.ehis.cs.domain.dto.HandleDTO;
 import com.paic.ehis.cs.domain.dto.HandleProcessInfoDTO;
+import com.paic.ehis.cs.domain.dto.QualityInspectionDTO;
 import com.paic.ehis.cs.domain.dto.WorkOrderQueryDTO;
 import com.paic.ehis.cs.domain.vo.AcceptVo;
 import com.paic.ehis.cs.domain.vo.HandleProcessInfoVO;
+import com.paic.ehis.cs.domain.vo.QualityInspectionHandleVo;
 import com.paic.ehis.cs.domain.vo.QualityVo;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 /**
  * 质检处理 Service接口
@@ -96,4 +100,10 @@ public interface IQualityInspectionHandleService
     int insertHandleInfo(HandleDTO handleDTO);
 
     String selectHandleStatus(QualityVo qualityVo);
+
+
+    public QualityInspectionHandleVo getQualityHandleInfo(QualityInspectionDTO qualityInspectionDTO);
+
+
+    public int insertHandleInfo(QualityInspectionDTO qualityInspectionDTO);
 }

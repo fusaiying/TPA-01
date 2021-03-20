@@ -19,7 +19,9 @@ public class QualityInspectionItem extends BaseEntity
     private static final long serialVersionUID = 1L;
 
     /** 流水编号 */
-    private String itemId;
+    private Long itemId;
+
+    private String inspectionHandlerId;
 
     /** 质检编号 */
     @Excel(name = "质检编号")

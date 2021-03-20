@@ -7,10 +7,9 @@ import com.paic.ehis.common.core.utils.StringUtils;
 import com.paic.ehis.cs.domain.*;
 import com.paic.ehis.cs.domain.dto.QualityDTO;
 import com.paic.ehis.cs.domain.dto.QualityFlagDTO;
+import com.paic.ehis.cs.domain.dto.QualityInspectionDTO;
 import com.paic.ehis.cs.domain.dto.WorkOrderQueryDTO;
-import com.paic.ehis.cs.domain.vo.AcceptVo;
-import com.paic.ehis.cs.domain.vo.QualityAcceptVo;
-import com.paic.ehis.cs.domain.vo.QualityFlagVO;
+import com.paic.ehis.cs.domain.vo.*;
 import com.paic.ehis.cs.mapper.*;
 import com.paic.ehis.cs.service.IQualityInspectionAcceptService;
 import com.paic.ehis.cs.utils.CodeEnum;
@@ -190,8 +189,9 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
         WorkOrderQueryDTO workOrderQueryDTO=new WorkOrderQueryDTO();
         List<String> idList= Arrays.asList(ids);
         workOrderQueryDTO.setAcceptStatus(param.get("status"));
+        workOrderQueryDTO.setStatus(CodeEnum.INSPECTION_STATE_01.getCode());
         workOrderQueryDTO.setWorkOrderNoList(idList);
-        workOrderQueryDTO.setUpdateBy(String.valueOf(SecurityUtils.getUsername()));
+        workOrderQueryDTO.setUpdateBy(SecurityUtils.getUsername());
         workOrderQueryDTO.setUpdateTime(DateUtils.getNowDate());
 
         List<FlowLog> flowLogList=new ArrayList<>();
@@ -242,17 +242,53 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
             //投诉人
             PersonInfo complaintPerson=personInfoMapper.selectPersonInfoById(acceptVo.getComplaintPersonId());
             if(complaintPerson!=null) {
+                if(StringUtils.isNotEmpty(complaintPerson.getHomePhone())){
+                    String[] homePhone1=complaintPerson.getHomePhone().split("-");
+                    complaintPerson.setHomePhone1(homePhone1);
+                }
+                if(StringUtils.isNotEmpty(complaintPerson.getWorkPhone())){
+                    String[] workPhone1=complaintPerson.getWorkPhone().split("-");
+                    complaintPerson.setWorkPhone1(workPhone1);
+                }
+                if(StringUtils.isNotEmpty(complaintPerson.getLinePhone())){
+                    String[] linePhone1=complaintPerson.getLinePhone().split("-");
+                    complaintPerson.setLinePhone1(linePhone1);
+                }
                 acceptVo.setComplaintPerson(complaintPerson);
             }
         }
         //来电人
         PersonInfo callPerson=personInfoMapper.selectPersonInfoById(acceptVo.getCallPersonId());
         if(callPerson!=null) {
+            if(StringUtils.isNotEmpty(callPerson.getHomePhone())){
+                String[] homePhone1=callPerson.getHomePhone().split("-");
+                callPerson.setHomePhone1(homePhone1);
+            }
+            if(StringUtils.isNotEmpty(callPerson.getWorkPhone())){
+                String[] workPhone1=callPerson.getWorkPhone().split("-");
+                callPerson.setWorkPhone1(workPhone1);
+            }
+            if(StringUtils.isNotEmpty(callPerson.getLinePhone())){
+                String[] linePhone1=callPerson.getLinePhone().split("-");
+                callPerson.setLinePhone1(linePhone1);
+            }
             acceptVo.setCallPerson(callPerson);
         }
         //联系人
         PersonInfo contactsPerson=personInfoMapper.selectPersonInfoById(acceptVo.getContactsPersonId());
         if(contactsPerson!=null) {
+            if(StringUtils.isNotEmpty(contactsPerson.getHomePhone())){
+                String[] homePhone1=contactsPerson.getHomePhone().split("-");
+                contactsPerson.setHomePhone1(homePhone1);
+            }
+            if(StringUtils.isNotEmpty(contactsPerson.getWorkPhone())){
+                String[] workPhone1=contactsPerson.getWorkPhone().split("-");
+                contactsPerson.setWorkPhone1(workPhone1);
+            }
+            if(StringUtils.isNotEmpty(contactsPerson.getLinePhone())){
+                String[] linePhone1=contactsPerson.getLinePhone().split("-");
+                contactsPerson.setLinePhone1(linePhone1);
+            }
             acceptVo.setContactsPerson(contactsPerson);
         }
 
@@ -272,10 +308,9 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
     public List<QualityAcceptVo> selectQualityVo(QualityDTO qualityDTO) {
         return qualityInspectionAcceptMapper.selectQualityVo(qualityDTO);
     }
-
     @Override
-    public List<QualityFlagVO> selectQualityFlagVO(QualityFlagDTO qualityFlagDTO) {
-        return qualityInspectionAcceptMapper.selectQualityFlagVO(qualityFlagDTO);
+    public List<QualityInspectionHandleVo> selectQualityFlagVO(QualityInspectionDTO qualityInspectionDTO) {
+        return qualityInspectionAcceptMapper.selectQualityFlagVO(qualityInspectionDTO);
     }
 
     //信息需求失效批处理

@@ -20,12 +20,12 @@ public class QualityInspectionAccept extends BaseEntity
     private Long inspectionId ;
     /** 工单号 */
     private String workOrderNo ;
-    /** 质检结果;01-待质检;
+    /** 质检结果;01-合格;
+     02-不合格 */
+    private String result ;
+    /** 质检状态;01-待质检;
      02-质检中;
      03-质检完成; */
-    private String result ;
-    /** 质检状态;01-合格;
-     02-不合格 */
     private String status ;
     /** 创建人 */
     private String createdBy ;

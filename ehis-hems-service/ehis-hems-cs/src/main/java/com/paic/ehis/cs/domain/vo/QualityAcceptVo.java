@@ -9,6 +9,15 @@ public class QualityAcceptVo {
     @Excel(name = "工单号")
     private String workOrderNo;
 
+    /** 质检编号 */
+    private String inspectionId;
+
+    private String businessType;
+
+    private String policyNo;
+
+    private String policyItemNo;
+
     @Excel(name = "出单机构",readConverterExp = "0000001=上海分公司本部,00000011=上海分公司")
     private String organCode;
 

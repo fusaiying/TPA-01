@@ -4,11 +4,9 @@ package com.paic.ehis.cs.service;
 import com.paic.ehis.cs.domain.AttachmentInfo;
 import com.paic.ehis.cs.domain.dto.QualityDTO;
 import com.paic.ehis.cs.domain.dto.QualityFlagDTO;
+import com.paic.ehis.cs.domain.dto.QualityInspectionDTO;
 import com.paic.ehis.cs.domain.dto.WorkOrderQueryDTO;
-import com.paic.ehis.cs.domain.vo.AcceptVo;
-import com.paic.ehis.cs.domain.vo.QualityAcceptVo;
-import com.paic.ehis.cs.domain.vo.QualityFlagVO;
-import com.paic.ehis.cs.domain.vo.QualityVo;
+import com.paic.ehis.cs.domain.vo.*;
 
 import java.util.List;
 import java.util.Map;
@@ -83,8 +81,9 @@ public interface IQualityInspectionAcceptService
 //     * @return
 //     */
 //    public List<AttachmentInfo> getAttachmentList(WorkOrderQueryDTO workOrderQueryDTO);
-    List<QualityFlagVO> selectQualityFlagVO(QualityFlagDTO qualityFlagDTO);
 
     //批处理
     List<AcceptVo> batchAcceptVo(String invalidDateStar);
+    List<QualityInspectionHandleVo> selectQualityFlagVO(QualityInspectionDTO qualityInspectionDTO);
+
 }

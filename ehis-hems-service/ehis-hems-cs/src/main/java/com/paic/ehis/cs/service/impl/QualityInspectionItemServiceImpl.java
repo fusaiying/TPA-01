@@ -141,7 +141,7 @@ public class QualityInspectionItemServiceImpl implements IQualityInspectionItemS
                 qualityVo.getItemList().forEach( item ->{
                     item.setStatus("02");
                     item.setInspectionId(inspectionId);
-                    item.setItemId(PubFun.createMySqlMaxNoUseCache("item_id", 10, 10));
+//                    item.setItemId(PubFun.createMySqlMaxNoUseCache("item_id", 10, 10));
                     item.setCreatedBy(username);
                     item.setUpdatedBy(username);
                     item.setUpdatedTime(time);
@@ -215,7 +215,7 @@ public class QualityInspectionItemServiceImpl implements IQualityInspectionItemS
                 qualityVo.getItemList().forEach( item ->{
                     item.setStatus("02");
                     item.setInspectionId(inspectionId);
-                    item.setItemId(PubFun.createMySqlMaxNoUseCache("item_id", 10, 10));
+//                    item.setItemId(PubFun.createMySqlMaxNoUseCache("item_id", 10, 10));
                     item.setCreatedBy(username);
                     item.setUpdatedBy(username);
                     item.setUpdatedTime(time);
@@ -307,7 +307,7 @@ public class QualityInspectionItemServiceImpl implements IQualityInspectionItemS
             flowLogMapper.insertBatch(flowLogList);
 
             //随机生成主键流水编号
-            qualityInspectionItem.setItemId(PubFun.createMySqlMaxNoUseCache("item_id",32,20));
+//            qualityInspectionItem.setItemId(PubFun.createMySqlMaxNoUseCache("item_id",32,20));
             qualityInspectionItem.setStatus("02");
             qualityInspectionItem.setUpdatedBy(String.valueOf(SecurityUtils.getUsername()));
             qualityInspectionItem.setUpdatedTime(DateUtils.getNowDate());

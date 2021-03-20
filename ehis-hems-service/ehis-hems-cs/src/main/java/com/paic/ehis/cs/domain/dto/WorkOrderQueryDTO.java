@@ -73,8 +73,9 @@ public class WorkOrderQueryDTO extends BaseEntity
     private String priorityLevel;
     /** VIP */
     private String vipFlag;
-    /** 状态 */
+    /** 要更新状态 */
     private String acceptStatus;
+    /** 当前状态 */
     private String status;
     /** 结案开始日期 */
     @JsonFormat(pattern = "yyyy-MM-dd")
@@ -94,4 +95,22 @@ public class WorkOrderQueryDTO extends BaseEntity
     private List<String> workOrderNoList;
     /** 多个业务类型 */
     private List<String> businessTypeList;
+
+    /** 当前记录起始索引 */
+    private int pageNum;
+
+    /** 每页显示记录数 */
+    private int pageSize;
+
+    /** 排序列 */
+    private String orderByColumn;
+
+    /** 排序的方向 "desc" 或者 "asc" */
+    private String isAsc;
+
+    /** 质检编号 */
+    private String inspectionId;
+    /** 质检结果 */
+    private String result;
+
 }

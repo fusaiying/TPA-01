@@ -3,10 +3,9 @@ package com.paic.ehis.cs.mapper;
 import java.util.List;
 import com.paic.ehis.cs.domain.QualityInspectionHandle;
 import com.paic.ehis.cs.domain.dto.HandleProcessInfoDTO;
+import com.paic.ehis.cs.domain.dto.QualityInspectionDTO;
 import com.paic.ehis.cs.domain.dto.WorkOrderQueryDTO;
-import com.paic.ehis.cs.domain.vo.AcceptVo;
-import com.paic.ehis.cs.domain.vo.HandleProcessInfoVO;
-import com.paic.ehis.cs.domain.vo.QualityVo;
+import com.paic.ehis.cs.domain.vo.*;
 
 /**
  * 质检处理 Mapper接口
@@ -69,4 +68,11 @@ public interface QualityInspectionHandleMapper
     List<HandleProcessInfoVO> getHandleInfoList(HandleProcessInfoDTO handleProcessInfoDTO);
 
     String selectHandleStatus(QualityVo qualityVo);
+
+    public QualityInspectionHandleVo getQualityHandleInfoById(QualityInspectionDTO qualityInspectionDTO);
+
+    public List<QualityInspectionItemVo> getQualityHandleItemInfo(QualityInspectionDTO qualityInspectionDTO);
+
+    public int insertHandleInfo(QualityInspectionDTO qualityInspectionDTO);
+    public int updateHandleInfoById(QualityInspectionDTO qualityInspectionDTO);
 }

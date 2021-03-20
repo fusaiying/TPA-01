@@ -214,7 +214,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="申请人姓名：" prop="complainantPerson.name">
+            <el-form-item label="申请人姓名：" prop="complaintPerson.name">
               <el-input  v-model="workPoolData.complaintPerson.name" class="item-width"  size="mini" />
             </el-form-item>
           </el-col>
@@ -628,7 +628,7 @@
         flowLogCount: 0,
         //服务项目
         workPoolData: {
-          complainantPerson:{
+          complaintPerson:{
             name:"",
           },
           medicalInstitution:"",

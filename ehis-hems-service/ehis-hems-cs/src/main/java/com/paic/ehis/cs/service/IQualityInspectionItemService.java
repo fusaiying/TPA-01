@@ -63,7 +63,7 @@ public interface IQualityInspectionItemService
     public int deleteQualityInspectionItemById(String itemId);
     /**
      * 新增质检项目
-     * @param ids
+     * @param qualityVo
      * @return
      */
     int insertItem(QualityVo qualityVo);

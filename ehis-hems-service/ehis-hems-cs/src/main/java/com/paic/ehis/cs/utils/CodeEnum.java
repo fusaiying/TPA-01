@@ -35,9 +35,15 @@ public enum CodeEnum {
     /*
     *质检处理状态
      */
-    CONFIRM_STATE_01("cs_confirm_state","01","待质检"),
-    CONFIRM_STATE_02("cs_confirm_state","02","质检中"),
-    CONFIRM_STATE_03("cs_confirm_state","03","质检完成"),
+    CONFIRM_STATE_01("cs_confirm_state","01","待确认"),
+    CONFIRM_STATE_02("cs_confirm_state","02","已确认"),
+    CONFIRM_STATE_03("cs_confirm_state","03","结案"),
+    CONFIRM_STATE_04("cs_confirm_state","04","处理中"),
+
+    /** 质检结果 */
+    INSPECTION_RESULT_01("cs_inspection_result","01","合格"),
+    INSPECTION_RESULT_02("cs_inspection_result","02","不合格"),
+
     /**
      * 业务类型
      */

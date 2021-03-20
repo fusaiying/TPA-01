@@ -144,7 +144,7 @@ public class ComplaintAcceptVo extends BaseEntity {
     /** 联系人电话*/
     private String contactsMobilePhone;
     /**投诉人*/
-    private PersonInfo complainantPerson;
+    private PersonInfo complaintPerson;
     /*被保人*/
     private PersonInfo insurer;
     /** 原操作人*/

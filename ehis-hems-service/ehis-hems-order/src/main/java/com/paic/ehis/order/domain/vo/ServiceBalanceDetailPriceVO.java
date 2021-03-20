@@ -20,11 +20,15 @@ public class ServiceBalanceDetailPriceVO implements Serializable
 
     /** 供应商编码 */
     @Excel(name = "供应商名称")
-    private String supplierCode;
+    private String supplierName;
+
+    /** 结算时间区间 */
+    @Excel(name = "结算时间区间")
+    private String settlementTime;
 
     /** 供应商项目名称 */
     @Excel(name = "供应商项目名称")
-    private String serviceCode;
+    private String supplierServiceName;
 
     /** 服务费 */
     @Excel(name = "服务费")

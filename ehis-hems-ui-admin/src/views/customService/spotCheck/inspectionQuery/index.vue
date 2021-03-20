@@ -251,27 +251,25 @@ export default {
       })
     },
     //处理按钮
-    dealButton(s){
-      if(s.businessType=="01") {
+    dealButton(row){
+      if (row.businessType=='01'){//跳需求
         this.$router.push({
-          path: '/customService/collaborative/deal',
-          query: {
-            workOrderNo: s.workOrderNo,
-            policyNo: s.policyNo,
-            policyItemNo: s.policyItemNo,
-            status: s.status,
-            flag: 'show'
+          path: '/customService/orderDetails',
+          query:{
+            workOrderNo:row.workOrderNo,
+            policyNo:row.policyNo,
+            policyItemNo:row.policyItemNo,
+            status:row.status
           }
         })
-      }else {
+      }else if(row.businessType=='03'){//跳投诉
         this.$router.push({
-          path: '/customService/collaborative/complaint',
+          path: '/customService/complaint/orderDetails',
           query:{
-            workOrderNo:s.workOrderNo,
-            policyNo:s.policyNo,
-            policyItemNo:s.policyItemNo,
-            status:s.status,
-            flag: 'show'
+            workOrderNo:row.workOrderNo,
+            policyNo:row.policyNo,
+            policyItemNo:row.policyItemNo,
+            status:row.status
           }
         })
       }

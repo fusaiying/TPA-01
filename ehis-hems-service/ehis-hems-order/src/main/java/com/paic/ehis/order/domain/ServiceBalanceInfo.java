@@ -35,11 +35,11 @@ public class ServiceBalanceInfo extends BaseEntity
     private String serviceCode;
 
     /** 结算方式 */
-    @Excel(name = "结算方式")
+    @Excel(name = "结算方式",readConverterExp="01-按case,02-按人头,03-按一口价")
     private String settleType;
 
     /** 结算币种 */
-    @Excel(name = "结算币种")
+    @Excel(name = "结算币种",readConverterExp="01-加币,02-人民币,03-港币,04-美元,05-日元,06-欧元,07-英镑,08-澳元,09-新币")
     private String settleCurrency;
 
     /** 结算止期 */
@@ -48,7 +48,7 @@ public class ServiceBalanceInfo extends BaseEntity
     private Date endDate;
 
     /** 发票类型 */
-    @Excel(name = "发票类型")
+    @Excel(name = "发票类型",readConverterExp="01-有票,02-无票")
     private String balanceInvoiceType;
 
     /** 服务费总金额 */
@@ -56,49 +56,49 @@ public class ServiceBalanceInfo extends BaseEntity
     private BigDecimal serviceAmount;
 
     /** 状态 */
-    @Excel(name = "状态")
+    @Excel(name = "状态",readConverterExp="Y-有效,N-无效")
     private String status;
 
     /** 是否导入 */
-    @Excel(name = "是否导入")
+    //@Excel(name = "是否导入")
     private String isImport;
 
     /** 业务状态 */
-    @Excel(name = "业务状态")
+    //@Excel(name = "业务状态")
     private String bussinessStatus;
 
     /** 核销日期 */
     @JsonFormat(pattern = "yyyy-MM-dd")
-    @Excel(name = "核销日期", width = 30, dateFormat = "yyyy-MM-dd")
+    //@Excel(name = "核销日期", width = 30, dateFormat = "yyyy-MM-dd")
     private Date balanceDate;
 
     /** 日志id */
-    @Excel(name = "日志id")
+    //@Excel(name = "日志id")
     private Long logId;
 
     /** 发票状态 */
-    @Excel(name = "发票状态")
+    //@Excel(name = "发票状态")
     private String invoiceStatus;
 
     /** 地区代码 */
-    @Excel(name = "地区代码")
+    //@Excel(name = "地区代码")
     private String areaCode;
 
     /** 公司段 */
-    @Excel(name = "公司段")
+    //@Excel(name = "公司段")
     private String manageCom;
 
     /** 支付流水号 */
-    @Excel(name = "支付流水号")
+    //@Excel(name = "支付流水号")
     private String payNo;
 
     /** 支付时间 */
     @JsonFormat(pattern = "yyyy-MM-dd")
-    @Excel(name = "支付时间", width = 30, dateFormat = "yyyy-MM-dd")
+    //@Excel(name = "支付时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date payDate;
 
     /** 支付金额 */
-    @Excel(name = "支付金额")
+    //@Excel(name = "支付金额")
     private BigDecimal payAmount;
 
     public void setSerialNo(Long serialNo)

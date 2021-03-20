@@ -35,7 +35,7 @@ public class ServiceBalanceInfoController extends BaseController
     public TableDataInfo list(@RequestBody ServiceBalanceInfo serviceBalanceInfo)
     {
         startPage(serviceBalanceInfo);
-        List<ServiceBalanceInfo> list = serviceBalanceInfoService.selectServiceBalanceInfoList2(serviceBalanceInfo);
+        List<ServiceBalanceInfo> list = serviceBalanceInfoService.selectServiceBalanceInfoList(serviceBalanceInfo);
         return getDataTable(list);
     }
 
@@ -46,7 +46,7 @@ public class ServiceBalanceInfoController extends BaseController
     @PostMapping("/export")
     public void export(HttpServletResponse response, ServiceBalanceInfo serviceBalanceInfo) throws IOException
     {
-        List<ServiceBalanceInfo> list = serviceBalanceInfoService.selectServiceBalanceInfoList(serviceBalanceInfo);
+        List<ServiceBalanceInfo> list = serviceBalanceInfoService.selectServiceBalanceInfoList2(serviceBalanceInfo);
         ExcelUtil<ServiceBalanceInfo> util = new ExcelUtil<ServiceBalanceInfo>(ServiceBalanceInfo.class);
         util.exportExcel(response, list, "balance");
     }

@@ -68,5 +68,7 @@ public interface QualityInspectionAcceptMapper {
 
     public AcceptDetailInfo getAcceptDetailInfo(WorkOrderQueryDTO workOrderQueryDTO);
 
+    /**将操作人分组查询所有工单*/
     public List<AcceptVo> getWorkOrderCountByUserId(WorkOrderQueryDTO workOrderQueryDTO);
+
 }

@@ -283,10 +283,10 @@
 
     <!--计算账单总金额-->
     <select id="selectBillAmount" resultType="String">
-        select sum(claim_case_bill.bill_amount)
-        FROM claim_case_bill
+        select sum(claim_case_cal.pay_amount)
+        FROM claim_case_cal
         where rpt_no = #{rptNo}
-          AND claim_case_bill.status = "Y"
+          AND claim_case_cal.status = "Y"
     </select>
 
     <!--删除按钮修改状态为无效-->

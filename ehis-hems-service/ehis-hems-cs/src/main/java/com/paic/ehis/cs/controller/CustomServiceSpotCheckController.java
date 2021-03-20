@@ -14,8 +14,6 @@ import com.paic.ehis.cs.domain.dto.*;
 import com.paic.ehis.cs.domain.vo.*;
 import com.paic.ehis.cs.service.*;
 import com.paic.ehis.cs.utils.CodeEnum;
-import org.apache.xmlbeans.impl.xb.xsdschema.Public;
-import org.omg.CORBA.PUBLIC_MEMBER;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -369,4 +367,16 @@ public class CustomServiceSpotCheckController extends BaseController {
     public AjaxResult insertHandleInfo(HandleDTO handleDTO) {
         return AjaxResult.success(qualityInspectionHandleService.insertHandleInfo(handleDTO));
     }
+
+    //信息需求失效批处理
+    @GetMapping("/internal/batchAcceptVo/invalidDate")
+    public AjaxResult batchAcceptVo(@PathVariable("invalidDate") String invalidDate){
+        try{
+            qualityInspectionAcceptService.batchAcceptVo(invalidDate);
+        }catch(RuntimeException e){
+            return AjaxResult.error(e.getMessage());
+        }
+        return AjaxResult.success("执行成功");
+    }
+
 }

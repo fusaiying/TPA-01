@@ -139,13 +139,16 @@ public class FinanceTpaSettleTaskServiceImpl implements IFinanceTpaSettleTaskSer
         financeSettleRecord.setUpdateBy(SecurityUtils.getUsername());
         financeSettleRecord.setUpdateTime(DateUtils.getNowDate());
 
+        FinanceTpaSettleDetail tpaSettleDetail = new FinanceTpaSettleDetail();
         //根据传回条件，查询对应险种下的关联保单信息
         policyAndRiskRelation.setCompanyCode(tpaSettleDTO.getCompanyCode());
         String taskNo = "SF" + PubFun.createMySqlMaxNoUseCache("tpa_service_settlement", 10, 10);
 
         if (StringUtils.isEmpty(tpaSettleDTO.getRiskCode())){
-//            financeTpaSettleDetail.setRiskCode(tpaSettleDTO.getRiskCode());
-            List<FinanceTpaSettleDetail> financeTpaSettleDetails = financeTpaSettleDetailMapper.selectFinanceTpaSettleDetailList(financeTpaSettleDetail);
+
+            tpaSettleDetail.setCompanyCode(tpaSettleDTO.getCompanyCode());
+            tpaSettleDetail.setStatus(ClaimStatus.DATAYES.getCode());
+            List<FinanceTpaSettleDetail> financeTpaSettleDetails = financeTpaSettleDetailMapper.selectFinanceTpaSettleDetailList(tpaSettleDetail);
             //设值 结算表的结算起期
             if (StringUtils.isNotEmpty(financeTpaSettleDetails)){
                 FinanceTpaSettleTask tpaSettleTask = new FinanceTpaSettleTask();
@@ -206,7 +209,8 @@ public class FinanceTpaSettleTaskServiceImpl implements IFinanceTpaSettleTaskSer
             financeSettleRecord.setSettleTaskNo(taskNo);
             financeSettleRecordMapper.insertFinanceSettleRecord(financeSettleRecord);
         }else {
-            financeTpaSettleDetail.setRiskCode(tpaSettleDTO.getRiskCode());
+            tpaSettleDetail.setCompanyCode(tpaSettleDTO.getCompanyCode());
+            tpaSettleDetail.setRiskCode(tpaSettleDTO.getRiskCode());
             List<FinanceTpaSettleDetail> financeTpaSettleDetails = financeTpaSettleDetailMapper.selectFinanceTpaSettleDetailList(financeTpaSettleDetail);
             //设值 结算表的结算起期
             if (StringUtils.isNotEmpty(financeTpaSettleDetails)){

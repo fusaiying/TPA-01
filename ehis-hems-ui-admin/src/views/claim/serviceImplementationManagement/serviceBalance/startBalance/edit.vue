@@ -383,7 +383,7 @@ export default {
         settleType: this.balanceInfo.settleType,
         status: "Y"
       };
-      this.download('order/balanceDetail/export', params, "balance_" + this.balanceInfo.taskNo + '_' + new Date().getTime() + '.xlsx');
+      this.download('order/balance/export', params, "balance_" + this.balanceInfo.taskNo + '_' + new Date().getTime() + '.xlsx');
     }
   }
 };

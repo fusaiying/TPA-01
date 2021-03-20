@@ -354,7 +354,7 @@
                         :closingFrom="closingFrom"></closing-info>
         </div>
         <!--附件信息-->
-        <!--        <div class="app-container">
+<!--                <div >
                   <annex-info :disabledFlag="disabledFlag" :suppliercode="providerCode" @upload="changeAnnexFlag"></annex-info>
                 </div>-->
 
@@ -877,7 +877,7 @@ export default {
         outpatientearly: [],
         sendType: [],
         sendWay: ['02'],
-        interlocking: '02',
+        interLocking: '02',
         workstarttime: '00:00',
         workendtime: '00:00',
         saturdaystarttime: '00:00',

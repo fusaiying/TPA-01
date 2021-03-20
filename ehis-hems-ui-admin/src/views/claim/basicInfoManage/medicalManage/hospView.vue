@@ -493,7 +493,7 @@ export default {
         outpatientearly: [],
         sendType: [],
         sendWay: ['02'],
-        interlocking: '02',
+        interLocking: '02',
         workstarttime: '00:00',
         workendtime: '00:00',
         saturdaystarttime: '00:00',

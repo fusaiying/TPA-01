@@ -138,8 +138,8 @@
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="是否连锁机构(结算)：" prop="interlocking">
-            <el-select v-model="reserveInfoForm.interlocking" class="item-width" placeholder="请选择是/否" clearable>
+          <el-form-item label="是否连锁机构(结算)：" prop="interLocking">
+            <el-select v-model="reserveInfoForm.interLocking" class="item-width" placeholder="请选择是/否" clearable>
               <el-option v-for="item in yes_or_noOptions" :label="item.dictLabel" :value="item.dictValue"
                          :key="item.dictValue"/>
             </el-select>

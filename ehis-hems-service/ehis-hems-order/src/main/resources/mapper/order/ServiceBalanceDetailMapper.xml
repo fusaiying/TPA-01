@@ -503,10 +503,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         SELECT
             oi.order_code,
             oi.supplier_name,
-            oi.service_name,
+            <!--oi.service_name,-->
             oi.remark,
             oi.settle_price amount,
-            <!--bcs.supplier_service_name,-->
+            bcs.supplier_service_name,
             bcs.settle_type,
             concat_ws(
             '~~',

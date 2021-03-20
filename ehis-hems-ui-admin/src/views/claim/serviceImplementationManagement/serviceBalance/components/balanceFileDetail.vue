@@ -186,7 +186,7 @@ export default {
     beforeUpload(file) {
       //限制文件不能超过500kb
       if (file.size / 1024 > 500) {  // 限制文件大小
-        this.$message.warning(`上传的单个文件大小不能大于500kb`)
+        this.$message.warning(`上传的单个文件大小不能超过500kb`)
         return false;
       }
 

@@ -100,7 +100,7 @@ export default {
   },
   created() {
 
-    this.getDicts("cs_sex").then(response => {
+    this.getDicts("sys_user_sex").then(response => {
       this.cs_sexOptionsOptions = response.data;
     });
     this.getDicts("card_type").then(response => {

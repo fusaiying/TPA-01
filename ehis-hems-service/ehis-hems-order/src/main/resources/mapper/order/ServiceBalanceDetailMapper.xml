@@ -70,12 +70,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="amount"    column="amount"    />
         <result property="actualAmount"    column="actual_amount"    />
         <result property="reason"    column="reason"    />
+        <result property="settlementTime"    column="settlement_time"    />
     </resultMap>
 
     <!-- 明细导出（按一口价） -->
     <resultMap type="ServiceBalanceDetailPriceVO" id="ServiceBalanceDetailPriceVOResult">
-        <result property="supplierCode"    column="supplier_code"    />
-        <result property="serviceCode"    column="service_code"    />
+        <result property="supplierName"    column="supplier_name"    />
+        <result property="supplierServiceName"    column="supplier_service_name"    />
         <result property="amount"    column="amount"    />
         <result property="actualAmount"    column="actual_amount"    />
         <result property="reason"    column="reason"    />
@@ -624,15 +625,15 @@ where task_no = #{taskNo}
     <!-- 导出（按一口价） -->
     <select id="selectServiceBalanceDetailList_price" parameterType="ServiceBalanceInfo" resultMap="ServiceBalanceDetailPriceVOResult">
         SELECT
-            c.chname supplier_code,
-            b.supplier_service_name service_code,
+            oi.supplier_name,
+            a.supplier_service_name,
+            a.settlement_time,
             a.amount,
             a.actual_amount,
             a.reason
         FROM
             service_balance_detail a
-        LEFT JOIN base_contract_service b ON a.service_code = b.serial_no
-        LEFT JOIN base_supplier_info c ON a.supplier_code = c.serial_no
+        LEFT JOIN order_info oi ON a.order_code = oi.order_code and oi.status = 'Y' and oi.flag
         <where>
             <if test="taskNo != null  and taskNo != ''"> and a.task_no = #{taskNo}</if>
             <if test="status != null  and status != ''"> and a.status = #{status}</if>

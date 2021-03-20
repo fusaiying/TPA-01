@@ -93,7 +93,14 @@ export default {
   methods: {
     //批量删除
     clearfile(){
-      this.fileList=[]
+      if(this.fileList.length>0){
+        this.fileList.forEach(file =>{
+          this.handleRemove(file,this.fileList)
+        })
+      }
+      else{
+        return false
+      }
     },
     /** 初始化数据 */
     initData() {

@@ -377,7 +377,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             service_balance_info
             WHERE
             supplier_code = #{supplierCode}
-            AND settle_type = '01'
+            AND settle_type = #{settleType}
             ),
             DATE_FORMAT(#{endDate}, '%Y-%m-%d')
             ) settlementTime,
@@ -394,6 +394,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             WHERE
             base_contract_service.supplier_code = oi.supplier_code
             AND base_contract_service.service_code = oi.service_code
+            and base_contract_service.status ='Y'
             )
             WHERE
             oi. STATUS = 'Y'
@@ -449,7 +450,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             service_balance_info
             WHERE
             supplier_code = #{supplierCode}
-            AND settle_type = '01'
+            AND settle_type = #{settleType}
             ),
             DATE_FORMAT(#{endDate}, '%Y-%m-%d')
             ) settlementTime,
@@ -464,6 +465,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             WHERE
             base_contract_service.supplier_code = oi.supplier_code
             AND base_contract_service.service_code = oi.service_code
+            and base_contract_service.status ='Y'
             )
             WHERE
             oi. STATUS = 'Y'
@@ -518,7 +520,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             service_balance_info
             WHERE
             supplier_code = #{supplierCode}
-            AND settle_type = '01'
+            AND settle_type = #{settleType}
             ),
             DATE_FORMAT(#{endDate}, '%Y-%m-%d')
             ) settlementTime,
@@ -535,6 +537,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             WHERE
             base_contract_service.supplier_code = oi.supplier_code
             AND base_contract_service.service_code = oi.service_code
+            and base_contract_service.status ='Y'
             )
         WHERE
             oi. STATUS = 'Y'
@@ -633,7 +636,7 @@ where task_no = #{taskNo}
             a.reason
         FROM
             service_balance_detail a
-        LEFT JOIN order_info oi ON a.order_code = oi.order_code and oi.status = 'Y' and oi.flag
+        LEFT JOIN order_info oi ON a.order_code = oi.order_code and oi.status = 'Y' and oi.update_flag = '0'
         <where>
             <if test="taskNo != null  and taskNo != ''"> and a.task_no = #{taskNo}</if>
             <if test="status != null  and status != ''"> and a.status = #{status}</if>

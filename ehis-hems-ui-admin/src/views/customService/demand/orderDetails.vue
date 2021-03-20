@@ -3,7 +3,7 @@
     <el-card class="box-card" style="margin-top: 10px;">
       <span style="color: blue">客户基本信息</span>
       <el-form ref="baseInfo" :model="baseInfo" label-width="180px"
-               label-position="right" size="mini">
+               label-position="right" size="mini" :disabled="flag">
         <el-row>
           <el-col :span="8">
             <el-form-item label="保单号：">
@@ -396,7 +396,9 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="业务处理情况:">
-              <el-input v-model="orderDetailSearch.handleProp1" class="width-full" size="mini" ></el-input>
+              <el-select v-model="orderDetailSearch.handleProp1" class="item-width" size="mini" placeholder="请选择">
+                <el-option v-for="option in cs_handle_state" :key="option.dictValue" :label="option.dictLabel" :value="option.dictValue" />
+              </el-select>
             </el-form-item>
           </el-col>
         </el-row>
@@ -428,6 +430,7 @@ import {policyInfoData} from "@/api/customService/common";
 
 let dictss = [
   {dictType: 'cs_business_type'},
+  {dictType: 'cs_handle_state'},
   {dictType: 'cs_service_item'},
   {dictType: 'cs_channel'},
   {dictType: 'cs_priority'},
@@ -454,7 +457,7 @@ export default {
   },
   data() {
     return {
-
+      flag:false,
       //最下面数据
       orderDetailSearch: {
         handleProp1: "",
@@ -534,6 +537,7 @@ export default {
       attachmentInfoData: [],
       rgtSex: [],//
       card_type: [],//
+      cs_handle_state: [],//
     }
   },
   created() {
@@ -543,6 +547,9 @@ export default {
     this.queryParams.policyItemNo = this.$route.query.policyItemNo;
     this.queryParams.status = this.$route.query.status;
     this.search.workOrderNo = this.$route.query.workOrderNo;
+    if (this.$route.query.flag!=null && this.$route.query.flag!=''){
+      this.flag = this.$route.query.flag;
+    }
     this.searchHandle()
     this.searchFlowLog()
     this.searchHandle2()
@@ -589,6 +596,9 @@ export default {
     }).dictDate
     this.card_type = this.dictList.find(item => {
       return item.dictType === 'card_type'
+    }).dictDate
+    this.cs_handle_state = this.dictList.find(item => {
+      return item.dictType === 'cs_handle_state'
     }).dictDate
   },
 

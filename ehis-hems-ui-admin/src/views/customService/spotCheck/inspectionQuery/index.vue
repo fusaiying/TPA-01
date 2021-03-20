@@ -116,14 +116,18 @@
             </template>
           </el-table-column>
           <el-table-column align="center" prop="organCode" label="出单机构" show-overflow-tooltip/>
-          <el-table-column align="center" prop="itemCode" label="服务项目" show-overflow-tooltip/>
+          <el-table-column align="center" prop="itemCode" label="服务项目" show-overflow-tooltip>
+            <template slot-scope="scope">
+              <span>{{selectDictLabel(service_itemOptions, scope.row.itemCode)}}</span>
+            </template>
+          </el-table-column>
           <el-table-column align="center" prop="endDate" label="结案日期" show-overflow-tooltip>
             <template slot-scope="scope">
               <span>{{ scope.row.updateTime | changeDate }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="updateBy" align="center" label="质检分组" show-overflow-tooltip/>
-          <el-table-column prop="updateBy" align="center" label="质检人" show-overflow-tooltip/>
+          <el-table-column prop="updatedBy" align="center" label="质检分组" show-overflow-tooltip/>
+          <el-table-column prop="updatedBy" align="center" label="质检人" show-overflow-tooltip/>
           <el-table-column align="center" prop="inspectionResult" label="质检结果" show-overflow-tooltip/>
         </el-table>
 
@@ -146,11 +150,19 @@ import {selectQualityVo} from '@/api/customService/spotCheck'
 
 let dictss = [{dictType: 'cs_organization'}
   ,{dictType: 'cs_service_item'}
-  ,{dictType: 'cs_inspection_status'}
+  ,{dictType: 'cs_inspection_state'}
   ,{dictType: 'cs_inspection_result'}
 ]
 export default {
   components: {},
+  filters: {
+    changeDate: function (value) {
+      if (value !== null) {
+        return moment(value).format('YYYY-MM-DD')
+      }
+    },
+
+  },
   data() {
     return {
       caseNumber: false,//查询条件（报案号）是否显示
@@ -201,7 +213,7 @@ export default {
       return item.dictType === 'cs_service_item'
     }).dictDate
     this.inspection_statusOptions = this.dictList.find(item => {
-      return item.dictType === 'cs_inspection_status'
+      return item.dictType === 'cs_inspection_state'
     }).dictDate
     this.inspection_resultOptions = this.dictList.find(item => {
       return item.dictType === 'cs_inspection_result'
@@ -252,27 +264,23 @@ export default {
     },
     //处理按钮
     dealButton(row){
-      if (row.businessType=='01'){//跳需求
-        this.$router.push({
-          path: '/customService/orderDetails',
-          query:{
-            workOrderNo:row.workOrderNo,
-            policyNo:row.policyNo,
-            policyItemNo:row.policyItemNo,
-            status:row.status
-          }
+      let data = encodeURI(
+        JSON.stringify({
+          workOrderNo: row.workOrderNo, //批次号
+          inspectionId: row.inspectionId, //批次号
+          businessType: row.businessType,
+          inspectionHandlerId: row.inspectionHandlerId,
+          node:'mistake',//质检工作池
+          status:'show'
         })
-      }else if(row.businessType=='03'){//跳投诉
-        this.$router.push({
-          path: '/customService/complaint/orderDetails',
-          query:{
-            workOrderNo:row.workOrderNo,
-            policyNo:row.policyNo,
-            policyItemNo:row.policyItemNo,
-            status:row.status
-          }
-        })
-      }
+      )
+      console.info("handleOne:"+data)
+      this.$router.push({
+        path: '/workOrder/inspectionHandle',
+        query: {
+          data
+        }
+      })
 
     },
     // 多选框选中数据

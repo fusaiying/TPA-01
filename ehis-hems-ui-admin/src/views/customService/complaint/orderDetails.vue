@@ -4,7 +4,7 @@
       <span style="color: blue">客户基本信息</span>
       <el-divider/>
       <el-form ref="sendForm" :model="sendForm" style="padding-bottom: 30px;" label-width="120px"
-               label-position="right" size="mini">
+               label-position="right" size="mini" :disabled="flag">
         <el-row>
           <!--clearable是清楚输入框内容 readly、只读不可以编辑 ；不可以共存-->
           <el-col :span="8">
@@ -195,7 +195,7 @@
 
     <el-card class="box-card" style="margin-top: 10px;">
       <el-form ref="ruleForm" :model="ruleForm"  style="padding-bottom: 30px;" label-width="150px"
-               label-position="right" size="mini">
+               label-position="right" size="mini" :disabled="flag">
         <span style="color: blue">基因改善-服务受理信息</span>
         <el-divider/>
         <el-row>
@@ -621,6 +621,7 @@
 
       return {
         ids:[],//多选框
+        flag:false,
         //流转用
         flowLogData:[],
         flowLogCount: 0,
@@ -729,6 +730,9 @@
       this.queryParams.policyNo=this.$route.query.policyNo;
       this.queryParams.policyItemNo=this.$route.query.policyItemNo;
       this.queryParams.status=this.$route.query.status;
+      if (this.$route.query.flag!=null && this.$route.query.flag!=''){
+        this.flag = this.$route.query.flag;
+      }
       //window.aaa = this;
       this.searchHandle()
       this.searchFlowLog()

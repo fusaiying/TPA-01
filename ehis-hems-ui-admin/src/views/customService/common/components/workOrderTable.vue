@@ -251,23 +251,30 @@ export default {
       }
     },
     claimRouter(row){
-      let data = encodeURI(
-        JSON.stringify({
-          workOrderNo: row.workOrderNo, //批次号
-          policyNo: row.policyNo, //保单号
-          policyItemNo: row.policyItemNo, //分单号
-          businessType: row.businessType,
-          status:'show'
+      console.log(row);
+      if (row.businessType=='01'){//跳需求
+        this.$router.push({
+          path: '/customService/orderDetails',
+          query:{
+            workOrderNo:row.workOrderNo,
+            policyNo:row.policyNo,
+            policyItemNo:row.policyItemNo,
+            status:row.status,
+            flag:true
+          }
         })
-      )
-      console.info(row)
-      console.info("row")
-      this.$router.push({
-        path: '/workOrder/inspectionHandle',
-        query: {
-          data
-        }
-      })
+      }else if(row.businessType=='03'){//跳投诉
+        this.$router.push({
+          path: '/customService/complaint/orderDetails',
+          query:{
+            workOrderNo:row.workOrderNo,
+            policyNo:row.policyNo,
+            policyItemNo:row.policyItemNo,
+            status:row.status,
+            flag:true
+          }
+        })
+      }
     }
   }
 }

@@ -68,9 +68,13 @@
               <el-button size="mini" type="text" @click="dealButton(scope.row)">{{scope.row.workOrderNo}}</el-button>
             </template>
           </el-table-column>
-          <el-table-column align="center" prop="serviceItem" label="服务项目" show-overflow-tooltip/>
+          <el-table-column align="center" prop="itemCode" label="服务项目" show-overflow-tooltip>
+            <template slot-scope="scope">
+              <span>{{selectDictLabel(service_itemOptions, scope.row.itemCode)}}</span>
+            </template>
+          </el-table-column>
           <el-table-column prop="modifyBy" align="center" label="结案处理人" show-overflow-tooltip/>
-          <el-table-column prop="updateBy" align="center" label="质检人" show-overflow-tooltip/>
+          <el-table-column prop="updatedBy" align="center" label="质检人" show-overflow-tooltip/>
 
         </el-table>
 
@@ -91,7 +95,7 @@
 import moment from 'moment'
 import {selectQualityFlagVO} from '@/api/customService/spotCheck'
 
-let dictss = [{dictType: 'cs_service_item'}]
+let dictss = [{dictType: 'cs_service_item'},]
 export default {
   components: {},
   filters: {
@@ -141,12 +145,12 @@ export default {
     this.service_itemOptions = this.dictList.find(item => {
       return item.dictType === 'cs_service_item'
     }).dictDate
-    this.inspection_statusOptions = this.dictList.find(item => {
+   /* this.inspection_statusOptions = this.dictList.find(item => {
       return item.dictType === 'cs_inspection_status'
     }).dictDate
     this.inspection_resultOptions = this.dictList.find(item => {
       return item.dictType === 'cs_inspection_result'
-    }).dictDate
+    }).dictDate*/
     this.searchHandle()
   },
   methods: {
@@ -163,9 +167,11 @@ export default {
       let data = encodeURI(
         JSON.stringify({
           workOrderNo: row.workOrderNo, //批次号
+          inspectionId: row.inspectionId,
           policyNo: row.policyNo, //保单号
           policyItemNo: row.policyItemNo, //分单号
           businessType: row.businessType,
+          inspectionHandlerId: row.inspectionHandlerId,
           node:'mistake',//质检差错确认
           status:'edit'
         })

@@ -158,3 +158,20 @@ export function selectQualityVo(params){
     params: params
   })
 }
+
+//根据条件获取质检
+export function getQualityHandleInfo(data){
+  return request({
+    url: '/cs/spotCheck/internal/getQualityHandleInfo ',
+    method: 'post',
+    data: data
+  })
+}
+//质检数据保存
+export function insetQualityHandleInfo(data){
+  return request({
+    url: '/cs/spotCheck/internal/insetQualityHandleInfo ',
+    method: 'post',
+    data: data
+  })
+}

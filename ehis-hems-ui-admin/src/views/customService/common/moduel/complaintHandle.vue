@@ -179,10 +179,6 @@
 
   import { reasonThree, reasonTwo, classTwo, complainSearchServer} from '@/api/customService/complaint'
   import {complainSearch, } from '@/api/customService/consultation'
-
-
-
-
   let dictss =
     [{dictType: 'cs_classify_level1'}
     ,{dictType: 'cs_classify_level2'}
@@ -201,6 +197,7 @@
 
   export default {
     props: {
+      formData:Object,
       routerParams:Object,
       isAcceptInfo: {
         type:Boolean,
@@ -217,6 +214,14 @@
       changeDate: function (value) {
         if (value !== null) {
           return moment(value).format('YYYY-MM-DD HH:mm:ss')
+        }
+      }
+    },
+    watch: {
+      formData: function (value) {
+        if (value !== null) {
+         this.form=value
+          this.searchHandleServer()
         }
       }
     },
@@ -283,7 +288,7 @@
       //window.aaa = this;
       this.searchHandle();
       this.searchHandle1();
-      this.searchHandleServer();
+      //this.searchHandleServer();
     },
     async mounted() {
       await this.getDictsList(dictss).then(response => {
@@ -333,10 +338,10 @@
     methods: {
       reasonTwo(flag) {
         const query = {}
-        query.parentCode = this.sendForm.reason1;
+        query.parentCode = this.form.reason1;
         if(flag=='1'){
-          this.sendForm.reason2 = '';
-          this.sendForm.reason3 = '';
+          this.form.reason2 = '';
+          this.form.reason3 = '';
         }
         reasonTwo(query).then(res => {
           if (res != null && res.code === 200) {
@@ -353,7 +358,7 @@
       },
       reasonThree(flag) {
         const query = {}
-        query.parentCode = this.sendForm.reason2
+        query.parentCode = this.form.reason2
         if(flag=='1'){
           this.sendForm.reason3 = '';
         }
@@ -372,7 +377,7 @@
       },
       classTwo(flag) {
         const query = {}
-        query.parentCode = this.sendForm.level1;
+        query.parentCode = this.form.level1;
         if(flag=='1'){
           this.sendForm.level2 = '';
         }
@@ -407,14 +412,15 @@
       },
       //反显信息需求
       searchHandleServer() {
-        let query=this.queryParams
+        this.reasonTwo('0');
+        this.reasonThree('0');
+        this.classTwo('0');
+      /*  let query=this.queryParams
         complainSearchServer(query).then(res => {
           if (res != null && res.code === 200) {
             console.log("投诉页面server反显数据",res.data)
-            this.sendForm = res.data;
-            this.reasonTwo('0');
-            this.reasonThree('0');
-            this.classTwo('0');
+            this.form = res.data;
+
             if (res.rows.length <= 0) {
               return this.$message.warning(
                 "未查询到数据！"
@@ -423,7 +429,7 @@
           }
         }).catch(res => {
 
-        })
+        })*/
       },
       //客户信息匹配
       matching() {

@@ -173,7 +173,8 @@ export default {
             workOrderNo:row.workOrderNo,
             policyNo:row.policyNo,
             policyItemNo:row.policyItemNo,
-            status:row.status
+            status:row.status,
+            flag:true
           }
         })
       }else if(row.businessType=='03'){//跳投诉
@@ -183,7 +184,8 @@ export default {
             workOrderNo:row.workOrderNo,
             policyNo:row.policyNo,
             policyItemNo:row.policyItemNo,
-            status:row.status
+            status:row.status,
+            flag:true
           }
         })
       }

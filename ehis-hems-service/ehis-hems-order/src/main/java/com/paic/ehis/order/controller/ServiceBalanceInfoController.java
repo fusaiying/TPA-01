@@ -35,7 +35,7 @@ public class ServiceBalanceInfoController extends BaseController
     public TableDataInfo list(@RequestBody ServiceBalanceInfo serviceBalanceInfo)
     {
         startPage(serviceBalanceInfo);
-        List<ServiceBalanceInfo> list = serviceBalanceInfoService.selectServiceBalanceInfoList(serviceBalanceInfo);
+        List<ServiceBalanceInfo> list = serviceBalanceInfoService.selectServiceBalanceInfoList2(serviceBalanceInfo);
         return getDataTable(list);
     }
 

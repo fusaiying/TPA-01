@@ -35,11 +35,11 @@ public class ServiceBalanceInfo extends BaseEntity
     private String serviceCode;
 
     /** 结算方式 */
-    @Excel(name = "结算方式",readConverterExp="01-按case,02-按人头,03-按一口价")
+    @Excel(name = "结算方式",readConverterExp="01=按case,02=按人头,03=按一口价")
     private String settleType;
 
     /** 结算币种 */
-    @Excel(name = "结算币种",readConverterExp="01-加币,02-人民币,03-港币,04-美元,05-日元,06-欧元,07-英镑,08-澳元,09-新币")
+    @Excel(name = "结算币种",readConverterExp="01=加币,02=人民币,03=港币,04=美元,05=日元,06=欧元,07=英镑,08=澳元,09=新币")
     private String settleCurrency;
 
     /** 结算止期 */
@@ -48,7 +48,7 @@ public class ServiceBalanceInfo extends BaseEntity
     private Date endDate;
 
     /** 发票类型 */
-    @Excel(name = "发票类型",readConverterExp="01-有票,02-无票")
+    @Excel(name = "发票类型",readConverterExp="01=有票,02=无票")
     private String balanceInvoiceType;
 
     /** 服务费总金额 */
@@ -56,7 +56,7 @@ public class ServiceBalanceInfo extends BaseEntity
     private BigDecimal serviceAmount;
 
     /** 状态 */
-    @Excel(name = "状态",readConverterExp="Y-有效,N-无效")
+    @Excel(name = "状态",readConverterExp="Y=有效,N=无效")
     private String status;
 
     /** 是否导入 */

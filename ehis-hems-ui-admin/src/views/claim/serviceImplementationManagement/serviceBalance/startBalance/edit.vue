@@ -78,7 +78,7 @@
         style="width: 100%;"
       >
         <el-table-column type="index" label="序号" align="center" show-overflow-tooltip width="50px"/>
-        <el-table-column v-if="queryParams.settleType===settleTypeData.isPrice" key="supplierCode" prop="supplierCode" label="供应商名称" min-width="150%" align="center" show-overflow-tooltip/>
+        <el-table-column v-if="queryParams.settleType===settleTypeData.isPrice" key="supplierCode" prop="supplierName" label="供应商名称" min-width="150%" align="center" show-overflow-tooltip/>
         <el-table-column v-if="queryParams.settleType===settleTypeData.isCase" key="orderCode" prop="orderCode" label="工单编号" min-width="150%" align="center" show-overflow-tooltip/>
 
         <el-table-column v-if="queryParams.settleType===settleTypeData.isCase || queryParams.settleType===settleTypeData.isCont || queryParams.settleType===settleTypeData.isPrice" key="settlementTime" prop="settlementTime" label="结算时间区间" min-width="150%" align="center" show-overflow-tooltip/>

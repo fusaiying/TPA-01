@@ -65,6 +65,11 @@ public class ClaimCaseCal extends BaseEntity
     @Excel(name = "核赔依据")
     private String claimCheck;
 
+    /** 账单总金额 */
+    private BigDecimal totalBillAmount;
+    /** 账单外币总金额 */
+    private BigDecimal totalBillAmountForeign;
+
     /** 数据状态（Y-有效，N-无效） */
     @Excel(name = "数据状态", readConverterExp = "Y=-有效，N-无效")
     private String status;

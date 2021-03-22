@@ -87,7 +87,7 @@ public class ServiceBalanceDetail extends BaseEntity
 
     /** 状态 */
     @Excel(name = "状态",readConverterExp="01=待确认,02=待审核,03=待确认(退回),04=待核销,05=已结算")
-    private String status;
+    private String bussinessStatus;
 
     /** 结算时间区间 */
     private String balanceInterval;
@@ -108,7 +108,7 @@ public class ServiceBalanceDetail extends BaseEntity
     private BigDecimal unitPrice;
 
     /** 扩展字段 */
-    private String bussinessStatus;
+    private String status;
 
     /** 产品期限日期 */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")

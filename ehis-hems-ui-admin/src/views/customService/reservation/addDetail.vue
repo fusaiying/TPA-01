@@ -228,7 +228,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="来电号码：" prop="callPerson.mobilePhone">
-              <el-input v-model="ruleForm.callPerson.mobilePhone" class="item-width" clearable size="mini" placeholder="请输入"/>
+              <el-input v-model="ruleForm.callPerson.mobilePhone" class="item-width" maxlength="15" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -361,7 +361,7 @@
           </el-col>
           <el-col :span="8">
 
-            <el-form-item label="预约时间："  style="white-space: nowrap" prop="complaintTime">
+            <el-form-item label="预约日期："  style="white-space: nowrap" prop="complaintTime">
               <el-date-picker class="item-width"
                 v-model="ruleForm.complaintTime"
                 type="datetime"
@@ -562,6 +562,12 @@ export default {
         'callPerson.name': [
           {required: true, message: "来电人不能为空", trigger: "blur"}
         ],
+        'callPerson.mobilePhone': [
+          {required: false,
+            message: "来电号码只能录入数字",
+            pattern: /^\d*$/,
+            trigger: ['change','blur']}
+        ],
         priorityLevel: [
           {required: true, message: "优先级不能为空", trigger: "blur"}
         ],
@@ -581,7 +587,11 @@ export default {
           {required: true, message: "症状或体征不能为空", trigger: "blur"}
         ],
         a: [
-          {required: true, message: "本次疾病/症状起病时间不能为空", trigger: "blur"}
+          {required: true, message: "本次疾病/症状起病时间不能为空", trigger: "blur"},
+          {required: true,
+            message: "本次疾病/症状起病时间只能录入数字",
+            pattern: /^\d*$/,
+            trigger: ['change','blur']}
         ],
         accidentFlag: [
           {required: true, message: "是否意外不能为空", trigger: "blur"}
@@ -601,6 +611,16 @@ export default {
         settlementCard: [
           {required: true, message: "是否持有直结卡不能为空", trigger: "blur"}
         ],
+        hospitalDays: [
+          {required: true,
+            message: "预计住院天数只能录入0-1000的数字",
+            pattern: /^(([1-9]\d{1,2})|\d|1000)$/,
+            trigger: ['change','blur']
+          }
+        ],
+        medicalInstitution: [
+          {required: true, message: "医疗机构不能为空", trigger: "blur"}
+        ],
         appointmentDate: [
           {required: true, message: "预约时间不能为空", trigger: "blur"}
         ],
@@ -616,12 +636,13 @@ export default {
         organCode: [
           {required: true, message: "出单机构不能为空", trigger: "blur"}
         ],
-        'E-MAIL': [
+        'email': [
           {required: true, message: "Email不能为空", trigger: "blur"},
           {required: true,
-            message: "请输入正确的格式",
-            pattern:  /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/,//可以写正则表达式呦呦呦,
-            trigger: "blur"},
+            message: "邮箱格式不正确",
+            pattern: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+            trigger: ["blur","change"]
+          }
         ],
       },
       readonly: true,

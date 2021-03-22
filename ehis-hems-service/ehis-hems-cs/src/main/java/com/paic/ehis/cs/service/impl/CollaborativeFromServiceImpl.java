@@ -156,6 +156,7 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
         flowLog.setLinkCode("04");//状态置为已协办
         flowLog.setOperateCode("15");//节点为发起协办
         flowLog.setMakeBy(SecurityUtils.getUsername());
+        flowLog.setMakeTime(DateUtils.parseDate(DateUtils.getTime()));
         //没有um帐号
         flowLog.setUmNum(SecurityUtils.getUsername());
         flowLog.setCreatedBy(SecurityUtils.getUsername());
@@ -178,6 +179,7 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
         flowLog.setLinkCode("04");//状态置为已协办
         flowLog.setOperateCode("11");//节点为协办
         flowLog.setMakeBy(SecurityUtils.getUsername());
+        flowLog.setMakeTime(DateUtils.parseDate(DateUtils.getTime()));
         //没有um帐号
         flowLog.setUmNum(SecurityUtils.getUsername());
         flowLog.setCreatedBy(SecurityUtils.getUsername());
@@ -277,6 +279,7 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
         flowLog.setLinkCode("04");//状态置为已协办
         flowLog.setOperateCode("16");//节点为撤销协办
         flowLog.setMakeBy(SecurityUtils.getUsername());
+        flowLog.setMakeTime(DateUtils.parseDate(DateUtils.getTime()));
         //没有um帐号
         flowLog.setUmNum(SecurityUtils.getUsername());
         flowLog.setCreatedBy(SecurityUtils.getUsername());

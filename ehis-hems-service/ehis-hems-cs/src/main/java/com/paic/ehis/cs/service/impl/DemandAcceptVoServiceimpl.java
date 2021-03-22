@@ -384,6 +384,8 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         FlowLog flowLog = new FlowLog();
         WorkOrderAccept workOrderAccept = workOrderAcceptMapper.selectWorkOrderAcceptById(workOrderNo);
         workOrderAccept.setOrganCode(demandAcceptVo.getOrganCode());
+        workOrderAccept.setUpdateBy(SecurityUtils.getUsername());
+        workOrderAccept.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
         workOrderAcceptMapper.updateWorkOrderAccept(workOrderAccept);
         acceptDetailInfo.setChannelCode(demandAcceptVo.getChannelCode());
         acceptDetailInfo.setCallCenterId(demandAcceptVo.getCallCenterId());

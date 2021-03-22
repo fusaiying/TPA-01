@@ -210,7 +210,9 @@ public class ServiceBalanceInfoServiceImpl implements IServiceBalanceInfoService
      */
     @Override
     public List<ServiceBalanceInfo> selectServiceBalanceInfoList2Default() {
-        return serviceBalanceInfoMapper.selectServiceBalanceInfoList2Default();
+        ServiceBalanceInfo serviceBalanceInfo = new ServiceBalanceInfo();
+        serviceBalanceInfo.setStatus("Y");
+        return serviceBalanceInfoMapper.selectServiceBalanceInfoList2Default(serviceBalanceInfo);
     }
 
     /**

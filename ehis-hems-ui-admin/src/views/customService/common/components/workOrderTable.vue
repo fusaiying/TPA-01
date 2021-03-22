@@ -211,14 +211,11 @@ export default {
       this.$router.push({
         path: url,
         query:{
-          data:{
             workOrderNo:row.workOrderNo,
             policyNo:row.policyNo,
             policyItemNo:row.policyItemNo,
             status:row.status,
             businessType:row.businessType
-          }
-
         }
       })
       // let data = encodeURI(

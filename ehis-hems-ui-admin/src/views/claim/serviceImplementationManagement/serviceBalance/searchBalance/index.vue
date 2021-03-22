@@ -203,10 +203,15 @@ export default {
   methods: {
     //给供应商服务项目名称赋值
     setSupplierServiceName(){
-      let arr=this.serviceOptions.filter(item=>{
-        return item.dictValue==this.queryParams.serviceCode
-      })
-      this.queryParams.supplierServiceName= arr[0].dictLabel
+      if(this.queryParams.serviceCode!=null && this.queryParams.serviceCode!='') {
+        let arr = this.serviceOptions.filter(item => {
+          return item.dictValue == this.queryParams.serviceCode
+        })
+        this.queryParams.supplierServiceName = arr[0].dictLabel
+      }
+      else {
+        this.queryParams.supplierServiceName=null
+      }
     },
 
     //清单导出
@@ -311,6 +316,7 @@ export default {
     },
     /** 供应商事件 */
     changeSupplier() {
+
       this.queryParams.serviceCode = "";
       this.serviceOptions = this.serviceData.filter(item => {
         return item.supplierCode === this.queryParams.supplierCode;
@@ -318,6 +324,8 @@ export default {
     },
     /** 搜索按钮操作 */
     handleQuery() {
+
+
       this.queryParams.pageNum = 1;
       this.queryParams.pageSize = 10;
       let query = JSON.parse(JSON.stringify(this.queryParams))

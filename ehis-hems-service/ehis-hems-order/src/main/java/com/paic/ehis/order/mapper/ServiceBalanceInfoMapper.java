@@ -80,7 +80,7 @@ public interface ServiceBalanceInfoMapper
     /**
      * 查询service_balance_info(服务结算基本信息)列表 默认
      */
-    public List<ServiceBalanceInfo> selectServiceBalanceInfoList2Default();
+    public List<ServiceBalanceInfo> selectServiceBalanceInfoList2Default(ServiceBalanceInfo serviceBalanceInfo);
 
     /**
      * 更新service_balance_info(服务结算基本信息)信息

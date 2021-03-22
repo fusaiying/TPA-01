@@ -104,6 +104,11 @@
               <span>{{ parseTime(scope.row.endDate, '{y}-{m}-{d}') }}</span>
             </template>
           </el-table-column>
+          <el-table-column prop="balanceInvoiceType" label="发票类型" align="center" show-overflow-tooltip>
+            <template slot-scope="scope">
+              <span>{{selectDictLabel(balanceInvoiceTypeOptions, scope.row.balanceInvoiceType)}}</span>
+            </template>
+          </el-table-column>
           <el-table-column prop="serviceAmount" label="服务费总金额" align="center" show-overflow-tooltip/>
           <el-table-column prop="bussinessStatus" label="状态" align="center" show-overflow-tooltip>
             <template slot-scope="scope">
@@ -139,7 +144,7 @@ import {
   getContractServerList
 } from '@/api/contractManage/contractManagement';
 
-let dictss = [{dictType: 'currency'}, {dictType: 'clearing_form'},{dictType: 'closing_balance_status'}]
+let dictss = [{dictType: 'currency'}, {dictType: 'clearing_form'},{dictType: 'closing_balance_status'},{dictType: 'balance_invoice_type'}]
 export default {
   name: "examBalance",
   data() {
@@ -193,7 +198,9 @@ export default {
       //结算方式
       clearingFormOptions: [],
       //结算业务状态
-      balanceStatusOptions: []
+      balanceStatusOptions: [],
+      //发票类型
+      balanceInvoiceTypeOptions: [],
     };
   },
   created() {
@@ -217,14 +224,22 @@ export default {
     this.balanceStatusOptions = this.dictList.find(item => {
       return item.dictType === 'closing_balance_status'
     }).dictDate
+    this.balanceInvoiceTypeOptions = this.dictList.find(item => {
+      return item.dictType === 'balance_invoice_type'
+    }).dictDate
   },
   methods: {
     //给供应商服务项目名称赋值
     setSupplierServiceName(){
-      let arr=this.serviceOptions.filter(item=>{
-        return item.dictValue==this.queryParams.serviceCode
-      })
-      this.queryParams.supplierServiceName= arr[0].dictLabel
+      if(this.queryParams.serviceCode!=null && this.queryParams.serviceCode!='') {
+        let arr = this.serviceOptions.filter(item => {
+          return item.dictValue == this.queryParams.serviceCode
+        })
+        this.queryParams.supplierServiceName = arr[0].dictLabel
+      }
+      else {
+        this.queryParams.supplierServiceName=null
+      }
     },
 
     initData (){

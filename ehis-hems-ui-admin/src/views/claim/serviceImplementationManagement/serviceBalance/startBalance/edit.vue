@@ -221,10 +221,15 @@ export default {
   methods: {
     //给供应商服务项目名称赋值
     setSupplierServiceName(){
-      let arr=this.serviceOptions.filter(item=>{
-        return item.dictValue==this.queryParams.serviceCode
-      })
-      this.queryParams.supplierServiceName= arr[0].dictLabel
+      if(this.queryParams.serviceCode!=null && this.queryParams.serviceCode!='') {
+        let arr = this.serviceOptions.filter(item => {
+          return item.dictValue == this.queryParams.serviceCode
+        })
+        this.queryParams.supplierServiceName = arr[0].dictLabel
+      }
+      else {
+        this.queryParams.supplierServiceName=null
+      }
     },
 
     //反显总费用
@@ -367,6 +372,16 @@ export default {
               this.balanceInfo = res.data;
               this.genLoading = false;
               this.msgInfo('生成成功，请下载！');
+              this.loading = true;
+              listBalanceDetail(this.queryParams).then(res => {
+                if (res != null && res.code === 200) {
+                  this.balanceList = res.rows;
+                  this.total = res.total;
+                  this.loading = false;
+                }
+              }).catch(res => {
+                this.loading = false
+              });
             }
           }).catch(error => {
             this.genLoading = false;

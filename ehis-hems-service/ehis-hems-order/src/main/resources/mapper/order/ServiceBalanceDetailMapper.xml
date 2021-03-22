@@ -58,7 +58,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="reason"    column="reason"    />
         <result property="riskName"    column="risk_name"    />
         <result property="supplierServiceName"    column="supplier_service_name"    />
-        <result property="settlementTime"    column="settlement_time"    />
+        <result property="settlementTime"    column="settlementTime"    />
     </resultMap>
 
     <!-- 明细导出（按人头） -->
@@ -70,7 +70,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="amount"    column="amount"    />
         <result property="actualAmount"    column="actual_amount"    />
         <result property="reason"    column="reason"    />
-        <result property="settlementTime"    column="settlement_time"    />
+        <result property="settlementTime"    column="settlementTime"    />
     </resultMap>
 
     <!-- 明细导出（按一口价） -->
@@ -143,7 +143,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="actualAmount != null">actual_amount,</if>
             <if test="reason != null">reason,</if>
             <if test="supplierServiceName != null">supplier_service_name,</if>
-            <if test="settlementTime != null">settlement_time,</if>
+            <if test="settlementTime != null">settlementTime,</if>
             <if test="insuredNum != null">insured_num,</if>
             <if test="unitPrice != null">unit_price,</if>
             <if test="createBy != null">create_by,</if>
@@ -598,7 +598,7 @@ where task_no = #{taskNo}
             a.amount,
             a.actual_amount,
             a.supplier_service_name,
-            a.settlement_time,
+            a.settlementTime,
             a.reason
         FROM
             service_balance_detail a
@@ -631,7 +631,7 @@ where task_no = #{taskNo}
         SELECT
             oi.supplier_name,
             a.supplier_service_name,
-            a.settlement_time,
+            a.settlementTime,
             a.amount,
             a.actual_amount,
             a.reason

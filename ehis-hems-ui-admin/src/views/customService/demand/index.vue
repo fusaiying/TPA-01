@@ -315,9 +315,9 @@
           </el-table-column>
           <el-table-column prop="createBy" align="center" label="受理人" show-overflow-tooltip/>
           <el-table-column prop="acceptBy" align="center" label="处理人" show-overflow-tooltip/>
-          <el-table-column prop="modifyTime" label="响应时间" align="center" show-overflow-tooltip width="140">
+          <el-table-column prop="remarkTime" label="响应时间" align="center" show-overflow-tooltip width="140">
             <template slot-scope="scope">
-              <span>{{ scope.row.modifyTime | changeDate}}</span>
+              <span>{{ scope.row.remarkTime | changeDate}}</span>
             </template>
           </el-table-column>
           <el-table-column prop="remark" align="center" label="响应内容" show-overflow-tooltip/>

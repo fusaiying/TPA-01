@@ -192,4 +192,12 @@ public class ComplaintAcceptVo extends BaseEntity {
     /** 创建人 */
     @Excel(name = "创建人")
     private String createBy;
+
+    /** 响应内容 */
+    @Excel(name = "响应内容")
+    private String remark;
+
+    /** 响应时间 */
+    @Excel(name = "响应时间")
+    private String remarkTime;
 }

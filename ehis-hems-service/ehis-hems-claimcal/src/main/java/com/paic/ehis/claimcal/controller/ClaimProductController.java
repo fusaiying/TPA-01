@@ -236,9 +236,9 @@ public class ClaimProductController extends BaseController
 //    @PreAuthorize("@ss.hasPermi('system:product:edit')")
     @Log(title = "产品信息", businessType = BusinessType.UPDATE)
     @PostMapping("/editUpdateBy")
-    public AjaxResult editUpdateBy(@RequestBody String[] riskCodes)
+    public TableDataInfo editUpdateBy(@RequestBody String[] riskCodes)
     {
-        return toAjax(claimProductService.updateClaimProductUpdateBy(riskCodes));
+        return getDataTable(claimProductService.updateClaimProductUpdateBy(riskCodes));
     }
 
     //个人池：（查询中需要加入对产品编码和产品名称的条件搜索）

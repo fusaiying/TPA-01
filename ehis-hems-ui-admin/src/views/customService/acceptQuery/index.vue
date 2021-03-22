@@ -164,7 +164,7 @@
         </span>
         <el-divider/>
 
-        <workOrderTable :table-data="workPoolData" />
+        <workOrderTable :table-data="workPoolData" @searchHandle="searchHandle" />
         <pagination
           v-show="totalCount>0"
           :total="totalCount"

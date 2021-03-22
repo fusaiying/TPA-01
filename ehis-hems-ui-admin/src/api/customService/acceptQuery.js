@@ -17,4 +17,11 @@ export function selectWorkOrder(params) {
     params: params
   })
 }
+//# 工单查询获取
+export function updateGetWorkOrder(workOrderNo) {
+  return request({
+    url: '/cs/spotCheck/internal/updateGetWorkOrder?workOrderNo='+workOrderNo,
+    method: 'get',
+  })
+}
 

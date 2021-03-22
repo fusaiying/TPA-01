@@ -296,16 +296,16 @@
           <el-col :span="16">
             <el-form-item label="联系人固定电话：" style="white-space: nowrap" prop="phone">
               国家区号+
-              <el-input v-model="workPoolData.contactsPerson.linePhone0" class="item-width"
+              <el-input v-model="workPoolData.contactsPerson.linePhones0" class="item-width"
                         style="width: 75px"/>
               区号
-              <el-input v-model="workPoolData.contactsPerson.linePhone1" class="item-width" size="mini"
+              <el-input v-model="workPoolData.contactsPerson.linePhones1" class="item-width" size="mini"
                         style="width: 75px" maxlength="50"/>
               号码
-              <el-input v-model="workPoolData.contactsPerson.linePhone2" class="item-width" size="mini"
+              <el-input v-model="workPoolData.contactsPerson.linePhones2" class="item-width" size="mini"
                         style="width: 120px" maxlength="50"/>
               分机号
-              <el-input v-model="workPoolData.contactsPerson.linePhone3" class="item-width" size="mini"
+              <el-input v-model="workPoolData.contactsPerson.linePhones3" class="item-width" size="mini"
                         style="width: 75px" maxlength="4"/>
             </el-form-item>
           </el-col>
@@ -974,10 +974,10 @@ export default {
           this.workPoolData = res.rows[0]
           this.totalCount = res.total
 
-          this.workPoolData.contactsPerson.linePhone0 = this.workPoolData.contactsPerson.linePhone1[0];
-          this.workPoolData.contactsPerson.linePhone1 = this.workPoolData.contactsPerson.linePhone1[1];
-          this.workPoolData.contactsPerson.linePhone2 = this.workPoolData.contactsPerson.linePhone1[2];
-          this.workPoolData.contactsPerson.linePhone3 = this.workPoolData.contactsPerson.linePhone1[3];
+          this.workPoolData.contactsPerson.linePhones0 = this.workPoolData.contactsPerson.linePhone1[0];
+          this.workPoolData.contactsPerson.linePhones1 = this.workPoolData.contactsPerson.linePhone1[1];
+          this.workPoolData.contactsPerson.linePhones2 = this.workPoolData.contactsPerson.linePhone1[2];
+          this.workPoolData.contactsPerson.linePhones3 = this.workPoolData.contactsPerson.linePhone1[3];
 
           /* if (res.rows.length <= 0) {
              return this.$message.warning(

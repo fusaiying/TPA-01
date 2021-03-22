@@ -570,6 +570,11 @@ export default {
       } else {
         queryParams = this.sendForm;
       }
+      if(this.sendForm.appointmentTime){
+        queryParams.appointmentTimeStart=this.sendForm.appointmentTime[0]
+        queryParams.appointmentTimeEnd=this.sendForm.appointmentTime[1]
+      }
+
       demandListAndPublicPool(queryParams).then(res => {
         console.log('共公池', res.rows)
         if (res != null && res.code === 200) {
@@ -595,6 +600,12 @@ export default {
       } else {
         queryParams = this.sendForm;
       }
+
+      if(this.sendForm.appointmentTime){
+        queryParams.appointmentTimeStart=this.sendForm.appointmentTime[0]
+        queryParams.appointmentTimeEnd=this.sendForm.appointmentTime[1]
+      }
+
       demandListAndPersonalPool(this.sendForm).then(res => {
         console.log('个人池：', res.rows)
         if (res != null && res.code === 200) {

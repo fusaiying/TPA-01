@@ -62,7 +62,7 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="联系人手机：" prop="contactsPerson.mobilePhone">
-              <el-input v-model="workPoolData.contactsPerson.mobilePhone" class="item-width"  size="mini" />
+              <el-input v-model="workPoolData.contactsPerson.mobilePhone" class="item-width"  size="mini" maxlength="15"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -72,7 +72,7 @@
           </el-col>
           <el-col :span="8">
 
-            <el-form-item label="预约时间："  style="white-space: nowrap">
+            <el-form-item label="预约时间：" prop="complaintTime"  style="white-space: nowrap">
               <el-date-picker
                 v-model="workPoolData.complaintTime"
                 class="item-width"
@@ -107,23 +107,61 @@
           </el-col>
 
         </el-row>
-          <el-row >
-            <el-col :span="16">
-              <el-form-item label="家庭电话："  style="white-space: nowrap" >
-                国家区号+<el-input v-model="workPoolData.contactsPerson.homePhone1[0]" class="item-width"  style="width: 75px"/>
-                区号<el-input v-model="workPoolData.contactsPerson.homePhone1[1]" class="item-width"  maxlength="50" size="mini" style="width: 145px"/>
-                号码<el-input v-model="workPoolData.contactsPerson.homePhone1[2]" class="item-width"  maxlength="50" size="mini" style="width: 145px"/>
-                分机号<el-input v-model="workPoolData.contactsPerson.homePhone1[3]" class="item-width"  maxlength="50" size="mini" style="width: 145px"/>
-              </el-form-item>
-            </el-col>
-          </el-row>
         <el-row>
-          <el-col :span="16">
-            <el-form-item label="办公电话："  style="white-space: nowrap">
-              国家区号+<el-input v-model="workPoolData.contactsPerson.workPhone1[0]" class="item-width"  style="width: 75px"/>
-              区号<el-input v-model="workPoolData.contactsPerson.workPhone1[1]" class="item-width"  maxlength="50" size="mini" style="width: 145px"/>
-              号码<el-input v-model="workPoolData.contactsPerson.workPhone1[2]" class="item-width"  maxlength="50" size="mini" style="width: 145px"/>
-              分机号<el-input v-model="workPoolData.contactsPerson.workPhone1[3]" class="item-width"  maxlength="50" size="mini" style="width: 145px"/>
+          <el-col :span="3">
+            <el-form-item label="家庭电话：" style="white-space: nowrap;" :inline="true" prop="contactsPerson.homePhone1[0]">
+              国家区号:+
+              <el-input v-model="workPoolData.contactsPerson.homePhone1[0]" class="item-width" style="width: 60px" maxlength="50"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="4">
+            <el-form-item style="white-space: nowrap;" :inline="true" prop="contactsPerson.homePhone1[1]">
+              区号
+              <el-input v-model="workPoolData.contactsPerson.homePhone1[1]" class="item-width" size="mini" style="width: 145px"
+                        maxlength="50"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="4">
+            <el-form-item style="white-space: nowrap;" :inline="true" prop="contactsPerson.homePhone1[2]">
+              号码
+              <el-input v-model="workPoolData.contactsPerson.homePhone1[2]" class="item-width" size="mini" style="width: 145px"
+                        maxlength="50"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="4">
+            <el-form-item style="white-space: nowrap;" :inline="true" prop="contactsPerson.homePhone1[3]">
+              分机号
+              <el-input v-model="workPoolData.contactsPerson.homePhone1[3]" class="item-width" size="mini" style="width: 145px"
+                        maxlength="4"/>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="3">
+            <el-form-item label="办公电话：" style="white-space: nowrap;" :inline="true" prop="contactsPerson.workPhone1[0]">
+              国家区号:+
+              <el-input v-model="workPoolData.contactsPerson.workPhone1[0]" class="item-width" style="width: 60px" maxlength="50"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="4">
+            <el-form-item style="white-space: nowrap;" :inline="true" prop="contactsPerson.workPhone1[1]">
+              区号
+              <el-input v-model="workPoolData.contactsPerson.workPhone1[1]" class="item-width" size="mini" style="width: 145px"
+                        maxlength="50"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="4">
+            <el-form-item style="white-space: nowrap;" :inline="true" prop="contactsPerson.workPhone1[2]">
+              号码
+              <el-input v-model="workPoolData.contactsPerson.workPhone1[2]" class="item-width" size="mini" style="width: 145px"
+                        maxlength="50"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="4">
+            <el-form-item style="white-space: nowrap;" :inline="true" prop="contactsPerson.workPhone1[3]">
+              分机号
+              <el-input v-model="workPoolData.contactsPerson.workPhone1[3]" class="item-width" size="mini" style="width: 145px"
+                        maxlength="4"/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -449,6 +487,15 @@
     },
     data() {
 
+      const checkComplaintTime= (rule, value, callback) => {
+        let tDate = new Date();
+        if(tDate > value){
+          callback(new Error("预约时间不能早于当前日期"));
+        }else{
+          callback();
+        }
+      }
+
       return {
         workPoolDataFlag:false,
         workPoolDataFlag3:false,
@@ -512,6 +559,16 @@
         totalCount: 0,
         // 表单校验
         rules: {
+          'contactsPerson.sex': [
+            {required: true, message: "联系人性别", trigger: "blur"}
+          ],
+          'contactsPerson.name': [
+            {required: true, message: "联系人姓名不能为空", trigger: "blur"}
+          ],
+          complaintTime: [
+            {required: true, message: "预约时间不能为空", trigger: "blur"},
+            {required: true, validator: checkComplaintTime, trigger: "blur"}
+          ],
           'complaintPerson.name': [
             {required: true, message: "投诉人姓名不能为空", trigger: "blur"}
           ],
@@ -528,7 +585,86 @@
           ],
           'editInfo.editReason':[
             {required: true, message: "修改原因不能为空", trigger: "blur"}
-          ]
+          ],
+          'contactsPerson.mobilePhone': [
+            {required: false,
+              message: "目前只支持中国大陆的手机号码",
+              pattern: /^1[34578]\d{9}$/,
+              trigger: ['blur','change']},
+          ],
+          'callPerson.mobilePhone': [
+            //{required: true, message: "来电号码不能为空", trigger: "blur"},
+            {required: true,
+              message: "目前只支持录入数字",
+              pattern: /^\d+$/,//可以写正则表达式呦呦呦,
+              trigger: ['blur','change']},
+          ],
+          email: [
+            {required: false,
+              message: "邮箱格式不正确",
+              pattern: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+              trigger: ["blur","change"]
+            }
+          ],
+          'contactsPerson.address': [
+            { min: 0, max: 2000, message: '长度不超过2000个字符' }
+          ],
+          'contactsPerson.homePhone1[0]': [
+            {required: false,
+              message: "国家区号只能录入数字",
+              pattern: /^\d*$/,
+              trigger: ['change','blur']
+            }
+          ],
+          'contactsPerson.homePhone1[1]': [
+            {required: false,
+              message: "区号只能录入数字",
+              pattern: /^\d*$/,
+              trigger: ['change','blur']
+            }
+          ],
+          'contactsPerson.homePhone1[2]': [
+            {required: false,
+              message: "号码只能录入数字",
+              pattern: /^\d*$/,
+              trigger: ['change','blur']
+            }
+          ],
+          'contactsPerson.homePhone1[3]': [
+            {required: false,
+              message: "分机号只能录入数字",
+              pattern: /^\d*$/,
+              trigger: ['change','blur']
+            }
+          ],
+          'contactsPerson.workPhone1[0]': [
+            {required: false,
+              message: "国家区号只能录入数字",
+              pattern: /^\d*$/,
+              trigger: ['change','blur']
+            }
+          ],
+          'contactsPerson.workPhone1[1]': [
+            {required: false,
+              message: "区号只能录入数字",
+              pattern: /^\d*$/,
+              trigger: ['change','blur']
+            }
+          ],
+          'contactsPerson.workPhone1[2]': [
+            {required: false,
+              message: "号码只能录入数字",
+              pattern: /^\d*$/,
+              trigger: ['change','blur']
+            }
+          ],
+          'contactsPerson.workPhone1[3]': [
+            {required: false,
+              message: "分机号只能录入数字",
+              pattern: /^\d*$/,
+              trigger: ['change','blur']
+            }
+          ],
         },
         // 查询参数
         queryParams: {

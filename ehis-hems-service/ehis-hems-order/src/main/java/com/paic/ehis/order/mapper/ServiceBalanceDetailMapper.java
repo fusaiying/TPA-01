@@ -131,4 +131,6 @@ public interface ServiceBalanceDetailMapper
 
     public int updateOrderInfo(List<String> orderCodes);
 
+    public int updateOrderInfo1(List<String> orderCodes);
+
 }

@@ -154,6 +154,7 @@
       },
       searchFlowLog() {
         let workOrderNo = this.queryParams
+        workOrderNo.workOrderNo=this.routerParams.workOrderNo
         workOrderNo.status = ""
         FlowLogSearch(workOrderNo).then(res => {
           if (res != null && res.code === 200) {

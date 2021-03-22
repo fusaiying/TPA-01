@@ -3,6 +3,7 @@ package com.paic.ehis.claimapt.service;
 import com.paic.ehis.claimapt.domain.ClaimBatchRecord;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -51,7 +52,7 @@ public interface IClaimBatchRecordService
      * @param batchnoes 理赔批次流程id数组
      * @return 结果
      */
-    public int updateClaimBatchByReview(String[] batchnoes);
+    public ArrayList<String> updateClaimBatchByReview(String[] batchnoes);
 
     /**
      * 批量删除理赔批次流程记录 

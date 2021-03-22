@@ -179,18 +179,19 @@ SELECT
         FROM
         accept_detail_info b
         LEFT JOIN work_order_accept a ON b.work_order_no = a.work_order_no
-        LEFT JOIN person_info c ON a.insured_no = c.person_id
+        LEFT JOIN person_info c ON b.contacts_person_id = c.person_id
         LEFT JOIN ( SELECT DISTINCT  work_order_no AS nnn FROM hcs_modification WHERE call_serial_num IS NOT NULL AND STATUS = 'Y' ) hm ON b.work_order_no = hm.nnn
         WHERE
          a.business_type = '02'
         AND a.STATUS = '01'
         <if test="channelCode != null  and channelCode != ''"> and b.channel_code = #{channelCode}</if>
         <if test="itemCode != null  and itemCode != ''"> and b.item_code = #{itemCode}</if>
-        <if test="acceptBy != null  and acceptBy != ''"> and a.accept_by = #{acceptBy}</if>
+        <if test="acceptBy != null  and acceptBy != ''"> and ifnull(a.accept_by,a.create_by) like concat('%',#{acceptBy},'%')</if>
         <if test="acceptTime != null "> and a.accept_time = #{acceptTime}</if>
         <if test="acceptTimeStart != null and acceptTimeEnd != null"> and a.accept_time between #{acceptTimeStart} and DATE_ADD(#{acceptTimeEnd},INTERVAL 1 DAY)</if>
         <if test="modifyBy != null  and modifyBy != ''"> and a.modify_by = #{modifyBy}</if>
         <if test="modifyTimeStart != null and modifyTimeEnd != null"> and a.modify_time between #{modifyTimeStart} and DATE_ADD(#{modifyTimeEnd},INTERVAL 1 DAY)</if>
+        <if test="appointmentTimeStart != null and appointmentTimeEnd != null"> and b.prop10 between DATE_ADD(#{appointmentTimeEnd},INTERVAL -1 DAY) and DATE_ADD(#{appointmentTimeEnd},INTERVAL 0 DAY)</if>
         <if test="workOrderNo != null and workOrderNo != ''" > and a.work_order_no= #{workOrderNo}</if>
         <if test="policyNo != null  and policyNo != ''"> and a.policy_no = #{policyNo}</if>
         <if test="policyItemNo != null  and policyItemNo != ''"> and a.policy_item_no = #{policyItemNo}</if>
@@ -204,7 +205,7 @@ SELECT
         <if test="mobilePhone != null  and mobilePhone != ''"> and c.mobile_phone = #{mobilePhone}</if>
         <!--<if test="complaintTime != null  and complaintTime != ''"> and complaintTime = #{complaintTime}</if>-->
         ORDER BY
-        isRedWord DESC,b.priority_level ASC,a.accept_time asc
+        isRedWord DESC,b.priority_level ASC,a.create_time desc
     </select>
 
     <select id="selectReservationAcceptVoList2" parameterType="com.paic.ehis.cs.domain.dto.AcceptDTO" resultMap="ReservationAcceptVoResult">
@@ -278,18 +279,19 @@ SELECT
         FROM
         accept_detail_info b
         LEFT JOIN work_order_accept a ON b.work_order_no = a.work_order_no
-        LEFT JOIN person_info c ON a.insured_no = c.person_id
+        LEFT JOIN person_info c ON b.contacts_person_id = c.person_id
         LEFT JOIN ( SELECT DISTINCT  work_order_no AS nnn FROM hcs_modification WHERE call_serial_num IS NOT NULL AND STATUS = 'Y' ) hm ON b.work_order_no = hm.nnn
         WHERE
         a.business_type = '02'
         AND a.STATUS = '02'
         <if test="channelCode != null  and channelCode != ''"> and b.channel_code = #{channelCode}</if>
         <if test="itemCode != null  and itemCode != ''"> and b.item_code = #{itemCode}</if>
-        <if test="acceptBy != null  and acceptBy != ''"> and a.accept_by = #{acceptBy}</if>
+        <if test="acceptBy != null  and acceptBy != ''"> and ifnull(a.accept_by,a.create_by) like concat('%',#{acceptBy},'%')</if>
         <if test="acceptTime != null "> and a.accept_time = #{acceptTime}</if>
         <if test="acceptTimeStart != null and acceptTimeEnd != null"> and a.accept_time between #{acceptTimeStart} and DATE_ADD(#{acceptTimeEnd},INTERVAL 1 DAY)</if>
         <if test="modifyBy != null  and modifyBy != ''"> and a.modify_by = #{modifyBy}</if>
         <if test="modifyTimeStart != null and modifyTimeEnd != null"> and a.modify_time between #{modifyTimeStart} and DATE_ADD(#{modifyTimeEnd},INTERVAL 1 DAY)</if>
+        <if test="appointmentTimeStart != null and appointmentTimeEnd != null"> and b.prop10 between DATE_ADD(#{appointmentTimeEnd},INTERVAL -1 DAY) and DATE_ADD(#{appointmentTimeEnd},INTERVAL 0 DAY)</if>
         <if test="workOrderNo != null and workOrderNo != ''" > and a.work_order_no= #{workOrderNo}</if>
         <if test="policyNo != null  and policyNo != ''"> and a.policy_no = #{policyNo}</if>
         <if test="policyItemNo != null  and policyItemNo != ''"> and a.policy_item_no = #{policyItemNo}</if>
@@ -304,7 +306,7 @@ SELECT
         <!--<if test="complaintTime != null  and complaintTime != ''"> and complaintTime = #{complaintTime}</if>-->
         <if test="operationBy != null and operationBy != ''"> and a.update_by = #{operationBy}</if>
         ORDER BY
-        isRedWord DESC,b.priority_level ASC,a.accept_time asc
+        isRedWord DESC,b.priority_level ASC,a.create_time desc
     </select>
 
     <update id="updateStatusM" parameterType="String" >

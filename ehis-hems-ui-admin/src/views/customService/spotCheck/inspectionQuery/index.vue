@@ -123,11 +123,20 @@
           </el-table-column>
           <el-table-column align="center" prop="endDate" label="结案日期" show-overflow-tooltip>
             <template slot-scope="scope">
+              <span>{{ scope.row.endDate | changeDate }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column prop="updatedBy" align="center" label="质检分组" show-overflow-tooltip>
+            <template slot-scope="scope">
+              <span>电话中心处理</span>
+            </template>
+          </el-table-column>
+          <el-table-column prop="updatedBy" align="center" label="质检人" show-overflow-tooltip/>
+          <el-table-column prop="updatedTime" align="center" label="质检日期" show-overflow-tooltip>
+            <template slot-scope="scope">
               <span>{{ scope.row.updateTime | changeDate }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="updatedBy" align="center" label="质检分组" show-overflow-tooltip/>
-          <el-table-column prop="updatedBy" align="center" label="质检人" show-overflow-tooltip/>
           <el-table-column align="center" prop="result" label="质检结果" show-overflow-tooltip>
             <template slot-scope="scope">
               <span>{{selectDictLabel(inspection_resultOptions, scope.row.result)}}</span>

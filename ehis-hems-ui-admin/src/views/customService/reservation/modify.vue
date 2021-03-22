@@ -326,23 +326,61 @@
           </el-col>
 
         </el-row>-->
-        <el-row >
-          <el-col :span="10">
-            <el-form-item label="家庭电话:"  style="white-space: nowrap" >
-              国家区号+<el-input v-model="workPoolData.contactsPerson.homePhone1[0]" class="item-width2"  />
-              区号<el-input v-model="workPoolData.contactsPerson.homePhone1[1]" class="item-width2"  size="mini" />
-              号码<el-input v-model="workPoolData.contactsPerson.homePhone1[2]" class="item-width2"  size="mini" />
-              分机号<el-input v-model="workPoolData.contactsPerson.homePhone1[3]" class="item-width2"  size="mini" />
+        <el-row>
+          <el-col :span="3">
+            <el-form-item label="家庭电话：" style="white-space: nowrap;" :inline="true" prop="contactsPerson.homePhone1[0]">
+              国家区号:+
+              <el-input v-model="workPoolData.contactsPerson.homePhone1[0]" class="item-width" style="width: 60px" maxlength="10"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="4">
+            <el-form-item style="white-space: nowrap;" :inline="true" prop="contactsPerson.homePhone1[1]">
+              区号
+              <el-input v-model="workPoolData.contactsPerson.homePhone1[1]" class="item-width" size="mini" style="width: 145px"
+                        maxlength="10"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="4">
+            <el-form-item style="white-space: nowrap;" :inline="true" prop="contactsPerson.homePhone1[2]">
+              号码
+              <el-input v-model="workPoolData.contactsPerson.homePhone1[2]" class="item-width" size="mini" style="width: 145px"
+                        maxlength="10"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="4">
+            <el-form-item style="white-space: nowrap;" :inline="true" prop="contactsPerson.homePhone1[3]">
+              分机号
+              <el-input v-model="workPoolData.contactsPerson.homePhone1[3]" class="item-width" size="mini" style="width: 145px"
+                        maxlength="4"/>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="8">
-            <el-form-item label="办公室电话:"  style="white-space: nowrap">
-              国家区号+<el-input v-model="workPoolData.contactsPerson.workPhone1[0]" class="item-width2"/>
-              区号<el-input v-model="workPoolData.contactsPerson.workPhone1[1]" class="item-width2"  size="mini" />
-              号码<el-input v-model="workPoolData.contactsPerson.workPhone1[2]" class="item-width2"  size="mini" />
-              分机号<el-input v-model="workPoolData.contactsPerson.workPhone1[3]" class="item-width2"  size="mini" />
+          <el-col :span="3">
+            <el-form-item label="办公电话：" style="white-space: nowrap;" :inline="true" prop="contactsPerson.workPhone1[0]">
+              国家区号:+
+              <el-input v-model="workPoolData.contactsPerson.workPhone1[0]" class="item-width" style="width: 60px" maxlength="10"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="4">
+            <el-form-item style="white-space: nowrap;" :inline="true" prop="contactsPerson.workPhone1[1]">
+              区号
+              <el-input v-model="workPoolData.contactsPerson.workPhone1[1]" class="item-width" size="mini" style="width: 145px"
+                        maxlength="10"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="4">
+            <el-form-item style="white-space: nowrap;" :inline="true" prop="contactsPerson.workPhone1[2]">
+              号码
+              <el-input v-model="workPoolData.contactsPerson.workPhone1[2]" class="item-width" size="mini" style="width: 145px"
+                        maxlength="10"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="4">
+            <el-form-item style="white-space: nowrap;" :inline="true" prop="contactsPerson.workPhone1[3]">
+              分机号
+              <el-input v-model="workPoolData.contactsPerson.workPhone1[3]" class="item-width" size="mini" style="width: 145px"
+                        maxlength="4"/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -541,7 +579,7 @@
 
     <el-card>
       <el-form ref="ruleForm" :model="workPoolData"  style="padding-bottom: 30px;" label-width="100px"
-               label-position="right" size="mini">
+               label-position="right" size="mini" :rules="rules">
         <span style="color: blue">修改原因</span>
         <el-divider></el-divider>
         <el-row>
@@ -637,6 +675,8 @@
       };
 
       return {
+        workPoolDataFlag:false,
+        ruleFormFlag:false,
         cs_relation:[],//关系
         cs_service_item:[],//服务项目
         cs_sex:[],//性别
@@ -710,6 +750,62 @@
         // 表单校验
         // 表单校验根据Form 组件提供了表单验证的功能，只需要通过 rules 属性传入约定的验证规则，并将 Form-Item 的 prop 属性设置为需校验的字段名即可
         rules: {
+          'contactsPerson.homePhone1[0]': [
+            {required: false,
+              message: "国家区号只能录入数字",
+              pattern: /^\d*$/,
+              trigger: ['change','blur']
+            }
+          ],
+          'contactsPerson.homePhone1[1]': [
+            {required: false,
+              message: "区号只能录入数字",
+              pattern: /^\d*$/,
+              trigger: ['change','blur']
+            }
+          ],
+          'contactsPerson.homePhone1[2]': [
+            {required: false,
+              message: "号码只能录入数字",
+              pattern: /^\d*$/,
+              trigger: ['change','blur']
+            }
+          ],
+          'contactsPerson.homePhone1[3]': [
+            {required: false,
+              message: "分机号只能录入数字",
+              pattern: /^\d*$/,
+              trigger: ['change','blur']
+            }
+          ],
+          'contactsPerson.workPhone1[0]': [
+            {required: false,
+              message: "国家区号只能录入数字",
+              pattern: /^\d*$/,
+              trigger: ['change','blur']
+            }
+          ],
+          'contactsPerson.workPhone1[1]': [
+            {required: false,
+              message: "区号只能录入数字",
+              pattern: /^\d*$/,
+              trigger: ['change','blur']
+            }
+          ],
+          'contactsPerson.workPhone1[2]': [
+            {required: false,
+              message: "号码只能录入数字",
+              pattern: /^\d*$/,
+              trigger: ['change','blur']
+            }
+          ],
+          'contactsPerson.workPhone1[3]': [
+            {required: false,
+              message: "分机号只能录入数字",
+              pattern: /^\d*$/,
+              trigger: ['change','blur']
+            }
+          ],
           channelCode: [
             {required: true, message: "受理渠道不能为空",  trigger: ["blur","change"]}
           ],
@@ -817,6 +913,13 @@
               trigger: ["blur","change"]
             }
           ],
+          editRemark:[
+            {required: true, message: "修改说明不能为空", trigger: "blur"},
+            { min: 3, max: 100, message: '长度在 3 到 100 个字符' }
+          ],
+          editReason:[
+            {required: true, message: "修改原因不能为空", trigger: "blur"}
+          ],
         },
 
         readonly: true,
@@ -920,22 +1023,31 @@
         ;},
       //提交页面数据
       submit(){
-        this.workPoolData.workOrderNo=this.$route.query.workOrderNo;
-        this.workPoolData.symptomTimes=this.workPoolData.a+'-'+this.workPoolData.b;
-        //this.ruleForm.symptomTimes=this.ruleForm.a+'-'+this.ruleForm.b;
-        let send=this.workPoolData
-        modifyReservationSubmit(send).then(res => {
-          if (res != null && res.code === 200) {
-            this.$message.success("保存成功！")
-            if (res.rows.length <= 0) {
-              return this.$message.warning(
-                "提交失败！"
-              )
-            }
-          }
-        }).catch(res => {
 
+        this.$refs.workPoolData.validate((valid) => {
+          this.workPoolDataFlag=valid
         })
+        this.$refs.ruleForm.validate((valid) => {
+          this.ruleFormFlag=valid
+        })
+        if (this.workPoolDataFlag&&this.ruleFormFlag) {
+          this.workPoolData.workOrderNo=this.$route.query.workOrderNo;
+          this.workPoolData.symptomTimes=this.workPoolData.a+'-'+this.workPoolData.b;
+          //this.ruleForm.symptomTimes=this.ruleForm.a+'-'+this.ruleForm.b;
+          let send=this.workPoolData
+          modifyReservationSubmit(send).then(res => {
+            if (res != null && res.code === 200) {
+              this.$message.success("保存成功！")
+              if (res.rows.length <= 0) {
+                return this.$message.warning(
+                  "提交失败！"
+                )
+              }
+            }
+          }).catch(res => {
+
+          })
+        }
       },
       //关闭页面
       close(){

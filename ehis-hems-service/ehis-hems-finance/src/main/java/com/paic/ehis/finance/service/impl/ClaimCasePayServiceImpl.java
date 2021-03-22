@@ -274,9 +274,9 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService {
             BaseProviderInfo hospital = result.getData().get(0);
             //BaseProviderInfo hospital = (BaseProviderInfo) tableDataInfo.getRows().get(1);
             // 封装返回对象
-            claimCasePaymentVO.setBank(hospital.getAccountName());//开户行
-            claimCasePaymentVO.setBankName(hospital.getBankName());//账户名
-            claimCasePaymentVO.setBankNumber(hospital.getBankCode());//账户号
+            claimCasePaymentVO.setBank(hospital.getBankName());//开户行
+            claimCasePaymentVO.setBankName(hospital.getAccountName());//账户名
+            claimCasePaymentVO.setBankNumber(hospital.getAccountNo());//账户号
         }
         // 获取‘是否仅结算理赔责任’ 是01-非全赔 否02-全赔
         BaseProviderSettle baseProviderSettle = new BaseProviderSettle();

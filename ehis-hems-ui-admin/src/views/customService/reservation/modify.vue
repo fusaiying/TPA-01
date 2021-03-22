@@ -189,7 +189,7 @@
 
     </el-card>
     <el-card class="box-card" style="margin-top: 10px;">
-      <el-form ref="workPoolData" :model="workPoolData"  style="padding-bottom: 30px;" label-width="200px"
+      <el-form ref="workPoolData" :rules="rules" :model="workPoolData"  style="padding-bottom: 30px;" label-width="200px"
                label-position="right" size="mini">
 
         <span style="color: blue">口腔责任直接结算-服务受理信息</span>
@@ -335,6 +335,8 @@
               分机号<el-input v-model="workPoolData.contactsPerson.homePhone1[3]" class="item-width2"  size="mini" />
             </el-form-item>
           </el-col>
+        </el-row>
+        <el-row>
           <el-col :span="8">
             <el-form-item label="办公室电话:"  style="white-space: nowrap">
               国家区号+<el-input v-model="workPoolData.contactsPerson.workPhone1[0]" class="item-width2"/>
@@ -358,10 +360,10 @@
         </el-row>
 
         <el-row>
-          <el-col :span="8">
+          <el-col :span="24">
               <el-form-item label="就诊医院：" prop="medicalInstitution">
-                省份：<el-input v-model="workPoolData.province" style="width: 60px"  />
-                城市：<el-input v-model="workPoolData.city" style="width: 60px" />
+                省份：<el-input v-model="workPoolData.province" style="width: 120px"  />
+                城市：<el-input v-model="workPoolData.city" style="width: 120px" />
               </el-form-item>
           </el-col>
 
@@ -409,9 +411,9 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="本次疾病/症状起病时间：" prop="symptomTimes">
-              <el-input v-model="ruleForm.a" style="width: 90px" clearable size="mini" placeholder="请输入"maxlength="6"/>
-              <el-select v-model="ruleForm.b" style="width: 90px" placeholder="请选择"  >
+            <el-form-item label="本次疾病/症状起病时间：" prop="a">
+              <el-input v-model="workPoolData.a" style="width: 90px" clearable size="mini" placeholder="请输入"maxlength="4"/>
+              <el-select v-model="workPoolData.b" style="width: 90px" placeholder="请选择"  >
                 <el-option v-for="item in cs_time_unit" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
@@ -608,6 +610,32 @@
       }
     },
     data() {
+      //意外原因
+      const checkAccidentReason = (rule, value, callback) => {
+        if (this.ruleForm.accidentFlag === '01') {
+          if (!value) {
+            callback(new Error("意外原因必填"));
+          } else {
+            callback();
+          }
+        } else {
+          callback();
+        }
+      };
+
+      //床位
+      const checkBunk = (rule, value, callback) => {
+        if (this.ruleForm.visitType === '02') {
+          if (!value) {
+            callback(new Error("床位必填"));
+          } else {
+            callback();
+          }
+        } else {
+          callback();
+        }
+      };
+
       return {
         cs_relation:[],//关系
         cs_service_item:[],//服务项目
@@ -680,9 +708,114 @@
 
         },
         // 表单校验
+        // 表单校验根据Form 组件提供了表单验证的功能，只需要通过 rules 属性传入约定的验证规则，并将 Form-Item 的 prop 属性设置为需校验的字段名即可
         rules: {
-          priority: [
-            {required: true, message: "优先级不能为空", trigger: "blur"}
+          channelCode: [
+            {required: true, message: "受理渠道不能为空",  trigger: ["blur","change"]}
+          ],
+          'callPerson.name': [
+            {required: true, message: "来电人不能为空",  trigger: ["blur","change"]}
+          ],
+          'callPerson.mobilePhone': [
+            {required: false,
+              message: "来电号码只能录入数字",
+              pattern: /^\d*$/,
+              trigger: ['change','blur']}
+          ],
+          priorityLevel: [
+            {required: true, message: "优先级不能为空",  trigger: ["blur","change"]}
+          ],
+          callRelationBy: [
+            {required: true, message: "来电人与申请人关系不能为空",  trigger: ["blur","change"]}
+          ],
+          outpatientSettlement: [
+            {required: true, message: "门诊直接结算服务项目", trigger: ["blur","change"]}
+          ],
+          'contactsPerson.language': [
+            {required: true, message: "联系人语言不能为空", trigger: ["blur","change"]}
+          ],
+          visitType: [
+            {required: true, message: "就诊类型不能为空", trigger: ["blur","change"]}
+          ],
+          symptomsSigns: [
+            {required: true, message: "症状或体征不能为空", trigger: ["blur","change"]}
+          ],
+          a: [
+            {required: true, message: "本次疾病/症状起病时间不能为空", trigger: ["blur","change"]},
+            {required: true,
+              message: "本次疾病/症状起病时间只能录入数字",
+              pattern: /^\d*$/,
+              trigger: ['change','blur']}
+          ],
+          accidentFlag: [
+            {required: true, message: "是否意外不能为空", trigger: ["blur","change"]}
+          ],
+          accidentReason: [
+            {required: false, validator: checkAccidentReason, trigger: ["blur","change"]}
+          ],
+          bunk: [
+            {required: false, validator: checkBunk, trigger: ["blur","change"]}
+          ],
+          'contactsPerson.name': [
+            {required: true, message: "联系人姓名不能为空", trigger: ["blur","change"]}
+          ],
+          'contactsPerson.mobilePhone': [
+            {required: true, message: "联系人电话不能为空", trigger: ["blur","change"]}
+          ],
+          'contactsPerson.sex': [
+            {required: true, message: "联系人性别不能为空", trigger: ["blur","change"]}
+          ],
+          validCertificate: [
+            {required: true, message: "是否持有有效证件不能为空", trigger: ["blur","change"]}
+          ],
+          settlementCard: [
+            {required: true, message: "是否持有直结卡不能为空", trigger: ["blur","change"]}
+          ],
+          hospitalDays: [
+            {required: true,
+              message: "预计住院天数只能录入0-1000的数字",
+              pattern: /^(([1-9]\d{1,2})|\d|1000)$/,
+              trigger: ['change','blur']
+            }
+          ],
+          medicalInstitution: [
+            {required: true, message: "医疗机构不能为空", trigger: ["blur","change"]}
+          ],
+          appointmentDate: [
+            {required: true, message: "预约时间不能为空", trigger: ["blur","change"]}
+          ],
+          province: [
+            {required: true, message: "预约医院不能为空", trigger: ["blur","change"]}
+          ],
+          compensationRatio: [
+            {required: false,
+              message: "赔付比例只能录入0-100的数字",
+              pattern: /^(([1-9]\d)|\d|100)$/,
+              trigger: ['change','blur']}
+          ],
+          city: [
+            {required: true, message: "预约医院不能为空", trigger: ["blur","change"]}
+          ],
+          department: [
+            {required: true, message: "科室不能为空", trigger: ["blur","change"]}
+          ],
+          organCode: [
+            {required: true, message: "出单机构不能为空", trigger: ["blur","change"]}
+          ],
+          hospitalWorkCall: [
+            {required: false,
+              message: "医院电话格式不正确",
+              pattern: /^[1][3|4|5|6|7|8|9][0-9]{9}$/,
+              trigger: ["blur","change"]
+            }
+          ],
+          'email': [
+            {required: true, message: "Email不能为空", trigger: "blur"},
+            {required: true,
+              message: "邮箱格式不正确",
+              pattern: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+              trigger: ["blur","change"]
+            }
           ],
         },
 
@@ -788,7 +921,8 @@
       //提交页面数据
       submit(){
         this.workPoolData.workOrderNo=this.$route.query.workOrderNo;
-        this.ruleForm.symptomTimes=this.ruleForm.a+'-'+this.ruleForm.b;
+        this.workPoolData.symptomTimes=this.workPoolData.a+'-'+this.workPoolData.b;
+        //this.ruleForm.symptomTimes=this.ruleForm.a+'-'+this.ruleForm.b;
         let send=this.workPoolData
         modifyReservationSubmit(send).then(res => {
           if (res != null && res.code === 200) {
@@ -818,8 +952,10 @@
               if (this.workPoolData.symptomTimes != null && this.workPoolData.symptomTimes != '') {
                 let arr=this.workPoolData.symptomTimes.split('-')
                 console.log(arr)
-                this.ruleForm.a=arr[0]
-                this.ruleForm.b=arr[1]
+                /*this.ruleForm.a=arr[0];
+                this.ruleForm.b=arr[1];*/
+                this.$set(this.workPoolData, `a`, arr[0]);
+                this.$set(this.workPoolData, `b`, arr[1]);
               }
 
               if (res.rows.length <= 0) {
@@ -841,8 +977,10 @@
               if (this.workPoolData.symptomTimes != null && this.workPoolData.symptomTimes != '') {
                 let arr=this.workPoolData.symptomTimes.split('-')
                 console.log(arr)
-                this.ruleForm.a=arr[0]
-                this.ruleForm.b=arr[1]
+                /*this.ruleForm.a=arr[0]
+                this.ruleForm.b=arr[1]*/
+                this.$set(this.workPoolData, `a`, arr[0]);
+                this.$set(this.workPoolData, `b`, arr[1]);
               }
               if (res.rows.length <= 0) {
                 return this.$message.warning(

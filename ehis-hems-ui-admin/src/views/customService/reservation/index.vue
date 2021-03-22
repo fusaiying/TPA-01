@@ -427,7 +427,7 @@ export default {
         label: '服务4'
       }],
       sysUserOptions: [],
-      isRemind:true,
+      isRemind:false,
     }
   },
   created() {

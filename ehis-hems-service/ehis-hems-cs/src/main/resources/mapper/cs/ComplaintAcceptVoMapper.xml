@@ -93,7 +93,7 @@
         <if test="mobilePhone != null  and mobilePhone != ''"> and c.mobile_phone = #{mobilePhone}</if>
             <!--<if test="complaintTime != null  and complaintTime != ''"> and complaintTime = #{complaintTime}</if>-->
         ORDER BY
-        isRedWord DESC,t2.priority_level ASC,t1.accept_time asc
+        isRedWord DESC,t2.priority_level ASC,t1.create_time desc
     </select>
 
     <select id="selectComplaintAcceptVoListOne" parameterType="com.paic.ehis.cs.domain.dto.AcceptDTO" resultMap="ComplaintAcceptVoResult">
@@ -134,7 +134,7 @@
         LEFT JOIN accept_detail_info t2 ON t1.work_order_no = t2.work_order_no
         LEFT JOIN person_info c ON t1.insured_no = c.person_id
         LEFT JOIN ( SELECT DISTINCT work_order_no AS nnn FROM hcs_modification WHERE call_serial_num IS NOT NULL AND STATUS = 'Y' ) hm ON t2.work_order_no = hm.nnn
-        left join work_handle_info whi on  whi.work_order_no = a.work_order_no
+        left join work_handle_info whi on  whi.work_order_no = t1.work_order_no
         WHERE
         t1.work_order_no NOT IN ( SELECT cf.work_order_no FROM collaborative_from cf WHERE cf.STATUS = '01' )
         AND t1.business_type = '03'
@@ -161,7 +161,7 @@
             <!--<if test="complaintTime != null  and complaintTime != ''"> and complaintTime = #{complaintTime}</if>-->
         <if test="operationBy != null and operationBy != ''"> and t1.update_by = #{operationBy}</if>
         ORDER BY
-        isRedWord DESC,t2.priority_level ASC,t1.accept_time asc
+        isRedWord DESC,t2.priority_level ASC,t1.create_time desc
     </select>
 
     <select id="selectComplaintAcceptVo" parameterType="string" resultMap="ComplaintAcceptVoResult">

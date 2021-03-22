@@ -226,6 +226,9 @@ export default {
   },
   methods: {
     resetForm() {
+      this.inspectionQueryForm.endCaseDate=[]
+      this.inspectionQueryForm.inspectionDate=[]
+      this.inspectionQueryForm.result=''
       this.$refs.inspectionQueryForm.resetFields()
     },
     searchHandle() {

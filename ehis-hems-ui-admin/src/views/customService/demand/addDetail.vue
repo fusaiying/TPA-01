@@ -601,7 +601,7 @@ export default {
         orgInsuredNo: undefined,
       },
       workPoolData: [],
-      checkSubmitFlag: '01',
+      checkSubmitFlag: '',
     }
   },
   created() {

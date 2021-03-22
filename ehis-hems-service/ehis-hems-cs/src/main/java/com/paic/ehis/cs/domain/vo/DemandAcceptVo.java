@@ -234,4 +234,12 @@ public class DemandAcceptVo extends BaseEntity {
     /** 最后一次修改人 */
     @Excel(name = "最后一次修改人")
     private String updateBy;
+
+    /** 响应内容 */
+    @Excel(name = "响应内容")
+    private String remark;
+
+    /** 响应时间 */
+    @Excel(name = "响应时间")
+    private String remarkTime;
 }

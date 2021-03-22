@@ -301,12 +301,26 @@
         } else {
           acquire(riskCodes).then(res => {
             if (res != null && res.code === 200) {
-              this.$message({
-                message: '获取成功！',
-                type: 'success',
-                center: true,
-                showClose: true
-              })
+              if (res.rows.length<=0){
+                this.$message({
+                  message: '获取成功！',
+                  type: 'success',
+                  center: true,
+                  showClose: true
+                })
+              }else {
+                let riskCodeList=''
+                for (let i = 0; i < res.rows.length-1; i++) {
+                  riskCodeList=riskCodeList+res.rows[i]+','
+                }
+                riskCodeList=riskCodeList+res.rows[res.rows.length-1]
+                this.$message({
+                  message: '产品编码'+riskCodeList+'已被获取！',
+                  type: 'warning',
+                  center: true,
+                  showClose: true
+                })
+              }
             }
             this.getPublicData()
             this.searchPending()
@@ -333,12 +347,21 @@
         let riskCodes = [row.riskCode]
         acquire(riskCodes).then(res => {
           if (res != null && res.code === 200) {
-            this.$message({
-              message: '获取成功！',
-              type: 'success',
-              center: true,
-              showClose: true
-            })
+            if (res.rows.length<=0){
+              this.$message({
+                message: '获取成功！',
+                type: 'success',
+                center: true,
+                showClose: true
+              })
+            }else {
+              this.$message({
+                message: '该产品已被获取，请重新获取！',
+                type: 'warning',
+                center: true,
+                showClose: true
+              })
+            }
           }
           this.getPublicData()
           this.searchPending()

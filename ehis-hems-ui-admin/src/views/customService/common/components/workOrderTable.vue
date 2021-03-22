@@ -71,6 +71,7 @@
 
 <script>
 import {getMinData} from '@/api/claim/presentingReview'
+import {updateGetWorkOrder} from '@/api/customService/acceptQuery'
 import {encrypt} from "@/utils/rsaEncrypt"
 import moment from "moment";
 
@@ -180,7 +181,24 @@ export default {
   methods: {
     //获取
     obtainButton(row) {
-
+      updateGetWorkOrder(row.workOrderNo).then(res=>{
+        if (res!=null && res.code=='200'){
+          this.$message({
+            message: '获取成功！',
+            type: 'success',
+            center: true,
+            showClose: true
+          })
+        }else {
+          this.$message({
+            message: '获取失败!',
+            type: 'error',
+            center: true,
+            showClose: true
+          })
+        }
+      })
+      this.$emit("searchHandle")
     },
     //修改
     modifyButton(row) {

@@ -399,7 +399,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             )
             WHERE
             oi. STATUS = 'Y'
-            AND oi.push_flag = '0' and oi.bussiness_status = '02' and oi.comfirm_flag = '1'
+            AND oi.push_flag = '0' and oi.bussiness_status = '02' and oi.confirm_flag = '1'
             <if test="supplierCode != null  and supplierCode != ''">and oi.supplier_code = #{supplierCode}</if>
             <if test="settleType != null  and settleType != ''">and bcs.settle_type =#{settleType}</if>
             <if test="serviceCode != null  and serviceCode != ''">and bcs.serial_no = #{serviceCode}</if>
@@ -470,7 +470,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             )
             WHERE
             oi. STATUS = 'Y'
-            AND oi.push_flag = '0' and oi.bussiness_status = '02' and oi.comfirm_flag = '1'
+            AND oi.push_flag = '0' and oi.bussiness_status = '02' and oi.confirm_flag = '1'
             <if test="supplierCode != null  and supplierCode != ''">and oi.supplier_code = #{supplierCode}</if>
             <if test="settleType != null  and settleType != ''">and bcs.settle_type =#{settleType}</if>
             <if test="serviceCode != null  and serviceCode != ''">and bcs.serial_no = #{serviceCode}</if>

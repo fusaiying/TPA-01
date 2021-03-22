@@ -132,7 +132,7 @@
               <span>{{selectDictLabel(balanceInvoiceTypeOptions, scope.row.balanceInvoiceType)}}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="serviceAmount" label="服务总金额" width="120%" align="center" show-overflow-tooltip/>
+          <el-table-column prop="serviceAmount" label="服务费总金额" width="120%" align="center" show-overflow-tooltip/>
           <el-table-column prop="bussinessStatus" label="状态" align="center" show-overflow-tooltip>
             <template slot-scope="scope">
               <span>{{selectDictLabel(balanceStatusOptions, scope.row.bussinessStatus)}}{{handleRemark(scope.row.remark)}}</span>

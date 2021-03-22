@@ -313,7 +313,96 @@ INSERT INTO `sn-cs`.code_dict (code_type,code,code_name,code_alias,status,parent
 ('cs_service_item','B00034','根因改善',NULL,'1',NULL,NULL,'服务项目',10,'admin','2021-02-09 09:36:00','admin','2021-02-09 09:36:00')
 ;
 
-
+INSERT INTO `sn-cs`.code_dict
+(code_type, code, code_name, code_alias, status, parent_code, parent_code_type, remarks, order_no, created_by, created_time, updated_by, updated_time)
+VALUES('cs_inspection_class_complaint', '01', '时效性', NULL, '1', NULL, NULL, '投诉质检分类', 1, 'admin', '2021-02-09 09:36:00', 'admin', '2021-02-09 09:36:00');
+INSERT INTO `sn-cs`.code_dict
+(code_type, code, code_name, code_alias, status, parent_code, parent_code_type, remarks, order_no, created_by, created_time, updated_by, updated_time)
+VALUES('cs_inspection_class_complaint', '02', '准确性', NULL, '1', NULL, NULL, '投诉质检分类', 2, 'admin', '2021-02-09 09:36:00', 'admin', '2021-02-09 09:36:00');
+INSERT INTO `sn-cs`.code_dict
+(code_type, code, code_name, code_alias, status, parent_code, parent_code_type, remarks, order_no, created_by, created_time, updated_by, updated_time)
+VALUES('cs_inspection_class_complaint', '03', '真实性', NULL, '1', NULL, NULL, '投诉质检分类', 3, 'admin', '2021-02-09 09:36:00', 'admin', '2021-02-09 09:36:00');
+INSERT INTO `sn-cs`.code_dict
+(code_type, code, code_name, code_alias, status, parent_code, parent_code_type, remarks, order_no, created_by, created_time, updated_by, updated_time)
+VALUES('cs_inspection_item_complaint', '01', '投诉件录入时效', NULL, '1', '01', 'cs_inspection_class_complaint', '投诉质检项目', 1, 'admin', '2021-02-09 09:36:00', 'admin', '2021-02-09 09:36:00');
+INSERT INTO `sn-cs`.code_dict
+(code_type, code, code_name, code_alias, status, parent_code, parent_code_type, remarks, order_no, created_by, created_time, updated_by, updated_time)
+VALUES('cs_inspection_item_complaint', '02', '响应时间', NULL, '1', '01', 'cs_inspection_class_complaint', '投诉质检项目', 2, 'admin', '2021-02-09 09:36:00', 'admin', '2021-02-09 09:36:00');
+INSERT INTO `sn-cs`.code_dict
+(code_type, code, code_name, code_alias, status, parent_code, parent_code_type, remarks, order_no, created_by, created_time, updated_by, updated_time)
+VALUES('cs_inspection_item_complaint', '03', '根因改善闭环时效', NULL, '1', '01', 'cs_inspection_class_complaint', '投诉质检项目', 3, 'admin', '2021-02-09 09:36:00', 'admin', '2021-02-09 09:36:00');
+INSERT INTO `sn-cs`.code_dict
+(code_type, code, code_name, code_alias, status, parent_code, parent_code_type, remarks, order_no, created_by, created_time, updated_by, updated_time)
+VALUES('cs_inspection_item_complaint', '04', '受理渠道', NULL, '1', '02', 'cs_inspection_class_complaint', '投诉质检项目', 4, 'admin', '2021-02-09 09:36:00', 'admin', '2021-02-09 09:36:00');
+INSERT INTO `sn-cs`.code_dict
+(code_type, code, code_name, code_alias, status, parent_code, parent_code_type, remarks, order_no, created_by, created_time, updated_by, updated_time)
+VALUES('cs_inspection_item_complaint', '05', '投诉分类', NULL, '1', '02', 'cs_inspection_class_complaint', '投诉质检项目', 5, 'admin', '2021-02-09 09:36:00', 'admin', '2021-02-09 09:36:00');
+INSERT INTO `sn-cs`.code_dict
+(code_type, code, code_name, code_alias, status, parent_code, parent_code_type, remarks, order_no, created_by, created_time, updated_by, updated_time)
+VALUES('cs_inspection_item_complaint', '06', '监管计件', NULL, '1', '02', 'cs_inspection_class_complaint', '投诉质检项目', 6, 'admin', '2021-02-09 09:36:00', 'admin', '2021-02-09 09:36:00');
+INSERT INTO `sn-cs`.code_dict
+(code_type, code, code_name, code_alias, status, parent_code, parent_code_type, remarks, order_no, created_by, created_time, updated_by, updated_time)
+VALUES('cs_inspection_item_complaint', '07', '监管撤诉状态', NULL, '1', '02', 'cs_inspection_class_complaint', '投诉质检项目', 7, 'admin', '2021-02-09 09:36:00', 'admin', '2021-02-09 09:36:00');
+INSERT INTO `sn-cs`.code_dict
+(code_type, code, code_name, code_alias, status, parent_code, parent_code_type, remarks, order_no, created_by, created_time, updated_by, updated_time)
+VALUES('cs_inspection_item_complaint', '08', '投诉原因', NULL, '1', '02', 'cs_inspection_class_complaint', '投诉质检项目', 8, 'admin', '2021-02-09 09:36:00', 'admin', '2021-02-09 09:36:00');
+INSERT INTO `sn-cs`.code_dict
+(code_type, code, code_name, code_alias, status, parent_code, parent_code_type, remarks, order_no, created_by, created_time, updated_by, updated_time)
+VALUES('cs_inspection_item_complaint', '09', '客户反馈', NULL, '1', '02', 'cs_inspection_class_complaint', '投诉质检项目', 9, 'admin', '2021-02-09 09:36:00', 'admin', '2021-02-09 09:36:00');
+INSERT INTO `sn-cs`.code_dict
+(code_type, code, code_name, code_alias, status, parent_code, parent_code_type, remarks, order_no, created_by, created_time, updated_by, updated_time)
+VALUES('cs_inspection_item_complaint', '10', '投诉损失', NULL, '1', '02', 'cs_inspection_class_complaint', '投诉质检项目', 10, 'admin', '2021-02-09 09:36:00', 'admin', '2021-02-09 09:36:00');
+INSERT INTO `sn-cs`.code_dict
+(code_type, code, code_name, code_alias, status, parent_code, parent_code_type, remarks, order_no, created_by, created_time, updated_by, updated_time)
+VALUES('cs_inspection_item_complaint', '11', '投诉是否成立', NULL, '1', '02', 'cs_inspection_class_complaint', '投诉质检项目', 11, 'admin', '2021-02-09 09:36:00', 'admin', '2021-02-09 09:36:00');
+INSERT INTO `sn-cs`.code_dict
+(code_type, code, code_name, code_alias, status, parent_code, parent_code_type, remarks, order_no, created_by, created_time, updated_by, updated_time)
+VALUES('cs_inspection_item_complaint', '12', '投诉根因部门', NULL, '1', '02', 'cs_inspection_class_complaint', '投诉质检项目', 12, 'admin', '2021-02-09 09:36:00', 'admin', '2021-02-09 09:36:00');
+INSERT INTO `sn-cs`.code_dict
+(code_type, code, code_name, code_alias, status, parent_code, parent_code_type, remarks, order_no, created_by, created_time, updated_by, updated_time)
+VALUES('cs_inspection_item_complaint', '13', '根因改善', NULL, '1', '02', 'cs_inspection_class_complaint', '投诉质检项目', 13, 'admin', '2021-02-09 09:36:00', 'admin', '2021-02-09 09:36:00');
+INSERT INTO `sn-cs`.code_dict
+(code_type, code, code_name, code_alias, status, parent_code, parent_code_type, remarks, order_no, created_by, created_time, updated_by, updated_time)
+VALUES('cs_inspection_item_complaint', '14', '致诉根因', NULL, '1', '02', 'cs_inspection_class_complaint', '投诉质检项目', 14, 'admin', '2021-02-09 09:36:00', 'admin', '2021-02-09 09:36:00');
+INSERT INTO `sn-cs`.code_dict
+(code_type, code, code_name, code_alias, status, parent_code, parent_code_type, remarks, order_no, created_by, created_time, updated_by, updated_time)
+VALUES('cs_inspection_item_complaint', '15', '处理结果', NULL, '1', '02', 'cs_inspection_class_complaint', '投诉质检项目', 15, 'admin', '2021-02-09 09:36:00', 'admin', '2021-02-09 09:36:00');
+INSERT INTO `sn-cs`.code_dict
+(code_type, code, code_name, code_alias, status, parent_code, parent_code_type, remarks, order_no, created_by, created_time, updated_by, updated_time)
+VALUES('cs_inspection_item_complaint', '16', '附件完整性', NULL, '1', '02', 'cs_inspection_class_complaint', '投诉质检项目', 16, 'admin', '2021-02-09 09:36:00', 'admin', '2021-02-09 09:36:00');
+INSERT INTO `sn-cs`.code_dict
+(code_type, code, code_name, code_alias, status, parent_code, parent_code_type, remarks, order_no, created_by, created_time, updated_by, updated_time)
+VALUES('cs_inspection_item_complaint', '17', '征求处理意见', NULL, '1', '02', 'cs_inspection_class_complaint', '投诉质检项目', 17, 'admin', '2021-02-09 09:36:00', 'admin', '2021-02-09 09:36:00');
+INSERT INTO `sn-cs`.code_dict
+(code_type, code, code_name, code_alias, status, parent_code, parent_code_type, remarks, order_no, created_by, created_time, updated_by, updated_time)
+VALUES('cs_inspection_item_complaint', '18', '处理意见', NULL, '1', '02', 'cs_inspection_class_complaint', '投诉质检项目', 18, 'admin', '2021-02-09 09:36:00', 'admin', '2021-02-09 09:36:00');
+INSERT INTO `sn-cs`.code_dict
+(code_type, code, code_name, code_alias, status, parent_code, parent_code_type, remarks, order_no, created_by, created_time, updated_by, updated_time)
+VALUES('cs_inspection_item_complaint', '19', '行协调或外部鉴定状态', NULL, '1', '02', 'cs_inspection_class_complaint', '投诉质检项目', 19, 'admin', '2021-02-09 09:36:00', 'admin', '2021-02-09 09:36:00');
+INSERT INTO `sn-cs`.code_dict
+(code_type, code, code_name, code_alias, status, parent_code, parent_code_type, remarks, order_no, created_by, created_time, updated_by, updated_time)
+VALUES('cs_inspection_item_complaint', '20', '案件真实性', NULL, '1', '03', 'cs_inspection_class_complaint', '投诉质检项目', 20, 'admin', '2021-02-09 09:36:00', 'admin', '2021-02-09 09:36:00');
+INSERT INTO `sn-cs`.code_dict
+(code_type, code, code_name, code_alias, status, parent_code, parent_code_type, remarks, order_no, created_by, created_time, updated_by, updated_time)
+VALUES('cs_inspection_item_demand', '21', '是否时效内响应客户', NULL, '1', NULL, NULL, '信息需求质检项目', 21, 'admin', '2021-02-09 09:36:00', 'admin', '2021-02-09 09:36:00');
+INSERT INTO `sn-cs`.code_dict
+(code_type, code, code_name, code_alias, status, parent_code, parent_code_type, remarks, order_no, created_by, created_time, updated_by, updated_time)
+VALUES('cs_inspection_item_demand', '22', '是否符合短信结案规则', NULL, '1', NULL, NULL, '信息需求质检项目', 22, 'admin', '2021-02-09 09:36:00', 'admin', '2021-02-09 09:36:00');
+INSERT INTO `sn-cs`.code_dict
+(code_type, code, code_name, code_alias, status, parent_code, parent_code_type, remarks, order_no, created_by, created_time, updated_by, updated_time)
+VALUES('cs_inspection_item_demand', '23', '是否电话通知客户', NULL, '1', NULL, NULL, '信息需求质检项目', 23, 'admin', '2021-02-09 09:36:00', 'admin', '2021-02-09 09:36:00');
+INSERT INTO `sn-cs`.code_dict
+(code_type, code, code_name, code_alias, status, parent_code, parent_code_type, remarks, order_no, created_by, created_time, updated_by, updated_time)
+VALUES('cs_inspection_item_demand', '24', '是否满足客户诉求', NULL, '1', NULL, NULL, '信息需求质检项目', 24, 'admin', '2021-02-09 09:36:00', 'admin', '2021-02-09 09:36:00');
+INSERT INTO `sn-cs`.code_dict
+(code_type, code, code_name, code_alias, status, parent_code, parent_code_type, remarks, order_no, created_by, created_time, updated_by, updated_time)
+VALUES('cs_inspection_item_demand', '25', '是否及时升级投诉', NULL, '1', NULL, NULL, '信息需求质检项目', 25, 'admin', '2021-02-09 09:36:00', 'admin', '2021-02-09 09:36:00');
+INSERT INTO `sn-cs`.code_dict
+(code_type, code, code_name, code_alias, status, parent_code, parent_code_type, remarks, order_no, created_by, created_time, updated_by, updated_time)
+VALUES('cs_inspection_item_demand', '26', '是否规范记录', NULL, '1', NULL, NULL, '信息需求质检项目', 26, 'admin', '2021-02-09 09:36:00', 'admin', '2021-02-09 09:36:00');
+INSERT INTO `sn-cs`.code_dict
+(code_type, code, code_name, code_alias, status, parent_code, parent_code_type, remarks, order_no, created_by, created_time, updated_by, updated_time)
+VALUES('cs_inspection_item_demand', '27', '是否有其他错误', NULL, '1', NULL, NULL, '信息需求质检项目', 27, 'admin', '2021-02-09 09:36:00', 'admin', '2021-02-09 09:36:00');
 
 
 

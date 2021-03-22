@@ -256,26 +256,30 @@ CREATE TABLE `quality_inspection_accept` (
 `updated_by` varchar(32) NOT NULL COMMENT '更新人',
 `updated_time` datetime NOT NULL COMMENT '更新时间',
 PRIMARY KEY (`inspection_id`,`work_order_no`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COMMENT='质检受理';
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COMMENT='质检受理'
 
 -- 质检处理 quality_inspection_handle
+
 CREATE TABLE `quality_inspection_handle` (
-`inspection_id` varchar(32) NOT NULL COMMENT '质检编号',
-`work_order_id` varchar(32) NOT NULL COMMENT '工单编号',
+`inspection_handler_id` varchar(32) NOT NULL COMMENT '质检处理流水号',
+`inspection_id` bigint(20) NOT NULL COMMENT '质检编号',
+`work_order_no` varchar(32) NOT NULL COMMENT '工单编号',
 `score` varchar(20) DEFAULT NULL COMMENT '质检评分',
-`appeal_flag` varchar(1) DEFAULT NULL COMMENT '是否申诉',
+`appeal_flag` varchar(2) DEFAULT NULL COMMENT '是否申诉',
 `appeal_reason` varchar(64) DEFAULT NULL COMMENT '申诉理由',
-`status` varchar(2) DEFAULT NULL COMMENT '状态',
+`status` varchar(2) DEFAULT NULL COMMENT '状态 差错确认状态	cs_confirm_status	01-待确认；02-已确认；03-结案；04-无；',
 `created_by` varchar(32) NOT NULL COMMENT '创建人',
 `created_time` datetime NOT NULL COMMENT '创建时间',
 `updated_by` varchar(32) NOT NULL COMMENT '更新人',
 `updated_time` datetime NOT NULL COMMENT '更新时间',
-PRIMARY KEY (`inspection_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='质检处理';
+PRIMARY KEY (`inspection_handler_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='质检处理 '
 
 -- 质检项目 quality_inspection_item
+
 CREATE TABLE `quality_inspection_item` (
-`item_id` varchar(15) NOT NULL COMMENT '流水编号',
+`item_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '流水编号',
+`inspection_handler_id` varchar(32) NOT NULL COMMENT '质检处理流水号',
 `inspection_id` varchar(32) NOT NULL COMMENT '质检编号',
 `item_type` varchar(20) DEFAULT NULL COMMENT '组',
 `item_key` varchar(20) DEFAULT NULL COMMENT '名',
@@ -287,7 +291,7 @@ CREATE TABLE `quality_inspection_item` (
 `updated_by` varchar(32) NOT NULL COMMENT '更新人',
 `updated_time` datetime NOT NULL COMMENT '更新时间',
 PRIMARY KEY (`item_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='质检项目';
+) ENGINE=InnoDB AUTO_INCREMENT=212 DEFAULT CHARSET=utf8mb4 COMMENT='质检项目 '
 
 -- 主键记录表 sys_maxno
 CREATE TABLE `sys_maxno` (

@@ -490,17 +490,19 @@
               "请录入申诉理由！"
             )
           }else {
-            insetQualityHandleInfo(item).then(res => {
-              if (res != null && res.code == '200') {
-                this.$message({
-                  message: '提交成功！',
-                  type: 'success',
-                  center: true,
-                  showClose: true
-                })
-                this.closeHandle()
-              }
-            })
+           if (this.$refs.complaintProcessInfo.checkForm()){
+             insetQualityHandleInfo(item).then(res => {
+               if (res != null && res.code == '200') {
+                 this.$message({
+                   message: '提交成功！',
+                   type: 'success',
+                   center: true,
+                   showClose: true
+                 })
+                 this.closeHandle()
+               }
+             })
+           }
           }
         }else {
           return this.$message.warning(

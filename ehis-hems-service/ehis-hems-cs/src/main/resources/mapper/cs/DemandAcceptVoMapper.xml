@@ -88,7 +88,7 @@
         FROM
         accept_detail_info b
         LEFT JOIN work_order_accept a ON b.work_order_no = a.work_order_no
-        LEFT JOIN person_info c ON a.insured_no = c.person_id
+        LEFT JOIN person_info c ON b.contacts_person_id = c.person_id
         LEFT JOIN ( SELECT DISTINCT work_order_no AS nnn FROM hcs_modification WHERE call_serial_num IS NOT NULL AND
         STATUS = 'Y' ) hm ON b.work_order_no = hm.nnn
         WHERE
@@ -191,7 +191,7 @@
         FROM
         accept_detail_info b
         LEFT JOIN work_order_accept a ON b.work_order_no = a.work_order_no
-        LEFT JOIN person_info c ON a.insured_no = c.person_id
+        LEFT JOIN person_info c ON b.contacts_person_id = c.person_id
         LEFT JOIN ( SELECT DISTINCT work_order_no AS nnn FROM hcs_modification WHERE call_serial_num IS NOT NULL AND
         STATUS = 'Y' ) hm ON b.work_order_no = hm.nnn
         left join work_handle_info whi on  whi.work_order_no = a.work_order_no
@@ -201,7 +201,7 @@
         AND a.STATUS = '02'
         <if test="channelCode != null  and channelCode != ''">and b.channel_code = #{channelCode}</if>
         <if test="itemCode != null  and itemCode != ''">and b.item_code = #{itemCode}</if>
-        <if test="acceptBy != null  and acceptBy != ''">and a.accept_by = #{acceptBy}</if>
+        <if test="acceptBy != null  and acceptBy != ''">and ifnull(a.accept_by,a.create_by) like concat('%',#{acceptBy},'%')</if>
         <if test="acceptStartDate != null and acceptStartDate != ''">
             and DATE_FORMAT(a.accept_time,'%Y-%m-%d') <![CDATA[>=]]> #{acceptStartDate}
         </if>
@@ -535,7 +535,7 @@
         from collaborative_from t3
         left join accept_detail_info t2 on t3.work_order_no=t2.work_order_no
         left join work_order_accept t1 on t1.work_order_no=t3.work_order_no
-        left join person_info t0 on t1.insured_no=t0.person_id
+        left join person_info t0 on t2.contacts_person_id=t0.person_id
         left join work_handle_info whi on  whi.work_order_no = t2.work_order_no
         where t1.business_type in ('01','03')
         and t1.status='02'

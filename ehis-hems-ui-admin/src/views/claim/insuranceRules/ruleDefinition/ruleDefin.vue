@@ -345,7 +345,8 @@
   import jwt from 'jsonwebtoken'
 
   let dictss = [{dictType: 'waiting_period'}, {dictType: 'isShare'}, {dictType: 'sex'}, {dictType: 'ruleelement'},
-    {dictType: 'special_cumulativemode'}, {dictType: 'intervalUnit'}, {dictType: 'unitofelement'},]
+    {dictType: 'special_cumulativemode'}, {dictType: 'intervalUnit'}, {dictType: 'unitofelement'},
+    {dictType: 'first_attribute'}, {dictType: 'second_attribute_a'}, {dictType: 'yes_or_no'},]
   import {getAddress} from '@/api/supplierManager/supplier'
 
   export default {
@@ -396,9 +397,9 @@
 
       const positiveInteger = (rule, value, callback) => {
         if (!value) {
-          if (value!==0){
+          if (value !== 0) {
             callback(new Error('要素值非空，请录入要素值'))
-          }else {
+          } else {
             callback()
           }
         } else {
@@ -425,8 +426,8 @@
         rules: {
           age: [{validator: integerRange, trigger: 'change'}],
           intervalUnit: [{validator: checkIntervalUnit, trigger: 'blur'}],
-          checkRequired: [{validator: checkRequired,required: true, trigger: 'blur'}],
-          elementValue: [{validator: positiveInteger,required: true, trigger: 'blur'}],
+          checkRequired: [{validator: checkRequired, required: true, trigger: 'blur'}],
+          elementValue: [{validator: positiveInteger, required: true, trigger: 'blur'}],
         },
 
         rulPageInfo: {
@@ -441,100 +442,26 @@
           {
             id: 1,
             label: '医院属性',
-            children: [{
-              id: '081',
-              label: '公立',
-              attr: 'attribute',
-              code: '1'
-            }, {
-              id: '082',
-              label: '私立',
-              attr: 'attribute',
-              code: '2'
-            }]
+            children: []
           },
           {
             id: 2,
             label: '医院级别',
-            children: [{
-              id: '121',
-              label: 'I_一级',
-              attr: 'grade',
-              code: '1'
-            }, {
-              id: '122',
-              label: 'IA_一级甲等',
-              attr: 'grade',
-              code: '2'
-            }]
+            children: []
           },
           {
             id: 3,
-            label: '部门类别',
-            children: [{
-              id: '091',
-              label: '国际部',
-              attr: 'department',
-              code: '1'
-            }, {
-              id: '092',
-              label: '特殊部',
-              attr: 'department',
-              code: '2'
-            }, {
-              id: '0999',
-              label: '其他',
-              attr: 'department',
-              code: '99'
-            }]
+            label: '是否国际部',
+            children: []
           }, {
             id: 4,
-            label: '医院类别',
-            children: [{
-              id: '098',
-              label: '一级',
-              attr: 'category',
-              code: '1'
-            }, {
-              id: '092',
-              label: '四类',
-              attr: 'category',
-              code: '2'
-            }, {
-              id: '099',
-              label: '其他',
-              attr: 'category',
-              code: '99'
-            }]
+            label: '是否特殊部',
+            children: []
           }, {
             id: 6,
-            label: '网络类',
-            children: [{
-              id: '056',
-              label: '是',
-              attr: 'network',
-              code: '1'
-            }, {
-              id: '057',
-              label: '否',
-              attr: 'network',
-              code: '2'
-            }]
-          },{
-            id: 7,
-            label: '是否直付',
-            children: [{
-              id: '058',
-              label: '是',
-              attr: 'isPay',
-              code: '1'
-            }, {
-              id: '059',
-              label: '否',
-              attr: 'isPay',
-              code: '2'
-            }]
-          },
+            label: '网络内',
+            children: []
+          }
         ],
         ruleForm: {
           minage: undefined,
@@ -622,6 +549,9 @@
         sexOptions: [],
         dictList: [],
         intervalUnitOptions: [],
+        first_attributeOptions: [],
+        second_attribute_aOptions: [],
+        yes_or_noOptions: [],
         rulePagingDatasrulePagingDatas: []
       }
     },
@@ -651,6 +581,50 @@
       this.unitofelementOptions = this.dictList.find(item => {
         return item.dictType === 'unitofelement'
       }).dictDate
+      this.first_attributeOptions = this.dictList.find(item => {
+        return item.dictType === 'first_attribute'
+      }).dictDate
+      this.second_attribute_aOptions = this.dictList.find(item => {
+        return item.dictType === 'second_attribute_a'
+      }).dictDate
+      this.yes_or_noOptions = this.dictList.find(item => {
+        return item.dictType === 'yes_or_no'
+      }).dictDate
+      //first_attributeOptions 公立 非公立
+      //second_attribute_aOptions 公立  二级属性
+      //yes_or_noOptions 是否国际部 是否特殊部 是否网络内
+      this.first_attributeOptions.forEach(item => { //医院属性
+        let option = {
+          id: item.dictCode,
+          label: item.dictLabel,
+          attr: 'attribute',
+          code: item.dictValue
+        }
+        this.rulTreeData[0].children.push(option)
+      })
+      this.second_attribute_aOptions.forEach(item => { //医院级别
+        let option = {
+          id: item.dictCode,
+          label: item.dictLabel,
+          attr: 'grade',
+          code: item.dictValue
+        }
+        this.rulTreeData[1].children.push(option)
+      })
+      this.yes_or_noOptions.forEach(item => { //医院级别
+        let option = {
+          id: item.dictCode,
+          label: item.dictLabel,
+          attr: 'department1',
+          code: item.dictValue
+        }
+        this.rulTreeData[2].children.push(option)
+        option.attr='department2'
+        this.rulTreeData[3].children.push(option)
+        option.attr='network'
+        this.rulTreeData[4].children.push(option)
+      })
+
 
       this.getAddress()
       if (this.$route.query.riskCode) {
@@ -728,9 +702,9 @@
       // 查询特殊医院
       remoteMethod(query) {
 
-        if (query !== '' && query!=null) {//调用特殊医院查询接口
-          let data ={
-            chname1:query
+        if (query !== '' && query != null) {//调用特殊医院查询接口
+          let data = {
+            chname1: query
           }
           getListNew(data).then(res => {
             this.remoteAddress = res.rows
@@ -816,7 +790,7 @@
           return this.$message.warning(
             "最少选择一个计划！"
           )
-        }else {
+        } else {
           this.$refs.ruleForm.validate((valid) => {
             if (valid) {
               //条件列表
@@ -862,12 +836,12 @@
                   constraintList.push(constraint)
                 }
                 //部门类别33
-                if (item.attr === 'department') {
+                if (item.attr === 'department1') {
                   let constraint = this.pushConstraint('33', item.code, item.label, undefined)
                   constraintList.push(constraint)
                 }
-                //医院类别34
-                if (item.attr === 'category') {
+                //是否特殊部34
+                if (item.attr === 'department2') {//department2
                   let constraint = this.pushConstraint('34', item.code, item.label, undefined)
                   constraintList.push(constraint)
                 }
@@ -894,7 +868,7 @@
               }
 
               //特殊医院30   item.code待定
-              this.specialHosList.forEach(item=>{
+              this.specialHosList.forEach(item => {
                 let constraint = this.pushConstraint('30', item.value, item.label, undefined)
                 constraintList.push(constraint)
               })
@@ -962,7 +936,7 @@
         this.ruleForm.maxage = ''
         this.ruleForm.cumulativeMode = ''
         this.ruleForm.isShare = ''
-        this.checkAll=false
+        this.checkAll = false
         this.resetTree()
       }
       ,
@@ -972,19 +946,19 @@
           this.$refs.areaTree.setCheckedKeys([])
           this.$refs.hospitaltree.setCheckedKeys([])
         });
-        this.welfareList.forEach(item=>{
+        this.welfareList.forEach(item => {
           let node = this.$refs.welfareTree.getNode(item.value).parent;
           node.childNodes.forEach((item) => {
             node.checked = false;
             if (item.childNodes.length > 0) {
               item.childNodes.forEach((element) => {
-                element.checked=false
+                element.checked = false
                 if (element.childNodes.length > 0) {
                   element.childNodes.forEach((element) => {
-                    element.checked=false
+                    element.checked = false
                     if (element.childNodes.length > 0) {
                       element.childNodes.forEach((element) => {
-                        element.checked=false
+                        element.checked = false
                       })
                     }
                   })
@@ -993,7 +967,7 @@
             }
           })
         })
-        this.rulTreeData.forEach(item=>{
+        this.rulTreeData.forEach(item => {
           let node = this.$refs.hospitaltree.getNode(item.id).parent;
           node.childNodes.forEach((item) => {
             node.checked = false;
@@ -1071,8 +1045,8 @@
 
       },
       submitReview() {
-        checkSave(this.insuranceInfo.riskCode).then(res=>{
-          if (res.data===1){//通过
+        checkSave(this.insuranceInfo.riskCode).then(res => {
+          if (res.data === 1) {//通过
             let data = {
               riskCode: this.insuranceInfo.riskCode,
               riskStatus: '03'
@@ -1094,12 +1068,12 @@
                 message: '提交失败！'
               })
             })
-          }else if(res.data===0){//不通过
+          } else if (res.data === 0) {//不通过
             return this.$message.warning(
               "每个计划都应包含一条只有涵盖区域的且规则要素为保障区域100%的记录！"
             )
           }
-        }).catch(res=>{
+        }).catch(res => {
 
         })
       }
@@ -1173,19 +1147,19 @@
       getPlan(row, index) {
         if (row.relationInfoList.length > 0) {
           let data = row.relationInfoList[0]
-          let plan=''
-          row.relationInfoList.forEach(data=>{
-            if (plan!==''){
+          let plan = ''
+          row.relationInfoList.forEach(data => {
+            if (plan !== '') {
               plan = plan + '|'
             }
             if ((data.feeitemName == null || data.planName === '') && (data.dutyDetailName !== null && data.dutyDetailName !== '')) {
-              plan=plan+ data.planName + '>' + data.dutyName + ':' + data.dutyDetailName
+              plan = plan + data.planName + '>' + data.dutyName + ':' + data.dutyDetailName
             } else if ((data.dutyDetailName == null || data.dutyDetailName === '') && (data.dutyName !== null && data.dutyName !== '')) {
-              plan= plan+ data.planName + '>' + data.dutyName
+              plan = plan + data.planName + '>' + data.dutyName
             } else if ((data.dutyName == null || data.dutyName === '') && (data.planName !== null && data.planName !== '')) {
-              plan= plan+ data.planName
+              plan = plan + data.planName
             } else {
-              plan= plan+ data.planName + '>' + data.dutyName + ':' + data.dutyDetailName + '>' + data.feeitemName
+              plan = plan + data.planName + '>' + data.dutyName + ':' + data.dutyDetailName + '>' + data.feeitemName
             }
           })
           return plan
@@ -1194,7 +1168,7 @@
       }
       ,
       getRuleInfo(row, index) {
-        return this.selectDictLabel(this.ruleelementOptions, row.ruleElement) +'|'+ row.elementValue +'|'+ this.selectDictLabel(this.unitofelementOptions, row.elementUnit)
+        return this.selectDictLabel(this.ruleelementOptions, row.ruleElement) + '|' + row.elementValue + '|' + this.selectDictLabel(this.unitofelementOptions, row.elementUnit)
       }
       ,
       getConditional(row, index, status) {
@@ -1207,8 +1181,8 @@
         let departmentClass = ''
         let hospitalClass = ''
         let network = ''
-        let isPay=''
-        let specialHospitals=''
+        let isPay = ''
+        let specialHospitals = ''
         data.forEach(item => {
           //规则条件
           if (item.constraintType === '10' || item.constraintType === '11' || item.constraintType === '12') {
@@ -1239,7 +1213,7 @@
             }
           }
           //医院属性
-          if (item.constraintType === '31' || item.constraintType === '32' || item.constraintType === '33' || item.constraintType === '34' || item.constraintType === '35'|| item.constraintType === '36') {
+          if (item.constraintType === '31' || item.constraintType === '32' || item.constraintType === '33' || item.constraintType === '34' || item.constraintType === '35' || item.constraintType === '36') {
             if (item.constraintType === '31') {
               if (hospitalProperty === '') {
                 hospitalProperty = '医院属性：' + item.value2
@@ -1256,14 +1230,14 @@
             }
             if (item.constraintType === '33') {
               if (departmentClass === '') {
-                departmentClass = '部门类别：' + item.value2
+                departmentClass = '是否国际部：' + item.value2
               } else {
                 departmentClass = departmentClass + ',' + item.value2
               }
             }
             if (item.constraintType === '34') {
               if (hospitalClass === '') {
-                hospitalClass = '医院类别：' + item.value2
+                hospitalClass = '是否特殊部：' + item.value2
               } else {
                 hospitalClass = hospitalClass + ',' + item.value2
               }
@@ -1284,10 +1258,10 @@
             }
           }
           //特殊医院
-          if (item.constraintType === '30'){
-            if (specialHospitals!==''){
+          if (item.constraintType === '30') {
+            if (specialHospitals !== '') {
               specialHospitals = specialHospitals + '|' + item.value2
-            }else {
+            } else {
               specialHospitals = item.value2
             }
           }
@@ -1349,24 +1323,24 @@
           return specialHospitals //特殊医院
         }
       },
-      areaTreeCheck(){
+      areaTreeCheck() {
         const areaTreeList = this.$refs.areaTree.getHalfCheckedNodes()
         const areaTreeList2 = this.$refs.areaTree.getCheckedNodes()
         console.log(areaTreeList);
-        if(areaTreeList.length<=0 && areaTreeList2.length<=0){
-          this.checkAll=false
+        if (areaTreeList.length <= 0 && areaTreeList2.length <= 0) {
+          this.checkAll = false
         }
-        let checks=0
-        this.address.forEach(item=>{
+        let checks = 0
+        this.address.forEach(item => {
           let node = this.$refs.areaTree.getNode(item.value);
           console.log(node);
-          if (node.checked===false){
+          if (node.checked === false) {
             checks++
           }
         })
 
-        if (areaTreeList.length<=0 && checks===0){
-          this.checkAll=true
+        if (areaTreeList.length <= 0 && checks === 0) {
+          this.checkAll = true
         }
       }
 

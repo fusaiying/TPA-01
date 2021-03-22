@@ -275,6 +275,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         b.order_code,
         b.balance_interval,
         b.risk_code,
+        b.risk_name,
         b.policy_no,
         b.policy_item_no,
         b.supplier_code,
@@ -377,7 +378,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             service_balance_info
             WHERE
             supplier_code = #{supplierCode}
-            AND settle_type = #{settleType}
+            AND settle_type = #{settleType} and status ='Y'
             ),
             DATE_FORMAT(#{endDate}, '%Y-%m-%d')
             ) settlementTime,

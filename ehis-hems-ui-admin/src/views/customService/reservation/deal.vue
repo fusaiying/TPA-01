@@ -724,10 +724,10 @@
         ruleForm: {
           fax: "",
           workOrderNo: "",
-          businessProcess: "",
+          businessProcess: "01",
           remark: "",
-          customerFeedback: "",
-          closeType: "",
+          customerFeedback: "01",
+          closeType: "01",
           costsIncurred: ""
         },
         checkButtonFlag: {

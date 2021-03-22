@@ -144,7 +144,7 @@ public interface IClaimProductService
      * @param riskCodes
      * @return
      */
-    public int updateClaimProductUpdateBy(String[] riskCodes);
+    public ArrayList<String> updateClaimProductUpdateBy(String[] riskCodes);
 
     /**
      * 规则审核-个人池-已处理

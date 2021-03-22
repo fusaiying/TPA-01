@@ -79,7 +79,7 @@
         <el-table-column type="index" label="序号" align="center" show-overflow-tooltip width="50px"/>
         <el-table-column  key="taskNo" prop="taskNo" label="任务号" width="150%" align="center" show-overflow-tooltip/>
         <el-table-column  key="orderCode" prop="orderCode" label="工单编号" width="150%" align="center" show-overflow-tooltip/>
-        <el-table-column  key="riskCode" prop="riskCode" label="险种" width="150%" align="center" show-overflow-tooltip/>
+        <el-table-column  key="riskCode" prop="riskName" label="险种" width="150%" align="center" show-overflow-tooltip/>
         <el-table-column  key="policyNo" prop="policyNo" label="保单号" width="150%" align="center" show-overflow-tooltip/>
         <el-table-column  key="policyItemNo" prop="policyItemNo" label="分单号" width="150%" align="center" show-overflow-tooltip/>
         <el-table-column  key="serviceCode" prop="supplierServiceName" label="供应商项目名称" width="150%" align="center" show-overflow-tooltip>

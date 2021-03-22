@@ -371,15 +371,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             bcs.settle_type,
             concat_ws(
             '~~',
-            (
+            ifnull((
             SELECT
             DATE_FORMAT(max(end_date), '%Y-%m-%d')
             FROM
             service_balance_info
             WHERE
             supplier_code = #{supplierCode}
-            AND settle_type = #{settleType} and status ='Y'
-            ),
+            AND settle_type = #{settleType}
+            ),DATE_FORMAT(now(), '%Y-%m-%d')),
             DATE_FORMAT(#{endDate}, '%Y-%m-%d')
             ) settlementTime,
             oi.push_flag
@@ -514,7 +514,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             bcs.settle_type,
             concat_ws(
             '~~',
-            (
+            ifnull((
             SELECT
             DATE_FORMAT(max(end_date), '%Y-%m-%d')
             FROM
@@ -522,7 +522,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             WHERE
             supplier_code = #{supplierCode}
             AND settle_type = #{settleType}
-            ),
+            ),DATE_FORMAT(now(), '%Y-%m-%d'))
             DATE_FORMAT(#{endDate}, '%Y-%m-%d')
             ) settlementTime,
             oi.push_flag
@@ -656,6 +656,14 @@ where task_no = #{taskNo}
 
     <update id="updateOrderInfo" parameterType="String">
         update order_info set confirm_flag = '0' where order_code in
+        <foreach item="orderCode" collection="list" open="(" separator="," close=")">
+            #{orderCode}
+        </foreach>
+    </update>
+
+
+    <update id="updateOrderInfo1" parameterType="String">
+        update order_info set confirm_flag = '1' where order_code in
         <foreach item="orderCode" collection="list" open="(" separator="," close=")">
             #{orderCode}
         </foreach>

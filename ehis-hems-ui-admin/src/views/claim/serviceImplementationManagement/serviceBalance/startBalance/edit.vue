@@ -98,9 +98,9 @@
         <el-table-column v-if="queryParams.settleType===settleTypeData.isCase || queryParams.settleType===settleTypeData.isCont" key="remark" prop="remark" label="备注" min-width="150%" align="center" show-overflow-tooltip/>
         <el-table-column v-if="queryParams.settleType===settleTypeData.isCont" key="allAmount" prop="allAmount" :formatter="getAllAmout" label="总费用" min-width="150%" align="center" show-overflow-tooltip/>
 
-        <el-table-column v-if="queryParams.settleType===settleTypeData.isCase || queryParams.settleType===settleTypeData.isCont || queryParams.settleType===settleTypeData.isPrice" key="amount" prop="amount" label="服务费" min-width="150%" align="center" show-overflow-tooltip/>
-        <el-table-column v-if="queryParams.settleType===settleTypeData.isCase || queryParams.settleType===settleTypeData.isCont || queryParams.settleType===settleTypeData.isPrice" key="actualAmount" prop="actualAmount" label="实际服务费用" min-width="150%" align="center" show-overflow-tooltip/>
-        <el-table-column v-if="queryParams.settleType===settleTypeData.isCase || queryParams.settleType===settleTypeData.isCont || queryParams.settleType===settleTypeData.isPrice" key="reason" prop="reason" label="编辑原因" min-width="150%" align="center" show-overflow-tooltip/>
+        <el-table-column v-if="queryParams.settleType===settleTypeData.isCase  || queryParams.settleType===settleTypeData.isPrice" key="amount" prop="amount" label="服务费" min-width="150%" align="center" show-overflow-tooltip/>
+        <el-table-column v-if="queryParams.settleType===settleTypeData.isCase || queryParams.settleType===settleTypeData.isPrice" key="actualAmount" prop="actualAmount" label="实际服务费用" min-width="150%" align="center" show-overflow-tooltip/>
+        <el-table-column v-if="queryParams.settleType===settleTypeData.isCase  || queryParams.settleType===settleTypeData.isPrice" key="reason" prop="reason" label="编辑原因" min-width="150%" align="center" show-overflow-tooltip/>
       </el-table>
       <!--分页组件-->
       <pagination
@@ -288,7 +288,9 @@ export default {
           let obj= new Object();
           obj.dictLabel = item.dictLabel;
           obj.dictValue = item.dictValue;
-          this.clearingFormOptions.push(obj);
+          if(item.dictLabel!='03') {
+            this.clearingFormOptions.push(obj);
+          }
         }
       });
       //如果只显示一条，则默认选中

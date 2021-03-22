@@ -83,7 +83,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectServiceBalanceDetailVo">
-        select serial_no, task_no, status, order_code, balance_interval, risk_code, risk_name, supplier_service_name, settlement_time, policy_no, policy_item_no, supplier_code, service_code, appnt_no, appnt_name, cust_no, cust_name, sex, id_no, service_date, remark, amount, actual_amount, reason, insured_num, unit_price, create_by, create_time, update_by, update_time from service_balance_detail
+        select serial_no, task_no, status, order_code, balance_interval, risk_code, risk_name, supplier_service_name, settlementTime, policy_no, policy_item_no, supplier_code, service_code, appnt_no, appnt_name, cust_no, cust_name, sex, id_no, service_date, remark, amount, actual_amount, reason, insured_num, unit_price, create_by, create_time, update_by, update_time from service_balance_detail
     </sql>
 
     <select id="selectServiceBalanceDetailList" parameterType="ServiceBalanceDetail" resultMap="ServiceBalanceDetailResult">

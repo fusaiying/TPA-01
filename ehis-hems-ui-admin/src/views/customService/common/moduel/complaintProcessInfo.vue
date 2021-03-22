@@ -254,13 +254,15 @@
         return data
       },
       checkForm(){
+        let data = true
         this.$refs.ruleForm.validate((valid) => {
           if (valid) {
-            return true
+            data=true
           }else {
-            return false
+            data=false
           }
         })
+        return data
       }
     }
   }

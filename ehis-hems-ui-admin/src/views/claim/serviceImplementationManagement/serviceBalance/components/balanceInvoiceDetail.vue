@@ -295,8 +295,10 @@ export default {
     submitForm() {
       this.$refs["form"].validate(valid => {
         if (valid) {
-          let calc=parseFloat(this.form.amount) - parseFloat(this.form.amountTax).toFixed(2)
-         if(calc==this.form.tax) {
+          let calc=(parseFloat(this.form.amount) - parseFloat(this.form.amountTax)).toFixed(2)
+
+         let flag=parseFloat(this.form.tax).toFixed(2)==calc
+         if(flag) {
            if (this.form.serialNo) {
              updateBalanceInvoice(this.form).then(response => {
                if (response.code === 200) {

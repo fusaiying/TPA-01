@@ -427,7 +427,8 @@ export default {
           taskNo: row.taskNo,
           supplierCode: row.supplierCode,
           settleType: row.settleType,
-          balanceInvoiceType: row.balanceInvoiceType
+          balanceInvoiceType: row.balanceInvoiceType,
+          serviceAmount:row.serviceAmount
         }
       });
     },

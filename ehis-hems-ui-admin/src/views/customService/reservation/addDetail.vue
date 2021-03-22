@@ -292,7 +292,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="本次疾病/症状起病时间：" prop="a">
-              <el-input v-model="ruleForm.a" style="width: 90px" clearable size="mini" placeholder="请输入" />
+              <el-input v-model="ruleForm.a" style="width: 90px" clearable size="mini" maxlength="4" placeholder="请输入" />
               <el-select v-model="ruleForm.b" style="width: 90px" placeholder="请选择"  >
                 <el-option v-for="item in cs_time_unit" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
@@ -398,7 +398,7 @@
 
           <el-col :span="8">
             <el-form-item label="科室：" prop="department">
-              <el-input v-model="ruleForm.department" class="item-width" clearable size="mini" placeholder="请输入"/>
+              <el-input v-model="ruleForm.department" class="item-width" clearable size="mini" maxlength="20" placeholder="请输入"/>
             </el-form-item>
           </el-col>
 
@@ -424,7 +424,7 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="医院电话：" prop="hospitalWorkCall">
-              <el-input v-model="ruleForm.hospitalWorkCall" class="item-width" clearable size="mini" placeholder="请输入"/>
+              <el-input v-model="ruleForm.hospitalWorkCall" class="item-width" maxlength="11" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -439,11 +439,16 @@
         </el-row>
         <el-row>
           <el-form-item label="业务内容：" prop="content">
-            <el-input v-model="ruleForm.content" class="width-full" clearable size="mini" placeholder="请输入"/>
+            <el-input
+              type="textarea"
+              :rows="3"
+              maxlength="2000"
+              v-model="ruleForm.content">
+            </el-input>
           </el-form-item>
         </el-row>
         <div style="text-align: right; margin-right: 8px;">
-          <el-button type="primary" size="mini" @click="submit">提交</el-button>
+          <el-button type="primary" size="mini" @click="submit" :disabled="this.checkSubmitFlag=='01'">提交</el-button>
           <el-button type="primary" size="mini" @click="hiddenShow">关闭</el-button>
         </div>
 
@@ -552,7 +557,8 @@ export default {
         email:"",//邮件
         organCode:"",//出单机构
         a:"",
-        b:""
+        b:"",
+        checkSubmitFlag:'',
       },
       // 表单校验根据Form 组件提供了表单验证的功能，只需要通过 rules 属性传入约定的验证规则，并将 Form-Item 的 prop 属性设置为需校验的字段名即可
       rules: {
@@ -627,6 +633,12 @@ export default {
         province: [
           {required: true, message: "预约医院不能为空", trigger: "blur"}
         ],
+        compensationRatio: [
+          {required: false,
+            message: "赔付比例只能录入0-100的数字",
+            pattern: /^(([1-9]\d)|\d|100)$/,
+            trigger: ['change','blur']}
+        ],
         city: [
           {required: true, message: "预约医院不能为空", trigger: "blur"}
         ],
@@ -635,6 +647,13 @@ export default {
         ],
         organCode: [
           {required: true, message: "出单机构不能为空", trigger: "blur"}
+        ],
+        hospitalWorkCall: [
+          {required: false,
+            message: "医院电话格式不正确",
+            pattern: /^[1][3|4|5|6|7|8|9][0-9]{9}$/,
+            trigger: ["blur","change"]
+          }
         ],
         'email': [
           {required: true, message: "Email不能为空", trigger: "blur"},
@@ -775,7 +794,8 @@ export default {
       addReservationInsert(insert).then(res => {
         console.log("insert",insert)
         if (res != null && res.code === 200) {
-          this.$message.success("插入成功")
+          this.$message.success("插入成功");
+          this.checkSubmitFlag = '01';
           this.ruleForm.workOrderNo=res.msg;
           if (res.rows.length <= 0) {
             return this.$message.warning(

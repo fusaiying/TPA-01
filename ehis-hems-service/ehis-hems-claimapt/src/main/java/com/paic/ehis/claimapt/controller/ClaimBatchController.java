@@ -315,8 +315,8 @@ public class ClaimBatchController extends BaseController {
     @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:batch:edit')")
     @Log(title = "获取理赔批次至个人池 ", businessType = BusinessType.UPDATE)
     @PutMapping(value = "/batchnoes")
-    public AjaxResult ObtainToPersonalPool(@RequestBody String[] batchnoes) {
-        return toAjax(claimBatchRecordService.updateClaimBatchByReview(batchnoes));
+    public TableDataInfo ObtainToPersonalPool(@RequestBody String[] batchnoes) {
+        return getDataTable(claimBatchRecordService.updateClaimBatchByReview(batchnoes));
     }
 
     /**

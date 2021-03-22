@@ -828,9 +828,9 @@ export default {
         treatmentResult: [
           {required: true, message: "处理结果不能为空", trigger: "blur"}
         ],
-        rootImprovement: [
+        /*rootImprovement: [
           {required: true, message: "根因改善不能为空", trigger: "blur"}
-        ],
+        ],*/
         actPromptly: [
           {required: true, message: "投诉损失不能为空", trigger: "blur"}
         ],

@@ -327,7 +327,7 @@
         </el-row>
 
         <el-row>
-          <el-form-item label="改善措施：" prop="phone">
+          <el-form-item label="改善措施：" prop="content">
             <el-input
               disabled
               type="textarea"
@@ -744,6 +744,9 @@
           // ],
           orderNum: [
             {required: true, message: "联系人移动电话不能为空", trigger: "blur"}
+          ],
+          content: [
+            {required: true, message: "改善措施不能为空", trigger: "blur"}
           ],
 
         },

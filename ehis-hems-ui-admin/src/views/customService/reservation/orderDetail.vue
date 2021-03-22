@@ -503,6 +503,7 @@
     {dictType: 'cs_channel'},
     {dictType: 'cs_communication_language'},
     {dictType: 'cs_organization'},
+    {dictType: 'cs_action_type'},
   ]
   export default {
     components: { transfer ,
@@ -520,6 +521,12 @@
     data() {
 
       return {
+        cs_action_type:[],
+        cs_communication_language:[],
+        cs_sex:[],
+        cs_priority:[],
+        cs_channel:[],
+        cs_organization:[],
         //流转用
         flowLogData:[],
         flowLogCount: 0,
@@ -552,18 +559,35 @@
           orderNum: [
             {required: true, message: "联系人与被保人关系不能为空", trigger: "blur"}
           ],
-          orderNum: [
-            {required: true, message: "联系人移动电话不能为空", trigger: "blur"}
-          ],
+          // orderNum: [
+          //   {required: true, message: "联系人移动电话不能为空", trigger: "blur"}
+          // ],
 
         },
         readonly: true,
         dialogFormVisible: false,
         updateBy: undefined,
         //新增的数据传输
+        // sendForm: {
+        //   workOrderNo:'',
+        //   businessProcess:'',
+        // },
         sendForm: {
-          workOrderNo:'',
-          businessProcess:'',
+          email: "",
+          workOrderNo: '',
+          businessProcess: '',
+          contactsPerson: {
+            homePhone1: [],
+            name: "",
+            sex: "",
+            mobilePhone: "",
+            address: "",
+            homePhone: "",
+            workPhone: "",
+            language: "",
+          },//联系人
+          callPerson: {},
+          validCertificate: "",
         },
         //submnit提交
         submitForm:{
@@ -625,7 +649,31 @@
       this.searchFlowLog()
       this.searchHCS()
     },
-
+    async mounted() {
+      // 字典数据统一获取
+      await this.getDictsList(dictss).then(response => {
+        this.dictList = response.data
+      })
+      // 下拉项赋值
+      this.cs_action_type = this.dictList.find(item => {
+        return item.dictType === 'cs_action_type'
+      })
+      this.cs_communication_language = this.dictList.find(item => {
+        return item.dictType === 'cs_communication_language'
+      })
+      this.cs_sex = this.dictList.find(item => {
+        return item.dictType === 'cs_sex'
+      })
+      this.cs_priority = this.dictList.find(item => {
+        return item.dictType === 'cs_priority'
+      })
+      this.cs_channel = this.dictList.find(item => {
+        return item.dictType === 'cs_channel'
+      })
+      this.cs_organization = this.dictList.find(item => {
+        return item.dictType === 'cs_organization'
+      })
+    },
     methods: {
       //超链接用
       modifyDetails(s){
@@ -707,13 +755,13 @@
       //反显信息需求
       searchHandle() {
         let query=this.queryParams
-        console.log("query",query)
+       // console.log("query",query)
         demandListAndPersonalPool(query).then(res => {
-          console.log('共公池',res.rows)
+         // console.log('共公池',res.rows)
           if (res != null && res.code === 200) {
             this.workPoolData = res.rows[0]
             this.totalCount = res.total
-            console.log('response',res.total)
+           // console.log('response',res.total)
             if (res.rows.length <= 0) {
               return this.$message.warning(
                 "未查询到数据！"
@@ -745,12 +793,12 @@
         let workOrderNo=this.queryParams
         workOrderNo.status=""
         FlowLogSearch(workOrderNo).then(res => {
-          console.log(workOrderNo)
-          console.log('轨迹表',res.rows)
+          // console.log(workOrderNo)
+          // console.log('轨迹表',res.rows)
           if (res != null && res.code === 200) {
             this.flowLogData = res.rows
             this.flowLogCount=res.total
-            console.log("searchFlowLog",this.flowLogData)
+            // console.log("searchFlowLog",this.flowLogData)
             this.flowLogCount = res.total
             if (res.rows.length <= 0) {
               return this.$message.warning(
@@ -767,8 +815,8 @@
         let workOrderNo=this.queryParams
         workOrderNo.status=""
         HMSSearch(workOrderNo).then(res => {
-          console.log(workOrderNo)
-          console.log('HCS',res.rows)
+          // console.log(workOrderNo)
+          // console.log('HCS',res.rows)
           if (res != null && res.code === 200) {
             this.HCSPoolData = res.rows
             this.HCSTotal = res.total

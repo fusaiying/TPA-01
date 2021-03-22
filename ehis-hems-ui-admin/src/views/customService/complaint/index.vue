@@ -566,6 +566,12 @@
         } else {
           queryParams = this.sendForm;
         }
+
+        if(this.sendForm.appointmentTime){
+          queryParams.appointmentTimeStart=this.sendForm.appointmentTime[0]
+          queryParams.appointmentTimeEnd=this.sendForm.appointmentTime[1]
+        }
+
        /* queryParams.pageNum = this.pageNum;
         queryParams.pageSize = this.pageSize;*/
         complaintListAndPublicPool(queryParams).then(res => {
@@ -589,6 +595,10 @@
           queryParams.acceptTimeEnd=acceptorTime[1]
         } else {
           queryParams = this.sendForm;
+        }
+        if(this.sendForm.appointmentTime){
+          queryParams.appointmentTimeStart=this.sendForm.appointmentTime[0]
+          queryParams.appointmentTimeEnd=this.sendForm.appointmentTime[1]
         }
         /*queryParams.pageNum = this.pageNumPerson;
         queryParams.pageSize = this.pageSizePerson;*/

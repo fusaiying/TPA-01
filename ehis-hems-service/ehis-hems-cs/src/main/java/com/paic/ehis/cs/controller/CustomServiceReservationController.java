@@ -56,8 +56,8 @@ public class CustomServiceReservationController extends BaseController {
     @Log(title = "增加 ", businessType = BusinessType.INSERT)
     @PutMapping("/serviceAdd")
     public AjaxResult reservationAdd(@Validated @RequestBody ReservationAcceptVo reservationAcceptVo)
-    {reservationAcceptVo.setContactsPersonId(PubFun.createMySqlMaxNoUseCache("cs_person_id",10,6));
-        reservationAcceptVo.setCallPersonId(PubFun.createMySqlMaxNoUseCache("cs_person_id",10,6));
+    {reservationAcceptVo.setContactsPersonId(PubFun.createMySqlMaxNoUseCache("cs_person_id",10,10));
+        reservationAcceptVo.setCallPersonId(PubFun.createMySqlMaxNoUseCache("cs_person_id",10,10));
         reservationAcceptVo.setBusinessType("02");
         String workOrderNo="9900000000"+PubFun.createMySqlMaxNoUseCache("cs_work_order_no",10,6);
         reservationAcceptVo.setWorkOrderNo(workOrderNo);

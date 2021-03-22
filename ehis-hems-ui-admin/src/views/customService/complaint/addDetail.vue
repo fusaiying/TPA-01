@@ -438,7 +438,7 @@
 
       </div>
       <div style="text-align: right; margin-right: 1px;">
-        <el-button  type="primary" size="mini" @click="submit">提交</el-button>
+        <el-button  type="primary" size="mini" @click="submit" :disabled="this.checkSubmitFlag=='01'">提交</el-button>
         <el-button  type="primary"size="mini" @click="hiddenShow">关闭</el-button>
       </div>
     </el-card>
@@ -531,7 +531,8 @@
           contactsCountry:"",//
           contactsQuhao:"",
            contactsNumber:"",
-          contactsSecondNumber:""
+          contactsSecondNumber:"",
+          checkSubmitFlag: '01',
 
         },
         // 表单校验根据Form 组件提供了表单验证的功能，只需要通过 rules 属性传入约定的验证规则，并将 Form-Item 的 prop 属性设置为需校验的字段名即可
@@ -746,7 +747,8 @@
              let insert = this.ruleForm
              complaintAddInsert(insert).then(res => {
                if (res != null && res.code === 200) {
-                 this.$message.success("保存成功")
+                 this.$message.success("保存成功");
+                 this.checkSubmitFlag = '01';
                  this.ruleForm.workOrderNo=res.msg;
                  if (res.rows.length <= 0) {
                    return this.$message.warning(

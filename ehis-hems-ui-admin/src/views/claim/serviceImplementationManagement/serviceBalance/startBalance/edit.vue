@@ -277,7 +277,7 @@ export default {
 
       //如果只有一条，则默认选中
       if (this.serviceOptions.length == 1) {
-        this.queryParams.serviceCode = this.serviceOptions[0].serialNo;
+        this.queryParams.serviceCode = this.serviceOptions[0].dictValue;
       }
 
       //结算方式

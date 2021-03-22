@@ -335,6 +335,8 @@
               分机号<el-input v-model="workPoolData.contactsPerson.homePhone1[3]" class="item-width2"  size="mini" />
             </el-form-item>
           </el-col>
+        </el-row>
+        <el-row>
           <el-col :span="8">
             <el-form-item label="办公室电话:"  style="white-space: nowrap">
               国家区号+<el-input v-model="workPoolData.contactsPerson.workPhone1[0]" class="item-width2"/>
@@ -358,10 +360,10 @@
         </el-row>
 
         <el-row>
-          <el-col :span="8">
+          <el-col :span="24">
               <el-form-item label="就诊医院：" prop="medicalInstitution">
-                省份：<el-input v-model="workPoolData.province" style="width: 60px"  />
-                城市：<el-input v-model="workPoolData.city" style="width: 60px" />
+                省份：<el-input v-model="workPoolData.province" style="width: 120px"  />
+                城市：<el-input v-model="workPoolData.city" style="width: 120px" />
               </el-form-item>
           </el-col>
 
@@ -409,8 +411,8 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="本次疾病/症状起病时间：" prop="symptomTimes">
-              <el-input v-model="ruleForm.a" style="width: 90px" clearable size="mini" placeholder="请输入"maxlength="6"/>
+            <el-form-item label="本次疾病/症状起病时间：" prop="a">
+              <el-input v-model="ruleForm.a" style="width: 90px" clearable size="mini" placeholder="请输入"maxlength="4"/>
               <el-select v-model="ruleForm.b" style="width: 90px" placeholder="请选择"  >
                 <el-option v-for="item in cs_time_unit" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
@@ -788,7 +790,8 @@
       //提交页面数据
       submit(){
         this.workPoolData.workOrderNo=this.$route.query.workOrderNo;
-        this.ruleForm.symptomTimes=this.ruleForm.a+'-'+this.ruleForm.b;
+        this.workPoolData.symptomTimes=this.ruleForm.a+'-'+this.ruleForm.b;
+        //this.ruleForm.symptomTimes=this.ruleForm.a+'-'+this.ruleForm.b;
         let send=this.workPoolData
         modifyReservationSubmit(send).then(res => {
           if (res != null && res.code === 200) {
@@ -818,8 +821,10 @@
               if (this.workPoolData.symptomTimes != null && this.workPoolData.symptomTimes != '') {
                 let arr=this.workPoolData.symptomTimes.split('-')
                 console.log(arr)
-                this.ruleForm.a=arr[0]
-                this.ruleForm.b=arr[1]
+                /*this.ruleForm.a=arr[0];
+                this.ruleForm.b=arr[1];*/
+                this.$set(this.ruleForm, `a`, arr[0]);
+                this.$set(this.ruleForm, `b`, arr[1]);
               }
 
               if (res.rows.length <= 0) {
@@ -841,8 +846,10 @@
               if (this.workPoolData.symptomTimes != null && this.workPoolData.symptomTimes != '') {
                 let arr=this.workPoolData.symptomTimes.split('-')
                 console.log(arr)
-                this.ruleForm.a=arr[0]
-                this.ruleForm.b=arr[1]
+                /*this.ruleForm.a=arr[0]
+                this.ruleForm.b=arr[1]*/
+                this.$set(this.ruleForm, `a`, arr[0]);
+                this.$set(this.ruleForm, `b`, arr[1]);
               }
               if (res.rows.length <= 0) {
                 return this.$message.warning(

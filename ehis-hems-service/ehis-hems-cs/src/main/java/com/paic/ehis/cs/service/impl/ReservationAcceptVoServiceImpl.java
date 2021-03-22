@@ -315,8 +315,8 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
         //工单表修改
         WorkOrderAccept workOrderAccept=workOrderAcceptMapper.selectWorkOrderAcceptById(workOrderNo);
         workOrderAccept.setOrganCode(reservationAcceptVo.getOrganCode());
-//        workOrderAccept.setUpdateBy(SecurityUtils.getUsername());
-//        workOrderAccept.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
+        workOrderAccept.setUpdateBy(SecurityUtils.getUsername());
+        workOrderAccept.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
         workOrderAcceptMapper.updateWorkOrderAccept(workOrderAccept);
 
         AcceptDetailInfo acceptDetailInfo=acceptDetailInfoMapper.selectAcceptDetailInfoById(workOrderNo);
@@ -367,19 +367,26 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
         callPerson.setFax(reservationAcceptVo.getCallPerson().getFax());
         callPerson.setName(reservationAcceptVo.getCallPerson().getName());
         callPerson.setMobilePhone(reservationAcceptVo.getCallPerson().getMobilePhone());
-//        callPerson.setUpdatedBy(SecurityUtils.getUsername());
-//        callPerson.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+        callPerson.setUpdatedBy(SecurityUtils.getUsername());
+        callPerson.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
         personInfoMapper.updatePersonInfo(callPerson);
         //插入联系人
         contactsPerson.setSex(reservationAcceptVo.getContactsPerson().getSex());
         contactsPerson.setName(reservationAcceptVo.getContactsPerson().getName());
         contactsPerson.setLanguage(reservationAcceptVo.getContactsPerson().getLanguage());
         contactsPerson.setMobilePhone(reservationAcceptVo.getContactsPerson().getMobilePhone());
-//        contactsPerson.setLinePhone(reservationAcceptVo.getContactsPerson().getLinePhone1()[0] + "-" + reservationAcceptVo.getContactsPerson().getLinePhone1()[1] + "-" + reservationAcceptVo.getContactsPerson().getLinePhone1()[2] + "-" + reservationAcceptVo.getContactsPerson().getLinePhone1()[3]);
-        contactsPerson.setHomePhone(reservationAcceptVo.getContactsPerson().getHomePhone1()[0]+"-"+reservationAcceptVo.getContactsPerson().getHomePhone1()[1]+"-"+reservationAcceptVo.getContactsPerson().getHomePhone1()[2]+"-"+reservationAcceptVo.getContactsPerson().getHomePhone1()[3]);
-        contactsPerson.setWorkPhone(reservationAcceptVo.getContactsPerson().getWorkPhone1()[0]+"-"+reservationAcceptVo.getContactsPerson().getWorkPhone1()[1]+"-"+reservationAcceptVo.getContactsPerson().getWorkPhone1()[2]+"-"+reservationAcceptVo.getContactsPerson().getWorkPhone1()[3]);
-//        contactsPerson.setUpdatedBy(SecurityUtils.getUsername());
-//        contactsPerson.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+        if(reservationAcceptVo.getContactsPerson().getHomePhone1()==null || reservationAcceptVo.getContactsPerson().getHomePhone1().length <=0){
+            contactsPerson.setHomePhone("---");
+        }else{
+            contactsPerson.setHomePhone(reservationAcceptVo.getContactsPerson().getHomePhone1()[0]+"-"+reservationAcceptVo.getContactsPerson().getHomePhone1()[1]+"-"+reservationAcceptVo.getContactsPerson().getHomePhone1()[2]+"-"+reservationAcceptVo.getContactsPerson().getHomePhone1()[3]);
+        }
+        if(reservationAcceptVo.getContactsPerson().getWorkPhone1()==null || reservationAcceptVo.getContactsPerson().getWorkPhone1().length <= 0){
+            contactsPerson.setWorkPhone("---");
+        }else{
+            contactsPerson.setWorkPhone(reservationAcceptVo.getContactsPerson().getWorkPhone1()[0]+"-"+reservationAcceptVo.getContactsPerson().getWorkPhone1()[1]+"-"+reservationAcceptVo.getContactsPerson().getWorkPhone1()[2]+"-"+reservationAcceptVo.getContactsPerson().getWorkPhone1()[3]);
+        }
+        contactsPerson.setUpdatedBy(SecurityUtils.getUsername());
+        contactsPerson.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
         personInfoMapper.updatePersonInfo(contactsPerson);
        //插入申请人
         complaintPerson.setName(reservationAcceptVo.getComplaintPerson().getName());
@@ -387,17 +394,15 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
         complaintPerson.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
         personInfoMapper.updatePersonInfo(complaintPerson);
 
+
+        //基本信息 修改明细
         String editId=PubFun.createMySqlMaxNoUseCache("cs_edit_id",10,8);
         Map map1 = JSONObject.parseObject(JSONObject.toJSONString(reservationAcceptVo1), Map.class);
         Map map2 = JSONObject.parseObject(JSONObject.toJSONString(reservationAcceptVo), Map.class);
-
-        //     Map<String,Object> map = JSONObject.parseObject(JSON.toJSONString(acceptDetailInfo1));
-
         List<String> keyList=new ArrayList<>();
         Iterator<String> iter1 = map1.keySet().iterator();
         while(iter1.hasNext()){
             EditDetail editDetail=new EditDetail();
-        //    EditInfo editInfo=new EditInfo();
             String map1key=iter1.next();
             String map1value = String.valueOf(map1.get(map1key));
             String map2value = String.valueOf(map2.get(map1key));
@@ -414,75 +419,68 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
                 editDetail.setUpdatedBy(SecurityUtils.getUsername());
                 editDetail.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
                 editDetailMapper.insertEditDetail(editDetail);
-
             }
-
         }
 
+        //来电人信息修改明细
         Map map3 = JSONObject.parseObject(JSONObject.toJSONString(callPerson1), Map.class);
         Map map4 = JSONObject.parseObject(JSONObject.toJSONString(callPerson), Map.class);
-
-        //     Map<String,Object> map = JSONObject.parseObject(JSON.toJSONString(acceptDetailInfo1));
-
-
         Iterator<String> iter2 = map3.keySet().iterator();
         while(iter2.hasNext()){
             EditDetail editDetail=new EditDetail();
-          //  EditInfo editInfo=new EditInfo();
             String map3key=iter2.next();
             String map3value = String.valueOf(map3.get(map3key));
             String map4value = String.valueOf(map4.get(map3key));
-            if (!map3value.equals(map4value)) {
-                keyList.add(map3key);
-                editDetail.setKeyDictType("reservationAcceptVo");
-                editDetail.setItemKey("callPerson."+map3key);
-                editDetail.setOldValue(map3value);
-                editDetail.setNowValue(map4value);
-                editDetail.setDetailId(PubFun.createMySqlMaxNoUseCache("cs_detail_id",10,8));
-                editDetail.setEditId(editId);
-                editDetail.setCreatedBy(SecurityUtils.getUsername());
-                editDetail.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
-                editDetail.setUpdatedBy(SecurityUtils.getUsername());
-                editDetail.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
-                editDetailMapper.insertEditDetail(editDetail);
+            if(!"updatedTime".equals(map3key)){
+                if (!map3value.equals(map4value)) {
+                    keyList.add(map3key);
+                    editDetail.setKeyDictType("reservationAcceptVo");
+                    editDetail.setItemKey("callPerson."+map3key);
+                    editDetail.setOldValue(map3value);
+                    editDetail.setNowValue(map4value);
+                    editDetail.setDetailId(PubFun.createMySqlMaxNoUseCache("cs_detail_id",10,8));
+                    editDetail.setEditId(editId);
+                    editDetail.setCreatedBy(SecurityUtils.getUsername());
+                    editDetail.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+                    editDetail.setUpdatedBy(SecurityUtils.getUsername());
+                    editDetail.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+                    editDetailMapper.insertEditDetail(editDetail);
+                }
             }
-
         }
 
+        //联系人
         Map map5 = JSONObject.parseObject(JSONObject.toJSONString(contactsPerson1), Map.class);
         Map map6 = JSONObject.parseObject(JSONObject.toJSONString(contactsPerson), Map.class);
-
         Iterator<String> iter3 = map6.keySet().iterator();
         while(iter3.hasNext()){
             EditDetail editDetail=new EditDetail();
-         //   EditInfo editInfo=new EditInfo();
             String map5key=iter3.next();
             String map5value = String.valueOf(map5.get(map5key));
             String map6value = String.valueOf(map6.get(map5key));
-            if (!map5value.equals(map6value)) {
-                keyList.add(map5key);
-                editDetail.setKeyDictType("reservationAcceptVo");
-                editDetail.setItemKey("contactsPerson."+map5key);
-                editDetail.setOldValue(map5value);
-                editDetail.setNowValue(map6value);
-                editDetail.setDetailId(PubFun.createMySqlMaxNoUseCache("cs_detail_id",10,8));
-                editDetail.setEditId(editId);
-                editDetail.setCreatedBy(SecurityUtils.getUsername());
-                editDetail.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
-                editDetail.setUpdatedBy(SecurityUtils.getUsername());
-                editDetail.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
-                editDetailMapper.insertEditDetail(editDetail);
+            if(!"updatedTime".equals(map5key)){
+                if (!map5value.equals(map6value)) {
+                    keyList.add(map5key);
+                    editDetail.setKeyDictType("reservationAcceptVo");
+                    editDetail.setItemKey("contactsPerson."+map5key);
+                    editDetail.setOldValue(map5value);
+                    editDetail.setNowValue(map6value);
+                    editDetail.setDetailId(PubFun.createMySqlMaxNoUseCache("cs_detail_id",10,8));
+                    editDetail.setEditId(editId);
+                    editDetail.setCreatedBy(SecurityUtils.getUsername());
+                    editDetail.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+                    editDetail.setUpdatedBy(SecurityUtils.getUsername());
+                    editDetail.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+                    editDetailMapper.insertEditDetail(editDetail);
+                }
             }
-
         }
 
         Map map7 = JSONObject.parseObject(JSONObject.toJSONString(complaintPerson1), Map.class);
         Map map8 = JSONObject.parseObject(JSONObject.toJSONString(complaintPerson), Map.class);
-
         Iterator<String> iter4 = map7.keySet().iterator();
         while(iter4.hasNext()){
             EditDetail editDetail=new EditDetail();
-          //  EditInfo editInfo=new EditInfo();
             String map7key=iter4.next();
             String map7value = String.valueOf(map7.get(map7key));
             String map8value = String.valueOf(map8.get(map7key));

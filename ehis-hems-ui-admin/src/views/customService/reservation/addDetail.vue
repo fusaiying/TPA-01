@@ -494,7 +494,31 @@ export default {
     }
   },
   data() {
+    //意外原因
+    const checkAccidentReason = (rule, value, callback) => {
+      if (this.ruleForm.accidentFlag === '01') {
+        if (!value) {
+          callback(new Error("意外原因必填"));
+        } else {
+          callback();
+        }
+      } else {
+        callback();
+      }
+    };
 
+    //床位
+    const checkBunk = (rule, value, callback) => {
+      if (this.ruleForm.visitType === '02') {
+        if (!value) {
+          callback(new Error("床位必填"));
+        } else {
+          callback();
+        }
+      } else {
+        callback();
+      }
+    };
     return {
       cs_channel:[],//受理渠道
       cs_reservation_item:[],//服务项目
@@ -563,10 +587,10 @@ export default {
       // 表单校验根据Form 组件提供了表单验证的功能，只需要通过 rules 属性传入约定的验证规则，并将 Form-Item 的 prop 属性设置为需校验的字段名即可
       rules: {
         channelCode: [
-          {required: true, message: "受理渠道不能为空", trigger: "blur"}
+          {required: true, message: "受理渠道不能为空",  trigger: ["blur","change"]}
         ],
         'callPerson.name': [
-          {required: true, message: "来电人不能为空", trigger: "blur"}
+          {required: true, message: "来电人不能为空",  trigger: ["blur","change"]}
         ],
         'callPerson.mobilePhone': [
           {required: false,
@@ -575,47 +599,53 @@ export default {
             trigger: ['change','blur']}
         ],
         priorityLevel: [
-          {required: true, message: "优先级不能为空", trigger: "blur"}
+          {required: true, message: "优先级不能为空",  trigger: ["blur","change"]}
         ],
         callRelationBy: [
-          {required: true, message: "来电人与申请人关系不能为空", trigger: "blur"}
+          {required: true, message: "来电人与申请人关系不能为空",  trigger: ["blur","change"]}
         ],
         outpatientSettlement: [
-          {required: true, message: "门诊直接结算服务项目", trigger: "blur"}
+          {required: true, message: "门诊直接结算服务项目", trigger: ["blur","change"]}
         ],
         'contactsPerson.language': [
-          {required: true, message: "联系人语言不能为空", trigger: "blur"}
+          {required: true, message: "联系人语言不能为空", trigger: ["blur","change"]}
         ],
         visitType: [
-          {required: true, message: "就诊类型不能为空", trigger: "blur"}
+          {required: true, message: "就诊类型不能为空", trigger: ["blur","change"]}
         ],
         symptomsSigns: [
-          {required: true, message: "症状或体征不能为空", trigger: "blur"}
+          {required: true, message: "症状或体征不能为空", trigger: ["blur","change"]}
         ],
         a: [
-          {required: true, message: "本次疾病/症状起病时间不能为空", trigger: "blur"},
+          {required: true, message: "本次疾病/症状起病时间不能为空", trigger: ["blur","change"]},
           {required: true,
             message: "本次疾病/症状起病时间只能录入数字",
             pattern: /^\d*$/,
             trigger: ['change','blur']}
         ],
         accidentFlag: [
-          {required: true, message: "是否意外不能为空", trigger: "blur"}
+          {required: true, message: "是否意外不能为空", trigger: ["blur","change"]}
+        ],
+        accidentReason: [
+          {required: false, validator: checkAccidentReason, trigger: ["blur","change"]}
+        ],
+        bunk: [
+          {required: false, validator: checkBunk, trigger: ["blur","change"]}
         ],
         'contactsPerson.name': [
-          {required: true, message: "联系人姓名不能为空", trigger: "blur"}
+          {required: true, message: "联系人姓名不能为空", trigger: ["blur","change"]}
         ],
         'contactsPerson.mobilePhone': [
-          {required: true, message: "联系人电话不能为空", trigger: "blur"}
+          {required: true, message: "联系人电话不能为空", trigger: ["blur","change"]}
         ],
         'contactsPerson.sex': [
-          {required: true, message: "联系人性别不能为空", trigger: "blur"}
+          {required: true, message: "联系人性别不能为空", trigger: ["blur","change"]}
         ],
         validCertificate: [
-          {required: true, message: "是否持有有效证件不能为空", trigger: "blur"}
+          {required: true, message: "是否持有有效证件不能为空", trigger: ["blur","change"]}
         ],
         settlementCard: [
-          {required: true, message: "是否持有直结卡不能为空", trigger: "blur"}
+          {required: true, message: "是否持有直结卡不能为空", trigger: ["blur","change"]}
         ],
         hospitalDays: [
           {required: true,
@@ -625,13 +655,13 @@ export default {
           }
         ],
         medicalInstitution: [
-          {required: true, message: "医疗机构不能为空", trigger: "blur"}
+          {required: true, message: "医疗机构不能为空", trigger: ["blur","change"]}
         ],
         appointmentDate: [
-          {required: true, message: "预约时间不能为空", trigger: "blur"}
+          {required: true, message: "预约时间不能为空", trigger: ["blur","change"]}
         ],
         province: [
-          {required: true, message: "预约医院不能为空", trigger: "blur"}
+          {required: true, message: "预约医院不能为空", trigger: ["blur","change"]}
         ],
         compensationRatio: [
           {required: false,
@@ -640,13 +670,13 @@ export default {
             trigger: ['change','blur']}
         ],
         city: [
-          {required: true, message: "预约医院不能为空", trigger: "blur"}
+          {required: true, message: "预约医院不能为空", trigger: ["blur","change"]}
         ],
         department: [
-          {required: true, message: "科室不能为空", trigger: "blur"}
+          {required: true, message: "科室不能为空", trigger: ["blur","change"]}
         ],
         organCode: [
-          {required: true, message: "出单机构不能为空", trigger: "blur"}
+          {required: true, message: "出单机构不能为空", trigger: ["blur","change"]}
         ],
         hospitalWorkCall: [
           {required: false,

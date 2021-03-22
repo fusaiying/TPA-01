@@ -28,21 +28,13 @@ public class ServiceBalanceDetail extends BaseEntity
     @Excel(name = "任务号")
     private String taskNo;
 
-    /** 状态 */
-    @Excel(name = "状态")
-    private String status;
-
     /** 工单编号 */
     @Excel(name = "工单编号")
     private String orderCode;
 
-    /** 结算时间区间 */
-    @Excel(name = "结算时间区间")
-    private String balanceInterval;
-
     /** 险种 */
     @Excel(name = "险种")
-    private String riskCode;
+    private String riskName;
 
     /** 保单号 */
     @Excel(name = "保单号")
@@ -52,37 +44,29 @@ public class ServiceBalanceDetail extends BaseEntity
     @Excel(name = "分单号")
     private String policyItemNo;
 
-    /** 供应商编码 */
-    @Excel(name = "供应商编码")
-    private String supplierCode;
-
     /** 供应商项目名称 */
     @Excel(name = "供应商项目名称")
-    private String serviceCode;
-
-    /** 投保人客户号 */
-    @Excel(name = "投保人客户号")
-    private String appntNo;
+    private String supplierServiceName;
 
     /** 投保人 */
     @Excel(name = "投保人")
     private String appntName;
-
-    /** 客户号 */
-    @Excel(name = "客户号")
-    private String custNo;
 
     /** 客户姓名 */
     @Excel(name = "客户姓名")
     private String custName;
 
     /** 性别 */
-    @Excel(name = "性别")
+    @Excel(name = "性别",readConverterExp="0=男,1=女")
     private String sex;
 
     /** 证件号码 */
     @Excel(name = "证件号码")
     private String idNo;
+
+    /** 证件号码 */
+    @Excel(name = "备注")
+    private String remark;
 
     /** 服务日期 */
     @JsonFormat(pattern = "yyyy-MM-dd")
@@ -98,23 +82,33 @@ public class ServiceBalanceDetail extends BaseEntity
     private BigDecimal actualAmount;
 
     /** 原因 */
-    @Excel(name = "原因")
+    @Excel(name = "编辑原因")
     private String reason;
 
+    /** 状态 */
+    @Excel(name = "状态",readConverterExp="01=待确认,02=待审核,03=待确认(退回),04=待核销,05=已结算")
+    private String bussinessStatus;
+
+    /** 结算时间区间 */
+    private String balanceInterval;
+
+    /** 供应商编码 */
+    private String supplierCode;
+
+    /** 投保人客户号 */
+    private String appntNo;
+
+    /** 客户号 */
+    private String custNo;
+
     /** 承保人数 */
-    @Excel(name = "承保人数")
     private Long insuredNum;
 
     /** 单价 */
-    @Excel(name = "单价")
     private BigDecimal unitPrice;
 
     /** 扩展字段 */
-    private String bussinessStatus;
-
-    private String riskName;
-
-    private String supplierServiceName;
+    private String status;
 
     /** 产品期限日期 */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -126,7 +120,6 @@ public class ServiceBalanceDetail extends BaseEntity
     private Date beforeDate;
 
     //结算区间
-    @Excel(name = "结算时间区间")
     private String settlementTime;
 
     /** 服务名称 */
@@ -134,6 +127,11 @@ public class ServiceBalanceDetail extends BaseEntity
 
     /** 供应商名称 */
     private String supplierName;
+
+    private String serviceCode;
+
+    /** 险种 */
+    private String riskCode;
 
     public void setSerialNo(Long serialNo) 
     {

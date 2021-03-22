@@ -474,13 +474,17 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         Iterator<String> iter = map1.keySet().iterator();
         while (iter.hasNext()) {
             String key = iter.next();
-            keyList.add(key);
+            if(!"updateBy".equals(key) && !"updateTime".equals(key) && !"changeTime".equals(key) && !"createBy".equals(key) && !"createTime".equals(key)){
+                keyList.add(key);
+            }
         }
         Iterator<String> iter2 = map2.keySet().iterator();
         while (iter2.hasNext()) {
             String key = iter2.next();
             if (!keyList.contains(key)) {
-                keyList.add(key);
+                if(!"updateBy".equals(key) && !"updateTime".equals(key) && !"changeTime".equals(key) && !"createBy".equals(key) && !"createTime".equals(key)){
+                    keyList.add(key);
+                }
             }
         }
 
@@ -488,36 +492,11 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
             String mapkey = keyList.get(i);
             if (outList.contains(mapkey)) {
                 continue;
-//            }
-//            if(subVoKeyList.contains(mapkey)){
-//                Map map3 = JSONObject.parseObject(JSONObject.toJSONString(map1.get(mapkey)), Map.class);
-//                Map map4 = JSONObject.parseObject(JSONObject.toJSONString(map2.get(mapkey)), Map.class);
-//                Iterator<String> iter3 = map3.keySet().iterator();
-//                while (iter3.hasNext()) {
-//                    String map3key = iter3.next();
-//                    String map3value = String.valueOf(map3.get(map3key));
-//                    String map4value = String.valueOf(map4.get(map3key));
-//                    if (!map3value.equals(map4value)) {
-//                        editDetail.setItemKey(mapkey+"." + map3key);
-//                        editDetail.setOldValue(map3value);
-//                        editDetail.setNowValue(map4value);
-//                        editDetail.setKeyDictType("demandAcceptVo");
-//                        editDetail.setDetailId(PubFun.createMySqlMaxNoUseCache("cs_detail_id", 10, 8));
-//                        editDetail.setEditId(editId);
-//                        editDetail.setCreatedBy(SecurityUtils.getUsername());
-//                        editDetail.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
-//                        editDetail.setUpdatedBy(SecurityUtils.getUsername());
-//                        editDetail.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
-//                        editDetailMapper.insertEditDetail(editDetail);
-//                    }
-//                }
             } else {
                 Object map1value = map1.get(mapkey);
                 Object map2value = map2.get(mapkey);
-                if ((map1value == null || map1value.equals("")) &&
-                        (map2value != null && !map2value.equals(""))) {
+                if ((map1value == null || map1value.equals("")) && (map2value != null && !map2value.equals(""))) {
                     editDetail.setItemKey(mapkey);
-                  //  editDetail.setOldValue("");
                     editDetail.setNowValue(String.valueOf(map2value));
                     editDetail.setKeyDictType("demandAcceptVo");
                     editDetail.setDetailId(PubFun.createMySqlMaxNoUseCache("cs_detail_id", 10, 8));
@@ -527,11 +506,9 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
                     editDetail.setUpdatedBy(SecurityUtils.getUsername());
                     editDetail.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
                     editDetailMapper.insertEditDetail(editDetail);
-                } else if ((map2value == null || map2value.equals("")) &&
-                        (map1value != null && !map1value.equals(""))) {
+                } else if ((map2value == null || map2value.equals("")) && (map1value != null && !map1value.equals(""))) {
                     editDetail.setItemKey(mapkey);
                     editDetail.setOldValue(String.valueOf(map1value));
-                 //   editDetail.setNowValue("");
                     editDetail.setKeyDictType("demandAcceptVo");
                     editDetail.setDetailId(PubFun.createMySqlMaxNoUseCache("cs_detail_id", 10, 8));
                     editDetail.setEditId(editId);
@@ -540,9 +517,7 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
                     editDetail.setUpdatedBy(SecurityUtils.getUsername());
                     editDetail.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
                     editDetailMapper.insertEditDetail(editDetail);
-                } else if ((map1value != null && !map1value.equals("")) &&
-                        (map2value != null && !map2value.equals("")) &&
-                        !map1value.equals(map2value)) {
+                } else if ((map1value != null && !map1value.equals("")) && (map2value != null && !map2value.equals("")) && !map1value.equals(map2value)) {
                     editDetail.setItemKey(mapkey);
                     editDetail.setOldValue(String.valueOf(map1value));
                     editDetail.setNowValue(String.valueOf(map2value));

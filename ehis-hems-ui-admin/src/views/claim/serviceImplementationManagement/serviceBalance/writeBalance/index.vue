@@ -261,10 +261,15 @@ export default {
   methods: {
     //给供应商服务项目名称赋值
     setSupplierServiceName(){
-      let arr=this.serviceOptions.filter(item=>{
-        return item.dictValue==this.queryParams.serviceCode
-      })
-      this.queryParams.supplierServiceName= arr[0].dictLabel
+      if(this.queryParams.serviceCode!=null && this.queryParams.serviceCode!='') {
+        let arr = this.serviceOptions.filter(item => {
+          return item.dictValue == this.queryParams.serviceCode
+        })
+        this.queryParams.supplierServiceName = arr[0].dictLabel
+      }
+      else {
+        this.queryParams.supplierServiceName=null
+      }
     },
 
     initData (){

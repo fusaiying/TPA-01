@@ -160,6 +160,7 @@ public class ServiceBalanceDetailController extends BaseController
                                 //表格实际服务费<数据库服务费时，原因必填
                                 if (StringUtils.isNotEmpty(excelCaseDetail.getReason())) {
                                     dataList.get(i).setActualAmount(excelCaseDetail.getActualAmount());
+                                    dataList.get(i).setReason(excelCaseDetail.getReason());
                                 } else {
                                     errorTmp.append("，服务费不一致，原因未填");
                                 }

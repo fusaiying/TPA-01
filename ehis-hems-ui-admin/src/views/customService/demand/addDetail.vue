@@ -385,7 +385,7 @@
 
       </div>
       <div style="text-align: right; margin-right: 1px;">
-        <el-button type="primary" size="mini" @click="submit">提交</el-button>
+        <el-button type="primary" size="mini" @click="submit" :disabled="this.checkSubmitFlag == '01'">提交</el-button>
         <el-button type="primary" size="mini" @click="hiddenShow">关闭</el-button>
       </div>
     </el-card>
@@ -601,6 +601,7 @@ export default {
         orgInsuredNo: undefined,
       },
       workPoolData: [],
+      checkSubmitFlag: '01',
     }
   },
   created() {
@@ -673,7 +674,8 @@ export default {
           }
           addInsert(insert).then(res => {
             if (res != null && res.code === 200) {
-              this.$message.success("工单受理成功!")
+              this.$message.success("工单受理成功!");
+              this.checkSubmitFlag='01';
               this.ruleForm.workOrderNo=res.msg;
               if (res.rows.length <= 0) {
                 return this.$message.warning(

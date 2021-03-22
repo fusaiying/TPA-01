@@ -324,8 +324,6 @@ export default {
     },
     /** 搜索按钮操作 */
     handleQuery() {
-
-
       this.queryParams.pageNum = 1;
       this.queryParams.pageSize = 10;
       let query = JSON.parse(JSON.stringify(this.queryParams))

@@ -364,28 +364,43 @@ export default {
         this.$message.warning('请先查询！');
         return;
       }
+
+
       this.$refs.queryForm.validate((valid) =>{
         if (valid){
-          this.genLoading = true;
-          addBalance(this.queryParams).then(res => {
+          listBalanceDetail(this.queryParams).then(res=>{
             if (res != null && res.code === 200) {
-              this.balanceInfo = res.data;
-              this.genLoading = false;
-              this.msgInfo('生成成功，请下载！');
-              this.loading = true;
-              listBalanceDetail(this.queryParams).then(res => {
-                if (res != null && res.code === 200) {
-                  this.balanceList = res.rows;
-                  this.total = res.total;
-                  this.loading = false;
-                }
-              }).catch(res => {
-                this.loading = false
-              });
+            /*  this.balanceList = res.rows;
+              this.total = res.total;*/
+              if(res.rows.length>0){
+                this.genLoading = true;
+                addBalance(this.queryParams).then(res => {
+                  if (res != null && res.code === 200) {
+                    this.balanceInfo = res.data;
+                    this.genLoading = false;
+                    this.msgInfo('生成成功，请下载！');
+                    this.loading = true;
+                    listBalanceDetail(this.queryParams).then(res => {
+                      if (res != null && res.code === 200) {
+                        this.balanceList = res.rows;
+                        this.total = res.total;
+                        this.loading = false;
+                      }
+                    }).catch(res => {
+                      this.loading = false
+                    });
+                  }
+                }).catch(error => {
+                  this.genLoading = false;
+                });
+              }
+              else {
+                this.$message.warning('未查询该供应商项目名称的数据！');
+              }
             }
-          }).catch(error => {
-            this.genLoading = false;
-          });
+          })
+
+
         }
       })
     },

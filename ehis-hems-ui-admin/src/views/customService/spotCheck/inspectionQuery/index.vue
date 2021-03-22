@@ -128,7 +128,11 @@
           </el-table-column>
           <el-table-column prop="updatedBy" align="center" label="质检分组" show-overflow-tooltip/>
           <el-table-column prop="updatedBy" align="center" label="质检人" show-overflow-tooltip/>
-          <el-table-column align="center" prop="inspectionResult" label="质检结果" show-overflow-tooltip/>
+          <el-table-column align="center" prop="result" label="质检结果" show-overflow-tooltip>
+            <template slot-scope="scope">
+              <span>{{selectDictLabel(inspection_resultOptions, scope.row.result)}}</span>
+            </template>
+          </el-table-column>
         </el-table>
 
         <pagination

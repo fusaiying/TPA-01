@@ -136,7 +136,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
     <select id="selectCollaborativeFromListPublicNew" parameterType="com.paic.ehis.cs.domain.dto.ConsultationDTO" resultMap="CollaborativeFromVOResult">
-        SELECT
+        select * from (SELECT
         a.work_order_no,
         a.collaborative_id,
         a.created_by,
@@ -147,7 +147,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         b.item_code,
         (case when ifnull(c.organ_code,'')='' then  b.organ_code else c.organ_code end) organ_code,
         c.business_type,
-        TIMESTAMPDIFF(Hour,a.created_time , NOW()) processingTime
+        TIMESTAMPDIFF(Hour,a.created_time , NOW()) processingTime,
+        b.priority_level,
+        c.create_time
         FROM
         collaborative_from a,
         accept_detail_info b,
@@ -178,7 +180,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         b.item_code,
         (case when ifnull(c.organ_code,'')='' then  b.organ_code else c.organ_code end) organ_code,
         c.business_type,
-        TIMESTAMPDIFF(Hour,a.created_time , NOW()) processingTime
+        TIMESTAMPDIFF(Hour,a.created_time , NOW()) processingTime,
+        b.priority_level,
+        c.create_time
         FROM
         collaborative_from a,
         accept_detail_info b,
@@ -196,6 +200,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <if test="policyNo != null  and policyNo != ''"> and c.policy_no = #{policyNo}</if>
         <if test="policyItemNo != null  and policyItemNo != ''"> and c.policy_item_no = #{policyItemNo}</if>
         <if test="operation != null and operation !=''"> and a.um_code = #{operation}</if>
+        ) ss
+        order by ss.priority_level ASC,ss.create_time desc
     </select>
     
     <select id="selectCollaborativeFromById" parameterType="Long" resultMap="CollaborativeFromResult">

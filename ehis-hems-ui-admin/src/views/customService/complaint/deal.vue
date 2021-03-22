@@ -497,7 +497,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="投诉问题(报保监)：" prop="complaintQuestion">
+            <el-form-item label="投保问题(报保监)：" prop="complaintQuestion">
               <el-select v-model="sendForm.complaintQuestion" class="item-width">
                 <el-option v-for="item in cs_question_circ" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
@@ -682,6 +682,30 @@ export default {
   },
   data() {
 
+    const checkPieceworkFlag = (rule, value, callback) => {
+      if (this.sendForm.level2 == '05') {
+        if (!value) {
+          callback(new Error("是否计件不能为空"));
+        } else {
+          callback();
+        }
+      } else {
+        callback();
+      }
+    };
+
+    const checkComplaintStatus = (rule, value, callback) => {
+      if (this.sendForm.level2 == '05') {
+        if (!value) {
+          callback(new Error("撤诉状态不能为空"));
+        } else {
+          callback();
+        }
+      } else {
+        callback();
+      }
+    };
+
     return {
 
       personInfo:{
@@ -775,10 +799,10 @@ export default {
           {required: true, message: "二级投诉分类不能为空", trigger: "blur"}
         ],
         pieceworkFlag: [
-          {required: true, message: "是否计件不能为空", trigger: "blur"}
+          {required: false, validator: checkPieceworkFlag, trigger: "blur"}
         ],
         complaintStatus: [
-          {required: true, message: "撤诉状态不能为空", trigger: "blur"}
+          {required: false, validator: checkComplaintStatus, trigger: "blur"}
         ],
         complaintTenable: [
           {required: true, message: "投诉是否成立不能为空", trigger: "blur"}
@@ -796,6 +820,9 @@ export default {
           {required: true, message: "三级投诉原因不能为空", trigger: "blur"}
         ],
         complaintLink: [
+          {required: true, message: "投保问题（报保监）不能为空", trigger: "blur"}
+        ],
+        complaintQuestion: [
           {required: true, message: "投保问题（报保监）不能为空", trigger: "blur"}
         ],
         outsideState: [
@@ -825,6 +852,9 @@ export default {
         treatmentResult: [
           {required: true, message: "处理结果不能为空", trigger: "blur"}
         ],
+        /*rootImprovement: [
+          {required: true, message: "根因改善不能为空", trigger: "blur"}
+        ],*/
         actPromptly: [
           {required: true, message: "投诉损失不能为空", trigger: "blur"}
         ],

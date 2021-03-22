@@ -109,7 +109,9 @@ export default {
         taskNo: null
       },
       //字典数组
-      dictList: []
+      dictList: [],
+      //服务总金额
+      serviceAmount: ''
     };
   },
   created() {
@@ -125,6 +127,8 @@ export default {
     this.queryDetailParams.settleType = this.$route.query.settleType;
     //发票类型
     this.queryParams.balanceInvoiceType = this.$route.query.balanceInvoiceType;
+    //服务总金额
+    this.serviceAmount = this.$route.query.serviceAmount
     //初始化数据
     this.initData();
   },
@@ -160,6 +164,26 @@ export default {
         this.$refs.balanceInvoiceTable.activeNames = ['1'];
         return;
       }
+      //服务总金额=发票信息列表中发票金额之和  发票类型无效 无需校验
+      //获取发票信息列表
+      if(this.queryParams.balanceInvoiceType == "01") {
+        let balanceInvoiceList = this.$refs.balanceInvoiceTable.balanceInvoiceList
+        let allAmount = 0;
+        balanceInvoiceList.forEach(item => {
+          allAmount = parseFloat(item.amount) + parseFloat(allAmount)
+        })
+        let num = parseFloat(allAmount).toFixed(2)
+        if (!(num == parseFloat(this.serviceAmount).toFixed(2))) {
+          this.$message.warning('发票金额之和与服务总金额不符!')
+          window.scrollTo({
+            'top': document.getElementById("balanceInvoiceDiv").offsetTop,
+            'behavior': 'smooth'
+          });
+          return;
+        }
+      }
+
+
       const params = {
         params: {type: "CONFIRM"},
         taskNo: this.queryParams.taskNo

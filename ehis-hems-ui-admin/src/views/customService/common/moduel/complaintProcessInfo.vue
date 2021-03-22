@@ -40,9 +40,9 @@
       </el-table-column>
     </el-table>
     <el-form ref="ruleForm" :model="tableData" style="padding-bottom: 30px;" label-width="100px"
-             :disabled="routerParams.status=='show'">
+             :disabled="routerParams.status=='show'" :rules="rules">
       <el-row v-if="businessType=='03'"><!--判断01 03-->
-        <el-form-item label="质检评分">
+        <el-form-item label="质检评分" prop="score">
           <el-input :disabled="node=='mistake'" v-model="tableData.score"/>
         </el-form-item>
       </el-row>
@@ -101,7 +101,26 @@
       }
     },
     data() {
+      const checkNum = (rule, value, callback) => {
+        const regx = /^(\d+|\d+\.\d{1,2})$/
+        if (!value) {
+          callback(new Error("质检评分必填"));
+        } else {
+          if (value < 0) {
+            callback(new Error("质检评分应为0~100，请检查"));
+          } else if (!regx.test(value)) {
+            callback(new Error("质检评分最多保留两位小数，请检查"));
+          } else if (value>100) {
+            callback(new Error("质检评分应为0~100，请检查"));
+          } else {
+            callback();
+          }
+        }
+      }
       return {
+        rules: {
+          score: [{validator: checkNum, required: true, trigger: 'blur'}], // 案件数
+        },
         spanArr: [],//用于存放每一行记录的合并数
         dictList: [],
         complaintProcessList: [],
@@ -233,10 +252,19 @@
           items: this.tableData.items
         }
         return data
+      },
+      checkForm(){
+        let data = true
+        this.$refs.ruleForm.validate((valid) => {
+          if (valid) {
+            data=true
+          }else {
+            data=false
+          }
+        })
+        return data
       }
     }
-
-
   }
 </script>
 

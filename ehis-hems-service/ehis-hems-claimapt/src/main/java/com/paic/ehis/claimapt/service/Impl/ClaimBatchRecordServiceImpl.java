@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -88,7 +89,8 @@ public class ClaimBatchRecordServiceImpl implements IClaimBatchRecordService
      */
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-    public int updateClaimBatchByReview(String[] batchnoes) {
+    public ArrayList<String> updateClaimBatchByReview(String[] batchnoes) {
+        ArrayList<String> batchNoList = new ArrayList<>();
         int i = 0;
         ClaimBatchRecord claimBatchRecord = new ClaimBatchRecord();
         claimBatchRecord.setOperation(ClaimStatus.BATCHREVIEW.getCode());
@@ -102,13 +104,19 @@ public class ClaimBatchRecordServiceImpl implements IClaimBatchRecordService
         claimBatch.setUpdateBy(SecurityUtils.getUsername());
         claimBatch.setUpdateTime(DateUtils.getNowDate());
         for (String batchno : batchnoes) {
-            claimBatchRecord.setBatchno(batchno);
-            claimBatchRecordMapper.insertClaimBatchRecord(claimBatchRecord);
-            claimBatch.setBatchno(batchno);
-            claimBatch.setBatchstatus(ClaimStatus.BATCHREVIEW.getCode());
-            i += claimBatchMapper.updateClaimBatch(claimBatch);
+            //根据批次号查询批次信息 判断是否已经被获取
+            ClaimBatch claimBatch1 = claimBatchMapper.selectClaimBatchById(batchno);
+            if("".equals(claimBatch1.getUpdateBy())){
+                claimBatchRecord.setBatchno(batchno);
+                claimBatchRecordMapper.insertClaimBatchRecord(claimBatchRecord);
+                claimBatch.setBatchno(batchno);
+                claimBatch.setBatchstatus(ClaimStatus.BATCHREVIEW.getCode());
+                i += claimBatchMapper.updateClaimBatch(claimBatch);
+            }else {
+                batchNoList.add(batchno);
+            }
         }
-        return i;
+        return batchNoList;
     }
 
     /**

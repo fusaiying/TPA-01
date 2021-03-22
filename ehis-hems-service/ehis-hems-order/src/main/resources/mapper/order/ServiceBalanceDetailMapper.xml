@@ -234,6 +234,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             b.order_code,
             b.balance_interval,
             b.risk_code,
+            b.risk_name,
             b.policy_no,
             b.policy_item_no,
             b.supplier_code,
@@ -260,7 +261,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         AND a.status = 'Y'
         AND b.status = 'Y'
         <if test="supplierCode != null  and supplierCode != ''"> and a.supplier_code = #{supplierCode}</if>
+<!--
         <if test="serviceCode != null  and serviceCode != ''"> and a.service_code = #{serviceCode}</if>
+-->
         <if test="bussinessStatus != null  and bussinessStatus != ''"> and a.bussiness_status = #{bussinessStatus}</if>
         <if test="orderCode != null  and orderCode != ''"> and b.order_code = #{orderCode}</if>
         <if test="custName != null  and custName != ''"> and b.cust_name like concat('%', #{custName}, '%')</if>
@@ -371,15 +374,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             bcs.settle_type,
             concat_ws(
             '~~',
-            (
+            ifnull((
             SELECT
             DATE_FORMAT(max(end_date), '%Y-%m-%d')
             FROM
             service_balance_info
             WHERE
             supplier_code = #{supplierCode}
-            AND settle_type = #{settleType} and status ='Y'
-            ),
+            AND settle_type = #{settleType}
+            ),DATE_FORMAT(now(), '%Y-%m-%d')),
             DATE_FORMAT(#{endDate}, '%Y-%m-%d')
             ) settlementTime,
             oi.push_flag
@@ -514,7 +517,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             bcs.settle_type,
             concat_ws(
             '~~',
-            (
+            ifnull((
             SELECT
             DATE_FORMAT(max(end_date), '%Y-%m-%d')
             FROM
@@ -522,7 +525,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             WHERE
             supplier_code = #{supplierCode}
             AND settle_type = #{settleType}
-            ),
+            ),DATE_FORMAT(now(), '%Y-%m-%d'))
             DATE_FORMAT(#{endDate}, '%Y-%m-%d')
             ) settlementTime,
             oi.push_flag
@@ -656,6 +659,14 @@ where task_no = #{taskNo}
 
     <update id="updateOrderInfo" parameterType="String">
         update order_info set confirm_flag = '0' where order_code in
+        <foreach item="orderCode" collection="list" open="(" separator="," close=")">
+            #{orderCode}
+        </foreach>
+    </update>
+
+
+    <update id="updateOrderInfo1" parameterType="String">
+        update order_info set confirm_flag = '1' where order_code in
         <foreach item="orderCode" collection="list" open="(" separator="," close=")">
             #{orderCode}
         </foreach>

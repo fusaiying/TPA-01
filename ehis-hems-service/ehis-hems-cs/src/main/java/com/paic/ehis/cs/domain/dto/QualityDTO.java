@@ -12,9 +12,13 @@ public class QualityDTO {
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Excel(name = "结案日期", width = 30, dateFormat = "yyyy-MM-dd")
     private Date endDate;
+    private String endCaseStartDate;
+    private String endCaseEndDate;
 
     /** 质检日期*/
     private Date updatedTime;
+    private String inspectionStartDate;
+    private String inspectionEndDate;
 
     /** 出单机构 */
     @Excel(name = "出单机构")

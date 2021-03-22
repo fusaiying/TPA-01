@@ -106,12 +106,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         ) time ON time.policy_no = prr.policy_no
         AND time.STATUS = 'Y'
         <where>
-            <if test="policyNo != null  and policyNo != ''"> and policy_no = #{policyNo}</if>
-            <if test="riskCode != null  and riskCode != ''"> and risk_code = #{riskCode}</if>
-            <if test="companyCode != null  and companyCode != ''"> and company_code = #{companyCode}</if>
-            <if test="startTime != null  and endTime != null"> and valid_start_date between #{startTime} and #{endTime} </if>
-            and status = 'Y'
-            and settle_flag != 'Y' or settle_flag is null
+            <if test="policyNo != null  and policyNo != ''"> and prr.policy_no = #{policyNo}</if>
+            <if test="riskCode != null  and riskCode != ''"> and prr.risk_code = #{riskCode}</if>
+            <if test="companyCode != null  and companyCode != ''"> and pi.company_code = #{companyCode}</if>
+            <if test="startTime != null  and endTime != null"> and pi.valid_start_date between #{startTime} and #{endTime} </if>
+            and prr.status = 'Y'
+            and pi.settle_flag != 'Y' or pi.settle_flag is null
         </where>
     </select>
 

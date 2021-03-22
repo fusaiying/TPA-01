@@ -269,7 +269,7 @@ export default {
       let query = {
         pageNum: this.queryParams.pageNum,
         pageSize: this.queryParams.pageSize,
-        serviceItemCode: this.poolQueryForm.serviceItem,
+        serviceItem: this.poolQueryForm.serviceItem,
         organCode: this.poolQueryForm.organization,
         acceptorName: this.poolQueryForm.acceptorName,
         endCaseStartTime: undefined,

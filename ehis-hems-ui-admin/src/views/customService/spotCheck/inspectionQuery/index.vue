@@ -7,7 +7,7 @@
           <el-col :span="8">
             <el-form-item label="结案日期：" prop="endCaseTime">
               <el-date-picker
-                v-model="inspectionQueryForm.endCaseTime"
+                v-model="inspectionQueryForm.endCaseDate"
                 style="width:220px;"
                 size="mini"
                 type="daterange"
@@ -21,7 +21,7 @@
           <el-col :span="8">
             <el-form-item label="质检日期：" prop="inspectionTime">
               <el-date-picker
-                v-model="inspectionQueryForm.inspectionTime"
+                v-model="inspectionQueryForm.inspectionDate"
                 style="width:220px;"
                 size="mini"
                 type="daterange"
@@ -33,8 +33,8 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="出单机构：" prop="organization">
-              <el-select v-model="inspectionQueryForm.organization" class="item-width" placeholder="请选择">
+            <el-form-item label="出单机构：" prop="organCode">
+              <el-select v-model="inspectionQueryForm.organCode" class="item-width" placeholder="请选择">
                 <el-option v-for="item in organizationOptions" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
@@ -43,22 +43,22 @@
         </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="质检人：" prop="inspectionName">
-              <el-input v-model="inspectionQueryForm.inspectionName" class="item-width" clearable size="mini"
+            <el-form-item label="质检人：" prop="updatedBy">
+              <el-input v-model="inspectionQueryForm.updatedBy" class="item-width" clearable size="mini"
                         placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="服务项目：" prop="serviceItem">
-              <el-select v-model="inspectionQueryForm.serviceItem" class="item-width" placeholder="请选择">
+            <el-form-item label="服务项目：" prop="itemCode">
+              <el-select v-model="inspectionQueryForm.itemCode" class="item-width" placeholder="请选择">
                 <el-option v-for="item in service_itemOptions" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="质检状态：" prop="inspectionStatus">
-              <el-select v-model="inspectionQueryForm.inspectionStatus" class="item-width" placeholder="请选择">
+            <el-form-item label="质检状态：" prop="status">
+              <el-select v-model="inspectionQueryForm.status" class="item-width" placeholder="请选择">
                 <el-option v-for="item in inspection_statusOptions" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
@@ -69,7 +69,7 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="质检结果：" prop="inspectionResult">
-              <el-select v-model="inspectionQueryForm.inspectionResult" class="item-width" placeholder="请选择">
+              <el-select v-model="inspectionQueryForm.result" class="item-width" placeholder="请选择">
                 <el-option v-for="item in inspection_resultOptions" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
@@ -172,13 +172,13 @@ export default {
       caseNumber: false,//查询条件（报案号）是否显示
       // 查询参数
       inspectionQueryForm: {
-        endCaseTime: undefined,
-        inspectionTime: undefined,
-        organization: undefined,
-        inspectionName: undefined,
-        serviceItem: undefined,
-        inspectionStatus: undefined,
-        inspectionResult: undefined
+        endCaseDate: undefined,
+        inspectionDate: undefined,
+        organCode: undefined,
+        updatedBy: undefined,
+        itemCode: undefined,
+        status: undefined,
+        result: undefined
       },
       confirmationQueryForm: {
         firstEndCaseTime: undefined,
@@ -233,24 +233,24 @@ export default {
         pageNum: this.queryParams.pageNum,
         pageSize: this.queryParams.pageSize,
 
-        endCaseStartTime: undefined,
-        endCaseEndTime: undefined,
-        inspectionStartTime: undefined,
-        inspectionEndTime: undefined,
-        organCode: this.inspectionQueryForm.organization,
-        inspectionName: this.inspectionQueryForm.inspectionName,
-        serviceItemCode: this.inspectionQueryForm.serviceItem,
-        inspectionStatus: this.inspectionQueryForm.inspectionStatus,
-        inspectionResult: this.inspectionQueryForm.inspectionResult
+        endCaseStartDate: undefined,
+        endCaseEndDate: undefined,
+        inspectionStartDate: undefined,
+        inspectionEndDate: undefined,
+        organCode: this.inspectionQueryForm.organCode,
+        updatedBy: this.inspectionQueryForm.updatedBy,
+        itemCode: this.inspectionQueryForm.itemCode,
+        status: this.inspectionQueryForm.status,
+        result: this.inspectionQueryForm.result
 
       }
-      if (this.inspectionQueryForm.endCaseTime) {
-        query.endCaseStartTime = this.inspectionQueryForm.endCaseTime[0]
-        query.endCaseEndTime = this.inspectionQueryForm.endCaseTime[1]
+      if (this.inspectionQueryForm.endCaseDate) {
+        query.endCaseStartDate = this.inspectionQueryForm.endCaseDate[0]
+        query.endCaseEndDate = this.inspectionQueryForm.endCaseDate[1]
       }
-      if (this.inspectionQueryForm.inspectionTime) {
-        query.inspectionStartTime = this.inspectionQueryForm.inspectionTime[0]
-        query.inspectionEndTime = this.inspectionQueryForm.inspectionTime[1]
+      if (this.inspectionQueryForm.inspectionDate) {
+        query.inspectionStartDate = this.inspectionQueryForm.inspectionDate[0]
+        query.inspectionEndDate = this.inspectionQueryForm.inspectionDate[1]
       }
       selectQualityVo(query).then(res => {
         if (res != null && res.code === 200) {

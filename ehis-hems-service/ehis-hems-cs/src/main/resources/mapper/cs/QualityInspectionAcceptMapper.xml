@@ -162,8 +162,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             quality_inspection_accept qia left join work_order_accept woa on qia.work_order_no=woa.work_order_no
             left join accept_detail_info adi on woa.work_order_no=adi.work_order_no
         <where>
+            <if test="endCaseStartDate != null ">
+                and DATE_FORMAT(woa.end_date,'%Y-%m-%d') <![CDATA[>=]]> #{endCaseStartDate}
+            </if>
+            <if test="endCaseEndDate != null ">
+                and DATE_FORMAT(woa.end_date,'%Y-%m-%d') <![CDATA[<=]]> #{endCaseEndDate}
+            </if>
             <if test="endDate != null and endDate != ''"> and woa.end_date = #{endDate}</if>
             <if test="updatedTime != null and updatedTime != ''"> and qia.updated_time = #{updatedTime}</if>
+            <if test="inspectionStartDate != null ">
+                and DATE_FORMAT(qia.updated_time,'%Y-%m-%d') <![CDATA[>=]]> #{inspectionStartDate}
+            </if>
+            <if test="inspectionEndDate != null ">
+                and DATE_FORMAT(qia.updated_time,'%Y-%m-%d') <![CDATA[<=]]> #{inspectionEndDate}
+            </if>
             <if test="organCode != null and organCode != ''"> and woa.organ_code = #{organCode}</if>
             <if test="updatedBy != null and updatedBy != ''"> and qia.updated_by = #{updatedBy}</if>
             <if test="itemCode != null and itemCode != ''"> and adi.item_code = #{itemCode}</if>

@@ -682,6 +682,30 @@ export default {
   },
   data() {
 
+    const checkPieceworkFlag = (rule, value, callback) => {
+      if (this.sendForm.level2 == '05') {
+        if (!value) {
+          callback(new Error("是否计件不能为空"));
+        } else {
+          callback();
+        }
+      } else {
+        callback();
+      }
+    };
+
+    const checkComplaintStatus = (rule, value, callback) => {
+      if (this.sendForm.level2 == '05') {
+        if (!value) {
+          callback(new Error("撤诉状态不能为空"));
+        } else {
+          callback();
+        }
+      } else {
+        callback();
+      }
+    };
+
     return {
 
       personInfo:{
@@ -775,10 +799,10 @@ export default {
           {required: true, message: "二级投诉分类不能为空", trigger: "blur"}
         ],
         pieceworkFlag: [
-          {required: true, message: "是否计件不能为空", trigger: "blur"}
+          {required: false, validator: checkPieceworkFlag, trigger: "blur"}
         ],
         complaintStatus: [
-          {required: true, message: "撤诉状态不能为空", trigger: "blur"}
+          {required: false, validator: checkComplaintStatus, trigger: "blur"}
         ],
         complaintTenable: [
           {required: true, message: "投诉是否成立不能为空", trigger: "blur"}

@@ -262,8 +262,8 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
             callPerson.setPersonId(callPersonId);
             callPerson.setName(complaintAcceptVo.getCallPerson().getName());
             callPerson.setMobilePhone(complaintAcceptVo.getCallPerson().getMobilePhone());
-//        callPerson.setUpdatedBy(SecurityUtils.getUsername());
-//        callPerson.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+            callPerson.setUpdatedBy(SecurityUtils.getUsername());
+            callPerson.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
             personInfoMapper.updatePersonInfo(callPerson);
         }
 
@@ -283,11 +283,10 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
             contactsPerson.setLanguage(complaintAcceptVo.getContactsPerson().getLanguage());
             contactsPerson.setMobilePhone(complaintAcceptVo.getContactsPerson().getMobilePhone());
             contactsPerson.setAddress(complaintAcceptVo.getContactsPerson().getAddress());
-            //    contactsPerson.setLinePhone(complaintAcceptVo.getContactsPerson().getLinePhone1()[0]+"-"+complaintAcceptVo.getContactsPerson().getLinePhone1()[1]+"-"+complaintAcceptVo.getContactsPerson().getLinePhone1()[2]+"-"+complaintAcceptVo.getContactsPerson().getLinePhone1()[3]);
             contactsPerson.setHomePhone(complaintAcceptVo.getContactsPerson().getHomePhone1()[0]+"-"+complaintAcceptVo.getContactsPerson().getHomePhone1()[1]+"-"+complaintAcceptVo.getContactsPerson().getHomePhone1()[2]+"-"+complaintAcceptVo.getContactsPerson().getHomePhone1()[3]);
             contactsPerson.setWorkPhone(complaintAcceptVo.getContactsPerson().getWorkPhone1()[0]+"-"+complaintAcceptVo.getContactsPerson().getWorkPhone1()[1]+"-"+complaintAcceptVo.getContactsPerson().getWorkPhone1()[2]+"-"+complaintAcceptVo.getContactsPerson().getWorkPhone1()[3]);
-//        contactsPerson.setUpdatedBy(SecurityUtils.getUsername());
-//        contactsPerson.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+            contactsPerson.setUpdatedBy(SecurityUtils.getUsername());
+            contactsPerson.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
             personInfoMapper.updatePersonInfo(contactsPerson);
         }
 
@@ -307,8 +306,8 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
             complaintPerson.setIdentity(complaintAcceptVo.getComplaintPerson().getIdentity());
             complaintPerson.setName(complaintAcceptVo.getComplaintPerson().getName());
             complaintPerson.setMobilePhone(complaintAcceptVo.getComplaintPerson().getMobilePhone());
-//        complaintPerson.setUpdatedBy(SecurityUtils.getUsername());
-//        complaintPerson.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+            complaintPerson.setUpdatedBy(SecurityUtils.getUsername());
+            complaintPerson.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
             personInfoMapper.updatePersonInfo(complaintPerson);
         }
 
@@ -317,8 +316,8 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
         //工单表修改
         WorkOrderAccept workOrderAccept=workOrderAcceptMapper.selectWorkOrderAcceptById(workOrderNo);
         workOrderAccept.setOrganCode(complaintAcceptVo.getOrganCode());
-//        workOrderAccept.setUpdateBy(SecurityUtils.getUsername());
-//        workOrderAccept.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
+        workOrderAccept.setUpdateBy(SecurityUtils.getUsername());
+        workOrderAccept.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
         workOrderAcceptMapper.updateWorkOrderAccept(workOrderAccept);
 
         AcceptDetailInfo acceptDetailInfo=acceptDetailInfoMapper.selectAcceptDetailInfoById(workOrderNo);
@@ -571,6 +570,7 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
         flowLog.setUpdatedBy(SecurityUtils.getUsername());
         flowLog.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
         flowLog.setMakeTime(DateUtils.parseDate(DateUtils.getTime()));
+        //flowLogMapper.insertFlowLog(flowLog);
 
         return  complaintAcceptVoMapper.insertFlowLog(flowLog);
     }

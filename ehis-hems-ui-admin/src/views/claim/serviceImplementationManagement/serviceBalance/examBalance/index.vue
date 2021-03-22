@@ -104,7 +104,7 @@
               <span>{{ parseTime(scope.row.endDate, '{y}-{m}-{d}') }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="serviceAmount" label="服务总金额" align="center" show-overflow-tooltip/>
+          <el-table-column prop="serviceAmount" label="服务费总金额" align="center" show-overflow-tooltip/>
           <el-table-column prop="bussinessStatus" label="状态" align="center" show-overflow-tooltip>
             <template slot-scope="scope">
               <span>{{selectDictLabel(balanceStatusOptions, scope.row.bussinessStatus)}}</span>

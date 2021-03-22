@@ -56,10 +56,6 @@
           return []
         },
       },
-      // 子组件接收函数
-      searchHandle: {
-        type: Function
-      },
       status: String
     },
     data() {
@@ -97,17 +93,26 @@
         let batchnoes =[batchno]
         changeStatus(batchnoes).then(res=>{
           if (res!=null && res.code===200){
-            this.$message({
-              message: '获取成功！',
-              type: 'success',
-              center: true,
-              showClose: true
-            })
-            this.searchHandle()
+            if (res.rows.length<=0){
+              this.$message({
+                message: '获取成功！',
+                type: 'success',
+                center: true,
+                showClose: true
+              })
+            }else {
+              this.$message({
+                message: '该产品已被获取，请重新获取！',
+                type: 'warning',
+                center: true,
+                showClose: true
+              })
+            }
           }else {
             this.$message.error('获取失败！')
           }
         })
+        this.$emit('searchHandle')
       },
       selectionLineChangeHandle (val) {
         this.dataonLineListSelections = val
@@ -120,18 +125,31 @@
         if (batchnoes.length>0){
           changeStatus(batchnoes).then(res=>{
             if (res!=null && res.code===200){
-              this.$message({
-                message: '获取成功！',
-                type: 'success',
-                center: true,
-                showClose: true
-
-              })
-              this.searchHandle()
+              if (res.rows.length<=0){
+                this.$message({
+                  message: '获取成功！',
+                  type: 'success',
+                  center: true,
+                  showClose: true
+                })
+              }else {
+                let riskCodeList=''
+                for (let i = 0; i < res.rows.length-1; i++) {
+                  riskCodeList=riskCodeList+res.rows[i]+','
+                }
+                riskCodeList=riskCodeList+res.rows[res.rows.length-1]
+                this.$message({
+                  message: '批次号'+riskCodeList+'已被获取！',
+                  type: 'warning',
+                  center: true,
+                  showClose: true
+                })
+              }
             }else {
               this.$message.error('获取失败！')
             }
           })
+          this.$emit('searchHandle')
         }else {
           return this.$message.warning(
             "请选择要获取的记录，进行批量获取操作。！"

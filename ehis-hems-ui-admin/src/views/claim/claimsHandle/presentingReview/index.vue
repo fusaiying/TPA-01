@@ -92,8 +92,8 @@
 
         </span>
       </div>
-      <div v-show="divShow">
-        <publicTable ref="publicTables" :searchHandle="searchHandleData" :table-data="publicData" :status="activeName"/>
+      <div v-if="divShow">
+        <publicTable ref="publicTables"  @searchHandle="searchHandleData"  :table-data="publicData" :status="activeName"/>
         <!--分页组件-->
         <pagination
           v-show="publicTotal>0"

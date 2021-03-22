@@ -27,10 +27,10 @@
           </el-table-column>
           <el-table-column v-if="queryParams.settleType===settleTypeData.isCase" key="orderCode" prop="orderCode" label="工单编号" width="150%" align="center" show-overflow-tooltip/>
           <el-table-column v-if="queryParams.settleType===settleTypeData.isCase || queryParams.settleType===settleTypeData.isCont || queryParams.settleType===settleTypeData.isPrice" key="settlementTime" prop="settlementTime" label="结算时间区间" min-width="150%" align="center" show-overflow-tooltip/>
-          <el-table-column v-if="queryParams.settleType===settleTypeData.isCase || queryParams.settleType===settleTypeData.isCont" key="riskCode" prop="riskCode" label="险种" width="150%" align="center" show-overflow-tooltip/>
+          <el-table-column v-if="queryParams.settleType===settleTypeData.isCase || queryParams.settleType===settleTypeData.isCont" key="riskCode" prop="riskName" label="险种" width="150%" align="center" show-overflow-tooltip/>
           <el-table-column v-if="queryParams.settleType===settleTypeData.isCase" key="policyNo" prop="policyNo" label="保单号" width="150%" align="center" show-overflow-tooltip/>
           <el-table-column v-if="queryParams.settleType===settleTypeData.isCase" key="policyItemNo" prop="policyItemNo" label="分单号" width="150%" align="center" show-overflow-tooltip/>
-          <el-table-column v-if="queryParams.settleType===settleTypeData.isCase || queryParams.settleType===settleTypeData.isPrice" key="serviceCode" prop="serviceCode" label="供应商项目名称" width="150%" align="center" show-overflow-tooltip>
+          <el-table-column v-if="queryParams.settleType===settleTypeData.isCase || queryParams.settleType===settleTypeData.isPrice" key="serviceCode" prop="supplierServiceName" label="供应商项目名称" width="150%" align="center" show-overflow-tooltip>
             <template slot-scope="scope">
               <span>{{selectDictLabel(serviceData, scope.row.serviceCode)}}</span>
             </template>

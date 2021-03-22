@@ -37,6 +37,8 @@
         <result property="callCenterId" column="call_center_id"/>
         <result property="oldmodifyBy" column="oldmodify_by"/>
         <result property="changeTime" column="change_time"/>
+        <result property="remark" column="remark"/>
+        <result property="remarkTime" column="remarkTime"/>
     </resultMap>
 <!--    信息需求公共池数据查询-->
     <select id="selectDemandAcceptVoList" parameterType="com.paic.ehis.cs.domain.dto.WorkOrderQueryDTO"
@@ -172,6 +174,7 @@
         b.update_by update_by2,
         b.update_time update_time2,
         case when whi.handle_prop1='02'  then whi.remark  else null end  as  remark,
+        case when whi.handle_prop1='02'  then whi.updated_time  else null end  as  remarkTime,
         CASE
         WHEN (
         a.STATUS = '02'

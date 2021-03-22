@@ -96,10 +96,13 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
     @Override
     public AcceptVo updateSendByVoById(String workOrderNo) {
         AcceptVo acceptVo = qualityInspectionAcceptMapper.selectSendByVoById1(workOrderNo);//先查询状态为处理中的工单
-        if (null != acceptVo) {
+        String updateby=String.valueOf(SecurityUtils.getUsername());
+        if (null != acceptVo && !acceptVo.getUpdateBy().equals(updateby)) {//如果获取的数据的操作人不是当前操作人，说明数据到了别人的工作池
+                acceptVo.setFlag("1");
             return acceptVo;//存在则获取处理中的工单数据
         } else {
             AcceptVo acceptVo1 = qualityInspectionAcceptMapper.selectSendByVoById2(workOrderNo);//不存在则获取最新的非处理的工单数据
+            acceptVo1.setFlag("2");
             return acceptVo1;
         }
     }

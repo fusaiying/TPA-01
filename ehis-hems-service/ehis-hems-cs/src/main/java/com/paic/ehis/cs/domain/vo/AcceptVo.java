@@ -217,4 +217,7 @@ public class AcceptVo extends BaseEntity
      */
     private Boolean isRedWord=false;
 
+    //禁用工单拆查询获取操作
+    private String flag;
+
 }

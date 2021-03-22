@@ -233,7 +233,9 @@ export default {
     //计算发票税额
     countTax(){
       if(this.form.amount && this.form.amountTax){
-          this.$set(this.form, 'tax', String(parseFloat(this.form.amount) - parseFloat(this.form.amountTax)))
+        let result=(parseFloat(this.form.amount) - parseFloat(this.form.amountTax)).toFixed(2)
+       result= isNaN(result)?0:result
+          this.$set(this.form, 'tax', String(result))
       }
       else {
         this.form.tax=''
@@ -293,23 +295,29 @@ export default {
     submitForm() {
       this.$refs["form"].validate(valid => {
         if (valid) {
-          if (this.form.serialNo) {
-            updateBalanceInvoice(this.form).then(response => {
-              if (response.code === 200) {
-                this.msgSuccess("修改成功");
-                this.open = false;
-                this.getList();
-              }
-            });
-          } else {
-            addBalanceInvoice(this.form).then(response => {
-              if (response.code === 200) {
-                this.msgSuccess("新增成功");
-                this.open = false;
-                this.getList();
-              }
-            });
-          }
+          let calc=parseFloat(this.form.amount) - parseFloat(this.form.amountTax).toFixed(2)
+         if(calc==this.form.tax) {
+           if (this.form.serialNo) {
+             updateBalanceInvoice(this.form).then(response => {
+               if (response.code === 200) {
+                 this.msgSuccess("修改成功");
+                 this.open = false;
+                 this.getList();
+               }
+             });
+           } else {
+             addBalanceInvoice(this.form).then(response => {
+               if (response.code === 200) {
+                 this.msgSuccess("新增成功");
+                 this.open = false;
+                 this.getList();
+               }
+             });
+           }
+         }
+        else {
+           this.$message.warning('发票税额不等于发票金额-发票税额(不含税)！')
+         }
         }
       });
     },

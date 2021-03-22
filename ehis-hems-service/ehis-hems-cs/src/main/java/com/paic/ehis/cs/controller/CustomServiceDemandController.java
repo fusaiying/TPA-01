@@ -102,8 +102,8 @@ public class CustomServiceDemandController extends BaseController {
     @PutMapping("/serviceAdd")
     @Transactional
     public AjaxResult serviceAdd(@Validated @RequestBody DemandAcceptVo demandAcceptVo) {
-        demandAcceptVo.setContactsPersonId(PubFun.createMySqlMaxNoUseCache("cs_person_id", 10, 6));
-        demandAcceptVo.setCallPersonId(PubFun.createMySqlMaxNoUseCache("cs_person_id", 10, 6));
+        demandAcceptVo.setContactsPersonId(PubFun.createMySqlMaxNoUseCache("cs_person_id", 10, 10));
+        demandAcceptVo.setCallPersonId(PubFun.createMySqlMaxNoUseCache("cs_person_id", 10, 10));
         demandAcceptVo.setBusinessType(CodeEnum.BUSINESS_TYPE_01.getCode());
         String workOrderNo = "9900000000" + PubFun.createMySqlMaxNoUseCache("cs_work_order_no", 10, 6);
         demandAcceptVo.setWorkOrderNo(workOrderNo);

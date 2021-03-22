@@ -497,7 +497,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="投诉问题(报保监)：" prop="complaintQuestion">
+            <el-form-item label="投保问题(报保监)：" prop="complaintQuestion">
               <el-select v-model="sendForm.complaintQuestion" class="item-width">
                 <el-option v-for="item in cs_question_circ" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
@@ -798,6 +798,9 @@ export default {
         complaintLink: [
           {required: true, message: "投保问题（报保监）不能为空", trigger: "blur"}
         ],
+        complaintQuestion: [
+          {required: true, message: "投保问题（报保监）不能为空", trigger: "blur"}
+        ],
         outsideState: [
           {required: true, message: "行协调解或外部鉴不能为空", trigger: "blur"}
         ],
@@ -824,6 +827,9 @@ export default {
         ],
         treatmentResult: [
           {required: true, message: "处理结果不能为空", trigger: "blur"}
+        ],
+        rootImprovement: [
+          {required: true, message: "根因改善不能为空", trigger: "blur"}
         ],
         actPromptly: [
           {required: true, message: "投诉损失不能为空", trigger: "blur"}

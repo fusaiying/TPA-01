@@ -58,7 +58,7 @@
     </el-table-column>
     <el-table-column align="center" label="操作" min-width="140" fixed="right">
       <template slot-scope="scope">
-        <el-button size="small" type="text" @click="obtainButton(scope.row)">获取
+        <el-button :disabled="scope.row.flag=='1'" size="small" type="text" @click="obtainButton(scope.row)">获取
         </el-button>
         <el-button size="small" type="text" @click="modifyButton(scope.row)">修改
         </el-button>

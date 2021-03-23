@@ -505,6 +505,7 @@ export default {
           let workOrderNo = s.workOrderNo
           demandObtain(workOrderNo).then(res => {
             if (res != null && res.code === 200) {
+              this.searchHandles();
             }
           }).catch(res => {
 
@@ -514,13 +515,14 @@ export default {
           console.log("ids:", workOrderNos)
           demandObtainMany(workOrderNos).then(res => {
             if (res != null && res.code === 200) {
-              this.$message.success("批量获取成功")
+              this.$message.success("批量获取成功");
+              this.searchHandles();
             }
           }).catch(res => {
 
           })
         }
-        this.searchHandles()
+
       }
     },
     //处理按钮

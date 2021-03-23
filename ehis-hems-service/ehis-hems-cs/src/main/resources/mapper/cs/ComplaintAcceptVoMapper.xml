@@ -89,7 +89,7 @@
         <if test="vipFlag != null  and vipFlag != ''"> and t1.vip_flag = #{vipFlag}</if>
         <if test="organCode != null  and organCode != ''"> and t1.organ_code = #{organCode}</if>
         <if test="priorityLevel != null  and priorityLevel != ''"> and t2.priority_level = #{priorityLevel}</if>
-        <if test="status != null  and status != ''"> and t2.status = #{status}</if>
+        <if test="status != null  and status != ''"> and t1.status = #{status}</if>
         <if test="idNumber != null  and idNumber != ''"> and c.id_number = #{idNumber}</if>
         <if test="mobilePhone != null  and mobilePhone != ''"> and c.mobile_phone = #{mobilePhone}</if>
             <!--<if test="complaintTime != null  and complaintTime != ''"> and complaintTime = #{complaintTime}</if>-->

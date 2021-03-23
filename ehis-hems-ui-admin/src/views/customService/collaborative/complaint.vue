@@ -612,7 +612,7 @@
         <el-button type="primary" size="mini" @click="temporary">暂存</el-button>
         <el-button type="primary" size="mini" @click="transfer">转办</el-button>
         <el-button type="primary" size="mini" @click="coOrganizer">催办</el-button>
-        <el-button type="primary" size="mini" @click="upload">撤销</el-button>
+        <el-button type="primary" size="mini" @click="coCancel">撤销</el-button>
       </div>
     </el-card>
 
@@ -629,7 +629,8 @@ import {
   dealAdd,
   FlowLogSearch,
   HMSSearch,
-  dealADD
+  dealADD,
+  coCancel
 } from '@/api/customService/demand'
 import transfer from "../common/modul/transfer";
 import upLoad from "../common/modul/upload";
@@ -993,6 +994,20 @@ export default {
     //下载
     download() {
     },
+
+    //撤销
+    coCancel() {
+      let workOrderNo = this.queryParams
+      coCancel(workOrderNo).then(res => {
+        if (res != null && res.code === 200) {
+          this.$message.success("撤销成功")
+        }
+      }).catch(res => {
+
+      })
+      this.coSearch()
+    },
+
     //转办
     transfer() {
       this.$refs.transfer.transferForm.workOrderNo = this.queryParams.workOrderNo

@@ -222,7 +222,7 @@ export default {
       let startTime = "";
       let endTime = "";
       let operateDate = this.formSearch.operateDate;
-      if('' != operateDate) {
+      if('' !== operateDate && null != operateDate) {
         startTime = operateDate[0];
         endTime = operateDate[1]  +" 23:59:59";
       }
@@ -252,7 +252,7 @@ export default {
       let startTime = "";
       let endTime = "";
       let operateDate = this.formSearch.operateDate;
-      if('' != operateDate) {
+      if('' !== operateDate && null != operateDate) {
         startTime = operateDate[0];
         endTime = operateDate[1] +" 23:59:59";
       }

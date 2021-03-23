@@ -120,8 +120,12 @@
     computed: {},
     methods: {
       getCalInfo() {
-        calInfo(this.fixInfo.rptNo).then(res => {
+        calInfo(this.fixInfo.rptNo.split("-")[0]).then(res => {
           if (res.code === 200 && res.data) {
+            console.log("res.data " , res.data)
+            console.log("res.data " , res.data)
+            console.log("res.data " , res.data)
+
             this.conclusionInfo = res.data;
           }
         })

@@ -63,6 +63,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateTime"    column="update_time"    />
     </resultMap>
 
+    <resultMap type="ProductManagerLog" id="ProductManagerLogResult">
+        <result property="serialNo"    column="serial_no"    />
+        <result property="productCode"    column="product_code"    />
+        <result property="bussinessStatus"    column="bussiness_status"    />
+        <result property="bussinessStatusName"    column="bussinessStatusName"    />
+        <result property="reason"    column="reason"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
     <sql id="selectProductInfoVo">
         select serial_no, product_code, product_chname, product_enname, out_product_chname, out_product_enname, product_type, product_time_info, product_time_time, steward, bussiness_status, status, create_by, create_time, update_by, update_time from product_info
     </sql>
@@ -523,5 +536,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         WHERE
             product_code = #{productCode}
         AND STATUS = 'Y'
+    </select>
+
+    <select id="selectLogList" parameterType="ProductInfo" resultMap="ProductManagerLogResult">
+      SELECT
+            bussiness_status,
+            (
+                SELECT
+                    dict_label
+                FROM
+                    sys_dict_data
+                WHERE
+                    dict_value = bussiness_status
+                AND dict_type = 'product_stream_status'
+            ) bussinessStatusName,
+            update_by,
+            update_time
+        FROM
+            product_manager_log
+        WHERE
+            product_code = #{productCode}
     </select>
 </mapper>

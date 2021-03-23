@@ -32,10 +32,11 @@
         <span>{{ scope.row.newRptNo}}</span>
       </template>
     </el-table-column>
-    <el-table-column   v-if="status === '01' || status === '03'" align="center" label="操作">
+    <el-table-column  align="center" label="操作">
       <template slot-scope="scope">
-        <el-button  v-if="status === '01'" size="mini"  type="text" @click="handleFun(scope.row,'initiate')">发起 </el-button>
+        <el-button  v-if="status === '01'" size="mini"  type="text" @click="handleFun(scope.row,'initiate')">处理 </el-button>
         <el-button  v-if="status === '03'" size="mini"  type="text" @click="handleFun(scope.row,'audit')">处理 </el-button>
+        <el-button v-if="status === '02' || status === '04'" size="mini"  type="text" @click="handleFun(scope.row,status)">查看 </el-button>
       </template>
     </el-table-column>
   </el-table>
@@ -125,7 +126,7 @@ export default {
           claimType: row.claimType,
           rptNo: row.appealRptNo,
           status,
-          node: 'accept',
+          node: 'calculateReview',
           styleFlag: 'list',
         })
       )

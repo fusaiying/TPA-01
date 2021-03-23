@@ -90,7 +90,7 @@
               <span>{{selectDictLabel(organizationOptions, scope.row.organCode)}}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="modifyUser.umCode" align="center" label="处理人" show-overflow-tooltip/>
+          <el-table-column prop="updateBy" align="center" label="处理人" show-overflow-tooltip/>
           <el-table-column prop="endDate" label="结案日期" align="center" show-overflow-tooltip>
             <template slot-scope="scope">
               <span>{{parseTime(scope.row.endDate, '{y}-{m}-{d}')}}</span>
@@ -141,7 +141,7 @@
               <span>{{selectDictLabel(organizationOptions, scope.row.organCode)}}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="modifyUser.umCode" align="center" label="处理人" show-overflow-tooltip/>
+          <el-table-column prop="updateBy" align="center" label="处理人" show-overflow-tooltip/>
           <el-table-column prop="endDate" label="结案日期" align="center" show-overflow-tooltip>
             <template slot-scope="scope">
               <span>{{parseTime(scope.row.endDate, '{y}-{m}-{d}')}}</span>

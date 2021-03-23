@@ -248,8 +248,24 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService {
                     }
 
                 }
-            }
 
+            }
+            if ("98".equals(payInfoVO.getCaseStatus())){
+                payInfoVO.setTreatmentDate(null);
+                payInfoVO.setName("");
+                payInfoVO.setCompanyName("");
+                payInfoVO.setPayStatus("");
+                payInfoVO.setBillAmount(new BigDecimal(0));
+                payInfoVO.setDiscountedAmount(new BigDecimal(0));
+                payInfoVO.setAdvancePayment(new BigDecimal(0));
+                payInfoVO.setCopay(new BigDecimal(0));
+                payInfoVO.setPayAmount(new BigDecimal(0));
+                payInfoVO.setDebtAmount(new BigDecimal(0));
+                payInfoVO.setBorrowAmount(new BigDecimal(0));
+            }
+            if ("97".equals(payInfoVO.getCaseStatus())){
+                payInfoVO.setPayStatus("");
+            }
         }
         // 获取支付信息
         ClaimCasePaymentVO claimCasePaymentVO = new ClaimCasePaymentVO();
@@ -497,7 +513,7 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService {
         } else {
             List<ClaimCaseForeignPayInfoVO> caseInfoList = claimCasePayVO.getCaseInfoList();
             for (ClaimCaseForeignPayInfoVO caseInfo : caseInfoList) {
-                if (!"99".equals(caseInfo.getCaseStatus()) && !"98".equals(caseInfo.getCaseStatus())) {
+                if (!"99".equals(caseInfo.getCaseStatus()) && !"98".equals(caseInfo.getCaseStatus()) && !"05".equals(caseInfo.getCaseStatus()) && !"04".equals(caseInfo.getCaseStatus()) && !"06".equals(caseInfo.getCaseStatus())) {
                     // 支付状态置为可支付
                     ClaimCase claimCase = new ClaimCase();
                     claimCase.setRptNo(caseInfo.getRptNo());

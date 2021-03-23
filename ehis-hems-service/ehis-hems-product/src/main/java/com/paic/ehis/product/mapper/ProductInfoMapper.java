@@ -98,4 +98,6 @@ public interface ProductInfoMapper
     public int insertSupplier(List<com.paic.ehis.system.api.domain.ProductSupplierInfo> productSupplierInfo);
 
     public List<String> getServiceCode(String productCode);
+
+    public List<ProductManagerLog> selectLogList(ProductInfo productInfo);
 }

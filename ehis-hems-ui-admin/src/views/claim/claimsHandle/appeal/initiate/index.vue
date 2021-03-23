@@ -255,7 +255,7 @@ export default {
       let operateDate = this.formSearch.operateDate;
       if('' != operateDate) {
         startTime = operateDate[0];
-        endTime = operateDate[1];
+        endTime = operateDate[1] +" 23:59:59";
       }
       const params = {};
       params.pageNum = this.pendPageInfo.pageNum;
@@ -285,7 +285,7 @@ export default {
       let operateDate = this.formSearch.operateDate;
       if('' != operateDate) {
         startTime = operateDate[0];
-        endTime = operateDate[1];
+        endTime = operateDate[1] +" 23:59:59";
       }
       const params = {};
       params.pageNum = this.completePageInfo.pageNum;
@@ -312,7 +312,7 @@ export default {
       let operateDate = this.formSearch.operateDate;
       if('' != operateDate) {
         startTime = operateDate[0];
-        endTime = operateDate[1];
+        endTime = operateDate[1] +" 23:59:59";
       }
       const params = {};
       params.pageNum = this.claimPageInfo.pageNum;

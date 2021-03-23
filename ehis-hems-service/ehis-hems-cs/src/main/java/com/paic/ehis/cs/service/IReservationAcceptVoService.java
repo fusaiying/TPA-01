@@ -25,5 +25,8 @@ public interface IReservationAcceptVoService {
     @Transactional(propagation = Propagation.REQUIRED,rollbackFor = Exception.class)
     int updateReservationAcceptVo(ReservationAcceptVo reservationAcceptVo);
 
+    /*处理*/
+    public int updateClickTime(AcceptDTO acceptDTO);
+
 //
 }

@@ -345,7 +345,8 @@ import {
   demandListAndPublicPool,
   demandListAndPersonalPool,
   demandObtain,
-  demandObtainMany
+  demandObtainMany,
+  updateClickTime
 } from '@/api/customService/reservation'
 import secondPhone from "../common/modul/secondPhone";
 import {selectCallAgain} from "@/api/customService/demand";
@@ -524,15 +525,39 @@ export default {
     },
     //处理按钮
     dealButton(s) {
-      this.$router.push({
-        path: '/customService/reservation/deal',
-        query: {
-          workOrderNo: s.workOrderNo,
-          policyNo: s.policyNo,
-          policyItemNo: s.policyItemNo,
-          status: s.status
+      //先保存点击处理时的时间
+      //存在协办 转办后  默认都置灰
+      let queryParams = JSON.parse(JSON.stringify(this.sendForm));
+      queryParams.workOrderNo = s.workOrderNo;
+      updateClickTime(queryParams).then(res => {
+        if (res != null && res.code === 200) {
+          //数据保存成功  跳转页面
+          this.$router.push({
+            path: '/customService/reservation/deal',
+            query: {
+              workOrderNo: s.workOrderNo,
+              policyNo: s.policyNo,
+              policyItemNo: s.policyItemNo,
+              status: s.status
+            }
+          })
+        }else{
+          //数据保存成功  跳转页面
+          this.$router.push({
+            path: '/customService/reservation/deal',
+            query: {
+              workOrderNo: s.workOrderNo,
+              policyNo: s.policyNo,
+              policyItemNo: s.policyItemNo,
+              status: s.status
+            }
+          })
         }
+      }).catch(res => {
+        console.log('error submit!!');
       })
+
+
     },
     // 多选框选中数据
     handleSelectionChange(selection) {

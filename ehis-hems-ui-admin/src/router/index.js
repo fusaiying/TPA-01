@@ -154,6 +154,13 @@ export const constantRoutes = [
     hidden: true,
     name: 'calculateDetail',
     meta: { title: '理算详情', noCache: true },
+  }, //医院详情
+  {
+    path: '/hospitalDetail',
+    component: () => import('../../src/views/claim/basicInfoManage/medicalManage/hospView.vue'),
+    hidden: true,
+    name: 'hospitalDetail',
+    meta: { title: '医院详情', noCache: true },
   },
 
 ]

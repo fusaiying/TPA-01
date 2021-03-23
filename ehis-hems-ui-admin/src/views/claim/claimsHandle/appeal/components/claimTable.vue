@@ -13,7 +13,7 @@
       </template>
     </el-table-column>
     <el-table-column align="center" :formatter="getDeliverySourceName" prop="source" label="交单来源" show-overflow-tooltip/>
-    <el-table-column align="center" prop="name" label="被保人姓名" show-overflow-tooltip/>
+    <el-table-column align="center" min-width="100" prop="name" label="被保人姓名" show-overflow-tooltip/>
     <el-table-column align="center" prop="idNo" label="证件号码" show-overflow-tooltip/>
     <el-table-column align="center" prop="claimType" :formatter="getClaimTypeName" label="理赔类型" show-overflow-tooltip/>
     <el-table-column align="center" prop="companyName" label="出单公司" show-overflow-tooltip/>

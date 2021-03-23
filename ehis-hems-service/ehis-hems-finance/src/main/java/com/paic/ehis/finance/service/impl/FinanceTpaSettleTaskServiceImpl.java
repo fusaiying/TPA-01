@@ -167,7 +167,6 @@ public class FinanceTpaSettleTaskServiceImpl implements IFinanceTpaSettleTaskSer
                 policyAndRiskRelation.setEndTime(financeTpaSettleTask.getSettleEndDate());
                 policyAndRiskRelation.setCompanyCode(financeTpaSettleTask.getCompanyCode());
 
-
                 TableDataInfo relationCompanyList = policyAndRiskService.getRelationCompanyList(policyAndRiskRelation);
                 if (StringUtils.isNotEmpty(relationCompanyList.getRows())) {
                     for (Object row : relationCompanyList.getRows()) {

@@ -489,7 +489,7 @@
         //需要填入数据的部分
         ruleForm:{
           channelCode:"03",//受理渠道
-          itemCode:"03",//服务项目
+          itemCode:"B00006",//服务项目
           callPerson:{
             mobilePhone:"",//来电人电话
 

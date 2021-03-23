@@ -250,11 +250,11 @@ export default {
         if (res.code == '200') {
           this.pendingTotal = res.total;
           this.pendingTableData = res.rows;
-          if (this.pendingTotal === 0 && this.searchBtn){
-            return this.$message.warning(
-              "未查询到数据！"
-            )
-          }
+          // if (this.pendingTotal === 0 && this.searchBtn){
+          //   return this.$message.warning(
+          //     "未查询到数据！"
+          //   )
+          // }
         }
         this.searchLoad = false
       });
@@ -284,11 +284,11 @@ export default {
         if (res.code == '200') {
           this.completedTotal = res.total;
           this.completedTableData = res.rows;
-          if (this.completedTotal === 0 && this.searchBtn){
-            return this.$message.warning(
-              "未查询到数据！"
-            )
-          }
+          // if (this.completedTotal === 0 && this.searchBtn){
+          //   return this.$message.warning(
+          //     "未查询到数据！"
+          //   )
+          // }
         }
       })
     },

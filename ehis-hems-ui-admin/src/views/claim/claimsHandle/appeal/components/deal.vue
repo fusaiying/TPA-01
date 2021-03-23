@@ -105,7 +105,7 @@ let dictss = [{dictType: 'appeal_type'}, {dictType: 'appeal_reason'}, {dictType:
         if(this.appealInfo.type === "initiate") {
           this.initiateBtn = true;
         }
-        if(this.appealInfo.type === "audit") {
+        if(this.appealInfo.type === "audit" || this.appealInfo.type === '02') {
           this.resetForm("appealForm");
           let data = this.appealInfo.row;
           /**
@@ -126,6 +126,9 @@ let dictss = [{dictType: 'appeal_type'}, {dictType: 'appeal_reason'}, {dictType:
 
           this.appealForm.appealRemark = data.appealRemark;
         }
+       if(this.appealInfo.type === '04') {
+
+       }
       },
     },
     data() {

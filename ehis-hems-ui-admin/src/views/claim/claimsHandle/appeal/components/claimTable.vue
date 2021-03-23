@@ -7,7 +7,11 @@
     tooltip-effect="dark"
     v-loading="loading"
     style="width: 100%;">
-    <el-table-column align="center" min-width="150" prop="rptNo" label="报案号" show-overflow-tooltip/>
+    <el-table-column align="center" min-width="150" prop="rptNo" label="报案号" show-overflow-tooltip>
+      <template slot-scope="scope">
+        <el-button width="160" size="small" type="text" @click="viewHandle(scope.row,'show')">{{ scope.row.rptNo }}</el-button>
+      </template>
+    </el-table-column>
     <el-table-column align="center" :formatter="getDeliverySourceName" prop="source" label="交单来源" show-overflow-tooltip/>
     <el-table-column align="center" prop="name" label="被保人姓名" show-overflow-tooltip/>
     <el-table-column align="center" prop="idNo" label="证件号码" show-overflow-tooltip/>
@@ -131,6 +135,24 @@ export default {
       getUserInfo().then(response => {
         if(response.data) {
           this.orgId = response.data.organCode.toString();
+        }
+      })
+    },
+    viewHandle(row, status) {
+      let data = encodeURI(
+        JSON.stringify({
+          batchNo: row.batchNo,
+          claimType: row.claimType,
+          rptNo: row.rptNo,
+          status,
+          node: 'accept',
+          styleFlag: 'list',
+        })
+      )
+      this.$router.push({
+        path: '/claims-handle/accept-process',
+        query: {
+          data
         }
       })
     },

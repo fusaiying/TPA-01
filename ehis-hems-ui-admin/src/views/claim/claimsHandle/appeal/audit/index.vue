@@ -73,7 +73,7 @@
           <appealTable :value="dialogVisible"  @openDialog="openDialog" :claimTypes="claimTypes" :deliverySource="deliverySource"  :table-data="pendingTableData" :status="activeName"/>
         </el-tab-pane>
         <el-tab-pane  :label="`已处理(${completedTotal})`" name="04">
-          <appealTable :claimTypes="claimTypes" :deliverySource="deliverySource" :table-data="completedTableData" :status="activeName"/>
+          <appealTable :value="dialogVisible"  @openDialog="openDialog" :claimTypes="claimTypes" :deliverySource="deliverySource" :table-data="completedTableData" :status="activeName"/>
         </el-tab-pane>
       </el-tabs>
       <!--分页组件-->

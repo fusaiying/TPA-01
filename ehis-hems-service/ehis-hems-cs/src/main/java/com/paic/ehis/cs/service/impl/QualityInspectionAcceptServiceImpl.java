@@ -96,10 +96,13 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
     @Override
     public AcceptVo updateSendByVoById(String workOrderNo) {
         AcceptVo acceptVo = qualityInspectionAcceptMapper.selectSendByVoById1(workOrderNo);//先查询状态为处理中的工单
-        if (null != acceptVo) {
+        String updateby=String.valueOf(SecurityUtils.getUsername());
+        if (null != acceptVo && !acceptVo.getUpdateBy().equals(updateby)) {//如果获取的数据的操作人不是当前操作人，说明数据到了别人的工作池
+                acceptVo.setFlag("1");
             return acceptVo;//存在则获取处理中的工单数据
         } else {
             AcceptVo acceptVo1 = qualityInspectionAcceptMapper.selectSendByVoById2(workOrderNo);//不存在则获取最新的非处理的工单数据
+            acceptVo1.setFlag("2");
             return acceptVo1;
         }
     }
@@ -328,21 +331,29 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
             e.printStackTrace();
         }
         Calendar cal = Calendar.getInstance();
+        Calendar cal1 = Calendar.getInstance();
         cal.setTime(date);
-        if (1 == cal.get(Calendar.DAY_OF_WEEK)) {
+        cal.add(Calendar.HOUR, 1); // 目前时间加1小时
+
+        cal1.add(Calendar.YEAR, -1); // 目前时间减1小时
+
+
+     /*   if (1 == cal.get(Calendar.DAY_OF_WEEK)) {
             cal.add(Calendar.DATE, -1);
         }
         cal.add(Calendar.DAY_OF_MONTH, -7);//时间减去7天
         cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);//Calendar.MONDAY 这个是周一
 
-        if (1 == cal.get(Calendar.DAY_OF_WEEK)) {
-            cal.add(Calendar.DATE, -1);
+        if (1 == cal1.get(Calendar.DAY_OF_WEEK)) {
+            cal1.add(Calendar.DATE, -1);
         }
-        cal.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);//这个是周日
+        cal1.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);//这个是周日*/
 
         WorkOrderQueryDTO workOrderQueryDTO = new WorkOrderQueryDTO();//根据工单状态
-        workOrderQueryDTO.setEndCaseStartTime(foramt.format(cal.getTime()) + " 00:00:00");//获取上周一
-        workOrderQueryDTO.setEndCaseEndTime(foramt.format(cal.getTime()) + " 23:59:59");//获取上周天
+        //workOrderQueryDTO.setEndCaseStartTime(foramt.format(cal.getTime()) + " 00:00:00");//获取上周一
+        //workOrderQueryDTO.setEndCaseEndTime(foramt.format(cal1.getTime()) + " 23:59:59");//获取上周天
+        workOrderQueryDTO.setEndCaseEndTime(foramt.format(cal.getTime()));//获取一小时后
+        workOrderQueryDTO.setEndCaseStartTime(foramt.format(cal1.getTime()));//获取一小时前
         //2.工单状态处理； 04-已完成的工单且没有被质检过
         workOrderQueryDTO.setAcceptStatus(CodeEnum.ORDER_STATE_04.getCode());
         //3.业务类型为： 01-信息需求和03-投诉的才可以质检

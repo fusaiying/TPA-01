@@ -398,11 +398,15 @@
         </el-row>
 
         <el-row>
-          <el-col :span="24">
-              <el-form-item label="就诊医院：" prop="medicalInstitution">
-                省份：<el-input v-model="workPoolData.province" style="width: 120px"  />
-                城市：<el-input v-model="workPoolData.city" style="width: 120px" />
-              </el-form-item>
+          <el-col :span="3">
+            <el-form-item label="预约医院：" style="white-space: nowrap;" :inline="true" prop="province">
+              省份：<el-input v-model="workPoolData.province" style="width: 100px"  />
+            </el-form-item>
+          </el-col>
+          <el-col :span="5">
+            <el-form-item style="white-space: nowrap;" :inline="true" prop="city" >
+              城市：<el-input v-model="workPoolData.city" style="width: 100px" />
+            </el-form-item>
           </el-col>
 
           <el-col :span="8">

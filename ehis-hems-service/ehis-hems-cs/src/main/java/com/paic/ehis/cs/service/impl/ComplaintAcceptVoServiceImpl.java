@@ -283,8 +283,17 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
             contactsPerson.setLanguage(complaintAcceptVo.getContactsPerson().getLanguage());
             contactsPerson.setMobilePhone(complaintAcceptVo.getContactsPerson().getMobilePhone());
             contactsPerson.setAddress(complaintAcceptVo.getContactsPerson().getAddress());
-            contactsPerson.setHomePhone(complaintAcceptVo.getContactsPerson().getHomePhone1()[0]+"-"+complaintAcceptVo.getContactsPerson().getHomePhone1()[1]+"-"+complaintAcceptVo.getContactsPerson().getHomePhone1()[2]+"-"+complaintAcceptVo.getContactsPerson().getHomePhone1()[3]);
-            contactsPerson.setWorkPhone(complaintAcceptVo.getContactsPerson().getWorkPhone1()[0]+"-"+complaintAcceptVo.getContactsPerson().getWorkPhone1()[1]+"-"+complaintAcceptVo.getContactsPerson().getWorkPhone1()[2]+"-"+complaintAcceptVo.getContactsPerson().getWorkPhone1()[3]);
+            if(complaintAcceptVo.getContactsPerson().getHomePhone1() == null || complaintAcceptVo.getContactsPerson().getHomePhone1().length<=0){
+                contactsPerson.setHomePhone("---");
+            }else{
+                contactsPerson.setHomePhone(complaintAcceptVo.getContactsPerson().getHomePhone1()[0]+"-"+complaintAcceptVo.getContactsPerson().getHomePhone1()[1]+"-"+complaintAcceptVo.getContactsPerson().getHomePhone1()[2]+"-"+complaintAcceptVo.getContactsPerson().getHomePhone1()[3]);
+            }
+            if(complaintAcceptVo.getContactsPerson().getWorkPhone1() == null || complaintAcceptVo.getContactsPerson().getWorkPhone1().length <= 0){
+                contactsPerson.setWorkPhone("---");
+            }else{
+                contactsPerson.setWorkPhone(complaintAcceptVo.getContactsPerson().getWorkPhone1()[0]+"-"+complaintAcceptVo.getContactsPerson().getWorkPhone1()[1]+"-"+complaintAcceptVo.getContactsPerson().getWorkPhone1()[2]+"-"+complaintAcceptVo.getContactsPerson().getWorkPhone1()[3]);
+            }
+
             contactsPerson.setUpdatedBy(SecurityUtils.getUsername());
             contactsPerson.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
             personInfoMapper.updatePersonInfo(contactsPerson);
@@ -652,6 +661,7 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
         WorkHandleInfo workHandleInfo=new WorkHandleInfo();
         workHandleInfo.setWorkOrderNo(complaintDealVo.getWorkOrderNo());
         workHandleInfo.setCreatedBy(SecurityUtils.getUsername());
+        workHandleInfo.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         WorkHandleInfo workHandleInfos=workHandleInfoMapper.selectCreatedBy(workHandleInfo);
 
 

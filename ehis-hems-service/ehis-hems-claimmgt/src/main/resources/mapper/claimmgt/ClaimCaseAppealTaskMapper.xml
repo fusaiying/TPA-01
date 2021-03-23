@@ -223,7 +223,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <if test="appealRptNo != null  and appealRptNo != ''"> and t.appeal_rpt_no = #{appealRptNo}</if>
         <if test="source != null  and source != ''"> and t2.source = #{source}</if>
         <if test="idNo != null  and idNo != ''"> and t3.id_no = #{idNo}</if>
-        <if test="name != null  and name != ''"> and t3.name = #{name}</if>
+        <if test="name != null  and name != ''"> and instr(t3.name,#{name})  > 0 </if>
         <if test="auditor != null  and auditor != ''"> and t.auditor = #{auditor}</if>
         <if test="pageType != null  and pageType != '' and pageType == '01'"> and t.appeal_status in ('01','04')</if>
         <if test="pageType != null  and pageType != '' and pageType == '02'"> and t.appeal_status in ('02','03')</if>

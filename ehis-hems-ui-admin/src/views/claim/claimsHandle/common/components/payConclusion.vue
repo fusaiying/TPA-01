@@ -111,6 +111,7 @@ export default {
   mounted() {
  //console.log("this.fixInfo.rptNo", this.fixInfo.isAppeal)
     if(this.fixInfo.isAppeal === '01') {
+     // console.log("this.fixInfo.rptNo.split('-')[0]", this.fixInfo.rptNo.split('-')[0])
       this.getCalInfo()
     }
   },
@@ -125,6 +126,7 @@ export default {
     getCalInfo() {
       calInfo(this.fixInfo.rptNo.split('-')[0]).then(res => {
         if (res.code === 200 && res.data) {
+          console.log("申述案件赔付结论 : ",res.data)
           this.conclusionInfo = res.data;
         }
       })

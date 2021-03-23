@@ -257,12 +257,31 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
         collaborativeFrom.setNonReason(complaintDealVo.getNonReason());
         collaborativeFrom.setTreatmentBasis(complaintDealVo.getTreatmentBasis());
         collaborativeFrom.setTreatmentPlan(complaintDealVo.getTreatmentPlan());
-        //征求意见处理提交禁止修改案件发起人，案件发起时间
-        //collaborativeFrom.setCreatedBy(SecurityUtils.getUsername());
-        //collaborativeFrom.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         collaborativeFrom.setUpdatedBy(SecurityUtils.getUsername());
         collaborativeFrom.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
-        return collaborativeFromMapper.updateConsultationDemandOne(collaborativeFrom);
+
+        int a = collaborativeFromMapper.updateConsultationDemandOne(collaborativeFrom);
+
+        //征求意见【提交】了之后，其他协办人手下的征求意见信息也都要变成“处理完毕”
+        //通过工单号查询对应协办信息
+        CollaborativeFrom tCollaborativeFrom = new CollaborativeFrom();
+        tCollaborativeFrom.setWorkOrderNo(complaintDealVo.getWorkOrderNo());
+        List<CollaborativeFrom> tCollaborativeFromList = collaborativeFromMapper.selectCollaborativeFromList(tCollaborativeFrom);
+        for(int i=0; i<tCollaborativeFromList.size(); i++){
+            //如果协办流水号 不为 当前页面传递过来的流水号 则通过for修改状态
+            if(!tCollaborativeFromList.get(i).getCollaborativeId().equals(complaintDealVo.getCollaborativeId())){
+                CollaborativeFrom uptCollaborativeFrom = new CollaborativeFrom();
+                uptCollaborativeFrom.setStatus("02");
+                uptCollaborativeFrom.setHandleState("02");
+                uptCollaborativeFrom.setWorkOrderNo(complaintDealVo.getWorkOrderNo());
+                uptCollaborativeFrom.setCollaborativeId(tCollaborativeFromList.get(i).getCollaborativeId());
+                uptCollaborativeFrom.setUpdatedBy(SecurityUtils.getUsername());
+                uptCollaborativeFrom.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+                collaborativeFromMapper.updateConsultationDemand(uptCollaborativeFrom);
+            }
+        }
+
+        return a;
     }
 
     /**

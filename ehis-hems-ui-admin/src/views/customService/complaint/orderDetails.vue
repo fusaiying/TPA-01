@@ -582,6 +582,9 @@
           </el-table-column>
         </el-table>
       </div>
+      <div style="text-align: right; margin-right: 1px;">
+        <modify-details ref="modifyDetails"></modify-details>
+      </div>
     </el-card>
   </div>
 </template>
@@ -592,6 +595,7 @@
   import upLoad from "../common/modul/upload";
   import {complainSearch,comSearch}  from  '@/api/customService/consultation'
   import {getAttachmentListById} from "@/api/customService/spotCheck";
+  import modifyDetails from "../common/modul/modifyDetails";
 
 
   let dictss = [
@@ -609,8 +613,9 @@
   export default {
     components: {
       upLoad,
-
+      modifyDetails,
     },
+
     filters: {
       changeDate: function (value) {
         if (value !== null) {
@@ -819,9 +824,9 @@
 
       //超链接用
       modifyDetails(s){
-        this.$refs.modifyDetails.queryParams.subId=s.subId,
+        this.$refs.modifyDetails.queryParams.subId=s.subId;
           this.$refs.modifyDetails.queryParams.workOrderNo=this.queryParams.workOrderNo;
-        this.$refs.modifyDetails.open()
+        this.$refs.modifyDetails.open();
         ;},
       //打开修改对话框
 
@@ -856,9 +861,9 @@
             this.HCSPoolData = res.rows
             this.HCSTotal = res.total
             if (res.rows.length <= 0) {
-              return this.$message.warning(
+              /*return this.$message.warning(
                 "未查询到数据！"
-              )
+              )*/
             }
           }
         }).catch(res => {

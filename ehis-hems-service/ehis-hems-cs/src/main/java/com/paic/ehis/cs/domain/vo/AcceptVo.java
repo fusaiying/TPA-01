@@ -66,7 +66,7 @@ public class AcceptVo extends BaseEntity
     private Date modifyTime;
     /** 受理人信息 */
     @Excel(name = "受理人")
-    private String acceptUserId;
+    private String acceptBy;
     /** 目前用不上,受理人信息以登录名称显示 */
     private UserInfo acceptUser=new UserInfo();
     /** 处理人信息 */

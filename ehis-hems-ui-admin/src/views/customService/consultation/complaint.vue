@@ -399,7 +399,7 @@
         <span style="color: blue">服务处理</span>
         <el-divider/>
         <el-row>
-          <el-form-item label="投诉是否成立：" prop="priority">
+          <el-form-item label="投诉是否成立：" prop="validFlag">
             <el-select v-model="sendForm.validFlag" class="item-width" placeholder="请选择">
               <el-option v-for="item in cs_whether_flag" :key="item.dictValue" :label="item.dictLabel"
                          :value="item.dictValue"/>
@@ -409,11 +409,11 @@
         <el-row>
 
           <el-form-item label="投诉不成立理由：" prop="nonReason">
-            <el-input size="mini" v-model="sendForm.nonReason"></el-input>
+            <el-input size="mini" v-model="sendForm.nonReason" maxlength="2000"></el-input>
           </el-form-item>
         </el-row>
         <el-row>
-          <el-form-item label="处理方案：" prop="remark">
+          <el-form-item label="处理方案：" prop="treatmentPlan">
             <el-input
               type="textarea"
               :rows="1"
@@ -521,6 +521,17 @@ export default {
     }
   },
   data() {
+    const checkValidFlag= (rule, value, callback) => {
+      if(this.sendForm.validFlag == "02"){
+        if(value == null || value == ""){
+          callback(new Error("投诉不成立理由不能为空"));
+        }else{
+          callback();
+        }
+      }else{
+        callback();
+      }
+    };
 
     return {
       ids: [],//多选框
@@ -543,6 +554,18 @@ export default {
       rules: {
         Service: [
           {required: true, message: "服务项目不能为空", trigger: "blur"}
+        ],
+        validFlag: [
+          {required: true, message: "投诉是否成立不能为空", trigger: "blur"}
+        ],
+        nonReason: [
+          {required: false, validator: checkValidFlag, trigger: "blur"}
+        ],
+        treatmentPlan: [
+          {required: true, message: "处理方案不能为空", trigger: "blur"}
+        ],
+        treatmentBasis: [
+          {required: true, message: "处理依据不能为空", trigger: "blur"}
         ],
       },
       sendForm: {},
@@ -749,22 +772,25 @@ export default {
 
     //提交
     submit() {
-      let insert = this.sendForm
-      insert.workOrderNo = this.$route.query.workOrderNo
-      insert.collaborativeId = this.$route.query.collaborativeId
-      comSearch(insert).then(res => {
-        if (res != null && res.code === 200) {
-          this.$message.success("保存成功")
-          if (res.rows.length <= 0) {
-            return this.$message.warning(
-              "失败！"
-            )
-          }
+      this.$refs.sendForm.validate(valid => {
+        if(valid){
+          let insert = this.sendForm
+          insert.workOrderNo = this.$route.query.workOrderNo
+          insert.collaborativeId = this.$route.query.collaborativeId
+          comSearch(insert).then(res => {
+            if (res != null && res.code === 200) {
+              this.$message.success("保存成功")
+              if (res.rows.length <= 0) {
+                return this.$message.warning(
+                  "失败！"
+                )
+              }
+            }
+          }).catch(res => {
+
+          })
         }
-      }).catch(res => {
-
       })
-
     },
     //查询轨迹表
     searchFlowLog() {

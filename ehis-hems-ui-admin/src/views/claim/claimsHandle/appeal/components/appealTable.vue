@@ -126,7 +126,7 @@ export default {
           claimType: row.claimType,
           rptNo: row.appealRptNo,
           status,
-          node: 'accept',
+          node: 'calculateReview',
           styleFlag: 'list',
         })
       )

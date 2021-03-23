@@ -563,7 +563,7 @@
         </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="是否需要担保函：" prop="costsIncurred">
+            <el-form-item label="是否需要担保函：" prop="costIncurred">
               <el-select v-model="submitForm.costIncurred" class="item-width" placeholder="请选择"
                          controls-position="right" :min="0">
                 <el-option v-for="item in cs_whether_flag" :key="item.dictValue" :label="item.dictLabel"

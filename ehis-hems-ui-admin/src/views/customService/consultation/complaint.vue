@@ -727,11 +727,12 @@ export default {
     },
     //转办
     transfer() {
-      this.$refs.transfer.transferForm.workOrderNo = this.queryParams.workOrderNo
-      this.$refs.transfer.open()
+      this.$refs.transfer.transferForm.workOrderNo = this.queryParams.workOrderNo;
+      this.$refs.transfer.open();
     },
     //协办
     coOrganizer() {
+      this.$refs.coOrganizer.dynamicValidateForm.workOrderNo = this.queryParams.workOrderNo;
       this.$refs.coOrganizer.open();
     },
     //超链接用

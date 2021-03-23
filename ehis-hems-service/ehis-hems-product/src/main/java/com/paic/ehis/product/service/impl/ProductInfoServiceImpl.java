@@ -131,37 +131,38 @@ public class ProductInfoServiceImpl implements IProductInfoService
     @Override
     public ProductInfo insertInfo(ProductInfo productInfo)
     {
-        int count = 0;
+
         //判断产品编码是否存在
         if(StringUtils.isBlank(productInfo.getProductCode())){//新增
             productInfo.setProductCode("PD"+PubFun.createMySqlMaxNoUseCache("productCodeSer", 10, 8));
-        }else{//变更状态
-            productInfoMapper.updateStatus(productInfo.getProductCode());
+            productInfo.setCreateTime(DateUtils.getNowDate());
+            productInfo.setUpdateTime(DateUtils.getNowDate());
+            productInfo.setCreateBy(SecurityUtils.getUsername());
+            productInfo.setUpdateBy(SecurityUtils.getUsername());
+            productInfo.setSerialNo(PubFun.createMySqlMaxNoUseCache("productInfoSer", 12, 12));
+            productInfo.setStatus("Y");
+            productInfo.setBussinessStatus("01");//新建状态
+            //产品表数据插入
+            productInfoMapper.insertProductInfo(productInfo);
+        }else{//修改数据
+            productInfo.setUpdateTime(DateUtils.getNowDate());
+            productInfo.setUpdateBy(SecurityUtils.getUsername());
+            productInfoMapper.updateProductInfo(productInfo);
         }
 
-        productInfo.setCreateTime(DateUtils.getNowDate());
-        productInfo.setUpdateTime(DateUtils.getNowDate());
-        productInfo.setCreateBy(SecurityUtils.getUsername());
-        productInfo.setUpdateBy(SecurityUtils.getUsername());
-        productInfo.setSerialNo(PubFun.createMySqlMaxNoUseCache("productInfoSer", 12, 12));
-        productInfo.setStatus("Y");
-        productInfo.setBussinessStatus("01");//新建状态
-        //产品表数据插入
-        count = productInfoMapper.insertProductInfo(productInfo);
-        if(count >0){
-            //轨迹表中判断数据是否存在；存在，变更轨迹表中数据的更新时间；不存在，轨迹表中插入数据
-            productManagerLogMapper.updateStatus(productInfo.getProductCode());
-            ProductManagerLog productManagerLog = new ProductManagerLog();
-            productManagerLog.setCreateTime(DateUtils.getNowDate());
-            productManagerLog.setUpdateTime(DateUtils.getNowDate());
-            productManagerLog.setCreateBy(SecurityUtils.getUsername());
-            productManagerLog.setUpdateBy(SecurityUtils.getUsername());
-            productManagerLog.setSerialNo(PubFun.createMySqlMaxNoUseCache("productManagerSer", 12, 12));
-            productManagerLog.setProductCode(productInfo.getProductCode());
-            productManagerLog.setBussinessStatus("01");//新建状态
-            productManagerLog.setStatus("Y");
-            productManagerLogMapper.insertProductManagerLog(productManagerLog);
-        }
+        //轨迹表中判断数据是否存在；存在，变更轨迹表中数据的更新时间；不存在，轨迹表中插入数据
+        productManagerLogMapper.updateStatus(productInfo.getProductCode());
+        ProductManagerLog productManagerLog = new ProductManagerLog();
+        productManagerLog.setCreateTime(DateUtils.getNowDate());
+        productManagerLog.setUpdateTime(DateUtils.getNowDate());
+        productManagerLog.setCreateBy(SecurityUtils.getUsername());
+        productManagerLog.setUpdateBy(SecurityUtils.getUsername());
+        productManagerLog.setSerialNo(PubFun.createMySqlMaxNoUseCache("productManagerSer", 12, 12));
+        productManagerLog.setProductCode(productInfo.getProductCode());
+        productManagerLog.setBussinessStatus("01");//新建状态
+        productManagerLog.setStatus("Y");
+        productManagerLogMapper.insertProductManagerLog(productManagerLog);
+
         return productInfo;
     }
 

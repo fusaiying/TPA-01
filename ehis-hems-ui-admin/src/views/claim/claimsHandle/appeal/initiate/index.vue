@@ -123,9 +123,6 @@ import deal from '../components/deal'
 
 import { claimInfoList,appealList } from '@/api/appeal/api'
 
-import moment from "moment";
-import {caseFilingList} from "@/api/placeCase/api";
-
 let dictss = [{dictType: 'delivery_source'},{dictType: 'claimType'} , {dictType: 'claim_status'},{dictType: 'case_pay_status'}]
 
 export default {
@@ -256,9 +253,9 @@ export default {
       let startTime = "";
       let endTime = "";
       let operateDate = this.formSearch.operateDate;
-      if('' != operateDate) {
+      if('' !== operateDate && null != operateDate) {
         startTime = operateDate[0];
-        endTime = operateDate[1];
+        endTime = operateDate[1] +" 23:59:59";
       }
       const params = {};
       params.pageNum = this.pendPageInfo.pageNum;
@@ -286,9 +283,9 @@ export default {
       let startTime = "";
       let endTime = "";
       let operateDate = this.formSearch.operateDate;
-      if('' != operateDate) {
+      if('' !== operateDate && null != operateDate) {
         startTime = operateDate[0];
-        endTime = operateDate[1];
+        endTime = operateDate[1] +" 23:59:59";
       }
       const params = {};
       params.pageNum = this.completePageInfo.pageNum;
@@ -313,9 +310,9 @@ export default {
       let startTime = "";
       let endTime = "";
       let operateDate = this.formSearch.operateDate;
-      if('' != operateDate) {
+      if('' !== operateDate && null != operateDate) {
         startTime = operateDate[0];
-        endTime = operateDate[1];
+        endTime = operateDate[1] +" 23:59:59";
       }
       const params = {};
       params.pageNum = this.claimPageInfo.pageNum;
@@ -326,7 +323,7 @@ export default {
       params.name = this.formSearch.name;
       params.createStartTime = startTime;
       params.createEndTime = endTime;
-      params.auditor = this.formSearch.updateBy;
+      params.updateBy = this.formSearch.updateBy;
       params.pageType = '01';
       claimInfoList(params).then(res => {
         if (res.code == '200') {

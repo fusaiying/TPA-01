@@ -77,7 +77,7 @@
         <if test="itemCode != null  and itemCode != ''"> and t2.item_code = #{itemCode}</if>
         <if test="acceptBy != null  and acceptBy != ''"> and ifnull(t1.accept_by,t1.create_by) like concat('%',#{acceptBy},'%')</if>
         <if test="acceptTime != null "> and t1.accept_time = #{acceptTime}</if>
-        <if test="acceptTimeStart != null and acceptTimeEnd != null"> and t1.create_By between #{acceptTimeStart} and DATE_ADD(#{acceptTimeEnd},INTERVAL 1 DAY)</if>
+        <if test="acceptTimeStart != null and acceptTimeEnd != null"> and t1.create_Time between #{acceptTimeStart} and DATE_ADD(#{acceptTimeEnd},INTERVAL 1 DAY)</if>
         <if test="modifyBy != null  and modifyBy != ''"> and t1.update_by = #{modifyBy}</if>
         <if test="modifyTimeStart != null and modifyTimeEnd != null"> and t1.modify_time between #{modifyTimeStart} and DATE_ADD(#{modifyTimeEnd},INTERVAL 1 DAY)</if>
         <if test="appointmentTimeStart != null and appointmentTimeEnd != null"> and t2.prop10 between DATE_ADD(#{appointmentTimeStart},INTERVAL -1 DAY) and DATE_ADD(#{appointmentTimeEnd},INTERVAL 0 DAY)</if>
@@ -145,7 +145,7 @@
             <if test="itemCode != null  and itemCode != ''"> and t2.item_code = #{itemCode}</if>
             <if test="acceptBy != null  and acceptBy != ''"> and ifnull(t1.accept_by,t1.create_by) like concat('%',#{acceptBy},'%')</if>
             <if test="acceptTime != null "> and t1.accept_time = #{acceptTime}</if>
-            <if test="acceptTimeStart != null and acceptTimeEnd != null"> and t1.create_By between #{acceptTimeStart} and DATE_ADD(#{acceptTimeEnd},INTERVAL 1 DAY)</if>
+            <if test="acceptTimeStart != null and acceptTimeEnd != null"> and t1.create_Time between #{acceptTimeStart} and DATE_ADD(#{acceptTimeEnd},INTERVAL 1 DAY)</if>
             <if test="modifyBy != null  and modifyBy != ''"> and t1.update_by = #{modifyBy}</if>
             <if test="modifyTimeStart != null and modifyTimeEnd != null"> and t1.modify_time between #{modifyTimeStart} and DATE_ADD(#{modifyTimeEnd},INTERVAL 1 DAY)</if>
         <if test="appointmentTimeStart != null and appointmentTimeEnd != null"> and t2.prop10 between DATE_ADD(#{appointmentTimeStart},INTERVAL -1 DAY) and DATE_ADD(#{appointmentTimeEnd},INTERVAL 0 DAY)</if>

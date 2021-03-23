@@ -571,8 +571,10 @@ export default {
         queryParams = this.sendForm;
       }
       if(this.sendForm.appointmentTime){
-        queryParams.appointmentTimeStart=this.sendForm.appointmentTime[0]
-        queryParams.appointmentTimeEnd=this.sendForm.appointmentTime[1]
+        this.$set(queryParams,'appointmentTimeStart',this.sendForm.appointmentTime[0]);
+        this.$set(queryParams,'appointmentTimeEnd',this.sendForm.appointmentTime[1]);
+        /*queryParams.appointmentTimeStart=this.sendForm.appointmentTime[0]
+        queryParams.appointmentTimeEnd=this.sendForm.appointmentTime[1]*/
       }
 
       demandListAndPublicPool(queryParams).then(res => {

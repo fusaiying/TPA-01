@@ -1271,27 +1271,29 @@ export default {
     coOrganizer() {
       //协办之前先暂存数据
       this.changeForm.rules = this.rules2;
-      this.$refs.sendForm.clearValidate();
-      this.$refs.sendForm.validate((valid) => {
-        if (valid) {
-          let insert = this.sendForm
-          insert.sign = "01"
-          insert.workOrderNo = this.$route.query.workOrderNo
-          complaintDealSubmit(insert).then(res => {
-            if (res != null && res.code === 200) {
-              this.$refs.coOrganizer.dynamicValidateForm.workOrderNo = this.queryParams.workOrderNo;
+      if(this.$refs.sendForm.clearValidate()){
+        this.$refs.sendForm.validate((valid) => {
+          if (valid) {
+            let insert = this.sendForm
+            insert.sign = "01"
+            insert.workOrderNo = this.$route.query.workOrderNo
+            complaintDealSubmit(insert).then(res => {
+              if (res != null && res.code === 200) {
+                this.$refs.coOrganizer.dynamicValidateForm.workOrderNo = this.queryParams.workOrderNo;
 
-              this.$refs.coOrganizer.open();
-              if (res.rows.length <= 0) {
-                return this.$message.warning("失败！");
+                this.$refs.coOrganizer.open();
+                if (res.rows.length <= 0) {
+                  return this.$message.warning("失败！");
+                }
+                this.changeForm.rules = this.rules1;
               }
-              this.changeForm.rules = this.rules1;
-            }
-          }).catch(res => {
+            }).catch(res => {
 
-          })
-        }
-      })
+            })
+          }
+        })
+      }
+
       //this.changeForm.rules = this.rules1;
     },
     //超链接用

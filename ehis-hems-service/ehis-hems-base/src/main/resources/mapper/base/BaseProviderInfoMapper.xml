@@ -1235,6 +1235,41 @@ WHERE
         ) order by -bcs.priority desc
     </select>
 
+    <resultMap id="baseHospitalForReservationMap" type="com.paic.ehis.base.domain.BaseHospitalForReservationVo">
+        <result property="hospitalCode"    column="provider_code"    />
+        <result property="hospitalName"    column="chname1"    />
+        <result property="address"    column="chaddreess"    />
+        <result property="consultPhone"    column="consultphone"    />
+        <collection property="deptList" ofType="java.lang.String" column="provider_code" select="com.paic.ehis.base.mapper.BaseProviderDepMapper.selectDeptById"/>
+    </resultMap>
+
+    <select id="selectHospitalForReservation" parameterType="com.paic.ehis.base.domain.dto.BaseHospitalForReservationDTO"
+            resultMap="baseHospitalForReservationMap">
+        select distinct bpi.provider_code,bpi.chname1,
+        concat_ws(
+        '',
+        ( SELECT DISTINCT placename FROM sn_base_address WHERE placecode = bpi.province ),
+        ( SELECT DISTINCT placename FROM sn_base_address WHERE placecode = bpi.city ),
+        ( SELECT DISTINCT placename FROM sn_base_address WHERE placecode = bpi.district ),
+        bpi.chaddreess
+        ) as chaddreess,bpi.consultphone
+        from base_provider_info bpi, base_provider_service bps
+        where 1=1 and bpi.provider_code=bps.provider_code
+            and bpi.status='Y' and bps.status='Y' and bps.cooperation_status='01' and bps.allcontopen='01'
+        <if test="hospitalCode!=null and hospitalCode!=''">
+            and bpi.provider_code =#{hospitalCode}
+        </if>
+        <if test="hospitalName!=null and hospitalName!=''">
+            and bpi.chname1 like concat('%', #{hospitalName}, '%')
+        </if>
+        <if test="province!=null and province!=''">
+            and bpi.province =#{province}
+        </if>
+        <if test="city!=null and city!=''">
+            and bpi.city =#{city}
+        </if>
+    </select>
+
     <update id ="updateSupplier" parameterType="ProductSupplierInfo" >
         UPDATE base_contract_service
         SET priority = #{priority}

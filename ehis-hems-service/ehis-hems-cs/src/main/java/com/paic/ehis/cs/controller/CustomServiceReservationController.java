@@ -13,6 +13,8 @@ import com.paic.ehis.cs.domain.vo.ReservationDealVo;
 import com.paic.ehis.cs.service.IEditInfoService;
 import com.paic.ehis.cs.service.IReservationAcceptVoService;
 import com.paic.ehis.cs.service.IWorkHandleInfoService;
+import com.paic.ehis.system.api.BaseService;
+import com.paic.ehis.system.api.domain.dto.BaseHospitalForReservationDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +34,9 @@ public class CustomServiceReservationController extends BaseController {
     private IEditInfoService iEditInfoService;
     @Autowired
     private IWorkHandleInfoService iWorkHandleInfoService;
+
+    @Autowired
+    private BaseService baseService;
 
 
 //    @PreAuthorize("@ss.hasPermi('system:customService:list')")
@@ -107,4 +112,10 @@ public class CustomServiceReservationController extends BaseController {
         return toAjax(1);
     }
 
+
+    @PostMapping("/internal/selectHospital")
+    public TableDataInfo selectHospital(@RequestBody BaseHospitalForReservationDTO baseHospitalForReservationDTO) {
+        TableDataInfo tableDataInfo = baseService.selectHospitalForReservation(baseHospitalForReservationDTO);
+        return tableDataInfo;
+    }
 }

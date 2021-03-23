@@ -108,8 +108,6 @@ import appealTable from '../components/appealTable'
 import deal from '../components/deal'
 import { appealList } from '@/api/appeal/api'
 
-import moment from "moment";
-
 let dictss = [{dictType: 'delivery_source'},{dictType: 'claimType'} , {dictType: 'claim_status'},{dictType: 'case_pay_status'}]
 
 export default {
@@ -178,9 +176,9 @@ export default {
   watch: {
     totalChange: function(newVal, oldVal) {
       if (newVal.pendingTotal === 0 && newVal.completedTotal > 0) {
-        this.activeName = '04'
+      //  this.activeName = '03'
       } else {
-        this.activeName = '03'
+      //  this.activeName = '04'
       }
     }
   },
@@ -204,13 +202,23 @@ export default {
     },
     searchHandle() {
 
-      this.pendPageInfo.pageNum = 1;
-      this.pendPageInfo.pageSize = 10;
-      this.completePageInfo.pageNum = 1;
-      this.completePageInfo.pageSize = 10;
+      // this.pendPageInfo.pageNum = 1;
+      // this.pendPageInfo.pageSize = 10;
+      // this.completePageInfo.pageNum = 1;
+      // this.completePageInfo.pageSize = 10;
+      //
+      // this.getPendingData();
+      // this.getProcessedData();
 
-      this.getPendingData();
-      this.getProcessedData();
+      if (this.activeName === '03') {
+        this.pendPageInfo.pageNum = 1;
+         this.pendPageInfo.pageSize = 10;
+        this.getPendingData()
+      } else {
+        this.completePageInfo.pageNum = 1;
+         this.completePageInfo.pageSize = 10;
+        this.getProcessedData()
+      }
     },
     initAppealData(){
       this.getPendingData();
@@ -276,7 +284,7 @@ export default {
     },
 
     handleClick() {
-      if (this.activeName === '01') {
+      if (this.activeName === '03') {
         this.getPendingData()
       } else {
         this.getProcessedData()

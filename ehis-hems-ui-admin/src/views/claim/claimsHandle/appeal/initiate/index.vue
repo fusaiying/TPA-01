@@ -339,6 +339,11 @@ export default {
         if (res.code == '200') {
           this.claimTotal = res.total;
           this.claimTableData = res.rows;
+          if (this.claimTotal === 0){
+            return this.$message.warning(
+              "未查询到数据！"
+            )
+          }
         }
       });
     },

@@ -612,7 +612,7 @@
         <el-button  type="primary" size="mini" @click="temporary">暂存</el-button>
         <el-button type="primary" size="mini" @click="submit">提交</el-button>
 <!--        <el-button  type="primary"  size="mini" @click="upload" disabled>客户信息匹配</el-button>-->
-        <el-button  type="primary"  size="mini" @click="transfer">转办</el-button>
+        <!--<el-button  type="primary"  size="mini" @click="transfer">转办</el-button>-->
         <el-button  type="primary" size="mini" @click="coOrganizer">协办</el-button>
         <el-button  type="primary" size="mini" @click="hiddenShow">关闭</el-button>
 

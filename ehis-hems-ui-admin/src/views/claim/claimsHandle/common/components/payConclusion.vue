@@ -86,72 +86,71 @@
   </el-card>
 </template>
 <script>
-  import {calInfo} from '@/api/handel/common/api'
+import {calInfo} from '@/api/handel/common/api'
 
-  export default {
-    props: {
-      fixInfo: Object,
-    },
-    components: {},
-    data() {
-      return {
-        conclusionInfo: {
-          sumBillAmount:undefined,
-          sumHosDiscountAmount:undefined,
-          payAmount:undefined,
-          refusedAmount:undefined,
-          debtAmount:undefined,
-          billCurrency:undefined,
-          exchangeRate:undefined,
-          payAmountForeign:undefined,
-        },
-
-      }
-    },
-    mounted() {
-
-    },
-    watch: {
-      fixInfo: function (newVal) {
-        this.getCalInfo()
-
-      }
-    },
-    computed: {},
-    methods: {
-      getCalInfo() {
-        calInfo(this.fixInfo.rptNo.split("-")[0]).then(res => {
-          if (res.code === 200 && res.data) {
-            console.log("res.data " , res.data)
-            console.log("res.data " , res.data)
-            console.log("res.data " , res.data)
-
-            this.conclusionInfo = res.data;
-          }
-        })
+export default {
+  props: {
+    fixInfo: Object,
+  },
+  components: {},
+  data() {
+    return {
+      conclusionInfo: {
+        sumBillAmount:undefined,
+        sumHosDiscountAmount:undefined,
+        payAmount:undefined,
+        refusedAmount:undefined,
+        debtAmount:undefined,
+        billCurrency:undefined,
+        exchangeRate:undefined,
+        payAmountForeign:undefined,
       },
+
     }
+  },
+  mounted() {
+ //console.log("this.fixInfo.rptNo", this.fixInfo.isAppeal)
+    if(this.fixInfo.isAppeal === '01') {
+      this.getCalInfo()
+    }
+  },
+  watch: {
+    fixInfo: function (newVal) {
+      this.getCalInfo()
+
+    }
+  },
+  computed: {},
+  methods: {
+    getCalInfo() {
+      calInfo(this.fixInfo.rptNo.split('-')[0]).then(res => {
+        if (res.code === 200 && res.data) {
+          this.conclusionInfo = res.data;
+        }
+      })
+    },
   }
+}
 </script>
 <style scoped>
-  .item-width {
-    width: 220px;
-  }
+.item-width {
+  width: 220px;
+}
 
-  ::v-deep .info_span_col {
-    text-align: right;
-    vertical-align: middle;
-    float: left;
-    font-size: 14px;
-    color: #606266;
-    line-height: 40px;
-    padding: 0 12px 0 0;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-  }
+::v-deep .info_span_col {
+  text-align: right;
+  vertical-align: middle;
+  float: left;
+  font-size: 14px;
+  color: #606266;
+  line-height: 40px;
+  padding: 0 12px 0 0;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
 
-  ::v-deep .to_right {
-    width: 130px;
-    text-align: right;
-  }
+::v-deep .to_right {
+  width: 130px;
+  text-align: right;
+}
 </style>

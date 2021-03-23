@@ -317,7 +317,13 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="预约时间：" prop="complaintTime">
-              <el-input v-model="sendForm.complaintTime" class="item-width" size="mini" placeholder="请输入"/>
+              <!--<el-input v-model="sendForm.complaintTime" class="item-width" size="mini" placeholder="请输入"/>-->
+              <el-date-picker class="item-width"
+                              v-model="sendForm.complaintTime"
+                              type="datetime"
+                              placeholder="选择日期时间">
+              </el-date-picker>
+
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -557,7 +563,7 @@
         </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="是否需要担保函：" prop="costsIncurred">
+            <el-form-item label="是否需要担保函：" prop="costIncurred">
               <el-select v-model="submitForm.costIncurred" class="item-width" placeholder="请选择"
                          controls-position="right" :min="0">
                 <el-option v-for="item in cs_whether_flag" :key="item.dictValue" :label="item.dictLabel"
@@ -1163,9 +1169,9 @@
             this.HCSPoolData = res.rows
             this.HCSTotal = res.total
             if (res.rows.length <= 0) {
-              return this.$message.warning(
+              /*return this.$message.warning(
                 "未查询到数据！"
-              )
+              )*/
             }
           }
         }).catch(res => {

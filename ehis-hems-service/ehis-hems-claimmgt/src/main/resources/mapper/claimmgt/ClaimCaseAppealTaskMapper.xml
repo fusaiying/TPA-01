@@ -197,7 +197,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             t.appeal_remark ,
             t.conclusion_remark ,
             t.apply_operator ,
-            t.auditor ,
+            t6.update_by auditor ,
             t.status ,
             t.dept_code ,
             t.create_time ,
@@ -212,6 +212,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         LEFT JOIN claim_case_insured t3 ON t1.rpt_no = t3.rpt_no
         LEFT JOIN claim_case_policy t4  ON  t3.rpt_no = t4.rpt_no
         LEFT JOIN claim_case_cal t5     ON t4.rpt_no = t5.rpt_no
+        LEFT JOIN (SELECT
+                        rpt_no,
+                        operation,
+                        update_by
+                        FROM claim_case_record
+                        WHERE record_id in (SELECT MAX(record_id) FROM claim_case_record WHERE operation = '07'  AND STATUS = 'Y' AND history_flag = 'Y' GROUP BY rpt_no)
+                    ) t6 ON t5.rpt_no = t6.rpt_no
         WHERE 1 = 1
         AND t.status = 'Y'
         AND t1.status = 'Y'
@@ -223,8 +230,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <if test="appealRptNo != null  and appealRptNo != ''"> and t.appeal_rpt_no = #{appealRptNo}</if>
         <if test="source != null  and source != ''"> and t2.source = #{source}</if>
         <if test="idNo != null  and idNo != ''"> and t3.id_no = #{idNo}</if>
-        <if test="name != null  and name != ''"> and t3.name = #{name}</if>
-        <if test="auditor != null  and auditor != ''"> and t.auditor = #{auditor}</if>
+        <if test="name != null  and name != ''"> and instr(t3.name,#{name})  > 0 </if>
+        <if test="auditor != null  and auditor != ''"> and instr(t6.update_by, #{auditor}) > 0</if>
         <if test="pageType != null  and pageType != '' and pageType == '01'"> and t.appeal_status in ('01','04')</if>
         <if test="pageType != null  and pageType != '' and pageType == '02'"> and t.appeal_status in ('02','03')</if>
         <if test="createStartTime != null and createStartTime != ''">

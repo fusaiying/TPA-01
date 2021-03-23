@@ -371,7 +371,7 @@
           </el-table-column>
           <el-table-column prop="remarks" align="center" label="说明" show-overflow-tooltip>
             <template slot-scope="scope">
-              <el-link v-if="scope.row.operateCode=='01'" style="font-size:12px" type="primary"
+              <el-link v-if="scope.row.operateCode=='03'" style="font-size:12px" type="primary"
                        @click="modifyDetails(scope.row)">修改说明
               </el-link>
             </template>
@@ -727,11 +727,12 @@ export default {
     },
     //转办
     transfer() {
-      this.$refs.transfer.transferForm.workOrderNo = this.queryParams.workOrderNo
-      this.$refs.transfer.open()
+      this.$refs.transfer.transferForm.workOrderNo = this.queryParams.workOrderNo;
+      this.$refs.transfer.open();
     },
     //协办
     coOrganizer() {
+      this.$refs.coOrganizer.dynamicValidateForm.workOrderNo = this.queryParams.workOrderNo;
       this.$refs.coOrganizer.open();
     },
     //超链接用

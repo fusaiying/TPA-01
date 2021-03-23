@@ -345,7 +345,8 @@ import {
   demandListAndPublicPool,
   demandListAndPersonalPool,
   demandObtain,
-  demandObtainMany
+  demandObtainMany,
+  updateClickTime
 } from '@/api/customService/reservation'
 import secondPhone from "../common/modul/secondPhone";
 import {selectCallAgain} from "@/api/customService/demand";
@@ -504,6 +505,7 @@ export default {
           let workOrderNo = s.workOrderNo
           demandObtain(workOrderNo).then(res => {
             if (res != null && res.code === 200) {
+              this.searchHandles();
             }
           }).catch(res => {
 
@@ -513,26 +515,51 @@ export default {
           console.log("ids:", workOrderNos)
           demandObtainMany(workOrderNos).then(res => {
             if (res != null && res.code === 200) {
-              this.$message.success("批量获取成功")
+              this.$message.success("批量获取成功");
+              this.searchHandles();
             }
           }).catch(res => {
 
           })
         }
-        this.searchHandles()
+
       }
     },
     //处理按钮
     dealButton(s) {
-      this.$router.push({
-        path: '/customService/reservation/deal',
-        query: {
-          workOrderNo: s.workOrderNo,
-          policyNo: s.policyNo,
-          policyItemNo: s.policyItemNo,
-          status: s.status
+      //先保存点击处理时的时间
+      //存在协办 转办后  默认都置灰
+      let queryParams = JSON.parse(JSON.stringify(this.sendForm));
+      queryParams.workOrderNo = s.workOrderNo;
+      updateClickTime(queryParams).then(res => {
+        if (res != null && res.code === 200) {
+          //数据保存成功  跳转页面
+          this.$router.push({
+            path: '/customService/reservation/deal',
+            query: {
+              workOrderNo: s.workOrderNo,
+              policyNo: s.policyNo,
+              policyItemNo: s.policyItemNo,
+              status: s.status
+            }
+          })
+        }else{
+          //数据保存成功  跳转页面
+          this.$router.push({
+            path: '/customService/reservation/deal',
+            query: {
+              workOrderNo: s.workOrderNo,
+              policyNo: s.policyNo,
+              policyItemNo: s.policyItemNo,
+              status: s.status
+            }
+          })
         }
+      }).catch(res => {
+        console.log('error submit!!');
       })
+
+
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
@@ -563,16 +590,14 @@ export default {
     //待处理查询
     searchHandle() {
       let queryParams;
-      if (this.sendForm.acceptorTime.length > 0) {
-        queryParams = JSON.parse(JSON.stringify(this.sendForm));
-        queryParams.acceptTimeStart = acceptorTime[0]
-        queryParams.acceptTimeEnd = acceptorTime[1]
-      } else {
-        queryParams = this.sendForm;
+      queryParams = JSON.parse(JSON.stringify(this.sendForm));
+      if (this.sendForm.acceptorTime) {
+        this.$set(queryParams,'acceptTimeStart',this.sendForm.acceptorTime[0]);
+        this.$set(queryParams,'acceptTimeEnd',this.sendForm.acceptorTime[1]);
       }
       if(this.sendForm.appointmentTime){
-        queryParams.appointmentTimeStart=this.sendForm.appointmentTime[0]
-        queryParams.appointmentTimeEnd=this.sendForm.appointmentTime[1]
+        this.$set(queryParams,'appointmentTimeStart',this.sendForm.appointmentTime[0]);
+        this.$set(queryParams,'appointmentTimeEnd',this.sendForm.appointmentTime[1]);
       }
 
       demandListAndPublicPool(queryParams).then(res => {
@@ -593,20 +618,17 @@ export default {
     //处理中查询
     searchHandle1() {
       let queryParams;
-      if (this.sendForm.acceptorTime.length > 0) {
-        queryParams = JSON.parse(JSON.stringify(this.sendForm));
-        queryParams.acceptTimeStart = acceptorTime[0]
-        queryParams.acceptTimeEnd = acceptorTime[1]
-      } else {
-        queryParams = this.sendForm;
+      queryParams = JSON.parse(JSON.stringify(this.sendForm));
+      if (this.sendForm.acceptorTime) {
+        this.$set(queryParams,'acceptTimeStart',this.sendForm.acceptorTime[0]);
+        this.$set(queryParams,'acceptTimeEnd',this.sendForm.acceptorTime[1]);
       }
-
       if(this.sendForm.appointmentTime){
-        queryParams.appointmentTimeStart=this.sendForm.appointmentTime[0]
-        queryParams.appointmentTimeEnd=this.sendForm.appointmentTime[1]
+        this.$set(queryParams,'appointmentTimeStart',this.sendForm.appointmentTime[0]);
+        this.$set(queryParams,'appointmentTimeEnd',this.sendForm.appointmentTime[1]);
       }
 
-      demandListAndPersonalPool(this.sendForm).then(res => {
+      demandListAndPersonalPool(queryParams).then(res => {
         console.log('个人池：', res.rows)
         if (res != null && res.code === 200) {
           this.workPersonPoolData = res.rows

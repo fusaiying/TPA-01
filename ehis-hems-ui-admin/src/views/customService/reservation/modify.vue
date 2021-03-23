@@ -398,11 +398,15 @@
         </el-row>
 
         <el-row>
-          <el-col :span="24">
-              <el-form-item label="就诊医院：" prop="medicalInstitution">
-                省份：<el-input v-model="workPoolData.province" style="width: 120px"  />
-                城市：<el-input v-model="workPoolData.city" style="width: 120px" />
-              </el-form-item>
+          <el-col :span="3">
+            <el-form-item label="预约医院：" style="white-space: nowrap;" :inline="true" prop="province">
+              省份：<el-input v-model="workPoolData.province" style="width: 100px"  />
+            </el-form-item>
+          </el-col>
+          <el-col :span="5">
+            <el-form-item style="white-space: nowrap;" :inline="true" prop="city" >
+              城市：<el-input v-model="workPoolData.city" style="width: 100px" />
+            </el-form-item>
           </el-col>
 
           <el-col :span="8">
@@ -648,6 +652,15 @@
       }
     },
     data() {
+      const checkComplaintTime= (rule, value, callback) => {
+        let tDate = new Date();
+        if(tDate > value){
+          callback(new Error("预约时间不能早于当前日期"));
+        }else{
+          callback();
+        }
+      };
+
       //意外原因
       const checkAccidentReason = (rule, value, callback) => {
         if (this.ruleForm.accidentFlag === '01') {
@@ -878,7 +891,8 @@
             {required: true, message: "医疗机构不能为空", trigger: ["blur","change"]}
           ],
           appointmentDate: [
-            {required: true, message: "预约时间不能为空", trigger: ["blur","change"]}
+            {required: true, message: "预约时间不能为空", trigger: ["blur","change"]},
+            {required: true, validator: checkComplaintTime, trigger: "blur"}
           ],
           province: [
             {required: true, message: "预约医院不能为空", trigger: ["blur","change"]}

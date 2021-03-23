@@ -39,7 +39,7 @@ public interface IFinanceTpaSettleTaskService
      * @param tpaSettleDTO TPA服务费结算任务
      * @return TPA服务费结算任务集合
      */
-    public List<TpaSettleInfo> tpaTaskInitiated(TpaSettleDTO tpaSettleDTO);
+    public List<TpaSettleInfo> tpaTaskInitiated(TpaSettleDTO tpaSettleDTO) throws Exception;
 
     /**
      * 多页面 查询TPA服务费结算任务 列表

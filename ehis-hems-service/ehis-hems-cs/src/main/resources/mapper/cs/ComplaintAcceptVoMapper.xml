@@ -77,7 +77,7 @@
         <if test="itemCode != null  and itemCode != ''"> and t2.item_code = #{itemCode}</if>
         <if test="acceptBy != null  and acceptBy != ''"> and ifnull(t1.accept_by,t1.create_by) like concat('%',#{acceptBy},'%')</if>
         <if test="acceptTime != null "> and t1.accept_time = #{acceptTime}</if>
-        <if test="acceptTimeStart != null and acceptTimeEnd != null"> and t1.create_By between #{acceptTimeStart} and DATE_ADD(#{acceptTimeEnd},INTERVAL 1 DAY)</if>
+        <if test="acceptTimeStart != null and acceptTimeEnd != null"> and t1.create_Time between #{acceptTimeStart} and DATE_ADD(#{acceptTimeEnd},INTERVAL 1 DAY)</if>
         <if test="modifyBy != null  and modifyBy != ''"> and t1.update_by = #{modifyBy}</if>
         <if test="modifyTimeStart != null and modifyTimeEnd != null"> and t1.modify_time between #{modifyTimeStart} and DATE_ADD(#{modifyTimeEnd},INTERVAL 1 DAY)</if>
         <if test="appointmentTimeStart != null and appointmentTimeEnd != null"> and t2.prop10 between DATE_ADD(#{appointmentTimeStart},INTERVAL -1 DAY) and DATE_ADD(#{appointmentTimeEnd},INTERVAL 0 DAY)</if>
@@ -89,7 +89,7 @@
         <if test="vipFlag != null  and vipFlag != ''"> and t1.vip_flag = #{vipFlag}</if>
         <if test="organCode != null  and organCode != ''"> and t1.organ_code = #{organCode}</if>
         <if test="priorityLevel != null  and priorityLevel != ''"> and t2.priority_level = #{priorityLevel}</if>
-        <if test="status != null  and status != ''"> and t2.status = #{status}</if>
+        <if test="status != null  and status != ''"> and t1.status = #{status}</if>
         <if test="idNumber != null  and idNumber != ''"> and c.id_number = #{idNumber}</if>
         <if test="mobilePhone != null  and mobilePhone != ''"> and c.mobile_phone = #{mobilePhone}</if>
             <!--<if test="complaintTime != null  and complaintTime != ''"> and complaintTime = #{complaintTime}</if>-->
@@ -145,7 +145,7 @@
             <if test="itemCode != null  and itemCode != ''"> and t2.item_code = #{itemCode}</if>
             <if test="acceptBy != null  and acceptBy != ''"> and ifnull(t1.accept_by,t1.create_by) like concat('%',#{acceptBy},'%')</if>
             <if test="acceptTime != null "> and t1.accept_time = #{acceptTime}</if>
-            <if test="acceptTimeStart != null and acceptTimeEnd != null"> and t1.create_By between #{acceptTimeStart} and DATE_ADD(#{acceptTimeEnd},INTERVAL 1 DAY)</if>
+            <if test="acceptTimeStart != null and acceptTimeEnd != null"> and t1.create_Time between #{acceptTimeStart} and DATE_ADD(#{acceptTimeEnd},INTERVAL 1 DAY)</if>
             <if test="modifyBy != null  and modifyBy != ''"> and t1.update_by = #{modifyBy}</if>
             <if test="modifyTimeStart != null and modifyTimeEnd != null"> and t1.modify_time between #{modifyTimeStart} and DATE_ADD(#{modifyTimeEnd},INTERVAL 1 DAY)</if>
         <if test="appointmentTimeStart != null and appointmentTimeEnd != null"> and t2.prop10 between DATE_ADD(#{appointmentTimeStart},INTERVAL -1 DAY) and DATE_ADD(#{appointmentTimeEnd},INTERVAL 0 DAY)</if>

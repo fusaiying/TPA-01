@@ -356,11 +356,12 @@ export default {
         this.$refs['baseForm'].validate(valid => {
           if (valid) {
             flag = true
+            resolve(flag)
           } else {
             flag = false
+            resolve(flag)
           }
         })
-        resolve(flag)
       })
       return flag
     }

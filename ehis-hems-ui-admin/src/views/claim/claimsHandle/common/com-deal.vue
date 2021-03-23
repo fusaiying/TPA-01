@@ -162,7 +162,7 @@
         <problemCase :sonProblemData="sonProblemData" :fixInfo="fixInfo" :node="querys.node" :status="querys.status"/>
       </div>
       <!--赔付结论-->
-      <div v-if="(querys.node==='calculateReview' || querys.node==='sport') && fixInfo.isAppeal==='02'"
+      <div v-if="(querys.node==='calculateReview' || querys.node==='sport') && fixInfo.isAppeal==='01'"
            class="batchInfo_class" style="margin-top: 10px;">
         <pay-conclusion :fixInfo="fixInfo"/>
       </div>

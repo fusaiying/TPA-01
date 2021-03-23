@@ -47,8 +47,6 @@ public class QualityInspectionHandleServiceImpl implements IQualityInspectionHan
     private IAttachmentInfoService iAttachmentInfoService;
     @Autowired
     private IQualityInspectionItemService iQualityInspectionItemService;
-    @Autowired
-    private WorkOrderAcceptMapper workOrderAcceptMapper;
     /**
      * 查询质检处理 
      * 
@@ -214,10 +212,6 @@ public class QualityInspectionHandleServiceImpl implements IQualityInspectionHan
             }
             return qualityInspectionHandleMapper.updateHandleInfoById(qualityInspectionDTO);
         }else{
-            String workOrderNo=qualityInspectionDTO.getWorkOrderNo();
-            WorkOrderAccept workOrderAccept=workOrderAcceptMapper.selectWorkOrderAcceptById(workOrderNo);
-            workOrderAccept.setEndDate(DateUtils.getNowDate());//设置结案时间
-            workOrderAcceptMapper.updateWorkOrderAccept(workOrderAccept);
             List<QualityInspectionItemVo> inspectionItemVos=qualityInspectionDTO.getItems();
             if(inspectionItemVos!=null && !inspectionItemVos.isEmpty()){
                 //作废状态

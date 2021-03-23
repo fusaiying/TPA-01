@@ -393,7 +393,7 @@
     </el-card>
 
     <el-card>
-      <el-form ref="sendForm" :model="sendForm" :rules="rules" style="padding-bottom: 30px;" label-width="180px"
+      <el-form ref="sendForm" :model="sendForm" :rules="changeForm.rules" style="padding-bottom: 30px;" label-width="180px"
                label-position="right" size="mini">
         <span style="color: blue">服务处理</span>
         <el-divider/>
@@ -706,8 +706,97 @@ export default {
       }
     };
 
-    return {
+    const rules = {
+        level1: [
+          {required: true, message: "一级投诉分类不能为空", trigger: "blur"}
+          ],
+        level2: [
+          {required: true, message: "二级投诉分类不能为空", trigger: "blur"}
+          ],
+        pieceworkFlag: [
+          {required: false, validator: checkPieceworkFlag, trigger: "blur"}
+          ],
+        complaintStatus: [
+          {required: false, validator: checkComplaintStatus, trigger: "blur"}
+          ],
+        complaintTenable: [
+          {required: true, message: "投诉是否成立不能为空", trigger: "blur"}
+          ],
+        repeatedComplaint: [
+          {required: true, message: "重复投诉不能为空", trigger: "blur"}
+          ],
+        reason1: [
+          {required: true, message: "一级投诉原因不能为空", trigger: "blur"}
+          ],
+        reason2: [
+          {required: true, message: "二级投诉原因不能为空", trigger: "blur"}
+          ],
+        reason3: [
+          {required: true, message: "三级投诉原因不能为空", trigger: "blur"}
+          ],
+        complaintLink: [
+          {required: true, message: "投保问题（报保监）不能为空", trigger: "blur"}
+          ],
+        complaintQuestion: [
+          {required: true, message: "投保问题（报保监）不能为空", trigger: "blur"}
+          ],
+        outsideState: [
+          {required: true, message: "行协调解或外部鉴不能为空", trigger: "blur"}
+          ],
+        riskType: [
+          {required: true, message: "险种类型不能为空", trigger: "blur"}
+          ],
+        marketChannel: [
+          {required: true, message: "营销渠道不能为空", trigger: "blur"}
+          ],
+        complaintCategory: [
+          {required: true, message: "投诉业务类别不能为空", trigger: "blur"}
+          ],
+        rootDepartment: [
+          {required: true, message: "投诉根因部门不能为空", trigger: "blur"}
+          ],
+        actionCause: [
+          {required: true, message: "致诉根因不能为空", trigger: "blur"}
+          ],
+        treatmentProgress: [
+          {required: true, message: "处理进展不能为空", trigger: "blur"}
+          ],
+        customerFeedback: [
+          {required: true, message: "客户反馈不能为空", trigger: "blur"}
+          ],
+        treatmentResult: [
+          {required: true, message: "处理结果不能为空", trigger: "blur"}
+          ],
+        /*rootImprovement: [
+          {required: true, message: "根因改善不能为空", trigger: "blur"}
+        ],*/
+        actPromptly: [
+          {required: true, message: "投诉损失不能为空", trigger: "blur"}
+          ],
 
+      };
+
+    const rulesTwo = {
+        level1: [
+          {required: true, message: "一级投诉分类不能为空", trigger: "blur"}
+          ],
+        level2: [
+          {required: true, message: "二级投诉分类不能为空", trigger: "blur"}
+          ],
+        pieceworkFlag: [
+          {required: false, validator: checkPieceworkFlag, trigger: "blur"}
+          ],
+        complaintStatus: [
+          {required: false, validator: checkComplaintStatus, trigger: "blur"}
+        ],
+      };
+
+    return {
+      rules1: rules,
+      rules2: rulesTwo,
+      changeForm: {
+        rules: rules
+      },
       personInfo:{
         policyNo:undefined,
         policyHolder: {},
@@ -754,8 +843,6 @@ export default {
         sign: ""
 
       },
-
-
       readonly: true,
       dialogFormVisible: false,
       updateBy: undefined,
@@ -790,76 +877,7 @@ export default {
         workOrderNo: '',
 
       },
-      // 表单校验
-      rules: {
-        level1: [
-          {required: true, message: "一级投诉分类不能为空", trigger: "blur"}
-        ],
-        level2: [
-          {required: true, message: "二级投诉分类不能为空", trigger: "blur"}
-        ],
-        pieceworkFlag: [
-          {required: false, validator: checkPieceworkFlag, trigger: "blur"}
-        ],
-        complaintStatus: [
-          {required: false, validator: checkComplaintStatus, trigger: "blur"}
-        ],
-        complaintTenable: [
-          {required: true, message: "投诉是否成立不能为空", trigger: "blur"}
-        ],
-        repeatedComplaint: [
-          {required: true, message: "重复投诉不能为空", trigger: "blur"}
-        ],
-        reason1: [
-          {required: true, message: "一级投诉原因不能为空", trigger: "blur"}
-        ],
-        reason2: [
-          {required: true, message: "二级投诉原因不能为空", trigger: "blur"}
-        ],
-        reason3: [
-          {required: true, message: "三级投诉原因不能为空", trigger: "blur"}
-        ],
-        complaintLink: [
-          {required: true, message: "投保问题（报保监）不能为空", trigger: "blur"}
-        ],
-        complaintQuestion: [
-          {required: true, message: "投保问题（报保监）不能为空", trigger: "blur"}
-        ],
-        outsideState: [
-          {required: true, message: "行协调解或外部鉴不能为空", trigger: "blur"}
-        ],
-        riskType: [
-          {required: true, message: "险种类型不能为空", trigger: "blur"}
-        ],
-        marketChannel: [
-          {required: true, message: "营销渠道不能为空", trigger: "blur"}
-        ],
-        complaintCategory: [
-          {required: true, message: "投诉业务类别不能为空", trigger: "blur"}
-        ],
-        rootDepartment: [
-          {required: true, message: "投诉根因部门不能为空", trigger: "blur"}
-        ],
-        actionCause: [
-          {required: true, message: "致诉根因不能为空", trigger: "blur"}
-        ],
-        treatmentProgress: [
-          {required: true, message: "处理进展不能为空", trigger: "blur"}
-        ],
-        customerFeedback: [
-          {required: true, message: "客户反馈不能为空", trigger: "blur"}
-        ],
-        treatmentResult: [
-          {required: true, message: "处理结果不能为空", trigger: "blur"}
-        ],
-        /*rootImprovement: [
-          {required: true, message: "根因改善不能为空", trigger: "blur"}
-        ],*/
-        actPromptly: [
-          {required: true, message: "投诉损失不能为空", trigger: "blur"}
-        ],
 
-      },
       caseNumber: false,//查询条件（报案号）是否显示
       // 查询参数
       queryParams: {
@@ -1251,8 +1269,30 @@ export default {
     },
     //协办
     coOrganizer() {
-      this.$refs.coOrganizer.dynamicValidateForm.workOrderNo = this.queryParams.workOrderNo
-      this.$refs.coOrganizer.open()
+      //协办之前先暂存数据
+      this.changeForm.rules = this.rules2;
+      this.$refs.sendForm.clearValidate();
+      this.$refs.sendForm.validate((valid) => {
+        if (valid) {
+          let insert = this.sendForm
+          insert.sign = "01"
+          insert.workOrderNo = this.$route.query.workOrderNo
+          complaintDealSubmit(insert).then(res => {
+            if (res != null && res.code === 200) {
+              this.$refs.coOrganizer.dynamicValidateForm.workOrderNo = this.queryParams.workOrderNo;
+
+              this.$refs.coOrganizer.open();
+              if (res.rows.length <= 0) {
+                return this.$message.warning("失败！");
+              }
+              this.changeForm.rules = this.rules1;
+            }
+          }).catch(res => {
+
+          })
+        }
+      })
+      //this.changeForm.rules = this.rules1;
     },
     //超链接用
     modifyDetails(s) {
@@ -1265,6 +1305,7 @@ export default {
 
     //提交
     submit() {
+      this.changeForm.rules = this.rules1;
       this.$refs.sendForm.validate((valid) => {
         if (valid) {
           let insert = this.sendForm

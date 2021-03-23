@@ -99,4 +99,12 @@ public class CustomServiceReservationController extends BaseController {
         }
     }
 
+    /*预约点击【处理】保存处理时间*/
+    @Log(title = "处理 ", businessType = BusinessType.INSERT)
+    @GetMapping("/updateClickTime")
+    public AjaxResult updateClickTime(AcceptDTO acceptDTO) {
+        int a = iReservationAcceptVoService.updateClickTime(acceptDTO);
+        return toAjax(1);
+    }
+
 }

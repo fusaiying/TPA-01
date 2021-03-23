@@ -67,7 +67,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
     <select id="selectProcessingTimeById" parameterType="String" resultType="java.lang.String">
-        select TIMESTAMPDIFF(HOUR,create_time,now()) from work_order_accept where work_order_no = #{workOrderNo}
+        select TIMESTAMPDIFF(HOUR,create_time,click_time) from work_order_accept where work_order_no = #{workOrderNo}
     </select>
         
     <insert id="insertWorkOrderAccept" parameterType="com.paic.ehis.cs.domain.WorkOrderAccept">
@@ -186,4 +186,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select work_order_no,hang_flag,hang_reason from work_order_accept
             where work_order_no=#{workOrderNo}
     </select>
+
+    <update id="updateClickTime"  parameterType="com.paic.ehis.cs.domain.WorkOrderAccept">
+        update work_order_accept
+        set click_time = #{clickTime} , update_by=#{updateBy} , update_time = #{updateTime}
+        where  work_order_no = #{workOrderNo} and ifnull(click_time,'')= ''
+    </update>
+
 </mapper>

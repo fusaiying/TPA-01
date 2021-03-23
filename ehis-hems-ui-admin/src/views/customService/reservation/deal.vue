@@ -1169,9 +1169,9 @@
             this.HCSPoolData = res.rows
             this.HCSTotal = res.total
             if (res.rows.length <= 0) {
-              return this.$message.warning(
+              /*return this.$message.warning(
                 "未查询到数据！"
-              )
+              )*/
             }
           }
         }).catch(res => {

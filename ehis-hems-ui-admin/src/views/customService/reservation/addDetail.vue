@@ -392,7 +392,7 @@
               <el-col :span="16">
                 <el-input v-model="ruleForm.medicalInstitution" input-w clearable size="mini" placeholder="请输入"/>
               </el-col>
-              <el-button type="primary" @click="searchHandle" disabled>查询</el-button>
+              <el-button type="primary" @click="openHospitalDialog">查询</el-button>
             </el-form-item>
           </el-col>
 
@@ -453,6 +453,8 @@
         </div>
 
       </el-form>
+      <hospital :value="hospitalDialog" @closeHospital="closeHospital"
+                @getPropData="getPropData"/>
     </el-card>
 
 
@@ -467,7 +469,7 @@ import moment from 'moment'
 import {demandListAndPublicPool,demandListAndPersonalPool,addInsert} from '@/api/customService/demand'
 import upLoad from "../common/modul/upload";
 import {addReservationInsert} from '@/api/customService/reservation'
-
+import Hospital from "../hospital/hospital";
 
 let dictss = [
   {dictType: 'cs_channel'},
@@ -485,7 +487,7 @@ let dictss = [
   {dictType: 'cs_time_unit'},
 ]
 export default {
-  components: { upLoad },
+  components: { upLoad,Hospital },
   filters: {
     changeDate: function (value) {
       if (value !== null) {
@@ -584,6 +586,7 @@ export default {
         b:"",
         checkSubmitFlag:'',
       },
+      checkSubmitFlag:'',
       // 表单校验根据Form 组件提供了表单验证的功能，只需要通过 rules 属性传入约定的验证规则，并将 Form-Item 的 prop 属性设置为需校验的字段名即可
       rules: {
         channelCode: [
@@ -695,6 +698,7 @@ export default {
         ],
       },
       readonly: true,
+      hospitalDialog: false,
       dialogVisable: "",//上传附件用
       historicalProblemData:Array,//上传附件用
       updateBy: undefined,
@@ -888,7 +892,22 @@ export default {
     handleSelectionChange(val) {
       this.dataonLineListSelections = val
     },
-
+    closeHospital() {
+      this.hospitalDialog = false
+    },
+    openHospitalDialog() {
+     /* if (this.searchForm.claimtype === null || this.searchForm.claimtype === '' || this.searchForm.claimtype === undefined) {
+        return this.$message.warning(
+          "请先选择理赔类型！"
+        );
+      } else {
+        this.hospitalDialog = true
+      }*/
+      this.hospitalDialog = true
+    },
+    getPropData(val) {
+      console.log('1');
+    },
   }
 }
 </script>

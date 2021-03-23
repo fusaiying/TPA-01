@@ -24,10 +24,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="insuredName" column="insured_name"/>
         <result property="holderPersonId" column="holder_no"/>
         <result property="holderName" column="holder_name"/>
-        <result property="acceptUserId" column="accept_by"/>
+        <result property="acceptBy" column="accept_by"/>
         <result property="modifyUserId" column="modify_by"/>
         <result property="updateBy" column="update_by"/>
         <result property="updateTime" column="update_time"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
         <result property="endDate" column="end_date"/>
         <result property="callPersonId" column="call_person_id"/>
         <result property="callRelationBy" column="call_relation_by"/>
@@ -44,7 +46,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <!--可质检工单查询-->
     <sql id="selectAcceptVo">
         select woa.work_order_no,woa.business_type,adi.item_code,concat(woa.business_type,'-', adi.item_code) as business_service,adi.channel_code,
-               woa.policy_no,woa.policy_item_no,woa.end_date,qia.inspection_id,qia.status,woa.organ_code,woa.accept_by,woa.accept_time,woa.modify_by,woa.modify_time,woa.update_by,woa.update_time
+               woa.policy_no,woa.policy_item_no,woa.end_date,qia.inspection_id,qia.status,woa.organ_code,woa.accept_by,woa.accept_time,woa.modify_by,woa.modify_time,woa.update_by,woa.update_time,	woa.create_by,
+               woa.create_time
         from quality_inspection_accept qia
             left join (
                 select distinct qih.inspection_handler_id,qih.inspection_id,qih.status
@@ -145,6 +148,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="policyNo" column="policy_no"/>
         <result property="policyItemNo" column="policy_item_no"/>
     </resultMap>
+
+    <!--质检查询页面-->
     <select id="selectQualityVo" parameterType="com.paic.ehis.cs.domain.dto.QualityDTO" resultMap="QualityResult">
     SELECT DISTINCT
         qia.inspection_id,

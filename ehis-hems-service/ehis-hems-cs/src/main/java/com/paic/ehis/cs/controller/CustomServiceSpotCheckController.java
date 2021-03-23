@@ -416,6 +416,7 @@ public class CustomServiceSpotCheckController extends BaseController {
     public AjaxResult batchAcceptVo(@PathVariable("invalidDate") String invalidDate){
         try{
             qualityInspectionAcceptService.batchAcceptVo(invalidDate);
+
         }catch(RuntimeException e){
             return AjaxResult.error(e.getMessage());
         }

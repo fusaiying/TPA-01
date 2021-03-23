@@ -44,7 +44,7 @@
         <span>{{parseTime(scope.row.updateTime, '{y}-{m}-{d} {h}:{i}:{s}')}}</span>
       </template>
     </el-table-column>
-    <el-table-column prop="acceptUserId" label="受理人" min-width="120" align="center"/>
+    <el-table-column prop="acceptBy" label="受理人" min-width="120" align="center"/>
     <el-table-column prop="updateBy" label="处理人" min-width="120" align="center"/>
     <el-table-column prop="vipFlag" label="VIP标识" align="center" show-overflow-tooltip>
       <template slot-scope="scope" v-if="scope.row.vipFlag">

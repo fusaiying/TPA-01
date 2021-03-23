@@ -48,6 +48,8 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
 
 
     @Override
+
+    //发送质检工作池/工单查询
     public List<AcceptVo> selectSendPoolData(WorkOrderQueryDTO workOrderQueryDTO) {
         List<AcceptVo> list=qualityInspectionAcceptMapper.selectSendByVo(workOrderQueryDTO);
         if(list!=null){
@@ -68,7 +70,8 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
                         list.get(i).setHolderPerson(setHolderPerson);
                     }
                 }
-                //受理人
+
+         /*       //受理人
                 String getAcceptUserId= list.get(i).getAcceptUserId();
                 if(StringUtils.isNotEmpty(getAcceptUserId)){
                     UserInfo setAcceptUser=userInfoMapper.selectUserInfoById(getAcceptUserId);
@@ -76,6 +79,7 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
                         list.get(i).setAcceptUser(setAcceptUser);
                     }
                 }
+*/
                 //原处理人
                 String getModifyUserId= list.get(i).getModifyUserId();
                 if(StringUtils.isNotEmpty(getModifyUserId)){
@@ -98,6 +102,13 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
         AcceptVo acceptVo = qualityInspectionAcceptMapper.selectSendByVoById1(workOrderNo);//先查询状态为处理中的工单
         String updateby=String.valueOf(SecurityUtils.getUsername());
         if (null != acceptVo && !acceptVo.getUpdateBy().equals(updateby)) {//如果获取的数据的操作人不是当前操作人，说明数据到了别人的工作池
+            if(acceptVo.getBusinessType().equals("01")){//说明此数据为信息需求的
+
+            }else if(acceptVo.getBusinessType().equals("02")){ //说明此数据为预约的
+
+            }else {//说明此数据为投诉的
+
+            }
                 acceptVo.setFlag("1");
             return acceptVo;//存在则获取处理中的工单数据
         } else {
@@ -107,7 +118,7 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
         }
     }
 
-
+    //质检中，待质检查询
     @Override
     public List<AcceptVo> selectAcceptPoolData(WorkOrderQueryDTO workOrderQueryDTO) {
         List<AcceptVo> list=qualityInspectionAcceptMapper.selectAcceptByVo(workOrderQueryDTO);
@@ -129,14 +140,14 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
                         list.get(i).setHolderPerson(setHolderPerson);
                     }
                 }
-                //受理人
+           /*     //受理人
                 String getAcceptUserId= list.get(i).getAcceptUserId();
                 if(StringUtils.isNotEmpty(getAcceptUserId)){
                     UserInfo setAcceptUser=userInfoMapper.selectUserInfoById(getAcceptUserId);
                     if(setAcceptUser!=null){
                         list.get(i).setAcceptUser(setAcceptUser);
                     }
-                }
+                }*/
                 //处理人
                 String getModifyUserId= list.get(i).getModifyUserId();
                 if(StringUtils.isNotEmpty(getModifyUserId)){
@@ -333,11 +344,9 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
         Calendar cal = Calendar.getInstance();
         Calendar cal1 = Calendar.getInstance();
         cal.setTime(date);
-        cal.add(Calendar.HOUR, 1); // 目前时间加1小时
+        cal.add(Calendar.MINUTE, 2); // 目前时间加30分钟
 
-        cal1.add(Calendar.YEAR, -1); // 目前时间减1小时
-
-
+        cal1.add(Calendar.MINUTE, -2); // 目前时间减30分钟
      /*   if (1 == cal.get(Calendar.DAY_OF_WEEK)) {
             cal.add(Calendar.DATE, -1);
         }

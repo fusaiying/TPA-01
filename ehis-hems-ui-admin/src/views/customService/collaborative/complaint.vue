@@ -629,14 +629,14 @@ import {
   dealAdd,
   FlowLogSearch,
   HMSSearch,
-  dealADD,
-  coCancel
+  dealADD
 } from '@/api/customService/demand'
 import transfer from "../common/modul/transfer";
 import upLoad from "../common/modul/upload";
 import coOrganizer from "../common/modul/coOrganizer";
 import modifyDetails from "../common/modul/modifyDetails";
 import {classTwo, complainSearchServer, reasonThree, reasonTwo} from "@/api/customService/complaint";
+import {coCancel} from '@/api/customService/collaborative'
 
 let dictss = [
   {dictType: 'cs_channel'},

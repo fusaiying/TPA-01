@@ -47,7 +47,7 @@ public class ClaimCasePayInfoVO implements Serializable {
     private String name;
 
     /** 案件状态 */
-    @Excel(name = "案件状态")
+    @Excel(name = "案件状态",readConverterExp = "00=挂起,01=交单复核,02=交单退回,03=交单失败,04=交单完成,05=受理,30=问题件,97=撤件可申诉,98=撤件,06=录入,07=审核,31=协谈,32=调查,08=抽检,99=结案")
     private String caseStatus;
 
     /** 理赔金额 */
@@ -88,7 +88,7 @@ public class ClaimCasePayInfoVO implements Serializable {
     private BigDecimal borrowAmount;
 
     /** 支付状态 */
-    @Excel(name = "支付状态")
+    @Excel(name = "支付状态",readConverterExp = "01=可支付,02=支付中,03=已支付,04=转账失败,05=退票")
     private String payStatus;
 
 }

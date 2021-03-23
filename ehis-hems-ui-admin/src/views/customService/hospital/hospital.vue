@@ -29,11 +29,21 @@
             　　　　　
           </template>
         </el-table-column>
-        <el-table-column key="1" align="center" prop="chname1" min-width="150" label="医疗机构ID"
-                         show-overflow-tooltip/>
-        <el-table-column key="2" align="center" min-width="100" prop="chaddreess" label="机构名称" show-overflow-tooltip/>
-        <el-table-column key="3" align="center" prop="bankName" min-width="160" label="机构地址" show-overflow-tooltip/>
-        <el-table-column key="5" align="center" prop="accountNo" label="机构电话" min-width="120" show-overflow-tooltip/>
+        <el-table-column key="1" align="center" prop="hospitalCode" min-width="150" label="医疗机构ID"
+                         show-overflow-tooltip>
+          <template slot-scope="scope">
+            <span v-if="scope.row.isInput" style="size: 20px">其他医院:</span>
+            <span v-else style="size: 20px">{{scope.row.hospitalCode}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column key="2" align="center" min-width="140" prop="hospitalName" label="机构名称" show-overflow-tooltip>
+          <template slot-scope="scope" >
+            <el-input v-if="scope.row.isInput" v-model="scope.row.hospitalName" class="item-width" size="mini"/>
+            <span v-else style="size: 20px">{{scope.row.hospitalName}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column key="3" align="center" prop="address" min-width="160" label="机构地址" show-overflow-tooltip/>
+        <el-table-column key="5" align="center" prop="consultPhone" label="机构电话" min-width="120" show-overflow-tooltip/>
         <el-table-column label="医院介绍" align="center">
           <template slot-scope="scope">
             <el-button type="text" size="mini" style="color: #1890ff;" @click="openHospitalShow(scope.row)">医院介绍
@@ -41,20 +51,20 @@
           </template>
         </el-table-column>
       </el-table>        <!--分页组件-->
-      <pagination
+    <!--  <pagination
         v-show="totalCount>0"
         :total="totalCount"
         :page.sync="searchForm.pageNum"
         :limit.sync="searchForm.pageSize"
         @pagination="getData"
-      />
+      />-->
 
     </el-card>
   </el-dialog>
 </template>
 
 <script>
-  import {getHospitalInfo} from '@/api/claim/handleCom'
+  import {getHospitalInfo} from '@/api/customService/reservation'
 
   export default {
     props: {
@@ -62,20 +72,38 @@
         type: Boolean,
         default: false
       },
-      claimtype: String
+      queryData: Object
     },
     watch: {
       value: function (newValue) {
         this.dialogVisable = newValue
       },
-      claimtype: function (newValue) {
-        this.searchForm.isNetworkHospital = newValue
-        getHospitalInfo(this.searchForm).then(res => {
-          if (res != null && res !== '') {
-            this.tableData = res.rows
-            this.totalCount = res.total
+      queryData: function (newValue) {
+        let data = {
+          hospitalCode:'',
+          hospitalName:newValue.hospitalName,
+          province:newValue.region[0],
+          city:'',
+        }
+        if (newValue.region.length>1){
+          data.city=newValue.region[1]
+        }
+        if (newValue.region.length>0){
+          let option={
+            isInput:true,
+            hospitalName:''
           }
-        })
+          getHospitalInfo(data).then(res => {
+            if (res != null && res !== '') {
+              this.tableData = res.rows
+              this.totalCount = res.total
+              this.tableData.push(option)
+            }
+          })
+
+
+        }
+
       },
     },
     data() {
@@ -94,53 +122,12 @@
       }
     },
     mounted() {
-      if (this.tableData.length <= 0) {
-        getHospitalInfo(this.searchForm).then(res => {
-          if (res != null && res !== '') {
-            this.tableData = res.rows
-            this.totalCount = res.total
-          }
-        })
-      }
-
     },
     computed: {},
     methods: {
       //自定义展开
       getCurrentRow(index, row) {
         this.rowData = row
-      },
-
-      // 查询
-      searchHandle() {
-        this.searchForm.pageNum = 1
-        this.searchForm.pageSize = 10
-        this.getData()
-        /*        getHospitalInfo(this.searchForm).then(res=>{
-                  if (res!=null && res!=='' ){
-                    this.tableData=res.rows
-                    this.totalCount=res.total
-                    if (res.rows.length<1) {
-                      return this.$message.warning(
-                        "没有查询到数据！"
-                      )
-                    }
-                  }
-                })*/
-      },
-
-      getData() {
-        getHospitalInfo(this.searchForm).then(res => {
-          if (res != null && res !== '') {
-            this.tableData = res.rows
-            this.totalCount = res.total
-            if (res.rows.length < 1) {
-              return this.$message.warning(
-                "没有查询到数据！"
-              )
-            }
-          }
-        })
       },
       changeDialogVisable() {
         this.$emit('closeHospital')
@@ -155,7 +142,7 @@
         const newpage = this.$router.resolve({
           name: 'hospitalDetail',
           query: {
-            providerCode: row.providerCode
+            providerCode: row.hospitalCode
           }
         })
         window.open(newpage.href, '_blank');
@@ -166,7 +153,7 @@
 
 <style scoped>
   .item-width {
-    width: 220px;
+    width: 130px;
   }
 
   #print-iframe {

@@ -240,6 +240,8 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
             }else  if (serviceProcessingVo.getBusinessProcess().equals("02")){
                 workOrderAccept.setStatus("02");
             }
+            workOrderAccept.setEndDate(DateUtils.parseDate(DateUtils.getTime()));
+            workOrderAccept.setUpdateBy(SecurityUtils.getUsername());
             workOrderAcceptMapper.updateWorkOrderAccept(workOrderAccept);
             //无本人操作历史   则增加一条新数据
            // WorkHandleInfo workHandleInfo=new WorkHandleInfo();
@@ -294,6 +296,8 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
             //修改主表状态为已处理
             WorkOrderAccept workOrderAccept=new WorkOrderAccept();
             workOrderAccept.setWorkOrderNo(serviceProcessingVo.getWorkOrderNo());
+            workOrderAccept.setEndDate(DateUtils.parseDate(DateUtils.getTime()));
+            workOrderAccept.setUpdateBy(SecurityUtils.getUsername());
             if(serviceProcessingVo.getBusinessProcess().equals("01")){
                 workOrderAccept.setStatus("04");/*已完成*/
             }else  if (serviceProcessingVo.getBusinessProcess().equals("02")){

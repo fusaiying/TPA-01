@@ -89,7 +89,7 @@
           <appealTable :value="dialogVisible"  @openDialog="openDialog" :claimTypes="claimTypes" :deliverySource="deliverySource"  :table-data="pendingTableData" :status="activeName"/>
         </el-tab-pane>
         <el-tab-pane  :label="`已处理(${completedTotal})`" name="02">
-          <appealTable :claimTypes="claimTypes" :deliverySource="deliverySource" :table-data="completedTableData" :status="activeName"/>
+          <appealTable :value="dialogVisible"  @openDialog="openDialog" :claimTypes="claimTypes" :deliverySource="deliverySource" :table-data="completedTableData" :status="activeName"/>
         </el-tab-pane>
       </el-tabs>
       <!--分页组件-->
@@ -205,9 +205,9 @@ export default {
   watch: {
     totalChange: function(newVal, oldVal) {
       if (newVal.pendingTotal === 0 && newVal.completedTotal > 0) {
-        this.activeName = '02'
+       // this.activeName = '02'
       } else {
-        this.activeName = '01'
+       // this.activeName = '01'
       }
     }
   },
@@ -233,14 +233,24 @@ export default {
     searchHandle() {
       this.claimPageInfo.pageNum = 1;
       this.claimPageInfo.pageSize = 10;
-      this.pendPageInfo.pageNum = 1;
-      this.pendPageInfo.pageSize = 10;
-      this.completePageInfo.pageNum = 1;
-      this.completePageInfo.pageSize = 10;
+      // this.pendPageInfo.pageNum = 1;
+      // this.pendPageInfo.pageSize = 10;
+      // this.completePageInfo.pageNum = 1;
+      // this.completePageInfo.pageSize = 10;
 
       this.initClaimData();
-      this.getPendingData();
-      this.getProcessedData();
+
+      if (this.activeName === '01') {
+        this.pendPageInfo.pageNum = 1;
+        this.pendPageInfo.pageSize = 10;
+        this.getPendingData()
+      } else {
+        this.completePageInfo.pageNum = 1;
+        this.completePageInfo.pageSize = 10;
+        this.getProcessedData()
+      }
+      // this.getPendingData();
+      // this.getProcessedData();
     },
     initAppealData(){
       this.initClaimData();
@@ -329,6 +339,11 @@ export default {
         if (res.code == '200') {
           this.claimTotal = res.total;
           this.claimTableData = res.rows;
+          // if (this.claimTotal === 0){
+          //   return this.$message.warning(
+          //     "未查询到数据！"
+          //   )
+          // }
         }
       });
     },

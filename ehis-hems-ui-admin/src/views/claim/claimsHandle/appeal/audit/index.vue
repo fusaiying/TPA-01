@@ -73,7 +73,7 @@
           <appealTable :value="dialogVisible"  @openDialog="openDialog" :claimTypes="claimTypes" :deliverySource="deliverySource"  :table-data="pendingTableData" :status="activeName"/>
         </el-tab-pane>
         <el-tab-pane  :label="`已处理(${completedTotal})`" name="04">
-          <appealTable :claimTypes="claimTypes" :deliverySource="deliverySource" :table-data="completedTableData" :status="activeName"/>
+          <appealTable :value="dialogVisible"  @openDialog="openDialog" :claimTypes="claimTypes" :deliverySource="deliverySource" :table-data="completedTableData" :status="activeName"/>
         </el-tab-pane>
       </el-tabs>
       <!--分页组件-->
@@ -107,8 +107,6 @@
 import appealTable from '../components/appealTable'
 import deal from '../components/deal'
 import { appealList } from '@/api/appeal/api'
-
-import moment from "moment";
 
 let dictss = [{dictType: 'delivery_source'},{dictType: 'claimType'} , {dictType: 'claim_status'},{dictType: 'case_pay_status'}]
 
@@ -178,9 +176,9 @@ export default {
   watch: {
     totalChange: function(newVal, oldVal) {
       if (newVal.pendingTotal === 0 && newVal.completedTotal > 0) {
-        this.activeName = '04'
+      //  this.activeName = '03'
       } else {
-        this.activeName = '03'
+      //  this.activeName = '04'
       }
     }
   },
@@ -204,13 +202,23 @@ export default {
     },
     searchHandle() {
 
-      this.pendPageInfo.pageNum = 1;
-      this.pendPageInfo.pageSize = 10;
-      this.completePageInfo.pageNum = 1;
-      this.completePageInfo.pageSize = 10;
-
-      this.getPendingData();
-      this.getProcessedData();
+      // this.pendPageInfo.pageNum = 1;
+      // this.pendPageInfo.pageSize = 10;
+      // this.completePageInfo.pageNum = 1;
+      // this.completePageInfo.pageSize = 10;
+      //
+      // this.getPendingData();
+      // this.getProcessedData();
+      this.searchBtn = true;
+      if (this.activeName === '03') {
+        this.pendPageInfo.pageNum = 1;
+         this.pendPageInfo.pageSize = 10;
+        this.getPendingData()
+      } else {
+        this.completePageInfo.pageNum = 1;
+         this.completePageInfo.pageSize = 10;
+        this.getProcessedData()
+      }
     },
     initAppealData(){
       this.getPendingData();
@@ -242,6 +250,11 @@ export default {
         if (res.code == '200') {
           this.pendingTotal = res.total;
           this.pendingTableData = res.rows;
+          // if (this.pendingTotal === 0 && this.searchBtn){
+          //   return this.$message.warning(
+          //     "未查询到数据！"
+          //   )
+          // }
         }
         this.searchLoad = false
       });
@@ -271,12 +284,17 @@ export default {
         if (res.code == '200') {
           this.completedTotal = res.total;
           this.completedTableData = res.rows;
+          // if (this.completedTotal === 0 && this.searchBtn){
+          //   return this.$message.warning(
+          //     "未查询到数据！"
+          //   )
+          // }
         }
       })
     },
 
     handleClick() {
-      if (this.activeName === '01') {
+      if (this.activeName === '03') {
         this.getPendingData()
       } else {
         this.getProcessedData()

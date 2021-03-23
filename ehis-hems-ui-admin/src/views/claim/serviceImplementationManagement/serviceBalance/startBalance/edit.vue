@@ -293,7 +293,7 @@ export default {
           let obj= new Object();
           obj.dictLabel = item.dictLabel;
           obj.dictValue = item.dictValue;
-          if(item.dictLabel!='03') {
+          if(item.dictValue!='03') {
             this.clearingFormOptions.push(obj);
           }
         }

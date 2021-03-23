@@ -377,20 +377,31 @@
         </el-row>
 
         <el-row>
-          <el-col :span="2">
+          <el-col :span="8">
             <el-form-item label="预约医院：" style="white-space: nowrap;" :inline="true" prop="province">
+              <el-cascader
+                v-model="region"
+                :options="regions"
+                class="item-width"
+                placeholder="请选择"
+                :props="{ checkStrictly: true }"
+                @change="handleChange"
+                clearable/>
+            </el-form-item>
+            <!--<el-form-item label="预约医院：" style="white-space: nowrap;" :inline="true" prop="province">
               省份：<el-input v-model="ruleForm.province" style="width: 50px"  />
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item style="white-space: nowrap;" :inline="true" prop="city" >
               城市：<el-input v-model="ruleForm.city" style="width: 50px" />
-            </el-form-item>
+            </el-form-item>-->
           </el-col>
         <el-col :span="8">
             <el-form-item label="医疗机构：" prop="medicalInstitution" >
               <el-col :span="16">
-                <el-input v-model="ruleForm.medicalInstitution" input-w clearable size="mini" placeholder="请输入"/>
+                <!--  <el-input v-model="ruleForm.medicalInstitution" input-w clearable size="mini" placeholder="请输入"/>-->
+                <el-input v-model="ruleForm.hospitalName" input-w clearable size="mini" placeholder="请输入"/>
               </el-col>
               <el-button type="primary" @click="openHospitalDialog">查询</el-button>
             </el-form-item>
@@ -398,7 +409,11 @@
 
           <el-col :span="8">
             <el-form-item label="科室：" prop="department">
-              <el-input v-model="ruleForm.department" class="item-width" clearable size="mini" maxlength="20" placeholder="请输入"/>
+              <el-select v-if="departmentOption.length>0" v-model="ruleForm.department" class="item-width" placeholder="请选择">
+                <el-option v-for="item in departmentOption" :key="item" :label="item"
+                           :value="item"/>
+              </el-select>
+              <el-input v-else v-model="ruleForm.department" class="item-width" clearable size="mini" maxlength="20" placeholder="请输入"/>
             </el-form-item>
           </el-col>
 
@@ -410,8 +425,8 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="医院地址：" prop="province">
-              <el-input v-model="ruleForm.province" class="item-width" clearable size="mini" placeholder="请输入"/>
+            <el-form-item label="医院地址：" prop="hospitalAddress">
+              <el-input v-model="ruleForm.hospitalAddress" class="item-width" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -453,7 +468,7 @@
         </div>
 
       </el-form>
-      <hospital :value="hospitalDialog" @closeHospital="closeHospital"
+      <hospital :value="hospitalDialog" @closeHospital="closeHospital" :queryData="queryData"
                 @getPropData="getPropData"/>
     </el-card>
 
@@ -470,7 +485,7 @@ import {demandListAndPublicPool,demandListAndPersonalPool,addInsert} from '@/api
 import upLoad from "../common/modul/upload";
 import {addReservationInsert} from '@/api/customService/reservation'
 import Hospital from "../hospital/hospital";
-
+import {getAddress} from "@/api/baseInfo/medicalManage";
 let dictss = [
   {dictType: 'cs_channel'},
   {dictType: 'cs_priority'},
@@ -496,6 +511,15 @@ export default {
     }
   },
   data() {
+    const checkComplaintTime= (rule, value, callback) => {
+      let tDate = new Date();
+      if(tDate > value){
+        callback(new Error("预约时间不能早于当前日期"));
+      }else{
+        callback();
+      }
+    };
+
     //意外原因
     const checkAccidentReason = (rule, value, callback) => {
       if (this.ruleForm.accidentFlag === '01') {
@@ -522,7 +546,13 @@ export default {
       }
     };
     return {
+      regions: [], // 省市区下拉选项
+      region: [], // 省市区下拉选项
       cs_channel:[],//受理渠道
+      queryData:{
+        region:[],
+        hospitalName:''
+      },//受理渠道
       cs_reservation_item:[],//服务项目
       cs_sex:[],//性别
       cs_priority:[],//优先级
@@ -538,11 +568,14 @@ export default {
       cs_direct_settlement: [],
       cs_consultation_type: [],
       cs_time_unit: [],
+      departmentOption: [],
       //需要填入数据的部分
       ruleForm:{
         workOrderNo:"",
+        hospitalName:"",
         complaintTime:"",
         hospitalWorkCall:"",
+        hospitalAddress:"",
         channelCode:"03",//受理渠道
         callCenterId:"",//中心
 
@@ -661,7 +694,8 @@ export default {
           {required: true, message: "医疗机构不能为空", trigger: ["blur","change"]}
         ],
         appointmentDate: [
-          {required: true, message: "预约时间不能为空", trigger: ["blur","change"]}
+          {required: true, message: "预约时间不能为空", trigger: ["blur","change"]},
+          {required: true, validator: checkComplaintTime, trigger: "blur"}
         ],
         province: [
           {required: true, message: "预约医院不能为空", trigger: ["blur","change"]}
@@ -805,6 +839,8 @@ export default {
     this.cs_time_unit = this.dictList.find(item => {
       return item.dictType === 'cs_time_unit'
     }).dictDate
+    // 地址下拉选
+    this.getAddressData()
   },
   methods: {
     //关闭按钮
@@ -903,10 +939,40 @@ export default {
       } else {
         this.hospitalDialog = true
       }*/
-      this.hospitalDialog = true
+      if (this.region.length<1){
+        return this.$message.warning(
+          "请先选择预约医院省市！"
+        )
+      }else {
+        this.queryData={
+          region:this.region,
+          hospitalName:this.ruleForm.hospitalName
+        }
+        this.hospitalDialog = true
+      }
+
     },
     getPropData(val) {
-      console.log('1');
+      if (val.deptList && val.deptList.length>0){
+        this.departmentOption=val.deptList
+      }else {
+        this.departmentOption=[]
+      }
+      this.ruleForm.medicalInstitution=val.hospitalCode
+      this.ruleForm.hospitalName=val.hospitalName
+      this.ruleForm.hospitalWorkCall=val.consultPhone
+      this.ruleForm.hospitalAddress=val.address
+    },
+    handleChange(){
+      this.ruleForm.province = this.region[0]
+      this.ruleForm.city = this.region[1]
+    },
+    // 地址下拉选
+    getAddressData() {
+      getAddress().then(response => {
+        this.regions = response
+      }).catch(error => {
+      })
     },
   }
 }

@@ -278,7 +278,11 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
                 insuredPerson.setIdType(policyListVo.getIdType());
                 insuredPerson.setIdNumber(policyListVo.getIdNo());
                 insuredPerson.setSex(policyListVo.getSex());
-                insuredPerson.setLinePhone(policyListVo.getPhone());
+                if(policyListVo.getPhone() == null || "".equals(policyListVo.getPhone())){
+                    insuredPerson.setLinePhone("---");
+                }else{
+                    insuredPerson.setLinePhone(policyListVo.getPhone());
+                }
                 insuredPerson.setOtherCustomerNo(policyListVo.getInsuredNo());
                 insuredPerson.setCreatedBy(SecurityUtils.getUsername());
                 insuredPerson.setUpdatedBy(SecurityUtils.getUsername());
@@ -345,6 +349,8 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         personInfo2.setMobilePhone(demandAcceptVo.getContactsMobilePhone());
         if (demandAcceptVo.getContactsCountry() != null && demandAcceptVo.getContactsCountry() != "") {
             personInfo2.setLinePhone(demandAcceptVo.getContactsCountry() + "-" + demandAcceptVo.getContactsQuhao() + "-" + demandAcceptVo.getContactsNumber() + "-" + demandAcceptVo.getContactsSecondNumber());
+        }else{
+            personInfo2.setLinePhone("---");
         }
         personInfo2.setCreatedBy(SecurityUtils.getUsername());
         personInfo2.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));

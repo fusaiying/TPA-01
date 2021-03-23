@@ -7,13 +7,12 @@ import com.paic.ehis.common.core.utils.PubFun;
 import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.cs.domain.AcceptDetailInfo;
 import com.paic.ehis.cs.domain.QualityInspectionItem;
-import com.paic.ehis.cs.domain.dto.HandleDTO;
-import com.paic.ehis.cs.domain.dto.HandleProcessInfoDTO;
-import com.paic.ehis.cs.domain.dto.QualityInspectionDTO;
-import com.paic.ehis.cs.domain.dto.WorkOrderQueryDTO;
+import com.paic.ehis.cs.domain.WorkOrderAccept;
+import com.paic.ehis.cs.domain.dto.*;
 import com.paic.ehis.cs.domain.vo.*;
 import com.paic.ehis.cs.mapper.QualityInspectionAcceptMapper;
 import com.paic.ehis.cs.mapper.QualityInspectionItemMapper;
+import com.paic.ehis.cs.mapper.WorkOrderAcceptMapper;
 import com.paic.ehis.cs.service.*;
 import com.paic.ehis.cs.utils.CodeEnum;
 import org.apache.commons.lang3.StringUtils;
@@ -48,6 +47,8 @@ public class QualityInspectionHandleServiceImpl implements IQualityInspectionHan
     private IAttachmentInfoService iAttachmentInfoService;
     @Autowired
     private IQualityInspectionItemService iQualityInspectionItemService;
+    @Autowired
+    private WorkOrderAcceptMapper workOrderAcceptMapper;
     /**
      * 查询质检处理 
      * 
@@ -213,6 +214,10 @@ public class QualityInspectionHandleServiceImpl implements IQualityInspectionHan
             }
             return qualityInspectionHandleMapper.updateHandleInfoById(qualityInspectionDTO);
         }else{
+            String workOrderNo=qualityInspectionDTO.getWorkOrderNo();
+            WorkOrderAccept workOrderAccept=workOrderAcceptMapper.selectWorkOrderAcceptById(workOrderNo);
+            workOrderAccept.setEndDate(DateUtils.getNowDate());//设置结案时间
+            workOrderAcceptMapper.updateWorkOrderAccept(workOrderAccept);
             List<QualityInspectionItemVo> inspectionItemVos=qualityInspectionDTO.getItems();
             if(inspectionItemVos!=null && !inspectionItemVos.isEmpty()){
                 //作废状态
@@ -243,7 +248,6 @@ public class QualityInspectionHandleServiceImpl implements IQualityInspectionHan
             String inspectionHandlerId = PubFun.createMySqlMaxNoUseCache("inspection_handler_id", 10, 10);
             qualityInspectionDTO.setInspectionHandlerId(inspectionHandlerId);
             qualityInspectionHandleMapper.insertHandleInfo(qualityInspectionDTO);
-
             return qualityInspectionItemMapper.insertHandleItemInfoBatch(qualityInspectionDTO);
         }
     }

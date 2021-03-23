@@ -31,7 +31,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="是否申述：" prop="complainStatus">
+            <el-form-item label="是否申诉：" prop="complainStatus">
               <el-select v-model="searchForm.complainStatus" class="item-width" placeholder="请选择" clearable
                          @change="">
                 <el-option v-for="option in sys_yes_noOptions" :key="option.dictValue"
@@ -111,7 +111,7 @@
               <span>{{scope.row.calAmount}} {{scope.row.currency}}</span>
             </template>
           </el-table-column>
-          <el-table-column align="center" prop="isAppeal" label="是否申述" width="100" show-overflow-tooltip>
+          <el-table-column align="center" prop="isAppeal" label="是否申诉" width="100" show-overflow-tooltip>
             <template slot-scope="scope">
               <span>{{selectDictLabel( sys_yes_noOptions, scope.row.isAppeal)}}</span>
             </template>

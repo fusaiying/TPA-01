@@ -353,4 +353,14 @@ public class ProductInfoController extends BaseController
         return AjaxResult.success(productInfoService.selectProductSupplier(productInfo));
     }
 
+    /*日志轨迹表*/
+    @PostMapping("/selectLogList")
+    public AjaxResult selectLogList(@RequestBody ProductInfo productInfo)
+    {
+        /*startPage();
+        List<ProductSupplierInfo> list = productInfoService.selectSupplier(productInfo);
+        return getDataTable(list);*/
+        return AjaxResult.success(productInfoService.selectLogList(productInfo));
+    }
+
 }

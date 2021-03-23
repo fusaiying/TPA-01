@@ -327,7 +327,7 @@
         </el-row>
 
         <el-row>
-          <el-form-item label="改善措施：" prop="content">
+          <el-form-item label="业务内容：" prop="content">
             <el-input
               disabled
               type="textarea"

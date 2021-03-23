@@ -247,7 +247,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <update id="updateProductInfo" parameterType="ProductInfo">
         update product_info
         <trim prefix="SET" suffixOverrides=",">
-            <if test="productCode != null and productCode != ''">product_code = #{productCode},</if>
             <if test="productChname != null and productChname != ''">product_chname = #{productChname},</if>
             <if test="productEnname != null and productEnname != ''">product_enname = #{productEnname},</if>
             <if test="outProductChname != null and outProductChname != ''">out_product_chname = #{outProductChname},</if>
@@ -263,7 +262,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateBy != null">update_by = #{updateBy},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
         </trim>
-        where serial_no = #{serialNo}
+        where product_code = #{productCode}
     </update>
 
     <update id="deleteProductInfoById" parameterType="String">

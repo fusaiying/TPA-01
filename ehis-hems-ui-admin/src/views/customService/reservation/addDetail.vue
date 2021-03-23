@@ -496,6 +496,15 @@ export default {
     }
   },
   data() {
+    const checkComplaintTime= (rule, value, callback) => {
+      let tDate = new Date();
+      if(tDate > value){
+        callback(new Error("预约时间不能早于当前日期"));
+      }else{
+        callback();
+      }
+    };
+
     //意外原因
     const checkAccidentReason = (rule, value, callback) => {
       if (this.ruleForm.accidentFlag === '01') {
@@ -661,7 +670,8 @@ export default {
           {required: true, message: "医疗机构不能为空", trigger: ["blur","change"]}
         ],
         appointmentDate: [
-          {required: true, message: "预约时间不能为空", trigger: ["blur","change"]}
+          {required: true, message: "预约时间不能为空", trigger: ["blur","change"]},
+          {required: true, validator: checkComplaintTime, trigger: "blur"}
         ],
         province: [
           {required: true, message: "预约医院不能为空", trigger: ["blur","change"]}

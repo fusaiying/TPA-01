@@ -762,7 +762,9 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
             reservationDealVo.setTimes(tTimes);
             return reservationDealVo;
         }else {
-            return new ReservationDealVo();
+            ReservationDealVo tReservationDealVo = new ReservationDealVo();
+            tReservationDealVo.setTimes(tTimes);
+            return tReservationDealVo;
         }
     }
 

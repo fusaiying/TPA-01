@@ -92,4 +92,11 @@ public interface WorkOrderAcceptMapper
      * @return 结果
      */
     public String selectProcessingTimeById(String workOrderNo);
+    /**
+     * 修改工单处理时间
+     *
+     * @param workOrderAccept 工单申请信息
+     * @return 结果
+     */
+    public int updateClickTime(WorkOrderAccept workOrderAccept);
 }

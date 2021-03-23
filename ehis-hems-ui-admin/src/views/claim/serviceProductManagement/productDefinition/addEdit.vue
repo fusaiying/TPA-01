@@ -82,7 +82,7 @@ export default {
 
     //提交审核
     submitHandle(){
-      this.$refs['productInfoForm'].validateForm().then(res=>{
+     let res= this.$refs['productInfoForm'].validateForm()
         let servicesAvailableFlag=this.$refs['servicesAvailableForm'].validateForm()
         if(res){
 
@@ -134,21 +134,15 @@ export default {
         else {
           this.$message.warning('产品基本信息必录项未必录')
         }
-      })
-
-
-
-
-
 
 
     },
     //保存
-    saveAll(){
-      this.$refs['productInfoForm'].validateForm().then((res)=>{
+     saveAll(){
+      let res=  this.$refs['productInfoForm'].validateForm()
+
           let servicesAvailableFlag=this.$refs['servicesAvailableForm'].validateForm()
           if(res){
-
             if(servicesAvailableFlag=='01') {
               let productInfoData = this.$refs.productInfoForm.baseForm
               let servicesAvailableData = this.$refs.servicesAvailableForm.serviceProForm
@@ -198,10 +192,10 @@ export default {
           }
 
 
-        }
 
 
-      )
+
+
 
 
 

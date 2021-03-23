@@ -534,7 +534,16 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
 
 
 
-
+    @Transactional(propagation = Propagation.REQUIRED,rollbackFor = Exception.class)
+    @Override
+    public int updateClickTime(AcceptDTO acceptDTO){
+        //更新处理时间
+        WorkOrderAccept workOrderAccept=workOrderAcceptMapper.selectWorkOrderAcceptById(acceptDTO.getWorkOrderNo());
+        workOrderAccept.setClickTime(DateUtils.parseDate(DateUtils.getTime()));
+        workOrderAccept.setUpdateBy(SecurityUtils.getUsername());
+        workOrderAccept.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
+        return workOrderAcceptMapper.updateClickTime(workOrderAccept);
+    }
 
 
 

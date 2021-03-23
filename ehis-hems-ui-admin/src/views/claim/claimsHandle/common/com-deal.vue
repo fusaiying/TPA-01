@@ -29,7 +29,7 @@
         <el-form style="float: right; padding: 3px 0">
           <span>
             <el-button type="primary" v-if="querys.node==='calculateReview' || querys.node==='sport'" size="mini"
-                       @click="openAppealInfo">申述信息</el-button>
+                       @click="openAppealInfo">申诉信息</el-button>
             <el-button type="primary" size="mini" @click="">影像查看</el-button>
             <el-button type="primary" v-if="(querys.node==='calculateReview' || querys.node==='sport') && showHistoryClaim" size="mini"
                        @click="openHistoryClaim">历史理赔</el-button>
@@ -80,7 +80,7 @@
         <el-form style="float: right; padding: 3px 0">
           <span>
             <el-button type="primary" v-if="querys.node==='calculateReview' || querys.node==='sport'" size="mini"
-                       @click="openAppealInfo">申述信息</el-button>
+                       @click="openAppealInfo">申诉信息</el-button>
             <el-button type="primary" size="mini" @click="">影像查看</el-button>
             <el-button type="primary" v-if="(querys.node==='calculateReview' || querys.node==='sport') && showHistoryClaim" size="mini"
                        @click="openHistoryClaim">历史理赔</el-button>
@@ -162,7 +162,7 @@
         <problemCase :sonProblemData="sonProblemData" :fixInfo="fixInfo" :node="querys.node" :status="querys.status"/>
       </div>
       <!--赔付结论-->
-      <div v-if="(querys.node==='calculateReview' || querys.node==='sport') && fixInfo.isAppeal==='02'"
+      <div v-if="(querys.node==='calculateReview' || querys.node==='sport') && fixInfo.isAppeal==='01'"
            class="batchInfo_class" style="margin-top: 10px;">
         <pay-conclusion :fixInfo="fixInfo"/>
       </div>

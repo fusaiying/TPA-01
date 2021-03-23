@@ -2,7 +2,9 @@ package com.paic.ehis.product.service;
 
 import java.util.List;
 
+import com.paic.ehis.common.core.web.domain.AjaxResult;
 import com.paic.ehis.product.domain.*;
+import org.springframework.web.bind.annotation.RequestBody;
 
 /**
  * base_product_info(服务产品)Service接口
@@ -136,4 +138,10 @@ public interface IProductInfoService
      *已经配置的供应商信息置为失效
      */
     public int updateSupplierStatus(com.paic.ehis.system.api.domain.ProductSupplierInfoVo productSupplierInfoVo);
+
+    /**
+     *日志轨迹表
+     */
+    public List<ProductManagerLog> selectLogList(ProductInfo productInfo);
+
 }

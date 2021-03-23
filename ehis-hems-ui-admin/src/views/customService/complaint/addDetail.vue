@@ -478,6 +478,7 @@
       }
 
       return {
+        checkSubmitFlag: '',
         cs_channel: [],//
         cs_complaint_item:[],//服务项目
         cs_sex:[],//性别
@@ -532,7 +533,7 @@
           contactsQuhao:"",
            contactsNumber:"",
           contactsSecondNumber:"",
-          checkSubmitFlag: '',
+
 
         },
         // 表单校验根据Form 组件提供了表单验证的功能，只需要通过 rules 属性传入约定的验证规则，并将 Form-Item 的 prop 属性设置为需校验的字段名即可

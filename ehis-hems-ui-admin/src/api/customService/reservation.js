@@ -140,7 +140,14 @@ export function addInsert(data) {
     data: data
   })
 }
-
+//# 获取医院信息
+export function getHospitalInfo(data) {
+  return request({
+    url: '/cs/reservation/internal/selectHospital',
+    method: 'post',
+    data:data
+  })
+}
 
 
 

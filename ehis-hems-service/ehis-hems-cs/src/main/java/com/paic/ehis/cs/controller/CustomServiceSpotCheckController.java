@@ -410,4 +410,17 @@ public class CustomServiceSpotCheckController extends BaseController {
         return toAjax(qualityInspectionHandleService.insertHandleInfo(qualityInspectionDTO));
     }
 
+
+    //信息需求失效批处理
+    @GetMapping("/internal/batchAcceptVo/invalidDate")
+    public AjaxResult batchAcceptVo(@PathVariable("invalidDate") String invalidDate){
+        try{
+            qualityInspectionAcceptService.batchAcceptVo(invalidDate);
+        }catch(RuntimeException e){
+            return AjaxResult.error(e.getMessage());
+        }
+        return AjaxResult.success("执行成功");
+    }
+
+
 }

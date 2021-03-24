@@ -759,7 +759,7 @@
                         return this.$message.warning(
                           "理赔材料不能为空"
                         );
-                      } else if (`${childrenVal}` === "remark") {
+                      }/* else if (`${childrenVal}` === "remark") {
                         this.hasBlock = true;
                         return this.$message.warning(
                           "备注不能为空"
@@ -769,7 +769,7 @@
                         return this.$message.warning(
                           "其他（案件去向）不能为空"
                         );
-                      }
+                      }*/
                     }
                   }
                 }
@@ -992,7 +992,7 @@
                           return this.$message.warning(
                             "理赔材料不能为空"
                           );
-                        } else if (`${childrenVal}` === "remark") {
+                        } /*else if (`${childrenVal}` === "remark") {
                           this.hasBlock = true;
                           return this.$message.warning(
                             "备注不能为空"
@@ -1002,7 +1002,7 @@
                           return this.$message.warning(
                             "其他（案件去向）不能为空"
                           );
-                        }
+                        }*/
                       }
                     }
                   }

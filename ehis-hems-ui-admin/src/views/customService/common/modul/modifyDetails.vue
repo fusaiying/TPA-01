@@ -30,8 +30,8 @@
               style=" width: 100%;"
             >
               <el-table-column align="center" width="140" prop="itemKey" label="修改项" show-overflow-tooltip>
-                <template slot-scope="scope" v-if="scope.row.operateCode">
-                  <span>{{ selectDictLabel(cs_demandAcceptVo, scope.row.operateCode) }}</span>
+                <template slot-scope="scope" v-if="scope.row.itemKey">
+                  <span>{{ selectDictLabel(cs_demandAcceptVo, scope.row.itemKey) }}</span>
                 </template>
               </el-table-column>
               <el-table-column align="center" prop="nowValue" label="新值" show-overflow-tooltip/>

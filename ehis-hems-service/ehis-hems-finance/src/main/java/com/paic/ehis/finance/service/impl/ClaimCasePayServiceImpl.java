@@ -217,10 +217,17 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService {
             // 理赔金额
             ClaimCaseCal claimCaseCal = claimCaseCalMapper.selectClaimCaseCalByRptNo(payInfoVO.getRptNo());
             if (StringUtils.isNotNull(claimCaseCal)) {
-                calAmount = calAmount.add(claimCaseCal.getCalAmount());
+                //判断是否撤件
+                if (!"98".equals(payInfoVO.getCaseStatus()) || !"97".equals(payInfoVO.getCaseStatus())){
+                    calAmount = calAmount.add(claimCaseCal.getCalAmount());
+                }
+
                 if ("01".equals(payInfoVO.getPayStatus())) {
                     // 获取支付金额 理赔金额
-                    payAmount = payAmount.add(claimCaseCal.getPayAmount());
+                    //判断是否撤件
+                    if (!"98".equals(payInfoVO.getCaseStatus()) || !"97".equals(payInfoVO.getCaseStatus()) ){
+                        payAmount = payAmount.add(claimCaseCal.getPayAmount());
+                    }
                     // 是否已存在轨迹为“支付环节”
                     ClaimCaseRecord claimCaseRecord = new ClaimCaseRecord();
                     claimCaseRecord.setOperation("09");
@@ -265,6 +272,8 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService {
             }
             if ("97".equals(payInfoVO.getCaseStatus())){
                 payInfoVO.setPayStatus("");
+                payInfoVO.setPayAmount(new BigDecimal(0));
+                payInfoVO.setDebtAmount(new BigDecimal(0));
             }
         }
         // 获取支付信息
@@ -513,7 +522,8 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService {
         } else {
             List<ClaimCaseForeignPayInfoVO> caseInfoList = claimCasePayVO.getCaseInfoList();
             for (ClaimCaseForeignPayInfoVO caseInfo : caseInfoList) {
-                if (!"99".equals(caseInfo.getCaseStatus()) && !"98".equals(caseInfo.getCaseStatus()) && !"05".equals(caseInfo.getCaseStatus()) && !"04".equals(caseInfo.getCaseStatus()) && !"06".equals(caseInfo.getCaseStatus())) {
+                if (!"99".equals(caseInfo.getCaseStatus()) && !"98".equals(caseInfo.getCaseStatus()) && !"05".equals(caseInfo.getCaseStatus()) && !"04".equals(caseInfo.getCaseStatus()) && !"06".equals(caseInfo.getCaseStatus())
+                 && !"02".equals(caseInfo.getPayStatus()) && !"03".equals(caseInfo.getPayStatus())) {
                     // 支付状态置为可支付
                     ClaimCase claimCase = new ClaimCase();
                     claimCase.setRptNo(caseInfo.getRptNo());
@@ -692,8 +702,10 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService {
             if ("01".equals(payInfoVO.getPayStatus())) {
                 // 获取支付金额 理赔金额 外币支付总金额
                 ClaimCaseCal claimCaseCal = claimCaseCalMapper.selectClaimCaseCalByRptNo(payInfoVO.getRptNo());
-                payAmount = payAmount.add(claimCaseCal.getPayAmount());
-                calAmount = calAmount.add(claimCaseCal.getCalAmount());
+                if (!"98".equals(payInfoVO.getCaseStatus()) || !"97".equals(payInfoVO.getCaseStatus())){
+                    payAmount = payAmount.add(claimCaseCal.getPayAmount());
+                    calAmount = calAmount.add(claimCaseCal.getCalAmount());
+                }
                 foreignPayAmount = foreignPayAmount.add(claimCaseCal.getPayAmountForeign());
                 // 是否已存在轨迹为“支付环节”
                 ClaimCaseRecord claimCaseRecord = new ClaimCaseRecord();
@@ -720,7 +732,24 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService {
                     record.setCreateTime(DateUtils.getNowDate());
                     claimCaseRecordMapper.insertClaimCaseRecord(record);
                 }
-
+            }
+            if ("98".equals(payInfoVO.getCaseStatus())){
+                payInfoVO.setTreatmentDate(null);
+                payInfoVO.setName("");
+                payInfoVO.setCompanyName("");
+                payInfoVO.setPayStatus("");
+                payInfoVO.setBillAmount(new BigDecimal(0));
+                payInfoVO.setDiscountedAmount(new BigDecimal(0));
+                payInfoVO.setAdvancePayment(new BigDecimal(0));
+                payInfoVO.setCopay(new BigDecimal(0));
+                payInfoVO.setPayAmount(new BigDecimal(0));
+                payInfoVO.setDebtAmount(new BigDecimal(0));
+                payInfoVO.setBorrowAmount(new BigDecimal(0));
+            }
+            if ("97".equals(payInfoVO.getCaseStatus())){
+                payInfoVO.setPayStatus("");
+                payInfoVO.setPayAmount(new BigDecimal(0));
+                payInfoVO.setDebtAmount(new BigDecimal(0));
             }
         }
         // 获取支付信息

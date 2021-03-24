@@ -46,7 +46,7 @@
             min( b.treatment_start_date ) treatment_date,
             c.insured_no,
             c.name,
-            sum( b.bill_amount ) bill_amount,
+            sum(  ifNUll(b.bill_amount,0) ) bill_amount,
             (sum( ifNUll(b.bill_amount,0) ) - sum( ifNUll(b.hos_discount_amount,0) )) discounted_amount,
             sum( ifNUll(b.tp_advance_payment + b.ss_advance_payment,0) ) advance_payment,
             sum( ifNUll(b.copay,0)) copay,

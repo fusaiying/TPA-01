@@ -51,6 +51,12 @@ export function logInfo() {
   })
 }
 
+export function getTakeOnUserName(userName) {
+  return request({
+    url: '/claimmgt/on/getTakeOnUserName/'+userName,
+    method: 'get',
+  })
+}
 // 工作流查看
 export function selectWorkflow(data) {
   return request({

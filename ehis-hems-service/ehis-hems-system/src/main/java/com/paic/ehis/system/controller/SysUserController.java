@@ -10,9 +10,10 @@ import com.paic.ehis.common.core.web.domain.AjaxResult;
 import com.paic.ehis.common.core.web.page.TableDataInfo;
 import com.paic.ehis.common.log.annotation.Log;
 import com.paic.ehis.common.log.enums.BusinessType;
-import com.paic.ehis.common.security.annotation.PreAuthorize;
 import com.paic.ehis.system.api.domain.SysRole;
 import com.paic.ehis.system.api.domain.SysUser;
+import com.paic.ehis.system.api.domain.dto.MenuIdDTO;
+import com.paic.ehis.system.api.domain.dto.RoleUserInfoDTO;
 import com.paic.ehis.system.api.model.LoginUser;
 import com.paic.ehis.system.domain.dto.SysUserByOrganCodeDTO;
 import com.paic.ehis.system.service.ISysPermissionService;
@@ -264,5 +265,17 @@ public class SysUserController extends BaseController
         }
 
         return getDataTable(userList);
+    }
+
+    /**
+     * 根据菜单ID获取用户集合
+     * @param menuIdDTO
+     * @return
+     */
+    @PostMapping("/getUsersByMenuId")
+    public TableDataInfo getUsersByMenuId(@RequestBody MenuIdDTO menuIdDTO){
+        startPage(menuIdDTO);
+        List<RoleUserInfoDTO> roleUserInfoDTOList = userService.getUsersByMenuId(menuIdDTO.getMenuId());
+        return getDataTable(roleUserInfoDTOList);
     }
 }

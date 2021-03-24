@@ -127,13 +127,13 @@
             <if test="feeItemCode != null and feeItemCode != ''">fee_item_code = #{feeItemCode},</if>
             <if test="feeItemName != null and feeItemName != ''">fee_item_name = #{feeItemName},</if>
             <if test="billDetailAmount != null">bill_detail_amount = #{billDetailAmount},</if>
-            <if test="selfAmount != null">self_amount = #{selfAmount},</if>
-            <if test="partSelfAmount != null">part_self_amount = #{partSelfAmount},</if>
+            self_amount = #{selfAmount},
+            part_self_amount = #{partSelfAmount},
             <if test="advancePayment != null">advance_payment = #{advancePayment},</if>
             <if test="billDetailCopay != null">bill_detail_copay = #{billDetailCopay},</if>
             <if test="hosDiscountAmount != null">hos_discount_amount = #{hosDiscountAmount},</if>
-            <if test="unableAmount != null">unable_amount = #{unableAmount},</if>
-            <if test="visNumber != null">vis_number = #{visNumber},</if>
+            unable_amount = #{unableAmount},
+            vis_number = #{visNumber},
             <if test="remark != null">remark = #{remark},</if>
             <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
             <if test="createTime != null">create_time = #{createTime},</if>

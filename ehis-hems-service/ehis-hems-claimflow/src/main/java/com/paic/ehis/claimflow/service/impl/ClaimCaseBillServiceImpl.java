@@ -234,15 +234,28 @@ public class ClaimCaseBillServiceImpl implements IClaimCaseBillService
         // 3、获取费用项明细
         List<ClaimCaseBillDetail> billDetail = claimCaseBill.getBillDetail();
         for (ClaimCaseBillDetail detail : billDetail){
-            selfAmount = selfAmount.add(detail.getSelfAmount() == null ? new BigDecimal("0.00") : detail.getSelfAmount());
-            partSelf = partSelf.add(detail.getPartSelfAmount() == null ? new BigDecimal("0.00") : detail.getPartSelfAmount());
-            unableAmount = unableAmount.add(detail.getUnableAmount() == null ? new BigDecimal("0.00") : detail.getUnableAmount());
+            //判断是修改还是新增
+            if (!"".equals(detail.getDetailId()) && detail.getDetailId()!=null){
+                selfAmount = selfAmount.add(detail.getSelfAmount() == null ? new BigDecimal("0.00") : detail.getSelfAmount());
+                partSelf = partSelf.add(detail.getPartSelfAmount() == null ? new BigDecimal("0.00") : detail.getPartSelfAmount());
+                unableAmount = unableAmount.add(detail.getUnableAmount() == null ? new BigDecimal("0.00") : detail.getUnableAmount());
 //            detail.setBillId(billId);
 //            detail.setRptNo(billInfo.getRptNo());
 //            detail.setStatus("Y");
-            detail.setUpdateBy(username);
-            detail.setUpdateTime(DateUtils.getNowDate());
-            claimCaseBillDetailMapper.updateClaimCaseBillDetail(detail);
+                detail.setUpdateBy(username);
+                detail.setUpdateTime(DateUtils.getNowDate());
+                claimCaseBillDetailMapper.updateClaimCaseBillDetail(detail);
+            }else {
+                selfAmount = selfAmount.add(detail.getSelfAmount() == null ? new BigDecimal("0.00") : detail.getSelfAmount());
+                partSelf = partSelf.add(detail.getPartSelfAmount() == null ? new BigDecimal("0.00") : detail.getPartSelfAmount());
+                unableAmount = unableAmount.add(detail.getUnableAmount() == null ? new BigDecimal("0.00") : detail.getUnableAmount());
+                detail.setBillId(billId);
+                detail.setRptNo(billInfo.getRptNo());
+                detail.setStatus("Y");
+                detail.setCreateBy(username);
+                detail.setCreateTime(DateUtils.getNowDate());
+                claimCaseBillDetailMapper.insertClaimCaseBillDetail(detail);
+            }
         }
         billInfo.setSelfAmount(selfAmount);
         billInfo.setPartSelfAmount(partSelf);

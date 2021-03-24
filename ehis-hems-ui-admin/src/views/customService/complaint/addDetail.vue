@@ -394,7 +394,7 @@
 
         </el-row>
 
-        <el-form-item label="业务内容：" prop="content">
+        <el-form-item label="投诉内容：" prop="content">
         <el-input
           type="textarea"
           :rows="3"

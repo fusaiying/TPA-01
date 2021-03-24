@@ -182,6 +182,10 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService {
             if (payInfo.getCaseStatus()!="99" || payInfo.getPayStatus()=="01"){
                 borrowFlag="true";
             }
+            if ("06".equals(payInfo.getPayStatus())){
+                ClaimBatch claimBatch = claimBatchMapper.selectClaimBatchById(payInfo.getBatchNo());
+                payInfo.setCurrency(claimBatch.getCurrency());
+            }
             List<ClaimCasePolicy> policyList = claimCasePolicyMapper.selectClaimCasePolicyByRptNo(payInfo.getRptNo());
             // 去重
             List<String> companyList = policyList.stream().map(ClaimCasePolicy::getCompanyName).collect(Collectors.toList());
@@ -667,6 +671,10 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService {
             }
             if (payInfo.getCaseStatus()!="99" || payInfo.getPayStatus()=="01"){
                 borrowFlag="true";
+            }
+            if ("06".equals(payInfo.getPayStatus())){
+                ClaimBatch claimBatch = claimBatchMapper.selectClaimBatchById(payInfo.getBatchNo());
+                payInfo.setCurrency(claimBatch.getCurrency());
             }
             List<ClaimCasePolicy> policyList = claimCasePolicyMapper.selectClaimCasePolicyByRptNo(payInfo.getRptNo());
             // 去重

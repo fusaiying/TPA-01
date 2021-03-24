@@ -314,6 +314,7 @@
         <if test="createTime != null">create_time = #{createTime},</if>
         <if test="updateBy != null">update_by = #{updateBy},</if>
         <if test="updateTime != null">update_time = #{updateTime},</if>
+        <if test="payStatus != null">pay_status = #{payStatus},</if>
         is_finance_back = null
     </trim>
     where rpt_no = #{rptNo} and status = 'Y'

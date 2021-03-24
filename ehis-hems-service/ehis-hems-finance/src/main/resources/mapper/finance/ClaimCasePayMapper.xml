@@ -75,6 +75,7 @@
 				union
 		SELECT
             a.rpt_no,
+            a.batch_no,
             d.treatment_start_date treatment_date,
             c.insured_no,
             c.name,
@@ -138,6 +139,7 @@
 				union
 		SELECT
             a.rpt_no,
+            a.batch_no,
             d.treatment_start_date treatment_date,
             c.name,
             d.bill_amount bill_amount,

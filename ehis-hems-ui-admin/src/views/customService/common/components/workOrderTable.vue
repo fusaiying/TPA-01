@@ -58,7 +58,7 @@
     </el-table-column>
     <el-table-column align="center" label="操作" min-width="140" fixed="right">
       <template slot-scope="scope">
-        <el-button :disabled="scope.row.flag=='1'" size="small" type="text" @click="obtainButton(scope.row)">获取
+        <el-button size="small" type="text" @click="obtainButton(scope.row)">获取
         </el-button>
         <el-button size="small" type="text" @click="modifyButton(scope.row)">修改
         </el-button>
@@ -181,24 +181,58 @@ export default {
   methods: {
     //获取
     obtainButton(row) {
-      updateGetWorkOrder(row.workOrderNo).then(res=>{
-        if (res!=null && res.code=='200'){
-          this.$message({
-            message: '获取成功！',
-            type: 'success',
-            center: true,
-            showClose: true
+      if (row.flag && row.flag=='1'){
+        this.$confirm(`当前工单正在处理，是否申请到个人池?`, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          updateGetWorkOrder(row.workOrderNo).then(res=>{
+            if (res!=null && res.code=='200'){
+              this.$message({
+                message: '获取成功！',
+                type: 'success',
+                center: true,
+                showClose: true
+              })
+            }else {
+              this.$message({
+                message: '获取失败!',
+                type: 'error',
+                center: true,
+                showClose: true
+              })
+            }
           })
-        }else {
+          this.$emit("searchHandle")
+        }).catch(() => {
           this.$message({
-            message: '获取失败!',
-            type: 'error',
-            center: true,
-            showClose: true
+            type: 'info',
+            message: '已取消！'
           })
-        }
-      })
-      this.$emit("searchHandle")
+        })
+      }else {
+        updateGetWorkOrder(row.workOrderNo).then(res=>{
+          if (res!=null && res.code=='200'){
+            this.$message({
+              message: '获取成功！',
+              type: 'success',
+              center: true,
+              showClose: true
+            })
+          }else {
+            this.$message({
+              message: '获取失败!',
+              type: 'error',
+              center: true,
+              showClose: true
+            })
+          }
+          this.$emit("searchHandle")
+        })
+      }
+
+
     },
     //修改
     modifyButton(row) {

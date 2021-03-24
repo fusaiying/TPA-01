@@ -514,7 +514,7 @@ export default {
     const checkComplaintTime= (rule, value, callback) => {
       let tDate = new Date();
       if(tDate > value){
-        callback(new Error("预约时间不能早于当前日期"));
+        callback(new Error("预约日期不能早于当前日期"));
       }else{
         callback();
       }
@@ -694,7 +694,7 @@ export default {
           {required: true, message: "医疗机构不能为空", trigger: ["blur","change"]}
         ],
         complaintTime: [
-          {required: true, message: "预约时间不能为空", trigger: ["blur","change"]},
+          {required: true, message: "预约日期不能为空", trigger: ["blur","change"]},
           {required: true, validator: checkComplaintTime, trigger: "blur"}
         ],
         province: [

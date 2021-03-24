@@ -182,7 +182,7 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService {
             if (payInfo.getCaseStatus()!="99" || payInfo.getPayStatus()=="01"){
                 borrowFlag="true";
             }
-            if ("06".equals(payInfo.getPayStatus())){
+            if ("06".equals(payInfo.getCaseStatus())){
                 ClaimBatch claimBatch = claimBatchMapper.selectClaimBatchById(payInfo.getBatchNo());
                 payInfo.setCurrency(claimBatch.getCurrency());
             }
@@ -222,14 +222,14 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService {
             ClaimCaseCal claimCaseCal = claimCaseCalMapper.selectClaimCaseCalByRptNo(payInfoVO.getRptNo());
             if (StringUtils.isNotNull(claimCaseCal)) {
                 //判断是否撤件
-                if (!"98".equals(payInfoVO.getCaseStatus()) || !"97".equals(payInfoVO.getCaseStatus())){
+                if (!"98".equals(payInfoVO.getCaseStatus()) && !"97".equals(payInfoVO.getCaseStatus())){
                     calAmount = calAmount.add(claimCaseCal.getCalAmount());
                 }
 
                 if ("01".equals(payInfoVO.getPayStatus())) {
                     // 获取支付金额 理赔金额
                     //判断是否撤件
-                    if (!"98".equals(payInfoVO.getCaseStatus()) || !"97".equals(payInfoVO.getCaseStatus()) ){
+                    if (!"98".equals(payInfoVO.getCaseStatus()) && !"97".equals(payInfoVO.getCaseStatus()) ){
                         payAmount = payAmount.add(claimCaseCal.getPayAmount());
                     }
                     // 是否已存在轨迹为“支付环节”
@@ -672,7 +672,7 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService {
             if (payInfo.getCaseStatus()!="99" || payInfo.getPayStatus()=="01"){
                 borrowFlag="true";
             }
-            if ("06".equals(payInfo.getPayStatus())){
+            if ("06".equals(payInfo.getCaseStatus())){
                 ClaimBatch claimBatch = claimBatchMapper.selectClaimBatchById(payInfo.getBatchNo());
                 payInfo.setCurrency(claimBatch.getCurrency());
             }

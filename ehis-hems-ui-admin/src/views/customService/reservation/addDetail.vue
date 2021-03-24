@@ -401,7 +401,7 @@
             <el-form-item label="医疗机构：" prop="medicalInstitution" >
               <el-col :span="16">
                 <!--  <el-input v-model="ruleForm.medicalInstitution" input-w clearable size="mini" placeholder="请输入"/>-->
-                <el-input v-model="ruleForm.hospitalName" input-w clearable size="mini" placeholder="请输入"/>
+                <el-input v-model="ruleForm.hospitalName" input-w clearable size="mini" disabled/>
               </el-col>
               <el-button type="primary" @click="openHospitalDialog">查询</el-button>
             </el-form-item>

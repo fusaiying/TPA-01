@@ -193,7 +193,6 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
         personInfo2.setAddress(complaintAcceptVo.getContactsPerson().getAddress());
         personInfo2.setLanguage(complaintAcceptVo.getContactsPerson().getLanguage());
         personInfo2.setMobilePhone(complaintAcceptVo.getContactsPerson().getMobilePhone());
-        //personInfo2.setLinePhone(complaintAcceptVo.getContactsCountry()+"-"+complaintAcceptVo.getContactsQuhao()+"-"+complaintAcceptVo.getContactsNumber()+"-"+complaintAcceptVo.getContactsSecondNumber());
         if(complaintAcceptVo.getContactsPerson().getHomePhone1().length>3) {
             personInfo2.setHomePhone(complaintAcceptVo.getContactsPerson().getHomePhone1()[0] + "-" + complaintAcceptVo.getContactsPerson().getHomePhone1()[1] + "-" + complaintAcceptVo.getContactsPerson().getHomePhone1()[2] + "-" + complaintAcceptVo.getContactsPerson().getHomePhone1()[3]);
         }else{
@@ -279,7 +278,6 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
         PersonInfo contactsPerson=new PersonInfo();
         if(contactsPerson1!=null){
             BeanUtils.copyProperties(contactsPerson1, contactsPerson);
-
             //插入联系人
             contactsPerson.setPersonId(contactsPersonId);
             contactsPerson.setSex(complaintAcceptVo.getContactsPerson().getSex());
@@ -297,7 +295,6 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
             }else{
                 contactsPerson.setWorkPhone(complaintAcceptVo.getContactsPerson().getWorkPhone1()[0]+"-"+complaintAcceptVo.getContactsPerson().getWorkPhone1()[1]+"-"+complaintAcceptVo.getContactsPerson().getWorkPhone1()[2]+"-"+complaintAcceptVo.getContactsPerson().getWorkPhone1()[3]);
             }
-
             contactsPerson.setUpdatedBy(SecurityUtils.getUsername());
             contactsPerson.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
             personInfoMapper.updatePersonInfo(contactsPerson);
@@ -312,7 +309,6 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
         PersonInfo complaintPerson=new PersonInfo();
         if(complaintPerson1!=null){
             BeanUtils.copyProperties(complaintPerson1, complaintPerson);
-
             //插入投诉人
             complaintPerson.setPersonId(complaintPersonId);
             complaintPerson.setSex(complaintAcceptVo.getComplaintPerson().getSex());
@@ -325,7 +321,6 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
         }
 
         FlowLog flowLog=new FlowLog();
-
         //工单表修改
         WorkOrderAccept workOrderAccept=workOrderAcceptMapper.selectWorkOrderAcceptById(workOrderNo);
         workOrderAccept.setOrganCode(complaintAcceptVo.getOrganCode());
@@ -341,8 +336,8 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
         acceptDetailInfo.setEmail(complaintAcceptVo.getEmail());
         acceptDetailInfo.setContent(complaintAcceptVo.getContent());
         acceptDetailInfo.setPersuasionFlag(complaintAcceptVo.getPersuasionFlag());
-//        acceptDetailInfo.setUpdateBy(SecurityUtils.getUsername());
-//        acceptDetailInfo.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
+        acceptDetailInfo.setUpdateBy(SecurityUtils.getUsername());
+        acceptDetailInfo.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
         List<FieldMap> KVMap=fieldMapMapper.selectKVMap("accept_detail_info","ComplaintAcceptVo");
         for (FieldMap fieldMap:KVMap){
             fieldMap.getTargetColumnName();
@@ -353,13 +348,10 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
             acceptDetailInfo= (AcceptDetailInfo) voUtils.fromVoToVo(acceptDetailInfo,map,complaintAcceptVo);
         }
         acceptDetailInfoMapper.updateAcceptDetailInfo(acceptDetailInfo);
-
         String editId=PubFun.createMySqlMaxNoUseCache("cs_edit_id",10,8);
         EditDetail editDetail = new EditDetail();
         Map map1 = JSONObject.parseObject(JSONObject.toJSONString(complaintAcceptVo1), Map.class);
         Map map2 = JSONObject.parseObject(JSONObject.toJSONString(complaintAcceptVo), Map.class);
-
-        //     Map<String,Object> map = JSONObject.parseObject(JSON.toJSONString(acceptDetailInfo1));
 
         List outList = new ArrayList();
         outList.add("hangFlag");
@@ -392,20 +384,19 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
         Iterator<String> iter = map1.keySet().iterator();
         while (iter.hasNext()) {
             String key = iter.next();
-            if(!"updatedTime".equals(key)){
+            if(!"updateBy".equals(key) && !"updateTime".equals(key) && !"changeTime".equals(key) && !"createBy".equals(key) && !"createTime".equals(key) && !"updatedBy".equals(key) && !"updatedTime".equals(key) && !"createdBy".equals(key) && !"createdTime".equals(key)){
                 keyList.add(key);
             }
         }
         Iterator<String> iter2 = map2.keySet().iterator();
         while (iter2.hasNext()) {
             String key = iter2.next();
-            if(!"updatedTime".equals(key)){
+            if(!"updateBy".equals(key) && !"updateTime".equals(key) && !"changeTime".equals(key) && !"createBy".equals(key) && !"createTime".equals(key) && !"updatedBy".equals(key) && !"updatedTime".equals(key) && !"createdBy".equals(key) && !"createdTime".equals(key)){
                 if (!keyList.contains(key)) {
                     keyList.add(key);
                 }
             }
         }
-
         for (int i = 0; i < keyList.size(); i++) {
             String mapkey = keyList.get(i);
             if (outList.contains(mapkey)) {
@@ -413,155 +404,140 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
             } else {
                 Object map1value = map1.get(mapkey);
                 Object map2value = map2.get(mapkey);
-                if ((map1value == null || map1value.equals("")) &&
-                        (map2value != null && !map2value.equals(""))) {
-                    editDetail.setItemKey(mapkey);
-                    //  editDetail.setOldValue("");
+
+                editDetail = new EditDetail();
+                editDetail.setItemKey(mapkey);
+                editDetail.setKeyDictType("complaintAcceptVo");
+                editDetail.setEditId(editId);
+                editDetail.setCreatedBy(SecurityUtils.getUsername());
+                editDetail.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+                editDetail.setUpdatedBy(SecurityUtils.getUsername());
+                editDetail.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+
+                if ((map1value == null || map1value.equals("")) && (map2value != null && !map2value.equals(""))) {
+                    editDetail.setDetailId(PubFun.createMySqlMaxNoUseCache("cs_detail_id", 10, 8));
                     editDetail.setNowValue(String.valueOf(map2value));
-                    editDetail.setKeyDictType("demandAcceptVo");
-                    editDetail.setDetailId(PubFun.createMySqlMaxNoUseCache("cs_detail_id", 10, 8));
-                    editDetail.setEditId(editId);
-                    editDetail.setCreatedBy(SecurityUtils.getUsername());
-                    editDetail.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
-                    editDetail.setUpdatedBy(SecurityUtils.getUsername());
-                    editDetail.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
                     editDetailMapper.insertEditDetail(editDetail);
-                } else if ((map2value == null || map2value.equals("")) &&
-                        (map1value != null && !map1value.equals(""))) {
-                    editDetail.setItemKey(mapkey);
+                } else if ((map2value == null || map2value.equals("")) && (map1value != null && !map1value.equals(""))) {
+                    editDetail.setDetailId(PubFun.createMySqlMaxNoUseCache("cs_detail_id", 10, 8));
                     editDetail.setOldValue(String.valueOf(map1value));
-                    //   editDetail.setNowValue("");
-                    editDetail.setKeyDictType("demandAcceptVo");
-                    editDetail.setDetailId(PubFun.createMySqlMaxNoUseCache("cs_detail_id", 10, 8));
-                    editDetail.setEditId(editId);
-                    editDetail.setCreatedBy(SecurityUtils.getUsername());
-                    editDetail.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
-                    editDetail.setUpdatedBy(SecurityUtils.getUsername());
-                    editDetail.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
                     editDetailMapper.insertEditDetail(editDetail);
-                } else if ((map1value != null && !map1value.equals("")) &&
-                        (map2value != null && !map2value.equals("")) &&
-                        !map1value.equals(map2value)) {
-                    editDetail.setItemKey(mapkey);
+                } else if ((map1value != null && !map1value.equals("")) && (map2value != null && !map2value.equals("")) && !map1value.equals(map2value)) {
+                    editDetail.setDetailId(PubFun.createMySqlMaxNoUseCache("cs_detail_id", 10, 8));
                     editDetail.setOldValue(String.valueOf(map1value));
                     editDetail.setNowValue(String.valueOf(map2value));
-                    editDetail.setKeyDictType("demandAcceptVo");
-                    editDetail.setDetailId(PubFun.createMySqlMaxNoUseCache("cs_detail_id", 10, 8));
-                    editDetail.setEditId(editId);
-                    editDetail.setCreatedBy(SecurityUtils.getUsername());
-                    editDetail.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
-                    editDetail.setUpdatedBy(SecurityUtils.getUsername());
-                    editDetail.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
                     editDetailMapper.insertEditDetail(editDetail);
                 }
-
             }
         }
 
 
         Map map3 = JSONObject.parseObject(JSONObject.toJSONString(callPerson1), Map.class);
         Map map4 = JSONObject.parseObject(JSONObject.toJSONString(callPerson), Map.class);
-
         Iterator<String> iter5 = map3.keySet().iterator();
         while(iter5.hasNext()){
             String map3key=iter5.next();
+            if(!"updateBy".equals(map3key) && !"updateTime".equals(map3key) && !"changeTime".equals(map3key) && !"createBy".equals(map3key) && !"createTime".equals(map3key) && !"updatedBy".equals(map3key) && !"updatedTime".equals(map3key) && !"createdBy".equals(map3key) && !"createdTime".equals(map3key)) {
+                continue;
+            }
             String map3value = String.valueOf(map3.get(map3key));
             String map4value = String.valueOf(map4.get(map3key));
-            if(!"updatedTime".equals(map3key)) {
-                if (!map3value.equals(map4value)) {
-                    editDetail.setKeyDictType("complaintAcceptVo");
-                    editDetail.setItemKey(map3key);
-                    editDetail.setOldValue(map3value);
-                    editDetail.setNowValue(map4value);
-                    editDetail.setDetailId(PubFun.createMySqlMaxNoUseCache("cs_detail_id", 10, 8));
-                    editDetail.setEditId(editId);
-                    editDetail.setCreatedBy(SecurityUtils.getUsername());
-                    editDetail.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
-                    editDetail.setUpdatedBy(SecurityUtils.getUsername());
-                    editDetail.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
-                    editDetailMapper.insertEditDetail(editDetail);
-                }
+
+            editDetail = new EditDetail();
+            editDetail.setKeyDictType("complaintAcceptVo");
+            editDetail.setItemKey("callPerson."+map3key);
+            editDetail.setEditId(editId);
+            editDetail.setCreatedBy(SecurityUtils.getUsername());
+            editDetail.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+            editDetail.setUpdatedBy(SecurityUtils.getUsername());
+            editDetail.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+
+            if((map3value == null || "".equals(map3value)) && (map4value !=null && !"".equals(map4value))){
+                editDetail.setDetailId(PubFun.createMySqlMaxNoUseCache("cs_detail_id", 10, 8));
+                editDetail.setNowValue(map4value);
+                editDetailMapper.insertEditDetail(editDetail);
+            }else if((map4value == null || "".equals(map4value)) && (map3value !=null && !"".equals(map3value))){
+                editDetail.setDetailId(PubFun.createMySqlMaxNoUseCache("cs_detail_id", 10, 8));
+                editDetail.setOldValue(map3value);
+                editDetailMapper.insertEditDetail(editDetail);
+            }else if ((map3value !=null && !"".equals(map3value)) && (map4value !=null && !"".equals(map4value)) &&(!map3value.equals(map4value))) {
+                editDetail.setDetailId(PubFun.createMySqlMaxNoUseCache("cs_detail_id", 10, 8));
+                editDetail.setOldValue(map3value);
+                editDetail.setNowValue(map4value);
+                editDetailMapper.insertEditDetail(editDetail);
             }
 
         }
 
         Map map5 = JSONObject.parseObject(JSONObject.toJSONString(contactsPerson1), Map.class);
         Map map6 = JSONObject.parseObject(JSONObject.toJSONString(contactsPerson), Map.class);
-
         Iterator<String> iter3 = map6.keySet().iterator();
         while(iter3.hasNext()){
- //           EditDetail editDetail=new EditDetail();
- //           EditInfo editInfo=new EditInfo();
             String map5key=iter3.next();
+            if(!"updateBy".equals(map5key) && !"updateTime".equals(map5key) && !"changeTime".equals(map5key) && !"createBy".equals(map5key) && !"createTime".equals(map5key) && !"updatedBy".equals(map5key) && !"updatedTime".equals(map5key) && !"createdBy".equals(map5key) && !"createdTime".equals(map5key)) {
+                continue;
+            }
             Object map5value = map5.get(map5key);
             Object map6value = map6.get(map5key);
-            if(!"updatedTime".equals(map5key)) {
-                if ((map5value == null || map5value.equals("")) &&
-                        (map6value != null && !map6value.equals(""))) {
-                    editDetail.setItemKey("contactsPerson." + map5key);
-                    //   editDetail.setOldValue("");
-                    editDetail.setNowValue(String.valueOf(map6value));
-                    editDetail.setKeyDictType("demandAcceptVo");
-                    editDetail.setDetailId(PubFun.createMySqlMaxNoUseCache("cs_detail_id", 10, 8));
-                    editDetail.setEditId(editId);
-                    editDetail.setCreatedBy(SecurityUtils.getUsername());
-                    editDetail.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
-                    editDetail.setUpdatedBy(SecurityUtils.getUsername());
-                    editDetail.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
-                    editDetailMapper.insertEditDetail(editDetail);
-                } else if ((map6value == null || map6value.equals("")) &&
-                        (map5value != null && !map5value.equals(""))) {
-                    editDetail.setItemKey("contactsPerson." + map5key);
-                    editDetail.setOldValue(String.valueOf(map5value));
-                    //  editDetail.setNowValue("");
-                    editDetail.setKeyDictType("demandAcceptVo");
-                    editDetail.setDetailId(PubFun.createMySqlMaxNoUseCache("cs_detail_id", 10, 8));
-                    editDetail.setEditId(editId);
-                    editDetail.setCreatedBy(SecurityUtils.getUsername());
-                    editDetail.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
-                    editDetail.setUpdatedBy(SecurityUtils.getUsername());
-                    editDetail.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
-                    editDetailMapper.insertEditDetail(editDetail);
-                } else if ((map5value != null && !map5value.equals("")) &&
-                        (map6value != null && !map6value.equals("")) &&
-                        !map5value.equals(map6value)) {
-                    editDetail.setItemKey("contactsPerson." + map5key);
-                    editDetail.setOldValue(String.valueOf(map5value));
-                    editDetail.setNowValue(String.valueOf(map6value));
-                    editDetail.setKeyDictType("demandAcceptVo");
-                    editDetail.setDetailId(PubFun.createMySqlMaxNoUseCache("cs_detail_id", 10, 8));
-                    editDetail.setEditId(editId);
-                    editDetail.setCreatedBy(SecurityUtils.getUsername());
-                    editDetail.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
-                    editDetail.setUpdatedBy(SecurityUtils.getUsername());
-                    editDetail.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
-                    editDetailMapper.insertEditDetail(editDetail);
-                }
+
+            editDetail = new EditDetail();
+            editDetail.setItemKey("contactsPerson." + map5key);
+            editDetail.setKeyDictType("complaintAcceptVo");
+            editDetail.setEditId(editId);
+            editDetail.setCreatedBy(SecurityUtils.getUsername());
+            editDetail.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+            editDetail.setUpdatedBy(SecurityUtils.getUsername());
+            editDetail.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+
+            if ((map5value == null || map5value.equals("")) && (map6value != null && !map6value.equals(""))) {
+                editDetail.setDetailId(PubFun.createMySqlMaxNoUseCache("cs_detail_id", 10, 8));
+                editDetail.setNowValue(String.valueOf(map6value));
+                editDetailMapper.insertEditDetail(editDetail);
+            } else if ((map6value == null || map6value.equals("")) && (map5value != null && !map5value.equals(""))) {
+                editDetail.setDetailId(PubFun.createMySqlMaxNoUseCache("cs_detail_id", 10, 8));
+                editDetail.setOldValue(String.valueOf(map5value));
+                editDetailMapper.insertEditDetail(editDetail);
+            } else if ((map5value != null && !map5value.equals("")) && (map6value != null && !map6value.equals("")) && !map5value.equals(map6value)) {
+                editDetail.setDetailId(PubFun.createMySqlMaxNoUseCache("cs_detail_id", 10, 8));
+                editDetail.setOldValue(String.valueOf(map5value));
+                editDetail.setNowValue(String.valueOf(map6value));
+                editDetailMapper.insertEditDetail(editDetail);
             }
         }
 
         Map map7 = JSONObject.parseObject(JSONObject.toJSONString(complaintPerson1), Map.class);
         Map map8 = JSONObject.parseObject(JSONObject.toJSONString(complaintPerson), Map.class);
-
         Iterator<String> iter4 = map7.keySet().iterator();
         while(iter4.hasNext()){
             String map7key=iter4.next();
+            if(!"updateBy".equals(map7key) && !"updateTime".equals(map7key) && !"changeTime".equals(map7key) && !"createBy".equals(map7key) && !"createTime".equals(map7key) && !"updatedBy".equals(map7key) && !"updatedTime".equals(map7key) && !"createdBy".equals(map7key) && !"createdTime".equals(map7key)) {
+                continue;
+            }
             String map7value = String.valueOf(map7.get(map7key));
             String map8value = String.valueOf(map8.get(map7key));
-            if(!"updatedTime".equals(map7key)) {
-                if (!map7value.equals(map8value)) {
-                    editDetail.setKeyDictType("complaintAcceptVo");
-                    editDetail.setItemKey("complainPerson." + map7key);
-                    editDetail.setOldValue(map7value);
-                    editDetail.setNowValue(map8value);
-                    editDetail.setDetailId(PubFun.createMySqlMaxNoUseCache("cs_detail_id", 10, 8));
-                    editDetail.setEditId(editId);
-                    editDetail.setCreatedBy(SecurityUtils.getUsername());
-                    editDetail.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
-                    editDetail.setUpdatedBy(SecurityUtils.getUsername());
-                    editDetail.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
-                    editDetailMapper.insertEditDetail(editDetail);
-                }
+
+            editDetail = new EditDetail();
+            editDetail.setKeyDictType("complaintAcceptVo");
+            editDetail.setItemKey("complainPerson." + map7key);
+            editDetail.setEditId(editId);
+            editDetail.setCreatedBy(SecurityUtils.getUsername());
+            editDetail.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+            editDetail.setUpdatedBy(SecurityUtils.getUsername());
+            editDetail.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+
+            if((map7value == null || "".equals(map7value)) && (map8value != null && !"".equals(map8value))){
+                editDetail.setDetailId(PubFun.createMySqlMaxNoUseCache("cs_detail_id", 10, 8));
+                editDetail.setNowValue(map8value);
+                editDetailMapper.insertEditDetail(editDetail);
+            }else if((map8value == null || "".equals(map8value)) && (map7value != null && !"".equals(map7value))){
+                editDetail.setDetailId(PubFun.createMySqlMaxNoUseCache("cs_detail_id", 10, 8));
+                editDetail.setOldValue(map7value);
+                editDetailMapper.insertEditDetail(editDetail);
+            }else if ((map8value != null && !"".equals(map8value)) && (map7value != null && !"".equals(map7value)) && (!map7value.equals(map8value))) {
+                editDetail.setDetailId(PubFun.createMySqlMaxNoUseCache("cs_detail_id", 10, 8));
+                editDetail.setOldValue(map7value);
+                editDetail.setNowValue(map8value);
+                editDetailMapper.insertEditDetail(editDetail);
             }
         }
         if(complaintAcceptVo.getEditInfo()!=null){

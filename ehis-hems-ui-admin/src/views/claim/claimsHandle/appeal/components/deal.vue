@@ -24,7 +24,7 @@
         <el-row>
           <el-col :span="20" :xs="24">
             <el-form-item label="申诉类型：" prop="appealType">
-              <el-select :disabled="!initiateBtn" v-model="appealForm.appealType" class="item-width" size="mini" placeholder="申诉类型">
+              <el-select :disabled="!initiateBtn || !delBtn" v-model="appealForm.appealType" class="item-width" size="mini" placeholder="申诉类型">
                 <el-option v-for="dict in appealTypes" :key="dict.dictValue" :label="dict.dictLabel"  :value="dict.dictValue" />
               </el-select>
             </el-form-item>
@@ -34,12 +34,12 @@
         <el-row>
           <el-col :span="20" :xs="24">
             <el-form-item label="申诉原因：" prop="appealReason">
-              <el-select :disabled="!initiateBtn" v-model="appealForm.appealReason" class="item-width" size="mini" placeholder="申诉原因" @change="validSubType">
+              <el-select :disabled="!initiateBtn || !delBtn" v-model="appealForm.appealReason" class="item-width" size="mini" placeholder="申诉原因" @change="validSubType">
                 <el-option v-for="dict in appealReasons" :key="dict.dictValue" :label="dict.dictLabel"  :value="dict.dictValue" />
               </el-select>
             </el-form-item>
             <el-form-item prop="appealSubReason">
-              <el-select :disabled="!initiateBtn" v-model="appealForm.appealSubReason" class="item-width" size="mini" placeholder="申诉原因">
+              <el-select :disabled="!initiateBtn  || !delBtn" v-model="appealForm.appealSubReason" class="item-width" size="mini" placeholder="申诉原因">
                 <el-option v-for="dict in appealSubReasons" :key="dict.dictValue" :label="dict.dictLabel"  :value="dict.dictValue" />
               </el-select>
             </el-form-item>
@@ -49,7 +49,7 @@
         <el-row>
           <el-col :span="20">
             <el-form-item label="申诉意见说明：" prop="appealRemark">
-              <el-input :disabled="!initiateBtn" style="min-width: 520px" col="2" type="textarea" row="4" maxlength="1000"
+              <el-input :disabled="!initiateBtn  || !delBtn" style="min-width: 520px" col="2" type="textarea" row="4" maxlength="1000"
                         v-model="appealForm.appealRemark" clearable size="mini"
                         placeholder=""/>
             </el-form-item>
@@ -65,7 +65,7 @@
         <el-row>
           <el-col :span="20" :xs="24">
             <el-form-item label="初审决定：" prop="isAgree">
-              <el-select v-model="auditForm.isAgree" class="item-width" size="mini" placeholder="初审决定">
+              <el-select :disabled="!delBtn" v-model="auditForm.isAgree" class="item-width" size="mini" placeholder="初审决定">
                 <el-option v-for="dict in isAgrees" :key="dict.dictValue" :label="dict.dictLabel"  :value="dict.dictValue" />
               </el-select>
             </el-form-item>
@@ -75,7 +75,7 @@
         <el-row>
           <el-col :span="20">
             <el-form-item label="处理意见：" prop="conclusionRemark" key = "remark2">
-              <el-input style="min-width: 520px" col="2" type="textarea" row="4" maxlength="1000"
+              <el-input :disabled="!delBtn" style="min-width: 520px" col="2" type="textarea" row="4" maxlength="1000"
                         v-model="auditForm.conclusionRemark" clearable size="mini"  placeholder=""/>
             </el-form-item>
           </el-col>
@@ -127,7 +127,6 @@ let dictss = [{dictType: 'appeal_type'}, {dictType: 'appeal_reason'}, {dictType:
             if(appealStatus === '03') {
                 this.auditForm.isAgree = '01';
             }
-            console.log("data : ", data)
             if(appealStatus === '02') {
               this.auditBtn = false;
             }

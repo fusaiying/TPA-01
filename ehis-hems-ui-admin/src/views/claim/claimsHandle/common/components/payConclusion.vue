@@ -11,10 +11,10 @@
     <el-form ref="conclusionForm" :model="conclusionInfo" style="padding-bottom: 30px;margin-top:20px;margin-left: 5%"  label-width="130px" label-position="right" size="mini">
       <el-row>
         <el-col :span="8">
-          <span class="info_span_col to_right">账单金额：</span> <span class="info_span">{{ conclusionInfo.sumBillAmount }} {{ conclusionInfo.sumBillAmount == ''  ? '' : billCurency }}</span>
+          <span class="info_span_col to_right">账单金额：</span> <span class="info_span">{{ conclusionInfo.sumBillAmount }} {{ conclusionInfo.sumBillAmount == ''  ? '' : conclusionInfo.billCurrency }}</span>
         </el-col>
         <el-col :span="8">
-          <span class="info_span_col to_right">折扣金额：</span> <span class="info_span money_class">{{ conclusionInfo.sumHosDiscountAmount }} {{ conclusionInfo.sumHosDiscountAmount == ''  ? '' : billCurency}}</span>
+          <span class="info_span_col to_right">折扣金额：</span> <span class="info_span money_class">{{ conclusionInfo.sumHosDiscountAmount }} {{ conclusionInfo.sumHosDiscountAmount == ''  ? '' : conclusionInfo.billCurrency}}</span>
         </el-col>
         <el-col :span="8">
           <span class="info_span_col to_right">赔付金额：</span> <span class="info_span money_class">{{ conclusionInfo.calAmount }} {{ conclusionInfo.calAmount == '' || conclusionInfo.calAmount == null  ? '' : 'CNY' }}</span>
@@ -148,5 +148,9 @@ export default {
 ::v-deep .to_right {
   width: 130px;
   text-align: right;
+}
+
+.money_class{
+  color: #2CC38E
 }
 </style>

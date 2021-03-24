@@ -226,6 +226,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         AND t2.status = 'Y'
         AND t4.status = 'Y'
         AND t5.status = 'Y'
+        AND not EXISTS (select 1 from claim_case_appeal_task task where t.new_rpt_no = task.appeal_rpt_no and task.appeal_status = '03')
         <if test="createBy != null  and createBy != ''"> and t.create_by = #{createBy}</if>
         <if test="updateBy != null  and updateBy != ''"> and t.update_by = #{updateBy}</if>
         <if test="appealStatus != null  and appealStatus != ''"> and t.appeal_status = #{appealStatus}</if>

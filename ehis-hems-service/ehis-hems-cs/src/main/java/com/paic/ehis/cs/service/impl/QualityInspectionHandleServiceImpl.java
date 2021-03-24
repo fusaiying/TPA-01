@@ -223,7 +223,7 @@ public class QualityInspectionHandleServiceImpl implements IQualityInspectionHan
                     //合格
                     String result=CodeEnum.INSPECTION_RESULT_01.getCode();
                     for (int i = 0; i < inspectionItemVos.size(); i++) {
-                        if("02".equals(inspectionItemVos.get(i).getItemValue())){
+                        if("01".equals(inspectionItemVos.get(i).getItemValue())){
                             //不合格
                             result=CodeEnum.INSPECTION_RESULT_02.getCode();
                             break;

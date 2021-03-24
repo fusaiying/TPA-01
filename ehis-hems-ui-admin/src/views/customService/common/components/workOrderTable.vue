@@ -39,7 +39,7 @@
         <span>{{ scope.row.updateTime | changeDate}}</span>
       </template>
     </el-table-column>
-    <el-table-column prop="acceptBy" label="受理人" align="center"/>
+    <el-table-column prop="createBy" label="受理人" align="center"/>
     <el-table-column prop="updateBy" label="处理人" align="center"/>
     <el-table-column prop="vipFlag" label="VIP标识" align="center">
       <template slot-scope="scope" v-if="scope.row.vipFlag">

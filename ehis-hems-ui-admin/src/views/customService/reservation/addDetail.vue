@@ -932,13 +932,6 @@ export default {
       this.hospitalDialog = false
     },
     openHospitalDialog() {
-     /* if (this.searchForm.claimtype === null || this.searchForm.claimtype === '' || this.searchForm.claimtype === undefined) {
-        return this.$message.warning(
-          "请先选择理赔类型！"
-        );
-      } else {
-        this.hospitalDialog = true
-      }*/
       if (this.region.length<1){
         return this.$message.warning(
           "请先选择预约医院省市！"

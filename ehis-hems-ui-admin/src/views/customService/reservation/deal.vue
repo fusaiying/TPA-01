@@ -326,14 +326,16 @@
 
             </el-form-item>
           </el-col>
-          <el-col :span="8">
-            <el-form-item label="医疗机构：" prop="hospitalName">
-              <el-input v-model="sendForm.hospitalName" input-w class="item-width2" size="mini"
-                        placeholder="请输入"/>
-              <el-button type="primary" @click="openHospitalShow">详细信息</el-button>
-            </el-form-item>
-          </el-col>
-
+          <el-form ref="ruleForm" :model="ruleForm" :rules="rules" style="padding-bottom: 30px;" label-width="170px"
+                   label-position="right" size="mini">
+            <el-col :span="8">
+              <el-form-item label="医疗机构：" prop="hospitalName">
+                <el-input :disabled="isDisabled" v-model="sendForm.hospitalName" input-w class="item-width2" size="mini"
+                          placeholder="请输入"/>
+                <el-button type="primary" @click="openHospitalShow">详细信息</el-button>
+              </el-form-item>
+            </el-col>
+          </el-form>
         </el-row>
         <el-row>
           <el-col :span="8">
@@ -522,9 +524,9 @@
         <el-divider/>
         <el-row>
           <el-col :span="8">
-          <el-form-item label="处理时长：" prop="times">
-            <el-input v-model="submitForm.times" class="width-full" size="mini" disabled/>
-          </el-form-item>
+            <el-form-item label="处理时长：" prop="times">
+              <el-input v-model="submitForm.times" class="width-full" size="mini" disabled/>
+            </el-form-item>
           </el-col>
         </el-row>
         <el-row>
@@ -938,7 +940,7 @@
     },
     methods: {
 
-      hiddenShow:function () {
+      hiddenShow: function () {
         // 返回上级路由并关闭当前路由
         this.$store.state.tagsView.visitedViews.splice(this.$store.state.tagsView.visitedViews.findIndex(item => item.path === this.$route.path), 1)
         this.$router.push(this.$store.state.tagsView.visitedViews[this.$store.state.tagsView.visitedViews.length - 1].path)
@@ -1064,8 +1066,8 @@
         if (this.ids.length == 0) {
           this.$message.warning("先选中一行")
         }
-        // else {if(this.ids.length>2){
-        //   this.$message.warning("选中一行")
+          // else {if(this.ids.length>2){
+          //   this.$message.warning("选中一行")
         // }
         else {
           this.$router.push({

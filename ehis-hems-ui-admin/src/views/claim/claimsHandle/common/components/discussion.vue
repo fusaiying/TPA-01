@@ -26,31 +26,29 @@
                  label-position="right" size="mini"  :disabled="status === 'show' && (node==='sport' || node==='calculateReview')">
           <el-row>
             <el-col :span="8">
-              <span class="info_span_col to_right">账单金额：</span><span class="info_span">{{ conclusionInfo.sumBillAmount }} {{ conclusionInfo.sumBillAmount == ''  ? '' : billCurency }}</span>
+              <span class="info_span_col to_right">账单金额：</span> <span class="info_span">{{ conclusionInfo.sumBillAmount }} {{ conclusionInfo.sumBillAmount == ''  ? '' : billCurency }}</span>
             </el-col>
             <el-col :span="8">
-              <span class="info_span_col to_right">折扣金额：</span><span class="info_span money_class">{{ conclusionInfo.sumHosDiscountAmount }} {{ conclusionInfo.sumHosDiscountAmount == ''  ? '' : billCurency}}</span>
+              <span class="info_span_col to_right">折扣金额：</span> <span class="info_span money_class">{{ conclusionInfo.sumHosDiscountAmount }} {{ conclusionInfo.sumHosDiscountAmount == ''  ? '' : billCurency}}</span>
             </el-col>
             <el-col :span="8">
-              <span class="info_span_col to_right">赔付金额：</span><span class="info_span money_class">{{ conclusionInfo.calAmount }} {{ conclusionInfo.calAmount == '' || conclusionInfo.calAmount == null  ? '' : 'CNY' }}</span>
+              <span class="info_span_col to_right">赔付金额：</span> <span class="info_span money_class">{{ conclusionInfo.calAmount }} {{ conclusionInfo.calAmount == '' || conclusionInfo.calAmount == null  ? '' : 'CNY' }}</span>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="8">
-              <span class="info_span_col to_right">拒赔金额 ：</span><span class="info_span money_class">{{ conclusionInfo.refusedAmount }} {{ conclusionInfo.refusedAmount == '' || conclusionInfo.refusedAmount == null ? '' : 'CNY' }}</span>
+              <span class="info_span_col to_right">拒赔金额 ：</span> <span class="info_span money_class">{{ conclusionInfo.refusedAmount }} {{ conclusionInfo.refusedAmount == '' || conclusionInfo.refusedAmount == null ? '' : 'CNY' }}</span>
             </el-col>
             <el-col :span="8">
-              <span class="info_span_col to_right">追讨金额：</span><span class="info_span money_class">{{ conclusionInfo.debtAmount}} {{ conclusionInfo.debtAmount == '' || conclusionInfo.debtAmount == null ? '' : 'CNY' }}</span>
+              <span class="info_span_col to_right">追讨金额：</span> <span class="info_span money_class">{{ conclusionInfo.debtAmount}} {{ conclusionInfo.debtAmount == '' || conclusionInfo.debtAmount == null ? '' : 'CNY' }}</span>
             </el-col>
             <el-col :span="8" v-if="appealCase">
-              <span class="info_span_col to_right">本次支付差额：</span><span class="info_span money_class">{{ conclusionInfo.paymentDifference }} {{ conclusionInfo.paymentDifference == '' || conclusionInfo.paymentDifference == null  ? '' : 'CNY' }}</span>
+              <span class="info_span_col to_right">本次支付差额：</span> <span class="info_span money_class">{{ conclusionInfo.paymentDifference }} {{ conclusionInfo.paymentDifference == '' || conclusionInfo.paymentDifference == null  ? '' : 'CNY' }}</span>
             </el-col>
           </el-row>
 
-
           <el-row>
             <el-col :span="8">
-            <!--  <span class="info_span_col to_right">账单币种：</span>-->
               <el-form-item label="账单币种：" prop="billCurrency">
                 <el-select  size="mini" v-model="conclusionForm.billCurrency" class= "el-select item-width el-select--mini" placeholder="请选择" @change="billCurrencyChange">
                   <el-option  v-for="dict in currencys" :key="dict.dictValue"  :label="dict.dictValue+' - '+dict.dictLabel"  :value="dict.dictValue" />
@@ -58,10 +56,10 @@
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <span class="info_span_col to_right">汇率：</span><span class="info_span money_class">{{ conclusionInfo.exchangeRate}}</span>
+              <span class="info_span_col to_right">汇率：</span> <span class="info_span money_class">{{ conclusionInfo.exchangeRate}}</span>
             </el-col>
             <el-col :span="8">
-              <span class="info_span_col to_right">外币给付金额：</span><span class="info_span money_class">{{ conclusionInfo.payAmountForeign}}</span>
+              <span class="info_span_col to_right">外币给付金额：</span> <span class="info_span money_class">{{ conclusionInfo.payAmountForeign}}</span>
             </el-col>
           </el-row>
 

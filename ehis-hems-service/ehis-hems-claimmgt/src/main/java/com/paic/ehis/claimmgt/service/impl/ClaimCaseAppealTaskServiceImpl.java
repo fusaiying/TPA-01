@@ -162,6 +162,7 @@ public class ClaimCaseAppealTaskServiceImpl implements IClaimCaseAppealTaskServi
      */
     @Override
     public List<ClaimCaseAppealTaskVo> getAppealList(ClaimCaseAppealTaskVo vo) {
+        vo.setCreateBy(SecurityUtils.getUsername());
         return claimCaseAppealTaskMapper.getAppealList(vo);
     }
 

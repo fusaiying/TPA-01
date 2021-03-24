@@ -46,8 +46,7 @@ public class CustomServiceSpotCheckController extends BaseController {
     private IQualityInspectionItemService qualityInspectionItemService;
     @Autowired
     private IAttachmentInfoService attachmentInfoService;
-    @Autowired
-    private IDemandAcceptVoService iDemandAcceptVoService;
+
 
     /**
      * 发送质检工作池：数据来源

@@ -14,17 +14,11 @@ public class UserTakeOnDTO extends BaseEntity
     /** 用户名称 */
     private String userName;
     /** 角色ID */
-    private String roleId;
-    /** 承接用户 */
-    @Excel(name = "承接用户")
-    private String takeOnUserId;
+    private String roleCode;
+    /** 承接用户名称 */
+    private String takeOnUserName;
     /**角色名*/
     private String roleName;
-    /** 交接用户 */
-    @Excel(name = "交接用户")
-    private String userId;
-    /** 更新者 */
-    private String updateBy;
     /** 数据状态（Y-有效，N-无效） */
     @Excel(name = "数据状态", readConverterExp = "Y=-有效，N-无效")
     private String status;

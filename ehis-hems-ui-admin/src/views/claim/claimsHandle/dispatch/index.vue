@@ -126,7 +126,7 @@
           :header-cell-style="{color:'black',background:'#f8f8ff'}"
         >
           <el-table-column type="selection" width="50" align="center"/>
-          <el-table-column sortable prop="rptNo" label="报案号" sortable="custom"
+          <el-table-column prop="rptNo" label="报案号" sortable="custom"
                            :sort-orders="['ascending','descending',null]" width="150%" align="center"
                            show-overflow-tooltip/>
           <el-table-column prop="source" :formatter="getDeliverySourceName" label="交单来源" width="150%" align="center"

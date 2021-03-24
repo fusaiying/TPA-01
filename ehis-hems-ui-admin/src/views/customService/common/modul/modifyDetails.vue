@@ -34,8 +34,19 @@
                   <span>{{ selectDictLabel(cs_demandAcceptVo, scope.row.itemKey) }}</span>
                 </template>
               </el-table-column>
-              <el-table-column align="center" prop="nowValue" label="新值" show-overflow-tooltip/>
-              <el-table-column align="center" prop="oldValue" label="旧值" show-overflow-tooltip/>
+              <el-table-column align="center" prop="nowValue" label="新值" show-overflow-tooltip>
+                <template slot-scope="scope" v-if="scope.row.valueDictType">
+                  <span>{{ selectDictLabel((this.dictList.find(item => {return item.dictType === scope.row.valueDictType}).dictDate) , scope.row.nowValue) }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column align="center" prop="oldValue" label="旧值" show-overflow-tooltip>
+                <template slot-scope="scope" v-if="scope.row.valueDictType">
+                  <span>{{ selectDictLabel((this.dictList.find(item => {return item.dictType === scope.row.valueDictType }).dictDate) , scope.row.oldValue) }}</span>
+                </template>
+                <template slot-scope="scope" v-if="scope.row.valueDictType == null || scope.row.valueDictType == ''">
+                  <span>{{ scope.row.oldValue }}</span>
+                </template>
+              </el-table-column>
 
               <!--fixed="right"控制固定某一列-->
             </el-table>
@@ -59,10 +70,25 @@
 <script>
 import {modifyDetailsSearch} from '@/api/customService/demand'
 
+let dictss = [
+  {dictType: 'cs_sex'},
+  {dictType: 'cs_communication_language'},
+  {dictType: 'cs_channel'},
+  {dictType: 'cs_priority'},
+  {dictType: 'cs_organization'},
+  {dictType: 'cs_relation'},
+  {dictType: 'cs_consultation_type'},
+  {dictType: 'cs_whether_flag'},
+  {dictType: 'cs_whether_flag'},
+  {dictType: 'cs_whether_flag'},
+  {dictType: 'cs_identity'}
+]
+
 export default {
   name: 'modify',
   data() {
     return {
+      dictList: [],
       cs_eidt_reason: [],//修改原因
       totalCount: 0,
       workPoolData: [],
@@ -89,6 +115,13 @@ export default {
     this.getDicts("cs_demandAcceptVo").then(response => {
       this.cs_demandAcceptVo = response.data;
     });
+  },
+
+  async mounted() {
+    // 字典数据统一获取
+    await this.getDictsList(dictss).then(response => {
+      this.dictList = response.data
+    })
   },
 
   methods: {

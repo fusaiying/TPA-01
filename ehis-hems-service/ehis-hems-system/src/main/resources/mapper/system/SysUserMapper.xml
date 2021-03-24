@@ -51,6 +51,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<id     property="id"       column="user_id"      />
 		<result property="userName"     column="user_name"    />
 	</resultMap>
+
+	<resultMap id="RoleUserInfoDTOResult" type="com.paic.ehis.system.api.domain.dto.RoleUserInfoDTO">
+		<result property="userName"     column="user_name"      />
+		<result property="orangeCode"     column="organ_code"      />
+	</resultMap>
 	
 	<sql id="selectUserVo">
         select u.user_id, u.dept_id, u.user_name, u.nick_name, u.email, u.avatar, u.phonenumber, u.password, u.sex, u.status, u.del_flag, u.login_ip, u.login_date, u.create_by, u.create_time, u.remark, 
@@ -222,5 +227,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="delFlag != null and delFlag != ''"> and del_flag = #{delFlag}</if>
 			<if test="userName != null and userName != ''"> and user_name like concat('%', #{userName}, '%')</if>
 		</where>
+	</select>
+
+	<select id="getUsersByMenuId" parameterType="Long" resultMap="RoleUserInfoDTOResult">
+		select distinct a.user_name,a.organ_code from sys_user a,sys_user_role b,sys_role_menu c where a.user_id = b.user_id and b.role_id = c.role_id and c.menu_id = #{menuId}
 	</select>
 </mapper> 

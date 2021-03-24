@@ -23,61 +23,23 @@ public class ClaimUserTakeOn extends BaseEntity
 
     /** 交接用户 */
     @Excel(name = "交接用户")
-    private String userId;
+    private String userName;
 
     /** 承接用户 */
     @Excel(name = "承接用户")
-    private String takeOnUserId;
+    private String takeOnUserName;
 
-    private String userName;
 
     /** 数据状态（Y-有效，N-无效） */
     @Excel(name = "数据状态", readConverterExp = "Y=-有效，N-无效")
     private String status;
 
-    public void setTakeOnId(String takeOnId)
-    {
-        this.takeOnId = takeOnId;
-    }
-
-    public String getTakeOnId()
-    {
-        return takeOnId;
-    }
-    public void setUserId(String userId)
-    {
-        this.userId = userId;
-    }
-
-    public String getUserId()
-    {
-        return userId;
-    }
-    public void setTakeOnUserId(String takeOnUserId)
-    {
-        this.takeOnUserId = takeOnUserId;
-    }
-
-    public String getTakeOnUserId()
-    {
-        return takeOnUserId;
-    }
-    public void setStatus(String status)
-    {
-        this.status = status;
-    }
-
-    public String getStatus()
-    {
-        return status;
-    }
-
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
                 .append("takeOnId", getTakeOnId())
-                .append("userId", getUserId())
-                .append("takeOnUserId", getTakeOnUserId())
+                .append("userId", getUserName())
+                .append("takeOnUserId", getTakeOnUserName())
                 .append("status", getStatus())
                 .append("createBy", getCreateBy())
                 .append("createTime", getCreateTime())

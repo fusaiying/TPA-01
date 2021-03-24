@@ -14,9 +14,9 @@
             class="receive_table"
             :header-cell-style="{color:'black',background:'#f8f8ff'}">
 
-            <el-table-column prop="updateBy" label="操作用户"  align="center" show-overflow-tooltip />
+            <el-table-column prop="userName" label="操作用户"  align="center" show-overflow-tooltip />
             <el-table-column prop="roleName" label="角色"  align="center" show-overflow-tooltip />
-            <el-table-column prop="userName" label="承接人"   align="center" show-overflow-tooltip />
+            <el-table-column prop="takeOnUserName" label="承接人"   align="center" show-overflow-tooltip />
             <el-table-column prop="status" label="承接状态" :formatter="getStatusName"   align="center" show-overflow-tooltip />
             <el-table-column label="操作" align="center" style="padding-top: 0px;">
               <template slot-scope="scope">
@@ -118,7 +118,7 @@
           const params = {
             pageNum:this.pageInfo.currentPage,
             pageSize:this.pageInfo.pageSize,
-            orderByColumn:'create_time',
+            orderByColumn:'a.create_time',
             isAsc:'desc'
           };
           listInfo(params).then(response => {

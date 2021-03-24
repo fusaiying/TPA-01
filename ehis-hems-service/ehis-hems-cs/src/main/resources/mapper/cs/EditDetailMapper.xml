@@ -58,7 +58,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	i.edit_reason,
 	d.old_value,
 	d.now_value,
-	d.item_key
+	d.item_key,
+	d.value_dict_type
 FROM
 	edit_info i,
 	edit_detail d,

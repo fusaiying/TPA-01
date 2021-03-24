@@ -1176,7 +1176,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         record.setCreateBy(SecurityUtils.getUsername());
         record.setCreateTime(DateUtils.getNowDate());
         claimCaseRecordMapper.insertClaimCaseRecord(record);
-
+        claimCase.setPayStatus("01");
         return claimCaseMapper.updateClaimCaseNew(claimCase);
     }
 

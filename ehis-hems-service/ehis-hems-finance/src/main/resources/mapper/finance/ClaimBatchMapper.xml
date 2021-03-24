@@ -65,6 +65,7 @@ FROM
 	LEFT JOIN (select rpt_no,batch_no from claim_case t where t.case_status not in ('07', '08', '97', '98', '99' )) t1 on cc.batch_no = t1.batch_no
 WHERE
 	cb.claim_flag = '01'
+	and cb.claim_type='01'
 	AND cc.case_status IN ( '97','98','99' )
 	and t1.batch_no is null
 union
@@ -77,6 +78,7 @@ FROM
 	LEFT JOIN (select rpt_no,batch_no from claim_case t where t.case_status not in ('07', '08', '97', '98', '99' )) t1 on cc.batch_no = t1.batch_no
 WHERE
 	cb.claim_flag = '02'
+	and cb.claim_type='01'
 	AND cc.case_status IN ( '07', '08', '97', '98', '99' )
 	and t1.batch_no is null
     ) a,
@@ -156,6 +158,7 @@ FROM
 where 1=1
  and d.batch_no=a.batch_no
     AND b.batch_no = a.batch_no
+    AND a.claim_type = '01'
     AND c.batch_no = d.batch_no
     AND a.organ_code = #{organCode}
     AND c.bill_currency = 'CNY'
@@ -194,6 +197,7 @@ FROM
 	LEFT JOIN (select rpt_no,batch_no from claim_case t where t.case_status not in ('07', '08', '97', '98', '99' )) t1 on cc.batch_no = t1.batch_no
 WHERE
 	cb.claim_flag = '01'
+	AND cb.claim_type = '01'
 	AND cc.case_status IN ( '97','98','99' )
 	and t1.batch_no is null
 union
@@ -206,6 +210,7 @@ FROM
 	LEFT JOIN (select rpt_no,batch_no from claim_case t where t.case_status not in ('07', '08', '97', '98', '99' )) t1 on cc.batch_no = t1.batch_no
 WHERE
 	cb.claim_flag = '02'
+	AND cb.claim_type = '01'
 	AND cc.case_status IN ( '07', '08', '97', '98', '99' )
 	and t1.batch_no is null
     ) a,
@@ -286,6 +291,7 @@ FROM
 where 1=1
  and d.batch_no=a.batch_no
     AND b.batch_no = a.batch_no
+    AND a.claim_type = '01'
     AND c.batch_no = d.batch_no
     AND a.organ_code = #{organCode}
     AND c.bill_currency != 'CNY'

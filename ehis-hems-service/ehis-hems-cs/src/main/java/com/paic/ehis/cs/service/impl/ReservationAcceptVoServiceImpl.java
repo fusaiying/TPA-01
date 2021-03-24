@@ -394,6 +394,19 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
         complaintPerson.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
         personInfoMapper.updatePersonInfo(complaintPerson);
 
+        Map<String ,String> tDictType = new HashMap<String ,String>();
+        tDictType.put("sex","cs_sex");
+        tDictType.put("language","cs_communication_language");
+        tDictType.put("channelCode","cs_channel");
+        tDictType.put("priorityLevel","cs_priority");
+        tDictType.put("organCode","cs_organization");
+        tDictType.put("callRelationBy","cs_relation");
+        tDictType.put("visitType","cs_consultation_type");
+        tDictType.put("validCertificate","cs_whether_flag");
+        tDictType.put("settlementCard","cs_whether_flag");
+        tDictType.put("accidentFlag","cs_whether_flag");
+        tDictType.put("identity","cs_identity");
+
         //基本信息 修改明细
         EditDetail editDetail=new EditDetail();
         String editId=PubFun.createMySqlMaxNoUseCache("cs_edit_id",10,8);
@@ -403,7 +416,7 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
         Iterator<String> iter1 = map1.keySet().iterator();
         while(iter1.hasNext()){
             String map1key=iter1.next();
-            if(!"updateBy".equals(map1key) && !"updateTime".equals(map1key) && !"changeTime".equals(map1key) && !"createBy".equals(map1key) && !"createTime".equals(map1key)  && !"updatedBy".equals(map1key) && !"updatedTime".equals(map1key) && !"createdBy".equals(map1key) && !"createdTime".equals(map1key)) {
+            if("updateBy".equals(map1key) || "updateTime".equals(map1key) || "changeTime".equals(map1key) || "createBy".equals(map1key) || "createTime".equals(map1key)  || "updatedBy".equals(map1key) || "updatedTime".equals(map1key) || "createdBy".equals(map1key) || "createdTime".equals(map1key)) {
                 continue;
             }
             String map1value = String.valueOf(map1.get(map1key));
@@ -417,6 +430,7 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
             editDetail.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
             editDetail.setUpdatedBy(SecurityUtils.getUsername());
             editDetail.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+            editDetail.setValueDictType(tDictType.get(map1key));
 
             if((map1value == null || map1value.equals("")) && (map2value != null && !map2value.equals(""))){
                 keyList.add(map1key);
@@ -443,7 +457,7 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
         Iterator<String> iter2 = map3.keySet().iterator();
         while(iter2.hasNext()){
             String map3key=iter2.next();
-            if(!"updateBy".equals(map3key) && !"updateTime".equals(map3key) && !"changeTime".equals(map3key) && !"createBy".equals(map3key) && !"createTime".equals(map3key)  && !"updatedBy".equals(map3key) && !"updatedTime".equals(map3key) && !"createdBy".equals(map3key) && !"createdTime".equals(map3key)) {
+            if("updateBy".equals(map3key) || "updateTime".equals(map3key) || "changeTime".equals(map3key) || "createBy".equals(map3key) || "createTime".equals(map3key)  || "updatedBy".equals(map3key) || "updatedTime".equals(map3key) || "createdBy".equals(map3key) || "createdTime".equals(map3key)) {
                 continue;
             }
             String map3value = String.valueOf(map3.get(map3key));
@@ -457,6 +471,7 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
             editDetail.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
             editDetail.setUpdatedBy(SecurityUtils.getUsername());
             editDetail.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+            editDetail.setValueDictType(tDictType.get(map3key));
 
             if((map3value == null || "".equals(map3value)) && (map4value !=null && !"".equals(map4value))){
                 keyList.add(map3key);
@@ -483,7 +498,7 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
         Iterator<String> iter3 = map6.keySet().iterator();
         while(iter3.hasNext()){
             String map5key=iter3.next();
-            if(!"updateBy".equals(map5key) && !"updateTime".equals(map5key) && !"changeTime".equals(map5key) && !"createBy".equals(map5key) && !"createTime".equals(map5key)  && !"updatedBy".equals(map5key) && !"updatedTime".equals(map5key) && !"createdBy".equals(map5key) && !"createdTime".equals(map5key)) {
+            if("updateBy".equals(map5key) || "updateTime".equals(map5key) || "changeTime".equals(map5key) || "createBy".equals(map5key) || "createTime".equals(map5key)  || "updatedBy".equals(map5key) || "updatedTime".equals(map5key) || "createdBy".equals(map5key) || "createdTime".equals(map5key)) {
                 continue;
             }
             String map5value = String.valueOf(map5.get(map5key));
@@ -497,6 +512,7 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
             editDetail.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
             editDetail.setUpdatedBy(SecurityUtils.getUsername());
             editDetail.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+            editDetail.setValueDictType(tDictType.get(map5key));
 
             if ((map5value == null || map5value.equals("")) && (map6value != null && !map6value.equals(""))) {
                 keyList.add(map5key);
@@ -522,7 +538,7 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
         Iterator<String> iter4 = map7.keySet().iterator();
         while(iter4.hasNext()){
             String map7key=iter4.next();
-            if(!"updateBy".equals(map7key) && !"updateTime".equals(map7key) && !"changeTime".equals(map7key) && !"createBy".equals(map7key) && !"createTime".equals(map7key)  && !"updatedBy".equals(map7key) && !"updatedTime".equals(map7key) && !"createdBy".equals(map7key) && !"createdTime".equals(map7key)) {
+            if("updateBy".equals(map7key) || "updateTime".equals(map7key) || "changeTime".equals(map7key) || "createBy".equals(map7key) || "createTime".equals(map7key)  || "updatedBy".equals(map7key) || "updatedTime".equals(map7key) || "createdBy".equals(map7key) || "createdTime".equals(map7key)) {
                 continue;
             }
             String map7value = String.valueOf(map7.get(map7key));
@@ -536,6 +552,7 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
             editDetail.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
             editDetail.setUpdatedBy(SecurityUtils.getUsername());
             editDetail.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+            editDetail.setValueDictType(tDictType.get(map7key));
 
             if((map7value == null || "".equals(map7value)) && (map8value != null && !"".equals(map8value))){
                 keyList.add(map7key);

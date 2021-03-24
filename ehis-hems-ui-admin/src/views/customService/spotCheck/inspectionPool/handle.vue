@@ -11,6 +11,7 @@
       <demandAcceptInfo :routerParams="params" :acceptInfo="allList.acceptInfo" :isDisabled="isDisabled"/>
     </div>
     <div id="#anchor-22" v-if="this.params.businessType=='03'" class="personInfo_class" style="margin-top: 5px;">
+      <!--投诉-->
       <complaintAcceptInfo ref="complaintAcceptInfo" :routerParams="params" :acceptInfo="allList.acceptInfo"
                            :isAcceptInfo="isAcceptInfo"/>
     </div>

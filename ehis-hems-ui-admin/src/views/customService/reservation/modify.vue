@@ -394,11 +394,27 @@
               </el-date-picker>
             </el-form-item>
           </el-col>
-
+          <el-col :span="8">
+            <el-form-item label="医院地址：" prop="hospitalAddress">
+              <el-input v-model="workPoolData.hospitalAddress" class="item-width" clearable size="mini" placeholder="请输入"/>
+            </el-form-item>
+          </el-col>
         </el-row>
 
         <el-row>
-          <el-col :span="3">
+          <el-col :span="8">
+            <el-form-item label="预约医院：" style="white-space: nowrap;" :inline="true" prop="province">
+              <el-cascader
+                v-model="region"
+                :options="regions"
+                class="item-width"
+                placeholder="请选择"
+                :props="{ checkStrictly: true }"
+                @change="handleChange"
+                clearable/>
+            </el-form-item>
+          </el-col>
+         <!-- <el-col :span="3">
             <el-form-item label="预约医院：" style="white-space: nowrap;" :inline="true" prop="province">
               省份：<el-input v-model="workPoolData.province" style="width: 100px"  />
             </el-form-item>
@@ -407,17 +423,27 @@
             <el-form-item style="white-space: nowrap;" :inline="true" prop="city" >
               城市：<el-input v-model="workPoolData.city" style="width: 100px" />
             </el-form-item>
-          </el-col>
+          </el-col>-->
 
           <el-col :span="8">
             <el-form-item label="医疗机构：" prop="medicalInstitution">
-                <el-input v-model="workPoolData.medicalInstitution" size="mini" class="item-width2"/>
-                <el-button type="primary" @click="searchHandle" disabled>详细信息</el-button>
+                <!--<el-input v-model="workPoolData.medicalInstitution" size="mini" class="item-width2"/>
+                <el-button type="primary" @click="searchHandle">详细信息</el-button>-->
+              <el-col :span="16">
+                <!--  <el-input v-model="workPoolData.medicalInstitution" input-w clearable size="mini" placeholder="请输入"/>-->
+                <el-input v-model="workPoolData.hospitalName" input-w clearable size="mini" placeholder="请输入"/>
+              </el-col>
+              <el-button type="primary" @click="openHospitalDialog">查询</el-button>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="科室：" prop="department">
-              <el-input v-model="workPoolData.department" class="item-width"  size="mini" />
+<!--              <el-input v-model="workPoolData.department" class="item-width"  size="mini" />-->
+              <el-select v-if="departmentOption.length>0" v-model="workPoolData.department" class="item-width" placeholder="请选择">
+                <el-option v-for="item in departmentOption" :key="item" :label="item"
+                           :value="item"/>
+              </el-select>
+              <el-input v-else v-model="workPoolData.department" class="item-width" clearable size="mini" maxlength="20" placeholder="请输入"/>
             </el-form-item>
           </el-col>
 
@@ -610,6 +636,8 @@
       <el-button  type="primary" size="mini" @click="submit">保存</el-button>
       <el-button  type="primary"size="mini" @click="hiddenShow">关闭</el-button>
       </div>
+      <hospital :value="hospitalDialog" @closeHospital="closeHospital" :queryData="queryData"
+                @getPropData="getPropData"/>
     </el-card>
 
 
@@ -621,10 +649,11 @@
 
 <script>
   import moment from 'moment'
+  import Hospital from "../hospital/hospital";
   import {FlowLogSearch} from '@/api/customService/demand'
   import modifyDetails from "../common/modul/modifyDetails";
   import {demandListAndPublicPool,demandListAndPersonalPool,modifyReservationSubmit} from '@/api/customService/reservation'
-
+  import {getAddress} from "@/api/baseInfo/medicalManage";
   let dictss = [
     {dictType: 'cs_identity'},
     {dictType: 'cs_sex'},
@@ -642,7 +671,7 @@
   ]
   export default {
     components: {
-      modifyDetails,
+      modifyDetails,Hospital
     },
     filters: {
       changeDate: function (value) {
@@ -688,6 +717,13 @@
       };
 
       return {
+        queryData:{
+          region:[],
+          hospitalName:''
+        },
+        region:[],
+        regions:[],
+        hospitalDialog:false,
         workPoolDataFlag:false,
         ruleFormFlag:false,
         cs_relation:[],//关系
@@ -706,6 +742,7 @@
         dictList: [],
         //流转用
         flowLogData:[],
+        departmentOption:[],
         flowLogCount: 0,
         //服务项目
         workPoolData: {
@@ -713,9 +750,11 @@
             name:"",
           },
           medicalInstitution:"",
+          hospitalName:"",
           callRelationBy:"",
           workOrderNo:"",
           hospitalWorkCall:"",
+          hospitalAddress:"",
           channelCode:"",
           callCenterId:"",
           priorityLevel:"",
@@ -751,9 +790,6 @@
           editReason:"",
           editRemark:"",
 
-          complaintPerson:{
-            name:"",
-          }
         },
         totalCount: 0,
         //需要填入数据的部分
@@ -1027,6 +1063,8 @@
       this.cs_time_unit = this.dictList.find(item => {
         return item.dictType === 'cs_time_unit'
       }).dictDate
+      // 地址下拉选
+      this.getAddressData()
     },
     methods: {
       //超链接用
@@ -1149,13 +1187,45 @@
         // 返回上级路由并关闭当前路由
         this.$store.state.tagsView.visitedViews.splice(this.$store.state.tagsView.visitedViews.findIndex(item => item.path === this.$route.path), 1)
         this.$router.push(this.$store.state.tagsView.visitedViews[this.$store.state.tagsView.visitedViews.length - 1].path)
-
-
       },
-
-
-
-
+      openHospitalDialog() {
+        if (this.region.length<1){
+          return this.$message.warning(
+            "请先选择预约医院省市！"
+          )
+        }else {
+          this.queryData={
+            region:this.region,
+            hospitalName:this.workPoolData.hospitalName
+          }
+          this.hospitalDialog = true
+        }
+      },
+      handleChange(){
+        this.workPoolData.province = this.region[0]
+        this.workPoolData.city = this.region[1]
+      },
+      closeHospital() {
+        this.hospitalDialog = false
+      },
+      // 地址下拉选
+      getAddressData() {
+        getAddress().then(response => {
+          this.regions = response
+        }).catch(error => {
+        })
+      },
+      getPropData(val) {
+        if (val.deptList && val.deptList.length>0){
+          this.departmentOption=val.deptList
+        }else {
+          this.departmentOption=[]
+        }
+        this.workPoolData.medicalInstitution=val.hospitalCode
+        this.workPoolData.hospitalName=val.hospitalName
+        this.workPoolData.hospitalWorkCall=val.consultPhone
+        this.workPoolData.hospitalAddress=val.address
+      },
     }
   }
 </script>

@@ -45,10 +45,10 @@
       <el-row>
         <el-col :span="8">
           <span class="info_span_col to_right">赔付结论：</span><span
-          class="info_span">{{ conclusionInfo.payConclusion }}</span>
+          class="info_span">{{selectDictLabel(conclusionSelect, conclusionInfo.payConclusion) }}</span>
         </el-col>
         <el-col :span="8">
-          <span class="info_span_col to_right">拒赔原因：</span><span class="info_span">{{ conclusionInfo.refusedReason}}</span>
+          <span class="info_span_col to_right">拒赔原因：</span><span class="info_span">{{selectDictLabel(rejectedReasons, conclusionInfo.refusedReason)}}</span>
         </el-col>
       </el-row>
 
@@ -75,8 +75,9 @@
   </el-card>
 </template>
 <script>
-import {calInfo} from '@/api/handel/common/api'
+import {calInfo} from '@/api/handel/common/api';
 
+let dictss = [{dictType: 'conclusion'}, {dictType: 'rejected_reasons'}];
 export default {
   props: {
     fixInfo: Object,
@@ -100,12 +101,25 @@ export default {
         claimCheck:'',
       },
       //赔付结论信息 end
+      //赔付结论
+      conclusionSelect:[],
+      //拒赔原因
+      rejectedReasons :[],
 
     }
   },
-  mounted() {
+  async mounted() {
+    await this.getDictsList(dictss).then(response => {
+      this.dictList = response.data
+    })
+    this.conclusionSelect = this.dictList.find(item => {
+      return item.dictType === 'conclusion'
+    }).dictDate
+    this.rejectedReasons = this.dictList.find(item => {
+      return item.dictType === 'rejected_reasons'
+    }).dictDate
+
     if(this.fixInfo.isAppeal === '01') {
-     // console.log("this.fixInfo.rptNo.split('-')[0]", this.fixInfo.rptNo.split('-')[0])
       this.getCalInfo()
     }
   },
@@ -120,7 +134,7 @@ export default {
     getCalInfo() {
       calInfo(this.fixInfo.rptNo.split('-')[0]).then(res => {
         if (res.code === 200 && res.data) {
-          console.log("申述案件赔付结论 : ",res.data)
+         // console.log("申述案件赔付结论 : ",res.data)
           this.conclusionInfo = res.data;
         }
       })

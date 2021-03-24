@@ -265,7 +265,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="医院工作来电：" prop="hospitalWorkCall">
-              <el-input v-model="workPoolData.hospitalWorkCall" class="item-width"  size="mini" />
+              <el-input v-model="workPoolData.hospitalWorkCall" class="item-width" maxlength="20"  size="mini" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -953,13 +953,6 @@
           ],
           organCode: [
             {required: true, message: "出单机构不能为空", trigger: ["blur","change"]}
-          ],
-          hospitalWorkCall: [
-            {required: false,
-              message: "医院电话格式不正确",
-              pattern: /^[1][3|4|5|6|7|8|9][0-9]{9}$/,
-              trigger: ["blur","change"]
-            }
           ],
           'email': [
             {required: true, message: "Email不能为空", trigger: "blur"},

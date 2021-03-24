@@ -249,11 +249,11 @@
 
         </el-row>
         <el-row>
-          <!--<el-col :span="8">
+          <el-col :span="8">
             <el-form-item label="传真：" prop="contactsPerson.fax">
               <el-input v-model="workPoolData.contactsPerson.fax" class="item-width"  size="mini" />
             </el-form-item>
-          </el-col>-->
+          </el-col>
           <el-col :span="8">
             <el-form-item label="就诊类型：" prop="visitType">
 
@@ -326,7 +326,7 @@
           </el-col>
 
         </el-row>-->
-        <!--<el-row>
+        <el-row>
           <el-col :span="3">
             <el-form-item label="家庭电话：" style="white-space: nowrap;" :inline="true" prop="contactsPerson.homePhone1[0]">
               国家区号:+
@@ -383,7 +383,7 @@
                         maxlength="4"/>
             </el-form-item>
           </el-col>
-        </el-row>-->
+        </el-row>
         <el-row>
           <el-col :span="8">
             <el-form-item label="预约日期："  style="white-space: nowrap" prop="complaintTime">
@@ -487,11 +487,11 @@
               </el-select>
             </el-form-item>
           </el-col>
-          <!--<el-col :span="8">
+          <el-col :span="8">
             <el-form-item label="类似疾病症状最早发生时间：" prop="earliestTime">
               <el-input v-model="workPoolData.earliestTime" class="item-width"  size="mini" />
             </el-form-item>
-          </el-col>-->
+          </el-col>
 
         </el-row>
         <el-row>

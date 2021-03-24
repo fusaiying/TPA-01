@@ -260,8 +260,8 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
         personInfo2.setName(reservationAcceptVo.getContactsPerson().getName());
         personInfo2.setLanguage(reservationAcceptVo.getContactsPerson().getLanguage());
         personInfo2.setMobilePhone(reservationAcceptVo.getContactsPerson().getMobilePhone());
- //        personInfo2.setHomePhone(reservationAcceptVo.getContactsPerson().getHomePhone1()[0]+"-"+reservationAcceptVo.getContactsPerson().getHomePhone1()[1]+"-"+reservationAcceptVo.getContactsPerson().getHomePhone1()[2]+"-"+reservationAcceptVo.getContactsPerson().getHomePhone1()[3]);
- //       personInfo2.setWorkPhone(reservationAcceptVo.getContactsPerson().getWorkPhone1()[0]+"-"+reservationAcceptVo.getContactsPerson().getWorkPhone1()[1]+"-"+reservationAcceptVo.getContactsPerson().getWorkPhone1()[2]+"-"+reservationAcceptVo.getContactsPerson().getWorkPhone1()[3]);
+        personInfo2.setHomePhone("---");
+        personInfo2.setWorkPhone("---");
         personInfo2.setCreatedBy(SecurityUtils.getUsername());
         personInfo2.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         personInfo2.setUpdatedBy(SecurityUtils.getUsername());
@@ -342,7 +342,7 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
         acceptDetailInfo.setCompensationRatio(reservationAcceptVo.getCompensationRatio());
         acceptDetailInfo.setAppointmentDate(reservationAcceptVo.getAppointmentDate());
         acceptDetailInfo.setHospitalWorkCall(reservationAcceptVo.getHospitalWorkCall());
-        //acceptDetailInfo.setEarliestTime(reservationAcceptVo.getEarliestTime());
+        acceptDetailInfo.setEarliestTime(reservationAcceptVo.getEarliestTime());
         acceptDetailInfo.setFirstFlag(reservationAcceptVo.getFirstFlag());
         acceptDetailInfo.setClinicDate(reservationAcceptVo.getClinicDate());
         acceptDetailInfo.setClinicTime(reservationAcceptVo.getClinicTime());
@@ -362,7 +362,7 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
         acceptDetailInfoMapper.updateAcceptDetailInfo(acceptDetailInfo);
 
         //插入来电人
-        //callPerson.setFax(reservationAcceptVo.getCallPerson().getFax());
+        callPerson.setFax(reservationAcceptVo.getCallPerson().getFax());
         callPerson.setName(reservationAcceptVo.getCallPerson().getName());
         callPerson.setMobilePhone(reservationAcceptVo.getCallPerson().getMobilePhone());
         callPerson.setUpdatedBy(SecurityUtils.getUsername());
@@ -374,7 +374,7 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
         contactsPerson.setName(reservationAcceptVo.getContactsPerson().getName());
         contactsPerson.setLanguage(reservationAcceptVo.getContactsPerson().getLanguage());
         contactsPerson.setMobilePhone(reservationAcceptVo.getContactsPerson().getMobilePhone());
-        /*if(reservationAcceptVo.getContactsPerson().getHomePhone1().length <=3){
+        if(reservationAcceptVo.getContactsPerson().getHomePhone1().length <=3){
             contactsPerson.setHomePhone("---");
         }else{
             contactsPerson.setHomePhone(reservationAcceptVo.getContactsPerson().getHomePhone1()[0]+"-"+reservationAcceptVo.getContactsPerson().getHomePhone1()[1]+"-"+reservationAcceptVo.getContactsPerson().getHomePhone1()[2]+"-"+reservationAcceptVo.getContactsPerson().getHomePhone1()[3]);
@@ -383,7 +383,7 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
             contactsPerson.setWorkPhone("---");
         }else{
             contactsPerson.setWorkPhone(reservationAcceptVo.getContactsPerson().getWorkPhone1()[0]+"-"+reservationAcceptVo.getContactsPerson().getWorkPhone1()[1]+"-"+reservationAcceptVo.getContactsPerson().getWorkPhone1()[2]+"-"+reservationAcceptVo.getContactsPerson().getWorkPhone1()[3]);
-        }*/
+        }
         contactsPerson.setUpdatedBy(SecurityUtils.getUsername());
         contactsPerson.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
         personInfoMapper.updatePersonInfo(contactsPerson);

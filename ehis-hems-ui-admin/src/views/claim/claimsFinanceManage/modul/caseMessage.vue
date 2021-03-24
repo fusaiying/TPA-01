@@ -352,6 +352,7 @@
             } else {
               let data = {
                 batchNo: this.querys.batchNo,
+                organCode: this.organCode,
                 caseInfoList: this.tableData,
                 payment: this.baseForm
               }

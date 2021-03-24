@@ -1450,8 +1450,9 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
                 claimCaseDebt.setCreateTime(DateUtils.getNowDate());
                 claimCaseDebt.setUpdateBy(SecurityUtils.getUsername());
                 claimCaseDebt.setUpdateTime(DateUtils.getNowDate());
-                return claimCaseDebtMapper.insertClaimCaseDebt(claimCaseDebt);
+                claimCaseDebtMapper.insertClaimCaseDebt(claimCaseDebt);
             }
+            claimCase.setPayStatus("01");
             return claimCaseMapper.updateClaimCaseNew(claimCase);
         }
         claimCaseCheckDTO1.setUpdateBy(SecurityUtils.getUsername());

@@ -150,6 +150,7 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
                         list.get(i).setHolderPerson(setHolderPerson);
                     }
                 }
+               list.get(i).setCreateBy(list.get(i).getAcceptBy());
            /*     //受理人
                 String getAcceptUserId= list.get(i).getAcceptUserId();
                 if(StringUtils.isNotEmpty(getAcceptUserId)){

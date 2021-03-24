@@ -132,7 +132,8 @@ public class CustomServiceSpotCheckController extends BaseController {
         //操作后主流程状态
         param.put("status",CodeEnum.INSPECTION_STATE_01.getCode());
         //操作前主流程状态
-        param.put("linkCode",CodeEnum.ORDER_STATE_04.getCode());
+        param.put("linkCode",CodeEnum.ORDER_STATE_04.getCode());//已完成的可质检
+        param.put("linkCode1",CodeEnum.ORDER_STATE_05.getCode());//取消也可质检
         //操作按钮代码
         param.put("operateCode",CodeEnum.OPERATE_CODE_16.getCode());
         return toAjax(qualityInspectionAcceptService.insertAcceptVoBatch(sendIds,param));
@@ -416,7 +417,6 @@ public class CustomServiceSpotCheckController extends BaseController {
     public AjaxResult batchAcceptVo(@PathVariable("invalidDate") String invalidDate){
         try{
             qualityInspectionAcceptService.batchAcceptVo(invalidDate);
-
         }catch(RuntimeException e){
             return AjaxResult.error(e.getMessage());
         }

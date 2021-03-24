@@ -540,10 +540,6 @@
 
                 }
               }
-              console.log("********")
-              console.log(res)
-              console.log("***************888")
-
             }
           });
         }

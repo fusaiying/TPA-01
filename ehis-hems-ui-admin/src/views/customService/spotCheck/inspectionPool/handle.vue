@@ -470,6 +470,7 @@
           businessType: this.params.businessType,
           items: data.items
         }
+
         if (value=='02'){
           item.inspectionHandlerId=this.params.inspectionHandlerId
         }
@@ -492,17 +493,38 @@
             )
           }else {
            if (this.$refs.complaintProcessInfo.checkForm()){
-             insetQualityHandleInfo(item).then(res => {
-               if (res != null && res.code == '200') {
-                 this.$message({
-                   message: '提交成功！',
-                   type: 'success',
-                   center: true,
-                   showClose: true
+             if (value=='02'){
+               if (this.$refs.complaintAcceptInfo.checkForm() && this.$refs.complaintHandle.checkForm()){
+                 insetQualityHandleInfo(item).then(res => {
+                   if (res != null && res.code == '200') {
+                     this.$message({
+                       message: '提交成功！',
+                       type: 'success',
+                       center: true,
+                       showClose: true
+                     })
+                     this.closeHandle()
+                   }
                  })
-                 this.closeHandle()
+               }else {
+                 return this.$message.warning(
+                   "请录入必要信息！"
+                 )
                }
-             })
+             }else {
+               insetQualityHandleInfo(item).then(res => {
+                 if (res != null && res.code == '200') {
+                   this.$message({
+                     message: '提交成功！',
+                     type: 'success',
+                     center: true,
+                     showClose: true
+                   })
+                   this.closeHandle()
+                 }
+               })
+             }
+
            }
           }
         }else {

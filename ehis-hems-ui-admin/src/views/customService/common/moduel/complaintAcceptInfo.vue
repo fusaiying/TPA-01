@@ -3,7 +3,8 @@
     <div slot="header" class="clearfix">
       <span style="color: blue">{{getTitles(acceptForm.businessService)}}</span>
     </div>
-    <el-form ref="ruleForm" :model="acceptForm" style="padding-bottom: 30px;" label-width="170px"  :rules="acceptFormRule"
+    <el-form ref="ruleForm" :model="acceptForm" style="padding-bottom: 30px;" label-width="170px"
+             :rules="acceptFormRule"
              :disabled="isAcceptInfo || routerParams.status=='show'"
              label-position="right" size="mini">
       <el-row>
@@ -283,8 +284,8 @@
           channelCode: undefined,
           serviceItem: undefined,
           contactsPerson: {
-            workPhone1:['','','',''],
-            homePhone1:['','','','']
+            workPhone1: ['', '', '', ''],
+            homePhone1: ['', '', '', '']
           },
           callRelationBy: undefined,
           priorityLevel: undefined,
@@ -300,12 +301,12 @@
         },
         //字段校验
         acceptFormRule: {
-          channelCode: [{ required: true, message: '受理渠道不能为空', trigger: 'change' }],
-          priorityLevel: [{ required: true, message: '优先级不能为空', trigger: 'change' }],
-          name: [{ required: true, message: '联系人姓名不能为空', trigger: 'blur' }],
-          mobilePhone: [{ required: true, message: '来电号码不能为空', trigger: 'blur' }],
-          organCode: [{ required: true, message: '出单机构不能为空', trigger: 'change' }],
-          remark: [{ required: true, message: '业务内容不能为空', trigger: 'blur' }]
+          channelCode: [{required: true, message: '受理渠道不能为空', trigger: 'change'}],
+          priorityLevel: [{required: true, message: '优先级不能为空', trigger: 'change'}],
+          name: [{required: true, message: '联系人姓名不能为空', trigger: 'blur'}],
+          mobilePhone: [{required: true, message: '来电号码不能为空', trigger: 'blur'}],
+          organCode: [{required: true, message: '出单机构不能为空', trigger: 'change'}],
+          remark: [{required: true, message: '业务内容不能为空', trigger: 'blur'}]
         }
       }
     },
@@ -349,6 +350,15 @@
         if (value != null && value != '' && value != undefined) {
           return this.selectDictLabel(this.businessTypeOptions, value.split('-')[0]) + '-' + this.selectDictLabel(this.serviceItemOptions, value.split('-')[1])
         }
+      },
+      checkForm() {
+        this.$refs.ruleForm.validate((valid) => {
+          if (valid) {
+            return true
+          }else {
+            return false
+          }
+        })
       }
     }
   }

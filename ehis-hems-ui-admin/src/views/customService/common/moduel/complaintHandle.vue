@@ -484,6 +484,15 @@
 
         })
       },
+      checkForm() {
+        this.$refs.ruleForm.validate((valid) => {
+          if (valid) {
+            return true
+          }else {
+            return false
+          }
+        })
+      }
     }
   }
 </script>

@@ -484,7 +484,7 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         Iterator<String> iter = map1.keySet().iterator();
         while (iter.hasNext()) {
             String key = iter.next();
-            if(!"updateBy".equals(key) && !"updateTime".equals(key) && !"changeTime".equals(key) && !"createBy".equals(key) && !"createTime".equals(key)){
+            if(!"updateBy".equals(key) && !"updateTime".equals(key) && !"changeTime".equals(key) && !"createBy".equals(key) && !"createTime".equals(key) && !"updatedBy".equals(key) && !"updatedTime".equals(key) && !"createdBy".equals(key) && !"createdTime".equals(key)){
                 keyList.add(key);
             }
         }
@@ -492,7 +492,7 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         while (iter2.hasNext()) {
             String key = iter2.next();
             if (!keyList.contains(key)) {
-                if(!"updateBy".equals(key) && !"updateTime".equals(key) && !"changeTime".equals(key) && !"createBy".equals(key) && !"createTime".equals(key)){
+                if(!"updateBy".equals(key) && !"updateTime".equals(key) && !"changeTime".equals(key) && !"createBy".equals(key) && !"createTime".equals(key) && !"updatedBy".equals(key) && !"updatedTime".equals(key) && !"createdBy".equals(key) && !"createdTime".equals(key)){
                     keyList.add(key);
                 }
             }
@@ -539,14 +539,14 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         Iterator<String> iter3 = map3.keySet().iterator();
         while (iter3.hasNext()) {
             String key = iter3.next();
-            if(!"updateBy".equals(key) && !"updateTime".equals(key) && !"changeTime".equals(key) && !"createBy".equals(key) && !"createTime".equals(key)){
+            if(!"updateBy".equals(key) && !"updateTime".equals(key) && !"changeTime".equals(key) && !"createBy".equals(key) && !"createTime".equals(key) && !"updatedBy".equals(key) && !"updatedTime".equals(key) && !"createdBy".equals(key) && !"createdTime".equals(key)){
                 keyList1.add(key);
             }
         }
         Iterator<String> iter4 = map4.keySet().iterator();
         while (iter4.hasNext()) {
             String key = iter4.next();
-            if(!"updateBy".equals(key) && !"updateTime".equals(key) && !"changeTime".equals(key) && !"createBy".equals(key) && !"createTime".equals(key)){
+            if(!"updateBy".equals(key) && !"updateTime".equals(key) && !"changeTime".equals(key) && !"createBy".equals(key) && !"createTime".equals(key) && !"updatedBy".equals(key) && !"updatedTime".equals(key) && !"createdBy".equals(key) && !"createdTime".equals(key)){
                 if (!keyList1.contains(key)) {
                     keyList1.add(key);
                 }
@@ -590,14 +590,14 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         Iterator<String> iter5 = map5.keySet().iterator();
         while (iter5.hasNext()) {
             String key = iter5.next();
-            if(!"updateBy".equals(key) && !"updateTime".equals(key) && !"changeTime".equals(key) && !"createBy".equals(key) && !"createTime".equals(key)){
+            if(!"updateBy".equals(key) && !"updateTime".equals(key) && !"changeTime".equals(key) && !"createBy".equals(key) && !"createTime".equals(key) && !"updatedBy".equals(key) && !"updatedTime".equals(key) && !"createdBy".equals(key) && !"createdTime".equals(key)){
                 keyList2.add(key);
             }
         }
         Iterator<String> iter6 = map6.keySet().iterator();
         while (iter6.hasNext()) {
             String key = iter6.next();
-            if(!"updateBy".equals(key) && !"updateTime".equals(key) && !"changeTime".equals(key) && !"createBy".equals(key) && !"createTime".equals(key)){
+            if(!"updateBy".equals(key) && !"updateTime".equals(key) && !"changeTime".equals(key) && !"createBy".equals(key) && !"createTime".equals(key) && !"updatedBy".equals(key) && !"updatedTime".equals(key) && !"createdBy".equals(key) && !"createdTime".equals(key)){
                 if (!keyList2.contains(key)) {
                     keyList2.add(key);
                 }

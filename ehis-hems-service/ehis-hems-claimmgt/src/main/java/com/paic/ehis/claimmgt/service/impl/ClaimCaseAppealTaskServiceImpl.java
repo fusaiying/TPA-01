@@ -101,7 +101,6 @@ public class ClaimCaseAppealTaskServiceImpl implements IClaimCaseAppealTaskServi
 
         // 进入申诉初审状态
         if(bean.getDealType().equalsIgnoreCase("initiate")) {
-            bean.setApplyOperator(username);
             bean.setAppealStatus("02");
         }
         //初审确认  同意 / 不同意  （申诉完成 / 申诉退回）
@@ -124,8 +123,16 @@ public class ClaimCaseAppealTaskServiceImpl implements IClaimCaseAppealTaskServi
                bean.setAppealStatus("04");
            }
         }
-        Long orgRecordId = this.updateHistoryFlag(bean);
-        this.insertRecordLog(bean,orgRecordId);
+        //如果是 发起 或者 审核 则添加轨迹记录
+        if(!bean.getDealType().equalsIgnoreCase("initPersonPool")) {
+            Long orgRecordId = this.updateHistoryFlag(bean);
+            this.insertRecordLog(bean,orgRecordId);
+        }
+        // 获取案件，进入个人池子
+        if(bean.getDealType().equalsIgnoreCase("initPersonPool")) {
+            bean.setApplyOperator(username);
+        }
+
         claimCaseAppealTaskMapper.updateClaimCaseAppealTask(bean);
         return bean;
     }
@@ -162,7 +169,17 @@ public class ClaimCaseAppealTaskServiceImpl implements IClaimCaseAppealTaskServi
      */
     @Override
     public List<ClaimCaseAppealTaskVo> getAppealList(ClaimCaseAppealTaskVo vo) {
-        vo.setCreateBy(SecurityUtils.getUsername());
+
+        String pageType = vo.getPageType();
+        if(StringUtils.isNotBlank(pageType)) {
+            // 申诉发起
+            if(pageType.equals("01") || pageType.equals("02")) {
+                vo.setCreateBy(SecurityUtils.getUsername());
+            }
+            if(pageType.equals("03") || pageType.equals("04")) {
+                vo.setApplyOperator(SecurityUtils.getUsername());
+            }
+        }
         return claimCaseAppealTaskMapper.getAppealList(vo);
     }
 

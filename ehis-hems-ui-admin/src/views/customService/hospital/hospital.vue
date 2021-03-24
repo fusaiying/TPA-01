@@ -10,10 +10,27 @@
       <span style="font-size: 20px">医院信息</span>
     </div>
     <el-card style="border: 0; margin-top: -20px; margin-bottom: 30px">
-      <div style="float: right;height: 50px">
-        <el-button size="mini" type="primary" @click="confirmHandle">确认</el-button>
-        <el-button size="mini" type="primary" @click="changeDialogVisable">返回</el-button>
-      </div>
+      <el-form ref="searchForm" :model="searchForm" style="padding-bottom: 30px;" label-width="100px"
+               label-position="right" size="mini">
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="医院名称：" prop="chname1">
+              <el-input v-model="searchForm.chname1" class="item-width" clearable size="mini" placeholder="请输入"/>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <div style="text-align: right; margin-right: 10px;">
+          <el-button
+            size="mini"
+            type="primary"
+            @click="
+            searchHandle()"
+          >查询
+          </el-button>
+          <el-button size="mini" type="primary" @click="confirmHandle">确认</el-button>
+          <el-button size="mini" type="primary" @click="changeDialogVisable">返回</el-button>
+        </div>
+      </el-form>
       <el-table
         :data="tableData"
         :header-cell-style="{color:'black',background:'#f8f8ff'}"
@@ -81,7 +98,6 @@
       queryData: function (newValue) {
         let data = {
           hospitalCode:'',
-          hospitalName:newValue.hospitalName,
           province:newValue.region[0],
           city:'',
         }
@@ -101,8 +117,6 @@
               this.tableData.push(option)
             }
           })
-
-
         }
 
       },
@@ -116,9 +130,6 @@
         tableData: [],
         searchForm: {
           chname1: '',
-          isNetworkHospital: '',
-          pageNum: 1,
-          pageSize: 10
         },
       }
     },
@@ -133,6 +144,32 @@
       changeDialogVisable() {
         this.$emit('closeHospital')
       },
+      searchHandle() {
+        let data = {
+          hospitalCode:'',
+          hospitalName:this.searchForm.chname1,
+          province:this.queryData.region[0],
+          city:'',
+        }
+        if (this.queryData.region.length>1){
+          data.city=this.queryData.region[1]
+        }
+        if (this.queryData.region.length>0){
+          let option={
+            isInput:true,
+            hospitalName:'',
+            hospitalCode:'9999'
+          }
+          getHospitalInfo (data).then(res => {
+            if (res != null && res !== '') {
+              this.tableData = res.rows
+              this.totalCount = res.total
+              this.tableData.push(option)
+            }
+          })
+        }
+      },
+
       //确人按钮
       confirmHandle() {
         //关闭清空

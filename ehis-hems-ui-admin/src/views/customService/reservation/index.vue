@@ -108,9 +108,9 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="预约日期：" prop="appointmentTime">
+            <el-form-item label="预约日期：" prop="complaintTime">
               <el-date-picker
-                v-model="sendForm.appointmentTime"
+                v-model="sendForm.complaintTime"
                 class="item-width"
                 type="daterange"
                 range-separator="~"
@@ -195,7 +195,7 @@
           </el-table-column>
           <el-table-column prop="complaintTime" label="预约日期" align="center" show-overflow-tooltip>
             <template slot-scope="scope">
-              <span>{{ scope.row.acceptTime | changeDate }}</span>
+              <span>{{ scope.row.complaintTime | changeDate }}</span>
             </template>
           </el-table-column>
           <el-table-column align="center" prop="medicalInstitution" label="预约医院" show-overflow-tooltip/>
@@ -280,7 +280,7 @@
           </el-table-column>
           <el-table-column prop="complaintTime" label="预约日期" align="center" show-overflow-tooltip>
             <template slot-scope="scope">
-              <span>{{ scope.row.modifyTime | changeDate }}</span>
+              <span>{{ scope.row.complaintTime | changeDate }}</span>
             </template>
           </el-table-column>
           <el-table-column align="center" prop="medicalInstitution" label="预约医院" show-overflow-tooltip/>
@@ -595,9 +595,9 @@ export default {
         this.$set(queryParams,'acceptTimeStart',this.sendForm.acceptorTime[0]);
         this.$set(queryParams,'acceptTimeEnd',this.sendForm.acceptorTime[1]);
       }
-      if(this.sendForm.appointmentTime){
-        this.$set(queryParams,'appointmentTimeStart',this.sendForm.appointmentTime[0]);
-        this.$set(queryParams,'appointmentTimeEnd',this.sendForm.appointmentTime[1]);
+      if(this.sendForm.complaintTime){
+        this.$set(queryParams,'complaintTimeStart',this.sendForm.complaintTime[0]);
+        this.$set(queryParams,'complaintTimeEnd',this.sendForm.complaintTime[1]);
       }
 
       demandListAndPublicPool(queryParams).then(res => {

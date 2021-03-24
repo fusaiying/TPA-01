@@ -197,7 +197,7 @@
 
 
     <el-card class="box-card" style="margin-top: 10px;">
-      <el-form ref="ruleForm" :model="ruleForm" :rules="rules" style="padding-bottom: 30px;" label-width="200px"
+      <el-form ref="ruleForm" :model="ruleForm" :rules="rules" style="padding-bottom: 30px;" label-width="150px"
                :disabled="isDisabled"
                label-position="right" size="mini">
 
@@ -312,15 +312,15 @@
         </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="预约日期：" prop="appointmentDate">
-              <el-input v-model="ruleForm.appointmentDate" class="item-width" readonly size="mini" placeholder="请输入"/>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="预约时间：" prop="complaintTime">
+            <el-form-item label="预约日期：" prop="complaintTime">
               <el-input v-model="ruleForm.complaintTime" class="item-width" readonly size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
+          <!--<el-col :span="8">
+            <el-form-item label="预约时间：" prop="complaintTime">
+              <el-input v-model="ruleForm.complaintTime" class="item-width" readonly size="mini" placeholder="请输入"/>
+            </el-form-item>
+          </el-col>-->
           <el-col :span="8">
             <el-form-item label="医疗机构：" prop="email">
               <el-col :span="14">

@@ -316,7 +316,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="预约时间：" prop="complaintTime">
+            <el-form-item label="预约日期：" prop="complaintTime">
               <!--<el-input v-model="sendForm.complaintTime" class="item-width" size="mini" placeholder="请输入"/>-->
               <el-date-picker class="item-width"
                               v-model="sendForm.complaintTime"

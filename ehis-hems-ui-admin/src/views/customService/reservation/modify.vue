@@ -386,7 +386,7 @@
         </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="预约时间："  style="white-space: nowrap" prop="complaintTime">
+            <el-form-item label="预约日期："  style="white-space: nowrap" prop="complaintTime">
               <el-date-picker class="item-width"
                 v-model="workPoolData.complaintTime"
                 type="datetime"
@@ -431,7 +431,7 @@
                 <el-button type="primary" @click="searchHandle">详细信息</el-button>-->
               <el-col :span="16">
                 <!--  <el-input v-model="workPoolData.medicalInstitution" input-w clearable size="mini" placeholder="请输入"/>-->
-                <el-input v-model="workPoolData.hospitalName" input-w clearable size="mini" placeholder="请输入"/>
+                <el-input v-model="workPoolData.hospitalName" input-w clearable size="mini" disabled/>
               </el-col>
               <el-button type="primary" @click="openHospitalDialog">查询</el-button>
             </el-form-item>
@@ -654,6 +654,7 @@
   import modifyDetails from "../common/modul/modifyDetails";
   import {demandListAndPublicPool,demandListAndPersonalPool,modifyReservationSubmit} from '@/api/customService/reservation'
   import {getAddress} from "@/api/baseInfo/medicalManage";
+  import {getHospitalInfo} from '@/api/customService/reservation'
   let dictss = [
     {dictType: 'cs_identity'},
     {dictType: 'cs_sex'},
@@ -684,7 +685,7 @@
       const checkComplaintTime= (rule, value, callback) => {
         let tDate = new Date();
         if(tDate > value){
-          callback(new Error("预约时间不能早于当前日期"));
+          callback(new Error("预约日期不能早于当前日期"));
         }else{
           callback();
         }
@@ -926,7 +927,7 @@
           medicalInstitution: [
             {required: true, message: "医疗机构不能为空", trigger: ["blur","change"]}
           ],
-          appointmentDate: [
+          complaintTime: [
             {required: true, message: "预约时间不能为空", trigger: ["blur","change"]},
             {required: true, validator: checkComplaintTime, trigger: "blur"}
           ],
@@ -1146,6 +1147,26 @@
                 this.$set(this.workPoolData, `a`, arr[0]);
                 this.$set(this.workPoolData, `b`, arr[1]);
               }
+              let queryData={
+                hospitalCode:res.rows[0].medicalInstitution,
+                hospitalName:res.rows[0].hospitalName,
+                province:res.rows[0].province,
+                city:res.rows[0].city,
+              }
+            if (res.rows[0].medicalInstitution!='9999'){
+              getHospitalInfo (queryData).then(res => {
+                if (res != null && res !== '') {
+                  if (res.rows[0].deptList && res.rows[0].deptList.length>0){
+                    this.departmentOption=res.rows[0].deptList
+                  }else {
+                    this.departmentOption=[]
+                  }
+                }
+              })
+            }else {
+              this.departmentOption=[]
+            }
+
               if (res.rows.length <= 0) {
                 return this.$message.warning(
                   "未查询到数据！"

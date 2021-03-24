@@ -392,6 +392,7 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
         tDictType.put("settlementCard","cs_whether_flag");
         tDictType.put("accidentFlag","cs_whether_flag");
         tDictType.put("identity","cs_identity");
+        tDictType.put("symptomTimes","cs_time_unit");
 
         List<String> keyList = new ArrayList<>();
         Iterator<String> iter = map1.keySet().iterator();
@@ -426,6 +427,7 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
                 editDetail.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
                 editDetail.setUpdatedBy(SecurityUtils.getUsername());
                 editDetail.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+                editDetail.setValueDictType(tDictType.get(mapkey));
 
                 if ((map1value == null || map1value.equals("")) && (map2value != null && !map2value.equals(""))) {
                     editDetail.setDetailId(PubFun.createMySqlMaxNoUseCache("cs_detail_id", 10, 8));
@@ -464,6 +466,7 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
             editDetail.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
             editDetail.setUpdatedBy(SecurityUtils.getUsername());
             editDetail.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+            editDetail.setValueDictType(tDictType.get(map3key));
 
             if((map3value == null || "".equals(map3value)) && (map4value !=null && !"".equals(map4value))){
                 editDetail.setDetailId(PubFun.createMySqlMaxNoUseCache("cs_detail_id", 10, 8));
@@ -501,6 +504,7 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
             editDetail.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
             editDetail.setUpdatedBy(SecurityUtils.getUsername());
             editDetail.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+            editDetail.setValueDictType(tDictType.get(map5key));
 
             if ((map5value == null || map5value.equals("")) && (map6value != null && !map6value.equals(""))) {
                 editDetail.setDetailId(PubFun.createMySqlMaxNoUseCache("cs_detail_id", 10, 8));
@@ -537,6 +541,7 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
             editDetail.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
             editDetail.setUpdatedBy(SecurityUtils.getUsername());
             editDetail.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+            editDetail.setValueDictType(tDictType.get(map7key));
 
             if((map7value == null || "".equals(map7value)) && (map8value != null && !"".equals(map8value))){
                 editDetail.setDetailId(PubFun.createMySqlMaxNoUseCache("cs_detail_id", 10, 8));

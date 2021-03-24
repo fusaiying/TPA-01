@@ -35,16 +35,13 @@
                 </template>
               </el-table-column>
               <el-table-column align="center" prop="nowValue" label="新值" show-overflow-tooltip>
-                <template slot-scope="scope" v-if="scope.row.valueDictType">
-                  <span>{{ selectDictLabel((this.dictList.find(item => {return item.dictType === scope.row.valueDictType}).dictDate) , scope.row.nowValue) }}</span>
+                <template slot-scope="scope">
+                  <span>{{ showNowValue(scope.row) }}</span>
                 </template>
               </el-table-column>
               <el-table-column align="center" prop="oldValue" label="旧值" show-overflow-tooltip>
-                <template slot-scope="scope" v-if="scope.row.valueDictType">
-                  <span>{{ selectDictLabel((this.dictList.find(item => {return item.dictType === scope.row.valueDictType }).dictDate) , scope.row.oldValue) }}</span>
-                </template>
-                <template slot-scope="scope" v-if="scope.row.valueDictType == null || scope.row.valueDictType == ''">
-                  <span>{{ scope.row.oldValue }}</span>
+                <template slot-scope="scope">
+                  <span>{{ showOldValue(scope.row) }}</span>
                 </template>
               </el-table-column>
 
@@ -81,7 +78,8 @@ let dictss = [
   {dictType: 'cs_whether_flag'},
   {dictType: 'cs_whether_flag'},
   {dictType: 'cs_whether_flag'},
-  {dictType: 'cs_identity'}
+  {dictType: 'cs_identity'},
+  {dictType: 'cs_time_unit'},
 ]
 
 export default {
@@ -159,6 +157,33 @@ export default {
       this.dialogVisable = true;
       this.searchHandle();
     },
+    showNowValue(row) {
+      if (row.valueDictType != null && row.valueDictType != '' && row.valueDictType != undefined) {
+        //本次疾病/症状起病时 需要特殊处理
+        if(row.valueDictType == "cs_time_unit"){
+          let tNowValueList = row.nowValue.splice("-");
+          return tNowValueList[0] + this.selectDictLabel((this.dictList.find(item => {return item.dictType === row.valueDictType}).dictDate), tNowValueList[1]);
+        }else{
+          return this.selectDictLabel((this.dictList.find(item => {return item.dictType === row.valueDictType}).dictDate), row.nowValue);
+        }
+      }else{
+        return row.nowValue;
+      }
+    },
+
+    showOldValue(row) {
+      if (row.valueDictType != null && row.valueDictType != '' && row.valueDictType != undefined) {
+        //本次疾病/症状起病时 需要特殊处理
+        if(row.valueDictType == "cs_time_unit"){
+          let tNowValueList = row.nowValue.splice("-");
+          return tNowValueList[0] + this.selectDictLabel((this.dictList.find(item => {return item.dictType === row.valueDictType}).dictDate), tNowValueList[1]);
+        }else {
+          return this.selectDictLabel((this.dictList.find(item => {return item.dictType === row.valueDictType}).dictDate), row.nowValue);
+        }
+      }else{
+        return row.nowValue;
+      }
+    }
   }
 }
 </script>

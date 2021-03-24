@@ -406,6 +406,7 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
         tDictType.put("settlementCard","cs_whether_flag");
         tDictType.put("accidentFlag","cs_whether_flag");
         tDictType.put("identity","cs_identity");
+        tDictType.put("symptomTimes","cs_time_unit");
 
         //基本信息 修改明细
         EditDetail editDetail=new EditDetail();

@@ -25,6 +25,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="holderPersonId" column="holder_no"/>
         <result property="holderName" column="holder_name"/>
         <result property="acceptBy" column="accept_by"/>
+        <result property="createBy" column="create_by"/>
         <result property="modifyUserId" column="modify_by"/>
         <result property="updateBy" column="update_by"/>
         <result property="updateTime" column="update_time"/>
@@ -59,7 +60,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <sql id="selectSendVo">
         select woa.work_order_no,woa.business_type,adi.channel_code,adi.item_code,concat(woa.business_type,'-', adi.item_code) as business_service,
-            woa.policy_no,woa.policy_item_no,woa.risk_code,woa.insured_no,woa.insured_name,woa.holder_no,woa.holder_name,woa.accept_by,woa.accept_time,woa.modify_by,woa.modify_time,woa.update_by,woa.update_time,woa.organ_code,woa.vip_flag,adi.priority_level,woa.status
+            woa.policy_no,woa.policy_item_no,woa.risk_code,woa.insured_no,woa.insured_name,woa.holder_no,woa.holder_name,woa.accept_by,woa.accept_time,woa.modify_by,woa.modify_time,woa.create_by,woa.update_by,woa.update_time,woa.organ_code,woa.vip_flag,adi.priority_level,woa.status
         from work_order_accept woa
             left join accept_detail_info adi on woa.work_order_no = adi.work_order_no left join person_info pi on woa.insured_no=pi.person_id
     </sql>

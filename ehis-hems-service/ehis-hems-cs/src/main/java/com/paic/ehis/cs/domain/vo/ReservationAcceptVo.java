@@ -222,8 +222,10 @@ public class ReservationAcceptVo extends BaseEntity {
     private EditInfo editInfo;
 
     private EditDetail editDetail;
-
-
+    /** 医院名称 */
+    private String hospitalName;
+    /** 医院地址 */
+    private String hospitalAddress;
 
     /**
      * 修改原因

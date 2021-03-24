@@ -347,11 +347,11 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         personInfo2.setName(demandAcceptVo.getContactsName());
         personInfo2.setLanguage(demandAcceptVo.getContactsLanguage());
         personInfo2.setMobilePhone(demandAcceptVo.getContactsMobilePhone());
-        if (demandAcceptVo.getContactsCountry() != null && demandAcceptVo.getContactsCountry() != "") {
-            personInfo2.setLinePhone(demandAcceptVo.getContactsCountry() + "-" + demandAcceptVo.getContactsQuhao() + "-" + demandAcceptVo.getContactsNumber() + "-" + demandAcceptVo.getContactsSecondNumber());
-        }else{
-            personInfo2.setLinePhone("---");
-        }
+        String tLinePhone = StringUtils.isNotEmpty(demandAcceptVo.getContactsCountry())?demandAcceptVo.getContactsCountry():""+"-";
+        tLinePhone += StringUtils.isNotEmpty(demandAcceptVo.getContactsCountry())?demandAcceptVo.getContactsCountry():""+"-";
+        tLinePhone += StringUtils.isNotEmpty(demandAcceptVo.getContactsCountry())?demandAcceptVo.getContactsCountry():""+"-";
+        tLinePhone += StringUtils.isNotEmpty(demandAcceptVo.getContactsCountry())?demandAcceptVo.getContactsCountry():""+"-";
+        personInfo2.setLinePhone(tLinePhone);
         personInfo2.setCreatedBy(SecurityUtils.getUsername());
         personInfo2.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         personInfo2.setUpdatedBy(SecurityUtils.getUsername());
@@ -480,6 +480,19 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         outList.add("callPerson");
         outList.add("contactsPerson");
 
+        Map<String ,String> tDictType = new HashMap<String ,String>();
+        tDictType.put("sex","cs_sex");
+        tDictType.put("language","cs_communication_language");
+        tDictType.put("channelCode","cs_channel");
+        tDictType.put("priorityLevel","cs_priority");
+        tDictType.put("organCode","cs_organization");
+        tDictType.put("callRelationBy","cs_relation");
+        tDictType.put("visitType","cs_consultation_type");
+        tDictType.put("validCertificate","cs_whether_flag");
+        tDictType.put("settlementCard","cs_whether_flag");
+        tDictType.put("accidentFlag","cs_whether_flag");
+        tDictType.put("identity","cs_identity");
+
         List<String> keyList = new ArrayList<>();
         Iterator<String> iter = map1.keySet().iterator();
         while (iter.hasNext()) {
@@ -514,6 +527,7 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
                 editDetail.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
                 editDetail.setUpdatedBy(SecurityUtils.getUsername());
                 editDetail.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+                editDetail.setValueDictType(tDictType.get(mapkey));
 
                 if ((map1value == null || map1value.equals("")) && (map2value != null && !map2value.equals(""))) {
                     editDetail.setDetailId(PubFun.createMySqlMaxNoUseCache("cs_detail_id", 10, 8));
@@ -565,6 +579,7 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
             editDetail.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
             editDetail.setUpdatedBy(SecurityUtils.getUsername());
             editDetail.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+            editDetail.setValueDictType(tDictType.get(map3key));
 
             if ((map3value == null || map3value.equals("")) && (map4value != null && !map4value.equals(""))) {
                 editDetail.setDetailId(PubFun.createMySqlMaxNoUseCache("cs_detail_id", 10, 8));
@@ -616,6 +631,7 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
             editDetail.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
             editDetail.setUpdatedBy(SecurityUtils.getUsername());
             editDetail.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+            editDetail.setValueDictType(tDictType.get(map5key));
 
             if ((map5value == null || map5value.equals("")) && (map6value != null && !map6value.equals(""))) {
                 editDetail.setDetailId(PubFun.createMySqlMaxNoUseCache("cs_detail_id", 10, 8));

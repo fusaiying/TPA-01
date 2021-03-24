@@ -427,7 +427,11 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         contactsPerson.setName(demandAcceptVo.getContactsPerson().getName());
         contactsPerson.setLanguage(demandAcceptVo.getContactsPerson().getLanguage());
         contactsPerson.setMobilePhone(demandAcceptVo.getContactsPerson().getMobilePhone());
-        contactsPerson.setLinePhone(demandAcceptVo.getContactsPerson().getLinePhone1()[0] + "-" + demandAcceptVo.getContactsPerson().getLinePhone1()[1] + "-" + demandAcceptVo.getContactsPerson().getLinePhone1()[2] + "-" + demandAcceptVo.getContactsPerson().getLinePhone1()[3]);
+        if(demandAcceptVo.getContactsPerson().getLinePhone1().length<=3){
+            contactsPerson.setLinePhone("---");
+        }else{
+            contactsPerson.setLinePhone(demandAcceptVo.getContactsPerson().getLinePhone1()[0] + "-" + demandAcceptVo.getContactsPerson().getLinePhone1()[1] + "-" + demandAcceptVo.getContactsPerson().getLinePhone1()[2] + "-" + demandAcceptVo.getContactsPerson().getLinePhone1()[3]);
+        }
         contactsPerson.setUpdatedBy(SecurityUtils.getUsername());
         contactsPerson.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
         personInfoMapper.updatePersonInfo(contactsPerson);

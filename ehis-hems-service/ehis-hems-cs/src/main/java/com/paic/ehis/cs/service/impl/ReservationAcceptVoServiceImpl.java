@@ -374,12 +374,12 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
         contactsPerson.setName(reservationAcceptVo.getContactsPerson().getName());
         contactsPerson.setLanguage(reservationAcceptVo.getContactsPerson().getLanguage());
         contactsPerson.setMobilePhone(reservationAcceptVo.getContactsPerson().getMobilePhone());
-        if(reservationAcceptVo.getContactsPerson().getHomePhone1()==null || reservationAcceptVo.getContactsPerson().getHomePhone1().length <=0){
+        if(reservationAcceptVo.getContactsPerson().getHomePhone1().length <=3){
             contactsPerson.setHomePhone("---");
         }else{
             contactsPerson.setHomePhone(reservationAcceptVo.getContactsPerson().getHomePhone1()[0]+"-"+reservationAcceptVo.getContactsPerson().getHomePhone1()[1]+"-"+reservationAcceptVo.getContactsPerson().getHomePhone1()[2]+"-"+reservationAcceptVo.getContactsPerson().getHomePhone1()[3]);
         }
-        if(reservationAcceptVo.getContactsPerson().getWorkPhone1()==null || reservationAcceptVo.getContactsPerson().getWorkPhone1().length <= 0){
+        if(reservationAcceptVo.getContactsPerson().getWorkPhone1().length <= 3){
             contactsPerson.setWorkPhone("---");
         }else{
             contactsPerson.setWorkPhone(reservationAcceptVo.getContactsPerson().getWorkPhone1()[0]+"-"+reservationAcceptVo.getContactsPerson().getWorkPhone1()[1]+"-"+reservationAcceptVo.getContactsPerson().getWorkPhone1()[2]+"-"+reservationAcceptVo.getContactsPerson().getWorkPhone1()[3]);

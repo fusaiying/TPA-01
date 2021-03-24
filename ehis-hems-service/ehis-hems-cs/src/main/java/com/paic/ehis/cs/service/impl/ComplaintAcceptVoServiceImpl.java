@@ -193,7 +193,6 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
         personInfo2.setAddress(complaintAcceptVo.getContactsPerson().getAddress());
         personInfo2.setLanguage(complaintAcceptVo.getContactsPerson().getLanguage());
         personInfo2.setMobilePhone(complaintAcceptVo.getContactsPerson().getMobilePhone());
-        //personInfo2.setLinePhone(complaintAcceptVo.getContactsCountry()+"-"+complaintAcceptVo.getContactsQuhao()+"-"+complaintAcceptVo.getContactsNumber()+"-"+complaintAcceptVo.getContactsSecondNumber());
         if(complaintAcceptVo.getContactsPerson().getHomePhone1().length>3) {
             personInfo2.setHomePhone(complaintAcceptVo.getContactsPerson().getHomePhone1()[0] + "-" + complaintAcceptVo.getContactsPerson().getHomePhone1()[1] + "-" + complaintAcceptVo.getContactsPerson().getHomePhone1()[2] + "-" + complaintAcceptVo.getContactsPerson().getHomePhone1()[3]);
         }else{

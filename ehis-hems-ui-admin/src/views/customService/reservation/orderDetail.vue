@@ -238,11 +238,11 @@
               <el-input v-model="ruleForm.callPerson.mobilePhone" class="item-width" readonly size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
-          <el-col :span="8">
+          <!--<el-col :span="8">
             <el-form-item label="传真：" prop="fax">
               <el-input v-model="ruleForm.fax" class="item-width" readonly size="mini" placeholder="请输入"/>
             </el-form-item>
-          </el-col>
+          </el-col>-->
         </el-row>
         <el-row>
           <el-col :span="8">
@@ -282,20 +282,20 @@
               <el-input v-model="sendForm.contactsPerson.mobilePhone" class="item-width" readonly size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
-          <el-col :span="8">
+          <!--<el-col :span="8">
             <el-form-item style="white-space: nowrap" label="联系人家庭电话：" prop="contactsPerson.homePhone">
               <el-input v-model="ruleForm.contactsPerson.homePhone" class="item-width" size="mini"
                         placeholder="请输入"/>
             </el-form-item>
-          </el-col>
+          </el-col>-->
         </el-row>
 
         <el-row>
-          <el-col :span="8">
+          <!--<el-col :span="8">
             <el-form-item style="white-space: nowrap" label="联系人办公电话：" prop="contactsPerson.workPhone">
               <el-input v-model="ruleForm.contactsPerson.workPhone" class="item-width" readonly size="mini" placeholder="请输入"/>
             </el-form-item>
-          </el-col>
+          </el-col>-->
           <el-col :span="8">
             <el-form-item label="E-MAIL：" prop="email">
               <el-input v-model="ruleForm.email" class="item-width" size="mini" placeholder="请输入"/>
@@ -372,11 +372,11 @@
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="8">
+          <!--<el-col :span="8">
             <el-form-item label="类似疾病症状最早发生时间：" prop="earliestTime">
               <el-input v-model="ruleForm.earliestTime" class="item-width" readonly size="mini" placeholder="请输入"/>
             </el-form-item>
-          </el-col>
+          </el-col>-->
           <el-col :span="8">
             <el-form-item label="疾病名称：" prop="disease">
               <el-input v-model="ruleForm.disease" class="item-width" readonly size="mini" placeholder="请输入"/>

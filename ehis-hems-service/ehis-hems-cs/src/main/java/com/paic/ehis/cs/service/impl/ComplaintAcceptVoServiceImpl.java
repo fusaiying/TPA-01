@@ -142,7 +142,6 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
         //workOrderAccept.setUpdateBy(SecurityUtils.getUsername());
         //workOrderAccept.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
         workOrderAccept.setWorkOrderNo(complaintAcceptVo.getWorkOrderNo());
-        workOrderAccept.setEndDate(DateUtils.parseDate(DateUtils.getTime()));
         workOrderAccept.setCreateTime(DateUtils.parseDate(DateUtils.getTime()));
         workOrderAccept.setBusinessType(complaintAcceptVo.getBusinessType());
         workOrderAccept.setAcceptTime(DateUtils.parseDate(DateUtils.getTime()));
@@ -669,6 +668,7 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
             WorkOrderAccept workOrderAccept=new WorkOrderAccept();
             workOrderAccept.setWorkOrderNo(complaintDealVo.getWorkOrderNo());
             workOrderAccept.setStatus("04");
+            workOrderAccept.setEndDate(DateUtils.parseDate(DateUtils.getTime()));
             workOrderAcceptMapper.updateWorkOrderAccept(workOrderAccept);
 
             if (workHandleInfos == null) {
@@ -730,6 +730,7 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
             WorkOrderAccept workOrderAccept1=workOrderAcceptMapper.selectWorkOrderAcceptById(workOrderNo);
             WorkOrderAccept workOrderAccept2=workOrderAccept1;
             workOrderAccept1.setStatus("04");
+            workOrderAccept1.setEndDate(DateUtils.parseDate(DateUtils.getTime()));
             workOrderAcceptMapper.updateWorkOrderStatus(workOrderAccept1);
             BeanUtils.copyProperties(workOrderAccept2,workOrderAccept1);
             String workOrderNo2="9900000000"+PubFun.createMySqlMaxNoUseCache("cs_work_order_no",10,6);
@@ -739,6 +740,7 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
             workOrderAccept2.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
             workOrderAccept2.setUpdateBy(SecurityUtils.getUsername());
             workOrderAccept2.setCreateBy(SecurityUtils.getUsername());
+            workOrderAccept2.setEndDate(DateUtils.parseDate(DateUtils.getTime()));
             workOrderAcceptMapper.insertWorkOrderAccept(workOrderAccept2);
 
             AcceptDetailInfo acceptDetailInfo1=acceptDetailInfoMapper.selectAcceptDetailInfoById(workOrderNo);

@@ -12,8 +12,8 @@
         <el-form ref="userForm" :model="userForm" style="border:0;" label-width="30%" label-position="right" size="mini" :rules="rules" >
           <el-row>
             <el-col :span="24">
-              <el-form-item label="交接人：" prop="userId">
-                <el-select filterable v-model="userForm.userId"  size="mini" placeholder="请选择">
+              <el-form-item label="交接人：" prop="userName">
+                <el-select filterable v-model="userForm.userName"  size="mini" placeholder="请选择" @change="changeUser">
                   <el-option v-for="option in users" :key="option.dictValue" :label="option.dictLabel" :value="option.dictValue" />
                 </el-select>
               </el-form-item>
@@ -22,9 +22,9 @@
 
           <el-row>
             <el-col :span="24">
-              <el-form-item label="承接人：" prop="takeOnUserId">
-                <el-select filterable v-model="userForm.takeOnUserId"  size="mini" placeholder="请选择">
-                  <el-option v-for="option in users" :key="option.dictValue" :label="option.dictLabel" :value="option.dictValue" />
+              <el-form-item label="承接人：" prop="takeOnUserName">
+                <el-select filterable v-model="userForm.takeOnUserName"  size="mini" placeholder="请选择">
+                  <el-option v-for="option in takeOnUsers" :key="option.dictValue" :label="option.dictLabel" :value="option.dictValue" />
                 </el-select>
               </el-form-item>
             </el-col>
@@ -53,7 +53,7 @@
 
   import { addInfo,editInfo  } from '@/api/scheduling/userApi'
 
-  import { getDspatchUser } from '@/api/dispatch/api'
+  import { getDspatchUser,getTakeOnUserName } from '@/api/dispatch/api'
   export default {
   props: {
     value: {
@@ -75,8 +75,8 @@
      this.editData = newVal;
      if( this.editData.type == 'edit') {
        this.userForm.takeOnId = newVal.rowdata.takeOnId;
-       this.userForm.userId = newVal.rowdata.userId.toString();
-       this.userForm.takeOnUserId = newVal.rowdata.takeOnUserId.toString();
+       this.userForm.userName = newVal.rowdata.userName.toString();
+       this.userForm.takeOnUserName = newVal.rowdata.takeOnUserName.toString();
        if(newVal.rowdata.status == 'Y' || newVal.rowdata.status == '01') {
         this.userForm.status = '01';
        } else {
@@ -94,18 +94,20 @@
       custLevel:[],
         userForm : {
           takeOnId:'',
-          userId: '',
-          takeOnUserId:'',
+          userName: '',
+          takeOnUserName:'',
           status:'01',
         },
         rules: {
-          userId: {trigger: ['change'], required: true, message: '交接人必填'},
-          takeOnUserId: {trigger: ['change'], required: true, message: '承接人必填'},
+          userName: {trigger: ['change'], required: true, message: '交接人必填'},
+          takeOnUserName: {trigger: ['change'], required: true, message: '承接人必填'},
           status: {trigger: ['change'], required: true, message: '金额上限必填'},
         },
       dialogVisible: false,
-      // 承接人 交接人 users
+      // 交接人 users
        users:[],
+      // 承接人
+      takeOnUsers:[],
       // 状态数据字典
       statusOptions: [],
     }
@@ -127,6 +129,7 @@
           } else {
             this.addData()
           }
+          this.takeOnUsers = [];
         }
       })
     },
@@ -180,6 +183,23 @@
         console.log(error);
       });
     },
+    changeUser(){
+      this.takeOnUsers = new Array();
+      this.userForm.takeOnUserName = "";
+      getTakeOnUserName(this.userForm.userName).then(response => {
+        if(response.data != null) {
+          for(let i=0; i<response.data.length; i++) {
+            let obj= new Object();
+            obj.dictLabel = response.data[i] ;
+            obj.dictValue = response.data[i];
+            this.takeOnUsers.push(obj);
+          }
+        }
+      }).catch(
+        error => {
+          console.log(error);
+        });
+    },
     getUserData () {
       const params = {
         pageNum:1,
@@ -193,7 +213,7 @@
           for(let i=0; i<response.rows.length; i++) {
             let obj= new Object();
             obj.dictLabel = response.rows[i].userName ;
-            obj.dictValue = response.rows[i].userId.toString();
+            obj.dictValue = response.rows[i].userName;
             this.users.push(obj);
           }
         }
@@ -204,8 +224,8 @@
     handleClose() {
 
       this.userForm.takeOnId = '';
-      this.userForm.userId = '';
-      this.userForm.takeOnUserId = '';
+      this.userForm.userName = '';
+      this.userForm.takeOnUserName = '';
       this.userForm.status = '01';
       //this.$refs.userForm.resetFields()
       this.$refs["userForm"].clearValidate();

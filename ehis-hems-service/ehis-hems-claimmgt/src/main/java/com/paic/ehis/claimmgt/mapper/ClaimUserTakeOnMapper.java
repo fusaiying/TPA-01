@@ -2,6 +2,7 @@ package com.paic.ehis.claimmgt.mapper;
 
 import com.paic.ehis.claimmgt.domain.ClaimUserTakeOn;
 import com.paic.ehis.claimmgt.domain.dto.UserTakeOnDTO;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -64,4 +65,17 @@ public interface ClaimUserTakeOnMapper
      */
     public int deleteClaimUserTakeOnByIds(String[] takeOnIds);
 
+    /**
+     * 获取角色集合
+     * @param userName
+     * @return
+     */
+    public List<String> getRoleCodeList(String userName);
+
+    /**
+     * 获取承接人
+     * @param roleCodeList
+     * @return
+     */
+    public List<String> getTakeOnUserName(@Param("userName") String userName,@Param("roleCodeList") List<String> roleCodeList);
 }

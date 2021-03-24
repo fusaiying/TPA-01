@@ -69,4 +69,11 @@ public interface IClaimUserTakeOnService
      */
     public int deleteClaimUserTakeOnById(String takeOnId);
 
+    /**
+     * 获取承接人
+     * @param userName
+     * @return
+     */
+    List<String> getTakeOnUserName(String userName);
+
 }

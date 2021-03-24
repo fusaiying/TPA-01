@@ -5,6 +5,7 @@ import com.paic.ehis.claimmgt.domain.dto.UserTakeOnDTO;
 import com.paic.ehis.claimmgt.mapper.ClaimUserTakeOnMapper;
 import com.paic.ehis.claimmgt.service.IClaimUserTakeOnService;
 import com.paic.ehis.common.core.utils.SecurityUtils;
+import com.paic.ehis.common.core.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -76,7 +77,7 @@ public class ClaimUserTakeOnServiceImpl implements IClaimUserTakeOnService
         claimUserTakeOn.setCreateTime(nowDate);
         claimUserTakeOn.setUpdateBy(username);
         claimUserTakeOn.setUpdateTime(nowDate);
-        claimUserTakeOn.setStatus(claimUserTakeOn.getStatus());
+        claimUserTakeOn.setStatus("01".equals(claimUserTakeOn.getStatus()) ? "Y" : "N");
         return claimUserTakeOnMapper.insertClaimUserTakeOn(claimUserTakeOn);
     }
 
@@ -94,7 +95,7 @@ public class ClaimUserTakeOnServiceImpl implements IClaimUserTakeOnService
 
         claimUserTakeOn.setUpdateBy(username);
         claimUserTakeOn.setUpdateTime(nowDate);
-        claimUserTakeOn.setStatus(claimUserTakeOn.getStatus());
+        claimUserTakeOn.setStatus("01".equals(claimUserTakeOn.getStatus()) ? "Y" : "N");
         return claimUserTakeOnMapper.updateClaimUserTakeOn(claimUserTakeOn);
     }
 
@@ -120,6 +121,24 @@ public class ClaimUserTakeOnServiceImpl implements IClaimUserTakeOnService
     public int deleteClaimUserTakeOnById(String takeOnId)
     {
         return claimUserTakeOnMapper.deleteClaimUserTakeOnById(takeOnId);
+    }
+
+    /**
+     * 获取承接人
+     * @param userName
+     * @return
+     */
+    @Override
+    public List<String> getTakeOnUserName(String userName) {
+        if(!StringUtils.isNotEmpty(userName)){
+            return null;
+        }
+        List<String> roleCodeList = claimUserTakeOnMapper.getRoleCodeList(userName);
+
+        if(roleCodeList == null || roleCodeList.size() <= 0){
+            return null;
+        }
+        return claimUserTakeOnMapper.getTakeOnUserName(userName,roleCodeList);
     }
 
 }

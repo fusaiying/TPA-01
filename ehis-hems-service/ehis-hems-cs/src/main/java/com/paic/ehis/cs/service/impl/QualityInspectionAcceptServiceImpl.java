@@ -101,18 +101,25 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
     public AcceptVo updateSendByVoById(String workOrderNo) {
         AcceptVo acceptVo = qualityInspectionAcceptMapper.selectSendByVoById1(workOrderNo);//先查询状态为处理中的工单
         String updateby=String.valueOf(SecurityUtils.getUsername());
-        if (null != acceptVo && !acceptVo.getUpdateBy().equals(updateby)) {//如果获取的数据的操作人不是当前操作人，说明数据到了别人的工作池
+        if (null != acceptVo && !acceptVo.getUpdateBy().equals(updateby)) {//如果获取的数据的操作人不是当前操作人，说明数据目前在别人的工作池
             if(acceptVo.getBusinessType().equals("01")){//说明此数据为信息需求的
-
+                acceptVo.setUpdateBy(SecurityUtils.getUsername());
             }else if(acceptVo.getBusinessType().equals("02")){ //说明此数据为预约的
-
+                acceptVo.setUpdateBy(SecurityUtils.getUsername());
             }else {//说明此数据为投诉的
-
+                acceptVo.setUpdateBy(SecurityUtils.getUsername());
             }
-                acceptVo.setFlag("1");
+                acceptVo.setFlag("1");//当前工单正在处理，是否申请到个人池
             return acceptVo;//存在则获取处理中的工单数据
         } else {
             AcceptVo acceptVo1 = qualityInspectionAcceptMapper.selectSendByVoById2(workOrderNo);//不存在则获取最新的非处理的工单数据
+            if(acceptVo.getBusinessType().equals("01")){//说明此数据为信息需求的
+                acceptVo.setUpdateBy(SecurityUtils.getUsername());
+            }else if(acceptVo.getBusinessType().equals("02")){ //说明此数据为预约的
+                acceptVo.setUpdateBy(SecurityUtils.getUsername());
+            }else {//说明此数据为投诉的
+                acceptVo.setUpdateBy(SecurityUtils.getUsername());
+            }
             acceptVo1.setFlag("2");
             return acceptVo1;
         }

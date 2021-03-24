@@ -693,7 +693,7 @@ export default {
         medicalInstitution: [
           {required: true, message: "医疗机构不能为空", trigger: ["blur","change"]}
         ],
-        appointmentDate: [
+        complaintTime: [
           {required: true, message: "预约时间不能为空", trigger: ["blur","change"]},
           {required: true, validator: checkComplaintTime, trigger: "blur"}
         ],

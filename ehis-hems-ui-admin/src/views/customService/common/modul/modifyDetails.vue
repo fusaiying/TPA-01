@@ -59,10 +59,6 @@
 <script>
 import {modifyDetailsSearch} from '@/api/customService/demand'
 
-let dictss = [
-  {dictType: 'cs_demandAcceptVo'}
-]
-
 export default {
   name: 'modify',
   data() {
@@ -90,20 +86,10 @@ export default {
     this.getDicts("cs_eidt_reason").then(response => {
       this.cs_eidt_reason = response.data;
     });
-
+    this.getDicts("cs_demandAcceptVo").then(response => {
+      this.cs_demandAcceptVo = response.data;
+    });
   },
-
-  async mounted() {
-    // 字典数据统一获取
-    await this.getDictsList(dictss).then(response => {
-      this.dictList = response.data
-    })
-    // 下拉项赋值
-    this.cs_demandAcceptVo = this.dictList.find(item => {
-      return item.dictType === 'cs_demandAcceptVo'
-    }).dictDate
-  },
-
 
   methods: {
     //查询

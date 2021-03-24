@@ -556,6 +556,7 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
             //修改主表状态为已处理
             WorkOrderAccept workOrderAccept=new WorkOrderAccept();
             workOrderAccept.setWorkOrderNo(reservationDealVo.getWorkOrderNo());
+            workOrderAccept.setEndDate(DateUtils.getNowDate());
             if(reservationDealVo.getBusinessProcess().equals("01")){
                 workOrderAccept.setStatus("03");
             }else  if (reservationDealVo.getBusinessProcess().equals("02")){
@@ -614,6 +615,7 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
             //修改主表状态为已处理
             WorkOrderAccept workOrderAccept=new WorkOrderAccept();
             workOrderAccept.setWorkOrderNo(reservationDealVo.getWorkOrderNo());
+            workOrderAccept.setEndDate(DateUtils.getNowDate());
             if(reservationDealVo.getBusinessProcess().equals("01")){
                 workOrderAccept.setStatus("03");
             }else  if (reservationDealVo.getBusinessProcess().equals("02")){

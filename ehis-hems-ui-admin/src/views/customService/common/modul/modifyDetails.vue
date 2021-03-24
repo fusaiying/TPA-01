@@ -30,8 +30,8 @@
               style=" width: 100%;"
             >
               <el-table-column align="center" width="140" prop="itemKey" label="修改项" show-overflow-tooltip>
-                <template slot-scope="scope" v-if="scope.row.operateCode">
-                  <span>{{ selectDictLabel(cs_demandAcceptVo, scope.row.operateCode) }}</span>
+                <template slot-scope="scope" v-if="scope.row.itemKey">
+                  <span>{{ selectDictLabel(cs_demandAcceptVo, scope.row.itemKey) }}</span>
                 </template>
               </el-table-column>
               <el-table-column align="center" prop="nowValue" label="新值" show-overflow-tooltip/>
@@ -58,10 +58,6 @@
 </template>
 <script>
 import {modifyDetailsSearch} from '@/api/customService/demand'
-
-let dictss = [
-  {dictType: 'cs_demandAcceptVo'}
-]
 
 export default {
   name: 'modify',
@@ -90,20 +86,10 @@ export default {
     this.getDicts("cs_eidt_reason").then(response => {
       this.cs_eidt_reason = response.data;
     });
-
+    this.getDicts("cs_demandAcceptVo").then(response => {
+      this.cs_demandAcceptVo = response.data;
+    });
   },
-
-  async mounted() {
-    // 字典数据统一获取
-    await this.getDictsList(dictss).then(response => {
-      this.dictList = response.data
-    })
-    // 下拉项赋值
-    this.cs_demandAcceptVo = this.dictList.find(item => {
-      return item.dictType === 'cs_demandAcceptVo'
-    }).dictDate
-  },
-
 
   methods: {
     //查询

@@ -46,7 +46,7 @@
         <el-table-column key="5" align="center" prop="consultPhone" label="机构电话" min-width="120" show-overflow-tooltip/>
         <el-table-column label="医院介绍" align="center">
           <template slot-scope="scope">
-            <el-button type="text" size="mini" style="color: #1890ff;" @click="openHospitalShow(scope.row)">医院介绍
+            <el-button v-if="!scope.row.isInput" type="text" size="mini" style="color: #1890ff;" @click="openHospitalShow(scope.row)">医院介绍
             </el-button>
           </template>
         </el-table-column>
@@ -91,7 +91,8 @@
         if (newValue.region.length>0){
           let option={
             isInput:true,
-            hospitalName:''
+            hospitalName:'',
+            hospitalCode:'9999'
           }
           getHospitalInfo(data).then(res => {
             if (res != null && res !== '') {

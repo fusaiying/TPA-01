@@ -327,10 +327,10 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="医疗机构：" prop="medicalInstitution">
-              <el-input v-model="sendForm.medicalInstitution" input-w class="item-width2" size="mini"
+            <el-form-item label="医疗机构：" prop="hospitalName">
+              <el-input v-model="sendForm.hospitalName" input-w class="item-width2" size="mini"
                         placeholder="请输入"/>
-              <el-button type="primary" @click="searchHandle">详细信息</el-button>
+              <el-button type="primary" @click="openHospitalShow">详细信息</el-button>
             </el-form-item>
           </el-col>
 
@@ -773,6 +773,8 @@
         //新增的数据传输
         sendForm: {
           email: "",
+          hospitalCode: "",
+          hospitalName: "",
           workOrderNo: '',
           businessProcess: '',
           contactsPerson: {
@@ -1178,7 +1180,15 @@
 
         })
       },
-
+      openHospitalShow() {
+        const newpage = this.$router.resolve({
+          name: 'hospitalDetail',
+          query: {
+            providerCode: this.sendForm.medicalInstitution
+          }
+        })
+        window.open(newpage.href, '_blank');
+      }
     }
   }
 </script>

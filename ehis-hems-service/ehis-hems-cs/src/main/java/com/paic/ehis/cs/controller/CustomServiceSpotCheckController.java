@@ -59,8 +59,11 @@ public class CustomServiceSpotCheckController extends BaseController {
     {
         //1.分页处理
         startPage();
-        //2.工单状态处理； 04-已完成的工单且没有被质检过
-        workOrderQueryDTO.setStatus(CodeEnum.ORDER_STATE_04.getCode());
+//        //2.工单状态处理； 04-已完成,已取消，不合格，合格的工单且没有被质检过
+//        List<String>  acceptStatusList=new ArrayList<>();
+//        acceptStatusList.add(CodeEnum.ORDER_STATE_04.getCode());
+//        acceptStatusList.add(CodeEnum.ORDER_STATE_05.getCode());
+//        workOrderQueryDTO.setAcceptStatusList(acceptStatusList);
         //3.业务类型为： 01-信息需求和03-投诉的才可以质检
         List<String> businessTypeList=new ArrayList<>();
         businessTypeList.add(CodeEnum.BUSINESS_TYPE_01.getCode());

@@ -367,7 +367,11 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="本次疾病/症状起病时间：" prop="symptomTimes">
-              <el-input v-model="ruleForm.symptomTimes" class="item-width" readonly size="mini" placeholder="请输入"/>
+              <el-input v-model="ruleForm.a" style="width: 90px" clearable size="mini" placeholder="请输入"maxlength="4"/>
+              <el-select v-model="ruleForm.b" style="width: 90px" placeholder="请选择"  >
+                <el-option v-for="item in cs_time_unit" :key="item.dictValue" :label="item.dictLabel"
+                           :value="item.dictValue"/>
+              </el-select>
             </el-form-item>
           </el-col>
         </el-row>

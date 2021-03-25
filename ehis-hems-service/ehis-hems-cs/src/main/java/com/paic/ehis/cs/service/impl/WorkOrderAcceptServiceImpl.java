@@ -37,8 +37,10 @@ public class WorkOrderAcceptServiceImpl implements IWorkOrderAcceptService
 
     //实时查询案件操作人和状态
     @Override
-    public WorkOrderAccept selectWorkOrderAcceptById1(String workOrderNo) {
-        return workOrderAcceptMapper.selectWorkOrderAcceptById1(workOrderNo);
+    public String selectWorkOrderAcceptById1(String workOrderNo) {
+        WorkOrderAccept workOrderAccept=workOrderAcceptMapper.selectWorkOrderAcceptById1(workOrderNo);
+        String status = workOrderAccept.getStatus();
+        return status;
     }
 
     /**

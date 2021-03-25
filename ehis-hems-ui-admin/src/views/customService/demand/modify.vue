@@ -595,21 +595,30 @@ export default {
         let query = this.queryParams
         demandListAndPublicPool(query).then(res => {
           if (res != null && res.code === 200) {
-            let workPoolData = res.rows[0];
-            let editInfo = {
-              editReason: "",
-              editRemark: ""
-            };
-            workPoolData.editReason = "",
+            if (res.rows.length>0){
+              let workPoolData = res.rows[0];
+              let editInfo = {
+                editReason: "",
+                editRemark: ""
+              };
+              workPoolData.editReason = "",
                 workPoolData.editRemark = "",
                 workPoolData.editInfo = editInfo
-            workPoolData.officeCountry = ""
-            workPoolData.officeNumber = ""
-            workPoolData.officeQuhao = ""
-            workPoolData.officeSecondNumber = ""
-            workPoolData.item = []
-            this.workPoolData = workPoolData;
+              workPoolData.officeCountry = ""
+              workPoolData.officeNumber = ""
+              workPoolData.officeQuhao = ""
+              workPoolData.officeSecondNumber = ""
+              workPoolData.item = []
+              this.workPoolData = workPoolData;
+            }
             //  this.bankChange(workPoolData.bankTransfer),//初始化是否校验银行
+            if (this.$route.query.status=='02'){
+              this.workPoolData.editInfo.editReason='01'
+            }else if (this.$route.query.status=='03'){
+              this.workPoolData.editInfo.editReason='02'
+            }else if (this.$route.query.status=='04'){
+              this.workPoolData.editInfo.editReason='03'
+            }
             this.totalCount = res.total
             if (res.rows.length <= 0) {
               return this.$message.warning(
@@ -624,17 +633,27 @@ export default {
         let query = this.queryParams
         demandListAndPersonalPool(query).then(res => {
           if (res != null && res.code === 200) {
-            let workPoolData = res.rows[0];
-            let editInfo = {
-              editReason: "",
-              editRemark: ""
-            };
-            workPoolData.editInfo = editInfo
-            workPoolData.officeCountry = ""
-            workPoolData.officeNumber = ""
-            workPoolData.officeQuhao = ""
-            workPoolData.officeSecondNumber = ""
-            this.workPoolData = workPoolData;
+            if (res.rows.length>0){
+              let workPoolData = res.rows[0];
+              let editInfo = {
+                editReason: "",
+                editRemark: ""
+              };
+              workPoolData.editInfo = editInfo
+              workPoolData.officeCountry = ""
+              workPoolData.officeNumber = ""
+              workPoolData.officeQuhao = ""
+              workPoolData.officeSecondNumber = ""
+              this.workPoolData = workPoolData;
+            }
+
+            if (this.$route.query.status=='02'){
+              this.workPoolData.editInfo.editReason='01'
+            }else if (this.$route.query.status=='03'){
+              this.workPoolData.editInfo.editReason='02'
+            }else if (this.$route.query.status=='04'){
+              this.workPoolData.editInfo.editReason='03'
+            }
             // this.bankChange(workPoolData.bankTransfer),
             this.totalCount = res.total
             if (res.rows.length <= 0) {

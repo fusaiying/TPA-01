@@ -10,7 +10,8 @@
     <el-table-column type="selection" align="center" content="全选"/>
     <el-table-column prop="workOrderNo" width="140" label="工单号" align="center">
       <template slot-scope="scope">
-        <el-link style="font-size: 11px" type="primary" @click="claimRouter(scope.row)">{{scope.row.workOrderNo}}</el-link>
+        <el-link style="font-size: 11px" type="primary" @click="claimRouter(scope.row)">{{scope.row.workOrderNo}}
+        </el-link>
       </template>
     </el-table-column>
     <el-table-column prop="channelCode" width="100" label="受理渠道" align="center">
@@ -58,7 +59,7 @@
     </el-table-column>
     <el-table-column align="center" label="操作" min-width="140" fixed="right">
       <template slot-scope="scope">
-        <el-button size="small" type="text" @click="obtainButton(scope.row)">获取
+        <el-button :disabled="scope.row.flag=='2'" size="small" type="text" @click="obtainButton(scope.row)">获取
         </el-button>
         <el-button size="small" type="text" @click="modifyButton(scope.row)">修改
         </el-button>
@@ -70,157 +71,127 @@
 </template>
 
 <script>
-import {getMinData} from '@/api/claim/presentingReview'
-import {updateGetWorkOrder} from '@/api/customService/acceptQuery'
-import {encrypt} from "@/utils/rsaEncrypt"
-import moment from "moment";
+  import {getMinData} from '@/api/claim/presentingReview'
+  import {updateGetWorkOrder} from '@/api/customService/acceptQuery'
+  import {encrypt} from "@/utils/rsaEncrypt"
+  import moment from "moment";
 
-let dictss = [
-  {dictType: 'cs_channel'},
-  {dictType: 'cs_priority'},
-  {dictType: 'cs_sex'},
-  {dictType: 'cs_communication_language'},
-  {dictType: 'cs_identity'},
-  {dictType: 'cs_whether_flag'},
-  {dictType: 'cs_organization'},
-  {dictType: 'cs_relation'},
-  {dictType: 'cs_feedback_type'},
-  {dictType: 'cs_vip_flag'},
-  {dictType: 'cs_direct_settlement'},
-  {dictType: 'cs_consultation_type'},
-  {dictType: 'cs_service_item'},
-]
+  let dictss = [
+    {dictType: 'cs_channel'},
+    {dictType: 'cs_priority'},
+    {dictType: 'cs_sex'},
+    {dictType: 'cs_communication_language'},
+    {dictType: 'cs_identity'},
+    {dictType: 'cs_whether_flag'},
+    {dictType: 'cs_organization'},
+    {dictType: 'cs_relation'},
+    {dictType: 'cs_feedback_type'},
+    {dictType: 'cs_vip_flag'},
+    {dictType: 'cs_direct_settlement'},
+    {dictType: 'cs_consultation_type'},
+    {dictType: 'cs_service_item'},
+  ]
 
-export default {
-  filters: {
-    changeDate: function (value) {
-      if (value !== null) {
-        return moment(value).format('YYYY-MM-DD HH:mm:ss')
-      }
-    }
-  },
-  props: {
-    tableData: {
-      type: Array,
-      default: function () {
-        return []
+  export default {
+    filters: {
+      changeDate: function (value) {
+        if (value !== null) {
+          return moment(value).format('YYYY-MM-DD HH:mm:ss')
+        }
       }
     },
-    status: String,
-  },
-  data() {
-    return {
-      loading: true,
-      cs_channel:[],//受理渠道
-      cs_reservation_item:[],//服务项目
-      cs_sex:[],//性别
-      cs_priority:[],//优先级
-      cs_communication_language:[],//语言
-      cs_organization:[],//机构
-      cs_handle_state:[],// 状态：
-      dictList: [],
-      cs_identity: [],
-      cs_whether_flag: [],
-      cs_relation: [],
-      cs_feedback_type: [],
-      cs_vip_flag: [],
-      cs_direct_settlement: [],
-      cs_consultation_type: [],
-      cs_service_item: [],
-    }
-  },
-  async mounted() {
-    // 字典数据统一获取
-    await this.getDictsList(dictss).then(response => {
-      this.dictList = response.data
-    })
-    // 下拉项赋值
-    this.cs_channel = this.dictList.find(item => {
-      return item.dictType === 'cs_channel'
-    }).dictDate
-    this.cs_priority = this.dictList.find(item => {
-      return item.dictType === 'cs_priority'
-    }).dictDate
-    this.cs_sex = this.dictList.find(item => {
-      return item.dictType === 'cs_sex'
-    }).dictDate
-    this.cs_priority = this.dictList.find(item => {
-      return item.dictType === 'cs_priority'
-    }).dictDate
-    this.cs_communication_language = this.dictList.find(item => {
-      return item.dictType === 'cs_communication_language'
-    }).dictDate
-    this.cs_identity = this.dictList.find(item => {
-      return item.dictType === 'cs_identity'
-    }).dictDate
-    this.cs_whether_flag = this.dictList.find(item => {
-      return item.dictType === 'cs_whether_flag'
-    }).dictDate
-    this.cs_organization = this.dictList.find(item => {
-      return item.dictType === 'cs_organization'
-    }).dictDate
-    this.cs_relation = this.dictList.find(item => {
-      return item.dictType === 'cs_relation'
-    }).dictDate
-    this.cs_feedback_type = this.dictList.find(item => {
-      return item.dictType === 'cs_feedback_type'
-    }).dictDate
-    this.cs_vip_flag = this.dictList.find(item => {
-      return item.dictType === 'cs_vip_flag'
-    }).dictDate
-    this.cs_direct_settlement = this.dictList.find(item => {
-      return item.dictType === 'cs_direct_settlement'
-    }).dictDate
-    this.cs_consultation_type = this.dictList.find(item => {
-      return item.dictType === 'cs_consultation_type'
-    }).dictDate
-    this.cs_service_item = this.dictList.find(item => {
-      return item.dictType === 'cs_service_item'
-    }).dictDate
-  },
-  methods: {
-    //获取
-    obtainButton(row) {
-      if (row.flag && row.flag=='1'){
-        this.$confirm(`当前工单正在处理，是否申请到个人池?`, '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          updateGetWorkOrder(row.workOrderNo).then(res=>{
-            if (res!=null && res.code=='200'){
-              this.$message({
-                message: '获取成功！',
-                type: 'success',
-                center: true,
-                showClose: true
-              })
-            }else {
-              this.$message({
-                message: '获取失败!',
-                type: 'error',
-                center: true,
-                showClose: true
-              })
-            }
-          })
-          this.$emit("searchHandle")
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消！'
-          })
-        })
-      }else {
-        updateGetWorkOrder(row.workOrderNo).then(res=>{
-          if (res!=null && res.code=='200'){
+    props: {
+      tableData: {
+        type: Array,
+        default: function () {
+          return []
+        }
+      },
+      status: String,
+    },
+    data() {
+      return {
+        loading: true,
+        cs_channel: [],//受理渠道
+        cs_reservation_item: [],//服务项目
+        cs_sex: [],//性别
+        cs_priority: [],//优先级
+        cs_communication_language: [],//语言
+        cs_organization: [],//机构
+        cs_handle_state: [],// 状态：
+        dictList: [],
+        cs_identity: [],
+        cs_whether_flag: [],
+        cs_relation: [],
+        cs_feedback_type: [],
+        cs_vip_flag: [],
+        cs_direct_settlement: [],
+        cs_consultation_type: [],
+        cs_service_item: [],
+      }
+    },
+    async mounted() {
+      // 字典数据统一获取
+      await this.getDictsList(dictss).then(response => {
+        this.dictList = response.data
+      })
+      // 下拉项赋值
+      this.cs_channel = this.dictList.find(item => {
+        return item.dictType === 'cs_channel'
+      }).dictDate
+      this.cs_priority = this.dictList.find(item => {
+        return item.dictType === 'cs_priority'
+      }).dictDate
+      this.cs_sex = this.dictList.find(item => {
+        return item.dictType === 'cs_sex'
+      }).dictDate
+      this.cs_priority = this.dictList.find(item => {
+        return item.dictType === 'cs_priority'
+      }).dictDate
+      this.cs_communication_language = this.dictList.find(item => {
+        return item.dictType === 'cs_communication_language'
+      }).dictDate
+      this.cs_identity = this.dictList.find(item => {
+        return item.dictType === 'cs_identity'
+      }).dictDate
+      this.cs_whether_flag = this.dictList.find(item => {
+        return item.dictType === 'cs_whether_flag'
+      }).dictDate
+      this.cs_organization = this.dictList.find(item => {
+        return item.dictType === 'cs_organization'
+      }).dictDate
+      this.cs_relation = this.dictList.find(item => {
+        return item.dictType === 'cs_relation'
+      }).dictDate
+      this.cs_feedback_type = this.dictList.find(item => {
+        return item.dictType === 'cs_feedback_type'
+      }).dictDate
+      this.cs_vip_flag = this.dictList.find(item => {
+        return item.dictType === 'cs_vip_flag'
+      }).dictDate
+      this.cs_direct_settlement = this.dictList.find(item => {
+        return item.dictType === 'cs_direct_settlement'
+      }).dictDate
+      this.cs_consultation_type = this.dictList.find(item => {
+        return item.dictType === 'cs_consultation_type'
+      }).dictDate
+      this.cs_service_item = this.dictList.find(item => {
+        return item.dictType === 'cs_service_item'
+      }).dictDate
+    },
+    methods: {
+      //获取
+      obtainButton(row) {
+
+        updateGetWorkOrder(row.workOrderNo).then(res => {
+          if (res != null && res.code == '200') {
             this.$message({
               message: '获取成功！',
               type: 'success',
               center: true,
               showClose: true
             })
-          }else {
+          } else {
             this.$message({
               message: '获取失败!',
               type: 'error',
@@ -229,109 +200,147 @@ export default {
             })
           }
           this.$emit("searchHandle")
+
         })
-      }
 
-
-    },
-    //修改
-    modifyButton(row) {
-      let url='/customService/modify';
-      if(row.businessType=='03'){
-        url='/customService/complaint/modify';
-      }else if(row.businessType=='02'){
-        url='/customService/reservation/modify';
-      }
-      this.$router.push({
-        path: url,
-        query:{
-            workOrderNo:row.workOrderNo,
-            policyNo:row.policyNo,
-            policyItemNo:row.policyItemNo,
-            status:row.status,
-            businessType:row.businessType
-        }
-      })
-      // let data = encodeURI(
-      //   JSON.stringify({
-      //     batchno: row.batchno, //批次号
-      //     status,//新增or查看
-      //     claimtype: row.claimtype//理赔类型
-      //   })
-      // )
-      // this.$router.push({
-      //   path: '/claims-handle/presenting-edit',
-      //   query: {
-      //     data
-      //   }
-      // })
-    },
-    cancleBytton(row) {
-      let url='/customService/cancle';
-      if(row.businessType=='03'){
-        url='/customService/complaint/cancle';
-      }else if(row.businessType=='02'){
-        url='/customService/reservation/cancle';
-      }
-      this.$router.push({
-        path: url,
-        query:{
-          workOrderNo:row.workOrderNo,
-          policyNo:row.policyNo,
-          policyItemNo:row.policyItemNo,
-          status:row.status
-        }
-      })
-    },
-
-
-    getMinData(row, expandedRows) {
-      this.loading = true
-      //判断只有展开是做请求
-      if (expandedRows.length > 0) {
-        getMinData(row.batchno).then(res => {
-          this.tableData.forEach((temp, index) => {
-            if (temp.batchno === row.batchno) {
-              this.tableData[index].minData = res.rows
+      },
+      //修改
+      modifyButton(row) {
+        if (row.flag1 && row.flag1 == '1') {
+          this.$confirm(`当前工单正在处理，是否申请到个人池?`, '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            let url = '/customService/modify';
+            if (row.businessType == '03') {
+              url = '/customService/complaint/modify';
+            } else if (row.businessType == '02') {
+              url = '/customService/reservation/modify';
+            }
+            this.$router.push({
+              path: url,
+              query: {
+                workOrderNo: row.workOrderNo,
+                policyNo: row.policyNo,
+                policyItemNo: row.policyItemNo,
+                status: row.status,
+                businessType: row.businessType
+              }
+            })
+          }).catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消！'
+            })
+          })
+        } else {
+          let url = '/customService/modify';
+          if (row.businessType == '03') {
+            url = '/customService/complaint/modify';
+          } else if (row.businessType == '02') {
+            url = '/customService/reservation/modify';
+          }
+          this.$router.push({
+            path: url,
+            query: {
+              workOrderNo: row.workOrderNo,
+              policyNo: row.policyNo,
+              policyItemNo: row.policyItemNo,
+              status: row.status,
+              businessType: row.businessType
             }
           })
-          this.loading = false
-        })
-      }
-    },
-    claimRouter(row){
-      console.log(row);
-      if (row.businessType=='01'){//跳需求
-        this.$router.push({
-          path: '/customService/orderDetails',
-          query:{
-            workOrderNo:row.workOrderNo,
-            policyNo:row.policyNo,
-            policyItemNo:row.policyItemNo,
-            status:row.status,
-            flag:true
+        }
+
+
+
+          // let data = encodeURI(
+          //   JSON.stringify({
+          //     batchno: row.batchno, //批次号
+          //     status,//新增or查看
+          //     claimtype: row.claimtype//理赔类型
+          //   })
+          // )
+          // this.$router.push({
+          //   path: '/claims-handle/presenting-edit',
+          //   query: {
+          //     data
+          //   }
+          // })
+        }
+      ,
+        cancleBytton(row)
+        {
+          let url = '/customService/cancle';
+          if (row.businessType == '03') {
+            url = '/customService/complaint/cancle';
+          } else if (row.businessType == '02') {
+            url = '/customService/reservation/cancle';
           }
-        })
-      }else if(row.businessType=='03'){//跳投诉
-        this.$router.push({
-          path: '/customService/complaint/orderDetails',
-          query:{
-            workOrderNo:row.workOrderNo,
-            policyNo:row.policyNo,
-            policyItemNo:row.policyItemNo,
-            status:row.status,
-            flag:true
+          this.$router.push({
+            path: url,
+            query: {
+              workOrderNo: row.workOrderNo,
+              policyNo: row.policyNo,
+              policyItemNo: row.policyItemNo,
+              status: row.status
+            }
+          })
+        }
+      ,
+
+
+        getMinData(row, expandedRows)
+        {
+          this.loading = true
+          //判断只有展开是做请求
+          if (expandedRows.length > 0) {
+            getMinData(row.batchno).then(res => {
+              this.tableData.forEach((temp, index) => {
+                if (temp.batchno === row.batchno) {
+                  this.tableData[index].minData = res.rows
+                }
+              })
+              this.loading = false
+            })
           }
-        })
+        }
+      ,
+        claimRouter(row)
+        {
+          console.log(row);
+          if (row.businessType == '01') {//跳需求
+            this.$router.push({
+              path: '/customService/orderDetails',
+              query: {
+                workOrderNo: row.workOrderNo,
+                policyNo: row.policyNo,
+                policyItemNo: row.policyItemNo,
+                status: row.status,
+                flag: true
+              }
+            })
+          } else if (row.businessType == '03') {//跳投诉
+            this.$router.push({
+              path: '/customService/complaint/orderDetails',
+              query: {
+                workOrderNo: row.workOrderNo,
+                policyNo: row.policyNo,
+                policyItemNo: row.policyItemNo,
+                status: row.status,
+                flag: true
+              }
+            })
+          }
+        }
       }
     }
-  }
-}
 </script>
 <style scoped>
 
-.el-table /deep/ .el-table__expanded-cell {
-  padding: 10px;
-}
+  .el-table /deep/ .el-table__expanded-cell {
+    padding: 10px;
+  }
 </style>
 

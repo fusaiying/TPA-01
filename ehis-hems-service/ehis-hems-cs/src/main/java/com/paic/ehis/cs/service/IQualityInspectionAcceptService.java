@@ -29,7 +29,10 @@ public interface IQualityInspectionAcceptService
      */
     public AcceptVo updateSendByVoById(String workOrderNo);
 
-
+    /**
+     * 工单修改
+     */
+    public AcceptVo updateSendByVoByIdById1(String workOrderNo);
 
     /**
      * 质检工作池

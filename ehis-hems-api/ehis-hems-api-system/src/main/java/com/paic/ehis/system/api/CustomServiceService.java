@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 
-@FeignClient(contextId = "CustomServiceService", value = ServiceNameConstants.PROVIDER_SERVICE)
+@FeignClient(contextId = "CustomServiceService", value = ServiceNameConstants.CS_SERVICE)
 public interface CustomServiceService {
     @GetMapping("/internal/batchAcceptVo/invalidDate")
     public AjaxResult batchAcceptVo(@PathVariable("invalidDate") String invalidDate);

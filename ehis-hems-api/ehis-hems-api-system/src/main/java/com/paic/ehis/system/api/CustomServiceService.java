@@ -12,4 +12,7 @@ public interface CustomServiceService {
     @GetMapping("/internal/batchAcceptVo/invalidDate")
     public AjaxResult batchAcceptVo(@PathVariable("invalidDate") String invalidDate);
 
+    @GetMapping("/internal/batchAcceptVo/invalidDateMonth")
+    public AjaxResult batchAcceptVomonth(@PathVariable("invalidDate") String invalidDate);
+
 }

@@ -41,6 +41,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="callCenterId" column="call_center_id"/>
         <result property="status" column="status"/>
         <result property="count" column="count"/>
+        <result property="activationNum" column="activation_num"/>
     </resultMap>
 
 
@@ -295,7 +296,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
 
     <select id="getWorkOrderCountByUserId" parameterType="com.paic.ehis.cs.domain.dto.WorkOrderQueryDTO" resultMap="AcceptResult">
-        select woa.update_by,count(*) as count,GROUP_CONCAT(work_order_no) as work_order_nos from work_order_accept woa where 1=1
+        select woa.update_by,count(*) as count,GROUP_CONCAT(work_order_no) as work_order_nos,woa.activation_num from work_order_accept woa where 1=1
+        and woa.work_order_no not in (select work_order_no from quality_inspection_accept)
         <if test="updatedBy != null and updatedBy != ''"> and woa.updated_by = #{updatedBy}</if>
         <if test="status != null and status != ''"> and woa.status = #{status}</if>
         <if test="workOrderNo != null and workOrderNo != ''"> and woa.work_order_no = #{workOrderNo}</if>
@@ -305,6 +307,37 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <if test="endCaseEndTime != null ">
             and DATE_FORMAT(woa.end_date,'%Y-%m-%d') <![CDATA[<=]]> #{endCaseEndTime}
         </if>
-        group by woa.update_by;
+        <if test="acceptStatusList != null">
+            and status IN (
+            <foreach collection="acceptStatusList" item="status"
+                     separator=",">
+                #{status}
+            </foreach>
+            )
+        </if>
+        group by woa.update_by,woa.activation_num
+    </select>
+
+    <select id="getWorkOrderCountByUserIdMonth" parameterType="com.paic.ehis.cs.domain.dto.WorkOrderQueryDTO" resultMap="AcceptResult">
+        select woa.update_by,count(*) as count,GROUP_CONCAT(work_order_no) as work_order_nos,woa.activation_num from work_order_accept woa where 1=1
+        AND woa.work_order_no  IN ( SELECT work_order_no FROM quality_inspection_accept where status='01' or (status='03' and result='01') )
+        <if test="updatedBy != null and updatedBy != ''"> and woa.updated_by = #{updatedBy}</if>
+        <if test="status != null and status != ''"> and woa.status = #{status}</if>
+        <if test="workOrderNo != null and workOrderNo != ''"> and woa.work_order_no = #{workOrderNo}</if>
+        <if test="endCaseStartTime != null ">
+            and DATE_FORMAT(woa.end_date,'%Y-%m-%d') <![CDATA[>=]]> #{endCaseStartTime}
+        </if>
+        <if test="endCaseEndTime != null ">
+            and DATE_FORMAT(woa.end_date,'%Y-%m-%d') <![CDATA[<=]]> #{endCaseEndTime}
+        </if>
+        <if test="acceptStatusList != null">
+            and status IN (
+            <foreach collection="acceptStatusList" item="status"
+                     separator=",">
+                #{status}
+            </foreach>
+            )
+        </if>
+        group by woa.update_by,woa.activation_num
     </select>
 </mapper>

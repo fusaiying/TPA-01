@@ -21,6 +21,10 @@ public class CustomServiceFallbackFactory implements FallbackFactory<CustomServi
             public AjaxResult batchAcceptVo(String invalidDate) {
                 return null;
             }
+            @Override
+            public AjaxResult batchAcceptVomonth(String invalidDate) {
+                return null;
+            }
         };
     }
 }

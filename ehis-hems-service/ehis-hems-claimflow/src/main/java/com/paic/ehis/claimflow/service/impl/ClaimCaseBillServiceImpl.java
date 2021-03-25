@@ -233,18 +233,19 @@ public class ClaimCaseBillServiceImpl implements IClaimCaseBillService
 
         // 3、获取费用项明细
         List<ClaimCaseBillDetail> billDetail = claimCaseBill.getBillDetail();
+        //先置为无效
+        claimCaseBillDetailMapper.updateClaimCaseBillDetailByBillId(billInfo.getBillId());
         for (ClaimCaseBillDetail detail : billDetail){
-            //判断是修改还是新增
             if (!"".equals(detail.getDetailId()) && detail.getDetailId()!=null){
                 selfAmount = selfAmount.add(detail.getSelfAmount() == null ? new BigDecimal("0.00") : detail.getSelfAmount());
                 partSelf = partSelf.add(detail.getPartSelfAmount() == null ? new BigDecimal("0.00") : detail.getPartSelfAmount());
                 unableAmount = unableAmount.add(detail.getUnableAmount() == null ? new BigDecimal("0.00") : detail.getUnableAmount());
 //            detail.setBillId(billId);
 //            detail.setRptNo(billInfo.getRptNo());
-//            detail.setStatus("Y");
+                detail.setStatus("Y");
                 detail.setUpdateBy(username);
                 detail.setUpdateTime(DateUtils.getNowDate());
-                claimCaseBillDetailMapper.updateClaimCaseBillDetail(detail);
+                claimCaseBillDetailMapper.updateClaimCaseBillDetailByBillIdOne(detail);
             }else {
                 selfAmount = selfAmount.add(detail.getSelfAmount() == null ? new BigDecimal("0.00") : detail.getSelfAmount());
                 partSelf = partSelf.add(detail.getPartSelfAmount() == null ? new BigDecimal("0.00") : detail.getPartSelfAmount());

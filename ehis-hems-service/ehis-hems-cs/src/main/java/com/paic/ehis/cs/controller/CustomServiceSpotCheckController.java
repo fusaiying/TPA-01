@@ -134,7 +134,7 @@ public class CustomServiceSpotCheckController extends BaseController {
         //操作前主流程状态
         param.put("linkCode",CodeEnum.ORDER_STATE_04.getCode());//已完成的可质检
         //操作按钮代码
-        param.put("operateCode",CodeEnum.OPERATE_CODE_16.getCode());
+        param.put("operateCode",CodeEnum.ACTION_TYPE_13.getCode());
         return toAjax(qualityInspectionAcceptService.insertAcceptVoBatch(sendIds,param));
     }
 
@@ -154,7 +154,7 @@ public class CustomServiceSpotCheckController extends BaseController {
         //操作前主流程状态
         param.put("linkCode",CodeEnum.LINK_CODE_08.getCode());
         //操作按钮代码
-        param.put("operateCode",CodeEnum.OPERATE_CODE_17.getCode());
+        param.put("operateCode",CodeEnum.ACTION_TYPE_02.getCode());
         return toAjax(qualityInspectionAcceptService.inspectionHandleStatusByIds(getIds,param));
     }
 
@@ -263,7 +263,7 @@ public class CustomServiceSpotCheckController extends BaseController {
         param.put("linkCode",CodeEnum.LINK_CODE_10.getCode());
         //param.put("inspectionId",);
         //操作按钮代码
-        param.put("operateCode",CodeEnum.OPERATE_CODE_20.getCode());
+        param.put("operateCode",CodeEnum.ACTION_TYPE_05.getCode());
         return toAjax(qualityInspectionItemService.updateQualityItem(sendIds,param));
     }
 

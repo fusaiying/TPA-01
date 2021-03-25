@@ -186,18 +186,6 @@
           </el-input>
         </el-form-item>
       </el-row>
-      <el-row>
-        <el-col :span="16">
-          <el-form-item label="业务内容：" prop="remark">
-            <el-input
-              type="textarea"
-              :rows="2"
-              placeholder="请输入内容"
-              v-model="acceptForm.remark">
-            </el-input>
-          </el-form-item>
-        </el-col>
-      </el-row>
     </el-form>
   </el-card>
 

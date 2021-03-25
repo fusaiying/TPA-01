@@ -302,6 +302,15 @@ public class CustomServiceSpotCheckController extends BaseController {
         return AjaxResult.success(qualityInspectionAcceptService.updateSendByVoById(workOrderNo));
     }
 
+    //************************************************************************************
+    /**
+     *工单修改判断弹框
+     */
+    @GetMapping("/internal/updateGetWorkOrder1")
+    public AjaxResult updateGetWorkOrder1(String workOrderNo) {
+        return AjaxResult.success(qualityInspectionAcceptService.updateSendByVoByIdById1(workOrderNo));
+    }
+
     //************************************************
         /*
         工单查询清单导出

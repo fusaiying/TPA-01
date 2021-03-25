@@ -112,6 +112,32 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
         }return acceptVo;
     }
 
+    /*工单修改*/
+    @Override
+    public AcceptVo updateSendByVoByIdById1(String workOrderNo){
+        AcceptVo acceptVo = qualityInspectionAcceptMapper.selectSendByVoById1(workOrderNo);//先查询所有的工单
+        String updateBy=SecurityUtils.getUsername();
+        WorkOrderAccept workOrderAccept = workOrderAcceptMapper.selectWorkOrderAcceptById(workOrderNo);
+        if (null != acceptVo && !acceptVo.getUpdateBy().equals(updateBy)) {//
+            workOrderAccept.setStatus("02");
+            workOrderAccept.setAcceptBy(SecurityUtils.getUsername());
+            workOrderAccept.setUpdateBy(SecurityUtils.getUsername());
+            workOrderAccept.setUpdateTime(DateUtils.getNowDate());
+            workOrderAcceptMapper.updateWorkOrderAccept(workOrderAccept);
+            acceptVo.setFlag("1");//别人修改的案件需要弹框
+        }
+        else if (null != acceptVo  && acceptVo.getUpdateBy().equals(updateBy)){
+            workOrderAccept.setStatus("02");
+            workOrderAccept.setAcceptBy(SecurityUtils.getUsername());
+            workOrderAccept.setUpdateBy(SecurityUtils.getUsername());
+            workOrderAccept.setUpdateTime(DateUtils.getNowDate());
+            workOrderAcceptMapper.updateWorkOrderAccept(workOrderAccept);
+            acceptVo.setFlag("2");//本人修改的案件不用弹框
+        }
+        return acceptVo;
+    }
+
+
     //质检中，待质检查询
     @Override
     public List<AcceptVo> selectAcceptPoolData(WorkOrderQueryDTO workOrderQueryDTO) {
@@ -347,7 +373,7 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
         cal.add(Calendar.MINUTE, 30); // 目前时间加30分钟
 
         cal1.add(Calendar.MINUTE, -30); // 目前时间减30分钟
-     /*   if (1 == cal.get(Calendar.DAY_OF_WEEK)) {
+        /*   if (1 == cal.get(Calendar.DAY_OF_WEEK)) {
             cal.add(Calendar.DATE, -1);
         }
         cal.add(Calendar.DAY_OF_MONTH, -7);//时间减去7天
@@ -386,7 +412,7 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
                 Set<String> set = new HashSet<String>();
                 Random random = new Random();
                 double h = i * 0.1;
-                if (h <= 1) {
+                if (h <= 1 && h>0) {
                     int j = 1;//抽取总量的10%，如计算结果≤1，则取1
                     int a = 0;
                     while (true) {

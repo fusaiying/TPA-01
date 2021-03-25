@@ -25,7 +25,7 @@
         </el-col>
         <el-col :span="8">
           <el-form-item label="电话中心业务流水号：" prop="callCenterId">
-            <el-input v-model="acceptForm.callCenterId" class="item-width" size="mini"/>
+            <el-input disabled v-model="acceptForm.callCenterId" class="item-width" size="mini"/>
           </el-form-item>
         </el-col>
         <el-col :span="8">
@@ -252,28 +252,28 @@
     },
     data() {
       const checkName1= (rule, value, callback) => {
-        if (this.acceptForm.contactsPerson.name!='' && this.acceptForm.contactsPerson.name!=null && this.acceptForm.contactsPerson.name!=undefined) {
+        if (this.acceptForm.contactsPerson && this.acceptForm.contactsPerson.name!='' && this.acceptForm.contactsPerson.name!=null && this.acceptForm.contactsPerson.name!=undefined) {
           callback()
         } else {
           callback(new Error('联系人姓名不能为空'))
         }
       }
       const checkName2= (rule, value, callback) => {
-        if (this.acceptForm.complaintPerson.name!='' && this.acceptForm.complaintPerson.name!=null && this.acceptForm.complaintPerson.name!=undefined) {
+        if (this.acceptForm.complaintPerson && this.acceptForm.complaintPerson.name!='' && this.acceptForm.complaintPerson.name!=null && this.acceptForm.complaintPerson.name!=undefined) {
           callback()
         } else {
           callback(new Error('投诉人姓名不能为空'))
         }
       }
       const checkMobilePhone1= (rule, value, callback) => {
-        if (this.acceptForm.callPerson.mobilePhone!='' && this.acceptForm.callPerson.mobilePhone!=null && this.callPerson.contactsPerson.mobilePhone!=undefined) {
+        if (this.acceptForm.callPerson && this.acceptForm.callPerson.mobilePhone!='' && this.acceptForm.callPerson.mobilePhone!=null && this.acceptForm.callPerson.mobilePhone!=undefined) {
           callback()
         } else {
           callback(new Error('来电号码不能为空'))
         }
       }
       const checkMobilePhone2= (rule, value, callback) => {
-        if (this.acceptForm.contactsPerson.mobilePhone!='' && this.acceptForm.contactsPerson.mobilePhone!=null && this.acceptForm.contactsPerson.mobilePhone!=undefined) {
+        if (this.acceptForm.contactsPerson && this.acceptForm.contactsPerson.mobilePhone!='' && this.acceptForm.contactsPerson.mobilePhone!=null && this.acceptForm.contactsPerson.mobilePhone!=undefined) {
           callback()
         } else {
           callback(new Error('联系人移动电话'))
@@ -324,7 +324,6 @@
           mobilePhone1: {validator: checkMobilePhone1, required: true, trigger: ['blur']},
           mobilePhone2: {validator: checkMobilePhone2, required: true, trigger: ['blur']},
           organCode: [{required: true, message: '出单机构不能为空', trigger: 'change'}],
-          remark: [{required: true, message: '业务内容不能为空', trigger: 'blur'}],
           content: [{required: true, message: '投诉内容不能为空', trigger: 'blur'}]
         }
       }
@@ -371,13 +370,15 @@
         }
       },
       checkForm() {
+        let data=false
         this.$refs.ruleForm.validate((valid) => {
           if (valid) {
-            return true
+            data= true
           }else {
-            return false
+            data= false
           }
         })
+        return data
       }
     }
   }

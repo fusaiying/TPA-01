@@ -127,11 +127,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         and woa.work_order_no=#{workOrderNo}
     </select>
 
-    <!--工单根据工单号查询非处理中的数据-->
+    <!--工单根据工单号查询所有状态的数据-->
     <select id="selectSendByVoById2" parameterType="String" resultMap="AcceptResult">
         <include refid="selectSendVo"/>
         where 1=1 and not exists (SELECT 1 FROM quality_inspection_accept qia WHERE qia.work_order_no=woa.work_order_no and qia.status!='03')
-        and woa.status !='02'
         and woa.work_order_no=#{workOrderNo}
     </select>
 

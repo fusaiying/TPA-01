@@ -78,8 +78,8 @@ public class ClaimCaseDistController extends BaseController
                 roleUserInfoDTO.setRate(vo.getRate());
                 roleUserInfoDTO.setStatus(vo.getStatus());
                 roleUserInfoDTO.setIsEqually(claimUserRole.getIsEqually());
+                termRoleUserInfoDTOList.add(roleUserInfoDTO);
             }
-            termRoleUserInfoDTOList.add(roleUserInfoDTO);
         }
         tableDataInfo.setRows(termRoleUserInfoDTOList);
 

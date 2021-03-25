@@ -1,7 +1,7 @@
 package com.paic.ehis.claimmgt.domain;
 
 import com.paic.ehis.common.core.web.domain.BaseEntity;
-import com.sun.tools.internal.xjc.reader.xmlschema.bindinfo.BIConversion;
+//import com.sun.tools.internal.xjc.reader.xmlschema.bindinfo.BIConversion;
 import lombok.Data;
 
 @Data

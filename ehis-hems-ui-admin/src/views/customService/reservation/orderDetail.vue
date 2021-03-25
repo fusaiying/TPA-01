@@ -721,6 +721,9 @@
       this.cs_organization = this.dictList.find(item => {
         return item.dictType === 'cs_organization'
       }).dictDate
+      this.cs_order_state = this.dictList.find(item => {
+        return item.dictType === 'cs_order_state'
+      }).dictDate
     },
     methods: {
       //超链接用

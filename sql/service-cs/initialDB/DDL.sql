@@ -44,6 +44,12 @@ CREATE TABLE `accept_detail_info` (
 `prop23` varchar(50) DEFAULT NULL COMMENT '见转意表',
 `prop24` varchar(50) DEFAULT NULL COMMENT '见转意表',
 `prop25` varchar(50) DEFAULT NULL COMMENT '见转意表',
+`prop26` varchar(100) DEFAULT NULL COMMENT '见转意表',
+`prop27` varchar(100) DEFAULT NULL COMMENT '见转意表',
+`prop28` varchar(200) DEFAULT NULL COMMENT '见转意表',
+`prop29` varchar(500) DEFAULT NULL COMMENT '见转意表',
+`prop30` varchar(500) DEFAULT NULL COMMENT '见转意表',
+`prop31` varchar(1000) DEFAULT NULL COMMENT '见转意表',
 PRIMARY KEY (`work_order_no`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='受理详情表';
 
@@ -399,7 +405,9 @@ CREATE TABLE `work_order_accept` (
 `hang_reason` varchar(32) DEFAULT NULL COMMENT '挂起原因',
 `create_by` varchar(10) NOT NULL COMMENT '创建人',
 `create_time` datetime NOT NULL COMMENT '创建时间',
-`update_by` varchar(10) NOT NULL COMMENT '更新人',
-`update_time` datetime NOT NULL COMMENT '更新时间',
+`update_by` varchar(10) DEFAULT NULL,
+`update_time` datetime DEFAULT NULL,
+`otherno` varchar(32) DEFAULT NULL COMMENT '外部受理案件号',
+`activation_num` int(11) DEFAULT '0' COMMENT '激活次数',
 PRIMARY KEY (`work_order_no`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='工单申请信息表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='工单申请信息表 '

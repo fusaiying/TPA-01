@@ -43,6 +43,7 @@
                  select * from (
 			SELECT
             a.rpt_no,
+            a.batch_no,
             min( b.treatment_start_date ) treatment_date,
             c.insured_no,
             c.name,
@@ -74,6 +75,7 @@
 				union
 		SELECT
             a.rpt_no,
+            a.batch_no,
             d.treatment_start_date treatment_date,
             c.insured_no,
             c.name,
@@ -103,6 +105,7 @@
          select * from (
 		 SELECT
             a.rpt_no,
+            a.batch_no,
             min( b.treatment_start_date ) treatment_date,
             c.`name`,
             sum( ifNUll(b.bill_amount,0) ) bill_amount,
@@ -136,6 +139,7 @@
 				union
 		SELECT
             a.rpt_no,
+            a.batch_no,
             d.treatment_start_date treatment_date,
             c.name,
             d.bill_amount bill_amount,

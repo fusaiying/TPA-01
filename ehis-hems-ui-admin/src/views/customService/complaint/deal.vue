@@ -1273,8 +1273,7 @@ export default {
       this.changeForm.rules = this.rules2;
       this.$refs.sendForm.clearValidate();
       if(this.sendForm.level1 === null || this.sendForm.level2 === null) {
-        //this.$refs.sendForm.validate((valid) => {});
-        return false;
+        this.$message.warning("请录入必录项");
       } else {
         let insert = this.sendForm
         insert.sign = "01"
@@ -1347,8 +1346,8 @@ export default {
           }).catch(res => {
 
           })
-        }else {
-          return false
+        }else{
+          this.$message.warning("请录入必录项");
         }
       })
     },

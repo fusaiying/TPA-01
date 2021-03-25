@@ -249,11 +249,11 @@
 
         </el-row>
         <el-row>
-          <!--<el-col :span="8">
+          <el-col :span="8">
             <el-form-item label="传真：" prop="contactsPerson.fax">
               <el-input v-model="workPoolData.contactsPerson.fax" class="item-width"  size="mini" />
             </el-form-item>
-          </el-col>-->
+          </el-col>
           <el-col :span="8">
             <el-form-item label="就诊类型：" prop="visitType">
 
@@ -265,7 +265,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="医院工作来电：" prop="hospitalWorkCall">
-              <el-input v-model="workPoolData.hospitalWorkCall" class="item-width"  size="mini" />
+              <el-input v-model="workPoolData.hospitalWorkCall" class="item-width" maxlength="20"  size="mini" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -326,7 +326,7 @@
           </el-col>
 
         </el-row>-->
-        <!--<el-row>
+        <el-row>
           <el-col :span="3">
             <el-form-item label="家庭电话：" style="white-space: nowrap;" :inline="true" prop="contactsPerson.homePhone1[0]">
               国家区号:+
@@ -383,7 +383,7 @@
                         maxlength="4"/>
             </el-form-item>
           </el-col>
-        </el-row>-->
+        </el-row>
         <el-row>
           <el-col :span="8">
             <el-form-item label="预约日期："  style="white-space: nowrap" prop="complaintTime">
@@ -487,11 +487,11 @@
               </el-select>
             </el-form-item>
           </el-col>
-          <!--<el-col :span="8">
+          <el-col :span="8">
             <el-form-item label="类似疾病症状最早发生时间：" prop="earliestTime">
               <el-input v-model="workPoolData.earliestTime" class="item-width"  size="mini" />
             </el-form-item>
-          </el-col>-->
+          </el-col>
 
         </el-row>
         <el-row>
@@ -954,13 +954,6 @@
           organCode: [
             {required: true, message: "出单机构不能为空", trigger: ["blur","change"]}
           ],
-          hospitalWorkCall: [
-            {required: false,
-              message: "医院电话格式不正确",
-              pattern: /^[1][3|4|5|6|7|8|9][0-9]{9}$/,
-              trigger: ["blur","change"]
-            }
-          ],
           'email': [
             {required: true, message: "Email不能为空", trigger: "blur"},
             {required: true,
@@ -1127,7 +1120,27 @@
                 this.$set(this.workPoolData, `a`, arr[0]);
                 this.$set(this.workPoolData, `b`, arr[1]);
               }
-
+              let queryData={
+                hospitalCode:res.rows[0].medicalInstitution,
+                hospitalName:res.rows[0].hospitalName,
+                province:res.rows[0].province,
+                city:res.rows[0].city,
+              }
+              if (res.rows[0].medicalInstitution!='9999'){
+                getHospitalInfo (queryData).then(res => {
+                  if (res != null && res !== '') {
+                    if (res.rows[0].deptList && res.rows[0].deptList.length>0){
+                      this.departmentOption=res.rows[0].deptList
+                    }else {
+                      this.departmentOption=[]
+                    }
+                  }
+                })
+              }else {
+                this.departmentOption=[]
+              }
+              this.region.push(this.workPoolData.province)
+              this.region.push(this.workPoolData.city)
               if (res.rows.length <= 0) {
                 return this.$message.warning(
                   "未查询到数据！"
@@ -1152,6 +1165,8 @@
                 this.$set(this.workPoolData, `a`, arr[0]);
                 this.$set(this.workPoolData, `b`, arr[1]);
               }
+              this.region.push(this.workPoolData.province)
+              this.region.push(this.workPoolData.city)
               let queryData={
                 hospitalCode:res.rows[0].medicalInstitution,
                 hospitalName:res.rows[0].hospitalName,

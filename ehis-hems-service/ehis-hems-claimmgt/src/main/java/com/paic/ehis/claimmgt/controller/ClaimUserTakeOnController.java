@@ -110,4 +110,11 @@ public class ClaimUserTakeOnController extends BaseController
     {
         return toAjax(claimUserTakeOnService.deleteClaimUserTakeOnByIds(takeOnIds));
     }
+
+    @GetMapping("/getTakeOnUserName/{userName}")
+    public AjaxResult getTakeOnUserName(@PathVariable("userName") String userName)
+    {
+        List<String> list = claimUserTakeOnService.getTakeOnUserName(userName);
+        return AjaxResult.success(list);
+    }
 }

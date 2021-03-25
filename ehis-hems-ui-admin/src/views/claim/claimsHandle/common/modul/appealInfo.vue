@@ -101,7 +101,6 @@ let dictss = [{dictType: 'appeal_type'}, {dictType: 'appeal_reason'}, {dictType:
       fixInfo: function (newValue) {
         this.rptNo = newValue.rptNo;
         if(this.rptNo !== '') {
-          this.rptNo = this.rptNo.split("-")[0];
           this.getDetail();
         }
       },
@@ -155,7 +154,7 @@ let dictss = [{dictType: 'appeal_type'}, {dictType: 'appeal_reason'}, {dictType:
     methods: {
       getDetail() {
         const params = {
-          appealRptNo:this.rptNo,
+          newRptNo:this.rptNo,
         };
         getAppealInfo(params).then(response => {
           if(response.code === 200 && response.data) {

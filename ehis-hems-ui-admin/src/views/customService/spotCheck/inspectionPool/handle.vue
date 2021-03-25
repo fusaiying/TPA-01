@@ -11,6 +11,7 @@
       <demandAcceptInfo :routerParams="params" :acceptInfo="allList.acceptInfo" :isDisabled="isDisabled"/>
     </div>
     <div id="#anchor-22" v-if="this.params.businessType=='03'" class="personInfo_class" style="margin-top: 5px;">
+      <!--投诉-->
       <complaintAcceptInfo ref="complaintAcceptInfo" :routerParams="params" :acceptInfo="allList.acceptInfo"
                            :isAcceptInfo="isAcceptInfo"/>
     </div>
@@ -63,7 +64,7 @@
                    size="mini">退回修改
         </el-button>
         <el-button v-if="this.params.node=='mistake'" style="margin-right: 20px" type="primary" @click="submit1('02')"
-                   :disabled="params.status=='show'" size="mini">提交
+                   :disabled="params.status=='show'" size="mini">提交 <!--  差错提交      -->
         </el-button>
         <el-button v-if="this.params.node=='mistake'" style="margin-right: 20px" type="primary" @click="closeHandle"
                    size="mini">关闭
@@ -469,6 +470,7 @@
           businessType: this.params.businessType,
           items: data.items
         }
+
         if (value=='02'){
           item.inspectionHandlerId=this.params.inspectionHandlerId
         }
@@ -491,17 +493,38 @@
             )
           }else {
            if (this.$refs.complaintProcessInfo.checkForm()){
-             insetQualityHandleInfo(item).then(res => {
-               if (res != null && res.code == '200') {
-                 this.$message({
-                   message: '提交成功！',
-                   type: 'success',
-                   center: true,
-                   showClose: true
+             if (value=='02' && this.params.businessType=='03' ){
+               if (this.$refs.complaintAcceptInfo.checkForm() && this.$refs.complaintHandle.checkForm()){
+                 insetQualityHandleInfo(item).then(res => {
+                   if (res != null && res.code == '200') {
+                     this.$message({
+                       message: '提交成功！',
+                       type: 'success',
+                       center: true,
+                       showClose: true
+                     })
+                     this.closeHandle()
+                   }
                  })
-                 this.closeHandle()
+               }else {
+                 return this.$message.warning(
+                   "请录入必要信息！"
+                 )
                }
-             })
+             }else {
+               insetQualityHandleInfo(item).then(res => {
+                 if (res != null && res.code == '200') {
+                   this.$message({
+                     message: '提交成功！',
+                     type: 'success',
+                     center: true,
+                     showClose: true
+                   })
+                   this.closeHandle()
+                 }
+               })
+             }
+
            }
           }
         }else {

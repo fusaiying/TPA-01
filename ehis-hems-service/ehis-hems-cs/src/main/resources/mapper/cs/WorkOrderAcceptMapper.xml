@@ -29,14 +29,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="createTime"    column="create_time"    />
         <result property="updateBy"    column="update_by"    />
         <result property="updateTime"    column="update_time"    />
+        <result property="activationNum"    column="activation_num"    />
     </resultMap>
 
     <sql id="selectWorkOrderAcceptVo">
-        select work_order_no, business_type, policy_no, policy_item_no, risk_code, insured_no, insured_name, holder_no, holder_name, accept_by, accept_time, modify_by, modify_time, vip_flag, organ_code, status, end_date, click_time, hang_flag, hang_reason, create_by, create_time, update_by, update_time from work_order_accept
+        select work_order_no, activation_num,business_type, policy_no, policy_item_no, risk_code, insured_no, insured_name, holder_no, holder_name, accept_by, accept_time, modify_by, modify_time, vip_flag, organ_code, status, end_date, click_time, hang_flag, hang_reason, create_by, create_time, update_by, update_time from work_order_accept
     </sql>
 
 
-    <select id="selectWorkOrderAcceptList" parameterType="WorkOrderAccept" resultMap="WorkOrderAcceptResult">
+    <select id="selectWorkOrderAcceptList" parameterType="com.paic.ehis.cs.domain.WorkOrderAccept" resultMap="WorkOrderAcceptResult">
         <include refid="selectWorkOrderAcceptVo"/>
         <where>
             <if test="businessType != null  and businessType != ''"> and business_type = #{businessType}</if>
@@ -64,6 +65,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectWorkOrderAcceptById" parameterType="String" resultMap="WorkOrderAcceptResult">
         <include refid="selectWorkOrderAcceptVo"/>
         where work_order_no = #{workOrderNo}
+    </select>
+    <!--实时查询案件操作人和状态-->
+    <select id="selectWorkOrderAcceptById1" parameterType="String" resultMap="WorkOrderAcceptResult">
+        select * from work_order_accept
+        where  work_order_no = #{workOrderNo}
     </select>
 
     <select id="selectProcessingTimeById" parameterType="String" resultType="java.lang.String">
@@ -97,6 +103,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null">create_time,</if>
             <if test="updateBy != null and updateBy != ''">update_by,</if>
             <if test="updateTime != null">update_time,</if>
+            <if test="otherNo != null">other_no,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="workOrderNo != null">#{workOrderNo},</if>
@@ -123,6 +130,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null">#{createTime},</if>
             <if test="updateBy != null and updateBy != ''">#{updateBy},</if>
             <if test="updateTime != null">#{updateTime},</if>
+            <if test="otherNo != null">#{otherNo},</if>
         </trim>
     </insert>
 

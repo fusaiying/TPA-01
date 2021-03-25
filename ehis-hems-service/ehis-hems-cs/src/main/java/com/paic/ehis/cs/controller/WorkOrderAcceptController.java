@@ -70,6 +70,15 @@ public class WorkOrderAcceptController extends BaseController
         return AjaxResult.success(workOrderAcceptService.selectWorkOrderAcceptById(workOrderNo));
     }
 
+    //实时查询案件操作人和状态
+    @GetMapping(value = "/workOrderAccept/{workOrderNo}")
+    public String getInfo1(@PathVariable("workOrderNo") String workOrderNo)
+    {
+        return workOrderAcceptService.selectWorkOrderAcceptById1(workOrderNo);
+    }
+
+
+
     /**
      * 新增工单申请信息 
      */

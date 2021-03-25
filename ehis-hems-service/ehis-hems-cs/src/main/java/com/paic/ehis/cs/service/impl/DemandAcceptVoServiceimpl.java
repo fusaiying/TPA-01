@@ -347,11 +347,14 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         personInfo2.setName(demandAcceptVo.getContactsName());
         personInfo2.setLanguage(demandAcceptVo.getContactsLanguage());
         personInfo2.setMobilePhone(demandAcceptVo.getContactsMobilePhone());
-        if (demandAcceptVo.getContactsCountry() != null && demandAcceptVo.getContactsCountry() != "") {
-            personInfo2.setLinePhone(demandAcceptVo.getContactsCountry() + "-" + demandAcceptVo.getContactsQuhao() + "-" + demandAcceptVo.getContactsNumber() + "-" + demandAcceptVo.getContactsSecondNumber());
-        }else{
-            personInfo2.setLinePhone("---");
-        }
+        String tLinePhone = StringUtils.isNotEmpty(demandAcceptVo.getContactsCountry())?demandAcceptVo.getContactsCountry():"";
+        tLinePhone += "-";
+        tLinePhone += StringUtils.isNotEmpty(demandAcceptVo.getContactsQuhao())?demandAcceptVo.getContactsQuhao():"";
+        tLinePhone += "-";
+        tLinePhone += StringUtils.isNotEmpty(demandAcceptVo.getContactsNumber())?demandAcceptVo.getContactsNumber():"";
+        tLinePhone += "-";
+        tLinePhone += StringUtils.isNotEmpty(demandAcceptVo.getContactsSecondNumber())?demandAcceptVo.getContactsSecondNumber():"";
+        personInfo2.setLinePhone(tLinePhone);
         personInfo2.setCreatedBy(SecurityUtils.getUsername());
         personInfo2.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         personInfo2.setUpdatedBy(SecurityUtils.getUsername());
@@ -480,11 +483,37 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         outList.add("callPerson");
         outList.add("contactsPerson");
 
+        Map<String ,String> tDictType = new HashMap<String ,String>();
+        tDictType.put("sex","cs_sex");
+        tDictType.put("language","cs_communication_language");
+        tDictType.put("channelCode","cs_channel");
+        tDictType.put("priorityLevel","cs_priority");
+        tDictType.put("organCode","cs_organization");
+        tDictType.put("callRelationBy","cs_relation");
+        tDictType.put("visitType","cs_consultation_type");
+        tDictType.put("validCertificate","cs_whether_flag");
+        tDictType.put("settlementCard","cs_whether_flag");
+        tDictType.put("accidentFlag","cs_whether_flag");
+        tDictType.put("identity","cs_identity");
+
+        Map<String,String> tSpecialMap = new HashMap<String ,String>();
+        tSpecialMap.put("updateBy","updateBy");
+        tSpecialMap.put("updateTime","updateTime");
+        tSpecialMap.put("createBy","createBy");
+        tSpecialMap.put("createTime","createTime");
+        tSpecialMap.put("updatedBy","updatedBy");
+        tSpecialMap.put("updatedTime","updatedTime");
+        tSpecialMap.put("createdBy","createdBy");
+        tSpecialMap.put("createdTime","createdTime");
+        tSpecialMap.put("changeTime","changeTime");
+        tSpecialMap.put("remarkTime","remarkTime");
+        tSpecialMap.put("oldmodifyBy","oldmodifyBy");
+
         List<String> keyList = new ArrayList<>();
         Iterator<String> iter = map1.keySet().iterator();
         while (iter.hasNext()) {
             String key = iter.next();
-            if(!"updateBy".equals(key) && !"updateTime".equals(key) && !"changeTime".equals(key) && !"createBy".equals(key) && !"createTime".equals(key) && !"updatedBy".equals(key) && !"updatedTime".equals(key) && !"createdBy".equals(key) && !"createdTime".equals(key)){
+            if(tSpecialMap.get(key)==null || "".equals(tSpecialMap.get(key))){
                 keyList.add(key);
             }
         }
@@ -492,7 +521,7 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         while (iter2.hasNext()) {
             String key = iter2.next();
             if (!keyList.contains(key)) {
-                if(!"updateBy".equals(key) && !"updateTime".equals(key) && !"changeTime".equals(key) && !"createBy".equals(key) && !"createTime".equals(key) && !"updatedBy".equals(key) && !"updatedTime".equals(key) && !"createdBy".equals(key) && !"createdTime".equals(key)){
+                if(tSpecialMap.get(key)==null || "".equals(tSpecialMap.get(key))){
                     keyList.add(key);
                 }
             }
@@ -514,6 +543,7 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
                 editDetail.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
                 editDetail.setUpdatedBy(SecurityUtils.getUsername());
                 editDetail.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+                editDetail.setValueDictType(tDictType.get(mapkey));
 
                 if ((map1value == null || map1value.equals("")) && (map2value != null && !map2value.equals(""))) {
                     editDetail.setDetailId(PubFun.createMySqlMaxNoUseCache("cs_detail_id", 10, 8));
@@ -539,14 +569,14 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         Iterator<String> iter3 = map3.keySet().iterator();
         while (iter3.hasNext()) {
             String key = iter3.next();
-            if(!"updateBy".equals(key) && !"updateTime".equals(key) && !"changeTime".equals(key) && !"createBy".equals(key) && !"createTime".equals(key) && !"updatedBy".equals(key) && !"updatedTime".equals(key) && !"createdBy".equals(key) && !"createdTime".equals(key)){
+            if(tSpecialMap.get(key)==null || "".equals(tSpecialMap.get(key))){
                 keyList1.add(key);
             }
         }
         Iterator<String> iter4 = map4.keySet().iterator();
         while (iter4.hasNext()) {
             String key = iter4.next();
-            if(!"updateBy".equals(key) && !"updateTime".equals(key) && !"changeTime".equals(key) && !"createBy".equals(key) && !"createTime".equals(key) && !"updatedBy".equals(key) && !"updatedTime".equals(key) && !"createdBy".equals(key) && !"createdTime".equals(key)){
+            if(tSpecialMap.get(key)==null || "".equals(tSpecialMap.get(key))){
                 if (!keyList1.contains(key)) {
                     keyList1.add(key);
                 }
@@ -565,6 +595,7 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
             editDetail.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
             editDetail.setUpdatedBy(SecurityUtils.getUsername());
             editDetail.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+            editDetail.setValueDictType(tDictType.get(map3key));
 
             if ((map3value == null || map3value.equals("")) && (map4value != null && !map4value.equals(""))) {
                 editDetail.setDetailId(PubFun.createMySqlMaxNoUseCache("cs_detail_id", 10, 8));
@@ -590,14 +621,14 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         Iterator<String> iter5 = map5.keySet().iterator();
         while (iter5.hasNext()) {
             String key = iter5.next();
-            if(!"updateBy".equals(key) && !"updateTime".equals(key) && !"changeTime".equals(key) && !"createBy".equals(key) && !"createTime".equals(key) && !"updatedBy".equals(key) && !"updatedTime".equals(key) && !"createdBy".equals(key) && !"createdTime".equals(key)){
+            if(tSpecialMap.get(key)==null || "".equals(tSpecialMap.get(key))){
                 keyList2.add(key);
             }
         }
         Iterator<String> iter6 = map6.keySet().iterator();
         while (iter6.hasNext()) {
             String key = iter6.next();
-            if(!"updateBy".equals(key) && !"updateTime".equals(key) && !"changeTime".equals(key) && !"createBy".equals(key) && !"createTime".equals(key) && !"updatedBy".equals(key) && !"updatedTime".equals(key) && !"createdBy".equals(key) && !"createdTime".equals(key)){
+            if(tSpecialMap.get(key)==null || "".equals(tSpecialMap.get(key))){
                 if (!keyList2.contains(key)) {
                     keyList2.add(key);
                 }
@@ -616,6 +647,7 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
             editDetail.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
             editDetail.setUpdatedBy(SecurityUtils.getUsername());
             editDetail.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+            editDetail.setValueDictType(tDictType.get(map5key));
 
             if ((map5value == null || map5value.equals("")) && (map6value != null && !map6value.equals(""))) {
                 editDetail.setDetailId(PubFun.createMySqlMaxNoUseCache("cs_detail_id", 10, 8));

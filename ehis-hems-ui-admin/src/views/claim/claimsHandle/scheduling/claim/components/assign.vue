@@ -12,8 +12,8 @@
         <el-form ref="userForm" :model="userForm" style="border:0;" label-width="110px" label-position="right" size="mini" :rules="rules" >
           <el-row>
             <el-col :span="24">
-              <el-form-item label="角色：" prop="level">
-                <el-select v-model="userForm.roleId"  size="mini" placeholder="请选择">
+              <el-form-item label="角色：" prop="roleCode">
+                <el-select v-model="userForm.roleCode"  size="mini" placeholder="请选择">
                   <el-option v-for="option in roles" :key="option.dictValue" :label="option.dictLabel" :value="option.dictValue" />
                 </el-select>
               </el-form-item>
@@ -54,6 +54,12 @@
         return {}
       }
     },
+    roleMappingValue: {
+      type : Object,
+      default: function (){
+        return {}
+      }
+    },
   },
   watch: {
     value: function (newValue) {
@@ -62,18 +68,18 @@
     roleSelects: function (newVal){
       this.roles = newVal;
     },
-
   },
   data() {
     return {
+        mappingValue:{},
         roles:[],
         dialogVisible:false,
         userForm : {
-          roleId:'',
+          roleCode:'',
           status:'01',
         },
         rules: {
-          roleId: {trigger: ['change'], required: true, message: '角色必填'},
+          roleCode: {trigger: ['change'], required: true, message: '角色必填'},
           status: {trigger: ['change'], required: true, message: '分配状态必填'},
         },
       // 状态数据字典
@@ -92,6 +98,9 @@
       this.$refs.userForm.validate((valid) => {
         if (valid) {
           const params = this.userForm;
+          params.isEqually = 'Y';
+          params.mappingValue = this.roleMappingValue[this.userForm.roleCode];
+          params.roleCode = this.userForm.roleCode;
           editInfoAverage(params).then(response => {
             if (response.code == '200') {
               this.$message({

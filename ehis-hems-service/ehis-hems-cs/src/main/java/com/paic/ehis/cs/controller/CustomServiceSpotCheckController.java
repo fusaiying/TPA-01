@@ -46,7 +46,8 @@ public class CustomServiceSpotCheckController extends BaseController {
     private IQualityInspectionItemService qualityInspectionItemService;
     @Autowired
     private IAttachmentInfoService attachmentInfoService;
-
+    @Autowired
+    private IDemandAcceptVoService iDemandAcceptVoService;
 
     /**
      * 发送质检工作池：数据来源
@@ -132,9 +133,8 @@ public class CustomServiceSpotCheckController extends BaseController {
         param.put("status",CodeEnum.INSPECTION_STATE_01.getCode());
         //操作前主流程状态
         param.put("linkCode",CodeEnum.ORDER_STATE_04.getCode());//已完成的可质检
-        param.put("linkCode1",CodeEnum.ORDER_STATE_05.getCode());//取消也可质检
         //操作按钮代码
-        param.put("operateCode",CodeEnum.OPERATE_CODE_16.getCode());
+        param.put("operateCode",CodeEnum.ACTION_TYPE_13.getCode());
         return toAjax(qualityInspectionAcceptService.insertAcceptVoBatch(sendIds,param));
     }
 
@@ -154,7 +154,7 @@ public class CustomServiceSpotCheckController extends BaseController {
         //操作前主流程状态
         param.put("linkCode",CodeEnum.LINK_CODE_08.getCode());
         //操作按钮代码
-        param.put("operateCode",CodeEnum.OPERATE_CODE_17.getCode());
+        param.put("operateCode",CodeEnum.ACTION_TYPE_02.getCode());
         return toAjax(qualityInspectionAcceptService.inspectionHandleStatusByIds(getIds,param));
     }
 
@@ -263,7 +263,7 @@ public class CustomServiceSpotCheckController extends BaseController {
         param.put("linkCode",CodeEnum.LINK_CODE_10.getCode());
         //param.put("inspectionId",);
         //操作按钮代码
-        param.put("operateCode",CodeEnum.OPERATE_CODE_20.getCode());
+        param.put("operateCode",CodeEnum.ACTION_TYPE_05.getCode());
         return toAjax(qualityInspectionItemService.updateQualityItem(sendIds,param));
     }
 
@@ -300,6 +300,15 @@ public class CustomServiceSpotCheckController extends BaseController {
     @GetMapping("/internal/updateGetWorkOrder")
     public AjaxResult updateGetWorkOrder(String workOrderNo) {
         return AjaxResult.success(qualityInspectionAcceptService.updateSendByVoById(workOrderNo));
+    }
+
+    //************************************************************************************
+    /**
+     *工单修改判断弹框
+     */
+    @GetMapping("/internal/updateGetWorkOrder1")
+    public AjaxResult updateGetWorkOrder1(String workOrderNo) {
+        return AjaxResult.success(qualityInspectionAcceptService.updateSendByVoByIdById1(workOrderNo));
     }
 
     //************************************************
@@ -412,9 +421,16 @@ public class CustomServiceSpotCheckController extends BaseController {
 
 
     //信息需求失效批处理
-    @GetMapping("/internal/batchAcceptVo/invalidDate")
+    @GetMapping("/internal/batchAcceptVo/invalidDate/{invalidDate}")
     public AjaxResult batchAcceptVo(@PathVariable("invalidDate") String invalidDate){
         try{
+            Map<String,String> param=new HashMap<>();
+            //操作后主流程状态
+            param.put("status",CodeEnum.INSPECTION_STATE_01.getCode());
+            //操作前主流程状态
+            param.put("linkCode",CodeEnum.ORDER_STATE_04.getCode());//已完成的可质检
+            //操作按钮代码
+            param.put("operateCode",CodeEnum.OPERATE_CODE_16.getCode());
             qualityInspectionAcceptService.batchAcceptVo(invalidDate);
         }catch(RuntimeException e){
             return AjaxResult.error(e.getMessage());
@@ -422,5 +438,22 @@ public class CustomServiceSpotCheckController extends BaseController {
         return AjaxResult.success("执行成功");
     }
 
+    //信息需求一个月失效批处理
+    @GetMapping("/internal/batchAcceptVo/invalidDateMonth/{invalidDate}")
+    public AjaxResult batchAcceptVomonth(@PathVariable("invalidDate") String invalidDate){
+        try{
+            Map<String,String> param=new HashMap<>();
+            //操作后主流程状态
+            param.put("status",CodeEnum.INSPECTION_STATE_01.getCode());
+            //操作前主流程状态
+            param.put("linkCode",CodeEnum.ORDER_STATE_04.getCode());//已完成的可质检
+            //操作按钮代码
+            param.put("operateCode",CodeEnum.OPERATE_CODE_16.getCode());
+            qualityInspectionAcceptService.batchAcceptVomonth(invalidDate);
+        }catch(RuntimeException e){
+            return AjaxResult.error(e.getMessage());
+        }
+        return AjaxResult.success("执行成功");
+    }
 
 }

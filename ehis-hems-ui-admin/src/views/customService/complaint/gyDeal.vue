@@ -127,7 +127,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="出单机构:"  prop="Acceptor">
-              <el-select v-model="sendForm.organCode" class="item-width" clearable placeholder="请选择">
+              <el-select v-model="sendForm.organCode" class="item-width" clearable placeholder="请选择" disabled="submissionFlag">
                 <el-option v-for="item in cs_organization" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
@@ -194,7 +194,7 @@
 
 
     <el-card class="box-card" style="margin-top: 10px;">
-      <el-form ref="ruleForm" :model="ruleForm"  style="padding-bottom: 30px;" label-width="160px"
+      <el-form ref="ruleForm" :model="ruleForm" style="padding-bottom: 30px;" label-width="160px" :disabled="isDisabled"
                label-position="right" size="mini">
 
         <span style="color: blue">根因改善-服务受理信息</span>
@@ -202,7 +202,7 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="受理渠道：" prop="phone">
-              <el-select v-model="workPoolData.channelCode" class="item-width" placeholder="请选择">
+              <el-select v-model="workPoolData.channelCode" class="item-width" placeholder="请选择" disabled="submissionFlag">
                 <el-option v-for="item in cs_channel" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
@@ -222,7 +222,7 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="联系人性别：" prop="sex" >
-              <el-select v-model="workPoolData.contactsPerson.sex" class="item-width">
+              <el-select v-model="workPoolData.contactsPerson.sex" class="item-width" disabled="submissionFlag">
                 <el-option v-for="item in cs_sex" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
@@ -242,7 +242,7 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="优先级：" prop="priorityLevel">
-              <el-select v-model="workPoolData.priorityLevel" class="item-width" placeholder="">
+              <el-select v-model="workPoolData.priorityLevel" class="item-width" placeholder="" disabled="submissionFlag">
                 <el-option v-for="item in cs_priority" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
@@ -282,7 +282,7 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="投诉人性别：" prop="phone">
-              <el-select v-model="workPoolData.complaintPerson.sex" class="item-width" placeholder="">
+              <el-select v-model="workPoolData.complaintPerson.sex" class="item-width" placeholder="" disabled="submissionFlag">
                 <el-option v-for="item in cs_sex" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
@@ -290,7 +290,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="投诉人身份：" prop="phone">
-              <el-select v-model="workPoolData.complaintPerson.identity" class="item-width" disabled>
+              <el-select v-model="workPoolData.complaintPerson.identity" class="item-width" disabled="submissionFlag">
                 <el-option v-for="item in cs_identity" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
@@ -310,7 +310,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="出单机构：" prop="organCode">
-              <el-select v-model="workPoolData.organCode" class="item-width" clearable placeholder="请选择">
+              <el-select v-model="workPoolData.organCode" class="item-width" clearable placeholder="请选择" disabled="submissionFlag">
                 <el-option v-for="item in cs_organization" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
@@ -319,7 +319,7 @@
 
         </el-row>
         <el-row>  <el-form-item label="是否已劝解：" prop="persuasionFlag">
-          <el-select v-model="workPoolData.persuasionFlag" class="item-width" placeholder="">
+          <el-select v-model="workPoolData.persuasionFlag" class="item-width" placeholder="" disabled="submissionFlag">
             <el-option v-for="item in cs_whether_flag" :key="item.dictValue" :label="item.dictLabel"
                        :value="item.dictValue"/>
           </el-select>
@@ -388,7 +388,7 @@
     </el-card>
 
     <el-card>
-      <el-form  ref="serverForm" :model="serverForm" style="padding-bottom: 30px;" label-width="145px"
+      <el-form  ref="serverForm" :model="serverForm" :rules="rules" style="padding-bottom: 30px;" label-width="145px"
                  label-position="right" size="mini">
         <span style="color: blue">服务处理</span>
         <el-divider/>
@@ -557,7 +557,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="跟因改善：" prop="rootImprovement" placeholder="">
+          <el-form-item label="根因改善：" prop="rootImprovement" placeholder="">
             <el-input v-model="serverForm.rootImprovement" class="item-width" readonly size="mini" disabled="submissionFlag"/>
           </el-form-item>
         </el-col>
@@ -567,7 +567,7 @@
           </el-form-item>
         </el-col>
         <el-col>
-          <el-form-item label="改善措施：" prop="phone">
+          <el-form-item label="改善措施：" prop="content">
             <el-input
               type="textarea"
               :rows="2"
@@ -730,21 +730,6 @@
         },
         // 表单校验
         rules: {
-          Service: [
-            {required: true, message: "服务项目不能为空", trigger: "blur"}
-          ],
-          priority: [
-            {required: true, message: "优先级不能为空", trigger: "blur"}
-          ],
-          lxperson: [
-            {required: true, message: "联系人不能为空", trigger: "blur"}
-          ],
-          // orderNum: [
-          //   {required: true, message: "联系人与被保人关系不能为空", trigger: "blur"}
-          // ],
-          orderNum: [
-            {required: true, message: "联系人移动电话不能为空", trigger: "blur"}
-          ],
           content: [
             {required: true, message: "改善措施不能为空", trigger: "blur"}
           ],
@@ -1072,20 +1057,29 @@
 
       //提交
       submit(){
-        let insert=this.sendForm
-        insert.sign="02"
-        insert.workOrderNo=this.$route.query.workOrderNo
-        complaintDealSubmit(insert).then(res => {
-          if (res != null && res.code === 200) {
-            this.$message.success("保存成功")
-            if (res.rows.length <= 0) {
+
+        this.$refs.serverForm.validate((valid) => {
+          if (valid) {
+            let insert = this.sendForm
+            insert.sign = "02"
+            insert.workOrderNo = this.$route.query.workOrderNo
+            complaintDealSubmit(insert).then(res => {
+              if (res != null && res.code === 200) {
+                this.$message.success("保存成功")
+                if (res.rows.length <= 0) {
+                  return this.$message.warning(
+                    "失败！"
+                  )
+                }
+              }
+            }).catch(res => {
               return this.$message.warning(
                 "失败！"
               )
-            }
+            })
+          }else{
+            this.$message.warning("请录入必录项");
           }
-        }).catch(res => {
-
         })
 
       },

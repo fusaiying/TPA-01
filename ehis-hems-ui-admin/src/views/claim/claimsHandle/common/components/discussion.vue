@@ -43,7 +43,7 @@
               <span class="info_span_col to_right">追讨金额：</span> <span class="info_span money_class">{{ conclusionInfo.debtAmount}} {{ conclusionInfo.debtAmount == '' || conclusionInfo.debtAmount == null ? '' : 'CNY' }}</span>
             </el-col>
             <el-col :span="8" v-if="appealCase">
-              <span class="info_span_col to_right">本次支付差额：</span> <span class="info_span money_class">{{ conclusionInfo.paymentDifference }} {{ conclusionInfo.paymentDifference == '' || conclusionInfo.paymentDifference == null  ? '' : 'CNY' }}</span>
+              <span class="info_span_col to_right">本次支付差额：</span> <span class="info_span money_class">{{ conclusionInfo.paymentDifference }} {{ conclusionInfo.paymentDifference == '' || conclusionInfo.paymentDifference == null  ? '' : billCurency }}</span>
             </el-col>
           </el-row>
 
@@ -641,6 +641,7 @@
                 refusedReason:this.conclusionForm.refusedReason,
                 remark:this.conclusionForm.remark,
                 claimCheck:this.conclusionForm.claimCheck,
+                debtAmount:this.conclusionInfo.debtAmount
                 // calAmount:'0',
                 // payAmount:this.conclusionInfo.payAmount,
                 // refusedAmount:this.conclusionInfo.refusedAmount,
@@ -748,6 +749,7 @@
           isAppeal: this.conclusionInfo.isAppeal,
           payAmount:this.conclusionInfo.calAmount,
           refusedAmount:this.conclusionInfo.refusedAmount,
+          debtAmount:this.conclusionInfo.debtAmount,
         };
         checkBillAndPolicyDate(this.rptNo).then(res=>{
           if (res!=null && res.code==200){

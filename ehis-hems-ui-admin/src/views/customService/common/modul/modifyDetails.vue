@@ -34,8 +34,16 @@
                   <span>{{ selectDictLabel(cs_demandAcceptVo, scope.row.itemKey) }}</span>
                 </template>
               </el-table-column>
-              <el-table-column align="center" prop="nowValue" label="新值" show-overflow-tooltip/>
-              <el-table-column align="center" prop="oldValue" label="旧值" show-overflow-tooltip/>
+              <el-table-column align="center" prop="nowValue" label="新值" show-overflow-tooltip>
+                <template slot-scope="scope">
+                  <span>{{ showNowValue(scope.row) }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column align="center" prop="oldValue" label="旧值" show-overflow-tooltip>
+                <template slot-scope="scope">
+                  <span>{{ showOldValue(scope.row) }}</span>
+                </template>
+              </el-table-column>
 
               <!--fixed="right"控制固定某一列-->
             </el-table>
@@ -59,10 +67,26 @@
 <script>
 import {modifyDetailsSearch} from '@/api/customService/demand'
 
+let dictss = [
+  {dictType: 'cs_sex'},
+  {dictType: 'cs_communication_language'},
+  {dictType: 'cs_channel'},
+  {dictType: 'cs_priority'},
+  {dictType: 'cs_organization'},
+  {dictType: 'cs_relation'},
+  {dictType: 'cs_consultation_type'},
+  {dictType: 'cs_whether_flag'},
+  {dictType: 'cs_whether_flag'},
+  {dictType: 'cs_whether_flag'},
+  {dictType: 'cs_identity'},
+  {dictType: 'cs_time_unit'},
+]
+
 export default {
   name: 'modify',
   data() {
     return {
+      dictList: [],
       cs_eidt_reason: [],//修改原因
       totalCount: 0,
       workPoolData: [],
@@ -89,6 +113,13 @@ export default {
     this.getDicts("cs_demandAcceptVo").then(response => {
       this.cs_demandAcceptVo = response.data;
     });
+  },
+
+  async mounted() {
+    // 字典数据统一获取
+    await this.getDictsList(dictss).then(response => {
+      this.dictList = response.data
+    })
   },
 
   methods: {
@@ -126,6 +157,33 @@ export default {
       this.dialogVisable = true;
       this.searchHandle();
     },
+    showNowValue(row) {
+      if (row.valueDictType != null && row.valueDictType != '' && row.valueDictType != undefined) {
+        //本次疾病/症状起病时 需要特殊处理
+        if(row.valueDictType == "cs_time_unit"){
+          let tNowValueList = row.nowValue.splice("-");
+          return tNowValueList[0] + this.selectDictLabel((this.dictList.find(item => {return item.dictType === row.valueDictType}).dictDate), tNowValueList[1]);
+        }else{
+          return this.selectDictLabel((this.dictList.find(item => {return item.dictType === row.valueDictType}).dictDate), row.nowValue);
+        }
+      }else{
+        return row.nowValue;
+      }
+    },
+
+    showOldValue(row) {
+      if (row.valueDictType != null && row.valueDictType != '' && row.valueDictType != undefined) {
+        //本次疾病/症状起病时 需要特殊处理
+        if(row.valueDictType == "cs_time_unit"){
+          let tNowValueList = row.oldValue.splice("-");
+          return tNowValueList[0] + this.selectDictLabel((this.dictList.find(item => {return item.dictType === row.valueDictType}).dictDate), tNowValueList[1]);
+        }else {
+          return this.selectDictLabel((this.dictList.find(item => {return item.dictType === row.valueDictType}).dictDate), row.oldValue);
+        }
+      }else{
+        return row.oldValue;
+      }
+    }
   }
 }
 </script>

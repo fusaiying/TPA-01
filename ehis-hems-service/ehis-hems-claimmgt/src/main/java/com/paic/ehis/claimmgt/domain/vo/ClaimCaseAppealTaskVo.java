@@ -81,4 +81,6 @@ public class ClaimCaseAppealTaskVo extends BaseEntity {
 
     private String  createEndTime;
 
+    private String  pubTaskPool;
+
 }

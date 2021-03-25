@@ -314,6 +314,7 @@
         <if test="createTime != null">create_time = #{createTime},</if>
         <if test="updateBy != null">update_by = #{updateBy},</if>
         <if test="updateTime != null">update_time = #{updateTime},</if>
+        <if test="payStatus != null">pay_status = #{payStatus},</if>
         is_finance_back = null
     </trim>
     where rpt_no = #{rptNo} and status = 'Y'
@@ -917,6 +918,7 @@
            AND t2.status = 'Y'
            AND  t4.status = 'Y'
            AND  t5.status = 'Y'
+           AND NOT EXISTS   (select 1 from claim_case_appeal_task t where t.appeal_rpt_no = t1.rpt_no and t.appeal_status = '03' and t.status = 'Y')
         <if test="rptNo != null  and rptNo != ''"> and t1.rpt_no = #{rptNo}</if>
         <if test="source != null  and source != ''"> and t2.source = #{source}</if>
         <if test="idNo != null  and idNo != ''"> and t3.id_no = #{idNo}</if>

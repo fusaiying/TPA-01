@@ -52,6 +52,19 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
     }
 
     /**
+     * 查询协办信息
+     *
+     * @param workOrderNo 协办信息 ID
+     * @return 协办信息
+     */
+    @Override
+    public List<CollaborativeFrom> selectCollaborativeFromByWorkId(String workOrderNo)
+    {
+        List<CollaborativeFrom> tCollaborativeFromList = collaborativeFromMapper.selectCollaborativeFromByWorkId(workOrderNo);
+        return tCollaborativeFromList;
+    }
+
+    /**
      * 查询协办信息 列表
      * 
      * @param collaborativeFrom 协办信息 
@@ -213,7 +226,8 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
             if(!tCollaborativeFromList.get(i).getCollaborativeId().equals(demandAcceptVo.getCollaborativeId())){
                 CollaborativeFrom uptCollaborativeFrom = new CollaborativeFrom();
                 uptCollaborativeFrom.setStatus("02");
-                uptCollaborativeFrom.setHandleState("02");
+                //uptCollaborativeFrom.setHandleState("02");
+                collaborativeFrom.setSolicitOpinion(demandAcceptVo.getSolicitOpinion());
                 uptCollaborativeFrom.setWorkOrderNo(demandAcceptVo.getWorkOrderNo());
                 uptCollaborativeFrom.setCollaborativeId(tCollaborativeFromList.get(i).getCollaborativeId());
                 uptCollaborativeFrom.setUpdatedBy(SecurityUtils.getUsername());

@@ -3,6 +3,7 @@ package com.paic.ehis.system.service;
 import com.alibaba.fastjson.JSONObject;
 import com.paic.ehis.system.api.domain.SysDept;
 import com.paic.ehis.system.api.domain.SysUser;
+import com.paic.ehis.system.api.domain.dto.RoleUserInfoDTO;
 import com.paic.ehis.system.domain.dto.SysUserByOrganCodeDTO;
 import com.paic.ehis.system.domain.dto.SysUserDTO;
 import com.paic.ehis.system.domain.vo.UserVo;
@@ -202,4 +203,11 @@ public interface ISysUserService
      * @return
      */
     public List<SysUser> getUsersByOrganCode(SysUserByOrganCodeDTO sysUserByOrganCodeDTO);
+
+    /**
+     * 根据角色获取用户清单
+     * @param menuId
+     * @return
+     */
+    List<RoleUserInfoDTO> getUsersByMenuId(Long menuId);
 }

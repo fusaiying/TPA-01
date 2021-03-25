@@ -57,6 +57,14 @@ export function  getCollaborativeInfo(collaborativeId) {
   })
 }
 
+/*获取协办信息 UMCode*/
+export function  getUMCode(workOrderNo) {
+  return request({
+    url: '/cs/from/UMCode?workOrderNo='+workOrderNo,
+    method: 'get'
+  })
+}
+
 //# 查询信息需求页面数据
 export function demandAccept(workOrderNo) {
   return request({

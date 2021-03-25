@@ -51,7 +51,8 @@ public class EditDetailController extends BaseController
      */
     @GetMapping("/edit")
     public TableDataInfo getEdit(FlowLog flowLog){
-         List<EditDetail> list =editDetailService.selectEdit(flowLog);
+        startPage();
+        List<EditDetail> list =editDetailService.selectEdit(flowLog);
         return getDataTable(list);
     }
 

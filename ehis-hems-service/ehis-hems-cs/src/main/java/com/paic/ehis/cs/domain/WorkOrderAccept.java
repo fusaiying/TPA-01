@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.paic.ehis.common.core.annotation.Excel;
 import com.paic.ehis.common.core.web.domain.BaseEntity;
 import lombok.Data;
+import lombok.ToString;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -16,6 +17,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  * @author sino
  * @date 2021-03-01
  */
+@Data
+@ToString
 public class WorkOrderAccept extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
@@ -103,215 +106,8 @@ public class WorkOrderAccept extends BaseEntity
     /** 挂起原因 */
     @Excel(name = "挂起原因")
     private String hangReason;
-
-    public void setWorkOrderNo(String workOrderNo) 
-    {
-        this.workOrderNo = workOrderNo;
-    }
-
-    public String getWorkOrderNo() 
-    {
-        return workOrderNo;
-    }
-    public void setBusinessType(String businessType) 
-    {
-        this.businessType = businessType;
-    }
-
-    public String getBusinessType() 
-    {
-        return businessType;
-    }
-    public void setPolicyNo(String policyNo) 
-    {
-        this.policyNo = policyNo;
-    }
-
-    public String getPolicyNo() 
-    {
-        return policyNo;
-    }
-    public void setPolicyItemNo(String policyItemNo) 
-    {
-        this.policyItemNo = policyItemNo;
-    }
-
-    public String getPolicyItemNo() 
-    {
-        return policyItemNo;
-    }
-    public void setRiskCode(String riskCode) 
-    {
-        this.riskCode = riskCode;
-    }
-
-    public String getRiskCode() 
-    {
-        return riskCode;
-    }
-    public void setInsuredNo(String insuredNo) 
-    {
-        this.insuredNo = insuredNo;
-    }
-
-    public String getInsuredNo() 
-    {
-        return insuredNo;
-    }
-    public void setInsuredName(String insuredName) 
-    {
-        this.insuredName = insuredName;
-    }
-
-    public String getInsuredName() 
-    {
-        return insuredName;
-    }
-    public void setHolderNo(String holderNo) 
-    {
-        this.holderNo = holderNo;
-    }
-
-    public String getHolderNo() 
-    {
-        return holderNo;
-    }
-    public void setHolderName(String holderName) 
-    {
-        this.holderName = holderName;
-    }
-
-    public String getHolderName() 
-    {
-        return holderName;
-    }
-    public void setAcceptBy(String acceptBy) 
-    {
-        this.acceptBy = acceptBy;
-    }
-
-    public String getAcceptBy() 
-    {
-        return acceptBy;
-    }
-    public void setAcceptTime(Date acceptTime) 
-    {
-        this.acceptTime = acceptTime;
-    }
-
-    public Date getAcceptTime() 
-    {
-        return acceptTime;
-    }
-    public void setModifyBy(String modifyBy) 
-    {
-        this.modifyBy = modifyBy;
-    }
-
-    public String getModifyBy() 
-    {
-        return modifyBy;
-    }
-    public void setModifyTime(Date modifyTime) 
-    {
-        this.modifyTime = modifyTime;
-    }
-
-    public Date getModifyTime() 
-    {
-        return modifyTime;
-    }
-    public void setVipFlag(String vipFlag) 
-    {
-        this.vipFlag = vipFlag;
-    }
-
-    public String getVipFlag() 
-    {
-        return vipFlag;
-    }
-    public void setOrganCode(String organCode) 
-    {
-        this.organCode = organCode;
-    }
-
-    public String getOrganCode() 
-    {
-        return organCode;
-    }
-    public void setStatus(String status) 
-    {
-        this.status = status;
-    }
-
-    public String getStatus() 
-    {
-        return status;
-    }
-    public void setEndDate(Date endDate) 
-    {
-        this.endDate = endDate;
-    }
-
-    public Date getEndDate() 
-    {
-        return endDate;
-    }
-    public void setClickTime(Date clickTime) 
-    {
-        this.clickTime = clickTime;
-    }
-
-    public Date getClickTime() 
-    {
-        return clickTime;
-    }
-    public void setHangFlag(String hangFlag) 
-    {
-        this.hangFlag = hangFlag;
-    }
-
-    public String getHangFlag() 
-    {
-        return hangFlag;
-    }
-    public void setHangReason(String hangReason) 
-    {
-        this.hangReason = hangReason;
-    }
-
-    public String getHangReason() 
-    {
-        return hangReason;
-    }
-
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("workOrderNo", getWorkOrderNo())
-            .append("businessType", getBusinessType())
-            .append("policyNo", getPolicyNo())
-            .append("policyItemNo", getPolicyItemNo())
-            .append("riskCode", getRiskCode())
-            .append("insuredNo", getInsuredNo())
-            .append("insuredName", getInsuredName())
-            .append("holderNo", getHolderNo())
-            .append("holderName", getHolderName())
-            .append("acceptBy", getAcceptBy())
-            .append("acceptTime", getAcceptTime())
-            .append("modifyBy", getModifyBy())
-            .append("modifyTime", getModifyTime())
-            .append("vipFlag", getVipFlag())
-            .append("organCode", getOrganCode())
-            .append("status", getStatus())
-            .append("endDate", getEndDate())
-            .append("clickTime", getClickTime())
-            .append("hangFlag", getHangFlag())
-            .append("hangReason", getHangReason())
-            .append("createBy", getCreateBy())
-            .append("createTime", getCreateTime())
-            .append("updateBy", getUpdateBy())
-            .append("updateTime", getUpdateTime())
-            .toString();
-    }
+    /**激活次数 */
+    private Integer activationNum;
+    /**外部受理案件号*/
+    private String otherNo;
 }

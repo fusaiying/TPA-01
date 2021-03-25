@@ -83,11 +83,14 @@
 import {coOrganizerSubmit} from "../../../../api/customService/demand";
 import {getUserInfo} from '@/api/claim/standingBookSearch';
 import {demandListAndPersonalPool} from '@/api/customService/demand'
+import {getUMCode} from '@/api/customService/collaborative'
 
 export default {
   name: 'upLoad',
   data() {
     return {
+      UMCode: [],
+      UMCodeNum: 0,
       dynamicValidateForm: {
         umCode: [{
           key: '00000001',
@@ -116,12 +119,22 @@ export default {
         solicitOpinion: "",
         workOrderNo: ""
 
-      }
+      },
+      collaborativeFrom: {
+        workOrderNo: "",
+        umCode: "",
+        solicitOpinion: "",
+        handleState: "",
+        status: "",
+        opinion: "",
+      },
     }
   },
-  mounted() {
+  async mounted() {
     this.getLoginUserInfo();
+    this.getUMCodeS();
   },
+
   methods: {
     removeDomain(item) {
       const index = this.dynamicValidateForm.umCode.indexOf(item);
@@ -134,6 +147,19 @@ export default {
         this.loginName = response.data.userName;
       })
     },
+
+    getUMCodeS(){
+      let insert = this.dynamicValidateForm;
+      getUMCode(insert.workOrderNo).then(res => {
+        if (res != null && res.code === 200) {
+          this.UMCode = res.rows;
+          this.UMCodeNum = res.rows.length;
+        }
+      }).catch(res => {
+
+      })
+    },
+
     addDomain() {
       this.dynamicValidateForm.umCode.push({
         value: '',
@@ -160,6 +186,43 @@ export default {
             this.$message.warning('协办方UM账号不能与当前登陆人相同');
             return false;
           }
+
+          let tReName = "";
+          for(let a=0; a<insert.umCode.length-1; a++){
+            let umcode1 = insert.umCode[a].value;
+            for(let b=a+1; b<insert.umCode.length; b++){
+              let umcode2 = insert.umCode[b].value;
+              if(umcode1 === umcode2){
+                tReName += umcode1+",";
+              }
+            }
+          }
+          if(tReName != "") {
+            tReName = tReName.substring(0,tReName.length-1);
+            this.$message.warning('协办方UM账号重复'+tReName);
+            return false;
+          }
+
+          //查询工单号已存在的UMCode
+          let tName = "";
+          let tCount = this.UMCodeNum;
+          let tUMCode = this.UMCode;
+          for(let n=0; n<tCount; n++){//循环已协办UM账号
+            let umcode3 = tUMCode[n].umCode;
+            for(let m=0; m<insert.umCode.length; m++){//循环页面输入UM账号
+              let umcode4 = insert.umCode[m].value;
+              if(umcode4 === umcode3) {
+                tName += umcode3+",";
+              }
+            }
+
+          }
+          if(tName != "") {
+            tName = tName.substring(0,tName.length-1);
+            this.$message.warning('协办方UM账号不能重复转办给：'+tName);
+            return false;
+          }
+          return false;
 
           coOrganizerSubmit(insert).then(res => {
             if (res != null && res.code === 200) {

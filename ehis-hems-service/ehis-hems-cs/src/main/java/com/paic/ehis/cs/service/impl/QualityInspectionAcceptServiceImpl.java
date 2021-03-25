@@ -344,9 +344,9 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
         Calendar cal = Calendar.getInstance();
         Calendar cal1 = Calendar.getInstance();
         cal.setTime(date);
-        cal.add(Calendar.MINUTE, 2); // 目前时间加30分钟
+        cal.add(Calendar.MINUTE, 30); // 目前时间加30分钟
 
-        cal1.add(Calendar.MINUTE, -2); // 目前时间减30分钟
+        cal1.add(Calendar.MINUTE, -30); // 目前时间减30分钟
      /*   if (1 == cal.get(Calendar.DAY_OF_WEEK)) {
             cal.add(Calendar.DATE, -1);
         }

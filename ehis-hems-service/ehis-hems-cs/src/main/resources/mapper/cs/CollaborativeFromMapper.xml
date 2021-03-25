@@ -163,7 +163,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <if test="createdTimeStart != null   and createdTimeEnd != null ">
             and(a.create_time between  #{createdTimeStart} and  #{createdTimeEnd})</if>
         <if test="handleState != null  and handleState != ''"> and a.handle_state = #{handleState}</if>
-        <if test="handleState == null  or handleState == ''"> and a.handle_state != '01' </if>
+        <if test="handleState == null  or handleState == ''"> and a.status = '02' and a.handle_state = '02'</if>
         <if test="itemCode != null  and itemCode != ''"> and b.item_code = #{itemCode}</if>
         <if test="policyNo != null  and policyNo != ''"> and c.policy_no = #{policyNo}</if>
         <if test="policyItemNo != null  and policyItemNo != ''"> and c.policy_item_no = #{policyItemNo}</if>

@@ -8,7 +8,7 @@
       <el-row>
         <el-col :span="8">
           <el-form-item label="一级投诉分类：" prop="level1">
-            <el-select v-model="form.level1" class="item-width" @change="classTwo()">
+            <el-select v-model="form.level1" class="item-width" @change="classTwo('1')">
               <el-option v-for="item in cs_classify_level1" :key="item.dictValue" :label="item.dictLabel"
                          :value="item.dictValue"/>
             </el-select>
@@ -16,14 +16,14 @@
         </el-col>
         <el-col :span="8">
           <el-form-item label="二级投诉分类：" prop="level2">
-            <el-select v-model="form.level2" class="item-width">
+            <el-select v-model="form.level2" class="item-width" @change="changeLevel2">
               <el-option v-for="item in cs_classify_level2" :key="item.code" :label="item.codeName"
                          :value="item.code"/>
             </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="是否计件：" prop="pieceworkFlag">
+          <el-form-item v-if="isShowLevel2" label="是否计件：" prop="pieceworkFlag">
             <el-select v-model="form.pieceworkFlag" class="item-width">
               <el-option v-for="item in cs_whether_flag" :key="item.dictValue" :label="item.dictLabel"
                          :value="item.dictValue"/>
@@ -33,7 +33,7 @@
       </el-row>
       <el-row>
         <el-col :span="8">
-          <el-form-item label="撤诉状态：" prop="priority">
+          <el-form-item v-if="isShowLevel2" label="撤诉状态：" prop="complaintStatus">
             <el-select v-model="form.complaintStatus" class="item-width">
               <el-option v-for="item in cs_drop_status" :key="item.dictValue" :label="item.dictLabel"
                          :value="item.dictValue"/>
@@ -42,7 +42,7 @@
         </el-col>
         <el-col :span="8">
           <el-form-item label="投诉是否成立：" prop="complaintTenable">
-            <el-select v-model="form.complaintTenable" class="item-width">
+            <el-select v-model="form.complaintTenable" class="item-width" @change="changeComplaintTenable">
               <el-option v-for="item in cs_whether_flag" :key="item.dictValue" :label="item.dictLabel"
                          :value="item.dictValue"/>
             </el-select>
@@ -50,14 +50,14 @@
         </el-col>
         <el-col :span="8">
           <el-form-item label="投诉不成立理由：" prop="faseReason">
-            <el-input v-model="form.faseReason" class="item-width" clearable size="mini" placeholder="请输入"/>
+            <el-input :disabled="isComplaintTenableDisabled" v-model="form.faseReason" class="item-width" clearable size="mini" placeholder="请输入"/>
           </el-form-item>
         </el-col>
       </el-row>
       <el-row>
         <el-col :span="8">
           <el-form-item label="一级投诉原因：" prop="reason1">
-            <el-select v-model="form.reason1" class="item-width" @change="reasonTwo()">
+            <el-select v-model="form.reason1" class="item-width" @change="reasonTwo('1')">
               <el-option v-for="item in cs_reason_level1" :key="item.dictValue" :label="item.dictLabel"
                          :value="item.dictValue"/>
             </el-select>
@@ -65,7 +65,7 @@
         </el-col>
         <el-col :span="8">
           <el-form-item label="二级投诉原因：" prop="reason2">
-            <el-select v-model="form.reason2" class="item-width" @change="reasonThree()">
+            <el-select v-model="form.reason2" class="item-width" @change="reasonThree('1')">
               <el-option v-for="item in cs_reason_level2" :key="item.code" :label="item.codeName"
                          :value="item.code"/>
             </el-select>
@@ -221,6 +221,14 @@
       formData: function (value) {
         if (value !== null) {
          this.form=value
+          if (this.form.complaintTenable=='01'){
+            this.isComplaintTenableDisabled=true
+          }
+          if (this.form.level1=='02' && this.form.level2=='05'){
+            this.isShowLevel2=true
+          }else {
+            this.isShowLevel2=false
+          }
           this.searchHandleServer()
         }
       }
@@ -229,6 +237,7 @@
 
     data() {
       return {
+        isShowLevel2:false,
         //字段校验
         ruleForm: {
           level1: [{ required: true, message: '一级投诉分类不能为空', trigger: 'change' }],
@@ -247,7 +256,9 @@
           actionCause: [{ required: true, message: '质诉根因不能为空', trigger: 'blur' }],
           treatmentResult: [{ required: true, message: '处理结果不能为空', trigger: 'blur' }],
           customerFeedback: [{ required: true, message: '客户反馈不能为空', trigger: 'change' }],
-          actPromptly: [{ required: true, message: '投诉损失不能为空', trigger: 'blur' }]
+          actPromptly: [{ required: true, message: '投诉损失不能为空', trigger: 'blur' }],
+          pieceworkFlag: [{ required: true, message: '是否计件不能为空', trigger: 'blur' }],
+          complaintStatus: [{ required: true, message: '撤诉状态不能为空', trigger: 'blur' }]
         },
         dictList:[],
         queryParams:{
@@ -262,6 +273,7 @@
           complaintPerson: {},
           insurer: {},
         },
+        isComplaintTenableDisabled:false,
         form:{
           level1: '',
           level2: '',
@@ -380,7 +392,7 @@
         const query = {}
         query.parentCode = this.form.reason2
         if(flag=='1'){
-          this.sendForm.reason3 = '';
+          this.form.reason3 = '';
         }
         reasonThree(query).then(res => {
           if (res != null && res.code === 200) {
@@ -395,11 +407,30 @@
         })
 
       },
+      changeLevel2(){
+        if (this.form.level1=='02' && this.form.level2=='05'){
+          this.isShowLevel2=true
+        }else {
+          this.isShowLevel2=false
+          this.form.pieceworkFlag=''
+          this.form.complaintStatus=''
+        }
+      },
+      changeComplaintTenable(value){
+        if (value=='01'){
+          this.isComplaintTenableDisabled=true
+        }else {
+          this.isComplaintTenableDisabled=false
+        }
+      },
       classTwo(flag) {
         const query = {}
         query.parentCode = this.form.level1;
         if(flag=='1'){
-          this.sendForm.level2 = '';
+          this.form.level2 = '';
+          this.isShowLevel2=false
+          this.form.pieceworkFlag=''
+          this.form.complaintStatus=''
         }
         classTwo(query).then(res => {
           if (res != null && res.code === 200) {
@@ -485,13 +516,15 @@
         })
       },
       checkForm() {
+        let data=false
         this.$refs.ruleForm.validate((valid) => {
           if (valid) {
-            return true
+            data= true
           }else {
-            return false
+            data= false
           }
         })
+        return data
       }
     }
   }

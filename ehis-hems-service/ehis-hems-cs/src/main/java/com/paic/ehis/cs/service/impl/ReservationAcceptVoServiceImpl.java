@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.PubFun;
 import com.paic.ehis.common.core.utils.SecurityUtils;
+import com.paic.ehis.common.core.utils.StringUtils;
 import com.paic.ehis.cs.domain.*;
 import com.paic.ehis.cs.domain.dto.AcceptDTO;
 import com.paic.ehis.cs.domain.vo.ComplaintAcceptVo;
@@ -374,16 +375,25 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
         contactsPerson.setName(reservationAcceptVo.getContactsPerson().getName());
         contactsPerson.setLanguage(reservationAcceptVo.getContactsPerson().getLanguage());
         contactsPerson.setMobilePhone(reservationAcceptVo.getContactsPerson().getMobilePhone());
-        if(reservationAcceptVo.getContactsPerson().getHomePhone1().length <=3){
-            contactsPerson.setHomePhone("---");
-        }else{
-            contactsPerson.setHomePhone(reservationAcceptVo.getContactsPerson().getHomePhone1()[0]+"-"+reservationAcceptVo.getContactsPerson().getHomePhone1()[1]+"-"+reservationAcceptVo.getContactsPerson().getHomePhone1()[2]+"-"+reservationAcceptVo.getContactsPerson().getHomePhone1()[3]);
-        }
-        if(reservationAcceptVo.getContactsPerson().getWorkPhone1().length <= 3){
-            contactsPerson.setWorkPhone("---");
-        }else{
-            contactsPerson.setWorkPhone(reservationAcceptVo.getContactsPerson().getWorkPhone1()[0]+"-"+reservationAcceptVo.getContactsPerson().getWorkPhone1()[1]+"-"+reservationAcceptVo.getContactsPerson().getWorkPhone1()[2]+"-"+reservationAcceptVo.getContactsPerson().getWorkPhone1()[3]);
-        }
+
+        String tHomePhone = StringUtils.isNotEmpty(reservationAcceptVo.getContactsPerson().getHomePhone1()[0])?reservationAcceptVo.getContactsPerson().getHomePhone1()[0]:"";
+        tHomePhone += "-";
+        tHomePhone += StringUtils.isNotEmpty(reservationAcceptVo.getContactsPerson().getHomePhone1()[1])?reservationAcceptVo.getContactsPerson().getHomePhone1()[1]:"";
+        tHomePhone += "-";
+        tHomePhone += StringUtils.isNotEmpty(reservationAcceptVo.getContactsPerson().getHomePhone1()[2])?reservationAcceptVo.getContactsPerson().getHomePhone1()[2]:"";
+        tHomePhone += "-";
+        tHomePhone += StringUtils.isNotEmpty(reservationAcceptVo.getContactsPerson().getHomePhone1()[3])?reservationAcceptVo.getContactsPerson().getHomePhone1()[3]:"";
+        contactsPerson.setHomePhone(tHomePhone);
+
+        String tWorkPhone = StringUtils.isNotEmpty(reservationAcceptVo.getContactsPerson().getWorkPhone1()[0])?reservationAcceptVo.getContactsPerson().getWorkPhone1()[0]:"";
+        tWorkPhone += "-";
+        tWorkPhone += StringUtils.isNotEmpty(reservationAcceptVo.getContactsPerson().getWorkPhone1()[1])?reservationAcceptVo.getContactsPerson().getWorkPhone1()[1]:"";
+        tWorkPhone += "-";
+        tWorkPhone += StringUtils.isNotEmpty(reservationAcceptVo.getContactsPerson().getWorkPhone1()[2])?reservationAcceptVo.getContactsPerson().getWorkPhone1()[2]:"";
+        tWorkPhone += "-";
+        tWorkPhone += StringUtils.isNotEmpty(reservationAcceptVo.getContactsPerson().getWorkPhone1()[3])?reservationAcceptVo.getContactsPerson().getWorkPhone1()[3]:"";
+        contactsPerson.setWorkPhone(tWorkPhone);
+
         contactsPerson.setUpdatedBy(SecurityUtils.getUsername());
         contactsPerson.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
         personInfoMapper.updatePersonInfo(contactsPerson);

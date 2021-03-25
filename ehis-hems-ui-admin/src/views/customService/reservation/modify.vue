@@ -1120,6 +1120,25 @@
                 this.$set(this.workPoolData, `a`, arr[0]);
                 this.$set(this.workPoolData, `b`, arr[1]);
               }
+              let queryData={
+                hospitalCode:res.rows[0].medicalInstitution,
+                hospitalName:res.rows[0].hospitalName,
+                province:res.rows[0].province,
+                city:res.rows[0].city,
+              }
+              if (res.rows[0].medicalInstitution!='9999'){
+                getHospitalInfo (queryData).then(res => {
+                  if (res != null && res !== '') {
+                    if (res.rows[0].deptList && res.rows[0].deptList.length>0){
+                      this.departmentOption=res.rows[0].deptList
+                    }else {
+                      this.departmentOption=[]
+                    }
+                  }
+                })
+              }else {
+                this.departmentOption=[]
+              }
               this.region.push(this.workPoolData.province)
               this.region.push(this.workPoolData.city)
               if (res.rows.length <= 0) {

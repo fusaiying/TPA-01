@@ -175,13 +175,13 @@ export default {
       if (row.valueDictType != null && row.valueDictType != '' && row.valueDictType != undefined) {
         //本次疾病/症状起病时 需要特殊处理
         if(row.valueDictType == "cs_time_unit"){
-          let tNowValueList = row.nowValue.splice("-");
+          let tNowValueList = row.oldValue.splice("-");
           return tNowValueList[0] + this.selectDictLabel((this.dictList.find(item => {return item.dictType === row.valueDictType}).dictDate), tNowValueList[1]);
         }else {
-          return this.selectDictLabel((this.dictList.find(item => {return item.dictType === row.valueDictType}).dictDate), row.nowValue);
+          return this.selectDictLabel((this.dictList.find(item => {return item.dictType === row.valueDictType}).dictDate), row.oldValue);
         }
       }else{
-        return row.nowValue;
+        return row.oldValue;
       }
     }
   }

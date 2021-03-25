@@ -72,9 +72,9 @@ public class WorkOrderAcceptController extends BaseController
 
     //实时查询案件操作人和状态
     @GetMapping(value = "/workOrderAccept/{workOrderNo}")
-    public AjaxResult getInfo1(@PathVariable("workOrderNo") String workOrderNo)
+    public String getInfo1(@PathVariable("workOrderNo") String workOrderNo)
     {
-        return AjaxResult.success(workOrderAcceptService.selectWorkOrderAcceptById1(workOrderNo));
+        return workOrderAcceptService.selectWorkOrderAcceptById1(workOrderNo);
     }
 
 

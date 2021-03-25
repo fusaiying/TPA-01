@@ -41,7 +41,7 @@
             class="receive_table"
             :header-cell-style="{color:'black',background:'#f8f8ff'}">
 
-            <el-table-column prop="roleName" label="角色"  align="center" show-overflow-tooltip />
+            <el-table-column prop="roleCode" :formatter="getRoleName" label="角色"  align="center" show-overflow-tooltip />
             <el-table-column prop="userName" label="操作用户"  align="center" show-overflow-tooltip />
             <el-table-column prop="rate" label="分配比例" :formatter="rateOrEqually"  align="center" show-overflow-tooltip />
             <el-table-column prop="status" label="是否有效" :formatter="getStatusName" align="center" show-overflow-tooltip />
@@ -152,7 +152,7 @@
           this.assignDiaVisible = false
         },
         initData(){
-          this.gettableData();
+         // this.gettableData();
         },
         //重置
         reset(form) {
@@ -160,12 +160,16 @@
         },
         //查询
         gettableData () {
-
+          if(this.form.roleId === '' || this.form.roleId === null) {
+            this.$message({ type: 'warning',  message: '请选择角色进行查询'});
+            return false;
+          }
           this.loading = true;
           const params = {
             pageNum:this.pageInfo.currentPage,
             pageSize:this.pageInfo.pageSize,
-            roleId: this.form.roleId,
+            mappingValue: this.form.roleId,
+            roleCode: this.form.roleId,
             orderByColumn:'t1.create_time',
             isAsc:'desc'
           };
@@ -210,17 +214,21 @@
             return row.rate;
           }
         },
+        getRoleName(row, col){
+          return this.selectDictLabel(this.roleSelects, row.roleCode)
+        },
         getAllRole(){
           const query ={
            // status:'Y',
             xtype:'roleAll',
           };
           roleAll(query).then(response => {
-            if(response.rows) {
-              for(let i=0; i<response.rows.length; i++) {
+            //console.log("response",response)
+            if(response.data) {
+              for(let i=0; i<response.data.length; i++) {
                 let obj= new Object();
-                obj.dictLabel = response.rows[i].roleName;
-                obj.dictValue = response.rows[i].roleId.toString();
+                obj.dictLabel = response.data[i].roleName;
+                obj.dictValue = response.data[i].userRoleId.toString();
                 this.roleSelects.push(obj);
               }
             }

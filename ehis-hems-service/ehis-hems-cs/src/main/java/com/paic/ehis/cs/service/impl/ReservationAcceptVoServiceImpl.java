@@ -7,11 +7,11 @@ import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.common.core.utils.StringUtils;
 import com.paic.ehis.cs.domain.*;
 import com.paic.ehis.cs.domain.dto.AcceptDTO;
-import com.paic.ehis.cs.domain.vo.ComplaintAcceptVo;
 import com.paic.ehis.cs.domain.vo.DemandAcceptVo;
 import com.paic.ehis.cs.domain.vo.ReservationAcceptVo;
 import com.paic.ehis.cs.mapper.*;
 import com.paic.ehis.cs.service.IReservationAcceptVoService;
+import com.paic.ehis.cs.utils.CodeEnum;
 import com.paic.ehis.cs.utils.VoUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.security.Security;
 import java.util.*;
 
 
@@ -203,35 +202,40 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
         FlowLog flowLog=new FlowLog();
         WorkOrderAccept workOrderAccept=new WorkOrderAccept();
         //工单表插入
-        workOrderAccept.setStatus("01");
-        //workOrderAccept.setBusinessType("02");
-        workOrderAccept.setAcceptTime(DateUtils.parseDate(DateUtils.getTime()));
+        workOrderAccept.setStatus(CodeEnum.ORDER_STATE_01.getCode());
+        workOrderAccept.setAcceptBy(reservationAcceptVo.getAcceptBy());
+        workOrderAccept.setAcceptTime(reservationAcceptVo.getAcceptTime());
         workOrderAccept.setModifyTime(DateUtils.parseDate(DateUtils.getTime()));
-        workOrderAccept.setCreateBy(SecurityUtils.getUsername());
-        workOrderAccept.setUpdateBy(SecurityUtils.getUsername());
+        workOrderAccept.setCreateBy(reservationAcceptVo.getCreateBy());
+        workOrderAccept.setUpdateBy(reservationAcceptVo.getUpdateBy());
         workOrderAccept.setOrganCode(reservationAcceptVo.getOrganCode());
-        workOrderAccept.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
+        workOrderAccept.setUpdateTime(reservationAcceptVo.getUpdateTime());
         workOrderAccept.setWorkOrderNo(reservationAcceptVo.getWorkOrderNo());
-        workOrderAccept.setCreateTime(DateUtils.parseDate(DateUtils.getTime()));
+        workOrderAccept.setCreateTime(reservationAcceptVo.getCreateTime());
         workOrderAccept.setBusinessType(reservationAcceptVo.getBusinessType());
+        workOrderAccept.setOtherNo(reservationAcceptVo.getOtherNo());
+        workOrderAccept.setInsuredNo(reservationAcceptVo.getInsuredNo());
+        workOrderAccept.setInsuredName(reservationAcceptVo.getInsuredName());
         workOrderAcceptMapper.insertWorkOrderAccept(workOrderAccept);
 
         //详细表插入
         acceptDetailInfo.setWorkOrderNo(reservationAcceptVo.getWorkOrderNo());
         acceptDetailInfo.setChannelCode(reservationAcceptVo.getChannelCode());
         acceptDetailInfo.setItemCode(reservationAcceptVo.getItemCode());
-        acceptDetailInfo.setCallPersonId(PubFun.createMySqlMaxNoUseCache("cs_person_id", 10, 10));
+        String callPersonId=PubFun.createMySqlMaxNoUseCache("cs_person_id", 10, 10);
+        acceptDetailInfo.setCallPersonId(callPersonId);
         acceptDetailInfo.setCallRelationBy(reservationAcceptVo.getCallRelationBy());
         acceptDetailInfo.setPriorityLevel(reservationAcceptVo.getPriorityLevel());
-        acceptDetailInfo.setContactsPersonId(PubFun.createMySqlMaxNoUseCache("cs_person_id", 10, 10));
+        String contactsPersonId=PubFun.createMySqlMaxNoUseCache("cs_person_id", 10, 10);
+        acceptDetailInfo.setContactsPersonId(contactsPersonId);
         acceptDetailInfo.setContactsRelationBy(reservationAcceptVo.getContactsRelationBy());
         acceptDetailInfo.setEmail(reservationAcceptVo.getEmail());
         acceptDetailInfo.setContent(reservationAcceptVo.getContent());
-        acceptDetailInfo.setStatus("01");
-        acceptDetailInfo.setCreateBy(SecurityUtils.getUsername());
-        acceptDetailInfo.setCreateTime(DateUtils.parseDate(DateUtils.getTime()));
-        acceptDetailInfo.setUpdateBy(SecurityUtils.getUsername());
-        acceptDetailInfo.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
+        acceptDetailInfo.setStatus(CodeEnum.ORDER_STATE_01.getCode());
+        acceptDetailInfo.setCreateBy(reservationAcceptVo.getCreateBy());
+        acceptDetailInfo.setCreateTime(reservationAcceptVo.getCreateTime());
+        acceptDetailInfo.setUpdateBy(reservationAcceptVo.getUpdateBy());
+        acceptDetailInfo.setUpdateTime(reservationAcceptVo.getUpdateTime());
         acceptDetailInfo.setCallCenterId(reservationAcceptVo.getCallCenterId());
         List<FieldMap> KVMap=fieldMapMapper.selectKVMap("accept_detail_info","ReservationAcceptVo");
         for (FieldMap fieldMap:KVMap){
@@ -243,11 +247,10 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
             acceptDetailInfo= (AcceptDetailInfo) voUtils.fromVoToVo(acceptDetailInfo,map,reservationAcceptVo);
         }
         //详细表插入
-  //    demandAcceptVoMapper.insertAcceptDetailInfo(acceptDetailInfo);
         acceptDetailInfoMapper.insertAcceptDetailInfo(acceptDetailInfo);
 
         //插入来电人
-        personInfo1.setPersonId(acceptDetailInfo.getCallPersonId());
+        personInfo1.setPersonId(callPersonId);
         personInfo1.setName(reservationAcceptVo.getCallPerson().getName());
         personInfo1.setMobilePhone(reservationAcceptVo.getCallPerson().getMobilePhone());
         personInfo1.setCreatedBy(SecurityUtils.getUsername());
@@ -256,7 +259,7 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
         personInfo1.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
         personInfoMapper.insertPersonInfo(personInfo1);
         //插入联系人
-        personInfo2.setPersonId(acceptDetailInfo.getContactsPersonId());
+        personInfo2.setPersonId(contactsPersonId);
         personInfo2.setSex(reservationAcceptVo.getContactsPerson().getSex());
         personInfo2.setName(reservationAcceptVo.getContactsPerson().getName());
         personInfo2.setLanguage(reservationAcceptVo.getContactsPerson().getLanguage());

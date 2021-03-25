@@ -297,7 +297,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="getWorkOrderCountByUserId" parameterType="com.paic.ehis.cs.domain.dto.WorkOrderQueryDTO" resultMap="AcceptResult">
         select woa.update_by,count(*) as count,GROUP_CONCAT(work_order_no) as work_order_nos,woa.activation_num from work_order_accept woa where 1=1
         and woa.work_order_no not in (select work_order_no from quality_inspection_accept)
-        <if test="updatedBy != null and updatedBy != ''"> and woa.updated_by = #{updatedBy}</if>
+        <if test="updateBy != null and updateBy != ''"> and woa.update_by = #{updateBy}</if>
         <if test="status != null and status != ''"> and woa.status = #{status}</if>
         <if test="workOrderNo != null and workOrderNo != ''"> and woa.work_order_no = #{workOrderNo}</if>
         <if test="endCaseStartTime != null ">
@@ -320,7 +320,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="getWorkOrderCountByUserIdMonth" parameterType="com.paic.ehis.cs.domain.dto.WorkOrderQueryDTO" resultMap="AcceptResult">
         select woa.update_by,count(*) as count,GROUP_CONCAT(work_order_no) as work_order_nos,woa.activation_num from work_order_accept woa where 1=1
         AND woa.work_order_no  IN ( SELECT work_order_no FROM quality_inspection_accept where status='01' or (status='03' and result='01') )
-        <if test="updatedBy != null and updatedBy != ''"> and woa.updated_by = #{updatedBy}</if>
+        <if test="updateBy != null and updateBy != ''"> and woa.update_by = #{updateBy}</if>
         <if test="status != null and status != ''"> and woa.status = #{status}</if>
         <if test="workOrderNo != null and workOrderNo != ''"> and woa.work_order_no = #{workOrderNo}</if>
         <if test="endCaseStartTime != null ">

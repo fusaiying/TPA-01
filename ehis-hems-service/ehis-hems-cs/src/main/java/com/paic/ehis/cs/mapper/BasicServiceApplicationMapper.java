@@ -12,7 +12,5 @@ public interface BasicServiceApplicationMapper {
      */
     int insertAcceptDetialInfoTable(AcceptDetailInfo acceptDetailInfo);
 
-    int insertPersonInfoTable(PersonInfo personInfo);
-
     int insertWorkOrderAcceptTable(WorkOrderAccept workOrderAccept);
 }

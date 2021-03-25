@@ -641,6 +641,7 @@
                 refusedReason:this.conclusionForm.refusedReason,
                 remark:this.conclusionForm.remark,
                 claimCheck:this.conclusionForm.claimCheck,
+                debtAmount:this.conclusionInfo.debtAmount
                 // calAmount:'0',
                 // payAmount:this.conclusionInfo.payAmount,
                 // refusedAmount:this.conclusionInfo.refusedAmount,
@@ -748,6 +749,7 @@
           isAppeal: this.conclusionInfo.isAppeal,
           payAmount:this.conclusionInfo.calAmount,
           refusedAmount:this.conclusionInfo.refusedAmount,
+          debtAmount:this.conclusionInfo.debtAmount,
         };
         checkBillAndPolicyDate(this.rptNo).then(res=>{
           if (res!=null && res.code==200){

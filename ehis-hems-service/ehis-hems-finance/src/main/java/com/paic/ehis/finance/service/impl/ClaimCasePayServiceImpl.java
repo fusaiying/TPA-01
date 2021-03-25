@@ -176,6 +176,13 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService {
         List<ClaimCasePayInfoVO> payInfoList = claimCasePayMapper.selectPayInfoList(batchNo);
         // 获取出单公司、借款金额
         for (ClaimCasePayInfoVO payInfo : payInfoList) {
+           /* //判断是否第一次支付
+            FinancePayInfo financePayInfo = financePayInfoMapper.selectFinancePayInfoByBatchNo(payInfo.getBatchNo());
+            if (StringUtils.isNotNull(financePayInfo)){
+
+            }else {
+
+            }*/
             if(!"01".equals(payInfo.getPayStatus())){
                 payFlag="false";
             }
@@ -526,7 +533,7 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService {
         } else {
             List<ClaimCaseForeignPayInfoVO> caseInfoList = claimCasePayVO.getCaseInfoList();
             for (ClaimCaseForeignPayInfoVO caseInfo : caseInfoList) {
-                if (!"99".equals(caseInfo.getCaseStatus()) && !"98".equals(caseInfo.getCaseStatus()) && !"05".equals(caseInfo.getCaseStatus()) && !"04".equals(caseInfo.getCaseStatus()) && !"06".equals(caseInfo.getCaseStatus())
+                if (!"99".equals(caseInfo.getCaseStatus()) && !"98".equals(caseInfo.getCaseStatus()) && !("05".equals(caseInfo.getCaseStatus()) && caseInfo.getDiscountedAmount().compareTo(new BigDecimal(0))==0) && !"04".equals(caseInfo.getCaseStatus()) && !"06".equals(caseInfo.getCaseStatus())
                  && !"02".equals(caseInfo.getPayStatus()) && !"03".equals(caseInfo.getPayStatus())) {
                     // 支付状态置为可支付
                     ClaimCase claimCase = new ClaimCase();

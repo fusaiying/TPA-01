@@ -370,10 +370,7 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
         Calendar cal = Calendar.getInstance();
         Calendar cal1 = Calendar.getInstance();
         cal.setTime(date);
-        cal.add(Calendar.MINUTE, 30); // 目前时间加30分钟
-
-        cal1.add(Calendar.MINUTE, -30); // 目前时间减30分钟
-        /*   if (1 == cal.get(Calendar.DAY_OF_WEEK)) {
+           if (1 == cal.get(Calendar.DAY_OF_WEEK)) {
             cal.add(Calendar.DATE, -1);
         }
         cal.add(Calendar.DAY_OF_MONTH, -7);//时间减去7天
@@ -382,13 +379,12 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
         if (1 == cal1.get(Calendar.DAY_OF_WEEK)) {
             cal1.add(Calendar.DATE, -1);
         }
-        cal1.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);//这个是周日*/
+        cal1.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);//这个是周日
 
         WorkOrderQueryDTO workOrderQueryDTO = new WorkOrderQueryDTO();//根据工单状态
-        //workOrderQueryDTO.setEndCaseStartTime(foramt.format(cal.getTime()) + " 00:00:00");//获取上周一
-        //workOrderQueryDTO.setEndCaseEndTime(foramt.format(cal1.getTime()) + " 23:59:59");//获取上周天
-        workOrderQueryDTO.setEndCaseEndTime(foramt.format(cal.getTime()));//获取一小时后
-        workOrderQueryDTO.setEndCaseStartTime(foramt.format(cal1.getTime()));//获取一小时前
+        workOrderQueryDTO.setEndCaseStartTime(foramt.format(cal.getTime()) + " 00:00:00");//获取上周一
+        workOrderQueryDTO.setEndCaseEndTime(foramt.format(cal1.getTime()) + " 23:59:59");//获取上周天
+
         //2.工单状态处理； 04-已完成的工单且没有被质检过
         workOrderQueryDTO.setAcceptStatus(CodeEnum.ORDER_STATE_04.getCode());
         //3.业务类型为： 01-信息需求和03-投诉的才可以质检
@@ -591,7 +587,7 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
                 Set<String> set = new HashSet<String>();
                 Random random = new Random();
                 double h = i * 0.1;
-                if (h <= 1) {
+                if (h <= 1 && h>0 ) {
                     int j = 1;//抽取总量的10%，如计算结果≤1，则取1
                     int a = 0;
                     while (true) {

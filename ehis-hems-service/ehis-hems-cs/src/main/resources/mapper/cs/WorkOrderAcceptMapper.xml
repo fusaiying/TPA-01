@@ -37,7 +37,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </sql>
 
 
-    <select id="selectWorkOrderAcceptList" parameterType="WorkOrderAccept" resultMap="WorkOrderAcceptResult">
+    <select id="selectWorkOrderAcceptList" parameterType="com.paic.ehis.cs.domain.WorkOrderAccept" resultMap="WorkOrderAcceptResult">
         <include refid="selectWorkOrderAcceptVo"/>
         <where>
             <if test="businessType != null  and businessType != ''"> and business_type = #{businessType}</if>

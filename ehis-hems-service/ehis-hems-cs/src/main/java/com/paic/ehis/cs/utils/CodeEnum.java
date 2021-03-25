@@ -115,9 +115,16 @@ public enum CodeEnum {
     OPERATE_CODE_22("cs_operate_code","22","导出"),
     OPERATE_CODE_23("cs_operate_code","23","导入"),
 
-
-
-
+    SERVICE_ITEM_01("cs_service_item","01","增值服务类"),
+    SERVICE_ITEM_02("cs_service_item","02","理赔类"),
+    SERVICE_ITEM_03("cs_service_item","03","其他"),
+    SERVICE_ITEM_04("cs_service_item","04","VIP门诊预约"),
+    SERVICE_ITEM_05("cs_service_item","05","特殊门诊直接结算服务"),
+    SERVICE_ITEM_06("cs_service_item","06","门诊直接结算"),
+    SERVICE_ITEM_07("cs_service_item","07","住院直接结算"),
+    SERVICE_ITEM_08("cs_service_item","08","门诊中医治疗直接结算"),
+    SERVICE_ITEM_B00006("cs_service_item","B00006","投诉"),
+    SERVICE_ITEM_B00034("cs_service_item","B00034","根因改善"),
 
 
 

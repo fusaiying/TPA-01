@@ -6,16 +6,19 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.paic.ehis.common.core.annotation.Excel;
 import com.paic.ehis.common.core.web.domain.BaseEntity;
 import lombok.Data;
+import lombok.ToString;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-@Data
+
 /**
  * 工单申请信息 对象 work_order_accept
  * 
  * @author sino
  * @date 2021-03-01
  */
+@Data
+@ToString
 public class WorkOrderAccept extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
@@ -103,6 +106,8 @@ public class WorkOrderAccept extends BaseEntity
     /** 挂起原因 */
     @Excel(name = "挂起原因")
     private String hangReason;
-
+    /**激活次数 */
     private Integer activationNum;
+    /**外部受理案件号*/
+    private String otherNo;
 }

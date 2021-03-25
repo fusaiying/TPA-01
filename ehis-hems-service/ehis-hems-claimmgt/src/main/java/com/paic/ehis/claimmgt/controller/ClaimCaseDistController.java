@@ -71,12 +71,15 @@ public class ClaimCaseDistController extends BaseController
             List<ClaimCaseDist> claimCaseDistList = claimCaseDistService.getClaimCaseDistInfo(claimCaseDist);
             //存在则获取，因只会存在一条数据所以获取第一条
             if(StringUtils.isNotEmpty(claimCaseDistList)){
-                roleUserInfoDTO.setDistId(claimCaseDistList.get(0).getDistId());
-                roleUserInfoDTO.setStatus(claimCaseDistList.get(0).getStatus());
-                roleUserInfoDTO.setRate(claimCaseDistList.get(0).getRate());
+                ClaimCaseDist vo = claimCaseDistList.get(0);
+                roleUserInfoDTO.setDistId(vo.getDistId());
+                roleUserInfoDTO.setDistId(vo.getDistId());
+                roleUserInfoDTO.setStatus(vo.getStatus());
+                roleUserInfoDTO.setRate(vo.getRate());
+                roleUserInfoDTO.setStatus(vo.getStatus());
                 roleUserInfoDTO.setIsEqually(claimUserRole.getIsEqually());
+                termRoleUserInfoDTOList.add(roleUserInfoDTO);
             }
-            termRoleUserInfoDTOList.add(roleUserInfoDTO);
         }
         tableDataInfo.setRows(termRoleUserInfoDTOList);
 

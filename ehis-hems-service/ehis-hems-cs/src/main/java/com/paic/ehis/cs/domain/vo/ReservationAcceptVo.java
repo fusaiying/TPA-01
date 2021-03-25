@@ -43,6 +43,10 @@ public class ReservationAcceptVo extends BaseEntity {
     /** 被保人 */
     @Excel(name = "被保人")
     private String insuredName;
+    /** 被保人客户号 */
+    private String insuredNo;
+    /** 被保人*/
+    private PersonInfo insuredPerson;
 
     /** 投保人 */
     @Excel(name = "投保人")
@@ -226,6 +230,8 @@ public class ReservationAcceptVo extends BaseEntity {
     private String hospitalName;
     /** 医院地址 */
     private String hospitalAddress;
+    /**外部系统受理号*/
+    private String otherNo;
 
     /**
      * 修改原因

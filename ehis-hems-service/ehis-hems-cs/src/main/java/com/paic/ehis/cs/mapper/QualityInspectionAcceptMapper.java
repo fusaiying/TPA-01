@@ -69,4 +69,7 @@ public interface QualityInspectionAcceptMapper {
     /**将操作人分组查询所有工单*/
     public List<AcceptVo> getWorkOrderCountByUserId(WorkOrderQueryDTO workOrderQueryDTO);
 
+    //查询符合一个月抽检规则的数据
+    public List<AcceptVo> getWorkOrderCountByUserIdMonth(WorkOrderQueryDTO workOrderQueryDTO);
+
 }

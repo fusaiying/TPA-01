@@ -34,7 +34,7 @@ public class CustomServiceTask {
     public void invalidMonth() {
         String invalidDate = DateUtils.getDate();
         logger.info("客服信息需求每月系统数据自动抽检开始，当前日期{}", invalidDate);
-        AjaxResult ajaxResult = customServiceService.batchAcceptVo(invalidDate);
+        AjaxResult ajaxResult = customServiceService.batchAcceptVomonth(invalidDate);
         String jsonCode = JSON.toJSONString(ajaxResult.get(AjaxResult.CODE_TAG));
         String dealCode = JSON.parseObject(jsonCode,String.class);
         if(String.valueOf(HttpStatus.SUCCESS).equals(dealCode)){

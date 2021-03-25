@@ -5,9 +5,10 @@ package com.paic.ehis.cs.utils;
  * by Louis
  **/
 public enum  CodeMappingEnum {
+    CLAIM_SEX_01("CLAIM","cs_sex","M","01","男"),
+    CLAIM_SEX_02("CLAIM","cs_sex","F","02","女"),
 
-    GCC_SEX_01("GCC","cs_sex","M","01","男"),
-    GCC_SEX_02("GCC","cs_sex","F","02","女"),
+
 
     ;
     private String systemID;

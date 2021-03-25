@@ -1057,8 +1057,8 @@ export default {
                 }
               }).catch(res => {
               })
-            } else {
-              return false
+            } else{
+              this.$message.warning("请录入必录项");
             }
 
           })

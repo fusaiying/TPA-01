@@ -567,7 +567,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="跟因改善：" prop="rootImprovement">
+          <el-form-item label="根因改善：" prop="rootImprovement">
             <el-input v-model="sendForm.rootImprovement" class="item-width" clearable size="mini" placeholder="请输入"/>
           </el-form-item>
         </el-col>

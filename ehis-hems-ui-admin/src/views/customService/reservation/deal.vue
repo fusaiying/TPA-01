@@ -1038,6 +1038,8 @@
             }).catch(res => {
 
             })
+          }else{
+            this.$message.warning("请录入必录项");
           }
         })
       },

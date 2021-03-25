@@ -493,7 +493,7 @@
             )
           }else {
            if (this.$refs.complaintProcessInfo.checkForm()){
-             if (value=='02'){
+             if (value=='02' && this.params.businessType=='03' ){
                if (this.$refs.complaintAcceptInfo.checkForm() && this.$refs.complaintHandle.checkForm()){
                  insetQualityHandleInfo(item).then(res => {
                    if (res != null && res.code == '200') {

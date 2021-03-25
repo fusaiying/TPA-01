@@ -66,6 +66,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectWorkOrderAcceptVo"/>
         where work_order_no = #{workOrderNo}
     </select>
+    <!--实时查询案件操作人和状态-->
+    <select id="selectWorkOrderAcceptById1" parameterType="String" resultMap="WorkOrderAcceptResult">
+        select * from work_order_accept
+        where  work_order_no = #{workOrderNo}
+    </select>
 
     <select id="selectProcessingTimeById" parameterType="String" resultType="java.lang.String">
         select TIMESTAMPDIFF(HOUR,create_time,click_time) from work_order_accept where work_order_no = #{workOrderNo}

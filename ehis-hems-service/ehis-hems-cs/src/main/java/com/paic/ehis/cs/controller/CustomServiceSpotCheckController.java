@@ -421,7 +421,7 @@ public class CustomServiceSpotCheckController extends BaseController {
 
 
     //信息需求失效批处理
-    @GetMapping("/internal/batchAcceptVo/invalidDate")
+    @GetMapping("/internal/batchAcceptVo/invalidDate/{invalidDate}")
     public AjaxResult batchAcceptVo(@PathVariable("invalidDate") String invalidDate){
         try{
             Map<String,String> param=new HashMap<>();
@@ -439,7 +439,7 @@ public class CustomServiceSpotCheckController extends BaseController {
     }
 
     //信息需求一个月失效批处理
-    @GetMapping("/internal/batchAcceptVo/invalidDateMonth")
+    @GetMapping("/internal/batchAcceptVo/invalidDateMonth/{invalidDate}")
     public AjaxResult batchAcceptVomonth(@PathVariable("invalidDate") String invalidDate){
         try{
             Map<String,String> param=new HashMap<>();

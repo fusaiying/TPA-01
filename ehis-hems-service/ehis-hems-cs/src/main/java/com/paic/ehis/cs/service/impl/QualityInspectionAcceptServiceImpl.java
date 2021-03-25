@@ -591,7 +591,7 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
                 Set<String> set = new HashSet<String>();
                 Random random = new Random();
                 double h = i * 0.1;
-                if (h <= 1) {
+                if (h <= 1 && h>0 ) {
                     int j = 1;//抽取总量的10%，如计算结果≤1，则取1
                     int a = 0;
                     while (true) {

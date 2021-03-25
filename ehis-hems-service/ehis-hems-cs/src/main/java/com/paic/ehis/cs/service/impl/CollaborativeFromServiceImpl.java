@@ -213,7 +213,8 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
             if(!tCollaborativeFromList.get(i).getCollaborativeId().equals(demandAcceptVo.getCollaborativeId())){
                 CollaborativeFrom uptCollaborativeFrom = new CollaborativeFrom();
                 uptCollaborativeFrom.setStatus("02");
-                uptCollaborativeFrom.setHandleState("02");
+                //uptCollaborativeFrom.setHandleState("02");
+                collaborativeFrom.setSolicitOpinion(demandAcceptVo.getSolicitOpinion());
                 uptCollaborativeFrom.setWorkOrderNo(demandAcceptVo.getWorkOrderNo());
                 uptCollaborativeFrom.setCollaborativeId(tCollaborativeFromList.get(i).getCollaborativeId());
                 uptCollaborativeFrom.setUpdatedBy(SecurityUtils.getUsername());

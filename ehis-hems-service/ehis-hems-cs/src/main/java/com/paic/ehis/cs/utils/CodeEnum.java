@@ -88,7 +88,32 @@ public enum CodeEnum {
     ACTION_TYPE_18("cs_action_type","18","结案"),
     ACTION_TYPE_19("cs_action_type","19","差错提交"),
 
-
+    /**
+     * 代码备用状态
+     */
+    OPERATE_CODE_01("cs_operate_code","01","受理"),
+    OPERATE_CODE_02("cs_operate_code","02","接收"),
+    OPERATE_CODE_03("cs_operate_code","03","修改"),
+    OPERATE_CODE_04("cs_operate_code","04","转办"),
+    OPERATE_CODE_05("cs_operate_code","05","协办"),
+    OPERATE_CODE_06("cs_operate_code","06","暂存"),
+    OPERATE_CODE_07("cs_operate_code","07","提交"),
+    OPERATE_CODE_08("cs_operate_code","08","取消"),
+    OPERATE_CODE_09("cs_operate_code","09","上传"),
+    OPERATE_CODE_10("cs_operate_code","10","下载"),
+    OPERATE_CODE_11("cs_operate_code","11","关联"),
+    OPERATE_CODE_12("cs_operate_code","12","解除"),
+    OPERATE_CODE_13("cs_operate_code","13","挂起"),
+    OPERATE_CODE_14("cs_operate_code","14","催办"),
+    OPERATE_CODE_15("cs_operate_code","15","撤销"),
+    OPERATE_CODE_16("cs_operate_code","16","发起"),
+    OPERATE_CODE_17("cs_operate_code","17","获取"),
+    OPERATE_CODE_18("cs_operate_code","18","处理"),
+    OPERATE_CODE_19("cs_operate_code","19","结案"),
+    OPERATE_CODE_20("cs_operate_code","20","复核"),
+    OPERATE_CODE_21("cs_operate_code","21","退回"),
+    OPERATE_CODE_22("cs_operate_code","22","导出"),
+    OPERATE_CODE_23("cs_operate_code","23","导入"),
 
 
 

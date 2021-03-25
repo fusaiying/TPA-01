@@ -52,6 +52,19 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
     }
 
     /**
+     * 查询协办信息
+     *
+     * @param workOrderNo 协办信息 ID
+     * @return 协办信息
+     */
+    @Override
+    public List<CollaborativeFrom> selectCollaborativeFromByWorkId(String workOrderNo)
+    {
+        List<CollaborativeFrom> tCollaborativeFromList = collaborativeFromMapper.selectCollaborativeFromByWorkId(workOrderNo);
+        return tCollaborativeFromList;
+    }
+
+    /**
      * 查询协办信息 列表
      * 
      * @param collaborativeFrom 协办信息 

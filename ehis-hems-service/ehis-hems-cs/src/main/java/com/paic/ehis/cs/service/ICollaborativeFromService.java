@@ -24,6 +24,14 @@ public interface ICollaborativeFromService
     public CollaborativeFrom selectCollaborativeFromById(Long collaborativeId);
 
     /**
+     * 查询协办信息
+     *
+     * @param workOrderNo 协办信息 ID
+     * @return 协办信息
+     */
+    public List<CollaborativeFrom> selectCollaborativeFromByWorkId(String workOrderNo);
+
+    /**
      * 查询协办信息 列表
      * 
      * @param collaborativeFrom 协办信息 

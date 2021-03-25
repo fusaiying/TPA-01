@@ -641,6 +641,7 @@
                 refusedReason:this.conclusionForm.refusedReason,
                 remark:this.conclusionForm.remark,
                 claimCheck:this.conclusionForm.claimCheck,
+                debtAmount:this.conclusionInfo.debtAmount
                 // calAmount:'0',
                 // payAmount:this.conclusionInfo.payAmount,
                 // refusedAmount:this.conclusionInfo.refusedAmount,

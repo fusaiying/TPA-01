@@ -342,21 +342,21 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
                 claimCaseRecord.setRptNo(claimCase.getRptNo());
                 claimCaseRecord.setStatus("Y");
                 //claimCaseRecord.setHistoryFlag("N");
-                claimCaseRecord.setOperation("06");
+                claimCaseRecord.setOperation("03");//03-录入
                 List<ClaimCaseRecord> claimCaseRecords = claimCaseRecordMapper.selectClaimCaseRecordList(claimCaseRecord);
                 ClaimCaseRecord claimCaseRecord1 = new ClaimCaseRecord();
                 if (null == claimCaseRecords || claimCaseRecords.size() == 0) {
                     //为空的情况
                     //第一次处理-案件状态05->06
-                    claimCase.setCaseStatus("06");//案件信息-录入
-                    claimCaseRecord1.setOperation("06");//案件操作记录-录入
+                    claimCase.setCaseStatus("03");//03-录入
+                    claimCaseRecord1.setOperation("03");//案件操作记录-录入03
 
                     //将原有的
                 } else {
                     //不为空的情况
                     //第二次处理-案件状态05->07
-                    claimCase.setCaseStatus("07");//案件信息-审核
-                    claimCaseRecord1.setOperation("07");//案件操作记录-审核
+                    claimCase.setCaseStatus("04");//案件信息-审核04
+                    claimCaseRecord1.setOperation("04");//案件操作记录-审核04
                 }
                 claimCase.setStatus("Y");
                 claimCase.setUpdateBy(SecurityUtils.getUsername());
@@ -476,14 +476,26 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
     @Override
     public int updateCaseAndRecordInfoCancel(ClaimCase claimCase) {
         ClaimCaseRecord claimCaseRecord1 = new ClaimCaseRecord();
+        ClaimCaseCal claimCaseCal = new ClaimCaseCal();
 
         String pulloutType = claimCase.getPulloutType();
         if (pulloutType.equals("01")) {//撤件97
             claimCase.setCaseStatus("98");
             claimCaseRecord1.setOperation("98");
+            claimCaseCal.setRptNo(claimCase.getRptNo());
+            claimCaseCal.setStatus("N");
+            claimCaseCal.setUpdateBy(SecurityUtils.getUsername());
+            claimCaseCal.setUpdateTime(DateUtils.getNowDate());
+            int i = claimCaseCalMapper.updateClaimCaseCalByRptNo(claimCaseCal);
         } else if (pulloutType.equals("02")) {//撤件可申诉98
             claimCase.setCaseStatus("97");
             claimCaseRecord1.setOperation("97");
+            claimCaseCal.setRptNo(claimCase.getRptNo());
+            claimCaseCal.setCalAmount(new BigDecimal("0.00"));
+            claimCaseCal.setDebtAmount(new BigDecimal("0.00"));
+            claimCaseCal.setUpdateBy(SecurityUtils.getUsername());
+            claimCaseCal.setUpdateTime(DateUtils.getNowDate());
+            int i = claimCaseCalMapper.updateClaimCaseCalByRptNo(claimCaseCal);
         }
         claimCase.setStatus("Y");
         claimCase.setUpdateBy(SecurityUtils.getUsername());

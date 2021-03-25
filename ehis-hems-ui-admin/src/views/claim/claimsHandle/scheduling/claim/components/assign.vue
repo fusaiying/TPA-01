@@ -54,6 +54,12 @@
         return {}
       }
     },
+    roleMappingValue: {
+      type : Object,
+      default: function (){
+        return {}
+      }
+    },
   },
   watch: {
     value: function (newValue) {
@@ -62,10 +68,10 @@
     roleSelects: function (newVal){
       this.roles = newVal;
     },
-
   },
   data() {
     return {
+        mappingValue:{},
         roles:[],
         dialogVisible:false,
         userForm : {
@@ -93,7 +99,7 @@
         if (valid) {
           const params = this.userForm;
           params.isEqually = 'Y';
-          params.mappingValue = this.userForm.roleCode;
+          params.mappingValue = this.roleMappingValue[this.userForm.roleCode];
           params.roleCode = this.userForm.roleCode;
           editInfoAverage(params).then(response => {
             if (response.code == '200') {

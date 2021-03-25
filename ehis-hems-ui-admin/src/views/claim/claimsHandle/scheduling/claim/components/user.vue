@@ -23,7 +23,7 @@
           <el-row>
             <el-col :span="24">
               <el-form-item label="操作用户：" prop="userId">
-                <el-select v-model="userForm.userId"  size="mini" class="item-width" placeholder="请选择" @change="getRole">
+                <el-select disabled v-model="userForm.userId"  size="mini" class="item-width" placeholder="请选择">
                   <el-option v-for="option in users" :key="option.dictValue" :label="option.dictLabel" :value="option.dictValue" />
                 </el-select>
               </el-form-item>
@@ -61,7 +61,9 @@
 
   import {editInfo ,roleInfo } from '@/api/scheduling/claimApi'
 
-  import { getDspatchUser } from '@/api/dispatch/api'
+  import {getUserInfo, getUsersByOrganCode} from '@/api/claim/standingBookSearch'
+
+  // import { getDspatchUser } from '@/api/dispatch/api'
   export default {
   props: {
     value: {
@@ -87,16 +89,18 @@
     },
     fixInfo: function (newVal){
       this.editData = newVal;
+      //console.log("this.editData",this.editData)
       if( this.editData.type == 'edit') {
+        this.userForm.roleId  = newVal.rowdata.roleCode;
         this.userForm.rate = newVal.rowdata.rate;
-         this.userForm.userId = newVal.rowdata.userId.toString();
-         this.userForm.distId = newVal.rowdata.distId.toString();
+         this.userForm.userId = newVal.rowdata.userName.toString();
+         this.userForm.distId = newVal.rowdata.distId;
         if(newVal.rowdata.status == 'Y' || newVal.rowdata.status == '01') {
           this.userForm.status = '01';
         } else {
           this.userForm.status = '02';
         }
-        this.getRole(this.userForm.userId)
+      //  this.getRole(this.userForm.userId)
       }
     },
     roleSelects: function (newVal){
@@ -137,15 +141,15 @@
     });
   },
   methods: {
-    getRole(value){
-      roleInfo(value).then(response => {
-        if (response.code == '200') {
-          this.userForm.roleId = response.roleIds.toString();
-        }
-      }).catch(error => {
-        console.log(error);
-      });
-    },
+    // getRole(value){
+    //   roleInfo(value).then(response => {
+    //     if (response.code == '200') {
+    //       this.userForm.roleId = response.roleIds.toString();
+    //     }
+    //   }).catch(error => {
+    //     console.log(error);
+    //   });
+    // },
     saveInfoFun(){
       this.$refs.userForm.validate((valid) => {
         if (valid) {
@@ -176,25 +180,41 @@
       })
     },
     getUserData () {
-      const params = {
-        pageNum:1,
-        pageSize:1000,
-        status:'0',
-        delFlag:0,
-        xtype:'getUserData'
-      };
-      getDspatchUser(params).then(response => {
-        if(response.rows != null) {
-          for(let i=0; i<response.rows.length; i++) {
-            let obj= new Object();
-            obj.dictLabel = response.rows[i].userName ;
-            obj.dictValue = response.rows[i].userId.toString();
-            this.users.push(obj);
+      getUserInfo().then(res => {
+        if (res != null && res.code === 200) {
+          let option = {
+            organCode: res.data.organCode,
+            pageNum: 1,
+            pageSize: 200,
           }
+          getUsersByOrganCode(option).then(response => {
+            if (response != null && response.code === 200) {
+              console.log("response getUsersByOrganCode",response)
+              for (let i = 0; i < response.rows.length; i++) {
+                let obj = new Object();
+                let resdata = response.rows[i]
+                let userName = resdata.userName;
+                obj.dictLabel = userName;
+                obj.dictValue = userName;
+                this.users.push(obj);
+              }
+            }
+          })
         }
-      }).catch(error => {
-        console.log(error);
-      });
+      })
+      // getDspatchUser(params).then(response => {
+      //   if(response.rows != null) {
+      //     for(let i=0; i<response.rows.length; i++) {
+      //       let obj= new Object();
+      //       obj.dictLabel = response.rows[i].userName ;
+      //       obj.dictValue = response.rows[i].userId.toString();
+      //       this.users.push(obj);
+      //     }
+      //   }
+      // }).catch(error => {
+      //   console.log(error);
+      // });
+
     },
     handleClose() {
       this.dialogVisible = false;

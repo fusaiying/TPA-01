@@ -2,11 +2,11 @@ import request from '@/utils/request'
 
 
 /*案件分配规则  */
-export function roleAll(query) {
+export function roleAll(data) {
   return request({
-    url: '/system/role/list',
-    method: 'get',
-    params: query
+    url: '/claimmgt/dist/selectClaimUserRoleInfo',
+    method: 'post',
+    data: data
   })
 }
 /*获取用户角色  */
@@ -18,18 +18,18 @@ export function roleInfo(userId) {
 }
 
 /*案件分配规则  */
-export function listInfo(query) {
+export function listInfo(data) {
   return request({
     url: '/claimmgt/dist/selectClaimCaseDist',
-    method: 'get',
-    params: query
+    method: 'post',
+    data: data
   })
 }
 
 //修改
 export function editInfo(data) {
   return request({
-    url: '/claimmgt/dist/updateClaimCaseDistOne',
+    url: '/claimmgt/dist/editClaimCaseDist',
     method: 'put',
     data
   })

@@ -12,8 +12,8 @@
         <el-form ref="userForm" :model="userForm" style="border:0;" label-width="180px" label-position="right" size="mini" :rules="rules" >
           <el-row>
             <el-col :span="24">
-              <el-form-item label="角色：" prop="roleId">
-                <el-select disabled v-model="userForm.roleId"  size="mini" class="item-width" placeholder="请选择">
+              <el-form-item label="角色：" prop="roleCode">
+                <el-select disabled v-model="userForm.roleCode"  size="mini" class="item-width" placeholder="请选择">
                   <el-option v-for="option in roles" :key="option.dictValue" :label="option.dictLabel" :value="option.dictValue" />
                 </el-select>
               </el-form-item>
@@ -22,8 +22,8 @@
 
           <el-row>
             <el-col :span="24">
-              <el-form-item label="操作用户：" prop="userId">
-                <el-select disabled v-model="userForm.userId"  size="mini" class="item-width" placeholder="请选择">
+              <el-form-item label="操作用户：" prop="userName">
+                <el-select disabled v-model="userForm.userName"  size="mini" class="item-width" placeholder="请选择">
                   <el-option v-for="option in users" :key="option.dictValue" :label="option.dictLabel" :value="option.dictValue" />
                 </el-select>
               </el-form-item>
@@ -91,16 +91,15 @@
       this.editData = newVal;
       //console.log("this.editData",this.editData)
       if( this.editData.type == 'edit') {
-        this.userForm.roleId  = newVal.rowdata.roleCode;
+        this.userForm.roleCode  = newVal.rowdata.roleCode;
         this.userForm.rate = newVal.rowdata.rate;
-         this.userForm.userId = newVal.rowdata.userName.toString();
+         this.userForm.userName = newVal.rowdata.userName;
          this.userForm.distId = newVal.rowdata.distId;
         if(newVal.rowdata.status == 'Y' || newVal.rowdata.status == '01') {
           this.userForm.status = '01';
         } else {
           this.userForm.status = '02';
         }
-      //  this.getRole(this.userForm.userId)
       }
     },
     roleSelects: function (newVal){
@@ -114,14 +113,14 @@
         dialogVisible:false,
         userForm : {
           distId:'',
-          userId: '',
-          roleId:'',
+          userName: '',
+          roleCode:'',
           rate :'',
           status:'01',
         },
         rules: {
-          roleId: {trigger: ['change'], required: false, message: '角色必填'},
-          userId: {trigger: ['change'], required: true, message: '操作用户必填'},
+          roleCode: {trigger: ['change'], required: false, message: '角色必填'},
+          userName: {trigger: ['change'], required: true, message: '操作用户必填'},
           rate: {trigger: ['change'], required: true, message: '分配比例必填'},
           status: {trigger: ['change'], required: true, message: '分配状态必填'},
         },
@@ -141,15 +140,6 @@
     });
   },
   methods: {
-    // getRole(value){
-    //   roleInfo(value).then(response => {
-    //     if (response.code == '200') {
-    //       this.userForm.roleId = response.roleIds.toString();
-    //     }
-    //   }).catch(error => {
-    //     console.log(error);
-    //   });
-    // },
     saveInfoFun(){
       this.$refs.userForm.validate((valid) => {
         if (valid) {
@@ -189,7 +179,7 @@
           }
           getUsersByOrganCode(option).then(response => {
             if (response != null && response.code === 200) {
-              console.log("response getUsersByOrganCode",response)
+              //console.log("response getUsersByOrganCode",response)
               for (let i = 0; i < response.rows.length; i++) {
                 let obj = new Object();
                 let resdata = response.rows[i]
@@ -202,19 +192,6 @@
           })
         }
       })
-      // getDspatchUser(params).then(response => {
-      //   if(response.rows != null) {
-      //     for(let i=0; i<response.rows.length; i++) {
-      //       let obj= new Object();
-      //       obj.dictLabel = response.rows[i].userName ;
-      //       obj.dictValue = response.rows[i].userId.toString();
-      //       this.users.push(obj);
-      //     }
-      //   }
-      // }).catch(error => {
-      //   console.log(error);
-      // });
-
     },
     handleClose() {
       this.dialogVisible = false;

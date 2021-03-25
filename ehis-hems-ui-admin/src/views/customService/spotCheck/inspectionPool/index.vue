@@ -98,7 +98,7 @@
           </el-table-column>
           <el-table-column prop="status" align="center" label="状态" show-overflow-tooltip>
             <template slot-scope="scope" v-if="scope.row.status">
-              <span>{{selectDictLabel(inspection_stateOptions, scope.row.status)}}</span>
+              <span>{{selectDictLabel(cs_link_code, scope.row.status)}}</span>
             </template>
           </el-table-column>
           <el-table-column align="center" label="操作" width="140">
@@ -149,7 +149,7 @@
           </el-table-column>
           <el-table-column prop="status" align="center" label="状态" show-overflow-tooltip>
             <template slot-scope="scope" v-if="scope.row.status">
-              <span>{{selectDictLabel(inspection_stateOptions, scope.row.status)}}</span>
+              <span>{{selectDictLabel(cs_link_code, scope.row.status)}}</span>
             </template>
           </el-table-column>
 
@@ -230,7 +230,7 @@ export default {
       business_typeOptions:[],
       service_itemOptions:[],
       organizationOptions:[],
-      inspection_stateOptions:[],
+        cs_link_code:[],
       //是否提示
       isRemind:true,
     }
@@ -251,7 +251,7 @@ export default {
     this.organizationOptions = this.dictList.find(item => {
       return item.dictType === 'cs_organization'
     }).dictDate
-    this.inspection_stateOptions = this.dictList.find(item => {
+    this.cs_link_code = this.dictList.find(item => {
       return item.dictType === 'cs_inspection_state'
     }).dictDate
     this.isRemind=false

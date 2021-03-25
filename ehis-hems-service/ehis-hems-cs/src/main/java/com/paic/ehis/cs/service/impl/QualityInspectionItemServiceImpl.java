@@ -118,7 +118,7 @@ public class QualityInspectionItemServiceImpl implements IQualityInspectionItemS
         //操作前主流程状态
         param.put("linkCode", CodeEnum.LINK_CODE_09.getCode());
         //操作按钮代码
-        param.put("operateCode",CodeEnum.OPERATE_CODE_19.getCode());
+        param.put("operateCode",CodeEnum.ACTION_TYPE_01.getCode());
         FlowLog flowLog=new FlowLog();
         //流转记录添加
         flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id",20,20));
@@ -192,7 +192,7 @@ public class QualityInspectionItemServiceImpl implements IQualityInspectionItemS
         //操作前主流程状态
         param.put("linkCode", CodeEnum.LINK_CODE_09.getCode());
         //操作按钮代码
-        param.put("operateCode",CodeEnum.OPERATE_CODE_19.getCode());
+        param.put("operateCode",CodeEnum.ACTION_TYPE_17.getCode());
         FlowLog flowLog=new FlowLog();
         //流转记录添加
         flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id",20,20));

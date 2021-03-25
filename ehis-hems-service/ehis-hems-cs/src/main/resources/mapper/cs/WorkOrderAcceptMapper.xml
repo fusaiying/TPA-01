@@ -37,7 +37,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </sql>
 
 
-    <select id="selectWorkOrderAcceptList" parameterType="WorkOrderAccept" resultMap="WorkOrderAcceptResult">
+    <select id="selectWorkOrderAcceptList" parameterType="com.paic.ehis.cs.domain.WorkOrderAccept" resultMap="WorkOrderAcceptResult">
         <include refid="selectWorkOrderAcceptVo"/>
         <where>
             <if test="businessType != null  and businessType != ''"> and business_type = #{businessType}</if>
@@ -65,6 +65,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectWorkOrderAcceptById" parameterType="String" resultMap="WorkOrderAcceptResult">
         <include refid="selectWorkOrderAcceptVo"/>
         where work_order_no = #{workOrderNo}
+    </select>
+    <!--实时查询案件操作人和状态-->
+    <select id="selectWorkOrderAcceptById1" parameterType="String" resultMap="WorkOrderAcceptResult">
+        select * from work_order_accept
+        where  work_order_no = #{workOrderNo}
     </select>
 
     <select id="selectProcessingTimeById" parameterType="String" resultType="java.lang.String">

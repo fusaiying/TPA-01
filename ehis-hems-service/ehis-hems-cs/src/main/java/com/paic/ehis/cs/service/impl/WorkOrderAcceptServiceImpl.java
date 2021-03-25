@@ -2,6 +2,7 @@ package com.paic.ehis.cs.service.impl;
 
 import java.util.List;
 import com.paic.ehis.common.core.utils.DateUtils;
+import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.cs.domain.WorkOrderAccept;
 import com.paic.ehis.cs.domain.vo.ComplaintAcceptVo;
 import com.paic.ehis.cs.mapper.WorkOrderAcceptMapper;
@@ -32,6 +33,12 @@ public class WorkOrderAcceptServiceImpl implements IWorkOrderAcceptService
     public WorkOrderAccept selectWorkOrderAcceptById(String workOrderNo)
     {
         return workOrderAcceptMapper.selectWorkOrderAcceptById(workOrderNo);
+    }
+
+    //实时查询案件操作人和状态
+    @Override
+    public WorkOrderAccept selectWorkOrderAcceptById1(String workOrderNo) {
+        return workOrderAcceptMapper.selectWorkOrderAcceptById1(workOrderNo);
     }
 
     /**

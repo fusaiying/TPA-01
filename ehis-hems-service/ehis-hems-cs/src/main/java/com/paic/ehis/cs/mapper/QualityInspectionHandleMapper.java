@@ -1,6 +1,8 @@
 package com.paic.ehis.cs.mapper;
 
 import java.util.List;
+import java.util.Map;
+
 import com.paic.ehis.cs.domain.QualityInspectionHandle;
 import com.paic.ehis.cs.domain.dto.HandleProcessInfoDTO;
 import com.paic.ehis.cs.domain.dto.QualityInspectionDTO;
@@ -74,5 +76,8 @@ public interface QualityInspectionHandleMapper
     public List<QualityInspectionItemVo> getQualityHandleItemInfo(QualityInspectionDTO qualityInspectionDTO);
 
     public int insertHandleInfo(QualityInspectionDTO qualityInspectionDTO);
+
+    public int insertHandleInfo1(QualityInspectionDTO qualityInspectionDTO, Map<String,String> param);
+
     public int updateHandleInfoById(QualityInspectionDTO qualityInspectionDTO);
 }

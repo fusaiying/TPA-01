@@ -1120,7 +1120,8 @@
                 this.$set(this.workPoolData, `a`, arr[0]);
                 this.$set(this.workPoolData, `b`, arr[1]);
               }
-
+              this.region.push(this.workPoolData.province)
+              this.region.push(this.workPoolData.city)
               if (res.rows.length <= 0) {
                 return this.$message.warning(
                   "未查询到数据！"
@@ -1145,6 +1146,8 @@
                 this.$set(this.workPoolData, `a`, arr[0]);
                 this.$set(this.workPoolData, `b`, arr[1]);
               }
+              this.region.push(this.workPoolData.province)
+              this.region.push(this.workPoolData.city)
               let queryData={
                 hospitalCode:res.rows[0].medicalInstitution,
                 hospitalName:res.rows[0].hospitalName,

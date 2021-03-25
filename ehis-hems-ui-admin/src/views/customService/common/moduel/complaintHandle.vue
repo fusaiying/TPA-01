@@ -3,11 +3,11 @@
     <div slot="header" class="clearfix" >
       <span style="color: blue">投诉处理</span>
     </div>
-    <el-form ref="ruleForm" :model="form" style="padding-bottom: 30px;" label-width="200px"
+    <el-form ref="ruleForm" :model="form" style="padding-bottom: 30px;" label-width="200px" :rules="ruleForm"
              label-position="right" size="mini" :disabled="isAcceptInfo || routerParams.status=='show'" >
       <el-row>
         <el-col :span="8">
-          <el-form-item label="一级投诉分类：" prop="priority">
+          <el-form-item label="一级投诉分类：" prop="level1">
             <el-select v-model="form.level1" class="item-width" @change="classTwo()">
               <el-option v-for="item in cs_classify_level1" :key="item.dictValue" :label="item.dictLabel"
                          :value="item.dictValue"/>
@@ -15,7 +15,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="二级投诉分类：" prop="priority">
+          <el-form-item label="二级投诉分类：" prop="level2">
             <el-select v-model="form.level2" class="item-width">
               <el-option v-for="item in cs_classify_level2" :key="item.code" :label="item.codeName"
                          :value="item.code"/>
@@ -158,7 +158,7 @@
       </el-row>
       <el-row>
         <el-col :span="22">
-          <el-form-item label="致诉根因：" prop="actionCause">
+          <el-form-item label="质诉根因：" prop="actionCause">
             <el-input type="text" v-model="form.actionCause" class="width-full"/>
           </el-form-item>
         </el-col>
@@ -229,6 +229,26 @@
 
     data() {
       return {
+        //字段校验
+        ruleForm: {
+          level1: [{ required: true, message: '一级投诉分类不能为空', trigger: 'change' }],
+          level2: [{ required: true, message: '二级投诉分类不能为空', trigger: 'change' }],
+          complaintTenable: [{ required: true, message: '投诉是否成立不能为空', trigger: 'change' }],
+          reason1: [{ required: true, message: '一级投诉原因不能为空', trigger: 'change' }],
+          reason2: [{ required: true, message: '二级投诉原因不能为空', trigger: 'change' }],
+          reason3: [{ required: true, message: '三级投诉原因不能为空', trigger: 'change' }],
+          complaintLink: [{ required: true, message: '投诉环节(报保监)不能为空', trigger: 'change' }],
+          complaintQuestion: [{ required: true, message: '投诉问题(报保监)不能为空', trigger: 'change' }],
+          outsideState: [{ required: true, message: '行协调解或外部鉴定状态不能为空', trigger: 'change' }],
+          riskType: [{ required: true, message: '险种类型不能为空', trigger: 'change' }],
+          marketChannel: [{ required: true, message: '营销渠道不能为空', trigger: 'change' }],
+          complaintCategory: [{ required: true, message: '投诉业务类别不能为空', trigger: 'blur' }],
+          rootDepartment: [{ required: true, message: '投诉根因部门不能为空', trigger: 'blur' }],
+          actionCause: [{ required: true, message: '质诉根因不能为空', trigger: 'blur' }],
+          treatmentResult: [{ required: true, message: '处理结果不能为空', trigger: 'blur' }],
+          customerFeedback: [{ required: true, message: '客户反馈不能为空', trigger: 'change' }],
+          actPromptly: [{ required: true, message: '投诉损失不能为空', trigger: 'blur' }]
+        },
         dictList:[],
         queryParams:{
           workOrderNo:'',
@@ -464,6 +484,15 @@
 
         })
       },
+      checkForm() {
+        this.$refs.ruleForm.validate((valid) => {
+          if (valid) {
+            return true
+          }else {
+            return false
+          }
+        })
+      }
     }
   }
 </script>

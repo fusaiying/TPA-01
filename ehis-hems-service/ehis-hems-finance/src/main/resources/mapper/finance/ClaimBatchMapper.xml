@@ -49,7 +49,7 @@ select distinct
     a.currency "currency",
     a.hospital_code "hospitalCode",
     a.caseload "caseload",
-    a.batch_total "batchTotal",
+    ifNUll(c.total_bill_amount,0) "batchTotal",
  (select case when count(1) > 0 then '01' else '02' end from claimmain.claim_case bb where bb.batch_no = a.batch_no and bb.is_appeal = '02' and bb.status = 'Y') "isAppeal",
     a.organ_code "organCode",
     a.submit_date "submitDate",
@@ -85,12 +85,12 @@ WHERE
     claimmain.claim_case b,
     (
 
-  select cc.batch_no ,ccc.bill_currency,sum(ccc.cal_amount) cal_amount
+  select cc.batch_no ,ccc.bill_currency,sum(ccc.cal_amount) cal_amount,sum(ccc.total_bill_amount) total_bill_amount
   from claimmain.claim_case cc  left join claimmain.claim_case_cal ccc on ccc.rpt_no=cc.rpt_no
   where cc.case_prop='01' and ccc.STATUS = 'Y' AND cc.STATUS = 'Y'
   group by ccc.bill_currency,cc.batch_no
 	union
-	 select cc.batch_no ,ccc.bill_currency,sum(ccc.cal_amount) cal_amount
+	 select cc.batch_no ,ccc.bill_currency,sum(ccc.cal_amount) cal_amount,sum(ccc.bill_amount) total_bill_amount
   from claimmain.claim_case cc left join  claimmain.claim_case_cal_core ccc on ccc.rpt_no=cc.rpt_no
   where cc.case_prop='02' and ccc.STATUS = 'Y' AND cc.STATUS = 'Y'
   group by ccc.bill_currency,cc.batch_no
@@ -126,7 +126,7 @@ select distinct
     a.currency "currency",
     a.hospital_code "hospitalCode",
     a.caseload "caseload",
-    a.batch_total "batchTotal",
+    ifNUll(c.total_bill_amount,0) "batchTotal",
  (select case when count(1) > 0 then '01' else '02' end from claimmain.claim_case bb where bb.batch_no = a.batch_no and bb.is_appeal = '02' and bb.status = 'Y') "isAppeal",
     a.organ_code "organCode",
     a.submit_date "submitDate",
@@ -135,12 +135,12 @@ FROM
      claimmain.claim_batch a,
     claimmain.claim_case b,
     (
-        select cc.batch_no ,ccc.bill_currency,sum(ccc.cal_amount) cal_amount
+        select cc.batch_no ,ccc.bill_currency,sum(ccc.cal_amount) cal_amount,sum(ccc.total_bill_amount) total_bill_amount
         from claimmain.claim_case cc  left join claimmain.claim_case_cal ccc on ccc.rpt_no=cc.rpt_no
         where cc.case_prop='01' and ccc.STATUS = 'Y' AND cc.STATUS = 'Y'
         group by ccc.bill_currency,cc.batch_no
         union
-        select cc.batch_no ,ccc.bill_currency,sum(ccc.cal_amount) cal_amount
+        select cc.batch_no ,ccc.bill_currency,sum(ccc.cal_amount) cal_amount,sum(ccc.bill_amount) total_bill_amount
         from claimmain.claim_case cc left join  claimmain.claim_case_cal_core ccc on ccc.rpt_no=cc.rpt_no
         where cc.case_prop='02' and ccc.STATUS = 'Y' AND cc.STATUS = 'Y'
         group by ccc.bill_currency,cc.batch_no
@@ -181,7 +181,7 @@ select distinct
     a.currency "currency",
     a.hospital_code "hospitalCode",
     a.caseload "caseload",
-    a.batch_total "batchTotal",
+    ifNUll(c.total_bill_amount,0) "batchTotal",
  (select case when count(1) > 0 then '01' else '02' end from claimmain.claim_case bb where bb.batch_no = a.batch_no and bb.is_appeal = '02' and bb.status = 'Y') "isAppeal",
     a.organ_code "organCode",
     a.submit_date "submitDate",
@@ -217,12 +217,12 @@ WHERE
     claimmain.claim_case b,
     (
 
-  select cc.batch_no ,ccc.bill_currency,sum(ccc.cal_amount) cal_amount
+  select cc.batch_no ,ccc.bill_currency,sum(ccc.cal_amount) cal_amount,sum(ccc.total_bill_amount) total_bill_amount
   from claimmain.claim_case cc  left join claimmain.claim_case_cal ccc on ccc.rpt_no=cc.rpt_no
   where cc.case_prop='01' and ccc.STATUS = 'Y' AND cc.STATUS = 'Y'
   group by ccc.bill_currency,cc.batch_no
 	union
-	 select cc.batch_no ,ccc.bill_currency,sum(ccc.cal_amount) cal_amount
+	 select cc.batch_no ,ccc.bill_currency,sum(ccc.cal_amount) cal_amount,sum(ccc.bill_amount) total_bill_amount
   from claimmain.claim_case cc left join  claimmain.claim_case_cal_core ccc on ccc.rpt_no=cc.rpt_no
   where cc.case_prop='02' and ccc.STATUS = 'Y' AND cc.STATUS = 'Y'
   group by ccc.bill_currency,cc.batch_no
@@ -258,7 +258,7 @@ select distinct
     a.currency "currency",
     a.hospital_code "hospitalCode",
     a.caseload "caseload",
-    a.batch_total "batchTotal",
+    ifNUll(c.total_bill_amount,0) "batchTotal",
  (select case when count(1) > 0 then '01' else '02' end from claimmain.claim_case bb where bb.batch_no = a.batch_no and bb.is_appeal = '02' and bb.status = 'Y') "isAppeal",
     a.organ_code "organCode",
     a.submit_date "submitDate",
@@ -268,12 +268,12 @@ FROM
     claimmain.claim_case b,
     (
 
-        select cc.batch_no ,ccc.bill_currency,sum(ccc.cal_amount) cal_amount
+        select cc.batch_no ,ccc.bill_currency,sum(ccc.cal_amount) cal_amount,sum(ccc.total_bill_amount) total_bill_amount
         from claimmain.claim_case cc  left join claimmain.claim_case_cal ccc on ccc.rpt_no=cc.rpt_no
         where cc.case_prop='01' and ccc.STATUS = 'Y' AND cc.STATUS = 'Y'
         group by ccc.bill_currency,cc.batch_no
         union
-        select cc.batch_no ,ccc.bill_currency,sum(ccc.cal_amount) cal_amount
+        select cc.batch_no ,ccc.bill_currency,sum(ccc.cal_amount) cal_amount,sum(ccc.bill_amount) total_bill_amount
         from claimmain.claim_case cc left join  claimmain.claim_case_cal_core ccc on ccc.rpt_no=cc.rpt_no
         where cc.case_prop='02' and ccc.STATUS = 'Y' AND cc.STATUS = 'Y'
         group by ccc.bill_currency,cc.batch_no

@@ -29,7 +29,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="insuranceSourceType"    column="insurance_source_type"    />
     </resultMap>
 
-    <select id="selectCodeDictVoList" parameterType="com.paic.ehis.cs.domain.vo.CodeDictVo" resultMap="CodeDictDTOResult">
+    <resultMap type="com.paic.ehis.cs.domain.vo.CodeDictVo" id="CodeDictVOResult">
+        <result property="complaintBusinessCode"    column="complaint_business_code"    />
+        <result property="complaintBusinessName"    column="complaint_business_name"    />
+        <result property="complaintBusinessType"    column="complaint_business_type"    />
+        <result property="insuranceSourceCode"    column="insurance_source_code"    />
+        <result property="insuranceSourceName"    column="insurance_source_name"    />
+        <result property="insuranceSourceType"    column="insurance_source_type"    />
+    </resultMap>
+
+    <select id="selectCodeDictVoList" parameterType="com.paic.ehis.cs.domain.dto.CodeDictDTO" resultMap="CodeDictVOResult">
         SELECT
         a.code insurance_source_code,
         a.code_name insurance_source_name,

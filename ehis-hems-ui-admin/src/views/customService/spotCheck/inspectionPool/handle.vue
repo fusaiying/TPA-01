@@ -64,7 +64,7 @@
                    size="mini">退回修改
         </el-button>
         <el-button v-if="this.params.node=='mistake'" style="margin-right: 20px" type="primary" @click="submit1('02')"
-                   :disabled="params.status=='show'" size="mini">提交
+                   :disabled="params.status=='show'" size="mini">提交 <!--  差错提交      -->
         </el-button>
         <el-button v-if="this.params.node=='mistake'" style="margin-right: 20px" type="primary" @click="closeHandle"
                    size="mini">关闭

@@ -304,4 +304,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where rpt_no = #{rptNo}
     </update>
 
+
+    <select id="selectPreCalConclusionByRptNo" parameterType="string" resultMap="CalConclusionResult">
+        SELECT
+               `appeal_rpt_no` rpt_no,
+               `status`,
+               `create_by`,
+               `create_time`,
+               `update_by`,
+               `update_time`
+        from claim_case_appeal_task
+        WHERE new_rpt_no = #{rptNo} and  status='Y' and appeal_status = '03'
+    </select>
+
 </mapper>

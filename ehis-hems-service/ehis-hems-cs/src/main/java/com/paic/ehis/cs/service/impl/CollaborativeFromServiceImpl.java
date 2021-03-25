@@ -249,10 +249,13 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
         //轨迹表插入数据
         FlowLog flowLog=new FlowLog();
         flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id",20,20));
-        flowLog.setLinkCode("06");
+        flowLog.setLinkCode("04");
+        flowLog.setStatus("04");
+        flowLog.setOperateCode("08");
         flowLog.setMakeBy(SecurityUtils.getUsername());
         //没有um帐号
         flowLog.setUmNum(SecurityUtils.getUsername());
+        flowLog.setMakeTime(DateUtils.parseDate(DateUtils.getTime()));
         flowLog.setCreatedBy(SecurityUtils.getUsername());
         flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         flowLog.setUpdatedBy(SecurityUtils.getUsername());

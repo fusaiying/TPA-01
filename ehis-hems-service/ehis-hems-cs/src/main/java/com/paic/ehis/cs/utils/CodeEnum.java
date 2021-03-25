@@ -87,6 +87,7 @@ public enum CodeEnum {
     ACTION_TYPE_17("cs_action_type","17","退回修改"),
     ACTION_TYPE_18("cs_action_type","18","结案"),
     ACTION_TYPE_19("cs_action_type","19","差错提交"),
+    ACTION_TYPE_20("cs_action_type","20","案件复核"),
 
     /**
      * 代码备用状态

@@ -216,43 +216,27 @@ public class QualityInspectionHandleServiceImpl implements IQualityInspectionHan
                 ComplaintDealVo complaintDealVo= qualityInspectionDTO.getComplaintDealVo();
                 complaintDealVo.setWorkOrderNo(qualityInspectionDTO.getWorkOrderNo());
                 iComplaintAcceptVoService.complaintHandling(complaintDealVo);
-
-
-                //操作后主流程状态  结案
-                param.put("status",CodeEnum.LINK_CODE_09.getCode());
-                //操作前主流程状态
-                param.put("linkCode",CodeEnum.LINK_CODE_09.getCode());
-                //操作按钮代码
-                param.put("operateCode",CodeEnum.ACTION_TYPE_18.getCode());
-
             }
-            //
-            //操作后主流程状态 案件退回修改后 差错提交
-            param.put("status",CodeEnum.LINK_CODE_09.getCode());
-            //操作前主流程状态
-            param.put("linkCode",CodeEnum.LINK_CODE_09.getCode());
-            //操作按钮代码
-            param.put("operateCode",CodeEnum.ACTION_TYPE_19.getCode());
             qualityInspectionHandleMapper.updateHandleInfoById(qualityInspectionDTO);
-        }else{
-            List<QualityInspectionItemVo> inspectionItemVos=qualityInspectionDTO.getItems();
-            if(inspectionItemVos!=null && !inspectionItemVos.isEmpty()){
+        }else {
+            List<QualityInspectionItemVo> inspectionItemVos = qualityInspectionDTO.getItems();
+            if (inspectionItemVos != null && !inspectionItemVos.isEmpty()) {
                 //作废状态
                 qualityInspectionDTO.setItemStatus("N");
                 //作废历史数据
                 qualityInspectionItemMapper.updateQualityInspectionItemById(qualityInspectionDTO);
                 //结案更新质检结果和状态
-                if(CodeEnum.CONFIRM_STATE_03.getCode().equals(qualityInspectionDTO.getStatus())){
+                if (CodeEnum.CONFIRM_STATE_03.getCode().equals(qualityInspectionDTO.getStatus())) {
                     //合格
-                    String result=CodeEnum.INSPECTION_RESULT_01.getCode();
+                    String result = CodeEnum.INSPECTION_RESULT_01.getCode();
                     for (int i = 0; i < inspectionItemVos.size(); i++) {
-                        if("01".equals(inspectionItemVos.get(i).getItemValue())){
+                        if ("01".equals(inspectionItemVos.get(i).getItemValue())) {
                             //不合格
-                            result=CodeEnum.INSPECTION_RESULT_02.getCode();
+                            result = CodeEnum.INSPECTION_RESULT_02.getCode();
                             break;
                         }
                     }
-                    WorkOrderQueryDTO workOrderQueryDTO=new WorkOrderQueryDTO();
+                    WorkOrderQueryDTO workOrderQueryDTO = new WorkOrderQueryDTO();
                     workOrderQueryDTO.setResult(result);
                     workOrderQueryDTO.setAcceptStatus(CodeEnum.INSPECTION_STATE_03.getCode());
                     workOrderQueryDTO.setUpdateTime(DateUtils.getNowDate());
@@ -262,29 +246,55 @@ public class QualityInspectionHandleServiceImpl implements IQualityInspectionHan
                     qualityInspectionAcceptMapper.updateAcceptByVoDTO(workOrderQueryDTO);
 
                     //操作后主流程状态
-                    param.put("status",CodeEnum.LINK_CODE_09.getCode());
+                    param.put("status", CodeEnum.LINK_CODE_09.getCode());
                     //操作前主流程状态
-                    param.put("linkCode",CodeEnum.LINK_CODE_09.getCode());
+                    param.put("linkCode", CodeEnum.LINK_CODE_09.getCode());
                     //操作按钮代码
-                    param.put("operateCode",CodeEnum.ACTION_TYPE_18.getCode());
+                    param.put("operateCode", CodeEnum.ACTION_TYPE_18.getCode());
 
-                }else {
-                    //操作后主流程状态 案件退回修改
-                    param.put("status",CodeEnum.LINK_CODE_09.getCode());
-                    //操作前主流程状态
-                    param.put("linkCode",CodeEnum.LINK_CODE_09.getCode());
-                    //操作按钮代码
-                    param.put("operateCode",CodeEnum.ACTION_TYPE_17.getCode());
                 }
+                String inspectionHandlerId = PubFun.createMySqlMaxNoUseCache("inspection_handler_id", 10, 10);
+                qualityInspectionDTO.setInspectionHandlerId(inspectionHandlerId);
+                qualityInspectionHandleMapper.insertHandleInfo(qualityInspectionDTO);
+                qualityInspectionItemMapper.insertHandleItemInfoBatch(qualityInspectionDTO);
             }
-            String inspectionHandlerId = PubFun.createMySqlMaxNoUseCache("inspection_handler_id", 10, 10);
-            qualityInspectionDTO.setInspectionHandlerId(inspectionHandlerId);
-            qualityInspectionHandleMapper.insertHandleInfo(qualityInspectionDTO);
-            qualityInspectionItemMapper.insertHandleItemInfoBatch(qualityInspectionDTO);
         }
+        //操作流程轨迹记录
         String id = qualityInspectionDTO.getWorkOrderNo();
         //流转记录添加
         String flow_id= PubFun.createMySqlMaxNoUseCache("cs_flow_id",20,20);
+        if(CodeEnum.BUSINESS_TYPE_03.getCode().equals(qualityInspectionDTO.getBusinessType()) && "01".equals(qualityInspectionDTO.getStatus())){
+            //操作后主流程状态 案件退回修改
+            param.put("status",CodeEnum.LINK_CODE_09.getCode());
+            //操作前主流程状态
+            param.put("linkCode",CodeEnum.LINK_CODE_09.getCode());
+            //操作按钮代码
+            param.put("operateCode",CodeEnum.ACTION_TYPE_17.getCode());
+        }else if ("02".equals(qualityInspectionDTO.getStatus())){
+            //操作后主流程状态 案件退回修改后 差错提交
+            param.put("status",CodeEnum.LINK_CODE_09.getCode());
+            //操作前主流程状态
+            param.put("linkCode",CodeEnum.LINK_CODE_09.getCode());
+            //操作按钮代码
+            param.put("operateCode",CodeEnum.ACTION_TYPE_19.getCode());
+            qualityInspectionHandleMapper.updateHandleInfoById(qualityInspectionDTO);
+        }else if(CodeEnum.BUSINESS_TYPE_01.getCode().equals(qualityInspectionDTO.getBusinessType()) && "01".equals(qualityInspectionDTO.getStatus())){
+            //操作后主流程状态 案件退回修改后 案件复核
+            param.put("status",CodeEnum.LINK_CODE_09.getCode());
+            //操作前主流程状态
+            param.put("linkCode",CodeEnum.LINK_CODE_09.getCode());
+            //操作按钮代码
+            param.put("operateCode",CodeEnum.ACTION_TYPE_20.getCode());
+            qualityInspectionHandleMapper.updateHandleInfoById(qualityInspectionDTO);
+        }else {
+            //操作后主流程状态 结案
+            param.put("status",CodeEnum.LINK_CODE_09.getCode());
+            //操作前主流程状态
+            param.put("linkCode",CodeEnum.LINK_CODE_09.getCode());
+            //操作按钮代码
+            param.put("operateCode",CodeEnum.ACTION_TYPE_18.getCode());
+            qualityInspectionHandleMapper.updateHandleInfoById(qualityInspectionDTO);
+        }
         flowLog.setFlowId(flow_id);
         flowLog.setCreatedBy(String.valueOf(SecurityUtils.getUsername()));
         flowLog.setCreatedTime(DateUtils.getNowDate());

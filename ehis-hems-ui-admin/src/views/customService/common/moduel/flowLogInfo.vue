@@ -10,9 +10,9 @@
         highlight-current-row
         tooltip-effect="dark"
         style=" width: 100%;">
-        <el-table-column align="center" prop="status" label="状态" show-overflow-tooltip>
-          <template slot-scope="scope" v-if="scope.row.status">
-            <span>{{ selectDictLabel(cs_link_code, scope.row.status) }}</span>
+        <el-table-column align="center" prop="linkCode" label="状态" show-overflow-tooltip>
+          <template slot-scope="scope" v-if="scope.row.linkCode">
+            <span>{{ selectDictLabel(cs_link_code, scope.row.linkCode) }}</span>
           </template>
         </el-table-column>
         <el-table-column align="center" prop="operateCode" label="操作" show-overflow-tooltip>
@@ -93,7 +93,7 @@
           status: ""
         },
         dictList: [],
-          cs_link_code: [],
+        cs_link_code: [],
         cs_action_type: [],
         cs_service_item: [],
         cs_communication_language: [],

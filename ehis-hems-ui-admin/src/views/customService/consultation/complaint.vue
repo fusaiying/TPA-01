@@ -461,8 +461,8 @@
       </div>
       <div style="text-align: right; margin-right: 1px;">
         <co-organizer ref="coOrganizer"></co-organizer>
-        <el-button type="primary" size="mini" @click="coOrganizer">协办</el-button>
-        <el-button type="primary" size="mini" @click="submit">提交</el-button>
+        <el-button type="primary" size="mini" @click="coOrganizer" :disabled="collaborativeFrom.status == '02'">协办</el-button>
+        <el-button type="primary" size="mini" @click="submit" :disabled="collaborativeFrom.status == '02'">提交</el-button>
         <el-button type="primary" size="mini" @click="close">关闭</el-button>
 
       </div>
@@ -484,6 +484,7 @@ import {
 import {complainSearch, comSearch} from '@/api/customService/consultation'
 import coOrganizer from "../common/modul/coOrganizer";
 import modifyDetails from "../common/modul/modifyDetails";
+import {getCollaborativeInfo} from '@/api/customService/collaborative'
 
 let dictss = [
   {dictType: 'cs_channel'},
@@ -549,6 +550,14 @@ export default {
         costsIncurred: "",
         sign: "",
         collaborativeId: ""
+      },
+      collaborativeFrom: {
+        workOrderNo: "",
+        umCode: "",
+        solicitOpinion: "",
+        handleState: "",
+        status: "",
+        opinion: "",
       },
       // 表单校验
       rules: {
@@ -656,6 +665,7 @@ export default {
     this.queryParams.status = this.$route.query.status;
     this.searchHandle();
     this.searchFlowLog();
+    this.getCollaborative();
   },
   async mounted() {
     // 字典数据统一获取
@@ -779,7 +789,8 @@ export default {
           insert.collaborativeId = this.$route.query.collaborativeId
           comSearch(insert).then(res => {
             if (res != null && res.code === 200) {
-              this.$message.success("保存成功")
+              this.$message.success("保存成功");
+              this.collaborativeFrom.status = "02";
               if (res.rows.length <= 0) {
                 return this.$message.warning(
                   "失败！"
@@ -792,6 +803,19 @@ export default {
         }
       })
     },
+
+    getCollaborative() {
+      getCollaborativeInfo(this.$route.query.collaborativeId).then(res => {
+        if (res != null && res.code === 200) {
+          console.log("getCollaborative", res.data)
+          this.collaborativeFrom = res.data;
+          this.submitForm.opinion = this.collaborativeFrom.opinion;
+        }
+      }).catch(res => {
+
+      })
+    },
+
     //查询轨迹表
     searchFlowLog() {
       let workOrderNo = this.queryParams

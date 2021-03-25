@@ -101,11 +101,9 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
      */
     @Override
     public AcceptVo updateSendByVoById(String workOrderNo) {
-        AcceptVo acceptVo = qualityInspectionAcceptMapper.selectSendByVoById1(workOrderNo);//先查询状态为处理中的工单
-        AcceptVo acceptVo1 = qualityInspectionAcceptMapper.selectSendByVoById2(workOrderNo);//不存在则获取最新的非处理的工单数据
-        String updateby = String.valueOf(SecurityUtils.getUsername());
+        AcceptVo acceptVo = qualityInspectionAcceptMapper.selectSendByVoById1(workOrderNo);//先查询所有的工单
         WorkOrderAccept workOrderAccept = workOrderAcceptMapper.selectWorkOrderAcceptById(workOrderNo);
-        if (null != acceptVo && !acceptVo.getUpdateBy().equals(updateby)) {//如果获取的数据的操作人不是当前操作人，说明数据目前在别人的工作池
+        if (null != acceptVo && acceptVo.getStatus().equals("01")) {//如果获取的数据的状态为待处理才可已获取
             if (null != acceptVo.getBusinessType()) {//不是预约已处理
                 workOrderAccept.setStatus("02");
                 workOrderAccept.setAcceptBy(SecurityUtils.getUsername());
@@ -114,18 +112,10 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
                 workOrderAcceptMapper.updateWorkOrderAccept(workOrderAccept);
             }
             acceptVo.setFlag("1");//弹框显示前工单正在处理，是否申请到个人池
-            return acceptVo;//存在则获取处理中的工单数据
-        } else if (null != acceptVo1 && acceptVo1.getUpdateBy().equals(updateby)) {//说明此数据在自己的个人池
-            if (null != acceptVo1.getBusinessType()) {//不是预约已处理
-                workOrderAccept.setStatus("02");
-                workOrderAccept.setAcceptBy(SecurityUtils.getUsername());
-                workOrderAccept.setUpdateBy(SecurityUtils.getUsername());
-                workOrderAccept.setUpdateTime(DateUtils.getNowDate());
-                workOrderAcceptMapper.updateWorkOrderAccept(workOrderAccept);
-            }
-            acceptVo1.setFlag("2");//不出弹框
+        }else if (null != acceptVo && !acceptVo.getStatus().equals("01")) {//置灰获取按钮
+            acceptVo.setFlag("2");
         }
-        return acceptVo1;
+        return acceptVo;
     }
 
     //质检中，待质检查询

@@ -208,6 +208,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectCollaborativeFromVo"/>
         where collaborative_id = #{collaborativeId}
     </select>
+
+    <select id="selectCollaborativeFromByWorkId" parameterType="string" resultMap="CollaborativeFromResult">
+        <include refid="selectCollaborativeFromVo"/>
+        where work_order_no = #{workOrderNo}
+    </select>
         
         <insert id="insertCollaborativeFrom" parameterType="CollaborativeFrom" useGeneratedKeys="true" keyProperty="collaborativeId">
         insert into collaborative_from

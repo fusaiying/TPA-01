@@ -347,10 +347,13 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         personInfo2.setName(demandAcceptVo.getContactsName());
         personInfo2.setLanguage(demandAcceptVo.getContactsLanguage());
         personInfo2.setMobilePhone(demandAcceptVo.getContactsMobilePhone());
-        String tLinePhone = StringUtils.isNotEmpty(demandAcceptVo.getContactsCountry())?demandAcceptVo.getContactsCountry():""+"-";
-        tLinePhone += StringUtils.isNotEmpty(demandAcceptVo.getContactsCountry())?demandAcceptVo.getContactsCountry():""+"-";
-        tLinePhone += StringUtils.isNotEmpty(demandAcceptVo.getContactsCountry())?demandAcceptVo.getContactsCountry():""+"-";
-        tLinePhone += StringUtils.isNotEmpty(demandAcceptVo.getContactsCountry())?demandAcceptVo.getContactsCountry():""+"-";
+        String tLinePhone = StringUtils.isNotEmpty(demandAcceptVo.getContactsCountry())?demandAcceptVo.getContactsCountry():"";
+        tLinePhone += "-";
+        tLinePhone += StringUtils.isNotEmpty(demandAcceptVo.getContactsQuhao())?demandAcceptVo.getContactsQuhao():"";
+        tLinePhone += "-";
+        tLinePhone += StringUtils.isNotEmpty(demandAcceptVo.getContactsNumber())?demandAcceptVo.getContactsNumber():"";
+        tLinePhone += "-";
+        tLinePhone += StringUtils.isNotEmpty(demandAcceptVo.getContactsSecondNumber())?demandAcceptVo.getContactsSecondNumber():"";
         personInfo2.setLinePhone(tLinePhone);
         personInfo2.setCreatedBy(SecurityUtils.getUsername());
         personInfo2.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));

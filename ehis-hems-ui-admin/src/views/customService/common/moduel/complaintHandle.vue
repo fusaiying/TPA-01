@@ -8,7 +8,7 @@
       <el-row>
         <el-col :span="8">
           <el-form-item label="一级投诉分类：" prop="level1">
-            <el-select v-model="form.level1" class="item-width" @change="classTwo()">
+            <el-select v-model="form.level1" class="item-width" @change="classTwo('1')">
               <el-option v-for="item in cs_classify_level1" :key="item.dictValue" :label="item.dictLabel"
                          :value="item.dictValue"/>
             </el-select>
@@ -57,7 +57,7 @@
       <el-row>
         <el-col :span="8">
           <el-form-item label="一级投诉原因：" prop="reason1">
-            <el-select v-model="form.reason1" class="item-width" @change="reasonTwo()">
+            <el-select v-model="form.reason1" class="item-width" @change="reasonTwo('1')">
               <el-option v-for="item in cs_reason_level1" :key="item.dictValue" :label="item.dictLabel"
                          :value="item.dictValue"/>
             </el-select>
@@ -65,7 +65,7 @@
         </el-col>
         <el-col :span="8">
           <el-form-item label="二级投诉原因：" prop="reason2">
-            <el-select v-model="form.reason2" class="item-width" @change="reasonThree()">
+            <el-select v-model="form.reason2" class="item-width" @change="reasonThree('1')">
               <el-option v-for="item in cs_reason_level2" :key="item.code" :label="item.codeName"
                          :value="item.code"/>
             </el-select>
@@ -380,7 +380,7 @@
         const query = {}
         query.parentCode = this.form.reason2
         if(flag=='1'){
-          this.sendForm.reason3 = '';
+          this.form.reason3 = '';
         }
         reasonThree(query).then(res => {
           if (res != null && res.code === 200) {
@@ -399,7 +399,7 @@
         const query = {}
         query.parentCode = this.form.level1;
         if(flag=='1'){
-          this.sendForm.level2 = '';
+          this.form.level2 = '';
         }
         classTwo(query).then(res => {
           if (res != null && res.code === 200) {

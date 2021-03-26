@@ -132,7 +132,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         left join accept_detail_info adi on woa.work_order_no = adi.work_order_no left join person_info pi on woa.insured_no=pi.person_id
         LEFT JOIN quality_inspection_accept qia ON woa.work_order_no = qia.work_order_no  AND qia.STATUS = '03'
         WHERE
-        1 = 1  and adi.item_code not in ('B00034')
+        1 = 1  	and woa.status not in ('01','02') and adi.item_code not in ('B00034')
         <if test="businessTypeList != null ">
             and woa.business_type IN (
             <foreach collection="businessTypeList" item="businessType"
@@ -381,9 +381,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
     <select id="getWorkOrderCountByUserIdMonth" parameterType="com.paic.ehis.cs.domain.dto.WorkOrderQueryDTO" resultMap="AcceptResult">
-        select woa.update_by,count(*) as count,GROUP_CONCAT(work_order_no) as work_order_nos,woa.activation_num from work_order_accept woa where 1=1
-        AND woa.work_order_no  IN ( SELECT work_order_no FROM quality_inspection_accept where status='01' or (status='03' and result='01') )
-        <if test="updateBy != null and updateBy != ''"> and woa.update_by = #{updateBy}</if>
+        SELECT
+        woa.update_by,
+        woa.work_order_no ,
+        woa.activation_num
+        FROM
+        work_order_accept woa
+        WHERE
+        1 = 1
+        AND woa.work_order_no IN ( SELECT work_order_no FROM quality_inspection_accept WHERE STATUS = '01' OR ( STATUS = '03' AND result = '01' ) )
+        <if test="updateBy != null and updateBy != ''">and woa.update_by = #{updateBy}</if>
         <if test="status != null and status != ''"> and woa.status = #{status}</if>
         <if test="workOrderNo != null and workOrderNo != ''"> and woa.work_order_no = #{workOrderNo}</if>
         <if test="endCaseStartTime != null ">
@@ -400,6 +407,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             </foreach>
             )
         </if>
-        group by woa.update_by,woa.activation_num
+
     </select>
 </mapper>

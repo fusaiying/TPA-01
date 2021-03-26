@@ -42,6 +42,7 @@ public class CustomServiceReservationController extends BaseController {
     private BaseService baseService;
 
 
+    //预约待处理
 //    @PreAuthorize("@ss.hasPermi('system:customService:list')")
     @GetMapping("/internal/listAndPublicPool")
     public TableDataInfo listAndPublicPool(AcceptDTO acceptDTO) {
@@ -50,6 +51,7 @@ public class CustomServiceReservationController extends BaseController {
         return getDataTable(list);
     }
 
+    //预约处理中
 //    @PreAuthorize("@ss.hasPermi('system:customService:list')")
     @GetMapping("/internal/listAndPersonalPool")
     public TableDataInfo listAndPersonalPool(AcceptDTO acceptDTO) {

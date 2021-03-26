@@ -1457,7 +1457,11 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
 
             if (claimCaseCheckDTO.getDebtAmount().compareTo(new BigDecimal(String.valueOf(0))) != 0){
                 ClaimCaseDebt claimCaseDebt = new ClaimCaseDebt();
+                ClaimCaseInsured claimCaseInsured = claimCaseInsuredMapper.selectClaimCaseInsuredListByRptNoTwo(claimCaseCheckDTO.getRptNo());
+                claimCaseDebt.setRptNo(claimCaseCheckDTO.getRptNo());
                 claimCaseDebt.setStatus("Y");
+                claimCaseDebt.setInsuredNo(claimCaseInsured.getInsuredNo());
+                claimCaseDebt.setDebtAmount(claimCaseCheckDTO.getDebtAmount());
                 claimCaseDebt.setCreateBy(SecurityUtils.getUsername());
                 claimCaseDebt.setCreateTime(DateUtils.getNowDate());
                 claimCaseDebt.setUpdateBy(SecurityUtils.getUsername());

@@ -1189,24 +1189,20 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         record.setCreateTime(DateUtils.getNowDate());
         claimCaseRecordMapper.insertClaimCaseRecord(record);
 
-        if (claimCase.getDebtAmount().compareTo(new BigDecimal(String.valueOf(0))) != 0){
-            if ("01".equals(claimCase.getIsAppeal())) {
+        ClaimCaseCal claimCaseCal = claimCaseCalMapper.selectClaimCaseCalByRptNo(claimCase.getRptNo());
+        if (claimCaseCal.getDebtAmount().compareTo(new BigDecimal(String.valueOf(0))) != 0){
+            if ("01".equals(claimCase.getIsAppeal())){
                 ClaimCaseDebt claimCaseDebt = claimCaseDebtMapper.selectClaimCaseDebtByRptNo(claimCase.getRptNo());
                 if (StringUtils.isNotNull(claimCaseDebt)) {
                     claimCaseDebt.setRptNo(claimCase.getRptNo());
-                    claimCaseDebt.setDebtAmount(claimCase.getDebtAmount());
-                    List<ClaimCaseInsured> claimCaseInsureds = claimCaseInsuredMapper.selectClaimCaseInsuredById(claimCase.getRptNo());
-                    claimCaseDebt.setInsuredNo(claimCaseInsureds.get(0).getInsuredNo());
-                    claimCaseDebt.setStatus("Y");
-                    claimCaseDebt.setCreateBy(SecurityUtils.getUsername());
-                    claimCaseDebt.setCreateTime(DateUtils.getNowDate());
+                    claimCaseDebt.setDebtAmount(claimCaseCal.getDebtAmount());
                     claimCaseDebt.setUpdateBy(SecurityUtils.getUsername());
                     claimCaseDebt.setUpdateTime(DateUtils.getNowDate());
-                    claimCaseDebtMapper.insertClaimCaseDebt(claimCaseDebt);
+                    claimCaseDebtMapper.updateClaimCaseDebt(claimCaseDebt);
                 } else {
                     ClaimCaseDebt caseDebt = new ClaimCaseDebt();
                     caseDebt.setRptNo(claimCase.getRptNo());
-                    caseDebt.setDebtAmount(claimCase.getDebtAmount());
+                    caseDebt.setDebtAmount(claimCaseCal.getDebtAmount());
                     List<ClaimCaseInsured> claimCaseInsureds = claimCaseInsuredMapper.selectClaimCaseInsuredById(claimCase.getRptNo());
                     caseDebt.setInsuredNo(claimCaseInsureds.get(0).getInsuredNo());
                     caseDebt.setStatus("Y");
@@ -1216,6 +1212,13 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
                     caseDebt.setUpdateTime(DateUtils.getNowDate());
                     claimCaseDebtMapper.insertClaimCaseDebt(claimCaseDebt);
                 }
+            }else{
+                CalConclusionVo calConclusionVo = claimCaseCalMapper.selectPreCalConclusionByRptNo(claimCase.getRptNo());
+                ClaimCaseDebt claimCaseDebt = claimCaseDebtMapper.selectClaimCaseDebtByRptNo(calConclusionVo.getRptNo());
+                claimCaseDebt.setDebtAmount(calConclusionVo.getDebtAmount());
+                claimCaseDebt.setUpdateBy(SecurityUtils.getUsername());
+                claimCaseDebt.setUpdateTime(DateUtils.getNowDate());
+                claimCaseDebtMapper.updateClaimCaseDebt(claimCaseDebt);
             }
         }
 
@@ -1486,20 +1489,16 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
             claimCase.setEndCaseTime(DateUtils.getNowDate());
             claimCase.setRptNo(claimCaseCheckDTO.getRptNo());
 
+            //追讨生成
             if (claimCaseCheckDTO.getDebtAmount().compareTo(new BigDecimal(String.valueOf(0))) != 0){
-                if ("01".equals(claimCase.getIsAppeal())) {
+                if ("01".equals(claimCase.getIsAppeal())){
                     ClaimCaseDebt claimCaseDebt = claimCaseDebtMapper.selectClaimCaseDebtByRptNo(claimCaseCheckDTO.getRptNo());
                     if (StringUtils.isNotNull(claimCaseDebt)) {
                         claimCaseDebt.setRptNo(claimCaseCheckDTO.getRptNo());
                         claimCaseDebt.setDebtAmount(claimCaseCheckDTO.getDebtAmount());
-                        List<ClaimCaseInsured> claimCaseInsureds = claimCaseInsuredMapper.selectClaimCaseInsuredById(claimCaseCheckDTO.getRptNo());
-                        claimCaseDebt.setInsuredNo(claimCaseInsureds.get(0).getInsuredNo());
-                        claimCaseDebt.setStatus("Y");
-                        claimCaseDebt.setCreateBy(SecurityUtils.getUsername());
-                        claimCaseDebt.setCreateTime(DateUtils.getNowDate());
                         claimCaseDebt.setUpdateBy(SecurityUtils.getUsername());
                         claimCaseDebt.setUpdateTime(DateUtils.getNowDate());
-                        claimCaseDebtMapper.insertClaimCaseDebt(claimCaseDebt);
+                        claimCaseDebtMapper.updateClaimCaseDebt(claimCaseDebt);
                     } else {
                         ClaimCaseDebt caseDebt = new ClaimCaseDebt();
                         caseDebt.setRptNo(claimCaseCheckDTO.getRptNo());
@@ -1514,7 +1513,12 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
                         claimCaseDebtMapper.insertClaimCaseDebt(claimCaseDebt);
                     }
                 }else{
-                    //todo:根据报案号查询该次申诉前案件的报案号，再根据报案号查询对应追讨将其置为无效后新增
+                    CalConclusionVo calConclusionVo = claimCaseCalMapper.selectPreCalConclusionByRptNo(claimCaseCheckDTO.getRptNo());
+                    ClaimCaseDebt claimCaseDebt = claimCaseDebtMapper.selectClaimCaseDebtByRptNo(calConclusionVo.getRptNo());
+                    claimCaseDebt.setDebtAmount(calConclusionVo.getDebtAmount());
+                    claimCaseDebt.setUpdateBy(SecurityUtils.getUsername());
+                    claimCaseDebt.setUpdateTime(DateUtils.getNowDate());
+                    claimCaseDebtMapper.updateClaimCaseDebt(claimCaseDebt);
                 }
             }
             claimCase.setPayStatus("01");

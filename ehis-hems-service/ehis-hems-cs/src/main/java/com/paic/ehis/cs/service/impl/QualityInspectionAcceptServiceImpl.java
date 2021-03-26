@@ -60,7 +60,7 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
         String updateBy=SecurityUtils.getUsername();
         if (list != null) {
             for (int i = 0; i < list.size(); i++) {
-                if (list.get(i).getUpdateBy().equals(updateBy)){//说明此时操作人是本人
+                if (null!=list.get(i).getUpdateBy() && list.get(i).getUpdateBy().equals(updateBy)){//说明此时操作人是本人
                     list.get(i).setFlag("2");
                     //被保人
                     String getInsuredPersonId = list.get(i).getInsuredPersonId();

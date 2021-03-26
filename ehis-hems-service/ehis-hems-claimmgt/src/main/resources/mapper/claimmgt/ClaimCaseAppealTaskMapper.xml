@@ -764,6 +764,32 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         )
     </insert>
 
+    <insert id="insertClaimCasTypeRemarkeCp" parameterType="com.paic.ehis.claimmgt.domain.ClaimCaseAppealTask">
+        INSERT INTO `claim_case_remark` (
+            `rpt_no`,
+            `remark_type`,
+            `remark`,
+            `station`,
+            `status`,
+            `create_by`,
+            `create_time`,
+            `update_by`,
+            `update_time`
+        )
+        VALUES
+        (
+            #{newRptNo},
+            '02',
+            '',
+            '08',
+            'Y',
+            (select create_by from claim_case_appeal_record where operation = '02' and status = 'Y' and task_id = (select max(task_id) from claim_case_appeal_task  where status = 'Y' and appeal_rpt_no = #{appealRptNo})),
+            (select create_time from claim_case_appeal_record where operation = '02' and status = 'Y' and task_id = (select max(task_id) from claim_case_appeal_task  where status = 'Y' and appeal_rpt_no = #{appealRptNo})),
+            '',
+            now()
+        )
+    </insert>
+
     <insert id="insertClaimCasePolicyCp" parameterType="com.paic.ehis.claimmgt.domain.ClaimCaseAppealTask">
         INSERT INTO `claim_case_policy` (
             `rpt_no`,

@@ -1068,11 +1068,6 @@
               if (res != null && res.code === 200) {
                 this.$message.success("保存成功");
                 this.checkSubmitFlag = '01';
-                if (res.rows.length <= 0) {
-                  return this.$message.warning(
-                    "失败！"
-                  )
-                }
               }
             }).catch(res => {
               return this.$message.warning(
@@ -1092,12 +1087,7 @@
         insert.workOrderNo=this.$route.query.workOrderNo
         complaintDealSubmit(insert).then(res => {
           if (res != null && res.code === 200) {
-            this.$message.success("暂存成功")
-            if (res.rows.length <= 0) {
-              return this.$message.warning(
-                "失败！"
-              )
-            }
+            this.$message.success("暂存成功");
           }
         }).catch(res => {
 

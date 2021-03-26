@@ -340,6 +340,16 @@
                 flag: true
               }
             })
+          }else {
+            this.$router.push({
+              path: '/customService/reservation/orderDetail',
+              query: {
+                workOrderNo: row.workOrderNo,
+                policyNo: row.policyNo,
+                policyItemNo: row.policyItemNo,
+                status: row.status
+              }
+            })
           }
         }
       }

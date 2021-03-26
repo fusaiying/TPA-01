@@ -56,22 +56,24 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
         List<AcceptVo> list = qualityInspectionAcceptMapper.selectSendByVo(workOrderQueryDTO);
         if (list != null) {
             for (int i = 0; i < list.size(); i++) {
-                //被保人
-                String getInsuredPersonId = list.get(i).getInsuredPersonId();
-                if (StringUtils.isNotEmpty(getInsuredPersonId)) {
-                    PersonInfo setInsuredPerson = personInfoMapper.selectPersonInfoById(getInsuredPersonId);
-                    if (setInsuredPerson != null) {
-                        list.get(i).setInsuredPerson(setInsuredPerson);
+                String serviceItem=list.get(i).getServiceItem();
+                if(!serviceItem.equals("03-B00034")) { //非根因改善才可以发起质检
+                    //被保人
+                    String getInsuredPersonId = list.get(i).getInsuredPersonId();
+                    if (StringUtils.isNotEmpty(getInsuredPersonId)) {
+                        PersonInfo setInsuredPerson = personInfoMapper.selectPersonInfoById(getInsuredPersonId);
+                        if (setInsuredPerson != null) {
+                            list.get(i).setInsuredPerson(setInsuredPerson);
+                        }
                     }
-                }
-                //投保人
-                String getHolderPersonId = list.get(i).getHolderPersonId();
-                if (StringUtils.isNotEmpty(getHolderPersonId)) {
-                    PersonInfo setHolderPerson = personInfoMapper.selectPersonInfoById(getHolderPersonId);
-                    if (setHolderPerson != null) {
-                        list.get(i).setHolderPerson(setHolderPerson);
+                    //投保人
+                    String getHolderPersonId = list.get(i).getHolderPersonId();
+                    if (StringUtils.isNotEmpty(getHolderPersonId)) {
+                        PersonInfo setHolderPerson = personInfoMapper.selectPersonInfoById(getHolderPersonId);
+                        if (setHolderPerson != null) {
+                            list.get(i).setHolderPerson(setHolderPerson);
+                        }
                     }
-                }
 
          /*       //受理人
                 String getAcceptUserId= list.get(i).getAcceptUserId();
@@ -82,15 +84,15 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
                     }
                 }
 */
-                //原处理人
-                String getModifyUserId = list.get(i).getModifyUserId();
-                if (StringUtils.isNotEmpty(getModifyUserId)) {
-                    UserInfo setModifyUser = userInfoMapper.selectUserInfoById(getModifyUserId);
-                    if (setModifyUser != null) {
-                        list.get(i).setModifyUser(setModifyUser);
+                    //原处理人
+                    String getModifyUserId = list.get(i).getModifyUserId();
+                    if (StringUtils.isNotEmpty(getModifyUserId)) {
+                        UserInfo setModifyUser = userInfoMapper.selectUserInfoById(getModifyUserId);
+                        if (setModifyUser != null) {
+                            list.get(i).setModifyUser(setModifyUser);
+                        }
                     }
                 }
-
             }
         }
         return list == null ? new ArrayList<AcceptVo>() : list;

@@ -194,23 +194,35 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
         personInfo2.setLanguage(complaintAcceptVo.getContactsPerson().getLanguage());
         personInfo2.setMobilePhone(complaintAcceptVo.getContactsPerson().getMobilePhone());
 
-        String tHomePhone = StringUtils.isNotEmpty(complaintAcceptVo.getContactsPerson().getHomePhone1()[0])?complaintAcceptVo.getContactsPerson().getHomePhone1()[0]:"";
-        tHomePhone += "-";
-        tHomePhone += StringUtils.isNotEmpty(complaintAcceptVo.getContactsPerson().getHomePhone1()[1])?complaintAcceptVo.getContactsPerson().getHomePhone1()[1]:"";
-        tHomePhone += "-";
-        tHomePhone += StringUtils.isNotEmpty(complaintAcceptVo.getContactsPerson().getHomePhone1()[2])?complaintAcceptVo.getContactsPerson().getHomePhone1()[2]:"";
-        tHomePhone += "-";
-        tHomePhone += StringUtils.isNotEmpty(complaintAcceptVo.getContactsPerson().getHomePhone1()[3])?complaintAcceptVo.getContactsPerson().getHomePhone1()[3]:"";
-        personInfo2.setHomePhone(tHomePhone);
+        String[] homePhone1= complaintAcceptVo.getContactsPerson().getHomePhone1();
+        if(StringUtils.isNotEmpty(homePhone1)){
+            String tHomePhone = (StringUtils.isNotEmpty(homePhone1[0]) && !"null".equals(homePhone1[0])) ? homePhone1[0]:"";
+            for (int i = 1; i < homePhone1.length; i++) {
+                tHomePhone += "-";
+                tHomePhone += (StringUtils.isNotEmpty(homePhone1[i]) && !"null".equals(homePhone1[i])) ? homePhone1[i]:"";
+            }
+            for (int i = 0; i < (4-homePhone1.length); i++) {
+                tHomePhone += "-";
+            }
+            personInfo2.setHomePhone(tHomePhone);
+        }else{
+            personInfo2.setHomePhone("---");
+        }
 
-        String tWorkPhone = StringUtils.isNotEmpty(complaintAcceptVo.getContactsPerson().getWorkPhone1()[0])?complaintAcceptVo.getContactsPerson().getWorkPhone1()[0]:"";
-        tWorkPhone += "-";
-        tWorkPhone += StringUtils.isNotEmpty(complaintAcceptVo.getContactsPerson().getWorkPhone1()[1])?complaintAcceptVo.getContactsPerson().getWorkPhone1()[1]:"";
-        tWorkPhone += "-";
-        tWorkPhone += StringUtils.isNotEmpty(complaintAcceptVo.getContactsPerson().getWorkPhone1()[2])?complaintAcceptVo.getContactsPerson().getWorkPhone1()[2]:"";
-        tWorkPhone += "-";
-        tWorkPhone += StringUtils.isNotEmpty(complaintAcceptVo.getContactsPerson().getWorkPhone1()[3])?complaintAcceptVo.getContactsPerson().getWorkPhone1()[3]:"";
-        personInfo2.setWorkPhone(tWorkPhone);
+        String[] workPhone1= complaintAcceptVo.getContactsPerson().getWorkPhone1();
+        if(StringUtils.isNotEmpty(workPhone1)){
+            String tWorkPhone = (StringUtils.isNotEmpty(workPhone1[0]) && !"null".equals(workPhone1[0])) ? workPhone1[0] : "";
+            for (int i = 1; i < workPhone1.length; i++) {
+                tWorkPhone += "-";
+                tWorkPhone += (StringUtils.isNotEmpty(workPhone1[i]) && !"null".equals(workPhone1[i])) ? workPhone1[i] : "";
+            }
+            for (int i = 0; i < (4-workPhone1.length); i++) {
+                tWorkPhone += "-";
+            }
+            personInfo2.setWorkPhone(tWorkPhone);
+        }else{
+            personInfo2.setWorkPhone("---");
+        }
 
         personInfo2.setCreatedBy(SecurityUtils.getUsername());
         personInfo2.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));

@@ -122,6 +122,8 @@ public class WorkOrderAcceptServiceImpl implements IWorkOrderAcceptService
         flowLog.setWorkOrderNo(businessData.getApplicationCaseNo());
         flowLog.setLinkCode(CodeEnum.ORDER_STATE_01.getCode());
         flowLog.setOperateCode(CodeEnum.OPERATE_CODE_01.getCode());
+        flowLog.setStatus(CodeEnum.ORDER_STATE_01.getCode());
+        flowLog.setMakeTime(DateUtils.getNowDate());
         flowLog.setCreatedBy(businessData.getAccepter());
         flowLog.setUpdatedBy(businessData.getAccepter());
         flowLog.setCreatedTime(DateUtils.getNowDate());

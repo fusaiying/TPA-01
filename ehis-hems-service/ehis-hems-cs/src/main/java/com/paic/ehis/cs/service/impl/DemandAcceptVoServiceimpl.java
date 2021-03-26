@@ -365,6 +365,7 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id", 20, 20));
         flowLog.setMakeTime(DateUtils.parseDate(DateUtils.getTime()));
         flowLog.setMakeBy(SecurityUtils.getUsername());
+        flowLog.setLinkCode("04");
         flowLog.setOperateCode("01");
         flowLog.setLinkCode("01");
         flowLog.setWorkOrderNo(demandAcceptVo.getWorkOrderNo());

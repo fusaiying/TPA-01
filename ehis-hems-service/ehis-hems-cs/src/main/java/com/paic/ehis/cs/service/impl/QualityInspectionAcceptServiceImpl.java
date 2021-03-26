@@ -54,9 +54,11 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
     //工单查询
     public List<AcceptVo> selectSendPoolData(WorkOrderQueryDTO workOrderQueryDTO) {
         List<AcceptVo> list = qualityInspectionAcceptMapper.selectSendByVo(workOrderQueryDTO);
+        String updateBy=SecurityUtils.getUsername();
         if (list != null) {
             for (int i = 0; i < list.size(); i++) {
-                String serviceItem=list.get(i).getServiceItem();
+                if (list.get(i).getUpdateBy().equals(updateBy)){//说明此时操作人是本人
+                    list.get(i).setFlag("2");
                     //被保人
                     String getInsuredPersonId = list.get(i).getInsuredPersonId();
                     if (StringUtils.isNotEmpty(getInsuredPersonId)) {
@@ -73,16 +75,6 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
                             list.get(i).setHolderPerson(setHolderPerson);
                         }
                     }
-
-         /*       //受理人
-                String getAcceptUserId= list.get(i).getAcceptUserId();
-                if(StringUtils.isNotEmpty(getAcceptUserId)){
-                    UserInfo setAcceptUser=userInfoMapper.selectUserInfoById(getAcceptUserId);
-                    if(setAcceptUser!=null){
-                        list.get(i).setAcceptUser(setAcceptUser);
-                    }
-                }
-*/
                     //原处理人
                     String getModifyUserId = list.get(i).getModifyUserId();
                     if (StringUtils.isNotEmpty(getModifyUserId)) {
@@ -91,7 +83,10 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
                             list.get(i).setModifyUser(setModifyUser);
                         }
                     }
+                }else {
+                    list.get(i).setFlag("1");//置灰
                 }
+            }
             }
         return list == null ? new ArrayList<AcceptVo>() : list;
     }
@@ -137,16 +132,13 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
     public AcceptVo updateSendByVoById(String workOrderNo) {
         AcceptVo acceptVo = qualityInspectionAcceptMapper.selectSendByVoById1(workOrderNo);//先查询所有的工单
         WorkOrderAccept workOrderAccept = workOrderAcceptMapper.selectWorkOrderAcceptById(workOrderNo);
-        if (null != acceptVo && acceptVo.getStatus().equals("01")) {//待处理状态
+        if (null != acceptVo && acceptVo.getStatus().equals("01")) {
                 workOrderAccept.setStatus("02");
                 workOrderAccept.setAcceptBy(SecurityUtils.getUsername());
                 workOrderAccept.setUpdateBy(SecurityUtils.getUsername());
                 workOrderAccept.setUpdateTime(DateUtils.getNowDate());
                 workOrderAcceptMapper.updateWorkOrderAccept(workOrderAccept);
-                acceptVo.setFlag("2");
-        }else {
-            acceptVo.setFlag("1");//非待处理的案件一律置灰
-        }  return acceptVo;
+        }return acceptVo;
     }
 
     /*工单修改*/

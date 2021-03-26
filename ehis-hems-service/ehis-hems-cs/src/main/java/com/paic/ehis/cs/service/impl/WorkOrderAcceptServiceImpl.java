@@ -405,7 +405,7 @@ public class WorkOrderAcceptServiceImpl implements IWorkOrderAcceptService
     }
 
 
-    //实时查询案件操作人和状态
+    //修改实时查询案件操作人和状态
     @Override
     public WorkOrderAccept selectWorkOrderAcceptById2(String workOrderNo) {
         WorkOrderAccept workOrderAccept = workOrderAcceptMapper.selectWorkOrderAcceptById1(workOrderNo);
@@ -414,7 +414,7 @@ public class WorkOrderAcceptServiceImpl implements IWorkOrderAcceptService
             if (workOrderAccept.getUpdateBy().equals(updateBy)) {//当前案件操作人非自己查询后按钮
                 workOrderAccept.setFlag1("2");
             } else {
-                workOrderAccept.setFlag1("1");
+                workOrderAccept.setFlag1("1");//弹框
             }
         }
         return workOrderAccept;

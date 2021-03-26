@@ -431,11 +431,22 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         contactsPerson.setName(demandAcceptVo.getContactsPerson().getName());
         contactsPerson.setLanguage(demandAcceptVo.getContactsPerson().getLanguage());
         contactsPerson.setMobilePhone(demandAcceptVo.getContactsPerson().getMobilePhone());
-        if(demandAcceptVo.getContactsPerson().getLinePhone1().length<=3){
-            contactsPerson.setLinePhone("---");
+
+        String[] LinePhone= demandAcceptVo.getContactsPerson().getLinePhone1();
+        if(StringUtils.isNotEmpty(LinePhone)){
+            String tLinePhone = (StringUtils.isNotEmpty(LinePhone[0]) && !"null".equals(LinePhone[0])) ? LinePhone[0]:"";
+            for (int i = 1; i < LinePhone.length; i++) {
+                tLinePhone += "-";
+                tLinePhone += (StringUtils.isNotEmpty(LinePhone[i]) && !"null".equals(LinePhone[i])) ? LinePhone[i]:"";
+            }
+            for (int i = 0; i < (4-LinePhone.length); i++) {
+                tLinePhone += "-";
+            }
+            contactsPerson.setLinePhone(tLinePhone);
         }else{
-            contactsPerson.setLinePhone(demandAcceptVo.getContactsPerson().getLinePhone1()[0] + "-" + demandAcceptVo.getContactsPerson().getLinePhone1()[1] + "-" + demandAcceptVo.getContactsPerson().getLinePhone1()[2] + "-" + demandAcceptVo.getContactsPerson().getLinePhone1()[3]);
+            contactsPerson.setLinePhone("---");
         }
+
         contactsPerson.setUpdatedBy(SecurityUtils.getUsername());
         contactsPerson.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
         personInfoMapper.updatePersonInfo(contactsPerson);

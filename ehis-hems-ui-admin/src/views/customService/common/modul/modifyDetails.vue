@@ -66,6 +66,7 @@
 </template>
 <script>
 import {modifyDetailsSearch} from '@/api/customService/demand'
+import moment from 'moment'
 
 let dictss = [
   {dictType: 'cs_sex'},
@@ -83,6 +84,15 @@ let dictss = [
 ]
 
 export default {
+
+  filters: {
+    changeDate: function(value) {
+      if (value !== null) {
+        return moment(value).format('YYYY-MM-DD')
+      }
+    }
+  },
+
   name: 'modify',
   data() {
     return {
@@ -167,7 +177,11 @@ export default {
           return this.selectDictLabel((this.dictList.find(item => {return item.dictType === row.valueDictType}).dictDate), row.nowValue);
         }
       }else{
-        return row.nowValue;
+        if(row.itemKey == "complaintTime"){
+          return moment(row.nowValue).format('YYYY-MM-DD HH:mm:ss');
+        }else{
+          return row.nowValue;
+        }
       }
     },
 
@@ -181,7 +195,11 @@ export default {
           return this.selectDictLabel((this.dictList.find(item => {return item.dictType === row.valueDictType}).dictDate), row.oldValue);
         }
       }else{
-        return row.oldValue;
+        if(row.itemKey == "complaintTime"){
+          return moment(row.oldValue).format('YYYY-MM-DD HH:mm:ss');
+        }else {
+          return row.oldValue;
+        }
       }
     }
   }

@@ -1042,6 +1042,14 @@
         let data = {
           rptNo: this.fixInfo.rptNo
         }
+
+        if(this.appealCase) {
+          if(this.conclusionInfo.prePayStatus === '05') {
+            this.$message.warning('该案件存在退票，支付成功后才可申诉！')
+            return false;
+          }
+        }
+
         editCaseCheck(data).then(res => {
           if (res != null && res.code === 200) {
             this.$message({

@@ -1336,7 +1336,7 @@ export default {
           insert.workOrderNo = this.$route.query.workOrderNo
           complaintDealSubmit(insert).then(res => {
             if (res != null && res.code === 200) {
-              this.$message.success("保存成功")
+              this.$message.success("保存成功");
               if (res.rows.length <= 0) {
                 return this.$message.warning(
                   "失败！"

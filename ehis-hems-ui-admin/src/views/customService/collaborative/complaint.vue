@@ -354,9 +354,9 @@
           highlight-current-row
           tooltip-effect="dark"
           style=" width: 100%;">
-          <el-table-column align="center" width="140" prop="status" label="状态" show-overflow-tooltip>
-            <template slot-scope="scope" v-if="scope.row.status">
-              <span>{{ selectDictLabel(cs_order_state, scope.row.status) }}</span>
+          <el-table-column align="center" width="140" prop="linkCode" label="状态" show-overflow-tooltip>
+            <template slot-scope="scope" v-if="scope.row.linkCode">
+              <span>{{ selectDictLabel(cs_order_state, scope.row.linkCode) }}</span>
             </template>
           </el-table-column>
           <el-table-column align="center" prop="operateCode" label="操作" show-overflow-tooltip>

@@ -130,21 +130,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <!--质检信息列表查询-->
     <select id="selectSendByVoTwo" parameterType="com.paic.ehis.cs.domain.dto.WorkOrderQueryDTO" resultMap="AcceptResult">
         <include refid="selectSendVo"/>
-        where 1=1 and not exists (SELECT 1 FROM quality_inspection_accept qia WHERE qia.work_order_no=woa.work_order_no)
+        where 1=1 AND NOT EXISTS ( SELECT 1 from quality_inspection_accept qia where qia.status='01' or qia.status='02' and woa.work_order_no=qia.work_order_no)
         and adi.item_code not in ('B00034')
         <if test="businessTypeList != null ">
             and woa.business_type IN (
             <foreach collection="businessTypeList" item="businessType"
                      separator=",">
                 #{businessType}
-            </foreach>
-            )
-        </if>
-        <if test="acceptStatusList != null ">
-            and woa.status IN (
-            <foreach collection="acceptStatusList" item="status"
-                     separator=",">
-                #{status}
             </foreach>
             )
         </if>

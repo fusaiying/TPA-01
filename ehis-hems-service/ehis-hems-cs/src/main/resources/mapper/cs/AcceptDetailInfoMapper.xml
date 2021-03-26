@@ -49,10 +49,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="prop23"    column="prop23"    />
         <result property="prop24"    column="prop24"    />
         <result property="prop25"    column="prop25"    />
+        <result property="prop26"    column="prop26"    />
+        <result property="prop27"    column="prop27"    />
+        <result property="prop28"    column="prop28"    />
+        <result property="prop29"    column="prop29"    />
+        <result property="prop30"    column="prop30"    />
+        <result property="prop31"    column="prop31"    />
     </resultMap>
 
     <sql id="selectAcceptDetailInfoVo">
-        select work_order_no, channel_code, item_code, call_person_id, call_relation_by, priority_level, contacts_person_id, contacts_relation_by, call_center_id, email, organ_code, content, complaint_person_id, status, create_by, create_time, update_by, update_time, prop0, prop1, prop2, prop3, prop4, prop5, prop6, prop7, prop8, prop9, prop10, prop11, prop12, prop13, prop14, prop15, prop16, prop17, prop18, prop19, prop20, prop21, prop22, prop23, prop24, prop25 from accept_detail_info
+        select work_order_no, channel_code, item_code, call_person_id, call_relation_by, priority_level, contacts_person_id, contacts_relation_by, call_center_id, email, organ_code, content, complaint_person_id, status, create_by, create_time, update_by, update_time, prop0, prop1, prop2, prop3, prop4, prop5, prop6, prop7, prop8, prop9, prop10, prop11, prop12, prop13, prop14, prop15, prop16, prop17, prop18, prop19, prop20, prop21, prop22, prop23, prop24, prop25,prop26,prop27,prop28,prop29,prop30,prop31 from accept_detail_info
     </sql>
 
     <select id="selectAcceptDetailInfoList" parameterType="AcceptDetailInfo" resultMap="AcceptDetailInfoResult">

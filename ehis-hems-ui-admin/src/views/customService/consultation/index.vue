@@ -117,6 +117,11 @@
             </template>
           </el-table-column>
           <el-table-column align="center" prop="processingTime" label="处理时效（工作日）" show-overflow-tooltip/>
+          <el-table-column prop="status" align="status" label="协办状态" show-overflow-tooltip>
+            <template slot-scope="scope" v-if="scope.row.status">
+              <span>{{ selectDictLabel(cs_collaborative_state, scope.row.status) }}</span>
+            </template>
+          </el-table-column>
           <el-table-column align="center" fixed="right" label="操作" width="140">
             <template slot-scope="scope" v-if="scope.row.status!='02'">
               <el-button size="mini" type="text" @click="dealButton(scope.row)">处理</el-button>
@@ -145,6 +150,7 @@ let dictss = [
   {dictType: 'cs_organization'},
   {dictType: 'cs_service_item'},
   {dictType: 'cs_opinion_handle'},
+  {dictType: 'cs_collaborative_state'},
 ]
 
 export default {
@@ -164,6 +170,7 @@ export default {
       cs_service_item: [],//服务项目
       cs_organization: [],
       cs_opinion_handle: [],
+      cs_collaborative_state: [],// 状态
       dialogFormVisible: false,
       updateBy: undefined,
       sendForm: {//传值给后台
@@ -199,6 +206,9 @@ export default {
     }).dictDate
     this.cs_opinion_handle = this.dictList.find(item => {
       return item.dictType === 'cs_opinion_handle'
+    }).dictDate
+    this.cs_collaborative_state = this.dictList.find(item => {
+      return item.dictType === 'cs_collaborative_state'
     }).dictDate
   },
   methods: {

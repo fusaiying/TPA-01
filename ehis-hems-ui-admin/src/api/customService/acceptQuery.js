@@ -25,3 +25,11 @@ export function updateGetWorkOrder(workOrderNo) {
   })
 }
 
+//# 工单查询获取
+export function getWorkOrderFlag(workOrderNo) {
+  return request({
+    url: '/cs/accept/workOrderAccept/'+workOrderNo,
+    method: 'get',
+  })
+}
+

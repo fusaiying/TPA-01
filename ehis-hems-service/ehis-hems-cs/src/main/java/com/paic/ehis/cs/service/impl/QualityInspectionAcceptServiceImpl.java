@@ -48,6 +48,9 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
     @Autowired
     private WorkOrderAcceptMapper workOrderAcceptMapper;
 
+    @Autowired
+    private AcceptDetailInfoMapper acceptDetailInfoMapper;
+
 
     @Override
 
@@ -132,13 +135,21 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
     public AcceptVo updateSendByVoById(String workOrderNo) {
         AcceptVo acceptVo = qualityInspectionAcceptMapper.selectSendByVoById1(workOrderNo);//先查询所有的工单
         WorkOrderAccept workOrderAccept = workOrderAcceptMapper.selectWorkOrderAcceptById(workOrderNo);
+        //获取受理信息
+        AcceptDetailInfo acceptDetailInfo = acceptDetailInfoMapper.selectAcceptDetailInfoById(workOrderNo);
         if (null != acceptVo && acceptVo.getStatus().equals("01")) {
-                workOrderAccept.setStatus("02");
-                workOrderAccept.setAcceptBy(SecurityUtils.getUsername());
-                workOrderAccept.setUpdateBy(SecurityUtils.getUsername());
-                workOrderAccept.setUpdateTime(DateUtils.getNowDate());
-                workOrderAcceptMapper.updateWorkOrderAccept(workOrderAccept);
-        }return acceptVo;
+            workOrderAccept.setStatus("02");
+            workOrderAccept.setAcceptBy(SecurityUtils.getUsername());
+            workOrderAccept.setUpdateBy(SecurityUtils.getUsername());
+            workOrderAccept.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
+            workOrderAcceptMapper.updateWorkOrderAccept(workOrderAccept);
+
+            acceptDetailInfo.setStatus("02");
+            acceptDetailInfo.setUpdateBy(SecurityUtils.getUsername());
+            acceptDetailInfo.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
+            acceptDetailInfoMapper.updateAcceptDetailInfo(acceptDetailInfo);
+        }
+        return acceptVo;
     }
 
     /*工单修改*/
@@ -147,21 +158,33 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
         AcceptVo acceptVo = qualityInspectionAcceptMapper.selectSendByVoById1(workOrderNo);//先查询所有的工单
         String updateBy=SecurityUtils.getUsername();
         WorkOrderAccept workOrderAccept = workOrderAcceptMapper.selectWorkOrderAcceptById(workOrderNo);
+        //获取受理信息
+        AcceptDetailInfo acceptDetailInfo = acceptDetailInfoMapper.selectAcceptDetailInfoById(workOrderNo);
         if (null != acceptVo && !acceptVo.getUpdateBy().equals(updateBy)) {//
             workOrderAccept.setStatus("02");
             workOrderAccept.setAcceptBy(SecurityUtils.getUsername());
             workOrderAccept.setUpdateBy(SecurityUtils.getUsername());
-            workOrderAccept.setUpdateTime(DateUtils.getNowDate());
+            workOrderAccept.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
             workOrderAcceptMapper.updateWorkOrderAccept(workOrderAccept);
             acceptVo.setFlag("1");//别人修改的案件需要弹框
+
+            acceptDetailInfo.setStatus("02");
+            acceptDetailInfo.setUpdateBy(SecurityUtils.getUsername());
+            acceptDetailInfo.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
+            acceptDetailInfoMapper.updateAcceptDetailInfo(acceptDetailInfo);
         }
         else if (null != acceptVo  && acceptVo.getUpdateBy().equals(updateBy)){
             workOrderAccept.setStatus("02");
             workOrderAccept.setAcceptBy(SecurityUtils.getUsername());
             workOrderAccept.setUpdateBy(SecurityUtils.getUsername());
-            workOrderAccept.setUpdateTime(DateUtils.getNowDate());
+            workOrderAccept.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
             workOrderAcceptMapper.updateWorkOrderAccept(workOrderAccept);
             acceptVo.setFlag("2");//本人修改的案件不用弹框
+
+            acceptDetailInfo.setStatus("02");
+            acceptDetailInfo.setUpdateBy(SecurityUtils.getUsername());
+            acceptDetailInfo.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
+            acceptDetailInfoMapper.updateAcceptDetailInfo(acceptDetailInfo);
         }
         return acceptVo;
     }

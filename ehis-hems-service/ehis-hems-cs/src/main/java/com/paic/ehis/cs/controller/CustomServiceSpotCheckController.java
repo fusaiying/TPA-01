@@ -18,6 +18,7 @@ import com.paic.ehis.cs.utils.CodeEnum;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.xmlbeans.impl.xb.xsdschema.Public;
 import org.omg.CORBA.PUBLIC_MEMBER;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -59,26 +60,29 @@ public class CustomServiceSpotCheckController extends BaseController {
     {
         //1.分页处理
         startPage();
-//        //2.工单状态处理； 04-已完成,已取消，不合格，合格的工单且没有被质检过
-//        List<String>  acceptStatusList=new ArrayList<>();
-//        acceptStatusList.add(CodeEnum.ORDER_STATE_04.getCode());
-//        acceptStatusList.add(CodeEnum.ORDER_STATE_05.getCode());
-//        workOrderQueryDTO.setAcceptStatusList(acceptStatusList);
-        //3.业务类型为： 01-信息需求和03-投诉的才可以质检
-        List<String> businessTypeList=new ArrayList<>();
-        businessTypeList.add(CodeEnum.BUSINESS_TYPE_01.getCode());
-        businessTypeList.add(CodeEnum.BUSINESS_TYPE_03.getCode());
-        workOrderQueryDTO.setBusinessTypeList(businessTypeList);
-        logger.debug("可发起质检工作池入参: {}",workOrderQueryDTO);
+        //2.工单状态处理； 04-已完成,已取消，不合格，合格的工单
+            List<String> acceptStatusList = new ArrayList<>();
+            acceptStatusList.add(CodeEnum.ORDER_STATE_04.getCode());
+            acceptStatusList.add(CodeEnum.ORDER_STATE_05.getCode());
+            workOrderQueryDTO.setAcceptStatusList(acceptStatusList);
+
+            //3.业务类型为： 01-信息需求和03-投诉的才可以质检
+            List<String> businessTypeList = new ArrayList<>();
+            businessTypeList.add(CodeEnum.BUSINESS_TYPE_01.getCode());
+            businessTypeList.add(CodeEnum.BUSINESS_TYPE_03.getCode());
+            workOrderQueryDTO.setBusinessTypeList(businessTypeList);
+            logger.debug("可发起质检工作池入参: {}", workOrderQueryDTO);
+
         List<AcceptVo> list = qualityInspectionAcceptService.selectSendPoolData(workOrderQueryDTO);
-//        for (int i = 0; i < list.size(); i++) {
-//            if(i==0){
-//                list.get(i).setIsRedWord(true);
-//            }else{
-//                list.get(i).setIsRedWord(false);
-//            }
-//        }
-        logger.debug("可发起质检工作池结果:{}",list);
+        List<AcceptVo> acceptVos = new ArrayList<>();
+        AcceptVo acceptVo1 = new AcceptVo();
+        for (AcceptVo acceptVo : list) {
+            if (!acceptVo.getServiceItem().equals("B00034")) {//非根因改善才可发起质检
+                BeanUtils.copyProperties(acceptVo, acceptVo1);
+            }
+            acceptVos.add(acceptVo1);
+        }
+        logger.debug("可发起质检工作池结果:{}", list);
         return getDataTable(list);
     }
 

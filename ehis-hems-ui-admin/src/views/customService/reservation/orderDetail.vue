@@ -229,8 +229,8 @@
         </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="来电人姓名：" prop="callName">
-              <el-input v-model="ruleForm.callName" class="item-width" readonly size="mini" placeholder="请输入"/>
+            <el-form-item label="来电人姓名：" prop="callPerson.name">
+              <el-input v-model="ruleForm.callPerson.name" class="item-width" readonly size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -279,7 +279,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item style="white-space: nowrap" label="联系人电话：" prop="contactsPerson.mobilePhone">
-              <el-input v-model="sendForm.contactsPerson.mobilePhone" class="item-width" readonly size="mini" placeholder="请输入"/>
+              <el-input v-model="ruleForm.contactsPerson.mobilePhone" class="item-width" readonly size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <!--<el-col :span="8">
@@ -370,7 +370,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="本次疾病/症状起病时间：" prop="symptomTimes">
+            <el-form-item label="本次疾病/症状起病时间：" prop="a">
               <el-input v-model="ruleForm.a" style="width: 90px" clearable size="mini" placeholder="请输入"maxlength="4"/>
               <el-select v-model="ruleForm.b" style="width: 90px" placeholder="请选择"  >
                 <el-option v-for="item in cs_time_unit" :key="item.dictValue" :label="item.dictLabel"
@@ -567,6 +567,7 @@
         cs_organization:[],
         cs_order_state:[],
         cs_whether_flag: [],
+        cs_time_unit: [],
         //流转用
         flowLogData:[],
         flowLogCount: 0,
@@ -728,6 +729,9 @@
       this.cs_order_state = this.dictList.find(item => {
         return item.dictType === 'cs_order_state'
       }).dictDate
+      this.cs_time_unit = this.dictList.find(item => {
+        return item.dictType === 'cs_time_unit'
+      }).dictDate
     },
     methods: {
       //超链接用
@@ -871,10 +875,11 @@
               console.log('个人池', res.rows)
               if (res != null && res.code === 200) {
                   this.ruleForm = res.rows[0]
-                  // console.log("res.rows[0]" , res.rows[0])
-                  // this.ruleForm.callRelationBy = res.rows[0].callRelationBy.toString();
-
-
+                if (this.ruleForm.symptomTimes != null && this.ruleForm.symptomTimes != '') {
+                  let arr=this.ruleForm.symptomTimes.split('-');
+                  this.$set(this.ruleForm, `a`, arr[0]);
+                  this.$set(this.ruleForm, `b`, arr[1]);
+                }
                   this.totalCount = res.total
                   console.log('response', res.total)
                   if (res.rows.length <= 0) {

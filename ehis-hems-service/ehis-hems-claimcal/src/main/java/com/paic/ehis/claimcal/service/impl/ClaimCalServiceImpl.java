@@ -120,7 +120,7 @@ public class ClaimCalServiceImpl implements IClaimCalService {
 //            if(StringUtils.isNull(exchangeRate)){
 //                throw new RuntimeException("获取汇率失败！");
 //            }
-            if(!StringUtils.isNull(exchangeRate)){//为获取到，按1汇率
+            if(StringUtils.isNull(exchangeRate)){//为获取到，按1汇率
                 exchangeRate = new SyncExchangeRate();
                 exchangeRate.setParities(new BigDecimal(1));
             }

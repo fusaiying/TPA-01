@@ -116,8 +116,7 @@ public class EditInfoServiceImpl implements IEditInfoService
     @Override
     public int cancelSubmit(DemandAcceptVo demandAcceptVo) {
 
-
-            EditInfo editInfo=new EditInfo();
+        EditInfo editInfo=new EditInfo();
         //随机生成流水号
         editInfo.setEditId(PubFun.createMySqlMaxNoUseCache("edit_id",10,6));
         editInfo.setWorkOrderId(demandAcceptVo.getWorkOrderNo());
@@ -136,9 +135,11 @@ public class EditInfoServiceImpl implements IEditInfoService
         flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id",20,20));
         flowLog.setWorkOrderNo(demandAcceptVo.getWorkOrderNo());
         flowLog.setMakeBy(SecurityUtils.getUsername());
+        flowLog.setMakeTime(DateUtils.parseDate(DateUtils.getTime()));
         //没有um帐号
         flowLog.setUmNum(SecurityUtils.getUsername());
         flowLog.setLinkCode("05");
+        flowLog.setOperateCode("02");
         flowLog.setCreatedBy(SecurityUtils.getUsername());
         flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         flowLog.setUpdatedBy(SecurityUtils.getUsername());
@@ -171,9 +172,11 @@ public class EditInfoServiceImpl implements IEditInfoService
         FlowLog flowLog=new FlowLog();
         flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id",20,20));
         flowLog.setMakeBy(SecurityUtils.getUsername());
+        flowLog.setMakeTime(DateUtils.parseDate(DateUtils.getTime()));
         //没有um帐号
         flowLog.setUmNum(SecurityUtils.getUsername());
         flowLog.setLinkCode("05");
+        flowLog.setOperateCode("03");
         flowLog.setCreatedBy(SecurityUtils.getUsername());
         flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         flowLog.setUpdatedBy(SecurityUtils.getUsername());
@@ -213,7 +216,9 @@ public class EditInfoServiceImpl implements IEditInfoService
         flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id",20,20));
         flowLog.setWorkOrderNo(complaintAcceptVo.getWorkOrderNo());
         flowLog.setLinkCode("05");//05 取消状态
+        flowLog.setOperateCode("03");
         flowLog.setMakeBy(SecurityUtils.getUsername());
+        flowLog.setMakeTime(DateUtils.parseDate(DateUtils.getTime()));
         //没有um帐号
         flowLog.setUmNum(SecurityUtils.getUsername());
         flowLog.setCreatedBy(SecurityUtils.getUsername());

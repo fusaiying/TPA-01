@@ -110,4 +110,6 @@ public class WorkOrderAccept extends BaseEntity
     private Integer activationNum;
     /**外部受理案件号*/
     private String otherNo;
+
+    private String flag;
 }

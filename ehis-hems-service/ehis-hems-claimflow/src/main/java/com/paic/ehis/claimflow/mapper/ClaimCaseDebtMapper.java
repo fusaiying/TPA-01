@@ -24,6 +24,14 @@ public interface ClaimCaseDebtMapper
     public ClaimCaseDebt selectClaimCaseDebtById(Long debtId);
 
     /**
+     * 查询案件追讨信息
+     *
+     * @param rptNo 案件追讨信息ID
+     * @return 案件追讨信息
+     */
+    public ClaimCaseDebt selectClaimCaseDebtByRptNo(String rptNo);
+
+    /**
      * 查询案件追讨信息列表
      * 
      * @param claimCaseDebt 案件追讨信息

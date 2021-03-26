@@ -368,6 +368,7 @@
           isAppeal:'', //是否是申诉案件
           insuredNo:'', // 被保人客户号
           payConclusion:'', //赔付结论
+          prePayStatus:'', // 原案件支付状态
 
         },
         conclusionForm:{
@@ -676,9 +677,15 @@
         if(this.rptNo == '') {
           return false;
         }
-
+        if(this.appealCase) {
+          if(this.conclusionInfo.prePayStatus === '05') {
+            this.$message.warning('该案件存在退票，支付成功后才可申诉！')
+            return false;
+          }
+        }
+          //
         if(this.conclusionInfo.payConclusion == '' || this.conclusionInfo.payConclusion == null){
-          this.$message.info('请先保存再进行审核！')
+          this.$message.warning('请先保存再进行审核！')
           return false;
         }
         //币种一致

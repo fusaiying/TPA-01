@@ -358,7 +358,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
              ) t
              WHERE
              1 = 1-->
-            SELECT
+            <!--SELECT
             oi.order_code,
             oi.risk_name,
             oi.policy_no,
@@ -405,7 +405,44 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             AND oi.push_flag = '0' and oi.bussiness_status = '02' and oi.confirm_flag = '1'
             <if test="supplierCode != null  and supplierCode != ''">and oi.supplier_code = #{supplierCode}</if>
             <if test="settleType != null  and settleType != ''">and bcs.settle_type =#{settleType}</if>
-            <if test="serviceCode != null  and serviceCode != ''">and bcs.serial_no = #{serviceCode}</if>
+            <if test="serviceCode != null  and serviceCode != ''">and bcs.serial_no = #{serviceCode}</if>-->
+            SELECT
+            oi.order_code,
+            oi.risk_name,
+            oi.policy_no,
+            oi.policy_certificate_no policy_item_no,
+            oi.appnt_name,
+            ci. NAME cust_name,
+            ci.sex,
+            ci.id_code id_no,
+            oi.order_complete_time service_date,
+            oi.remark,
+            oi.settle_price amount,
+            oi.service_name supplier_service_name,
+            oi.settle_type,
+            concat_ws(
+            '~~',
+            ifnull((
+            SELECT
+            DATE_FORMAT(max(end_date), '%Y-%m-%d')
+            FROM
+            service_balance_info
+            WHERE
+            supplier_code = #{supplierCode}
+            AND settle_type = #{settleType}
+            ),DATE_FORMAT(now(), '%Y-%m-%d')),
+            DATE_FORMAT(#{endDate}, '%Y-%m-%d')
+            ) settlementTime,
+            oi.push_flag
+            FROM
+            order_info oi
+            LEFT JOIN customer_info ci ON ci.customer_no = oi.customer_no
+            AND ci. STATUS = 'Y'
+            WHERE
+            oi. STATUS = 'Y'
+            AND oi.push_flag = '0' and oi.bussiness_status = '02' and oi.confirm_flag = '1'
+            <if test="supplierCode != null  and supplierCode != ''">and oi.supplier_code = #{supplierCode}</if>
+            <if test="settleType != null  and settleType != ''">and oi.settle_type =#{settleType}</if>
         </if>
         <!-- 按人头（保单） -->
         <if test="settleType == '02'">

@@ -3,7 +3,7 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.paic.ehis.order.mapper.ServiceBalanceInfoMapper">
-    <resultMap type="ServiceBalanceInfo" id="ServiceBalanceInfoResult">
+    <resultMap type="com.paic.ehis.order.domain.ServiceBalanceInfo" id="ServiceBalanceInfoResult">
         <result property="serialNo"    column="serial_no"    />
         <result property="taskNo"    column="task_no"    />
         <result property="supplierCode"    column="supplier_code"    />
@@ -177,7 +177,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         from service_balance_info
     </sql>
 
-    <select id="selectServiceBalanceInfoList2" parameterType="ServiceBalanceInfo" resultMap="ServiceBalanceInfoResult">
+    <select id="selectServiceBalanceInfoList2" parameterType="com.paic.ehis.order.domain.ServiceBalanceInfo" resultMap="ServiceBalanceInfoResult">
         <include refid="selectServiceBalanceInfoVo2"/>
         <where>
             <if test="taskNo != null  and taskNo != ''"> and task_no = #{taskNo}</if>
@@ -212,7 +212,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="areaCode != null  and areaCode != ''"> and area_code = #{areaCode}</if>
             <if test="manageCom != null  and manageCom != ''"> and manage_com = #{manageCom}</if>
             <if test="payNo != null  and payNo != ''"> and pay_no = #{payNo}</if>
-            <if test="payDate != null "> and pay_date = #{payDate}</if>
+            <if test="payDate != null"> and pay_date like concat('%',SUBSTRING(#{payDate},1 ,10),'%') </if>
+            <!--<if test="payDate != null"> and pay_date like concat(date_format(#{payDate},'%Y-%m-%d'),'%') </if>-->
             <if test="payAmount != null "> and pay_amount = #{payAmount}</if>
             <if test="beginTime != null "> and end_date &gt;= #{beginTime}</if>
             <if test="endTime != null "> and end_date &lt;= #{endTime}</if>

@@ -247,6 +247,10 @@ public class OrderInfo extends BaseEntity
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date nowDate;
 
+    /** 结算方式 */
+    @Excel(name = "结算方式")
+    private String settleType;
+
 
     public Date getNowDate() {
         return nowDate;
@@ -436,7 +440,7 @@ public class OrderInfo extends BaseEntity
         this.seriousDisease = seriousDisease;
     }
 
-    public String getSeriousDisease() 
+    public String getSeriousDisease()
     {
         return seriousDisease;
     }
@@ -502,6 +506,14 @@ public class OrderInfo extends BaseEntity
     public String getStatus() 
     {
         return status;
+    }
+
+    public String getSettleType() {
+        return settleType;
+    }
+
+    public void setSettleType(String settleType) {
+        this.settleType = settleType;
     }
 
     @Override

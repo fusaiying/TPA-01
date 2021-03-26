@@ -203,7 +203,7 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
             flowLog.setUpdatedTime(DateUtils.getNowDate());
             flowLog.setWorkOrderNo(ids[i]);
             //操作前流程轨迹状态
-            flowLog.setStatus("04");
+            flowLog.setLinkCode("04");
             flowLog.setLinkCode(param.get("linkCode"));
             flowLog.setOperateCode(param.get("operateCode"));
             flowLogList.add(flowLog);
@@ -248,7 +248,7 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
 //            flowLog.setSubId(ids[i]);
 
             //操作前流程状态
-            flowLog.setStatus("08");
+            //flowLog.setStatus("08");
             flowLog.setLinkCode(param.get("linkCode"));
             flowLog.setOperateCode(param.get("operateCode"));
             flowLogList.add(flowLog);

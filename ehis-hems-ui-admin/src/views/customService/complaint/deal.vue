@@ -612,13 +612,13 @@
         <up-load ref="upload"></up-load>
         <co-organizer @collaborativeFromInfo="collaborativeFromInfo" ref="coOrganizer"></co-organizer>
         <hang-up @hangUpSearch="hangUpSearch" ref="hangUp"></hang-up>
-        <el-button type="primary" size="mini" @click="hangUp" >工单挂起</el-button>
-        <el-button type="primary" size="mini" @click="temporary" :disabled="this.hangUps.hangFlag==='01'">暂存</el-button>
-        <el-button type="primary" size="mini" @click="submit" :disabled="this.hangUps.hangFlag==='01'">提交</el-button>
-        <el-button type="primary" size="mini" @click="matching" :disabled="this.hangUps.hangFlag==='01'">客户信息匹配
+        <el-button type="primary" size="mini" @click="hangUp" :disabled="collaborative">工单挂起</el-button>
+        <el-button type="primary" size="mini" @click="temporary" :disabled="this.hangUps.hangFlag==='01'  || collaborative">暂存</el-button>
+        <el-button type="primary" size="mini" @click="submit" :disabled="this.hangUps.hangFlag==='01'  || collaborative">提交</el-button>
+        <el-button type="primary" size="mini" @click="matching" :disabled="this.hangUps.hangFlag==='01'  || collaborative">客户信息匹配
         </el-button>
-        <el-button type="primary" size="mini" @click="transfer" :disabled="this.hangUps.hangFlag==='01'">转办</el-button>
-        <el-button type="primary" size="mini" @click="coOrganizer" :disabled="this.hangUps.hangFlag==='01'">协办
+        <el-button type="primary" size="mini" @click="transfer" :disabled="this.hangUps.hangFlag==='01'  || collaborative">转办</el-button>
+        <el-button type="primary" size="mini" @click="coOrganizer" :disabled="this.hangUps.hangFlag==='01'  || collaborative">协办
         </el-button>
       </div>
     </el-card>

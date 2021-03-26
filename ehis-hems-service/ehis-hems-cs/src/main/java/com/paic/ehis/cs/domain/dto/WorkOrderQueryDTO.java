@@ -37,10 +37,10 @@ public class WorkOrderQueryDTO extends BaseEntity
     private String acceptBy;
     /** 受理开始日期  */
     @JsonFormat(pattern = "yyyy-MM-dd")
-    private String acceptStartDate;
+    private Date acceptStartDate;
     /** 受理结束日期  */
     @JsonFormat(pattern = "yyyy-MM-dd")
-    private String acceptEndDate;
+    private Date acceptEndDate;
     private String updateBy;
     /** 处理开始日期  */
     @JsonFormat(pattern = "yyyy-MM-dd")

@@ -77,14 +77,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             </foreach>
             )
         </if>
-        <if test="acceptStatusList != null ">
-            and woa.status IN (
-            <foreach collection="acceptStatusList" item="status"
-                     separator=",">
-                #{status}
-            </foreach>
-            )
-        </if>
         <if test="endCaseStartTime != null ">
             and DATE_FORMAT(woa.end_date,'%Y-%m-%d') <![CDATA[>=]]> #{endCaseStartTime}
         </if>

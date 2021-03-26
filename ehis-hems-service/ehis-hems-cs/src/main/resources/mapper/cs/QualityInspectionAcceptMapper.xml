@@ -130,9 +130,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         woa.policy_no,woa.policy_item_no,woa.risk_code,woa.insured_no,woa.insured_name,woa.holder_no,woa.end_date,woa.holder_name,woa.accept_by,woa.accept_time,woa.modify_by,woa.modify_time,woa.create_by,woa.update_by,woa.update_time,woa.organ_code,woa.vip_flag,adi.priority_level,woa.status
         from work_order_accept woa
         left join accept_detail_info adi on woa.work_order_no = adi.work_order_no left join person_info pi on woa.insured_no=pi.person_id
-        LEFT JOIN quality_inspection_accept qia ON woa.work_order_no = qia.work_order_no  AND qia.STATUS = '03'
         WHERE
-        1 = 1  	and woa.status not in ('01','02') and adi.item_code not in ('B00034')
+        1 = 1  	and woa.status  in ('04','05') and adi.item_code not in ('B00034')
         <if test="businessTypeList != null ">
             and woa.business_type IN (
             <foreach collection="businessTypeList" item="businessType"

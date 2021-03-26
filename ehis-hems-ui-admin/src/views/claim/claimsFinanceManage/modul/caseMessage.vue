@@ -442,6 +442,10 @@
                   return this.$message.warning(
                     "批次下案件币种不统一，请核实！"
                   )
+                }else if (res != null && res.data === 4) {
+                  return this.$message.warning(
+                    "不存在可以借款的案件！"
+                  )
                 }
                 this.search()
               })

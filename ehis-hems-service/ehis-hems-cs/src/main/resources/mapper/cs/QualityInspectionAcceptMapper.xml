@@ -121,7 +121,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <if test="priorityLevel != null  and priorityLevel != ''"> and adi.priority_level = #{priorityLevel}</if>
         <if test="vipFlag != null  and vipFlag != ''"> and woa.vip_flag = #{vipFlag}</if>
         <if test="status != null  and status != ''"> and woa.status = #{status}</if>
-
+        order by woa.accept_time asc
     </select>
 
     <!--质检信息列表查询-->

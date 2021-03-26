@@ -18,9 +18,14 @@ import java.util.List;
 @Repository
 public interface QualityInspectionAcceptMapper {
     /**
-     * 质检发起工作池查询
+     * 工单查询工作池查询
      */
     public List<AcceptVo> selectSendByVo(WorkOrderQueryDTO workOrderQueryDTO);
+
+    /**
+     * 质检发起工作池查询
+     */
+    public List<AcceptVo> selectSendByVoTwo(WorkOrderQueryDTO workOrderQueryDTO);
 
     /**
      * 可质检工单根据工单号查询是处理中的数据

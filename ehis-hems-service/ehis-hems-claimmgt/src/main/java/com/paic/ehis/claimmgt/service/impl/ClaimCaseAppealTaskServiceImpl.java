@@ -260,11 +260,11 @@ public class ClaimCaseAppealTaskServiceImpl implements IClaimCaseAppealTaskServi
      * @time : 2021-3-15
      */
     private String getNewRptNo(String appealRptNo){
-        String appealNewRptNo = claimCaseAppealTaskMapper.getAppealNewRptNo(appealRptNo.split("-")[0]);
-        if(StringUtils.isBlank(appealNewRptNo)){
+        //String appealNewRptNo = claimCaseAppealTaskMapper.getAppealNewRptNo(appealRptNo.split("-")[0]);
+        if(appealRptNo.indexOf("-") < 0){
             appealRptNo +="-1" ;
         } else {
-            String[] rptArr = appealNewRptNo.split("-");
+            String[] rptArr = appealRptNo.split("-");
             int endNo = Integer.valueOf(rptArr[1]) + 1;
             appealRptNo = appealRptNo.split("-")[0] + "-" + endNo;
         }

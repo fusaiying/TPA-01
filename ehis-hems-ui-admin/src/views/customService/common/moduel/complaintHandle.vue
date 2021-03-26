@@ -118,7 +118,7 @@
         <el-col :span="8">
           <el-form-item label="营销渠道：" prop="marketChannel">
             <el-select v-model="form.marketChannel" class="item-width">
-              <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
+              <el-option v-for="item in cs_marketingchannel_codeOption" :key="item.dictValue" :label="item.dictLabel"
                          :value="item.dictValue"/>
             </el-select>
           </el-form-item>
@@ -193,6 +193,7 @@
     ,{dictType: 'cs_risk_type'}
     ,{dictType: 'serves'}
     ,{dictType: 'cs_feedback_type'}
+    ,{dictType: 'cs_marketingchannel_code'}
   ]
 
   export default {
@@ -310,6 +311,7 @@
         cs_risk_type:[],
         serves:[],
         cs_feedback_type:[],
+        cs_marketingchannel_codeOption:[],
       }
     },
     created() {
@@ -364,6 +366,9 @@
       }).dictDate
       this.cs_feedback_type = this.dictList.find(item => {
         return item.dictType === 'cs_feedback_type'
+      }).dictDate
+      this.cs_marketingchannel_codeOption = this.dictList.find(item => {
+        return item.dictType === 'cs_marketingchannel_code'
       }).dictDate
 
     },

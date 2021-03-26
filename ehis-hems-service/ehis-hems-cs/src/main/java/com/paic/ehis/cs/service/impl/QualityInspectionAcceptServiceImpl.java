@@ -57,7 +57,6 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
         if (list != null) {
             for (int i = 0; i < list.size(); i++) {
                 String serviceItem=list.get(i).getServiceItem();
-                if(!serviceItem.equals("03-B00034")) { //非根因改善才可以发起质检
                     //被保人
                     String getInsuredPersonId = list.get(i).getInsuredPersonId();
                     if (StringUtils.isNotEmpty(getInsuredPersonId)) {
@@ -94,7 +93,6 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
                     }
                 }
             }
-        }
         return list == null ? new ArrayList<AcceptVo>() : list;
     }
 

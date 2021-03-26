@@ -112,4 +112,7 @@ public class WorkOrderAccept extends BaseEntity
     private String otherNo;
 
     private String flag;
+
+
+    private String flag1;
 }

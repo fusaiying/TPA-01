@@ -395,10 +395,26 @@ public class WorkOrderAcceptServiceImpl implements IWorkOrderAcceptService
         WorkOrderAccept workOrderAccept = workOrderAcceptMapper.selectWorkOrderAcceptById1(workOrderNo);
         String updateBy = SecurityUtils.getUsername();
         if (null != workOrderAccept) {
-            if (!workOrderAccept.getUpdateBy().equals(updateBy)) {//当前案件操作人非自己查询后置灰获取按钮
-                workOrderAccept.setFlag("1");
-            } else if (workOrderAccept.getUpdateBy().equals(updateBy)) {
+            if (workOrderAccept.getUpdateBy().equals(updateBy)) {//当前案件操作人自己查询后获取按钮
                 workOrderAccept.setFlag("2");
+            } else {
+                workOrderAccept.setFlag("1");
+            }
+        }
+        return workOrderAccept;
+    }
+
+
+    //实时查询案件操作人和状态
+    @Override
+    public WorkOrderAccept selectWorkOrderAcceptById2(String workOrderNo) {
+        WorkOrderAccept workOrderAccept = workOrderAcceptMapper.selectWorkOrderAcceptById1(workOrderNo);
+        String updateBy = SecurityUtils.getUsername();
+        if (null != workOrderAccept) {
+            if (workOrderAccept.getUpdateBy().equals(updateBy)) {//当前案件操作人非自己查询后按钮
+                workOrderAccept.setFlag1("2");
+            } else {
+                workOrderAccept.setFlag1("1");
             }
         }
         return workOrderAccept;

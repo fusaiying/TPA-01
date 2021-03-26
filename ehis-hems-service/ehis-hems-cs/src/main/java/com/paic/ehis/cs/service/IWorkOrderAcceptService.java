@@ -47,8 +47,11 @@ public interface IWorkOrderAcceptService
      */
     public WorkOrderAccept selectWorkOrderAcceptById(String workOrderNo);
 
-    //实时查询案件操作人和状态
+    //获取实时查询案件操作人和状态
     public WorkOrderAccept selectWorkOrderAcceptById1(String workOrderNo);
+
+    //修改实时查询案件操作人和状态
+    public WorkOrderAccept selectWorkOrderAcceptById2(String workOrderNo);
 
     /**
      * 查询工单申请信息 列表

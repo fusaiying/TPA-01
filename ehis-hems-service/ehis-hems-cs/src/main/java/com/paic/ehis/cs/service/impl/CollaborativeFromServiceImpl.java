@@ -166,7 +166,7 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
         //新增 发起协办流程节点信息
         FlowLog flowLog=new FlowLog();
         flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id",20,20));
-        flowLog.setLinkCode("04");//状态置为已协办
+        flowLog.setLinkCode("01");//状态置为已协办
         flowLog.setOperateCode("15");//节点为发起协办
         flowLog.setMakeBy(SecurityUtils.getUsername());
         flowLog.setMakeTime(DateUtils.parseDate(DateUtils.getTime()));
@@ -189,7 +189,7 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
     public int insertConsultationDemand(DemandAcceptVo demandAcceptVo) {
         FlowLog flowLog=new FlowLog();
         flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id",20,20));
-        flowLog.setLinkCode("04");//状态置为已协办
+        flowLog.setLinkCode("01");//状态置为已协办
         flowLog.setOperateCode("11");//节点为协办
         flowLog.setMakeBy(SecurityUtils.getUsername());
         flowLog.setMakeTime(DateUtils.parseDate(DateUtils.getTime()));
@@ -317,7 +317,7 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
         //新增撤销协办节点信息
         FlowLog flowLog=new FlowLog();
         flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id",20,20));
-        flowLog.setLinkCode("04");//状态置为已协办
+        flowLog.setLinkCode("01");//状态置为已协办
         flowLog.setOperateCode("16");//节点为撤销协办
         flowLog.setMakeBy(SecurityUtils.getUsername());
         flowLog.setMakeTime(DateUtils.parseDate(DateUtils.getTime()));

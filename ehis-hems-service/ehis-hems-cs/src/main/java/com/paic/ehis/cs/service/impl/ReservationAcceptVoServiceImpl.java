@@ -276,8 +276,8 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
         flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id",20,20));
         flowLog.setWorkOrderNo(reservationAcceptVo.getWorkOrderNo());
         flowLog.setOperateCode("06");
-        flowLog.setLinkCode("01");
-        flowLog.setStatus("01");
+        flowLog.setLinkCode(workOrderAccept.getStatus());
+        flowLog.setStatus(workOrderAccept.getStatus());
         flowLog.setCreatedBy(SecurityUtils.getUsername());
         flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         flowLog.setUpdatedBy(SecurityUtils.getUsername());

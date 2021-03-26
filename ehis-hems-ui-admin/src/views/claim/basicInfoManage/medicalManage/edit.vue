@@ -916,7 +916,7 @@ export default {
         allowance: undefined,
         costs: undefined,
         discountinfo: undefined,
-        specialdiscount: undefined,
+        specialDiscount: undefined,
         project: undefined,
         sellingpoint: undefined,
         foreignnote: undefined,

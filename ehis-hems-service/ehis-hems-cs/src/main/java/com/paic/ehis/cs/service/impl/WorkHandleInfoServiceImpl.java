@@ -219,10 +219,10 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
             flowLog.setWorkOrderNo(serviceProcessingVo.getWorkOrderNo());
             if(serviceProcessingVo.getBusinessProcess().equals("01")){
                 flowLog.setOperateCode("05");
-                flowLog.setStatus("03");
+                flowLog.setLinkCode("03");
             }else  if (serviceProcessingVo.getBusinessProcess().equals("02")){
                 flowLog.setOperateCode("14");
-                flowLog.setStatus("02");
+                flowLog.setLinkCode("02");
             }
             flowLogMapper.insertFlowLog(flowLog);
             //if(serviceProcessingVo.getSign().equals("01")){
@@ -287,10 +287,10 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
             flowLog.setWorkOrderNo(serviceProcessingVo.getWorkOrderNo());
             if(serviceProcessingVo.getBusinessProcess().equals("01")){
                 flowLog.setOperateCode("05");
-                flowLog.setStatus("03");
+                flowLog.setLinkCode("03");
             }else  if (serviceProcessingVo.getBusinessProcess().equals("02")){
                 flowLog.setOperateCode("14");
-                flowLog.setStatus("02");
+                flowLog.setLinkCode("02");
             }
             flowLogMapper.insertFlowLog(flowLog);
             //修改主表状态为已处理
@@ -578,10 +578,10 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
             flowLog.setWorkOrderNo(reservationDealVo.getWorkOrderNo());
             if(reservationDealVo.getBusinessProcess().equals("01")){
                 flowLog.setOperateCode("05");
-                flowLog.setStatus("03");
+                flowLog.setLinkCode("03");
             }else  if (reservationDealVo.getBusinessProcess().equals("02")){
                 flowLog.setOperateCode("14");
-                flowLog.setStatus("02");
+                flowLog.setLinkCode("02");
             }
             flowLogMapper.insertFlowLog(flowLog);
 
@@ -625,7 +625,7 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
             //生成轨迹表
             FlowLog flowLog=new FlowLog();
             flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id",20,20));
-            flowLog.setStatus("03");
+            flowLog.setLinkCode("03");
             flowLog.setMakeBy(SecurityUtils.getUsername());
             flowLog.setOpinion(reservationDealVo.getRemark());
             //没有um帐号
@@ -637,10 +637,10 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
             flowLog.setWorkOrderNo(reservationDealVo.getWorkOrderNo());
             if(reservationDealVo.getBusinessProcess().equals("01")){
                 flowLog.setOperateCode("05");
-                flowLog.setStatus("03");
+                flowLog.setLinkCode("03");
             }else  if (reservationDealVo.getBusinessProcess().equals("02")){
                 flowLog.setOperateCode("14");
-                flowLog.setStatus("02");
+                flowLog.setLinkCode("02");
             }
             flowLogMapper.insertFlowLog(flowLog);
 

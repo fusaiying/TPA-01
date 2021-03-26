@@ -258,21 +258,21 @@
 
         <el-form-item label="折扣信息：" prop="discountinfo" v-if="this.serviceForm.discountinfo">
           <el-input v-model="serviceForm.discountinfo" class="item-width" clearable maxlength="50" disabled
-                    style="width: 550px"
+                    style="width: 450px"
                     placeholder="请输入"/>
         </el-form-item>
       </el-row>
       <el-row>
-        <el-form-item label="特殊费折扣信息：" prop="specialdiscount" v-if="this.serviceForm.specialdiscount">
-          <el-input v-model="serviceForm.specialdiscount" class="item-width" clearable maxlength="50" disabled
-                    style="width: 550px"
+        <el-form-item label="特殊费折扣信息：" prop="specialDiscount" v-if="this.serviceForm.specialDiscount">
+          <el-input v-model="serviceForm.specialDiscount" class="item-width" clearable maxlength="50" disabled
+                    style="width: 450px"
                     placeholder="请输入"/>
         </el-form-item>
       </el-row>
       <el-row>
-        <el-form-item label="折扣除外项目：" prop="project" v-if="this.serviceForm.specialdiscount">
+        <el-form-item label="折扣除外项目：" prop="project" v-if="this.serviceForm.project">
           <el-input v-model="serviceForm.project" class="item-width" clearable maxlength="50" disabled
-                    style="width: 550px"
+                    style="width: 450px"
                     placeholder="请输入"/>
         </el-form-item>
       </el-row>
@@ -613,7 +613,7 @@ export default {
         allowance: undefined,
         costs: undefined,
         discountinfo: undefined,
-        specialdiscount: undefined,
+        specialDiscount: undefined,
         project: undefined,
         sellingpoint: undefined,
         foreignnote: undefined,

@@ -302,7 +302,7 @@ public class QualityInspectionHandleServiceImpl implements IQualityInspectionHan
         flowLog.setUpdatedTime(DateUtils.getNowDate());
         flowLog.setWorkOrderNo(id);
         //操作后主流程状态
-        flowLog.setStatus(param.get("status"));
+        //flowLog.setStatus(param.get("status"));
         flowLog.setLinkCode(param.get("linkCode"));
         flowLog.setOperateCode(param.get("operateCode"));
         flowLogList.add(flowLog);

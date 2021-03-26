@@ -367,7 +367,7 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         flowLog.setMakeBy(SecurityUtils.getUsername());
         flowLog.setLinkCode("04");
         flowLog.setOperateCode("01");
-        flowLog.setStatus("01");
+        flowLog.setLinkCode("01");
         flowLog.setWorkOrderNo(demandAcceptVo.getWorkOrderNo());
         flowLog.setCreatedBy(SecurityUtils.getUsername());
         flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
@@ -682,7 +682,7 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         flowLog.setMakeTime(DateUtils.parseDate(DateUtils.getTime()));
         flowLog.setMakeBy(SecurityUtils.getUsername());
         flowLog.setOperateCode("03");
-        flowLog.setStatus(workOrderAccept.getStatus());
+        flowLog.setLinkCode(workOrderAccept.getStatus());
         flowLog.setSubId(editId);
         flowLog.setWorkOrderNo(demandAcceptVo.getWorkOrderNo());
         flowLog.setCreatedBy(SecurityUtils.getUsername());

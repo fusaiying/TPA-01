@@ -101,14 +101,15 @@ export default {
         this.$message({ type: 'warning',  message: '无法获取，该案件在申诉中'});
         return false;
       }
+      if( row.payStatus === '05') {
+        this.$message({ type: 'warning',  message: '该案件存在退票，支付成功后才可申诉，请核实。'});
+        return false;
+      }
       if(row.payStatus !== '03') {
         this.$message({ type: 'warning',  message: '该案件还未支付，请在支付环节进行回退操作，请核实。'});
         return false;
       }
-      if( row.payStatus !== '05') {
-        this.$message({ type: 'warning',  message: '该案件存在退票，支付成功后才可申诉，请核实。'});
-        return false;
-      }
+
 
       const params = {};
       params.appealRptNo = row.rptNo;

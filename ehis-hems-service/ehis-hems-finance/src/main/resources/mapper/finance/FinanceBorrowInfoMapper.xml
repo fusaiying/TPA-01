@@ -96,5 +96,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         update_by updateBy, update_time updateTime, dept_code deptCode from finance_borrow_info
         where rpt_no = #{rptNo} and status = 'Y'
     </select>
-    
+
+    <update id="updateFinanceBorrowInfoByRptNo" parameterType="String">
+        update finance_borrow_info set status='N' where rpt_no=#{rptNo} and status='Y'
+    </update>
 </mapper>

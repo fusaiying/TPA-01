@@ -82,6 +82,7 @@ public class ClaimCaseCalServiceImpl implements IClaimCaseCalService
             //获取‘是否仅结算理赔责任’ 是01-非全赔 否02-全赔
             if(StringUtils.isNotBlank(calConclusionVo.getHospitalCode())) {
                 BaseProviderSettle baseProviderSettle = new BaseProviderSettle();
+                baseProviderSettle.setOrgFlag("01");
                 baseProviderSettle.setProviderCode(calConclusionVo.getHospitalCode());
                 List<BaseProviderSettle> baseProviderList = getProviderInfoService.selectsettleInfoNew(baseProviderSettle);
                 if (!baseProviderList.isEmpty()) {

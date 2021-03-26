@@ -320,7 +320,7 @@
     },
     data() {
       const checkRefusedReason = (rule, value, callback) => {
-        if(this.conclusionForm.payConclusion != '' && '05' == this.conclusionForm.payConclusion) {
+        if(this.conclusionInfo.refusedAmount > 0) {
           if (!value) {
             callback(new Error("拒赔原因必填"));// XXXXXXXXXXXX
           } else {

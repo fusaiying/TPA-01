@@ -22,32 +22,38 @@
           <el-table-column align="center" prop="companyName" label="出单公司" show-overflow-tooltip/>
           <el-table-column align="center" prop="billAmount" label="账单金额" show-overflow-tooltip>
             <template slot-scope="scope">
-              <span>{{scope.row.billAmount}} {{scope.row.currency}}</span>
+              <span v-if="scope.row.caseStatus!='98'">{{scope.row.billAmount}} {{scope.row.currency}}</span>
+              <span v-else>{{scope.row.billAmount}}</span>
             </template>
           </el-table-column>
           <el-table-column align="center" prop="discountedAmount" label="折后金额" show-overflow-tooltip>
             <template slot-scope="scope">
-              <span>{{scope.row.discountedAmount}} {{scope.row.currency}}</span>
+              <span v-if="scope.row.caseStatus!='98'">{{scope.row.discountedAmount}} {{scope.row.currency}}</span>
+              <span v-else>{{scope.row.discountedAmount}}</span>
             </template>
           </el-table-column>
           <el-table-column align="center" prop="advancePayment" label="先期给付" show-overflow-tooltip>
             <template slot-scope="scope">
-              <span>{{scope.row.advancePayment}} {{scope.row.currency}}</span>
+              <span v-if="scope.row.caseStatus!='98'">{{scope.row.advancePayment}} {{scope.row.currency}}</span>
+              <span v-else>{{scope.row.advancePayment}}</span>
             </template>
           </el-table-column>
           <el-table-column align="center" prop="copay" label="自付额" show-overflow-tooltip>
             <template slot-scope="scope">
-              <span>{{scope.row.copay}} {{scope.row.currency}}</span>
+              <span v-if="scope.row.caseStatus!='98'">{{scope.row.copay}} {{scope.row.currency}}</span>
+              <span v-else>{{scope.row.copay}}</span>
             </template>
           </el-table-column>
           <el-table-column align="center" prop="payAmount" label="理赔金额" show-overflow-tooltip>
             <template slot-scope="scope">
-              <span>{{scope.row.payAmount}} {{scope.row.currency}}</span>
+              <span v-if="scope.row.caseStatus!='98'">{{scope.row.payAmount}} {{scope.row.currency}}</span>
+              <span v-else>{{scope.row.payAmount}}</span>
             </template>
           </el-table-column>
           <el-table-column align="center" prop="debtAmount" label="追讨金额" show-overflow-tooltip>
             <template slot-scope="scope">
-              <span>{{scope.row.debtAmount}} {{scope.row.currency}}</span>
+              <span v-if="scope.row.caseStatus!='98'">{{scope.row.debtAmount}} {{scope.row.currency}}</span>
+              <span v-else>{{scope.row.debtAmount}}</span>
             </template>
           </el-table-column>
           <el-table-column key="1" v-if="querys.status === 'publicForeign'" align="center" prop="exchangeRate"
@@ -55,12 +61,14 @@
           <el-table-column key="2" v-if="querys.status === 'publicForeign'" align="center" prop="payAmountForeign"
                            label="外币支付金额" width="110" show-overflow-tooltip>
             <template slot-scope="scope">
-              <span>{{scope.row.payAmountForeign}} {{scope.row.currency}}</span>
+              <span v-if="scope.row.caseStatus!='98'">{{scope.row.payAmountForeign}} {{scope.row.currency}}</span>
+              <span v-else>{{scope.row.payAmountForeign}}</span>
             </template>
           </el-table-column>
           <el-table-column align="center" prop="borrowAmount" label="借款金额" show-overflow-tooltip>
             <template slot-scope="scope">
-              <span>{{scope.row.borrowAmount}} {{scope.row.currency}}</span>
+              <span v-if="scope.row.caseStatus!='98'">{{scope.row.borrowAmount}} {{scope.row.currency}}</span>
+              <span v-else>{{scope.row.borrowAmount}}</span>
             </template>
           </el-table-column>
           <el-table-column align="center" prop="caseStatus" label="案件状态" show-overflow-tooltip>
@@ -332,8 +340,9 @@
                       "批次下案件币种不统一，请核实！"
                     )
                   }
+                  this.search()
                 })
-                this.search()
+
               }).catch(() => {
                 this.$message({
                   type: 'info',
@@ -343,6 +352,7 @@
             } else {
               let data = {
                 batchNo: this.querys.batchNo,
+                organCode: this.organCode,
                 caseInfoList: this.tableData,
                 payment: this.baseForm
               }
@@ -365,15 +375,14 @@
                     "批次下案件币种不统一，请核实！"
                   )
                 }
+                this.search()
               })
-              this.search()
             }
           }
         })
       },
       backspace(row) {//回退
-        if (row.caseStatus === '97' || row.caseStatus === '98' || row.payStatus === '02' || row.payStatus === '03' ||
-          row.caseStatus === '05' || row.caseStatus === '06' || row.caseStatus === '07') {
+        if ((row.caseStatus != '08' && row.caseStatus != '99') || row.payStatus === '02' || row.payStatus === '03' ) {
           return this.$message.warning(
             " 当前案件不允许进行回退，请核实！"
           )
@@ -394,8 +403,8 @@
                 showClose: true
               })
             }
+            this.search()
           })
-          this.search()
         }
       },
       caseBorrow() {//案件借款
@@ -434,8 +443,8 @@
                     "批次下案件币种不统一，请核实！"
                   )
                 }
+                this.search()
               })
-              this.search()
             }).catch(() => {
               this.$message({
                 type: 'info',
@@ -465,8 +474,9 @@
                   "批次下案件币种不统一，请核实！"
                 )
               }
+              this.search()
             })
-            this.search()
+
           }
         }
 

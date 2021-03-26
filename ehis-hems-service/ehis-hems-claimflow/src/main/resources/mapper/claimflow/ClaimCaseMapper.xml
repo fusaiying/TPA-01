@@ -314,6 +314,7 @@
         <if test="createTime != null">create_time = #{createTime},</if>
         <if test="updateBy != null">update_by = #{updateBy},</if>
         <if test="updateTime != null">update_time = #{updateTime},</if>
+        <if test="payStatus != null">pay_status = #{payStatus},</if>
         is_finance_back = null
     </trim>
     where rpt_no = #{rptNo} and status = 'Y'
@@ -917,11 +918,12 @@
            AND t2.status = 'Y'
            AND  t4.status = 'Y'
            AND  t5.status = 'Y'
+           AND NOT EXISTS   (select 1 from claim_case_appeal_task t where t.appeal_rpt_no = t1.rpt_no and t.appeal_status = '03' and t.status = 'Y')
         <if test="rptNo != null  and rptNo != ''"> and t1.rpt_no = #{rptNo}</if>
         <if test="source != null  and source != ''"> and t2.source = #{source}</if>
         <if test="idNo != null  and idNo != ''"> and t3.id_no = #{idNo}</if>
-        <if test="name != null  and name != ''"> and t3.name = #{name}</if>
-        <if test="updateBy != null  and updateBy != ''"> and t6.update_by = #{updateBy}</if>
+        <if test="name != null  and name != ''"> and instr(t3.name,#{name})  > 0 </if>
+        <if test="updateBy != null  and updateBy != ''"> and instr(t6.update_by ,#{updateBy}) > 0 </if>
         <if test="pageType != null  and pageType != '' and pageType = '01'"> and t1.case_status in ('97','99') </if>
 
         <if test="createStartTime != null and createStartTime != ''">

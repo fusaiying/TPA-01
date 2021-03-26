@@ -99,4 +99,11 @@ public interface ClaimCaseCalMapper
 
     public int updateClaimConclusionNull(String rptNo);
 
+    /***
+     * 原申诉案件报案号
+     * @param rptNo
+     * @return
+     * auth: hjw
+     */
+    public CalConclusionVo selectPreCalConclusionByRptNo(String rptNo);
 }

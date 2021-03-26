@@ -377,28 +377,43 @@
         </el-row>
 
         <el-row>
-          <el-col :span="2">
+          <el-col :span="8">
             <el-form-item label="预约医院：" style="white-space: nowrap;" :inline="true" prop="province">
+              <el-cascader
+                v-model="region"
+                :options="regions"
+                class="item-width"
+                placeholder="请选择"
+                :props="{ checkStrictly: true }"
+                @change="handleChange"
+                clearable/>
+            </el-form-item>
+            <!--<el-form-item label="预约医院：" style="white-space: nowrap;" :inline="true" prop="province">
               省份：<el-input v-model="ruleForm.province" style="width: 50px"  />
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item style="white-space: nowrap;" :inline="true" prop="city" >
               城市：<el-input v-model="ruleForm.city" style="width: 50px" />
-            </el-form-item>
+            </el-form-item>-->
           </el-col>
         <el-col :span="8">
             <el-form-item label="医疗机构：" prop="medicalInstitution" >
               <el-col :span="16">
-                <el-input v-model="ruleForm.medicalInstitution" input-w clearable size="mini" placeholder="请输入"/>
+                <!--  <el-input v-model="ruleForm.medicalInstitution" input-w clearable size="mini" placeholder="请输入"/>-->
+                <el-input v-model="ruleForm.hospitalName" input-w clearable size="mini" disabled/>
               </el-col>
-              <el-button type="primary" @click="searchHandle" disabled>查询</el-button>
+              <el-button type="primary" @click="openHospitalDialog">查询</el-button>
             </el-form-item>
           </el-col>
 
           <el-col :span="8">
             <el-form-item label="科室：" prop="department">
-              <el-input v-model="ruleForm.department" class="item-width" clearable size="mini" maxlength="20" placeholder="请输入"/>
+              <el-select v-if="departmentOption.length>0" v-model="ruleForm.department" class="item-width" placeholder="请选择">
+                <el-option v-for="item in departmentOption" :key="item" :label="item"
+                           :value="item"/>
+              </el-select>
+              <el-input v-else v-model="ruleForm.department" class="item-width" clearable size="mini" maxlength="20" placeholder="请输入"/>
             </el-form-item>
           </el-col>
 
@@ -410,8 +425,8 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="医院地址：" prop="province">
-              <el-input v-model="ruleForm.province" class="item-width" clearable size="mini" placeholder="请输入"/>
+            <el-form-item label="医院地址：" prop="hospitalAddress">
+              <el-input v-model="ruleForm.hospitalAddress" class="item-width" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -424,7 +439,7 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="医院电话：" prop="hospitalWorkCall">
-              <el-input v-model="ruleForm.hospitalWorkCall" class="item-width" maxlength="11" clearable size="mini" placeholder="请输入"/>
+              <el-input v-model="ruleForm.hospitalWorkCall" class="item-width" maxlength="20" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -453,6 +468,8 @@
         </div>
 
       </el-form>
+      <hospital :value="hospitalDialog" @closeHospital="closeHospital" :queryData="queryData"
+                @getPropData="getPropData"/>
     </el-card>
 
 
@@ -467,8 +484,8 @@ import moment from 'moment'
 import {demandListAndPublicPool,demandListAndPersonalPool,addInsert} from '@/api/customService/demand'
 import upLoad from "../common/modul/upload";
 import {addReservationInsert} from '@/api/customService/reservation'
-
-
+import Hospital from "../hospital/hospital";
+import {getAddress} from "@/api/baseInfo/medicalManage";
 let dictss = [
   {dictType: 'cs_channel'},
   {dictType: 'cs_priority'},
@@ -485,7 +502,7 @@ let dictss = [
   {dictType: 'cs_time_unit'},
 ]
 export default {
-  components: { upLoad },
+  components: { upLoad,Hospital },
   filters: {
     changeDate: function (value) {
       if (value !== null) {
@@ -494,6 +511,15 @@ export default {
     }
   },
   data() {
+    const checkComplaintTime= (rule, value, callback) => {
+      let tDate = new Date();
+      if(tDate > value){
+        callback(new Error("预约日期不能早于当前日期"));
+      }else{
+        callback();
+      }
+    };
+
     //意外原因
     const checkAccidentReason = (rule, value, callback) => {
       if (this.ruleForm.accidentFlag === '01') {
@@ -520,7 +546,13 @@ export default {
       }
     };
     return {
+      regions: [], // 省市区下拉选项
+      region: [], // 省市区下拉选项
       cs_channel:[],//受理渠道
+      queryData:{
+        region:[],
+        hospitalName:''
+      },//受理渠道
       cs_reservation_item:[],//服务项目
       cs_sex:[],//性别
       cs_priority:[],//优先级
@@ -536,11 +568,14 @@ export default {
       cs_direct_settlement: [],
       cs_consultation_type: [],
       cs_time_unit: [],
+      departmentOption: [],
       //需要填入数据的部分
       ruleForm:{
         workOrderNo:"",
+        hospitalName:"",
         complaintTime:"",
         hospitalWorkCall:"",
+        hospitalAddress:"",
         channelCode:"03",//受理渠道
         callCenterId:"",//中心
 
@@ -584,6 +619,7 @@ export default {
         b:"",
         checkSubmitFlag:'',
       },
+      checkSubmitFlag:'',
       // 表单校验根据Form 组件提供了表单验证的功能，只需要通过 rules 属性传入约定的验证规则，并将 Form-Item 的 prop 属性设置为需校验的字段名即可
       rules: {
         channelCode: [
@@ -657,8 +693,9 @@ export default {
         medicalInstitution: [
           {required: true, message: "医疗机构不能为空", trigger: ["blur","change"]}
         ],
-        appointmentDate: [
-          {required: true, message: "预约时间不能为空", trigger: ["blur","change"]}
+        complaintTime: [
+          {required: true, message: "预约日期不能为空", trigger: ["blur","change"]},
+          {required: true, validator: checkComplaintTime, trigger: "blur"}
         ],
         province: [
           {required: true, message: "预约医院不能为空", trigger: ["blur","change"]}
@@ -678,13 +715,6 @@ export default {
         organCode: [
           {required: true, message: "出单机构不能为空", trigger: ["blur","change"]}
         ],
-        hospitalWorkCall: [
-          {required: false,
-            message: "医院电话格式不正确",
-            pattern: /^[1][3|4|5|6|7|8|9][0-9]{9}$/,
-            trigger: ["blur","change"]
-          }
-        ],
         'email': [
           {required: true, message: "Email不能为空", trigger: "blur"},
           {required: true,
@@ -695,6 +725,7 @@ export default {
         ],
       },
       readonly: true,
+      hospitalDialog: false,
       dialogVisable: "",//上传附件用
       historicalProblemData:Array,//上传附件用
       updateBy: undefined,
@@ -801,6 +832,8 @@ export default {
     this.cs_time_unit = this.dictList.find(item => {
       return item.dictType === 'cs_time_unit'
     }).dictDate
+    // 地址下拉选
+    this.getAddressData()
   },
   methods: {
     //关闭按钮
@@ -888,7 +921,45 @@ export default {
     handleSelectionChange(val) {
       this.dataonLineListSelections = val
     },
+    closeHospital() {
+      this.hospitalDialog = false
+    },
+    openHospitalDialog() {
+      if (this.region.length<1){
+        return this.$message.warning(
+          "请先选择预约医院省市！"
+        )
+      }else {
+        this.queryData={
+          region:this.region,
+          hospitalName:this.ruleForm.hospitalName
+        }
+        this.hospitalDialog = true
+      }
 
+    },
+    getPropData(val) {
+      if (val.deptList && val.deptList.length>0){
+        this.departmentOption=val.deptList
+      }else {
+        this.departmentOption=[]
+      }
+      this.ruleForm.medicalInstitution=val.hospitalCode
+      this.ruleForm.hospitalName=val.hospitalName
+      this.ruleForm.hospitalWorkCall=val.consultPhone
+      this.ruleForm.hospitalAddress=val.address
+    },
+    handleChange(){
+      this.ruleForm.province = this.region[0]
+      this.ruleForm.city = this.region[1]
+    },
+    // 地址下拉选
+    getAddressData() {
+      getAddress().then(response => {
+        this.regions = response
+      }).catch(error => {
+      })
+    },
   }
 }
 </script>

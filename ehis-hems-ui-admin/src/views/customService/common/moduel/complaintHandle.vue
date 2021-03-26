@@ -3,27 +3,27 @@
     <div slot="header" class="clearfix" >
       <span style="color: blue">投诉处理</span>
     </div>
-    <el-form ref="ruleForm" :model="form" style="padding-bottom: 30px;" label-width="200px"
+    <el-form ref="ruleForm" :model="form" style="padding-bottom: 30px;" label-width="200px" :rules="ruleForm"
              label-position="right" size="mini" :disabled="isAcceptInfo || routerParams.status=='show'" >
       <el-row>
         <el-col :span="8">
-          <el-form-item label="一级投诉分类：" prop="priority">
-            <el-select v-model="form.level1" class="item-width" @change="classTwo()">
+          <el-form-item label="一级投诉分类：" prop="level1">
+            <el-select v-model="form.level1" class="item-width" @change="classTwo('1')">
               <el-option v-for="item in cs_classify_level1" :key="item.dictValue" :label="item.dictLabel"
                          :value="item.dictValue"/>
             </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="二级投诉分类：" prop="priority">
-            <el-select v-model="form.level2" class="item-width">
+          <el-form-item label="二级投诉分类：" prop="level2">
+            <el-select v-model="form.level2" class="item-width" @change="changeLevel2">
               <el-option v-for="item in cs_classify_level2" :key="item.code" :label="item.codeName"
                          :value="item.code"/>
             </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="是否计件：" prop="pieceworkFlag">
+          <el-form-item v-if="isShowLevel2" label="是否计件：" prop="pieceworkFlag">
             <el-select v-model="form.pieceworkFlag" class="item-width">
               <el-option v-for="item in cs_whether_flag" :key="item.dictValue" :label="item.dictLabel"
                          :value="item.dictValue"/>
@@ -33,7 +33,7 @@
       </el-row>
       <el-row>
         <el-col :span="8">
-          <el-form-item label="撤诉状态：" prop="priority">
+          <el-form-item v-if="isShowLevel2" label="撤诉状态：" prop="complaintStatus">
             <el-select v-model="form.complaintStatus" class="item-width">
               <el-option v-for="item in cs_drop_status" :key="item.dictValue" :label="item.dictLabel"
                          :value="item.dictValue"/>
@@ -42,7 +42,7 @@
         </el-col>
         <el-col :span="8">
           <el-form-item label="投诉是否成立：" prop="complaintTenable">
-            <el-select v-model="form.complaintTenable" class="item-width">
+            <el-select v-model="form.complaintTenable" class="item-width" @change="changeComplaintTenable">
               <el-option v-for="item in cs_whether_flag" :key="item.dictValue" :label="item.dictLabel"
                          :value="item.dictValue"/>
             </el-select>
@@ -50,14 +50,14 @@
         </el-col>
         <el-col :span="8">
           <el-form-item label="投诉不成立理由：" prop="faseReason">
-            <el-input v-model="form.faseReason" class="item-width" clearable size="mini" placeholder="请输入"/>
+            <el-input :disabled="isComplaintTenableDisabled" v-model="form.faseReason" class="item-width" clearable size="mini" placeholder="请输入"/>
           </el-form-item>
         </el-col>
       </el-row>
       <el-row>
         <el-col :span="8">
           <el-form-item label="一级投诉原因：" prop="reason1">
-            <el-select v-model="form.reason1" class="item-width" @change="reasonTwo()">
+            <el-select v-model="form.reason1" class="item-width" @change="reasonTwo('1')">
               <el-option v-for="item in cs_reason_level1" :key="item.dictValue" :label="item.dictLabel"
                          :value="item.dictValue"/>
             </el-select>
@@ -65,7 +65,7 @@
         </el-col>
         <el-col :span="8">
           <el-form-item label="二级投诉原因：" prop="reason2">
-            <el-select v-model="form.reason2" class="item-width" @change="reasonThree()">
+            <el-select v-model="form.reason2" class="item-width" @change="reasonThree('1')">
               <el-option v-for="item in cs_reason_level2" :key="item.code" :label="item.codeName"
                          :value="item.code"/>
             </el-select>
@@ -118,7 +118,7 @@
         <el-col :span="8">
           <el-form-item label="营销渠道：" prop="marketChannel">
             <el-select v-model="form.marketChannel" class="item-width">
-              <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
+              <el-option v-for="item in cs_marketingchannel_codeOption" :key="item.dictValue" :label="item.dictLabel"
                          :value="item.dictValue"/>
             </el-select>
           </el-form-item>
@@ -158,7 +158,7 @@
       </el-row>
       <el-row>
         <el-col :span="22">
-          <el-form-item label="致诉根因：" prop="actionCause">
+          <el-form-item label="质诉根因：" prop="actionCause">
             <el-input type="text" v-model="form.actionCause" class="width-full"/>
           </el-form-item>
         </el-col>
@@ -193,6 +193,7 @@
     ,{dictType: 'cs_risk_type'}
     ,{dictType: 'serves'}
     ,{dictType: 'cs_feedback_type'}
+    ,{dictType: 'cs_marketingchannel_code'}
   ]
 
   export default {
@@ -221,6 +222,14 @@
       formData: function (value) {
         if (value !== null) {
          this.form=value
+          if (this.form.complaintTenable=='01'){
+            this.isComplaintTenableDisabled=true
+          }
+          if (this.form.level1=='02' && this.form.level2=='05'){
+            this.isShowLevel2=true
+          }else {
+            this.isShowLevel2=false
+          }
           this.searchHandleServer()
         }
       }
@@ -229,6 +238,29 @@
 
     data() {
       return {
+        isShowLevel2:false,
+        //字段校验
+        ruleForm: {
+          level1: [{ required: true, message: '一级投诉分类不能为空', trigger: 'change' }],
+          level2: [{ required: true, message: '二级投诉分类不能为空', trigger: 'change' }],
+          complaintTenable: [{ required: true, message: '投诉是否成立不能为空', trigger: 'change' }],
+          reason1: [{ required: true, message: '一级投诉原因不能为空', trigger: 'change' }],
+          reason2: [{ required: true, message: '二级投诉原因不能为空', trigger: 'change' }],
+          reason3: [{ required: true, message: '三级投诉原因不能为空', trigger: 'change' }],
+          complaintLink: [{ required: true, message: '投诉环节(报保监)不能为空', trigger: 'change' }],
+          complaintQuestion: [{ required: true, message: '投诉问题(报保监)不能为空', trigger: 'change' }],
+          outsideState: [{ required: true, message: '行协调解或外部鉴定状态不能为空', trigger: 'change' }],
+          riskType: [{ required: true, message: '险种类型不能为空', trigger: 'change' }],
+          marketChannel: [{ required: true, message: '营销渠道不能为空', trigger: 'change' }],
+          complaintCategory: [{ required: true, message: '投诉业务类别不能为空', trigger: 'blur' }],
+          rootDepartment: [{ required: true, message: '投诉根因部门不能为空', trigger: 'blur' }],
+          actionCause: [{ required: true, message: '质诉根因不能为空', trigger: 'blur' }],
+          treatmentResult: [{ required: true, message: '处理结果不能为空', trigger: 'blur' }],
+          customerFeedback: [{ required: true, message: '客户反馈不能为空', trigger: 'change' }],
+          actPromptly: [{ required: true, message: '投诉损失不能为空', trigger: 'blur' }],
+          pieceworkFlag: [{ required: true, message: '是否计件不能为空', trigger: 'blur' }],
+          complaintStatus: [{ required: true, message: '撤诉状态不能为空', trigger: 'blur' }]
+        },
         dictList:[],
         queryParams:{
           workOrderNo:'',
@@ -242,6 +274,7 @@
           complaintPerson: {},
           insurer: {},
         },
+        isComplaintTenableDisabled:false,
         form:{
           level1: '',
           level2: '',
@@ -278,6 +311,7 @@
         cs_risk_type:[],
         serves:[],
         cs_feedback_type:[],
+        cs_marketingchannel_codeOption:[],
       }
     },
     created() {
@@ -333,6 +367,9 @@
       this.cs_feedback_type = this.dictList.find(item => {
         return item.dictType === 'cs_feedback_type'
       }).dictDate
+      this.cs_marketingchannel_codeOption = this.dictList.find(item => {
+        return item.dictType === 'cs_marketingchannel_code'
+      }).dictDate
 
     },
     methods: {
@@ -360,7 +397,7 @@
         const query = {}
         query.parentCode = this.form.reason2
         if(flag=='1'){
-          this.sendForm.reason3 = '';
+          this.form.reason3 = '';
         }
         reasonThree(query).then(res => {
           if (res != null && res.code === 200) {
@@ -375,11 +412,30 @@
         })
 
       },
+      changeLevel2(){
+        if (this.form.level1=='02' && this.form.level2=='05'){
+          this.isShowLevel2=true
+        }else {
+          this.isShowLevel2=false
+          this.form.pieceworkFlag=''
+          this.form.complaintStatus=''
+        }
+      },
+      changeComplaintTenable(value){
+        if (value=='01'){
+          this.isComplaintTenableDisabled=true
+        }else {
+          this.isComplaintTenableDisabled=false
+        }
+      },
       classTwo(flag) {
         const query = {}
         query.parentCode = this.form.level1;
         if(flag=='1'){
-          this.sendForm.level2 = '';
+          this.form.level2 = '';
+          this.isShowLevel2=false
+          this.form.pieceworkFlag=''
+          this.form.complaintStatus=''
         }
         classTwo(query).then(res => {
           if (res != null && res.code === 200) {
@@ -464,6 +520,17 @@
 
         })
       },
+      checkForm() {
+        let data=false
+        this.$refs.ruleForm.validate((valid) => {
+          if (valid) {
+            data= true
+          }else {
+            data= false
+          }
+        })
+        return data
+      }
     }
   }
 </script>

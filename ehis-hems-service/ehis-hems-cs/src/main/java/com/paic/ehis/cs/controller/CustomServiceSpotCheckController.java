@@ -18,6 +18,7 @@ import com.paic.ehis.cs.utils.CodeEnum;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.xmlbeans.impl.xb.xsdschema.Public;
 import org.omg.CORBA.PUBLIC_MEMBER;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -55,27 +56,18 @@ public class CustomServiceSpotCheckController extends BaseController {
      * @return
      */
     @GetMapping("/internal/inspectionSendData")
-    public TableDataInfo selectSendPoolDataBy(WorkOrderQueryDTO workOrderQueryDTO)
-    {
+    public TableDataInfo selectSendPoolDataBy(WorkOrderQueryDTO workOrderQueryDTO) {
         //1.分页处理
         startPage();
-        //2.工单状态处理； 04-已完成的工单且没有被质检过
-        workOrderQueryDTO.setStatus(CodeEnum.ORDER_STATE_04.getCode());
+       //2.工单状态处理； 04-已完成,已取消，不合格，合格的工单
         //3.业务类型为： 01-信息需求和03-投诉的才可以质检
-        List<String> businessTypeList=new ArrayList<>();
+        List<String> businessTypeList = new ArrayList<>();
         businessTypeList.add(CodeEnum.BUSINESS_TYPE_01.getCode());
         businessTypeList.add(CodeEnum.BUSINESS_TYPE_03.getCode());
         workOrderQueryDTO.setBusinessTypeList(businessTypeList);
-        logger.debug("可发起质检工作池入参: {}",workOrderQueryDTO);
-        List<AcceptVo> list = qualityInspectionAcceptService.selectSendPoolData(workOrderQueryDTO);
-//        for (int i = 0; i < list.size(); i++) {
-//            if(i==0){
-//                list.get(i).setIsRedWord(true);
-//            }else{
-//                list.get(i).setIsRedWord(false);
-//            }
-//        }
-        logger.debug("可发起质检工作池结果:{}",list);
+        logger.debug("可发起质检工作池入参: {}", workOrderQueryDTO);
+        List<AcceptVo> list = qualityInspectionAcceptService.selectSendPoolDataTwo(workOrderQueryDTO);
+        logger.debug("可发起质检工作池结果:{}", list);
         return getDataTable(list);
     }
 
@@ -132,9 +124,9 @@ public class CustomServiceSpotCheckController extends BaseController {
         //操作后主流程状态
         param.put("status",CodeEnum.INSPECTION_STATE_01.getCode());
         //操作前主流程状态
-        param.put("linkCode",CodeEnum.ORDER_STATE_04.getCode());
+        param.put("linkCode",CodeEnum.ORDER_STATE_04.getCode());//已完成的可质检
         //操作按钮代码
-        param.put("operateCode",CodeEnum.OPERATE_CODE_16.getCode());
+        param.put("operateCode",CodeEnum.ACTION_TYPE_13.getCode());
         return toAjax(qualityInspectionAcceptService.insertAcceptVoBatch(sendIds,param));
     }
 
@@ -154,7 +146,7 @@ public class CustomServiceSpotCheckController extends BaseController {
         //操作前主流程状态
         param.put("linkCode",CodeEnum.LINK_CODE_08.getCode());
         //操作按钮代码
-        param.put("operateCode",CodeEnum.OPERATE_CODE_17.getCode());
+        param.put("operateCode",CodeEnum.ACTION_TYPE_02.getCode());
         return toAjax(qualityInspectionAcceptService.inspectionHandleStatusByIds(getIds,param));
     }
 
@@ -263,7 +255,7 @@ public class CustomServiceSpotCheckController extends BaseController {
         param.put("linkCode",CodeEnum.LINK_CODE_10.getCode());
         //param.put("inspectionId",);
         //操作按钮代码
-        param.put("operateCode",CodeEnum.OPERATE_CODE_20.getCode());
+        param.put("operateCode",CodeEnum.ACTION_TYPE_05.getCode());
         return toAjax(qualityInspectionItemService.updateQualityItem(sendIds,param));
     }
 
@@ -300,6 +292,15 @@ public class CustomServiceSpotCheckController extends BaseController {
     @GetMapping("/internal/updateGetWorkOrder")
     public AjaxResult updateGetWorkOrder(String workOrderNo) {
         return AjaxResult.success(qualityInspectionAcceptService.updateSendByVoById(workOrderNo));
+    }
+
+    //************************************************************************************
+    /**
+     *工单修改判断弹框
+     */
+    @GetMapping("/internal/updateGetWorkOrder1")
+    public AjaxResult updateGetWorkOrder1(String workOrderNo) {
+        return AjaxResult.success(qualityInspectionAcceptService.updateSendByVoByIdById1(workOrderNo));
     }
 
     //************************************************
@@ -408,6 +409,43 @@ public class CustomServiceSpotCheckController extends BaseController {
         qualityInspectionDTO.setUpdatedBy(SecurityUtils.getUsername());
         qualityInspectionDTO.setUpdatedTime(DateUtils.getNowDate());
         return toAjax(qualityInspectionHandleService.insertHandleInfo(qualityInspectionDTO));
+    }
+
+
+    //信息需求失效批处理
+    @GetMapping("/internal/batchAcceptVo/invalidDate/{invalidDate}")
+    public AjaxResult batchAcceptVo(@PathVariable("invalidDate") String invalidDate){
+        try{
+            Map<String,String> param=new HashMap<>();
+            //操作后主流程状态
+            param.put("status",CodeEnum.INSPECTION_STATE_01.getCode());
+            //操作前主流程状态
+            param.put("linkCode",CodeEnum.ORDER_STATE_04.getCode());//已完成的可质检
+            //操作按钮代码
+            param.put("operateCode",CodeEnum.OPERATE_CODE_16.getCode());
+            qualityInspectionAcceptService.batchAcceptVo(invalidDate);
+        }catch(RuntimeException e){
+            return AjaxResult.error(e.getMessage());
+        }
+        return AjaxResult.success("执行成功");
+    }
+
+    //信息需求一个月失效批处理
+    @GetMapping("/internal/batchAcceptVo/invalidDateMonth/{invalidDate}")
+    public AjaxResult batchAcceptVomonth(@PathVariable("invalidDate") String invalidDate){
+        try{
+            Map<String,String> param=new HashMap<>();
+            //操作后主流程状态
+            param.put("status",CodeEnum.INSPECTION_STATE_01.getCode());
+            //操作前主流程状态
+            param.put("linkCode",CodeEnum.ORDER_STATE_04.getCode());//已完成的可质检
+            //操作按钮代码
+            param.put("operateCode",CodeEnum.OPERATE_CODE_16.getCode());
+            qualityInspectionAcceptService.batchAcceptVomonth(invalidDate);
+        }catch(RuntimeException e){
+            return AjaxResult.error(e.getMessage());
+        }
+        return AjaxResult.success("执行成功");
     }
 
 }

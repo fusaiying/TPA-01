@@ -48,7 +48,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="处理日期：" prop="HandlerTime">
+            <el-form-item label="处理日期：" prop="handlerTime">
               <el-date-picker
                 v-model="sendForm.handlerTime"
                 class="item-width"
@@ -611,16 +611,16 @@ export default {
     searchHandle() {
       let queryParams = JSON.parse(JSON.stringify(this.sendForm));
       if (this.sendForm.acceptorTime) {
-        queryParams.acceptTimeStart=this.sendForm.acceptorTime[0]
-        queryParams.acceptTimeEnd=this.sendForm.acceptorTime[1]
+        this.$set(queryParams,'acceptTimeStart',this.sendForm.acceptorTime[0]);
+        this.$set(queryParams,'acceptTimeEnd',this.sendForm.acceptorTime[1]);
       }
       if (this.sendForm.handlerTime) {
-        queryParams.acceptTimeStart=this.sendForm.handlerTime[0]
-        queryParams.acceptTimeEnd=this.sendForm.handlerTime[1]
+        this.$set(queryParams,'modifyStartDate',this.sendForm.handlerTime[0]);
+        this.$set(queryParams,'modifyEndDate',this.sendForm.handlerTime[1]);
       }
       if (this.sendForm.appointmentTime) {
-        queryParams.acceptTimeStart=this.sendForm.appointmentTime[0]
-        queryParams.acceptTimeEnd=this.sendForm.appointmentTime[1]
+        this.$set(queryParams,'appointmentTimeStart',this.sendForm.appointmentTime[0]);
+        this.$set(queryParams,'appointmentTimeEnd',this.sendForm.appointmentTime[1]);
       }
       queryParams.pageNum = this.pageNum;
       queryParams.pageSize = this.pageSize;
@@ -643,16 +643,16 @@ export default {
       this.personLoading=true;
       let queryParams = JSON.parse(JSON.stringify(this.sendForm));
       if (this.sendForm.acceptorTime) {
-        queryParams.acceptStartDate=this.sendForm.acceptorTime[0];
-        queryParams.acceptEndDate=this.sendForm.acceptorTime[1];
+        this.$set(queryParams,'acceptTimeStart',this.sendForm.acceptorTime[0]);
+        this.$set(queryParams,'acceptTimeEnd',this.sendForm.acceptorTime[1]);
       }
       if (this.sendForm.handlerTime) {
-        queryParams.modifyStartDate=this.sendForm.handlerTime[0];
-        queryParams.modifyEndDate=this.sendForm.handlerTime[1];
+        this.$set(queryParams,'modifyStartDate',this.sendForm.handlerTime[0]);
+        this.$set(queryParams,'modifyEndDate',this.sendForm.handlerTime[1]);
       }
       if (this.sendForm.appointmentTime) {
-        queryParams.appointmentStartDate=this.sendForm.appointmentTime[0];
-        queryParams.appointmentEndDate=this.sendForm.appointmentTime[1];
+        this.$set(queryParams,'appointmentTimeStart',this.sendForm.appointmentTime[0]);
+        this.$set(queryParams,'appointmentTimeEnd',this.sendForm.appointmentTime[1]);
       }
       queryParams.pageNum = this.pageNumPerson;
       queryParams.pageSize = this.pageSizePerson;

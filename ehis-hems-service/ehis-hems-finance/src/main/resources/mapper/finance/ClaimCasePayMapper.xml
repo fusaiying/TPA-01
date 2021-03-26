@@ -43,10 +43,11 @@
                  select * from (
 			SELECT
             a.rpt_no,
+            a.batch_no,
             min( b.treatment_start_date ) treatment_date,
             c.insured_no,
             c.name,
-            sum( b.bill_amount ) bill_amount,
+            sum(  ifNUll(b.bill_amount,0) ) bill_amount,
             (sum( ifNUll(b.bill_amount,0) ) - sum( ifNUll(b.hos_discount_amount,0) )) discounted_amount,
             sum( ifNUll(b.tp_advance_payment + b.ss_advance_payment,0) ) advance_payment,
             sum( ifNUll(b.copay,0)) copay,
@@ -54,7 +55,8 @@
             ifNUll(d.debt_amount,0) debt_amount,
             a.case_status,
             a.pay_status,
-            a.case_prop
+            a.case_prop,
+            d.bill_currency currency
         FROM
             claim_case a
             LEFT JOIN claim_case_bill b ON a.rpt_no = b.rpt_no  AND b.`status` = 'Y'
@@ -68,10 +70,12 @@
             c.`name`,
             d.cal_amount,
             d.debt_amount,
-            c.insured_no
+            c.insured_no,
+            d.bill_currency
 				union
 		SELECT
             a.rpt_no,
+            a.batch_no,
             d.treatment_start_date treatment_date,
             c.insured_no,
             c.name,
@@ -83,7 +87,8 @@
             ifNUll(c.fee_amount,0) debt_amount,
             a.case_status,
             a.pay_status,
-            a.case_prop
+            a.case_prop,
+            d.bill_currency currency
         FROM
             claim_case a
             LEFT JOIN claim_case_cal_core_policy c ON a.rpt_no = c.rpt_no  AND c.`status` = 'Y' and c.amount_type='04'
@@ -100,6 +105,7 @@
          select * from (
 		 SELECT
             a.rpt_no,
+            a.batch_no,
             min( b.treatment_start_date ) treatment_date,
             c.`name`,
             sum( ifNUll(b.bill_amount,0) ) bill_amount,
@@ -133,6 +139,7 @@
 				union
 		SELECT
             a.rpt_no,
+            a.batch_no,
             d.treatment_start_date treatment_date,
             c.name,
             d.bill_amount bill_amount,

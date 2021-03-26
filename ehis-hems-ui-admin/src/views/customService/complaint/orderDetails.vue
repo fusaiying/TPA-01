@@ -327,6 +327,18 @@
         </el-row>
 
         <el-row>
+          <el-col :span="8">
+            <el-form-item label="预约时间："  style="white-space: nowrap"  prop="complaintTime">
+              <el-date-picker
+                v-model="workPoolData.complaintTime"
+                type="datetime"
+                placeholder="选择日期时间">
+              </el-date-picker>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <el-row>
           <el-form-item label="投诉内容：" prop="phone">
             <el-input
               disabled
@@ -354,8 +366,8 @@
           tooltip-effect="dark"
           style=" width: 100%;">
           <el-table-column align="center" width="140" prop="status" label="状态" show-overflow-tooltip>
-            <template slot-scope="scope" v-if="scope.row.status">
-              <span>{{ selectDictLabel(cs_order_state, scope.row.status) }}</span>
+            <template slot-scope="scope" v-if="scope.row.linkCode">
+              <span>{{ selectDictLabel(cs_order_state, scope.row.linkCode) }}</span>
             </template>
           </el-table-column>
           <el-table-column align="center" prop="operateCode" label="操作" show-overflow-tooltip>
@@ -582,6 +594,9 @@
           </el-table-column>
         </el-table>
       </div>
+      <div style="text-align: right; margin-right: 1px;">
+        <modify-details ref="modifyDetails"></modify-details>
+      </div>
     </el-card>
   </div>
 </template>
@@ -592,6 +607,7 @@
   import upLoad from "../common/modul/upload";
   import {complainSearch,comSearch}  from  '@/api/customService/consultation'
   import {getAttachmentListById} from "@/api/customService/spotCheck";
+  import modifyDetails from "../common/modul/modifyDetails";
 
 
   let dictss = [
@@ -609,8 +625,9 @@
   export default {
     components: {
       upLoad,
-
+      modifyDetails,
     },
+
     filters: {
       changeDate: function (value) {
         if (value !== null) {
@@ -819,9 +836,9 @@
 
       //超链接用
       modifyDetails(s){
-        this.$refs.modifyDetails.queryParams.subId=s.subId,
+        this.$refs.modifyDetails.queryParams.subId=s.subId;
           this.$refs.modifyDetails.queryParams.workOrderNo=this.queryParams.workOrderNo;
-        this.$refs.modifyDetails.open()
+        this.$refs.modifyDetails.open();
         ;},
       //打开修改对话框
 
@@ -856,9 +873,9 @@
             this.HCSPoolData = res.rows
             this.HCSTotal = res.total
             if (res.rows.length <= 0) {
-              return this.$message.warning(
+              /*return this.$message.warning(
                 "未查询到数据！"
-              )
+              )*/
             }
           }
         }).catch(res => {

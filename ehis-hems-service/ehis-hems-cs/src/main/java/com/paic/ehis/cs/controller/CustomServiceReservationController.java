@@ -1,5 +1,6 @@
 package com.paic.ehis.cs.controller;
 
+import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.PubFun;
 import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.common.core.web.controller.BaseController;
@@ -13,7 +14,11 @@ import com.paic.ehis.cs.domain.vo.ReservationDealVo;
 import com.paic.ehis.cs.service.IEditInfoService;
 import com.paic.ehis.cs.service.IReservationAcceptVoService;
 import com.paic.ehis.cs.service.IWorkHandleInfoService;
+import com.paic.ehis.cs.utils.CodeEnum;
+import com.paic.ehis.system.api.BaseService;
+import com.paic.ehis.system.api.domain.dto.BaseHospitalForReservationDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,6 +37,9 @@ public class CustomServiceReservationController extends BaseController {
     private IEditInfoService iEditInfoService;
     @Autowired
     private IWorkHandleInfoService iWorkHandleInfoService;
+
+    @Autowired
+    private BaseService baseService;
 
 
 //    @PreAuthorize("@ss.hasPermi('system:customService:list')")
@@ -55,12 +63,19 @@ public class CustomServiceReservationController extends BaseController {
 //    @PreAuthorize("@ss.hasPermi('system:customService::edit')")
     @Log(title = "增加 ", businessType = BusinessType.INSERT)
     @PutMapping("/serviceAdd")
-    public AjaxResult reservationAdd(@Validated @RequestBody ReservationAcceptVo reservationAcceptVo)
-    {reservationAcceptVo.setContactsPersonId(PubFun.createMySqlMaxNoUseCache("cs_person_id",10,10));
-        reservationAcceptVo.setCallPersonId(PubFun.createMySqlMaxNoUseCache("cs_person_id",10,10));
-        reservationAcceptVo.setBusinessType("02");
+    @Transactional
+    public AjaxResult reservationAdd(@Validated @RequestBody ReservationAcceptVo reservationAcceptVo) {
+        reservationAcceptVo.setBusinessType(CodeEnum.BUSINESS_TYPE_02.getCode());
         String workOrderNo="9900000000"+PubFun.createMySqlMaxNoUseCache("cs_work_order_no",10,6);
         reservationAcceptVo.setWorkOrderNo(workOrderNo);
+
+        reservationAcceptVo.setAcceptBy(SecurityUtils.getUsername());
+        reservationAcceptVo.setAcceptTime(DateUtils.getNowDate());
+        reservationAcceptVo.setCreateBy(SecurityUtils.getUsername());
+        reservationAcceptVo.setCreateTime(DateUtils.getNowDate());
+        reservationAcceptVo.setUpdateTime(DateUtils.getNowDate());
+        reservationAcceptVo.setUpdateBy(SecurityUtils.getUsername());
+
         return iReservationAcceptVoService.insertServiceInfo(reservationAcceptVo) > 0 ? AjaxResult.success(workOrderNo) : AjaxResult.error();
 
     }
@@ -99,4 +114,18 @@ public class CustomServiceReservationController extends BaseController {
         }
     }
 
+    /*预约点击【处理】保存处理时间*/
+    @Log(title = "处理 ", businessType = BusinessType.INSERT)
+    @GetMapping("/updateClickTime")
+    public AjaxResult updateClickTime(AcceptDTO acceptDTO) {
+        int a = iReservationAcceptVoService.updateClickTime(acceptDTO);
+        return toAjax(1);
+    }
+
+
+    @PostMapping("/internal/selectHospital")
+    public TableDataInfo selectHospital(@RequestBody BaseHospitalForReservationDTO baseHospitalForReservationDTO) {
+        TableDataInfo tableDataInfo = baseService.selectHospitalForReservation(baseHospitalForReservationDTO);
+        return tableDataInfo;
+    }
 }

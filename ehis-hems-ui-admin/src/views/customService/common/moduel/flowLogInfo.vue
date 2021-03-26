@@ -10,9 +10,9 @@
         highlight-current-row
         tooltip-effect="dark"
         style=" width: 100%;">
-        <el-table-column align="center" prop="status" label="状态" show-overflow-tooltip>
-          <template slot-scope="scope" v-if="scope.row.status">
-            <span>{{ selectDictLabel(cs_order_state, scope.row.status) }}</span>
+        <el-table-column align="center" prop="linkCode" label="状态" show-overflow-tooltip>
+          <template slot-scope="scope" v-if="scope.row.linkCode">
+            <span>{{ selectDictLabel(cs_link_code, scope.row.linkCode) }}</span>
           </template>
         </el-table-column>
         <el-table-column align="center" prop="operateCode" label="操作" show-overflow-tooltip>
@@ -63,7 +63,7 @@
     {dictType: 'cs_priority'},
     {dictType: 'cs_channel'},
     {dictType: 'cs_whether_flag'},
-    {dictType: 'cs_order_state'},
+    {dictType: 'cs_link_code'},
     {dictType: 'cs_action_type'},
   ]
   export default {
@@ -93,7 +93,7 @@
           status: ""
         },
         dictList: [],
-        cs_order_state: [],
+        cs_link_code: [],
         cs_action_type: [],
         cs_service_item: [],
         cs_communication_language: [],
@@ -117,8 +117,8 @@
       this.cs_action_type = this.dictList.find(item => {
         return item.dictType === 'cs_action_type'
       }).dictDate
-      this.cs_order_state = this.dictList.find(item => {
-        return item.dictType === 'cs_order_state'
+      this.cs_link_code = this.dictList.find(item => {
+        return item.dictType === 'cs_link_code'
       }).dictDate
       this.cs_communication_language = this.dictList.find(item => {
         return item.dictType === 'cs_communication_language'

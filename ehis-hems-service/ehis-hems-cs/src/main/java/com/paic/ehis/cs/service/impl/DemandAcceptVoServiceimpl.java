@@ -278,7 +278,11 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
                 insuredPerson.setIdType(policyListVo.getIdType());
                 insuredPerson.setIdNumber(policyListVo.getIdNo());
                 insuredPerson.setSex(policyListVo.getSex());
-                insuredPerson.setLinePhone(policyListVo.getPhone());
+                if(policyListVo.getPhone() == null || "".equals(policyListVo.getPhone())){
+                    insuredPerson.setLinePhone("---");
+                }else{
+                    insuredPerson.setLinePhone(policyListVo.getPhone());
+                }
                 insuredPerson.setOtherCustomerNo(policyListVo.getInsuredNo());
                 insuredPerson.setCreatedBy(SecurityUtils.getUsername());
                 insuredPerson.setUpdatedBy(SecurityUtils.getUsername());
@@ -343,9 +347,14 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         personInfo2.setName(demandAcceptVo.getContactsName());
         personInfo2.setLanguage(demandAcceptVo.getContactsLanguage());
         personInfo2.setMobilePhone(demandAcceptVo.getContactsMobilePhone());
-        if (demandAcceptVo.getContactsCountry() != null && demandAcceptVo.getContactsCountry() != "") {
-            personInfo2.setLinePhone(demandAcceptVo.getContactsCountry() + "-" + demandAcceptVo.getContactsQuhao() + "-" + demandAcceptVo.getContactsNumber() + "-" + demandAcceptVo.getContactsSecondNumber());
-        }
+        String tLinePhone = StringUtils.isNotEmpty(demandAcceptVo.getContactsCountry())?demandAcceptVo.getContactsCountry():"";
+        tLinePhone += "-";
+        tLinePhone += StringUtils.isNotEmpty(demandAcceptVo.getContactsQuhao())?demandAcceptVo.getContactsQuhao():"";
+        tLinePhone += "-";
+        tLinePhone += StringUtils.isNotEmpty(demandAcceptVo.getContactsNumber())?demandAcceptVo.getContactsNumber():"";
+        tLinePhone += "-";
+        tLinePhone += StringUtils.isNotEmpty(demandAcceptVo.getContactsSecondNumber())?demandAcceptVo.getContactsSecondNumber():"";
+        personInfo2.setLinePhone(tLinePhone);
         personInfo2.setCreatedBy(SecurityUtils.getUsername());
         personInfo2.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         personInfo2.setUpdatedBy(SecurityUtils.getUsername());
@@ -357,7 +366,7 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         flowLog.setMakeTime(DateUtils.parseDate(DateUtils.getTime()));
         flowLog.setMakeBy(SecurityUtils.getUsername());
         flowLog.setOperateCode("01");
-        flowLog.setStatus("01");
+        flowLog.setLinkCode("01");
         flowLog.setWorkOrderNo(demandAcceptVo.getWorkOrderNo());
         flowLog.setCreatedBy(SecurityUtils.getUsername());
         flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
@@ -412,6 +421,8 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         //插入来电人
         callPerson.setName(demandAcceptVo.getCallPerson().getName());
         callPerson.setMobilePhone(demandAcceptVo.getCallPerson().getMobilePhone());
+        callPerson.setUpdatedBy(SecurityUtils.getUsername());
+        callPerson.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
         personInfoMapper.updatePersonInfo(callPerson);
 
         //插入联系人
@@ -419,7 +430,24 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         contactsPerson.setName(demandAcceptVo.getContactsPerson().getName());
         contactsPerson.setLanguage(demandAcceptVo.getContactsPerson().getLanguage());
         contactsPerson.setMobilePhone(demandAcceptVo.getContactsPerson().getMobilePhone());
-        contactsPerson.setLinePhone(demandAcceptVo.getContactsPerson().getLinePhone1()[0] + "-" + demandAcceptVo.getContactsPerson().getLinePhone1()[1] + "-" + demandAcceptVo.getContactsPerson().getLinePhone1()[2] + "-" + demandAcceptVo.getContactsPerson().getLinePhone1()[3]);
+
+        String[] LinePhone= demandAcceptVo.getContactsPerson().getLinePhone1();
+        if(StringUtils.isNotEmpty(LinePhone)){
+            String tLinePhone = (StringUtils.isNotEmpty(LinePhone[0]) && !"null".equals(LinePhone[0])) ? LinePhone[0]:"";
+            for (int i = 1; i < LinePhone.length; i++) {
+                tLinePhone += "-";
+                tLinePhone += (StringUtils.isNotEmpty(LinePhone[i]) && !"null".equals(LinePhone[i])) ? LinePhone[i]:"";
+            }
+            for (int i = 0; i < (4-LinePhone.length); i++) {
+                tLinePhone += "-";
+            }
+            contactsPerson.setLinePhone(tLinePhone);
+        }else{
+            contactsPerson.setLinePhone("---");
+        }
+
+        contactsPerson.setUpdatedBy(SecurityUtils.getUsername());
+        contactsPerson.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
         personInfoMapper.updatePersonInfo(contactsPerson);
 
 
@@ -466,15 +494,37 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         outList.add("callPerson");
         outList.add("contactsPerson");
 
-//        List subVoKeyList=new ArrayList();
-//        subVoKeyList.add("callPerson");
-//        subVoKeyList.add("contactsPerson");
+        Map<String ,String> tDictType = new HashMap<String ,String>();
+        tDictType.put("sex","cs_sex");
+        tDictType.put("language","cs_communication_language");
+        tDictType.put("channelCode","cs_channel");
+        tDictType.put("priorityLevel","cs_priority");
+        tDictType.put("organCode","cs_organization");
+        tDictType.put("callRelationBy","cs_relation");
+        tDictType.put("visitType","cs_consultation_type");
+        tDictType.put("validCertificate","cs_whether_flag");
+        tDictType.put("settlementCard","cs_whether_flag");
+        tDictType.put("accidentFlag","cs_whether_flag");
+        tDictType.put("identity","cs_identity");
+
+        Map<String,String> tSpecialMap = new HashMap<String ,String>();
+        tSpecialMap.put("updateBy","updateBy");
+        tSpecialMap.put("updateTime","updateTime");
+        tSpecialMap.put("createBy","createBy");
+        tSpecialMap.put("createTime","createTime");
+        tSpecialMap.put("updatedBy","updatedBy");
+        tSpecialMap.put("updatedTime","updatedTime");
+        tSpecialMap.put("createdBy","createdBy");
+        tSpecialMap.put("createdTime","createdTime");
+        tSpecialMap.put("changeTime","changeTime");
+        tSpecialMap.put("remarkTime","remarkTime");
+        tSpecialMap.put("oldmodifyBy","oldmodifyBy");
 
         List<String> keyList = new ArrayList<>();
         Iterator<String> iter = map1.keySet().iterator();
         while (iter.hasNext()) {
             String key = iter.next();
-            if(!"updateBy".equals(key) && !"updateTime".equals(key) && !"changeTime".equals(key) && !"createBy".equals(key) && !"createTime".equals(key)){
+            if(tSpecialMap.get(key)==null || "".equals(tSpecialMap.get(key))){
                 keyList.add(key);
             }
         }
@@ -482,7 +532,7 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         while (iter2.hasNext()) {
             String key = iter2.next();
             if (!keyList.contains(key)) {
-                if(!"updateBy".equals(key) && !"updateTime".equals(key) && !"changeTime".equals(key) && !"createBy".equals(key) && !"createTime".equals(key)){
+                if(tSpecialMap.get(key)==null || "".equals(tSpecialMap.get(key))){
                     keyList.add(key);
                 }
             }
@@ -495,39 +545,29 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
             } else {
                 Object map1value = map1.get(mapkey);
                 Object map2value = map2.get(mapkey);
+
+                editDetail = new EditDetail();
+                editDetail.setItemKey(mapkey);
+                editDetail.setKeyDictType("demandAcceptVo");
+                editDetail.setEditId(editId);
+                editDetail.setCreatedBy(SecurityUtils.getUsername());
+                editDetail.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+                editDetail.setUpdatedBy(SecurityUtils.getUsername());
+                editDetail.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+                editDetail.setValueDictType(tDictType.get(mapkey));
+
                 if ((map1value == null || map1value.equals("")) && (map2value != null && !map2value.equals(""))) {
-                    editDetail.setItemKey(mapkey);
-                    editDetail.setNowValue(String.valueOf(map2value));
-                    editDetail.setKeyDictType("demandAcceptVo");
                     editDetail.setDetailId(PubFun.createMySqlMaxNoUseCache("cs_detail_id", 10, 8));
-                    editDetail.setEditId(editId);
-                    editDetail.setCreatedBy(SecurityUtils.getUsername());
-                    editDetail.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
-                    editDetail.setUpdatedBy(SecurityUtils.getUsername());
-                    editDetail.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+                    editDetail.setNowValue(String.valueOf(map2value));
                     editDetailMapper.insertEditDetail(editDetail);
                 } else if ((map2value == null || map2value.equals("")) && (map1value != null && !map1value.equals(""))) {
-                    editDetail.setItemKey(mapkey);
-                    editDetail.setOldValue(String.valueOf(map1value));
-                    editDetail.setKeyDictType("demandAcceptVo");
                     editDetail.setDetailId(PubFun.createMySqlMaxNoUseCache("cs_detail_id", 10, 8));
-                    editDetail.setEditId(editId);
-                    editDetail.setCreatedBy(SecurityUtils.getUsername());
-                    editDetail.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
-                    editDetail.setUpdatedBy(SecurityUtils.getUsername());
-                    editDetail.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+                    editDetail.setOldValue(String.valueOf(map1value));
                     editDetailMapper.insertEditDetail(editDetail);
                 } else if ((map1value != null && !map1value.equals("")) && (map2value != null && !map2value.equals("")) && !map1value.equals(map2value)) {
-                    editDetail.setItemKey(mapkey);
+                    editDetail.setDetailId(PubFun.createMySqlMaxNoUseCache("cs_detail_id", 10, 8));
                     editDetail.setOldValue(String.valueOf(map1value));
                     editDetail.setNowValue(String.valueOf(map2value));
-                    editDetail.setKeyDictType("demandAcceptVo");
-                    editDetail.setDetailId(PubFun.createMySqlMaxNoUseCache("cs_detail_id", 10, 8));
-                    editDetail.setEditId(editId);
-                    editDetail.setCreatedBy(SecurityUtils.getUsername());
-                    editDetail.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
-                    editDetail.setUpdatedBy(SecurityUtils.getUsername());
-                    editDetail.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
                     editDetailMapper.insertEditDetail(editDetail);
                 }
 
@@ -540,58 +580,46 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         Iterator<String> iter3 = map3.keySet().iterator();
         while (iter3.hasNext()) {
             String key = iter3.next();
-            keyList1.add(key);
+            if(tSpecialMap.get(key)==null || "".equals(tSpecialMap.get(key))){
+                keyList1.add(key);
+            }
         }
         Iterator<String> iter4 = map4.keySet().iterator();
         while (iter4.hasNext()) {
             String key = iter4.next();
-            if (!keyList1.contains(key)) {
-                keyList1.add(key);
+            if(tSpecialMap.get(key)==null || "".equals(tSpecialMap.get(key))){
+                if (!keyList1.contains(key)) {
+                    keyList1.add(key);
+                }
             }
         }
         for (int j = 0; j < keyList1.size(); j++) {
             String map3key = keyList1.get(j);
             Object map3value = map3.get(map3key);
             Object map4value = map4.get(map3key);
-            if ((map3value == null || map3value.equals("")) &&
-                    (map4value != null && !map4value.equals(""))) {
-                editDetail.setItemKey("callPerson."+map3key);
-               // editDetail.setOldValue("");
+
+            editDetail = new EditDetail();
+            editDetail.setItemKey("callPerson."+map3key);
+            editDetail.setKeyDictType("demandAcceptVo");
+            editDetail.setEditId(editId);
+            editDetail.setCreatedBy(SecurityUtils.getUsername());
+            editDetail.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+            editDetail.setUpdatedBy(SecurityUtils.getUsername());
+            editDetail.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+            editDetail.setValueDictType(tDictType.get(map3key));
+
+            if ((map3value == null || map3value.equals("")) && (map4value != null && !map4value.equals(""))) {
+                editDetail.setDetailId(PubFun.createMySqlMaxNoUseCache("cs_detail_id", 10, 8));
                 editDetail.setNowValue(String.valueOf(map4value));
-                editDetail.setKeyDictType("demandAcceptVo");
-                editDetail.setDetailId(PubFun.createMySqlMaxNoUseCache("cs_detail_id", 10, 8));
-                editDetail.setEditId(editId);
-                editDetail.setCreatedBy(SecurityUtils.getUsername());
-                editDetail.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
-                editDetail.setUpdatedBy(SecurityUtils.getUsername());
-                editDetail.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
                 editDetailMapper.insertEditDetail(editDetail);
-            } else if ((map4value == null || map4value.equals("")) &&
-                    (map3value != null && !map3value.equals(""))) {
-                editDetail.setItemKey("callPerson."+map3key);
+            } else if ((map4value == null || map4value.equals("")) && (map3value != null && !map3value.equals(""))) {
+                editDetail.setDetailId(PubFun.createMySqlMaxNoUseCache("cs_detail_id", 10, 8));
                 editDetail.setOldValue(String.valueOf(map3value));
-           //     editDetail.setNowValue("");
-                editDetail.setKeyDictType("demandAcceptVo");
-                editDetail.setDetailId(PubFun.createMySqlMaxNoUseCache("cs_detail_id", 10, 8));
-                editDetail.setEditId(editId);
-                editDetail.setCreatedBy(SecurityUtils.getUsername());
-                editDetail.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
-                editDetail.setUpdatedBy(SecurityUtils.getUsername());
-                editDetail.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
                 editDetailMapper.insertEditDetail(editDetail);
-            } else if ((map3value != null && !map3value.equals("")) &&
-                    (map4value != null && !map4value.equals("")) &&
-                    !map3value.equals(map4value)) {
-                editDetail.setItemKey("callPerson."+map3key);
+            } else if ((map3value != null && !map3value.equals("")) && (map4value != null && !map4value.equals("")) && !map3value.equals(map4value)) {
+                editDetail.setDetailId(PubFun.createMySqlMaxNoUseCache("cs_detail_id", 10, 8));
                 editDetail.setOldValue(String.valueOf(map3value));
                 editDetail.setNowValue(String.valueOf(map4value));
-                editDetail.setKeyDictType("demandAcceptVo");
-                editDetail.setDetailId(PubFun.createMySqlMaxNoUseCache("cs_detail_id", 10, 8));
-                editDetail.setEditId(editId);
-                editDetail.setCreatedBy(SecurityUtils.getUsername());
-                editDetail.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
-                editDetail.setUpdatedBy(SecurityUtils.getUsername());
-                editDetail.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
                 editDetailMapper.insertEditDetail(editDetail);
             }
 
@@ -604,62 +632,48 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         Iterator<String> iter5 = map5.keySet().iterator();
         while (iter5.hasNext()) {
             String key = iter5.next();
-            keyList2.add(key);
+            if(tSpecialMap.get(key)==null || "".equals(tSpecialMap.get(key))){
+                keyList2.add(key);
+            }
         }
         Iterator<String> iter6 = map6.keySet().iterator();
         while (iter6.hasNext()) {
             String key = iter6.next();
-            if (!keyList2.contains(key)) {
-                keyList2.add(key);
+            if(tSpecialMap.get(key)==null || "".equals(tSpecialMap.get(key))){
+                if (!keyList2.contains(key)) {
+                    keyList2.add(key);
+                }
             }
         }
         for (int k = 0; k < keyList2.size(); k++) {
             String map5key = keyList2.get(k);
             Object map5value = map5.get(map5key);
             Object map6value = map6.get(map5key);
-            if ((map5value == null || map5value.equals("")) &&
-                    (map6value != null && !map6value.equals(""))) {
-                editDetail.setItemKey("contactsPerson."+map5key);
-             //   editDetail.setOldValue("");
+
+            editDetail = new EditDetail();
+            editDetail.setItemKey("contactsPerson."+map5key);
+            editDetail.setKeyDictType("demandAcceptVo");
+            editDetail.setEditId(editId);
+            editDetail.setCreatedBy(SecurityUtils.getUsername());
+            editDetail.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+            editDetail.setUpdatedBy(SecurityUtils.getUsername());
+            editDetail.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+            editDetail.setValueDictType(tDictType.get(map5key));
+
+            if ((map5value == null || map5value.equals("")) && (map6value != null && !map6value.equals(""))) {
+                editDetail.setDetailId(PubFun.createMySqlMaxNoUseCache("cs_detail_id", 10, 8));
                 editDetail.setNowValue(String.valueOf(map6value));
-                editDetail.setKeyDictType("demandAcceptVo");
-                editDetail.setDetailId(PubFun.createMySqlMaxNoUseCache("cs_detail_id", 10, 8));
-                editDetail.setEditId(editId);
-                editDetail.setCreatedBy(SecurityUtils.getUsername());
-                editDetail.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
-                editDetail.setUpdatedBy(SecurityUtils.getUsername());
-                editDetail.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
                 editDetailMapper.insertEditDetail(editDetail);
-            } else if ((map6value == null || map6value.equals("")) &&
-                    (map5value != null && !map5value.equals(""))) {
-                editDetail.setItemKey("contactsPerson."+map5key);
+            } else if ((map6value == null || map6value.equals("")) && (map5value != null && !map5value.equals(""))) {
+                editDetail.setDetailId(PubFun.createMySqlMaxNoUseCache("cs_detail_id", 10, 8));
                 editDetail.setOldValue(String.valueOf(map5value));
-              //  editDetail.setNowValue("");
-                editDetail.setKeyDictType("demandAcceptVo");
-                editDetail.setDetailId(PubFun.createMySqlMaxNoUseCache("cs_detail_id", 10, 8));
-                editDetail.setEditId(editId);
-                editDetail.setCreatedBy(SecurityUtils.getUsername());
-                editDetail.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
-                editDetail.setUpdatedBy(SecurityUtils.getUsername());
-                editDetail.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
                 editDetailMapper.insertEditDetail(editDetail);
-            } else if ((map5value != null && !map5value.equals("")) &&
-                    (map6value != null && !map6value.equals("")) &&
-                    !map5value.equals(map6value)) {
-                editDetail.setItemKey("contactsPerson."+map5key);
+            } else if ((map5value != null && !map5value.equals("")) && (map6value != null && !map6value.equals("")) && !map5value.equals(map6value)) {
+                editDetail.setDetailId(PubFun.createMySqlMaxNoUseCache("cs_detail_id", 10, 8));
                 editDetail.setOldValue(String.valueOf(map5value));
                 editDetail.setNowValue(String.valueOf(map6value));
-                editDetail.setKeyDictType("demandAcceptVo");
-                editDetail.setDetailId(PubFun.createMySqlMaxNoUseCache("cs_detail_id", 10, 8));
-                editDetail.setEditId(editId);
-                editDetail.setCreatedBy(SecurityUtils.getUsername());
-                editDetail.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
-                editDetail.setUpdatedBy(SecurityUtils.getUsername());
-                editDetail.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
                 editDetailMapper.insertEditDetail(editDetail);
             }
-
-
         }
 
         EditInfo editInfo1 = new EditInfo();
@@ -678,14 +692,13 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         flowLog.setMakeTime(DateUtils.parseDate(DateUtils.getTime()));
         flowLog.setMakeBy(SecurityUtils.getUsername());
         flowLog.setOperateCode("03");
-        flowLog.setStatus(workOrderAccept.getStatus());
+        flowLog.setLinkCode(workOrderAccept.getStatus());
         flowLog.setSubId(editId);
         flowLog.setWorkOrderNo(demandAcceptVo.getWorkOrderNo());
         flowLog.setCreatedBy(SecurityUtils.getUsername());
         flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         flowLog.setUpdatedBy(SecurityUtils.getUsername());
         flowLog.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
-
 
         //Hcs
         if (demandAcceptVo.getAlterId() != null) {

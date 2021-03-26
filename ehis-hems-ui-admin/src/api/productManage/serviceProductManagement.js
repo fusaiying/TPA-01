@@ -224,9 +224,9 @@ export function selectProductSupplier(data) {
 /**
  * 审核日志查询
  */
-export function selectCheckLog(data) {
+export function selectLogList(data) {
   return request({
-    url: 'product/info/selectCheckLog',
+    url: 'product/info/selectLogList',
     method: 'post',
     data
   })

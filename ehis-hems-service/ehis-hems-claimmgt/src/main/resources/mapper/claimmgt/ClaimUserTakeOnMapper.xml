@@ -6,8 +6,8 @@
 
     <resultMap type="com.paic.ehis.claimmgt.domain.ClaimUserTakeOn" id="ClaimUserTakeOnResult">
         <result property="takeOnId"    column="take_on_id"    />
-        <result property="userId"    column="user_id"    />
-        <result property="takeOnUserId"    column="take_on_user_id"    />
+        <result property="userName"    column="user_name"    />
+        <result property="takeOnUserName"    column="take_on_user_name"    />
         <result property="status"    column="status"    />
         <result property="createBy"    column="create_by"    />
         <result property="createTime"    column="create_time"    />
@@ -16,51 +16,31 @@
     </resultMap>
 
     <sql id="selectClaimUserTakeOnVo">
-        select take_on_id, user_id, take_on_user_id, status, create_by, create_time, update_by, update_time from claim_user_take_on
+        select take_on_id, user_name, take_on_user_name, status, create_by, create_time, update_by, update_time from claim_user_take_on
     </sql>
     <resultMap type="com.paic.ehis.claimmgt.domain.dto.UserTakeOnDTO" id="ClaimUserTakeOnDTO">
-        <result property="userId"    column="user_id"    />
         <result property="userName"    column="user_name"    />
         <result property="roleName"    column="role_name"    />
-        <result property="roleId"    column="role_id"    />
-        <result property="updateBy"    column="update_by"    />
+        <result property="roleCode"    column="role_code"    />
         <result property="status"    column="status"    />
-        <result property="takeOnUserId"    column="take_on_user_id"    />
-        <result property="updateBy"    column="update_by"    />
-        <result property="updateTime"    column="update_time"    />
-        <result property="createBy"    column="create_by"    />
+        <result property="takeOnUserName"    column="take_on_user_name"    />
         <result property="takeOnId"    column="take_on_id"    />
-
     </resultMap>
+
     <select id="selectClaimUserTakeOnList" parameterType="com.paic.ehis.claimmgt.domain.ClaimUserTakeOn" resultMap="ClaimUserTakeOnResult">
         <include refid="selectClaimUserTakeOnVo"/>
         <where>
-            <if test="userId != null "> and user_id  like concat('%', #{userId}, '%')</if>
-            <if test="takeOnUserId != null "> and take_on_user_id  like concat('%',  #{takeOnUserId}, '%')</if>
+            <if test="userName != null "> and user_name  like concat('%', #{userName}, '%')</if>
+            <if test="takeOnUserName != null "> and take_on_user_name  like concat('%',  #{takeOnUserName}, '%')</if>
             <if test="status != null  and status != ''"> and status = #{status}</if>
         </where>
     </select>
 
     <select id="selectClaimUserTakeOnListOne" parameterType="com.paic.ehis.claimmgt.domain.dto.UserTakeOnDTO" resultMap="ClaimUserTakeOnDTO">
-        select t1.take_on_id,
-        t1.take_on_user_id,
-        t1.create_time,
-        t1.user_id ,
-        t3.role_id,
-        t4.role_name,
-        t2.user_name,
-        t1.update_by,
-        t1.status
-        from claim_user_take_on t1
-        LEFT JOIN sys_user t2  on t1.take_on_user_id = t2.user_id
-        LEFT JOIN sys_user_role t3 on t3.user_id = t2.user_id
-        LEFT JOIN sys_role t4 on t3.role_id = t4.role_id
-
+        select a.take_on_id,a.user_name,b.role_code,a.take_on_user_name,c.role_name,a.status
+        from claim_user_take_on a join claim_case_dist b on a.user_name = b.user_name and b.status = 'Y' join claim_user_role c on c.role_code = b.role_code
         <where>
-            <if test="userId != null "> and t1.user_id  like concat('%', #{userId}, '%')</if>
-            <if test="takeOnUserId != null "> and t1.take_on_user_id  like concat('%',  #{takeOnUserId}, '%')</if>
-            <if test="status != null  and status != ''"> and t1.status = #{status}</if>
-            <if test="status == null  or status == ''"> and t1.status != 'N'</if>
+            1=1
         </where>
     </select>
 
@@ -72,8 +52,8 @@
     <insert id="insertClaimUserTakeOn" parameterType="com.paic.ehis.claimmgt.domain.ClaimUserTakeOn" useGeneratedKeys="true" keyProperty="takeOnId">
         insert into claim_user_take_on
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="userId != null">user_id,</if>
-            <if test="takeOnUserId != null">take_on_user_id,</if>
+            <if test="userName != null">user_name,</if>
+            <if test="takeOnUserName != null">take_on_user_name,</if>
             <if test="status != null and status != ''">status,</if>
             <if test="createBy != null and createBy != ''">create_by,</if>
             <if test="createTime != null">create_time,</if>
@@ -81,8 +61,8 @@
             <if test="updateTime != null">update_time,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="userId != null">#{userId},</if>
-            <if test="takeOnUserId != null">#{takeOnUserId},</if>
+            <if test="userName != null">#{userName},</if>
+            <if test="takeOnUserName != null">#{takeOnUserName},</if>
             <if test="status != null and status != ''">#{status},</if>
             <if test="createBy != null and createBy != ''">#{createBy},</if>
             <if test="createTime != null">#{createTime},</if>
@@ -94,8 +74,8 @@
     <update id="updateClaimUserTakeOn" parameterType="com.paic.ehis.claimmgt.domain.ClaimUserTakeOn">
         update claim_user_take_on
         <trim prefix="SET" suffixOverrides=",">
-            <if test="userId != null">user_id = #{userId},</if>
-            <if test="takeOnUserId != null">take_on_user_id = #{takeOnUserId},</if>
+            <if test="userName != null">user_name = #{userName},</if>
+            <if test="takeOnUserName != null">take_on_user_name = #{takeOnUserName},</if>
             <if test="status != null and status != ''">status = #{status},</if>
             <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
             <if test="createTime != null">create_time = #{createTime},</if>
@@ -110,7 +90,7 @@
             <if test="userName != null">user_name = #{userName},</if>
             <!--<if test="status != null and status != ''">status = #{status},</if>-->
         </trim>
-        where user_id = #{userId}
+        where user_name = #{userName}
     </update>
     <delete id="deleteClaimUserTakeOnById" parameterType="String">
         delete from claim_user_take_on where take_on_id = #{takeOnId}
@@ -122,4 +102,15 @@
             #{takeOnId}
         </foreach>
     </delete>
+
+    <select id="getRoleCodeList" parameterType="String" resultType="String">
+        select role_code from claim_case_dist where user_name = #{userName} and status = 'Y'
+    </select>
+
+    <select id="getTakeOnUserName" resultType="String">
+        select distinct a.user_name from claim_case_dist a where a.user_name &lt;&gt; #{userName}
+        <foreach collection="roleCodeList" item="roleCode" open="" separator=" " close="">
+            and exists(select 1 from claim_case_dist b where b.user_name = a.user_name and b.role_code = #{roleCode})
+        </foreach>
+    </select>
 </mapper>

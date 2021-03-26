@@ -353,8 +353,8 @@
           tooltip-effect="dark"
           style=" width: 100%;">
           <el-table-column align="center" width="140" prop="status" label="状态" show-overflow-tooltip>
-            <template slot-scope="scope" v-if="scope.row.status">
-              <span>{{ selectDictLabel(cs_order_state, scope.row.status) }}</span>
+            <template slot-scope="scope" v-if="scope.row.linkCode">
+              <span>{{ selectDictLabel(cs_order_state, scope.row.linkCode) }}</span>
             </template>
           </el-table-column>
           <el-table-column align="center" prop="operateCode" label="操作" show-overflow-tooltip>
@@ -371,7 +371,7 @@
           </el-table-column>
           <el-table-column prop="remarks" align="center" label="说明" show-overflow-tooltip>
             <template slot-scope="scope">
-              <el-link v-if="scope.row.operateCode=='01'" style="font-size:12px" type="primary"
+              <el-link v-if="scope.row.operateCode=='03'" style="font-size:12px" type="primary"
                        @click="modifyDetails(scope.row)">修改说明
               </el-link>
             </template>
@@ -399,7 +399,7 @@
         <span style="color: blue">服务处理</span>
         <el-divider/>
         <el-row>
-          <el-form-item label="投诉是否成立：" prop="priority">
+          <el-form-item label="投诉是否成立：" prop="validFlag">
             <el-select v-model="sendForm.validFlag" class="item-width" placeholder="请选择">
               <el-option v-for="item in cs_whether_flag" :key="item.dictValue" :label="item.dictLabel"
                          :value="item.dictValue"/>
@@ -409,11 +409,11 @@
         <el-row>
 
           <el-form-item label="投诉不成立理由：" prop="nonReason">
-            <el-input size="mini" v-model="sendForm.nonReason"></el-input>
+            <el-input size="mini" v-model="sendForm.nonReason" maxlength="2000"></el-input>
           </el-form-item>
         </el-row>
         <el-row>
-          <el-form-item label="处理方案：" prop="remark">
+          <el-form-item label="处理方案：" prop="treatmentPlan">
             <el-input
               type="textarea"
               :rows="1"
@@ -461,8 +461,8 @@
       </div>
       <div style="text-align: right; margin-right: 1px;">
         <co-organizer ref="coOrganizer"></co-organizer>
-        <el-button type="primary" size="mini" @click="coOrganizer">协办</el-button>
-        <el-button type="primary" size="mini" @click="submit">提交</el-button>
+        <el-button type="primary" size="mini" @click="coOrganizer" :disabled="collaborativeFrom.status == '02'">协办</el-button>
+        <el-button type="primary" size="mini" @click="submit" :disabled="collaborativeFrom.status == '02'">提交</el-button>
         <el-button type="primary" size="mini" @click="close">关闭</el-button>
 
       </div>
@@ -484,6 +484,7 @@ import {
 import {complainSearch, comSearch} from '@/api/customService/consultation'
 import coOrganizer from "../common/modul/coOrganizer";
 import modifyDetails from "../common/modul/modifyDetails";
+import {getCollaborativeInfo} from '@/api/customService/collaborative'
 
 let dictss = [
   {dictType: 'cs_channel'},
@@ -521,6 +522,17 @@ export default {
     }
   },
   data() {
+    const checkValidFlag= (rule, value, callback) => {
+      if(this.sendForm.validFlag == "02"){
+        if(value == null || value == ""){
+          callback(new Error("投诉不成立理由不能为空"));
+        }else{
+          callback();
+        }
+      }else{
+        callback();
+      }
+    };
 
     return {
       ids: [],//多选框
@@ -539,10 +551,30 @@ export default {
         sign: "",
         collaborativeId: ""
       },
+      collaborativeFrom: {
+        workOrderNo: "",
+        umCode: "",
+        solicitOpinion: "",
+        handleState: "",
+        status: "",
+        opinion: "",
+      },
       // 表单校验
       rules: {
         Service: [
           {required: true, message: "服务项目不能为空", trigger: "blur"}
+        ],
+        validFlag: [
+          {required: true, message: "投诉是否成立不能为空", trigger: "blur"}
+        ],
+        nonReason: [
+          {required: false, validator: checkValidFlag, trigger: "blur"}
+        ],
+        treatmentPlan: [
+          {required: true, message: "处理方案不能为空", trigger: "blur"}
+        ],
+        treatmentBasis: [
+          {required: true, message: "处理依据不能为空", trigger: "blur"}
         ],
       },
       sendForm: {},
@@ -633,6 +665,7 @@ export default {
     this.queryParams.status = this.$route.query.status;
     this.searchHandle();
     this.searchFlowLog();
+    this.getCollaborative();
   },
   async mounted() {
     // 字典数据统一获取
@@ -709,7 +742,9 @@ export default {
     },
     //关闭
     close() {
-
+      // 返回上级路由并关闭当前路由
+      this.$store.state.tagsView.visitedViews.splice(this.$store.state.tagsView.visitedViews.findIndex(item => item.path === this.$route.path), 1);
+      this.$router.push(this.$store.state.tagsView.visitedViews[this.$store.state.tagsView.visitedViews.length - 1].path);
     },
 
     upload() {
@@ -727,12 +762,13 @@ export default {
     },
     //转办
     transfer() {
-      this.$refs.transfer.transferForm.workOrderNo = this.queryParams.workOrderNo
-      this.$refs.transfer.open()
+      this.$refs.transfer.transferForm.workOrderNo = this.queryParams.workOrderNo;
+      this.$refs.transfer.open();
     },
     //协办
     coOrganizer() {
-      this.$refs.coOrganizer.open();
+      this.$refs.coOrganizer.dynamicValidateForm.workOrderNo = this.queryParams.workOrderNo;
+      this.$refs.coOrganizer.open(this.queryParams.workOrderNo);
     },
     //超链接用
     modifyDetails(s) {
@@ -748,23 +784,41 @@ export default {
 
     //提交
     submit() {
-      let insert = this.sendForm
-      insert.workOrderNo = this.$route.query.workOrderNo
-      insert.collaborativeId = this.$route.query.collaborativeId
-      comSearch(insert).then(res => {
+      this.$refs.sendForm.validate(valid => {
+        if(valid){
+          let insert = this.sendForm
+          insert.workOrderNo = this.$route.query.workOrderNo
+          insert.collaborativeId = this.$route.query.collaborativeId
+          comSearch(insert).then(res => {
+            if (res != null && res.code === 200) {
+              this.$message.success("保存成功");
+              this.collaborativeFrom.status = "02";
+              if (res.rows.length <= 0) {
+                return this.$message.warning(
+                  "失败！"
+                )
+              }
+            }
+          }).catch(res => {
+
+          })
+        }
+      })
+    },
+
+    getCollaborative() {
+      getCollaborativeInfo(this.$route.query.collaborativeId).then(res => {
         if (res != null && res.code === 200) {
-          this.$message.success("保存成功")
-          if (res.rows.length <= 0) {
-            return this.$message.warning(
-              "失败！"
-            )
-          }
+          console.log("getCollaborative", res.data)
+          this.collaborativeFrom = res.data;
+          this.sendForm = res.data;
+          this.submitForm.opinion = this.collaborativeFrom.opinion;
         }
       }).catch(res => {
 
       })
-
     },
+
     //查询轨迹表
     searchFlowLog() {
       let workOrderNo = this.queryParams

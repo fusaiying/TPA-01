@@ -18,6 +18,16 @@ export function demandListAndPersonalPool(query) {
 }
 
 
+//#预约页面点击处理按钮存储数据
+export function updateClickTime(query) {
+  return request({
+    url: '/cs/reservation/updateClickTime',
+    method: 'get',
+    params: query
+  })
+}
+
+
 //取消页面提交
 export function cancelReservationSubmit(data) {
   return request({
@@ -130,7 +140,14 @@ export function addInsert(data) {
     data: data
   })
 }
-
+//# 获取医院信息
+export function getHospitalInfo(data) {
+  return request({
+    url: '/cs/reservation/internal/selectHospital',
+    method: 'post',
+    data:data
+  })
+}
 
 
 

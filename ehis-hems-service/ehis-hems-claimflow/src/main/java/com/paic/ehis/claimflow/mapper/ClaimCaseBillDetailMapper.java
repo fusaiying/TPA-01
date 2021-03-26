@@ -84,4 +84,12 @@ public interface ClaimCaseBillDetailMapper
      * @return
      */
     public int updateClaimCaseBillDetailByBillId(Long billId);
+
+    /**
+     * 修改案件账单费用项明细
+     *
+     * @param claimCaseBillDetail 案件账单费用项明细
+     * @return 结果
+     */
+    public int updateClaimCaseBillDetailByBillIdOne(ClaimCaseBillDetail claimCaseBillDetail);
 }

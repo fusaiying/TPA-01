@@ -115,7 +115,11 @@
               <el-button size="mini" type="text" @click="dealButton(scope.row)">{{scope.row.workOrderNo}}</el-button>
             </template>
           </el-table-column>
-          <el-table-column align="center" prop="organCode" label="出单机构" show-overflow-tooltip/>
+          <el-table-column align="center" prop="organCode" label="出单机构" show-overflow-tooltip>
+            <template slot-scope="scope">
+              <span>{{selectDictLabel(organizationOptions, scope.row.organCode)}}</span>
+            </template>
+          </el-table-column>
           <el-table-column align="center" prop="itemCode" label="服务项目" show-overflow-tooltip>
             <template slot-scope="scope">
               <span>{{selectDictLabel(service_itemOptions, scope.row.itemCode)}}</span>

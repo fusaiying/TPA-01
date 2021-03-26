@@ -101,7 +101,6 @@ public class ClaimCaseAppealTaskServiceImpl implements IClaimCaseAppealTaskServi
 
         // 进入申诉初审状态
         if(bean.getDealType().equalsIgnoreCase("initiate")) {
-            bean.setApplyOperator(username);
             bean.setAppealStatus("02");
         }
         //初审确认  同意 / 不同意  （申诉完成 / 申诉退回）
@@ -124,8 +123,16 @@ public class ClaimCaseAppealTaskServiceImpl implements IClaimCaseAppealTaskServi
                bean.setAppealStatus("04");
            }
         }
-        Long orgRecordId = this.updateHistoryFlag(bean);
-        this.insertRecordLog(bean,orgRecordId);
+        //如果是 发起 或者 审核 则添加轨迹记录
+        if(!bean.getDealType().equalsIgnoreCase("initPersonPool")) {
+            Long orgRecordId = this.updateHistoryFlag(bean);
+            this.insertRecordLog(bean,orgRecordId);
+        }
+        // 获取案件，进入个人池子
+        if(bean.getDealType().equalsIgnoreCase("initPersonPool")) {
+            bean.setApplyOperator(username);
+        }
+
         claimCaseAppealTaskMapper.updateClaimCaseAppealTask(bean);
         return bean;
     }
@@ -162,6 +169,17 @@ public class ClaimCaseAppealTaskServiceImpl implements IClaimCaseAppealTaskServi
      */
     @Override
     public List<ClaimCaseAppealTaskVo> getAppealList(ClaimCaseAppealTaskVo vo) {
+
+        String pageType = vo.getPageType();
+        if(StringUtils.isNotBlank(pageType)) {
+            // 申诉发起
+            if(pageType.equals("01") || pageType.equals("02")) {
+                vo.setCreateBy(SecurityUtils.getUsername());
+            }
+            if(pageType.equals("03") || pageType.equals("04")) {
+                vo.setApplyOperator(SecurityUtils.getUsername());
+            }
+        }
         return claimCaseAppealTaskMapper.getAppealList(vo);
     }
 
@@ -242,13 +260,13 @@ public class ClaimCaseAppealTaskServiceImpl implements IClaimCaseAppealTaskServi
      * @time : 2021-3-15
      */
     private String getNewRptNo(String appealRptNo){
-        String appealNewRptNo = claimCaseAppealTaskMapper.getAppealNewRptNo(appealRptNo);
+        String appealNewRptNo = claimCaseAppealTaskMapper.getAppealNewRptNo(appealRptNo.split("-")[0]);
         if(StringUtils.isBlank(appealNewRptNo)){
             appealRptNo +="-1" ;
         } else {
             String[] rptArr = appealNewRptNo.split("-");
             int endNo = Integer.valueOf(rptArr[1]) + 1;
-            appealRptNo += "-" + endNo;
+            appealRptNo = appealRptNo.split("-")[0] + "-" + endNo;
         }
         return appealRptNo;
     }
@@ -268,18 +286,59 @@ public class ClaimCaseAppealTaskServiceImpl implements IClaimCaseAppealTaskServi
      * @time:2021-03-15
      * */
     private void insertTableData(ClaimCaseAppealTask bean){
-        // select * from claim_case ;   -- cp  07
-        //select * from claim_case_accept ; -- cp 案件受理信息表
-        //select * from claim_case_apply_type ; -- cp  案件受理信息表 申请原因
-        //select * from claim_case_bill  -- cp  案件账单明细表
-        //select * from claim_case_bill_detail; -- cp  案件账单费用项明细表
-        //SELECT * FROM claim_case_bill_diagnosis ; -- CP  案件账单诊断信息表
-        //SELECT * FROM claim_case_insured ; -- cp  案件被保人信息表
-        //SELECT * FROM claim_case_payee ; -- cp  案件领款人信息表
-        //SELECT * FROM claim_case_register ; -- cp  案件申请人信息表
-        //select * from claim_case_remark ; -- cp  案件备注表
-        //SELECT * FROM claim_case_policy ; -- cp  案件保单关联表
-        // SELECT * FROM claim_case_cal_bill -- cp 案件赔付账单明细表
-        claimCaseAppealTaskMapper.insertClaimTableData(bean);
+        //claimCaseAppealTaskMapper.insertClaimTableData(bean);
+        /** claim_case */
+        claimCaseAppealTaskMapper.insertClaimCaseCp(bean);
+
+        /** claim_case_accept */
+        claimCaseAppealTaskMapper.insertClaimCaseAcceptCp(bean);
+
+        /** claim_case_apply_type */
+        claimCaseAppealTaskMapper.insertClaimCaseApplyTypeCp(bean);
+
+        /** claim_case_bill */
+        claimCaseAppealTaskMapper.insertClaimCaseBillCp(bean);
+
+        /** claim_case_cal_bill */
+        claimCaseAppealTaskMapper.insertClaimCaseCalBillCp(bean);
+
+        /** claim_case_bill_detail */
+        claimCaseAppealTaskMapper.insertClaimCaseBillDetailCp(bean);
+
+        /** claim_case_bill_diagnosis */
+        claimCaseAppealTaskMapper.insertClaimCaseBillDiagnosisCp(bean);
+
+        /** claim_case_insured */
+        claimCaseAppealTaskMapper.insertClaimCaseInsuredCp(bean);
+
+        /** claim_case_payee */
+        claimCaseAppealTaskMapper.insertClaimCasePayeeCp(bean);
+
+        /** claim_case_register */
+        claimCaseAppealTaskMapper.insertClaimCaseRegisterCp(bean);
+
+        /** claim_case_remark */
+        claimCaseAppealTaskMapper.insertClaimCasRemarkeCp(bean);
+
+        /** claim_case_remark type == 02*/ //  暂时不生成该记录
+       // claimCaseAppealTaskMapper.insertClaimCasTypeRemarkeCp(bean);
+
+        /** claim_case_policy */
+        claimCaseAppealTaskMapper.insertClaimCasePolicyCp(bean);
+
+        /** claim_case_record  00 04 04 32*/
+        claimCaseAppealTaskMapper.insertClaimCaseRecordCp(bean);
+
+        /** claim_case_record  06 */
+        claimCaseAppealTaskMapper.insertClaimCaseC06RecordCp(bean);
+
+        /** claim_case_record  07 */
+        claimCaseAppealTaskMapper.insertClaimCaseRecordCpAutid(bean);
+
+        /** claim_case_investigate_detail */
+        claimCaseAppealTaskMapper.insertClaimCaseInvestigateDetailCp(bean);
+
+        /** claim_case_investigation */
+        claimCaseAppealTaskMapper.insertclaimCaseInvestigationCp(bean);
     }
 }

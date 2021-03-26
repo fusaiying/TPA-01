@@ -90,7 +90,7 @@
               <span>{{selectDictLabel(organizationOptions, scope.row.organCode)}}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="modifyUser.umCode" align="center" label="处理人" show-overflow-tooltip/>
+          <el-table-column prop="updateBy" align="center" label="处理人" show-overflow-tooltip/>
           <el-table-column prop="endDate" label="结案日期" align="center" show-overflow-tooltip>
             <template slot-scope="scope">
               <span>{{parseTime(scope.row.endDate, '{y}-{m}-{d}')}}</span>
@@ -111,8 +111,8 @@
         <pagination
           v-show="publicTotalCount>0"
           :total="publicTotalCount"
-          :page.sync="queryParams.pageNum"
-          :limit.sync="queryParams.pageSize"
+          :page.sync="queryParams1.pageNum"
+          :limit.sync="queryParams1.pageSize"
           @pagination="searchForm"
         />
       </div>
@@ -141,7 +141,7 @@
               <span>{{selectDictLabel(organizationOptions, scope.row.organCode)}}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="modifyUser.umCode" align="center" label="处理人" show-overflow-tooltip/>
+          <el-table-column prop="updateBy" align="center" label="处理人" show-overflow-tooltip/>
           <el-table-column prop="endDate" label="结案日期" align="center" show-overflow-tooltip>
             <template slot-scope="scope">
               <span>{{parseTime(scope.row.endDate, '{y}-{m}-{d}')}}</span>
@@ -164,8 +164,8 @@
         <pagination
           v-show="personTotalCount>0"
           :total="personTotalCount"
-          :page.sync="queryParams.pageNum"
-          :limit.sync="queryParams.pageSize"
+          :page.sync="queryParams2.pageNum"
+          :limit.sync="queryParams2.pageSize"
           @pagination="searchForm"
         />
       </div>
@@ -208,7 +208,11 @@ export default {
       },
       caseNumber: false,//查询条件（报案号）是否显示
       // 查询参数
-      queryParams: {
+      queryParams1: {
+        pageNum: 1,
+        pageSize: 10,
+      },
+      queryParams2: {
         pageNum: 1,
         pageSize: 10,
       },
@@ -226,7 +230,7 @@ export default {
       business_typeOptions:[],
       service_itemOptions:[],
       organizationOptions:[],
-      inspection_stateOptions:[],
+        inspection_stateOptions:[],
       //是否提示
       isRemind:true,
     }
@@ -267,8 +271,8 @@ export default {
       this.publicLoading=true;
       this.personLoading=true;
       let query = {
-        pageNum: this.queryParams.pageNum,
-        pageSize: this.queryParams.pageSize,
+        pageNum: this.queryParams1.pageNum,
+        pageSize: this.queryParams1.pageSize,
         serviceItem: this.poolQueryForm.serviceItem,
         organCode: this.poolQueryForm.organization,
         acceptorName: this.poolQueryForm.acceptorName,
@@ -295,8 +299,17 @@ export default {
       }).catch(res => {
       }).finally(() => {
         this.publicLoading=false;
-      }),
-      inspectionListAndPersonalPool(query).then(res => {
+      })
+        let query2 = {
+        pageNum: this.queryParams2.pageNum,
+        pageSize: this.queryParams2.pageSize,
+        serviceItem: this.poolQueryForm.serviceItem,
+        organCode: this.poolQueryForm.organization,
+        acceptorName: this.poolQueryForm.acceptorName,
+        endCaseStartTime: undefined,
+        endCaseEndTime: undefined
+      }
+      inspectionListAndPersonalPool(query2).then(res => {
         console.log('------------: ', res)
         if (res != null && res.code === 200) {
           this.inspectionPersonalPoolData = res.rows

@@ -137,6 +137,7 @@ public class CodeDictServiceImpl implements ICodeDictService
 
     @Override
     public List<CodeDictVo> selectCodeEnumVo(CodeDictDTO codeEnumDTO) {
+        codeEnumDTO.setInsuranceSourceType("cs_insurance_source");
         codeEnumDTO.setComplaintBusinessType("cs_complaint_business_item");
         return codeDictMapper.selectCodeDictVoList(codeEnumDTO);
     }

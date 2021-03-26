@@ -310,24 +310,32 @@
         </el-row>
 
         <el-row>
-          <el-col :span="8">
+          <!--<el-col :span="8">
             <el-form-item label="预约日期：" prop="appointmentDate">
               <el-input v-model="sendForm.appointmentDate" class="item-width" size="mini" placeholder="请输入"/>
             </el-form-item>
-          </el-col>
+          </el-col>-->
           <el-col :span="8">
-            <el-form-item label="预约时间：" prop="complaintTime">
-              <el-input v-model="sendForm.complaintTime" class="item-width" size="mini" placeholder="请输入"/>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="医疗机构：" prop="medicalInstitution">
-              <el-input v-model="sendForm.medicalInstitution" input-w class="item-width2" size="mini"
-                        placeholder="请输入"/>
-              <el-button type="primary" @click="searchHandle">详细信息</el-button>
-            </el-form-item>
-          </el-col>
+            <el-form-item label="预约日期：" prop="complaintTime">
+              <!--<el-input v-model="sendForm.complaintTime" class="item-width" size="mini" placeholder="请输入"/>-->
+              <el-date-picker class="item-width"
+                              v-model="sendForm.complaintTime"
+                              type="datetime"
+                              placeholder="选择日期时间">
+              </el-date-picker>
 
+            </el-form-item>
+          </el-col>
+          <el-form ref="ruleForm" :model="ruleForm" :rules="rules" style="padding-bottom: 30px;" label-width="170px"
+                   label-position="right" size="mini">
+            <el-col :span="8">
+              <el-form-item label="医疗机构：" prop="hospitalName">
+                <el-input :disabled="isDisabled" v-model="sendForm.hospitalName" input-w class="item-width2" size="mini"
+                          placeholder="请输入"/>
+                <el-button type="primary" @click="openHospitalShow">详细信息</el-button>
+              </el-form-item>
+            </el-col>
+          </el-form>
         </el-row>
         <el-row>
           <el-col :span="8">
@@ -430,8 +438,8 @@
           tooltip-effect="dark"
           style=" width: 100%;">
           <el-table-column align="center" prop="status" label="状态" show-overflow-tooltip>
-            <template slot-scope="scope" v-if="scope.row.status">
-              <span>{{ selectDictLabel(cs_order_state, scope.row.status) }}</span>
+            <template slot-scope="scope" v-if="scope.row.linkCode">
+              <span>{{ selectDictLabel(cs_order_state, scope.row.linkCode) }}</span>
             </template>
           </el-table-column>
           <el-table-column align="center" prop="operateCode" label="操作" show-overflow-tooltip>
@@ -516,9 +524,9 @@
         <el-divider/>
         <el-row>
           <el-col :span="8">
-          <el-form-item label="处理时长：" prop="times">
-            <el-input v-model="submitForm.times" class="width-full" size="mini" disabled/>
-          </el-form-item>
+            <el-form-item label="处理时长：" prop="times">
+              <el-input v-model="submitForm.times" class="width-full" size="mini" disabled/>
+            </el-form-item>
           </el-col>
         </el-row>
         <el-row>
@@ -557,7 +565,7 @@
         </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="是否需要担保函：" prop="costsIncurred">
+            <el-form-item label="是否需要担保函：" prop="costIncurred">
               <el-select v-model="submitForm.costIncurred" class="item-width" placeholder="请选择"
                          controls-position="right" :min="0">
                 <el-option v-for="item in cs_whether_flag" :key="item.dictValue" :label="item.dictLabel"
@@ -767,6 +775,8 @@
         //新增的数据传输
         sendForm: {
           email: "",
+          hospitalCode: "",
+          hospitalName: "",
           workOrderNo: '',
           businessProcess: '',
           contactsPerson: {
@@ -930,7 +940,7 @@
     },
     methods: {
 
-      hiddenShow:function () {
+      hiddenShow: function () {
         // 返回上级路由并关闭当前路由
         this.$store.state.tagsView.visitedViews.splice(this.$store.state.tagsView.visitedViews.findIndex(item => item.path === this.$route.path), 1)
         this.$router.push(this.$store.state.tagsView.visitedViews[this.$store.state.tagsView.visitedViews.length - 1].path)
@@ -1028,6 +1038,8 @@
             }).catch(res => {
 
             })
+          }else{
+            this.$message.warning("请录入必录项");
           }
         })
       },
@@ -1056,8 +1068,8 @@
         if (this.ids.length == 0) {
           this.$message.warning("先选中一行")
         }
-        // else {if(this.ids.length>2){
-        //   this.$message.warning("选中一行")
+          // else {if(this.ids.length>2){
+          //   this.$message.warning("选中一行")
         // }
         else {
           this.$router.push({
@@ -1120,7 +1132,7 @@
       },
       //协办
       coOrganizer() {
-        this.$refs.coOrganizer.open();
+        this.$refs.coOrganizer.open(this.queryParams.workOrderNo);
 
       },
       resetForm() {
@@ -1163,16 +1175,24 @@
             this.HCSPoolData = res.rows
             this.HCSTotal = res.total
             if (res.rows.length <= 0) {
-              return this.$message.warning(
+              /*return this.$message.warning(
                 "未查询到数据！"
-              )
+              )*/
             }
           }
         }).catch(res => {
 
         })
       },
-
+      openHospitalShow() {
+        const newpage = this.$router.resolve({
+          name: 'hospitalDetail',
+          query: {
+            providerCode: this.sendForm.medicalInstitution
+          }
+        })
+        window.open(newpage.href, '_blank');
+      }
     }
   }
 </script>

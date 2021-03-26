@@ -261,7 +261,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         AND a.status = 'Y'
         AND b.status = 'Y'
         <if test="supplierCode != null  and supplierCode != ''"> and a.supplier_code = #{supplierCode}</if>
+<!--
         <if test="serviceCode != null  and serviceCode != ''"> and a.service_code = #{serviceCode}</if>
+-->
         <if test="bussinessStatus != null  and bussinessStatus != ''"> and a.bussiness_status = #{bussinessStatus}</if>
         <if test="orderCode != null  and orderCode != ''"> and b.order_code = #{orderCode}</if>
         <if test="custName != null  and custName != ''"> and b.cust_name like concat('%', #{custName}, '%')</if>

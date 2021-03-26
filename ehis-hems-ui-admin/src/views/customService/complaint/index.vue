@@ -46,7 +46,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="处理日期：" prop="HandlerTime">
+            <el-form-item label="处理日期：" prop="handlerTime">
               <el-date-picker
                 v-model="sendForm.handlerTime"
                 class="item-width"
@@ -558,18 +558,14 @@
       },
       //待处理查询
       searchHandle() {
-        let queryParams;
-        if (this.sendForm.acceptorTime.length > 0) {
-          queryParams = JSON.parse(JSON.stringify(this.sendForm));
-          queryParams.acceptTimeStart=acceptorTime[0]
-          queryParams.acceptTimeEnd=acceptorTime[1]
-        } else {
-          queryParams = this.sendForm;
+        let queryParams = JSON.parse(JSON.stringify(this.sendForm));
+        if (this.sendForm.acceptorTime) {
+          this.$set(queryParams,'acceptTimeStart',this.sendForm.acceptorTime[0]);
+          this.$set(queryParams,'acceptTimeEnd',this.sendForm.acceptorTime[1]);
         }
-
         if(this.sendForm.appointmentTime){
-          queryParams.appointmentTimeStart=this.sendForm.appointmentTime[0]
-          queryParams.appointmentTimeEnd=this.sendForm.appointmentTime[1]
+          this.$set(queryParams,'appointmentTimeStart',this.sendForm.appointmentTime[0]);
+          this.$set(queryParams,'appointmentTimeEnd',this.sendForm.appointmentTime[1]);
         }
 
        /* queryParams.pageNum = this.pageNum;
@@ -588,21 +584,18 @@
       },
       //处理中查询
       searchHandle1() {
-        let queryParams;
-        if (this.sendForm.acceptorTime.length > 0) {
-          queryParams = JSON.parse(JSON.stringify(this.sendForm));
-          queryParams.acceptTimeStart=acceptorTime[0]
-          queryParams.acceptTimeEnd=acceptorTime[1]
-        } else {
-          queryParams = this.sendForm;
+        let queryParams = JSON.parse(JSON.stringify(this.sendForm));
+        if (this.sendForm.acceptorTime) {
+          this.$set(queryParams,'acceptTimeStart',this.sendForm.acceptorTime[0]);
+          this.$set(queryParams,'acceptTimeEnd',this.sendForm.acceptorTime[1]);
         }
         if(this.sendForm.appointmentTime){
-          queryParams.appointmentTimeStart=this.sendForm.appointmentTime[0]
-          queryParams.appointmentTimeEnd=this.sendForm.appointmentTime[1]
+          this.$set(queryParams,'appointmentTimeStart',this.sendForm.appointmentTime[0]);
+          this.$set(queryParams,'appointmentTimeEnd',this.sendForm.appointmentTime[1]);
         }
         /*queryParams.pageNum = this.pageNumPerson;
         queryParams.pageSize = this.pageSizePerson;*/
-        complaintListAndPersonalPool(this.sendForm).then(res => {
+        complaintListAndPersonalPool(queryParams).then(res => {
           console.log('个人池：', res.rows)
           if (res != null && res.code === 200) {
             this.workPersonPoolData = res.rows;

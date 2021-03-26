@@ -1,6 +1,6 @@
 package com.paic.ehis.cs.service;
 
-import com.paic.ehis.cs.domain.WorkOrderAccept;
+import com.paic.ehis.cs.domain.*;
 import com.paic.ehis.cs.domain.vo.ComplaintAcceptVo;
 
 import java.util.List;
@@ -15,12 +15,43 @@ import java.util.List;
 public interface IWorkOrderAcceptService 
 {
     /**
+     *基础受理保存
+     *@param businessData
+     * @return  结果
+     */
+    public int insertBasicServiceApplication(BasicServiceAppilcation businessData);
+
+    /**
+     * 增值服务受理处理
+     * @param businessData
+     * @return
+     */
+    public int insertIncrementServiceApplication(IncrementApplication businessData);
+
+
+
+
+
+
+
+
+
+
+
+//    ##################################################################################################################
+    /**
      * 查询工单申请信息 
      * 
      * @param workOrderNo 工单申请信息 ID
      * @return 工单申请信息 
      */
     public WorkOrderAccept selectWorkOrderAcceptById(String workOrderNo);
+
+    //获取实时查询案件操作人和状态
+    public WorkOrderAccept selectWorkOrderAcceptById1(String workOrderNo);
+
+    //修改实时查询案件操作人和状态
+    public WorkOrderAccept selectWorkOrderAcceptById2(String workOrderNo);
 
     /**
      * 查询工单申请信息 列表

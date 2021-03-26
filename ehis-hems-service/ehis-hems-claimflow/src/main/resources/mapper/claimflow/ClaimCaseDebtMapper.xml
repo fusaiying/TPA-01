@@ -51,6 +51,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectClaimCaseDebtVo"/>
         where debt_id = #{debtId}
     </select>
+
+    <select id="selectClaimCaseDebtByRptNo" parameterType="Long" resultMap="ClaimCaseDebtResult">
+        <include refid="selectClaimCaseDebtVo"/>
+        where rpt_no = #{rptNo}
+    </select>
         
     <insert id="insertClaimCaseDebt" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseDebt" useGeneratedKeys="true" keyProperty="debtId">
         insert into claim_case_debt

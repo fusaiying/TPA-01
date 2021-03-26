@@ -89,7 +89,7 @@
           <appealTable :value="dialogVisible"  @openDialog="openDialog" :claimTypes="claimTypes" :deliverySource="deliverySource"  :table-data="pendingTableData" :status="activeName"/>
         </el-tab-pane>
         <el-tab-pane  :label="`已处理(${completedTotal})`" name="02">
-          <appealTable :claimTypes="claimTypes" :deliverySource="deliverySource" :table-data="completedTableData" :status="activeName"/>
+          <appealTable :value="dialogVisible"  @openDialog="openDialog" :claimTypes="claimTypes" :deliverySource="deliverySource" :table-data="completedTableData" :status="activeName"/>
         </el-tab-pane>
       </el-tabs>
       <!--分页组件-->
@@ -122,9 +122,6 @@ import claimTable from '../components/claimTable'
 import deal from '../components/deal'
 
 import { claimInfoList,appealList } from '@/api/appeal/api'
-
-import moment from "moment";
-import {caseFilingList} from "@/api/placeCase/api";
 
 let dictss = [{dictType: 'delivery_source'},{dictType: 'claimType'} , {dictType: 'claim_status'},{dictType: 'case_pay_status'}]
 
@@ -208,9 +205,9 @@ export default {
   watch: {
     totalChange: function(newVal, oldVal) {
       if (newVal.pendingTotal === 0 && newVal.completedTotal > 0) {
-        this.activeName = '02'
+       // this.activeName = '02'
       } else {
-        this.activeName = '01'
+       // this.activeName = '01'
       }
     }
   },
@@ -236,14 +233,24 @@ export default {
     searchHandle() {
       this.claimPageInfo.pageNum = 1;
       this.claimPageInfo.pageSize = 10;
-      this.pendPageInfo.pageNum = 1;
-      this.pendPageInfo.pageSize = 10;
-      this.completePageInfo.pageNum = 1;
-      this.completePageInfo.pageSize = 10;
+      // this.pendPageInfo.pageNum = 1;
+      // this.pendPageInfo.pageSize = 10;
+      // this.completePageInfo.pageNum = 1;
+      // this.completePageInfo.pageSize = 10;
 
       this.initClaimData();
-      this.getPendingData();
-      this.getProcessedData();
+
+      if (this.activeName === '01') {
+        this.pendPageInfo.pageNum = 1;
+        this.pendPageInfo.pageSize = 10;
+        this.getPendingData()
+      } else {
+        this.completePageInfo.pageNum = 1;
+        this.completePageInfo.pageSize = 10;
+        this.getProcessedData()
+      }
+      // this.getPendingData();
+      // this.getProcessedData();
     },
     initAppealData(){
       this.initClaimData();
@@ -256,9 +263,9 @@ export default {
       let startTime = "";
       let endTime = "";
       let operateDate = this.formSearch.operateDate;
-      if('' != operateDate) {
+      if('' !== operateDate && null != operateDate) {
         startTime = operateDate[0];
-        endTime = operateDate[1];
+        endTime = operateDate[1] +" 23:59:59";
       }
       const params = {};
       params.pageNum = this.pendPageInfo.pageNum;
@@ -286,9 +293,9 @@ export default {
       let startTime = "";
       let endTime = "";
       let operateDate = this.formSearch.operateDate;
-      if('' != operateDate) {
+      if('' !== operateDate && null != operateDate) {
         startTime = operateDate[0];
-        endTime = operateDate[1];
+        endTime = operateDate[1] +" 23:59:59";
       }
       const params = {};
       params.pageNum = this.completePageInfo.pageNum;
@@ -313,9 +320,9 @@ export default {
       let startTime = "";
       let endTime = "";
       let operateDate = this.formSearch.operateDate;
-      if('' != operateDate) {
+      if('' !== operateDate && null != operateDate) {
         startTime = operateDate[0];
-        endTime = operateDate[1];
+        endTime = operateDate[1] +" 23:59:59";
       }
       const params = {};
       params.pageNum = this.claimPageInfo.pageNum;
@@ -326,12 +333,17 @@ export default {
       params.name = this.formSearch.name;
       params.createStartTime = startTime;
       params.createEndTime = endTime;
-      params.auditor = this.formSearch.updateBy;
+      params.updateBy = this.formSearch.updateBy;
       params.pageType = '01';
       claimInfoList(params).then(res => {
         if (res.code == '200') {
           this.claimTotal = res.total;
           this.claimTableData = res.rows;
+          // if (this.claimTotal === 0){
+          //   return this.$message.warning(
+          //     "未查询到数据！"
+          //   )
+          // }
         }
       });
     },

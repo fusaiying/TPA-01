@@ -4,6 +4,7 @@
       <span style="color: blue">{{getTitles(acceptForm.businessService)}}</span>
     </div>
     <el-form ref="ruleForm" :model="acceptForm" style="padding-bottom: 30px;" label-width="170px"
+             :rules="acceptFormRule"
              :disabled="isAcceptInfo || routerParams.status=='show'"
              label-position="right" size="mini">
       <el-row>
@@ -15,7 +16,7 @@
       </el-row>
       <el-row>
         <el-col :span="8">
-          <el-form-item label="受理渠道：" prop="phone">
+          <el-form-item label="受理渠道：" prop="channelCode">
             <el-select v-model="acceptForm.channelCode" class="item-width" placeholder="">
               <el-option v-for="item in channelOptions" :key="item.dictValue" :label="item.dictLabel"
                          :value="item.dictValue"/>
@@ -24,11 +25,11 @@
         </el-col>
         <el-col :span="8">
           <el-form-item label="电话中心业务流水号：" prop="callCenterId">
-            <el-input v-model="acceptForm.callCenterId" class="item-width" size="mini"/>
+            <el-input disabled v-model="acceptForm.callCenterId" class="item-width" size="mini"/>
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="联系人姓名：" prop="name">
+          <el-form-item label="联系人姓名：" prop="name1">
             <el-input v-model="acceptForm.contactsPerson.name" class="item-width" size="mini"/>
           </el-form-item>
         </el-col>
@@ -63,7 +64,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="来电号码：" prop="mobilePhone">
+          <el-form-item label="来电号码：" prop="mobilePhone1">
             <el-input v-model="acceptForm.callPerson.mobilePhone" class="item-width" size="mini"/>
           </el-form-item>
         </el-col>
@@ -75,7 +76,7 @@
       </el-row>
       <el-row>
         <el-col :span="8">
-          <el-form-item label="联系人移动电话：" prop="mobilePhone">
+          <el-form-item label="联系人移动电话：" prop="mobilePhone2">
             <el-input v-model="acceptForm.contactsPerson.mobilePhone" class="item-width" size="mini"/>
           </el-form-item>
         </el-col>
@@ -88,7 +89,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="投诉人姓名：" prop="name">
+          <el-form-item label="投诉人姓名：" prop="name2">
             <el-input v-model="acceptForm.complaintPerson.name" class="item-width" size="mini"/>
           </el-form-item>
         </el-col>
@@ -185,18 +186,6 @@
           </el-input>
         </el-form-item>
       </el-row>
-      <el-row>
-        <el-col :span="16">
-          <el-form-item label="业务内容：" prop="remark">
-            <el-input
-              type="textarea"
-              :rows="2"
-              placeholder="请输入内容"
-              v-model="acceptForm.remark">
-            </el-input>
-          </el-form-item>
-        </el-col>
-      </el-row>
     </el-form>
   </el-card>
 
@@ -262,6 +251,34 @@
       }
     },
     data() {
+      const checkName1= (rule, value, callback) => {
+        if (this.acceptForm.contactsPerson && this.acceptForm.contactsPerson.name!='' && this.acceptForm.contactsPerson.name!=null && this.acceptForm.contactsPerson.name!=undefined) {
+          callback()
+        } else {
+          callback(new Error('联系人姓名不能为空'))
+        }
+      }
+      const checkName2= (rule, value, callback) => {
+        if (this.acceptForm.complaintPerson && this.acceptForm.complaintPerson.name!='' && this.acceptForm.complaintPerson.name!=null && this.acceptForm.complaintPerson.name!=undefined) {
+          callback()
+        } else {
+          callback(new Error('投诉人姓名不能为空'))
+        }
+      }
+      const checkMobilePhone1= (rule, value, callback) => {
+        if (this.acceptForm.callPerson && this.acceptForm.callPerson.mobilePhone!='' && this.acceptForm.callPerson.mobilePhone!=null && this.acceptForm.callPerson.mobilePhone!=undefined) {
+          callback()
+        } else {
+          callback(new Error('来电号码不能为空'))
+        }
+      }
+      const checkMobilePhone2= (rule, value, callback) => {
+        if (this.acceptForm.contactsPerson && this.acceptForm.contactsPerson.mobilePhone!='' && this.acceptForm.contactsPerson.mobilePhone!=null && this.acceptForm.contactsPerson.mobilePhone!=undefined) {
+          callback()
+        } else {
+          callback(new Error('联系人移动电话'))
+        }
+      }
       return {
         dictList: [],
         serviceItemOptions: [],
@@ -283,8 +300,8 @@
           channelCode: undefined,
           serviceItem: undefined,
           contactsPerson: {
-            workPhone1:['','','',''],
-            homePhone1:['','','','']
+            workPhone1: ['', '', '', ''],
+            homePhone1: ['', '', '', '']
           },
           callRelationBy: undefined,
           priorityLevel: undefined,
@@ -298,6 +315,17 @@
             identity: ''
           }
         },
+        //字段校验
+        acceptFormRule: {
+          channelCode: [{required: true, message: '受理渠道不能为空', trigger: 'change'}],
+          priorityLevel: [{required: true, message: '优先级不能为空', trigger: 'change'}],
+          name1:{validator: checkName1, required: true, trigger: ['blur']},
+          name2: {validator: checkName2, required: true, trigger: ['blur']},
+          mobilePhone1: {validator: checkMobilePhone1, required: true, trigger: ['blur']},
+          mobilePhone2: {validator: checkMobilePhone2, required: true, trigger: ['blur']},
+          organCode: [{required: true, message: '出单机构不能为空', trigger: 'change'}],
+          content: [{required: true, message: '投诉内容不能为空', trigger: 'blur'}]
+        }
       }
     },
     async mounted() {
@@ -340,6 +368,17 @@
         if (value != null && value != '' && value != undefined) {
           return this.selectDictLabel(this.businessTypeOptions, value.split('-')[0]) + '-' + this.selectDictLabel(this.serviceItemOptions, value.split('-')[1])
         }
+      },
+      checkForm() {
+        let data=false
+        this.$refs.ruleForm.validate((valid) => {
+          if (valid) {
+            data= true
+          }else {
+            data= false
+          }
+        })
+        return data
       }
     }
   }

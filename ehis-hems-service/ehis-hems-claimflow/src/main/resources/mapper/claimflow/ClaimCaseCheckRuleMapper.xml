@@ -102,26 +102,31 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <!-- lihy -->
     <select id="selectClaimCaseCheckRuleMatch" parameterType="com.paic.ehis.claimflow.domain.dto.ClaimCaseCheckDTO" resultMap="ClaimCaseCheckDTOResult">
         SELECT
-        check_rule_no,
-        case_type,
-        amount_type,
-        check_amount,
-        rate,
-        STATUS,
-        create_by,
-        create_time,
-        update_by,
-        case when update_time is not null then update_time else null end as update_time,
-        (select GROUP_CONCAT(pay_conclusion) from claim_case_check_rule_attr
-        where check_rule_no  = t1.check_rule_no and pay_conclusion = #{payConclusion})
+        t1.check_rule_no,
+        t1.case_type,
+        t1.amount_type,
+        t1.check_amount,
+        t1.rate,
+        t1.STATUS,
+        t1.create_by,
+        t1.create_time,
+        t1.update_by,
+        CASE
+
+        WHEN t1.update_time IS NOT NULL THEN
+        t1.update_time ELSE NULL
+        END AS update_time,
+        t2.pay_conclusion
         FROM
         claim_case_check_rule t1
+        INNER JOIN claim_case_check_rule_attr t2 ON t1.check_rule_no = t2.check_rule_no  and t2.status='Y'
         <where>
-            <if test="caseType != null  and caseType != ''"> and case_type = #{caseType}</if>
-            <if test="amountType != null  and amountType != ''"> and amount_type = #{amountType}</if>
-            <if test="checkAmount != null "> and check_amount = #{checkAmount}</if>
-            <if test="rate != null "> and rate = #{rate}</if>
-            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="caseType != null  and caseType != ''"> and t1.case_type = #{caseType}</if>
+            <if test="amountType != null  and amountType != ''"> and t1.amount_type = #{amountType}</if>
+            <if test="checkAmount != null "> and t1.check_amount = #{checkAmount}</if>
+            <if test="rate != null "> and t1.rate = #{rate}</if>
+            <if test="status != null  and status != ''"> and t1.status = #{status}</if>
+            <if test="payConclusion != null "> and t2.pay_conclusion = #{payConclusion}</if>
         </where>
     </select>
     

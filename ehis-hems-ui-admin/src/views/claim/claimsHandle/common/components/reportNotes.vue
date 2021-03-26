@@ -34,8 +34,8 @@
       </el-table-column>
       <el-table-column align="center" v-if="status==='edit'" label="操作" width="140"><!--batchInfo.claimtype==='02' && -->
         <template slot-scope="scope" >
-          <el-button :disabled="user!==scope.row.createBy" size="mini" type="text" @click="addOrEdit('edit',scope.row)">编辑</el-button>
-          <el-button :disabled="user!==scope.row.createBy" size="mini" style="color: red" type="text" @click="deleteInfo(scope.row)">删除</el-button>
+          <el-button :disabled="user!==scope.row.createBy && scope.row.station != '08'" size="mini" type="text" @click="addOrEdit('edit',scope.row)">编辑</el-button>
+          <el-button :disabled="user!==scope.row.createBy || scope.row.station === '08'" size="mini" style="color: red" type="text" @click="deleteInfo(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -47,7 +47,7 @@
           <el-row>
             <el-col :span="8">
               <el-form-item label="备注类型：" prop="remarkType">
-                <el-select v-model="baseForm.remarkType" class="item-width" placeholder="请选择" clearable>
+                <el-select :disabled="baseForm.station==='08'" v-model="baseForm.remarkType" class="item-width" placeholder="请选择" clearable>
                   <el-option v-for="option in claim_noteOptions" :key="option.dictValue" :label="option.dictLabel"
                              :value="option.dictValue"/>
                 </el-select>
@@ -151,15 +151,18 @@
         this.$set(this.payeeInfo.data[index], 'payoutratio', null)
       },
       saveRemark() {
-        if (this.node==='accept'){
-          this.baseForm.station='01'
-        }else if (this.node==='input'){
-          this.baseForm.station='02'
-        }else if(this.node==='calculateReview'){
-          this.baseForm.station='03'
-        }else if(this.node==='sport'){
-          this.baseForm.station='04'
+        if(this.baseForm.station !== '08') {
+          if (this.node==='accept'){
+            this.baseForm.station='01'
+          }else if (this.node==='input'){
+            this.baseForm.station='02'
+          }else if(this.node==='calculateReview'){
+            this.baseForm.station='03'
+          }else if(this.node==='sport'){
+            this.baseForm.station='04'
+          }
         }
+
         this.$refs.baseForm.validate((valid) => {
           if (valid) {
             if (this.isAddOrEdit==='add'){

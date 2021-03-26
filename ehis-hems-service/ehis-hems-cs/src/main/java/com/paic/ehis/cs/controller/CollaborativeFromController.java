@@ -10,14 +10,7 @@ import com.paic.ehis.cs.domain.vo.CollaborativeFromVO;
 import com.paic.ehis.cs.domain.vo.ComplaintDealVo;
 import com.paic.ehis.cs.service.IWorkHandleInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.paic.ehis.common.log.annotation.Log;
 import com.paic.ehis.common.log.enums.BusinessType;
 import com.paic.ehis.cs.domain.CollaborativeFrom;
@@ -95,6 +88,16 @@ public class CollaborativeFromController extends BaseController
     public AjaxResult getInfo(@PathVariable("collaborativeId") Long collaborativeId)
     {
         return AjaxResult.success(collaborativeFromService.selectCollaborativeFromById(collaborativeId));
+    }
+
+    /**
+     * 获取协办信息 UMCode
+     */
+    @GetMapping(value = "/UMCode")
+    public TableDataInfo selectCollaborativeFromByWorkId(@RequestParam("workOrderNo") String workOrderNo)
+    {
+        List<CollaborativeFrom> tCollaborativeFromList = collaborativeFromService.selectCollaborativeFromByWorkId(workOrderNo);
+        return getDataTable(tCollaborativeFromList);
     }
 
     /**

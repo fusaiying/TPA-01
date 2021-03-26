@@ -95,8 +95,63 @@ public interface ClaimCaseAppealTaskMapper
      * 初始化案件修正新RPT_NO 数据
      * @auhtor: hjw
      * @time:2021-03-15
+     * 不让用存储过程。。。。。
      * */
-    public void insertClaimTableData(ClaimCaseAppealTask bean);
+   // public void insertClaimTableData(ClaimCaseAppealTask bean);
+
+    /** claim_case */
+    public void insertClaimCaseCp(ClaimCaseAppealTask bean);
+
+    /** claim_case_accept */
+    public void insertClaimCaseAcceptCp(ClaimCaseAppealTask bean);
+
+    /** claim_case_apply_type */
+    public void insertClaimCaseApplyTypeCp(ClaimCaseAppealTask bean);
+
+    /** claim_case_bill */
+    public void insertClaimCaseBillCp(ClaimCaseAppealTask bean);
+
+    /** claim_case_cal_bill */
+    public void insertClaimCaseCalBillCp(ClaimCaseAppealTask bean);
+
+    /** claim_case_bill_detail */
+    public void insertClaimCaseBillDetailCp(ClaimCaseAppealTask bean);
+
+    /** claim_case_bill_diagnosis */
+    public void insertClaimCaseBillDiagnosisCp(ClaimCaseAppealTask bean);
+
+    /** claim_case_insured */
+    public void insertClaimCaseInsuredCp(ClaimCaseAppealTask bean);
+
+    /** claim_case_payee */
+    public void insertClaimCasePayeeCp(ClaimCaseAppealTask bean);
+
+    /** claim_case_register */
+    public void insertClaimCaseRegisterCp(ClaimCaseAppealTask bean);
+
+    /** claim_case_remark */
+    public void insertClaimCasRemarkeCp(ClaimCaseAppealTask bean);
+
+    /** claim_case_remark type == 02 */
+    public void insertClaimCasTypeRemarkeCp(ClaimCaseAppealTask bean);
+
+    /** claim_case_policy */
+    public void insertClaimCasePolicyCp(ClaimCaseAppealTask bean);
+
+    /** claim_case_record  00 04 04 32*/
+    public void insertClaimCaseRecordCp(ClaimCaseAppealTask bean);
+
+    /** claim_case_record  06 */
+    public void insertClaimCaseC06RecordCp(ClaimCaseAppealTask bean);
+
+    /** claim_case_record  07 */
+    public void insertClaimCaseRecordCpAutid(ClaimCaseAppealTask bean);
+
+    /** claim_case_investigate_detail */
+    public void insertClaimCaseInvestigateDetailCp(ClaimCaseAppealTask bean);
+
+    /** claim_case_investigation */
+    public void insertclaimCaseInvestigationCp(ClaimCaseAppealTask bean);
 
 
 

@@ -294,14 +294,14 @@ FROM
             <if test="invoiceNo != null">invoice_no = #{invoiceNo},</if>
             <if test="billNo != null">bill_no = #{billNo},</if>
             <if test="billType != null">bill_type = #{billType},</if>
-            <if test="ssAdvancePayment != null">ss_advance_payment = #{ssAdvancePayment},</if>
-            <if test="tpAdvancePayment != null">tp_advance_payment = #{tpAdvancePayment},</if>
+            ss_advance_payment = #{ssAdvancePayment},
+            tp_advance_payment = #{tpAdvancePayment},
             <if test="isShareAp != null and isShareAp != ''">is_share_ap = #{isShareAp},</if>
             <if test="transSerialNo != null">trans_serial_no = #{transSerialNo},</if>
             <if test="transSerialCopay != null">trans_Serial_copay = #{transSerialCopay},</if>
-            <if test="copay != null">copay = #{copay},</if>
+            copay = #{copay},
             <if test="isShareCopay != null and isShareCopay != ''">is_share_copay = #{isShareCopay},</if>
-            <if test="hosDiscountAmount != null">hos_discount_amount = #{hosDiscountAmount},</if>
+            hos_discount_amount = #{hosDiscountAmount},
             <if test="isShareDisAmount != null and isShareDisAmount != ''">is_share_dis_amount = #{isShareDisAmount},</if>
             <if test="selfAmount != null">self_amount = #{selfAmount},</if>
             <if test="partSelfAmount != null">part_self_amount = #{partSelfAmount},</if>

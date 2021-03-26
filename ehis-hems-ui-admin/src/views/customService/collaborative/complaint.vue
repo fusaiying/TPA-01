@@ -354,9 +354,9 @@
           highlight-current-row
           tooltip-effect="dark"
           style=" width: 100%;">
-          <el-table-column align="center" width="140" prop="status" label="状态" show-overflow-tooltip>
-            <template slot-scope="scope" v-if="scope.row.status">
-              <span>{{ selectDictLabel(cs_order_state, scope.row.status) }}</span>
+          <el-table-column align="center" width="140" prop="linkCode" label="状态" show-overflow-tooltip>
+            <template slot-scope="scope" v-if="scope.row.linkCode">
+              <span>{{ selectDictLabel(cs_order_state, scope.row.linkCode) }}</span>
             </template>
           </el-table-column>
           <el-table-column align="center" prop="operateCode" label="操作" show-overflow-tooltip>
@@ -373,7 +373,7 @@
           </el-table-column>
           <el-table-column prop="remarks" align="center" label="说明" show-overflow-tooltip>
             <template slot-scope="scope">
-              <el-link v-if="scope.row.operateCode=='01'" style="font-size:12px" type="primary"
+              <el-link v-if="scope.row.operateCode=='03'" style="font-size:12px" type="primary"
                        @click="modifyDetails(scope.row)">修改说明
               </el-link>
             </template>
@@ -567,7 +567,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="跟因改善：" prop="rootImprovement">
+          <el-form-item label="根因改善：" prop="rootImprovement">
             <el-input v-model="sendForm.rootImprovement" class="item-width" clearable size="mini" placeholder="请输入"/>
           </el-form-item>
         </el-col>
@@ -610,9 +610,9 @@
         <up-load ref="upload"></up-load>
         <co-organizer ref="coOrganizer"></co-organizer>
         <el-button type="primary" size="mini" @click="temporary">暂存</el-button>
-        <el-button type="primary" size="mini" @click="transfer">转办</el-button>
-        <el-button type="primary" size="mini" @click="coOrganizer">催办</el-button>
-        <el-button type="primary" size="mini" @click="upload">撤销</el-button>
+        <el-button type="primary" size="mini" @click="coOrganizer">协办</el-button>
+        <el-button type="primary" size="mini" @click="urge">催办</el-button>
+        <el-button type="primary" size="mini" @click="coCancel">撤销</el-button>
       </div>
     </el-card>
 
@@ -636,6 +636,7 @@ import upLoad from "../common/modul/upload";
 import coOrganizer from "../common/modul/coOrganizer";
 import modifyDetails from "../common/modul/modifyDetails";
 import {classTwo, complainSearchServer, reasonThree, reasonTwo} from "@/api/customService/complaint";
+import {coCancel} from '@/api/customService/collaborative'
 
 let dictss = [
   {dictType: 'cs_channel'},
@@ -993,6 +994,20 @@ export default {
     //下载
     download() {
     },
+
+    //撤销
+    coCancel() {
+      let workOrderNo = this.queryParams
+      coCancel(workOrderNo).then(res => {
+        if (res != null && res.code === 200) {
+          this.$message.success("撤销成功")
+        }
+      }).catch(res => {
+
+      })
+      this.coSearch()
+    },
+
     //转办
     transfer() {
       this.$refs.transfer.transferForm.workOrderNo = this.queryParams.workOrderNo
@@ -1000,7 +1015,8 @@ export default {
     },
     //协办
     coOrganizer() {
-      this.$refs.coOrganizer.open();
+      this.$refs.coOrganizer.dynamicValidateForm.workOrderNo = this.queryParams.workOrderNo;
+      this.$refs.coOrganizer.open(this.queryParams.workOrderNo);
     },
     //超链接用
     modifyDetails(s) {

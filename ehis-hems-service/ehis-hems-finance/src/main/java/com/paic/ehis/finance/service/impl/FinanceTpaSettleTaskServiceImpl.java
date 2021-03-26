@@ -1,6 +1,7 @@
 package com.paic.ehis.finance.service.impl;
 
 
+import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.paic.ehis.common.core.enums.ClaimStatus;
 import com.paic.ehis.common.core.utils.DateUtils;
@@ -8,12 +9,14 @@ import com.paic.ehis.common.core.utils.PubFun;
 import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.common.core.utils.StringUtils;
 import com.paic.ehis.common.core.utils.poi.ExcelUtils;
+import com.paic.ehis.common.core.web.domain.AjaxResult;
 import com.paic.ehis.common.core.web.page.TableDataInfo;
 import com.paic.ehis.finance.domain.*;
 import com.paic.ehis.finance.domain.dto.TpaSettleDTO;
 import com.paic.ehis.finance.mapper.*;
 import com.paic.ehis.finance.service.IFinanceTpaSettleTaskService;
 import com.paic.ehis.system.api.PolicyAndRiskService;
+import com.paic.ehis.system.api.domain.ClaimCaseBillInfo;
 import com.paic.ehis.system.api.domain.PolicyAndRiskRelation;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -91,7 +94,7 @@ public class FinanceTpaSettleTaskServiceImpl implements IFinanceTpaSettleTaskSer
      * @return TPA服务费结算任务集合
      */
     @Override
-    public List<TpaSettleInfo> tpaTaskInitiated(TpaSettleDTO tpaSettleDTO) {
+    public List<TpaSettleInfo> tpaTaskInitiated(TpaSettleDTO tpaSettleDTO) throws Exception {
         TpaSettleInfo tpaSettleInfo = new TpaSettleInfo();
         TpaSettleDetailInfo tpaSettleDetailInfo = new TpaSettleDetailInfo();
         PolicyAndRiskRelation policyAndRiskRelation = new PolicyAndRiskRelation();
@@ -163,23 +166,28 @@ public class FinanceTpaSettleTaskServiceImpl implements IFinanceTpaSettleTaskSer
                 policyAndRiskRelation.setStartTime(financeTpaSettleTask.getSettleStartDate());
                 policyAndRiskRelation.setEndTime(financeTpaSettleTask.getSettleEndDate());
                 policyAndRiskRelation.setCompanyCode(financeTpaSettleTask.getCompanyCode());
+
                 TableDataInfo relationCompanyList = policyAndRiskService.getRelationCompanyList(policyAndRiskRelation);
-                for (Object row : relationCompanyList.getRows()) {
-                    companyRiskPolicy = objectMapper.convertValue(row, CompanyRiskPolicy.class);
-                    //子页面 下拉列表数据
-                    BeanUtils.copyProperties(companyRiskPolicy, tpaSettleDetailInfo);
-                    BeanUtils.copyProperties(companyRiskPolicy, financeTpaSettleDetail);
-                    tpaSettleDetailInfo.setRiskName(baseIssuingRule.getRiskName());
-                    if ("02".equals(tpaSettleDTO.getSettlementType())) {//保费比例
-                        tpaSettleDetailInfo.setPremiumRatio(baseIssuingRule.getSettlementvalue());
-                        tpaSettleDetailInfo.setServiceAmount(companyRiskPolicy.getPrem().multiply(tpaSettleDetailInfo.getPremiumRatio()));
+                if (StringUtils.isNotEmpty(relationCompanyList.getRows())) {
+                    for (Object row : relationCompanyList.getRows()) {
+                        companyRiskPolicy = objectMapper.convertValue(row, CompanyRiskPolicy.class);
+                        //子页面 下拉列表数据
+                        BeanUtils.copyProperties(companyRiskPolicy, tpaSettleDetailInfo);
+                        BeanUtils.copyProperties(companyRiskPolicy, financeTpaSettleDetail);
+                        tpaSettleDetailInfo.setRiskName(baseIssuingRule.getRiskName());
+                        if ("02".equals(tpaSettleDTO.getSettlementType())) {//保费比例
+                            tpaSettleDetailInfo.setPremiumRatio(baseIssuingRule.getSettlementvalue());
+                            tpaSettleDetailInfo.setServiceAmount(companyRiskPolicy.getPrem().multiply(tpaSettleDetailInfo.getPremiumRatio()));
+                        }
+                        financeTpaSettleDetail.setSettleTaskNo(taskNo);
+                        financeTpaSettleDetail.setServiceAmount(tpaSettleDetailInfo.getServiceAmount());
+                        detailInfos.add(tpaSettleDetailInfo);
+                        financeTpaSettleDetailMapper.insertFinanceTpaSettleDetail(financeTpaSettleDetail);
+                        policyAndRiskRelation.setSettleFlag("Y");
+                        policyAndRiskService.settledPolicy(policyAndRiskRelation);
                     }
-                    financeTpaSettleDetail.setSettleTaskNo(taskNo);
-                    financeTpaSettleDetail.setServiceAmount(tpaSettleDetailInfo.getServiceAmount());
-                    detailInfos.add(tpaSettleDetailInfo);
-                    financeTpaSettleDetailMapper.insertFinanceTpaSettleDetail(financeTpaSettleDetail);
-                    policyAndRiskRelation.setSettleFlag("Y");
-                    policyAndRiskService.settledPolicy(policyAndRiskRelation);
+                }else{
+                    throw new Exception("该出单公司在该截止日期前已结算完毕！");
                 }
                 tpaSettleInfo.setDetailInfos(detailInfos);
                 //子页面 列表数据

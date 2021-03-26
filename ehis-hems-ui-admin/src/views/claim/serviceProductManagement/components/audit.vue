@@ -38,14 +38,14 @@
           </el-form>
         </el-tab-pane>
         <el-tab-pane :label="label.label02" name="02">
-          <el-table  :data="reviewLogTableData"
+<!--          <el-table  :data="reviewLogTableData"
                      :header-cell-style="{color:'black',background:'#f8f8ff'}"
                      size="small" highlight-current-row style="width: 100%;">
             <el-table-column key="1"  align="center" prop="updateBy" min-width="150" label="操作人" show-overflow-tooltip/>
             <el-table-column  key="2"  align="center" min-width="100" prop="updateTime" label="时间" show-overflow-tooltip/>
             <el-table-column key="3"  align="center" prop="checkResult" label="审核结论" min-width="120" :formatter="getCheckResult" show-overflow-tooltip/>
             <el-table-column key="4"  align="center" prop="checkAdvice" min-width="160" label="审核意见" show-overflow-tooltip/>
-          </el-table>
+          </el-table>-->
 <!--            <div class="el-steps el-steps&#45;&#45;vertical" style="margin-left: 100px">
               <div  class="el-step is-vertical is-flex" style="height: 70px">
                 <div class="" style="width: 200px; margin-right: 20px">
@@ -162,6 +162,9 @@
                 </div>
               </div>
             </div>-->
+          <el-steps align-center direction="vertical" :active="active" v-loading="loading" >
+            <el-step :key="step.index" :title="step.bussinessStatusName" :description="step.updateTime + ' 处理人：' + step.updateBy" v-for="(step,index) in steps"/>
+          </el-steps>
 
 
 
@@ -178,7 +181,8 @@
 </template>
 
 <script>
-import {insertCheckInfo,selectCheckLog} from '@/api/productManage/serviceProductManagement'
+import {insertCheckInfo,selectCheckLog,selectLogList} from '@/api/productManage/serviceProductManagement'
+import {listBalanceExamLog} from "@/api/claim/serviceBalance";
 export default {
   props:{
     productCode: String,
@@ -202,26 +206,13 @@ export default {
       }
     }
     return {
-      caseInfo04:{},
-      caseInfo05:{},
-      caseInfo06:{},
-      caseInfo07:{},
-      caseInfo08:{},
-      caseInfo99:{},
+      // 遮罩层
+      loading: false,
+      //当前激活
+      active: 0,
+      //步骤数组
+      steps: [],
 
-      caseInfo04Css:false,
-      caseInfo05Css:false,
-      caseInfo06Css:false,
-      caseInfo07Css:false,
-      caseInfo08Css:false,
-      caseInfo99Css:false,
-
-      ca04Active:false,
-      ca05Active:false,
-      ca06Active:false,
-      ca07Active:false,
-      ca08Active:false,
-      ca99Active:false,
       pList: [{name: 1},{name: 2},{name: 3},{name: 4},],
       reviewForm: {
         checkResult: '',
@@ -241,6 +232,7 @@ export default {
     }
   },
   mounted() {
+    this.init();
     this.getDicts("product_review_result").then(response => {
       this.product_review_resultOptions = response.data;
     });
@@ -249,22 +241,42 @@ export default {
   watch: {},
 
   methods: {
+    init() {
+      this.loading = true;
+      this.active = 0;
+      this.steps = [];
+      let query = {
+        productCode: this.productCode,
+      }
+      selectLogList(query).then(res => {
+        if (res != null && res.code === 200) {
+          this.steps = res.data;
+          if (res.data.length > 0) {
+            this.active = res.data.length - 1;
+          }
+          this.loading = false;
+        }
+      }).catch(res => {
+        this.loading = false
+      });
 
+  },
 
     getCheckResult(row,index){
         return this.selectDictLabel(this.product_review_resultOptions, row.checkResult);
     },
     handleClick(){
-      if(this.activeName=='02'){
+     /* if(this.activeName=='02'){
         let query = {
           productCode: this.productCode,
         }
         //审核日志的接口
+
         selectCheckLog(query).then(res => {
           this.reviewLogTableData = res.data
         }).catch(res => {
         })
-      }
+      }*/
     },
 
     goBack(){
@@ -337,43 +349,11 @@ export default {
 .active {
   padding-top: 49px
 }
-.a .el-step__icon-inner ::after{
-  content: '全选';
-}
-::v-deep .el-step__icon-inner ::after {
-  content: '全选';
-  position: absolute;
-  font-weight: bolder;
-  margin-left: 5px;
-}
-/deep/ .el-step__icon {
-  position: relative;
-  z-index: 1;
-  display: -webkit-inline-box;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-  -webkit-box-pack: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-  width: 40px;
-  height: 40px;
-  font-size: 14px;
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-  background: #FFFFFF;
-  -webkit-transition: 0.15s ease-out;
-  transition: 0.15s ease-out;
-}
 
-/deep/ .el-step.is-vertical .el-step__line {
-  width: 2px;
-  top: 0;
-  bottom: 0;
-  left: 17px;
-}
+
+
+
+
 
 
 </style>

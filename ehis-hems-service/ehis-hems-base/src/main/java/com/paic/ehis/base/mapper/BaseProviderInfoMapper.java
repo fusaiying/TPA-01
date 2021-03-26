@@ -1,8 +1,10 @@
 package com.paic.ehis.base.mapper;
 
 import com.paic.ehis.base.domain.BaseCheckInfo;
+import com.paic.ehis.base.domain.BaseHospitalForReservationVo;
 import com.paic.ehis.base.domain.BaseProviderInfo;
 import com.paic.ehis.base.domain.ProductInfo;
+import com.paic.ehis.base.domain.dto.BaseHospitalForReservationDTO;
 import com.paic.ehis.base.domain.vo.AddressInfo;
 import com.paic.ehis.base.domain.vo.Sn_base_addressDO;
 import com.paic.ehis.system.api.domain.*;
@@ -204,4 +206,6 @@ public interface BaseProviderInfoMapper
     public void updateIssue(@RequestBody List<String> serviceCodes);
 
     public void updateIssue1(@RequestBody List<String> serviceCodes);
+
+    public List<BaseHospitalForReservationVo> selectHospitalForReservation(BaseHospitalForReservationDTO baseHospitalForReservationDTO);
 }

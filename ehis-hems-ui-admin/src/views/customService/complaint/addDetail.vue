@@ -394,7 +394,7 @@
 
         </el-row>
 
-        <el-form-item label="业务内容：" prop="content">
+        <el-form-item label="投诉内容：" prop="content">
         <el-input
           type="textarea"
           :rows="3"
@@ -478,6 +478,7 @@
       }
 
       return {
+        checkSubmitFlag: '',
         cs_channel: [],//
         cs_complaint_item:[],//服务项目
         cs_sex:[],//性别
@@ -489,7 +490,7 @@
         //需要填入数据的部分
         ruleForm:{
           channelCode:"03",//受理渠道
-          itemCode:"",//服务项目
+          itemCode:"B00006",//服务项目
           callPerson:{
             mobilePhone:"",//来电人电话
 
@@ -532,7 +533,7 @@
           contactsQuhao:"",
            contactsNumber:"",
           contactsSecondNumber:"",
-          checkSubmitFlag: '',
+
 
         },
         // 表单校验根据Form 组件提供了表单验证的功能，只需要通过 rules 属性传入约定的验证规则，并将 Form-Item 的 prop 属性设置为需校验的字段名即可

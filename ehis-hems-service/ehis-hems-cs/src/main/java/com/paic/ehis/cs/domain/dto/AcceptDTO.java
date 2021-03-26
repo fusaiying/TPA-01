@@ -68,6 +68,16 @@ public class AcceptDTO implements Serializable {
     @Excel(name = "预约时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date appointmentTimeEnd;
 
+    /** 预约日期 */
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @Excel(name = "预约日期", width = 30, dateFormat = "yyyy-MM-dd")
+    private Date complaintTimeStart;
+
+    /** 预约日期 */
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @Excel(name = "预约日期", width = 30, dateFormat = "yyyy-MM-dd")
+    private Date complaintTimeEnd;
+
     /** 工单编号 */
     private String workOrderNo;
 

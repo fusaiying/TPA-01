@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.List;
 
 /**
@@ -78,70 +79,117 @@ public class ClaimCaseCalServiceImpl implements IClaimCaseCalService
 
         CalConclusionVo calConclusionVo = claimCaseCalMapper.selectClaimCaseCalInformation(rptNo);
         if(null != calConclusionVo) {
-            // TODO: 获取‘是否仅结算理赔责任’ 是01-非全赔 否02-全赔
+            //获取‘是否仅结算理赔责任’ 是01-非全赔 否02-全赔
             if(StringUtils.isNotBlank(calConclusionVo.getHospitalCode())) {
                 BaseProviderSettle baseProviderSettle = new BaseProviderSettle();
+                baseProviderSettle.setOrgFlag("01");
                 baseProviderSettle.setProviderCode(calConclusionVo.getHospitalCode());
-                if (getProviderInfoService.selectsettleInfoNew(baseProviderSettle).size()>0) {
-                    List<BaseProviderSettle> settleList = getProviderInfoService.selectsettleInfoNew(baseProviderSettle);
-                    if(!settleList.isEmpty()) {
-                        String claimFlag = settleList.get(0).getClaimFlag();
-                        calConclusionVo.setClaimFlag(claimFlag);
+                List<BaseProviderSettle> baseProviderList = getProviderInfoService.selectsettleInfoNew(baseProviderSettle);
+                if (!baseProviderList.isEmpty()) {
+                    String claimFlag = baseProviderList.get(0).getClaimFlag();
+                    calConclusionVo.setClaimFlag(claimFlag);
+                    /**
+                     * 外币给付金额
+                     * 1、非全赔医院：根据账单币种及汇率对赔付金额进行汇率转换
+                     * 2、全赔医院：根据账单币种及汇率对折后金额进行汇率转换
+                     * Eg：账单币种HKD，汇率：0.9，赔付金额900CNY
+                     * 外币给付金额：900CNY/0.9=1000HKD
+                     */
+                    SyncExchangeRate exchangeRate = new SyncExchangeRate();
+                    exchangeRate.setBeforeMoney("CNY");
+                    exchangeRate.setAfterMoney(calConclusionVo.getBillCurrency());
+                    exchangeRate.setDateConvert(claimCaseBillMapper.selectEarliestTreatmentBillByRptNo(rptNo).getTreatmentStartDate());
+                    exchangeRate = exchangeRateService.getExchangeRate(exchangeRate);
+                    if(StringUtils.isNull(exchangeRate)){
+                        exchangeRate = new SyncExchangeRate();
+                        exchangeRate.setParities(new BigDecimal(1));
+                    }
+                    calConclusionVo.setExchangeRate(exchangeRate.getParities());
+                    BigDecimal payAmount1 = calConclusionVo.getPayAmount();
 
-                        // TODO: 需要判断，是否申诉案件；若是 计算 本次支付差额
-                        if(calConclusionVo.getIsAppeal().equals("01")) {
-                            /***
-                             * 本次支付差额
-                             * 1、当前案件为申诉案件时显示该字段；
-                             * 2、本次支付差额（人民币）=本次赔付金额（非全赔）/折后金额（全赔）-申诉原案件赔付金额/折后金额；
-                             * 3、本次支付差额（外币）=本次外币给付金额-申诉原案件外币给付金额；
-                             * 4、若本次支付差额为负值则显示负号，代表需要收费
-                             * 5、显示格式为金额+币种
-                             */
-//                        BigDecimal payAmount = calConclusionVo.getPayAmount(); // 赔付金额
-//                        BigDecimal discountAmount = calConclusionVo.getSumHosDiscountAmount();// 折扣金额
+                    BigDecimal billAmount1 = calConclusionVo.getSumBillAmount();
+                    BigDecimal discountAmount1 = calConclusionVo.getSumHosDiscountAmount();// 折扣金额
+
+                    //01-非全赔
+                    if("01".equals(claimFlag)) {
+                        if(payAmount1 != null) {
+                            BigDecimal payAmountForeign = payAmount1.divide(exchangeRate.getParities(),20,BigDecimal.ROUND_HALF_UP);
+                            calConclusionVo.setPayAmountForeign(payAmountForeign);
+
                         }
+                    }
+                    //02-全赔
+                    if("02".equals(claimFlag)) {
+                        if(billAmount1 != null && discountAmount1 != null) {
+                            BigDecimal subtractVal = billAmount1.subtract(discountAmount1);
+                            BigDecimal payAmountForeign = subtractVal.divide(exchangeRate.getParities(),20,BigDecimal.ROUND_HALF_UP);
+                            calConclusionVo.setPayAmountForeign(payAmountForeign);
+                        }
+                    }
+                    // 需要判断，是否申诉案件；若是 计算 本次支付差额
+                    if(StringUtils.isNotBlank(calConclusionVo.getIsAppeal()) && calConclusionVo.getIsAppeal().equals("01")) {
 
-                        /**
-                         * 外币给付金额
-                         * 1、非全赔医院：根据账单币种及汇率对赔付金额进行汇率转换
-                         * 2、全赔医院：根据账单币种及汇率对折后金额进行汇率转换
-                         * Eg：账单币种HKD，汇率：0.9，赔付金额900CNY
-                         * 外币给付金额：900CNY/0.9=1000HKD
+                        CalConclusionVo precalConclusionVo = claimCaseCalMapper.selectPreCalConclusionByRptNo(rptNo);
+                        if(precalConclusionVo != null) {
+                            precalConclusionVo = claimCaseCalMapper.selectClaimCaseCalInformation(precalConclusionVo.getRptNo());
+                        }
+                        /***
+                         * 折后金额等于全部账单的（账单金额-折扣金额）之和
+                         *
+                         * 本次支付差额
+                         * 1、当前案件为申诉案件时显示该字段；
+                         * 2、本次支付差额（人民币）=本次赔付金额（非全赔）/折后金额（全赔）-申诉原案件赔付金额/折后金额；
+                         * 3、本次支付差额（外币）=本次外币给付金额-申诉原案件外币给付金额；
+                         * 4、若本次支付差额为负值则显示负号，代表需要收费
+                         * 5、显示格式为金额+币种
                          */
-                        SyncExchangeRate exchangeRate = new SyncExchangeRate();
-                        exchangeRate.setBeforeMoney("CNY");
-                        exchangeRate.setAfterMoney(calConclusionVo.getBillCurrency());
-                        exchangeRate.setDateConvert(claimCaseBillMapper.selectEarliestTreatmentBillByRptNo(rptNo).getTreatmentStartDate());
-                        exchangeRate = exchangeRateService.getExchangeRate(exchangeRate);
-                        if(StringUtils.isNull(exchangeRate)){
-                            return null;
-                        }
-                        calConclusionVo.setExchangeRate(exchangeRate.getParities());
-                        BigDecimal payAmount = calConclusionVo.getPayAmount();
+                        BigDecimal defaultValue = new BigDecimal(0);
 
-                        BigDecimal billAmount = calConclusionVo.getSumBillAmount();
-                        BigDecimal discountAmount = calConclusionVo.getSumHosDiscountAmount();// 折扣金额
+                       // BigDecimal preBillAmount = precalConclusionVo.getSumBillAmount() == null ?  defaultValue : precalConclusionVo.getSumBillAmount(); // 原案件
 
-                        if(exchangeRate != null) {
+                        BigDecimal prePayAmount = precalConclusionVo.getCalAmount() == null ?  defaultValue : precalConclusionVo.getCalAmount(); // 原案件 赔付金额
+                        BigDecimal preSumBillAmount = precalConclusionVo.getSumBillAmount() == null ? defaultValue : precalConclusionVo.getSumBillAmount(); //原案件 账单金额
+                        BigDecimal preDiscountAmount = precalConclusionVo.getSumHosDiscountAmount() == null ? defaultValue : precalConclusionVo.getSumHosDiscountAmount();//原案件 折扣金额
+
+                        String billCurrency = calConclusionVo.getBillCurrency();  // 账单币种
+                        BigDecimal payAmount = calConclusionVo.getCalAmount() == null ? defaultValue : calConclusionVo.getCalAmount(); // 赔付金额
+                        BigDecimal sumBillAmount = calConclusionVo.getSumBillAmount() == null ? defaultValue : calConclusionVo.getSumBillAmount(); // 账单金额
+                        BigDecimal discountAmount = calConclusionVo.getSumHosDiscountAmount() == null ? defaultValue : calConclusionVo.getSumHosDiscountAmount();// 折扣金额
+
+                        if (billCurrency.equalsIgnoreCase("CNY")) {
+                           //  paymentDifference
+                            // 全赔付
+                            if (claimFlag.equals("01")) {
+                                calConclusionVo.setPaymentDifference(payAmount.subtract(prePayAmount));
+                            }
+                            if (claimFlag.equals("02")) {
+                                BigDecimal subtract = sumBillAmount.subtract(discountAmount); // 本次 折后金额
+                                BigDecimal subtract1 = preSumBillAmount.subtract(preDiscountAmount); // 原案件 折后金额
+                                calConclusionVo.setPaymentDifference(subtract.subtract(subtract1));
+                            }
+                        } else {
                             //01-非全赔
                             if("01".equals(claimFlag)) {
-                                if(payAmount != null) {
-                                    BigDecimal payAmountForeign = payAmount.divide(exchangeRate.getParities(),20,BigDecimal.ROUND_HALF_UP);
-                                    calConclusionVo.setPayAmountForeign(payAmountForeign);
+                                if(prePayAmount != null) {
+                                    BigDecimal payAmountForeign = prePayAmount.divide(exchangeRate.getParities(),20,BigDecimal.ROUND_HALF_UP);
+                                    precalConclusionVo.setPayAmountForeign(payAmountForeign);
+                                    //本次支付差额（外币）=本次外币给付金额-申诉原案件外币给付金额；
+                                    calConclusionVo.setPaymentDifference(calConclusionVo.getPaymentDifference().subtract(precalConclusionVo.getPaymentDifference()));
 
                                 }
                             }
                             //02-全赔
                             if("02".equals(claimFlag)) {
-                                if(billAmount != null && discountAmount != null) {
-                                    BigDecimal subtractVal = billAmount.subtract(discountAmount);
-                                    BigDecimal payAmountForeign = subtractVal.divide(exchangeRate.getParities(),20,BigDecimal.ROUND_HALF_UP);
-                                    calConclusionVo.setPayAmountForeign(payAmountForeign);
+                                if(preSumBillAmount != null && preDiscountAmount != null) {
+                                    BigDecimal subtractVa = preSumBillAmount.subtract(preDiscountAmount);
+                                    BigDecimal payAmountForeign = subtractVa.divide(exchangeRate.getParities(),20,BigDecimal.ROUND_HALF_UP);
+                                    precalConclusionVo.setPayAmountForeign(payAmountForeign);
+                                    //本次支付差额（外币）=本次外币给付金额-申诉原案件外币给付金额；
+                                    calConclusionVo.setPaymentDifference(calConclusionVo.getPaymentDifference().subtract(precalConclusionVo.getPaymentDifference()));
+
                                 }
                             }
                         }
-
                     }
                 }
             }

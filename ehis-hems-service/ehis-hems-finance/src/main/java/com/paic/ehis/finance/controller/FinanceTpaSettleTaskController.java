@@ -57,8 +57,7 @@ public class FinanceTpaSettleTaskController extends BaseController
      */
     @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:task:list')")
     @GetMapping("/tpaTaskInitiated")
-    public TableDataInfo tpaTaskInitiated(TpaSettleDTO tpaSettleDTO)
-    {
+    public TableDataInfo tpaTaskInitiated(TpaSettleDTO tpaSettleDTO) throws Exception {
         List<TpaSettleInfo> tpaSettleInfos = financeTpaSettleTaskService.tpaTaskInitiated(tpaSettleDTO);
         return getDataTable(tpaSettleInfos);
     }

@@ -235,7 +235,7 @@ export default {
     }
 
     const checkNoticeDay = (rules, value, callback) => {
-      let reg= /^(\d+|\d+)$/
+      let reg= /^[1-9]\d*$/
       if(value) {
         if (value < 0) {
           callback(new Error("请输入正整数"));

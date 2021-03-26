@@ -5,19 +5,19 @@
                label-position="right" size="mini">
         <el-row>
           <el-col :span="8">
-            <el-form-item label="投保来源ID：" prop="acceptorName">
+            <el-form-item label="投保来源ID：" prop="insuranceSourceCode">
               <el-input v-model="codeQueryForm.insuranceSourceCode" class="item-width" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
 
           <el-col :span="8">
-            <el-form-item label="投保来源名称：" prop="handlerName">
+            <el-form-item label="投保来源名称：" prop="insuranceSourceName">
               <el-input v-model="codeQueryForm.insuranceSourceName" class="item-width" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
 
           <el-col :span="8">
-            <el-form-item label="投诉业务类别ID：" prop="workOrderNo">
+            <el-form-item label="投诉业务类别ID：" prop="complaintBusinessCode">
               <el-input v-model="codeQueryForm.complaintBusinessCode" class="item-width" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
@@ -25,7 +25,7 @@
         </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="投诉业务类别名称：" prop="holderName">
+            <el-form-item label="投诉业务类别名称：" prop="complaintBusinessName">
               <el-input v-model="codeQueryForm.complaintBusinessName" class="item-width" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>

@@ -21,8 +21,8 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="受理人：" prop="acceptBy">
-              <el-input v-model="sendQueryForm.acceptBy" class="item-width" clearable size="mini" placeholder="请输入"/>
+            <el-form-item label="受理人：" prop="createBy">
+              <el-input v-model="sendQueryForm.createBy" class="item-width" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -219,7 +219,7 @@ export default {
       sendQueryForm: {
         itemCode: undefined,
         channelCode: undefined,
-        acceptBy: undefined,
+        createBy: undefined,
         acceptorTime: undefined,
         updateBy: undefined,
         handlerTime: undefined,
@@ -324,7 +324,7 @@ export default {
         pageSize: this.queryParams.pageSize,
         itemCode: this.sendQueryForm.itemCode,
         channelCode: this.sendQueryForm.channelCode,
-        acceptBy: this.sendQueryForm.acceptBy,
+        createBy: this.sendQueryForm.createBy,
         acceptStartDate: undefined,
         acceptEndDate: undefined,
         updateBy: this.sendQueryForm.updateBy,

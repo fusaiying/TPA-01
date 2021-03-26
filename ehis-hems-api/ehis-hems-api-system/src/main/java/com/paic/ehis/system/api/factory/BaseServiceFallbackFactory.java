@@ -1,7 +1,9 @@
 package com.paic.ehis.system.api.factory;
 
+import com.paic.ehis.common.core.web.page.TableDataInfo;
 import com.paic.ehis.system.api.BaseService;
 import com.paic.ehis.system.api.domain.BaseIcd10;
+import com.paic.ehis.system.api.domain.dto.BaseHospitalForReservationDTO;
 import feign.hystrix.FallbackFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +24,16 @@ public class BaseServiceFallbackFactory implements FallbackFactory<BaseService> 
         return new BaseService() {
             @Override
             public List<BaseIcd10> selectIcdFuzzy(BaseIcd10 baseIcd) {
+                return null;
+            }
+
+            /**
+             * 提供客服预约医疗机构查询服务
+             * @param baseHospitalForReservationDTO
+             * @return
+             */
+            @Override
+            public TableDataInfo selectHospitalForReservation(BaseHospitalForReservationDTO baseHospitalForReservationDTO) {
                 return null;
             }
         };

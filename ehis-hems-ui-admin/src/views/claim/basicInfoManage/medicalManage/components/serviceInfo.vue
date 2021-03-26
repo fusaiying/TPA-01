@@ -202,6 +202,8 @@
                       placeholder="请输入"/>
           </el-form-item>
         </el-col>
+      </el-row>
+      <el-row>
         <el-col :span="13">
           <el-form-item label="检查费折扣：" prop="examineDiscount" v-if="this.serviceForm.examineDiscount">
             <el-input v-model="serviceForm.examineDiscount" class="item-width" clearable disabled
@@ -217,6 +219,8 @@
             </el-select>
           </el-form-item>
         </el-col>
+        </el-row>
+      <el-row>
         <el-col :span="13">
           <el-form-item label="床位费折扣：" prop="bedDiscount" v-if="this.serviceForm.bedDiscount">
             <el-input v-model="serviceForm.bedDiscount" class="item-width" clearable disabled
@@ -257,21 +261,21 @@
 
         <el-form-item label="折扣信息：" prop="discountinfo" v-if="this.serviceForm.discountinfo">
           <el-input v-model="serviceForm.discountinfo" class="item-width" clearable maxlength="50" disabled
-                    style="width: 550px"
+                    style="width: 450px"
                     placeholder="请输入"/>
         </el-form-item>
       </el-row>
       <el-row>
-        <el-form-item label="特殊费折扣信息：" prop="specialdiscount" v-if="this.serviceForm.specialdiscount">
-          <el-input v-model="serviceForm.specialdiscount" class="item-width" clearable maxlength="50" disabled
-                    style="width: 550px"
+        <el-form-item label="特殊费折扣信息：" prop="specialDiscount" v-if="this.serviceForm.specialDiscount">
+          <el-input v-model="serviceForm.specialDiscount" class="item-width" clearable maxlength="50" disabled
+                    style="width: 450px"
                     placeholder="请输入"/>
         </el-form-item>
       </el-row>
       <el-row>
-        <el-form-item label="折扣除外项目：" prop="project" v-if="this.serviceForm.specialdiscount">
+        <el-form-item label="折扣除外项目：" prop="project" v-if="this.serviceForm.project">
           <el-input v-model="serviceForm.project" class="item-width" clearable maxlength="50" disabled
-                    style="width: 550px"
+                    style="width: 450px"
                     placeholder="请输入"/>
         </el-form-item>
       </el-row>
@@ -886,7 +890,7 @@ export default {
         allowance: undefined,
         costs: undefined,
         discountinfo: undefined,
-        specialdiscount: undefined,
+        specialDiscount: undefined,
         project: undefined,
         sellingpoint: undefined,
         foreignnote: undefined,
@@ -934,7 +938,6 @@ export default {
           }
         })
         this.serviceForm.speciallanguage = []
-        console.log(this.serviceForm.speciallanguage)
       } else {
         this.speciallanguageOptions.map(item => {
           item.isShow = false
@@ -949,12 +952,13 @@ export default {
       this.serviceForm.bedDiscount = this.hospContactFormData.bedDiscount
       this.serviceForm.type = this.hospContactFormData.type
       this.serviceForm.allowance = this.hospContactFormData.allowance
-      this.serviceForm.advicenum = this.hospContactFormData.advicenum
+      this.serviceForm.adviceNum = this.hospContactFormData.advicenum
       this.serviceForm.costs = this.hospContactFormData.costs
       this.serviceForm.excludingFee = this.hospContactFormData.averageCostExcept
       this.serviceForm.discountinfo = this.hospContactFormData.discountinfo
       this.serviceForm.specialDiscount = this.hospContactFormData.specialDiscount
       this.serviceForm.project = this.hospContactFormData.project
+      this.serviceForm.examineDiscount = this.hospContactFormData.examineDiscount
     },
 
 
@@ -964,7 +968,6 @@ export default {
       }
       getNewtworktypeList(query).then(res => {
         this.medicalTypeData = res.rows
-        console.log(this.medicalTypeData)
         let flag = this.medicalTypeData.filter(item => {
           return item.networktypeName == '网络医院'
         })[0].oldChoose
@@ -982,7 +985,6 @@ export default {
       if (localStorage.getItem('portFlaws')) {
         this.serviceForm = JSON.parse(localStorage.getItem('portFlaws'))
         localStorage.removeItem('portFlaws')
-        console.log(this.serviceForm)
       } else {
         this.serviceForm = this.propServiceForm
       }
@@ -1150,7 +1152,6 @@ export default {
         providerCode: this.providerCode,
         medicalTypeData: filterData
       }
-      console.log(filterData)
       if (filterData.length > 0) {
         //调用保存接口
         updateNewtworktypeList(medicalData).then(res => {
@@ -1179,7 +1180,6 @@ export default {
       let objNetHosp = this.medicalTypeData.find(item => {
         return item.networktypeName === '网络医院'
       })
-      console.log(objNetHosp)
       if (objNetHosp != null && objNetHosp != '') {
         if (objNetHosp.oldChoose == '02' && objNetHosp.isCheck == '01' || objNetHosp.oldChoose == '01' && objNetHosp.isCheck == '02') {
           this.historyContractBtnShow = true,
@@ -1224,7 +1224,6 @@ export default {
 
 
     historyContract() {
-      console.log('---------------------')
       localStorage.setItem('portFlaws', JSON.stringify(this.serviceForm))
       if (this.isAdd) {
         //跳到合约新增页面

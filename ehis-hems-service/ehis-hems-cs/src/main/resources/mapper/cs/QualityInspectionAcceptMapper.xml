@@ -65,10 +65,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         from work_order_accept woa
             left join accept_detail_info adi on woa.work_order_no = adi.work_order_no left join person_info pi on woa.insured_no=pi.person_id
     </sql>
-<!--工单信息列表查询-->
+    <!--工单信息列表查询-->
     <select id="selectSendByVo" parameterType="com.paic.ehis.cs.domain.dto.WorkOrderQueryDTO" resultMap="AcceptResult">
-        <include refid="selectSendVo"/>
-        where 1=1 and not exists (SELECT 1 FROM quality_inspection_accept qia WHERE qia.work_order_no=woa.work_order_no)
+        select woa.work_order_no,woa.business_type,adi.channel_code,adi.item_code,concat(woa.business_type,'-', adi.item_code) as business_service,
+        woa.policy_no,woa.policy_item_no,woa.risk_code,woa.insured_no,woa.insured_name,woa.holder_no,woa.end_date,woa.holder_name,woa.accept_by,woa.accept_time,woa.modify_by,woa.modify_time,woa.create_by,woa.update_by,woa.update_time,woa.organ_code,woa.vip_flag,adi.priority_level,woa.status
+        from work_order_accept woa
+        left join accept_detail_info adi on woa.work_order_no = adi.work_order_no left join person_info pi on woa.insured_no=pi.person_id
+        LEFT JOIN quality_inspection_accept qia ON woa.work_order_no = qia.work_order_no  AND qia.STATUS = '03'
+        WHERE
+        1 = 1
         <if test="businessTypeList != null ">
             and woa.business_type IN (
             <foreach collection="businessTypeList" item="businessType"
@@ -121,9 +126,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <!--质检信息列表查询-->
     <select id="selectSendByVoTwo" parameterType="com.paic.ehis.cs.domain.dto.WorkOrderQueryDTO" resultMap="AcceptResult">
-        <include refid="selectSendVo"/>
-        where 1=1 AND NOT EXISTS ( SELECT 1 from quality_inspection_accept qia where qia.status='01' or qia.status='02' and woa.work_order_no=qia.work_order_no)
-        and adi.item_code not in ('B00034')
+        select woa.work_order_no,woa.business_type,adi.channel_code,adi.item_code,concat(woa.business_type,'-', adi.item_code) as business_service,
+        woa.policy_no,woa.policy_item_no,woa.risk_code,woa.insured_no,woa.insured_name,woa.holder_no,woa.end_date,woa.holder_name,woa.accept_by,woa.accept_time,woa.modify_by,woa.modify_time,woa.create_by,woa.update_by,woa.update_time,woa.organ_code,woa.vip_flag,adi.priority_level,woa.status
+        from work_order_accept woa
+        left join accept_detail_info adi on woa.work_order_no = adi.work_order_no left join person_info pi on woa.insured_no=pi.person_id
+        LEFT JOIN quality_inspection_accept qia ON woa.work_order_no = qia.work_order_no  AND qia.STATUS = '03'
+        WHERE
+        1 = 1  and adi.item_code not in ('B00034')
         <if test="businessTypeList != null ">
             and woa.business_type IN (
             <foreach collection="businessTypeList" item="businessType"

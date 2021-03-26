@@ -320,8 +320,8 @@ public class ClaimCaseAppealTaskServiceImpl implements IClaimCaseAppealTaskServi
         /** claim_case_remark */
         claimCaseAppealTaskMapper.insertClaimCasRemarkeCp(bean);
 
-        /** claim_case_remark type == 02*/
-        claimCaseAppealTaskMapper.insertClaimCasTypeRemarkeCp(bean);
+        /** claim_case_remark type == 02*/ //  暂时不生成该记录
+       // claimCaseAppealTaskMapper.insertClaimCasTypeRemarkeCp(bean);
 
         /** claim_case_policy */
         claimCaseAppealTaskMapper.insertClaimCasePolicyCp(bean);

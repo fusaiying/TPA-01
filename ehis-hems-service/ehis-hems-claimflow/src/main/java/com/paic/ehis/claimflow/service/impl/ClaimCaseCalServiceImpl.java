@@ -101,7 +101,8 @@ public class ClaimCaseCalServiceImpl implements IClaimCaseCalService
                     exchangeRate.setDateConvert(claimCaseBillMapper.selectEarliestTreatmentBillByRptNo(rptNo).getTreatmentStartDate());
                     exchangeRate = exchangeRateService.getExchangeRate(exchangeRate);
                     if(StringUtils.isNull(exchangeRate)){
-                        return null;
+                        exchangeRate = new SyncExchangeRate();
+                        exchangeRate.setParities(new BigDecimal(1));
                     }
                     calConclusionVo.setExchangeRate(exchangeRate.getParities());
                     BigDecimal payAmount1 = calConclusionVo.getPayAmount();

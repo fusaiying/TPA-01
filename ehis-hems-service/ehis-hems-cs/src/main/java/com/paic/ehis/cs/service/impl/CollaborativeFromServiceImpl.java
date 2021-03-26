@@ -289,9 +289,13 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
             if(!tCollaborativeFromList.get(i).getCollaborativeId().equals(complaintDealVo.getCollaborativeId())){
                 CollaborativeFrom uptCollaborativeFrom = new CollaborativeFrom();
                 uptCollaborativeFrom.setStatus("02");
-                uptCollaborativeFrom.setHandleState("02");
+                //uptCollaborativeFrom.setHandleState("02");
                 uptCollaborativeFrom.setWorkOrderNo(complaintDealVo.getWorkOrderNo());
                 uptCollaborativeFrom.setCollaborativeId(tCollaborativeFromList.get(i).getCollaborativeId());
+                collaborativeFrom.setValidFlag(complaintDealVo.getValidFlag());
+                collaborativeFrom.setNonReason(complaintDealVo.getNonReason());
+                collaborativeFrom.setTreatmentBasis(complaintDealVo.getTreatmentBasis());
+                collaborativeFrom.setTreatmentPlan(complaintDealVo.getTreatmentPlan());
                 uptCollaborativeFrom.setUpdatedBy(SecurityUtils.getUsername());
                 uptCollaborativeFrom.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
                 collaborativeFromMapper.updateConsultationDemand(uptCollaborativeFrom);

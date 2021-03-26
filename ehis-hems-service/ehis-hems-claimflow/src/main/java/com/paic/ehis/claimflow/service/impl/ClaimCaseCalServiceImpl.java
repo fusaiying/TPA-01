@@ -133,7 +133,7 @@ public class ClaimCaseCalServiceImpl implements IClaimCaseCalService
 
                         CalConclusionVo precalConclusionVo = claimCaseCalMapper.selectPreCalConclusionByRptNo(rptNo);
                         if(precalConclusionVo != null) {
-                            precalConclusionVo = claimCaseCalMapper.selectPreCalConclusionByRptNo(precalConclusionVo.getRptNo());
+                            precalConclusionVo = claimCaseCalMapper.selectClaimCaseCalInformation(precalConclusionVo.getRptNo());
                         }
                         /***
                          * 折后金额等于全部账单的（账单金额-折扣金额）之和

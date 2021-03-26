@@ -236,7 +236,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <if test="name != null  and name != ''"> and instr(t3.name,#{name})  > 0 </if>
         <if test="auditor != null  and auditor != ''"> and instr(t6.update_by, #{auditor}) > 0</if>
         <if test="pageType != null  and pageType != '' and pageType == '01'"> and t.appeal_status in ('01','04')</if>
-        <if test="pageType != null  and pageType != '' and pageType == '02'"> and t.appeal_status in ('02')</if>
+        <if test="pageType != null  and pageType != '' and pageType == '02'"> and t.appeal_status in ('02','03')</if>
         <if test="applyOperator != null  and applyOperator != '' "> and t.apply_operator = #{applyOperator}</if>
         <if test="pubTaskPool != null  and pubTaskPool != '' and pubTaskPool == 'Y'.toString()"> and length(ifnull(t.apply_operator,'')) = 0</if>
         <if test="createStartTime != null and createStartTime != ''">

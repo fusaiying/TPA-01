@@ -1065,24 +1065,15 @@
       //取消
       //修改按钮
       modify() {
-        if (this.ids.length == 0) {
-          this.$message.warning("先选中一行")
-        }
-          // else {if(this.ids.length>2){
-          //   this.$message.warning("选中一行")
-        // }
-        else {
-          this.$router.push({
-            path: '/customService/reservation/modify',
-            query: {
-              workOrderNo: this.queryParams.workOrderNo,
-              policyNo: this.queryParams.policyNo,
-              policyItemNo: this.queryParams.policyItemNo,
-              status: this.queryParams.status
-            }
-          })
-        }
-        // }
+        this.$router.push({
+          path: '/customService/reservation/modify',
+          query: {
+            workOrderNo: this.queryParams.workOrderNo,
+            policyNo: this.queryParams.policyNo,
+            policyItemNo: this.queryParams.policyItemNo,
+            status: this.queryParams.status
+          }
+        })
       },
       //取消按钮
       cancle() {

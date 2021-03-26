@@ -72,16 +72,7 @@ public class CustomServiceSpotCheckController extends BaseController {
             businessTypeList.add(CodeEnum.BUSINESS_TYPE_03.getCode());
             workOrderQueryDTO.setBusinessTypeList(businessTypeList);
             logger.debug("可发起质检工作池入参: {}", workOrderQueryDTO);
-
-        List<AcceptVo> list = qualityInspectionAcceptService.selectSendPoolData(workOrderQueryDTO);
-        List<AcceptVo> acceptVos = new ArrayList<>();
-        AcceptVo acceptVo1 = new AcceptVo();
-        for (AcceptVo acceptVo : list) {
-            if (!acceptVo.getServiceItem().equals("B00034")) {//非根因改善才可发起质检
-                BeanUtils.copyProperties(acceptVo, acceptVo1);
-            }
-            acceptVos.add(acceptVo1);
-        }
+        List<AcceptVo> list = qualityInspectionAcceptService.selectSendPoolDataTwo(workOrderQueryDTO);
         logger.debug("可发起质检工作池结果:{}", list);
         return getDataTable(list);
     }

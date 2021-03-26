@@ -51,7 +51,7 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
 
     @Override
 
-    //发起质检工作池/工单查询
+    //工单查询
     public List<AcceptVo> selectSendPoolData(WorkOrderQueryDTO workOrderQueryDTO) {
         List<AcceptVo> list = qualityInspectionAcceptMapper.selectSendByVo(workOrderQueryDTO);
         if (list != null) {
@@ -95,6 +95,40 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
             }
         return list == null ? new ArrayList<AcceptVo>() : list;
     }
+     // 发起质检工作池
+     public List<AcceptVo> selectSendPoolDataTwo(WorkOrderQueryDTO workOrderQueryDTO) {
+         List<AcceptVo> list = qualityInspectionAcceptMapper.selectSendByVoTwo(workOrderQueryDTO);
+         if (list != null) {
+             for (int i = 0; i < list.size(); i++) {
+                 String serviceItem=list.get(i).getServiceItem();
+                 //被保人
+                 String getInsuredPersonId = list.get(i).getInsuredPersonId();
+                 if (StringUtils.isNotEmpty(getInsuredPersonId)) {
+                     PersonInfo setInsuredPerson = personInfoMapper.selectPersonInfoById(getInsuredPersonId);
+                     if (setInsuredPerson != null) {
+                         list.get(i).setInsuredPerson(setInsuredPerson);
+                     }
+                 }
+                 //投保人
+                 String getHolderPersonId = list.get(i).getHolderPersonId();
+                 if (StringUtils.isNotEmpty(getHolderPersonId)) {
+                     PersonInfo setHolderPerson = personInfoMapper.selectPersonInfoById(getHolderPersonId);
+                     if (setHolderPerson != null) {
+                         list.get(i).setHolderPerson(setHolderPerson);
+                     }
+                 }
+                 //原处理人
+                 String getModifyUserId = list.get(i).getModifyUserId();
+                 if (StringUtils.isNotEmpty(getModifyUserId)) {
+                     UserInfo setModifyUser = userInfoMapper.selectUserInfoById(getModifyUserId);
+                     if (setModifyUser != null) {
+                         list.get(i).setModifyUser(setModifyUser);
+                     }
+                 }
+             }
+         }
+         return list == null ? new ArrayList<AcceptVo>() : list;
+     }
 
     /**
      * 工单获取

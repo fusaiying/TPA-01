@@ -18,11 +18,17 @@ import java.util.Map;
 public interface IQualityInspectionAcceptService
 {
     /**
-     * 发起质检工作池
+     * 工单查询工作池
      * @param workOrderQueryDTO
      * @return
      */
     public List<AcceptVo> selectSendPoolData(WorkOrderQueryDTO workOrderQueryDTO);
+
+    /**
+     * 发起质检工作池
+     */
+    public List<AcceptVo> selectSendPoolDataTwo(WorkOrderQueryDTO workOrderQueryDTO);
+
 
     /**
      * 工单获取

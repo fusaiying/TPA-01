@@ -346,7 +346,7 @@
 
   let dictss = [{dictType: 'waiting_period'}, {dictType: 'isShare'}, {dictType: 'sex'}, {dictType: 'ruleelement'},
     {dictType: 'special_cumulativemode'}, {dictType: 'intervalUnit'}, {dictType: 'unitofelement'},
-    {dictType: 'first_attribute'}, {dictType: 'second_attribute_a'}, {dictType: 'yes_or_no'},]
+    {dictType: 'first_attribute'}, {dictType: 'second_attribute_a'}, {dictType: 'yes_or_no'}, {dictType: 'classification'},]
   import {getAddress} from '@/api/supplierManager/supplier'
 
   export default {
@@ -451,11 +451,20 @@
           },
           {
             id: 3,
-            label: '是否国际部',
-            children: []
+            label: '部门类别',//部门类别
+            children: [
+              { id: '01',
+                label: '国际部',
+                attr: 'department',
+                code:'01'},
+              { id: '02',
+                label: '特殊部',
+                attr: 'department',
+                code:'02'}
+            ],
           }, {
             id: 4,
-            label: '是否特殊部',
+            label: '医院类别',//医院类别
             children: []
           }, {
             id: 6,
@@ -551,6 +560,7 @@
         intervalUnitOptions: [],
         first_attributeOptions: [],
         second_attribute_aOptions: [],
+        classificationOptions: [],
         yes_or_noOptions: [],
         rulePagingDatasrulePagingDatas: []
       }
@@ -590,6 +600,9 @@
       this.yes_or_noOptions = this.dictList.find(item => {
         return item.dictType === 'yes_or_no'
       }).dictDate
+      this.classificationOptions = this.dictList.find(item => {
+        return item.dictType === 'classification'
+      }).dictDate
       //first_attributeOptions 公立 非公立
       //second_attribute_aOptions 公立  二级属性
       //yes_or_noOptions 是否国际部 是否特殊部 是否网络内
@@ -611,20 +624,25 @@
         }
         this.rulTreeData[1].children.push(option)
       })
-      this.yes_or_noOptions.forEach(item => { //医院级别
+      this.yes_or_noOptions.forEach(item => { //网络内
         let option = {
           id: item.dictCode,
           label: item.dictLabel,
-          attr: 'department1',
+          attr: 'network',
           code: item.dictValue
         }
-        this.rulTreeData[2].children.push(option)
-        option.attr='department2'
-        this.rulTreeData[3].children.push(option)
-        option.attr='network'
         this.rulTreeData[4].children.push(option)
       })
 
+      this.classificationOptions.forEach(item => { //医院类别
+        let option = {
+          id: item.dictCode,
+          label: item.dictLabel,
+          attr: 'hospital',
+          code: item.dictValue
+        }
+        this.rulTreeData[3].children.push(option)
+      })
 
       this.getAddress()
       if (this.$route.query.riskCode) {
@@ -836,12 +854,12 @@
                   constraintList.push(constraint)
                 }
                 //部门类别33
-                if (item.attr === 'department1') {
+                if (item.attr === 'department') {
                   let constraint = this.pushConstraint('33', item.code, item.label, undefined)
                   constraintList.push(constraint)
                 }
-                //是否特殊部34
-                if (item.attr === 'department2') {//department2
+                //医院类别34
+                if (item.attr === 'hospital') {//department2
                   let constraint = this.pushConstraint('34', item.code, item.label, undefined)
                   constraintList.push(constraint)
                 }
@@ -1230,14 +1248,14 @@
             }
             if (item.constraintType === '33') {
               if (departmentClass === '') {
-                departmentClass = '是否国际部：' + item.value2
+                departmentClass = '部门类别：' + item.value2
               } else {
                 departmentClass = departmentClass + ',' + item.value2
               }
             }
             if (item.constraintType === '34') {
               if (hospitalClass === '') {
-                hospitalClass = '是否特殊部：' + item.value2
+                hospitalClass = '医院类别：' + item.value2
               } else {
                 hospitalClass = hospitalClass + ',' + item.value2
               }

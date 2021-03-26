@@ -147,7 +147,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         b.item_code,
         (case when ifnull(c.organ_code,'')='' then  b.organ_code else c.organ_code end) organ_code,
         c.business_type,
-        (case when a.status ='02' then TIMESTAMPDIFF(Hour,a.created_time , a.update_time) else '' end) processingTime,
+        (case when a.status ='02' then TIMESTAMPDIFF(Hour,a.created_time , a.updated_time) else '' end) processingTime,
         b.priority_level,
         c.create_time
         FROM

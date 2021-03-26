@@ -832,18 +832,6 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
             flowLog.setWorkOrderNo(complaintDealVo.getWorkOrderNo());
             flowLogMapper.insertFlowLog(flowLog);
 
-            FlowLog flowLog2 = new FlowLog();
-            flowLog2.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id", 20, 20));
-            flowLog2.setStatus("02");
-            flowLog2.setMakeBy(SecurityUtils.getUsername());
-            //没有um帐号
-            flowLog2.setUmNum(SecurityUtils.getUsername());
-            flowLog2.setCreatedBy(SecurityUtils.getUsername());
-            flowLog2.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
-            flowLog2.setUpdatedBy(SecurityUtils.getUsername());
-            flowLog2.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
-            flowLog2.setWorkOrderNo(workOrderAccept2.getWorkOrderNo());
-            flowLogMapper.insertFlowLog(flowLog2);
             //将所有状态置为N
             workHandleInfo.setWorkOrderNo(complaintDealVo.getWorkOrderNo());
             workHandleInfoMapper.updateStatus(workHandleInfo);
@@ -885,16 +873,28 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
                 workHandleInfoMapper.updateServiceProcessing(workHandleInfo);
             }
             //workHandleInfoMapper.assistInComplaint(workHandleInfo);
-            String status="Y";
+            /*String status="Y";
             //生成WorkHandleInfo第一条数据
             WorkHandleInfo workHandleInfo1=workHandleInfoMapper.selectWorkHandleInfo(workOrderNo,status);
             WorkHandleInfo workHandleInfo2=workHandleInfo1;
             BeanUtils.copyProperties(workHandleInfo2,workHandleInfo1);
             workHandleInfo2.setHandleId(Long.parseLong(PubFun.createMySqlMaxNoUseCache("handle_id",10,6)));
             workHandleInfo2.setWorkOrderNo(workOrderNo2);
-            workHandleInfo2.setStatus("Y");
+            workHandleInfo2.setStatus("Y");*/
 
-            return workHandleInfoMapper.assistInComplaint(workHandleInfo2);
+            FlowLog flowLog2 = new FlowLog();
+            flowLog2.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id", 20, 20));
+            flowLog2.setStatus("02");
+            flowLog2.setMakeBy(SecurityUtils.getUsername());
+            //没有um帐号
+            flowLog2.setUmNum(SecurityUtils.getUsername());
+            flowLog2.setCreatedBy(SecurityUtils.getUsername());
+            flowLog2.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+            flowLog2.setUpdatedBy(SecurityUtils.getUsername());
+            flowLog2.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+            flowLog2.setWorkOrderNo(workOrderAccept2.getWorkOrderNo());
+
+            return flowLogMapper.insertFlowLog(flowLog2);
         }
     }
     @Override

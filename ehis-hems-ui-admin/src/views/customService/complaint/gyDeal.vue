@@ -609,12 +609,12 @@
         <up-load ref="upload"></up-load>
         <co-organizer ref="coOrganizer"></co-organizer>
 <!--        <el-button  type="primary"  size="mini" @click="transfer" disabled>工单挂起</el-button>-->
-        <el-button  type="primary" size="mini" @click="temporary">暂存</el-button>
-        <el-button type="primary" size="mini" @click="submit">提交</el-button>
+        <el-button  type="primary" size="mini" @click="temporary" :disabled="this.checkSubmitFlag=='01'">暂存</el-button>
+        <el-button type="primary" size="mini" @click="submit" :disabled="this.checkSubmitFlag=='01'">提交</el-button>
 <!--        <el-button  type="primary"  size="mini" @click="upload" disabled>客户信息匹配</el-button>-->
         <!--<el-button  type="primary"  size="mini" @click="transfer">转办</el-button>-->
-        <el-button  type="primary" size="mini" @click="coOrganizer">协办</el-button>
-        <el-button  type="primary" size="mini" @click="hiddenShow">关闭</el-button>
+        <el-button  type="primary" size="mini" @click="coOrganizer" :disabled="this.checkSubmitFlag=='01'">协办</el-button>
+        <el-button  type="primary" size="mini" @click="hiddenShow" >关闭</el-button>
 
       </div>
     </el-card>
@@ -681,6 +681,7 @@
     data() {
 
       return {
+        checkSubmitFlag:'',
         serverForm:{
           sign:"",//控制暂存还是提交用
           level1:"",
@@ -1065,7 +1066,8 @@
             insert.workOrderNo = this.$route.query.workOrderNo
             complaintDealSubmit(insert).then(res => {
               if (res != null && res.code === 200) {
-                this.$message.success("保存成功")
+                this.$message.success("保存成功");
+                this.checkSubmitFlag = '01';
                 if (res.rows.length <= 0) {
                   return this.$message.warning(
                     "失败！"

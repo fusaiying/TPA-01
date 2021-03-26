@@ -373,7 +373,7 @@
           </el-table-column>
           <el-table-column prop="remarks" align="center" label="说明" show-overflow-tooltip>
             <template slot-scope="scope">
-              <el-link v-if="scope.row.operateCode=='01'" style="font-size:12px" type="primary"
+              <el-link v-if="scope.row.operateCode=='03'" style="font-size:12px" type="primary"
                        @click="modifyDetails(scope.row)">修改说明
               </el-link>
             </template>
@@ -610,8 +610,8 @@
         <up-load ref="upload"></up-load>
         <co-organizer ref="coOrganizer"></co-organizer>
         <el-button type="primary" size="mini" @click="temporary">暂存</el-button>
-        <el-button type="primary" size="mini" @click="transfer">转办</el-button>
-        <el-button type="primary" size="mini" @click="coOrganizer">催办</el-button>
+        <el-button type="primary" size="mini" @click="coOrganizer">协办</el-button>
+        <el-button type="primary" size="mini" @click="urge">催办</el-button>
         <el-button type="primary" size="mini" @click="coCancel">撤销</el-button>
       </div>
     </el-card>
@@ -1015,6 +1015,7 @@ export default {
     },
     //协办
     coOrganizer() {
+      this.$refs.coOrganizer.dynamicValidateForm.workOrderNo = this.queryParams.workOrderNo;
       this.$refs.coOrganizer.open(this.queryParams.workOrderNo);
     },
     //超链接用

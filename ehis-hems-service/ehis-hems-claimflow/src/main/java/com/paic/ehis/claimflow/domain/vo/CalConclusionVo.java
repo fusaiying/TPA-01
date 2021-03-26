@@ -76,4 +76,7 @@ public class CalConclusionVo implements Serializable {
 
     /** 本次支付差额 */
     private BigDecimal paymentDifference;
+
+    /** 支付状态 */
+    private String prePayStatus;
 }

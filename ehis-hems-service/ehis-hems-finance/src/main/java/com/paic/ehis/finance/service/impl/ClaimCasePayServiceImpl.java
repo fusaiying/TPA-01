@@ -533,6 +533,7 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService {
 
             //return AjaxResult.success("确认支付成功！",1);
             return 1;
+
         }
     }
 
@@ -564,10 +565,12 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService {
             return 2;
         } else {
             List<ClaimCaseForeignPayInfoVO> caseInfoList = claimCasePayVO.getCaseInfoList();
+            int payNum=0;
             for (ClaimCaseForeignPayInfoVO caseInfo : caseInfoList) {
                 if (!"99".equals(caseInfo.getCaseStatus()) && !"98".equals(caseInfo.getCaseStatus()) && !("05".equals(caseInfo.getCaseStatus()) && caseInfo.getDiscountedAmount().compareTo(new BigDecimal(0)) == 0) && !"04".equals(caseInfo.getCaseStatus()) && !"06".equals(caseInfo.getCaseStatus())
                         && !"02".equals(caseInfo.getPayStatus()) && !"03".equals(caseInfo.getPayStatus())) {
                     // 支付状态置为可支付
+                    payNum++;
                     ClaimCase claimCase = new ClaimCase();
                     claimCase.setRptNo(caseInfo.getRptNo());
                     claimCase.setPayStatus("01");
@@ -592,7 +595,11 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService {
                     }
                 }
             }
-            return 1;
+            if (payNum==0){//无借款案件
+                return 4;
+            }else {
+                return 1;
+            }
         }
     }
 
@@ -868,9 +875,9 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService {
         }
         if (result.getData().size() > 0) {
             BaseProviderInfo hospital = result.getData().get(0);  // 封装返回对象
-            claimCasePaymentVO.setBank(hospital.getAccountName());//开户行
-            claimCasePaymentVO.setBankName(hospital.getBankName());//账户名
-            claimCasePaymentVO.setBankNumber(hospital.getBankCode());//账户号
+            claimCasePaymentVO.setBank(hospital.getBankName());//开户行
+            claimCasePaymentVO.setBankName(hospital.getAccountName());//账户名
+            claimCasePaymentVO.setBankNumber(hospital.getAccountNo());//账户号
         }
         // 获取‘是否仅结算理赔责任’ 是01-非全赔 否02-全赔
         BaseProviderSettle baseProviderSettle = new BaseProviderSettle();

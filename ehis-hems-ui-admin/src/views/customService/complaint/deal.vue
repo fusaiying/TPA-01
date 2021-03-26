@@ -525,7 +525,7 @@
           <el-col :span="8">
             <el-form-item label="营销渠道：" prop="marketChannel">
               <el-select v-model="sendForm.marketChannel" class="item-width">
-                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in cs_marketingchannel_codeOption" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
@@ -664,6 +664,7 @@ let dictss = [
   {dictType: 'cs_mediation_appraisal'},
   {dictType: 'cs_risk_type'},
   {dictType: 'cs_question_circ'},
+  {dictType: 'cs_marketingchannel_code'},
 ]
 export default {
   components: {
@@ -945,6 +946,7 @@ export default {
       cs_mediation_appraisal: [],
       cs_risk_type: [],
       cs_question_circ: [],
+      cs_marketingchannel_codeOption: [],
       logUserName:'',
       collaborative : false,
   //    transferBtn : false,
@@ -1030,6 +1032,9 @@ export default {
     }).dictDate
     this.cs_question_circ = this.dictList.find(item => {
       return item.dictType === 'cs_question_circ'
+    }).dictDate
+    this.cs_marketingchannel_codeOption = this.dictList.find(item => {
+      return item.dictType === 'cs_marketingchannel_code'
     }).dictDate
   },
   methods: {

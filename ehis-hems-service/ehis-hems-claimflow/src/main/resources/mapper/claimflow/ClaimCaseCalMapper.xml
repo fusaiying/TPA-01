@@ -46,6 +46,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="sumBillAmount"    column="sumBillAmount"    />
         <result property="sumHosDiscountAmount"    column="sumHosDiscountAmount"    />
         <result property="hospitalCode"    column="hospital_code"    />
+        <result property="prePayStatus"    column="pre_pay_status"    />
     </resultMap>
 
     <resultMap type="com.paic.ehis.claimflow.domain.vo.CalBillSummaryVo" id="CalBillSummaryResult">
@@ -116,9 +117,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         then '05'
         else '02'
         end
-        )) pay_conclusion
-        FROM
-        claim_case_cal ccc
+        )) pay_conclusion ,
+        case when  tt.is_appeal = '01' then
+                                    (select ccase.pay_status
+                                                    from claim_case ccase
+                                                where  ccase.status = 'Y'
+                                                  and ccase.rpt_no  = (select appeal_rpt_no from claim_case_appeal_task task where task.status = 'Y' and  task.appeal_status = '03' and task.new_rpt_no = ccc.rpt_no )
+                                    )
+                                    else '' end pre_pay_status
+        FROM claim_case_cal ccc
         left join (select c.rpt_no,c.is_appeal,b.hospital_code,b.currency from claim_case c left join claim_batch b on c.batch_no=b.batch_no) cc on cc.rpt_no=ccc.rpt_no
         LEFT JOIN
         ( SELECT DISTINCT
@@ -129,6 +136,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         GROUP BY rpt_no ) bill
         ON ccc.rpt_no = bill.rpt_no
         left join claim_case_insured insured on insured.rpt_no=ccc.rpt_no and insured.status='Y'
+        LEFT JOIN claim_case tt on tt.rpt_no = ccc.rpt_no and tt.status='Y'
         <where>
             <if test="rptNo != null  and rptNo != ''"> and ccc.rpt_no = #{rptNo}</if>
         </where>

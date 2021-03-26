@@ -148,7 +148,6 @@ public class FinanceTpaSettleTaskServiceImpl implements IFinanceTpaSettleTaskSer
         String taskNo = "SF" + PubFun.createMySqlMaxNoUseCache("tpa_service_settlement", 10, 10);
 
         if (StringUtils.isEmpty(tpaSettleDTO.getRiskCode())){
-
             tpaSettleDetail.setCompanyCode(tpaSettleDTO.getCompanyCode());
             tpaSettleDetail.setStatus(ClaimStatus.DATAYES.getCode());
             List<FinanceTpaSettleDetail> financeTpaSettleDetails = financeTpaSettleDetailMapper.selectFinanceTpaSettleDetailList(tpaSettleDetail);
@@ -174,6 +173,7 @@ public class FinanceTpaSettleTaskServiceImpl implements IFinanceTpaSettleTaskSer
                         //子页面 下拉列表数据
                         BeanUtils.copyProperties(companyRiskPolicy, tpaSettleDetailInfo);
                         BeanUtils.copyProperties(companyRiskPolicy, financeTpaSettleDetail);
+                        financeTpaSettleDetail.setRiskCode(companyRiskPolicy.getRiskCode());
                         tpaSettleDetailInfo.setRiskName(baseIssuingRule.getRiskName());
                         if ("02".equals(tpaSettleDTO.getSettlementType())) {//保费比例
                             tpaSettleDetailInfo.setPremiumRatio(baseIssuingRule.getSettlementvalue());

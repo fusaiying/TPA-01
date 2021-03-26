@@ -72,7 +72,7 @@
 
 <script>
   import {getMinData} from '@/api/claim/presentingReview'
-  import {updateGetWorkOrder} from '@/api/customService/acceptQuery'
+  import {updateGetWorkOrder,getWorkOrderFlag} from '@/api/customService/acceptQuery'
   import {encrypt} from "@/utils/rsaEncrypt"
   import moment from "moment";
 
@@ -182,27 +182,35 @@
     methods: {
       //获取
       obtainButton(row) {
-
-        updateGetWorkOrder(row.workOrderNo).then(res => {
-          if (res != null && res.code == '200') {
-            this.$message({
-              message: '获取成功！',
-              type: 'success',
-              center: true,
-              showClose: true
-            })
-          } else {
-            this.$message({
-              message: '获取失败!',
-              type: 'error',
-              center: true,
-              showClose: true
-            })
+        getWorkOrderFlag(row.workOrderNo).then(response=>{
+          if (response != null && response.code == '200') {
+            if (response.flag=='1'){
+              this.$emit("searchHandle")
+              return this.$message.warning(
+                "当前工单已被获取，请重新获取！"
+              )
+            }else {
+              updateGetWorkOrder(row.workOrderNo).then(res => {
+                if (res != null && res.code == '200') {
+                  this.$message({
+                    message: '获取成功！',
+                    type: 'success',
+                    center: true,
+                    showClose: true
+                  })
+                } else {
+                  this.$message({
+                    message: '获取失败!',
+                    type: 'error',
+                    center: true,
+                    showClose: true
+                  })
+                }
+                this.$emit("searchHandle")
+              })
+            }
           }
-          this.$emit("searchHandle")
-
         })
-
       },
       //修改
       modifyButton(row) {

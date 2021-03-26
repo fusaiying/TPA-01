@@ -1188,6 +1188,37 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         record.setCreateBy(SecurityUtils.getUsername());
         record.setCreateTime(DateUtils.getNowDate());
         claimCaseRecordMapper.insertClaimCaseRecord(record);
+
+        if (claimCase.getDebtAmount().compareTo(new BigDecimal(String.valueOf(0))) != 0){
+            if ("01".equals(claimCase.getIsAppeal())) {
+                ClaimCaseDebt claimCaseDebt = claimCaseDebtMapper.selectClaimCaseDebtByRptNo(claimCase.getRptNo());
+                if (StringUtils.isNotNull(claimCaseDebt)) {
+                    claimCaseDebt.setRptNo(claimCase.getRptNo());
+                    claimCaseDebt.setDebtAmount(claimCase.getDebtAmount());
+                    List<ClaimCaseInsured> claimCaseInsureds = claimCaseInsuredMapper.selectClaimCaseInsuredById(claimCase.getRptNo());
+                    claimCaseDebt.setInsuredNo(claimCaseInsureds.get(0).getInsuredNo());
+                    claimCaseDebt.setStatus("Y");
+                    claimCaseDebt.setCreateBy(SecurityUtils.getUsername());
+                    claimCaseDebt.setCreateTime(DateUtils.getNowDate());
+                    claimCaseDebt.setUpdateBy(SecurityUtils.getUsername());
+                    claimCaseDebt.setUpdateTime(DateUtils.getNowDate());
+                    claimCaseDebtMapper.insertClaimCaseDebt(claimCaseDebt);
+                } else {
+                    ClaimCaseDebt caseDebt = new ClaimCaseDebt();
+                    caseDebt.setRptNo(claimCase.getRptNo());
+                    caseDebt.setDebtAmount(claimCase.getDebtAmount());
+                    List<ClaimCaseInsured> claimCaseInsureds = claimCaseInsuredMapper.selectClaimCaseInsuredById(claimCase.getRptNo());
+                    caseDebt.setInsuredNo(claimCaseInsureds.get(0).getInsuredNo());
+                    caseDebt.setStatus("Y");
+                    caseDebt.setCreateBy(SecurityUtils.getUsername());
+                    caseDebt.setCreateTime(DateUtils.getNowDate());
+                    caseDebt.setUpdateBy(SecurityUtils.getUsername());
+                    caseDebt.setUpdateTime(DateUtils.getNowDate());
+                    claimCaseDebtMapper.insertClaimCaseDebt(claimCaseDebt);
+                }
+            }
+        }
+
         claimCase.setPayStatus("01");
         return claimCaseMapper.updateClaimCaseNew(claimCase);
     }

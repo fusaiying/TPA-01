@@ -59,11 +59,11 @@
     </el-table-column>
     <el-table-column align="center" label="操作" min-width="140" fixed="right">
       <template slot-scope="scope">
-        <el-button :disabled="scope.row.flag=='2'" size="small" type="text" @click="obtainButton(scope.row)">获取
+        <el-button :disabled="scope.row.flag=='1'" size="small" type="text" @click="obtainButton(scope.row)">获取
         </el-button>
         <el-button size="small" type="text" @click="modifyButton(scope.row)">修改
         </el-button>
-        <el-button size="small" type="text" @click="cancleBytton(scope.row)">取消
+        <el-button :disabled="scope.row.status=='05'" size="small" type="text" @click="cancleBytton(scope.row)">取消
         </el-button>
       </template>
     </el-table-column>
@@ -72,7 +72,7 @@
 
 <script>
   import {getMinData} from '@/api/claim/presentingReview'
-  import {updateGetWorkOrder,getWorkOrderFlag} from '@/api/customService/acceptQuery'
+  import {updateGetWorkOrder,getWorkOrderFlag,editWorkOrder} from '@/api/customService/acceptQuery'
   import {encrypt} from "@/utils/rsaEncrypt"
   import moment from "moment";
 
@@ -214,52 +214,57 @@
       },
       //修改
       modifyButton(row) {
-        if (row.flag1 && row.flag1 == '1') {
-          this.$confirm(`当前工单正在处理，是否申请到个人池?`, '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'warning'
-          }).then(() => {
-            let url = '/customService/modify';
-            if (row.businessType == '03') {
-              url = '/customService/complaint/modify';
-            } else if (row.businessType == '02') {
-              url = '/customService/reservation/modify';
-            }
-            this.$router.push({
-              path: url,
-              query: {
-                workOrderNo: row.workOrderNo,
-                policyNo: row.policyNo,
-                policyItemNo: row.policyItemNo,
-                status: row.status,
-                businessType: row.businessType
+        editWorkOrder(row.workOrderNo).then(res=>{
+          if (res!=null && res.code=='200'){
+            if (res.data.flag1 && res.data.flag1 == '1') {
+              this.$confirm(`当前工单正在处理，是否申请到个人池?`, '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+              }).then(() => {
+                let url = '/customService/modify';
+                if (row.businessType == '03') {
+                  url = '/customService/complaint/modify';
+                } else if (row.businessType == '02') {
+                  url = '/customService/reservation/modify';
+                }
+                this.$router.push({
+                  path: url,
+                  query: {
+                    workOrderNo: row.workOrderNo,
+                    policyNo: row.policyNo,
+                    policyItemNo: row.policyItemNo,
+                    status: row.status,
+                    businessType: row.businessType
+                  }
+                })
+              }).catch(() => {
+                this.$message({
+                  type: 'info',
+                  message: '已取消！'
+                })
+              })
+            } else {
+              let url = '/customService/modify';
+              if (row.businessType == '03') {
+                url = '/customService/complaint/modify';
+              } else if (row.businessType == '02') {
+                url = '/customService/reservation/modify';
               }
-            })
-          }).catch(() => {
-            this.$message({
-              type: 'info',
-              message: '已取消！'
-            })
-          })
-        } else {
-          let url = '/customService/modify';
-          if (row.businessType == '03') {
-            url = '/customService/complaint/modify';
-          } else if (row.businessType == '02') {
-            url = '/customService/reservation/modify';
-          }
-          this.$router.push({
-            path: url,
-            query: {
-              workOrderNo: row.workOrderNo,
-              policyNo: row.policyNo,
-              policyItemNo: row.policyItemNo,
-              status: row.status,
-              businessType: row.businessType
+              this.$router.push({
+                path: url,
+                query: {
+                  workOrderNo: row.workOrderNo,
+                  policyNo: row.policyNo,
+                  policyItemNo: row.policyItemNo,
+                  status: row.status,
+                  businessType: row.businessType
+                }
+              })
             }
-          })
-        }
+          }
+        })
+
 
 
 

@@ -246,7 +246,7 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
         flowLog.setMakeTime(DateUtils.parseDate(DateUtils.getTime()));
         flowLog.setMakeBy(SecurityUtils.getUsername());
         flowLog.setOperateCode("01");
-        flowLog.setLinkCode("01");
+        flowLog.setLinkCode(workOrderAccept.getStatus());
         flowLog.setWorkOrderNo(complaintAcceptVo.getWorkOrderNo());
         flowLog.setCreatedBy(SecurityUtils.getUsername());
         flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
@@ -771,12 +771,13 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
                 workHandleInfoMapper.updateServiceProcessing(workHandleInfo);
             }
 
-
             //插入轨迹表
             FlowLog flowLog = new FlowLog();
             flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id", 20, 20));
-            flowLog.setLinkCode("03");
+            flowLog.setLinkCode(workOrderAccept.getStatus());
+            flowLog.setOperateCode("08");
             flowLog.setMakeBy(SecurityUtils.getUsername());
+            flowLog.setMakeTime(DateUtils.parseDate(DateUtils.getTime()));
             //没有um帐号
             flowLog.setUmNum(SecurityUtils.getUsername());
             flowLog.setCreatedBy(SecurityUtils.getUsername());
@@ -859,12 +860,28 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
                 workHandleInfoMapper.updateServiceProcessing(workHandleInfo);
             }
 
+            FlowLog flowLog2 = new FlowLog();
+            flowLog2.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id", 20, 20));
+            flowLog2.setLinkCode(workOrderAccept2.getStatus());
+            flowLog2.setOperateCode("01");
+            flowLog2.setMakeBy(SecurityUtils.getUsername());
+            flowLog2.setMakeTime(DateUtils.parseDate(DateUtils.getTime()));
+            //没有um帐号
+            flowLog2.setUmNum(SecurityUtils.getUsername());
+            flowLog2.setCreatedBy(SecurityUtils.getUsername());
+            flowLog2.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+            flowLog2.setUpdatedBy(SecurityUtils.getUsername());
+            flowLog2.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+            flowLog2.setWorkOrderNo(workOrderAccept2.getWorkOrderNo());
+            flowLogMapper.insertFlowLog(flowLog2);
+
             //插入轨迹表
             FlowLog flowLog = new FlowLog();
             flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id", 20, 20));
-            flowLog.setLinkCode("03");
+            flowLog.setLinkCode(workOrderAccept1.getStatus());
             flowLog.setOperateCode("08");
             flowLog.setMakeBy(SecurityUtils.getUsername());
+            flowLog.setMakeTime(DateUtils.parseDate(DateUtils.getTime()));
             //没有um帐号
             flowLog.setUmNum(SecurityUtils.getUsername());
             flowLog.setCreatedBy(SecurityUtils.getUsername());

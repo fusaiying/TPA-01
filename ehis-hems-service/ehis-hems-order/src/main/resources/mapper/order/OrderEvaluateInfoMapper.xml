@@ -4,7 +4,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.paic.ehis.order.mapper.OrderEvaluateInfoMapper">
     
-    <resultMap type="OrderEvaluateInfo" id="OrderEvaluateInfoResult">
+    <resultMap type="com.paic.ehis.order.domain.OrderEvaluateInfo" id="OrderEvaluateInfoResult">
         <result property="serialNo"    column="serial_no"    />
         <result property="productCode"    column="product_code"    />
         <result property="serviceCode"    column="service_code"    />
@@ -24,6 +24,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="createTime"    column="create_time"    />
         <result property="updateBy"    column="update_by"    />
         <result property="updateTime"    column="update_time"    />
+        <result property="policyNo"    column="policy_no"    />
+        <result property="productName"    column="product_name"    />
+        <result property="serviceName"    column="service_name"    />
+        <result property="supplierName"    column="supplier_name"    />
+
+
     </resultMap>
 
     <sql id="selectOrderEvaluateInfoVo">
@@ -44,7 +50,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
     <select id="selectOrderEvaluateInfoListNew" parameterType="OrderEvaluateInfo" resultMap="OrderEvaluateInfoResult">
-        SELECT
+        <!--SELECT
             oei.product_code,
             pi.product_chname productName,
             oei.service_code,
@@ -74,7 +80,37 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="phone != null  and phone != ''"> and ci.phone = #{phone}</if>
             <if test="policyNo != null  and policyNo != ''"> and oei.policy_no = #{policyNo}</if>
              and oei.status = 'Y'
+        </where>-->
+        SELECT DISTINCT
+
+        o.product_code,
+        o.product_name productName,
+        o.service_code,
+        o.service_name serviceName,
+        o.supplier_code,
+        o.supplier_name supplierName,
+        o.customer_evaluation,
+        o.evaluation_content,
+        c.name,
+        c.phone,
+        o.create_time
+        FROM
+        order_evaluate_info o
+        LEFT JOIN customer_info c ON c.customer_no = o.customer_no
+        <where>
+            <if test="productCode != null  and productCode != ''"> and o.product_code = #{productCode}</if>
+            <if test="serviceCode != null  and serviceCode != ''"> and o.service_code = #{serviceCode}</if>
+            <if test="supplierCode != null  and supplierCode != ''"> and o.supplier_code = #{supplierCode}</if>
+            <if test="customerEvaluation != null  and customerEvaluation != ''"> and o.customer_evaluation = #{customerEvaluation}</if>
+            <if test="evaluationContent != null  and evaluationContent != ''"> and o.evaluation_content = #{evaluationContent}</if>
+            <if test="idType != null  and idType != ''"> and c.id_type = #{idType}</if>
+            <if test="idCode != null  and idCode != ''"> and c.id_code = #{idCode}</if>
+            <if test="name != null  and name != ''"> and c.name like concat('%', #{name}, '%')</if>
+            <if test="phone != null  and phone != ''"> and c.phone = #{phone}</if>
+            <if test="policyNo != null  and policyNo != ''"> and o.policy_no = #{policyNo}</if>
+            and o.status = 'Y'
         </where>
+
     </select>
     
     <select id="selectOrderEvaluateInfoById" parameterType="String" resultMap="OrderEvaluateInfoResult">

@@ -872,7 +872,6 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
             flowLog.setUpdatedBy(SecurityUtils.getUsername());
             flowLog.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
             flowLog.setWorkOrderNo(complaintDealVo.getWorkOrderNo());
-            flowLogMapper.insertFlowLog(flowLog);
 
             return flowLogMapper.insertFlowLog(flowLog);
         }

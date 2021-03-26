@@ -742,7 +742,9 @@ export default {
     },
     //关闭
     close() {
-
+      // 返回上级路由并关闭当前路由
+      this.$store.state.tagsView.visitedViews.splice(this.$store.state.tagsView.visitedViews.findIndex(item => item.path === this.$route.path), 1);
+      this.$router.push(this.$store.state.tagsView.visitedViews[this.$store.state.tagsView.visitedViews.length - 1].path);
     },
 
     upload() {
@@ -809,6 +811,7 @@ export default {
         if (res != null && res.code === 200) {
           console.log("getCollaborative", res.data)
           this.collaborativeFrom = res.data;
+          this.sendForm = res.data;
           this.submitForm.opinion = this.collaborativeFrom.opinion;
         }
       }).catch(res => {

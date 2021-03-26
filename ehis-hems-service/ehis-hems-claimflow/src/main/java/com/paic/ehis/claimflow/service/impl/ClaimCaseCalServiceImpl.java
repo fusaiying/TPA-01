@@ -82,6 +82,7 @@ public class ClaimCaseCalServiceImpl implements IClaimCaseCalService
             //获取‘是否仅结算理赔责任’ 是01-非全赔 否02-全赔
             if(StringUtils.isNotBlank(calConclusionVo.getHospitalCode())) {
                 BaseProviderSettle baseProviderSettle = new BaseProviderSettle();
+                baseProviderSettle.setOrgFlag("01");
                 baseProviderSettle.setProviderCode(calConclusionVo.getHospitalCode());
                 List<BaseProviderSettle> baseProviderList = getProviderInfoService.selectsettleInfoNew(baseProviderSettle);
                 if (!baseProviderList.isEmpty()) {
@@ -100,7 +101,8 @@ public class ClaimCaseCalServiceImpl implements IClaimCaseCalService
                     exchangeRate.setDateConvert(claimCaseBillMapper.selectEarliestTreatmentBillByRptNo(rptNo).getTreatmentStartDate());
                     exchangeRate = exchangeRateService.getExchangeRate(exchangeRate);
                     if(StringUtils.isNull(exchangeRate)){
-                        return null;
+                        exchangeRate = new SyncExchangeRate();
+                        exchangeRate.setParities(new BigDecimal(1));
                     }
                     calConclusionVo.setExchangeRate(exchangeRate.getParities());
                     BigDecimal payAmount1 = calConclusionVo.getPayAmount();

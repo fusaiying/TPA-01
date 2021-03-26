@@ -67,4 +67,13 @@ public interface FinanceBorrowInfoMapper
      * @return
      */
     public FinanceBorrowInfo selectFinanceBorrowInfoByRptNo(String rptNo);
+
+    /**
+     * 修改案件借款明细
+     *
+     * @param rptNo
+     * @return
+     */
+    public int updateFinanceBorrowInfoByRptNo(String rptNo);
+
 }

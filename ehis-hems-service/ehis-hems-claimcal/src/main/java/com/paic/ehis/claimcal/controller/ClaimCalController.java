@@ -20,6 +20,7 @@ public class ClaimCalController {
         try{
             claimCalService.Calculate(rptNo);
         }catch (Exception e){
+            e.printStackTrace();
             return AjaxResult.error("理算失败，原因："+e.getMessage());
         }
 

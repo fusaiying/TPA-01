@@ -1282,7 +1282,7 @@ export default {
           if (res != null && res.code === 200) {
             this.$refs.coOrganizer.dynamicValidateForm.workOrderNo = this.queryParams.workOrderNo;
 
-            this.$refs.coOrganizer.open();
+            this.$refs.coOrganizer.open(this.queryParams.workOrderNo);
             if (res.rows.length <= 0) {
               return this.$message.warning("失败！");
             }
@@ -1302,7 +1302,7 @@ export default {
               if (res != null && res.code === 200) {
                 this.$refs.coOrganizer.dynamicValidateForm.workOrderNo = this.queryParams.workOrderNo;
 
-                this.$refs.coOrganizer.open();
+                this.$refs.coOrganizer.open(this.queryParams.workOrderNo);
                 if (res.rows.length <= 0) {
                   return this.$message.warning("失败！");
                 }

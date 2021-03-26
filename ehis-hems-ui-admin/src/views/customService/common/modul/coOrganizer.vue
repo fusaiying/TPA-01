@@ -132,7 +132,6 @@ export default {
   },
   async mounted() {
     this.getLoginUserInfo();
-    this.getUMCodeS();
   },
 
   methods: {
@@ -167,8 +166,10 @@ export default {
       });
     },
     //打开窗口
-    open() {
-      this.dialogVisable = true
+    open(workOrderNo) {
+      this.dialogVisable = true;
+      this.dynamicValidateForm.workOrderNo = workOrderNo;
+      this.getUMCodeS();
     },
     submitButton(formName) {
       this.$refs[formName].validate((valid) => {
@@ -222,7 +223,6 @@ export default {
             this.$message.warning('协办方UM账号不能重复转办给：'+tName);
             return false;
           }
-          return false;
 
           coOrganizerSubmit(insert).then(res => {
             if (res != null && res.code === 200) {

@@ -1132,7 +1132,7 @@
       },
       //协办
       coOrganizer() {
-        this.$refs.coOrganizer.open();
+        this.$refs.coOrganizer.open(this.queryParams.workOrderNo);
 
       },
       resetForm() {

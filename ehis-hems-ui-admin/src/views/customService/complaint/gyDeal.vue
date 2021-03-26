@@ -1042,7 +1042,7 @@
       //协办
       coOrganizer(){
         this.$refs.coOrganizer.dynamicValidateForm.workOrderNo=this.queryParams.workOrderNo
-        this.$refs.coOrganizer.open()
+        this.$refs.coOrganizer.open(this.queryParams.workOrderNo);
       },
       //超链接用
       modifyDetails(s){

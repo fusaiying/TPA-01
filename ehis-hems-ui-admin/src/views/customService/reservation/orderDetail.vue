@@ -835,7 +835,7 @@
       //转办
       transfer(){ this.$refs.transfer.open();},
       //协办
-      coOrganizer(){ this.$refs.coOrganizer.open();},
+      coOrganizer(){ this.$refs.coOrganizer.open(this.queryParams.workOrderNo);},
       resetForm() {
         this.$refs.sendForm.resetFields()
       },

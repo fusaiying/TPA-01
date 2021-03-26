@@ -73,6 +73,8 @@ public class AcceptVo extends BaseEntity
     private UserInfo acceptUser=new UserInfo();
     /** 处理人信息 */
     @Excel(name = "处理人")
+    private String updateBy;
+
     private String modifyUserId;
     /** 目前用不上,处理人信息以登录名称显示 */
     private UserInfo modifyUser=new UserInfo();

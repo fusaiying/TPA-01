@@ -45,7 +45,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="subType"    column="sub_type"    />
         <result property="linkCode"    column="link_code"    />
         <result property="operateCode"    column="operate_code"    />
-        <result property="makeBy"    column="make_by"    />
+        <result property="makeBy"    column="created_by"    />
         <result property="umNum"    column="um_num"    />
         <result property="makeTime"    column="make_time"    />
         <result property="remarks"    column="remarks"    />

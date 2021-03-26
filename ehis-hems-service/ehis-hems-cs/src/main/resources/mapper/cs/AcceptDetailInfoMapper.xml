@@ -167,6 +167,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="prop23 != null">prop23,</if>
             <if test="prop24 != null">prop24,</if>
             <if test="prop25 != null">prop25,</if>
+            <if test="prop26 != null">prop26,</if>
+            <if test="prop27 != null">prop27,</if>
+            <if test="prop28 != null">prop28,</if>
+            <if test="prop29 != null">prop29,</if>
+            <if test="prop30 != null">prop30,</if>
+            <if test="prop31 != null">prop31,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="workOrderNo != null">#{workOrderNo},</if>
@@ -213,6 +219,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="prop23 != null">#{prop23},</if>
             <if test="prop24 != null">#{prop24},</if>
             <if test="prop25 != null">#{prop25},</if>
+            <if test="prop26 != null">#{prop26},</if>
+            <if test="prop27 != null">#{prop27},</if>
+            <if test="prop28 != null">#{prop28},</if>
+            <if test="prop29 != null">#{prop29},</if>
+            <if test="prop30 != null">#{prop30},</if>
+            <if test="prop31 != null">#{prop31},</if>
          </trim>
     </insert>
 
@@ -262,6 +274,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="prop23 != null">prop23 = #{prop23},</if>
             <if test="prop24 != null">prop24 = #{prop24},</if>
             <if test="prop25 != null">prop25 = #{prop25},</if>
+            <if test="prop26 != null">prop26 = #{prop26},</if>
+            <if test="prop27 != null">prop26 = #{prop27},</if>
+            <if test="prop28 != null">prop26 = #{prop28},</if>
+            <if test="prop29 != null">prop26 = #{prop29},</if>
+            <if test="prop30 != null">prop26 = #{prop30},</if>
+            <if test="prop31 != null">prop31 = #{prop31},</if>
         </trim>
         where work_order_no = #{workOrderNo}
     </update>

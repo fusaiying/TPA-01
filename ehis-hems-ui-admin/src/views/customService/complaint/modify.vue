@@ -382,7 +382,7 @@
           <el-col :span="8">
             <el-form-item label="营销渠道：" prop="priority"  >
               <el-select v-model="workPoolData.contactsLanguage" class="item-width" >
-                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in cs_marketingchannel_codeOption" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
@@ -486,6 +486,7 @@
     {dictType: 'cs_priority'},
     {dictType: 'cs_channel'},
     {dictType: 'cs_whether_flag'},
+    {dictType: 'cs_marketingchannel_code'},
   ]
   export default {
     components: { upLoad },
@@ -702,6 +703,7 @@
           label: '服务4'
         }],
         sysUserOptions: [],
+        cs_marketingchannel_codeOption: [],
       }
     },
     created() {
@@ -742,6 +744,9 @@
       }).dictDate
       this.cs_identity = this.dictList.find(item => {
         return item.dictType === 'cs_identity'
+      }).dictDate
+      this.cs_marketingchannel_code = this.dictList.find(item => {
+        return item.dictType === 'cs_marketingchannel_code'
       }).dictDate
     },
     methods: {

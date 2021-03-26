@@ -137,13 +137,16 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
     public AcceptVo updateSendByVoById(String workOrderNo) {
         AcceptVo acceptVo = qualityInspectionAcceptMapper.selectSendByVoById1(workOrderNo);//先查询所有的工单
         WorkOrderAccept workOrderAccept = workOrderAcceptMapper.selectWorkOrderAcceptById(workOrderNo);
-        if (null != acceptVo && acceptVo.getStatus().equals("01")) {
+        if (null != acceptVo && acceptVo.getStatus().equals("01")) {//待处理状态
                 workOrderAccept.setStatus("02");
                 workOrderAccept.setAcceptBy(SecurityUtils.getUsername());
                 workOrderAccept.setUpdateBy(SecurityUtils.getUsername());
                 workOrderAccept.setUpdateTime(DateUtils.getNowDate());
                 workOrderAcceptMapper.updateWorkOrderAccept(workOrderAccept);
-        }return acceptVo;
+                acceptVo.setFlag("2");
+        }else {
+            acceptVo.setFlag("1");//非待处理的案件一律置灰
+        }  return acceptVo;
     }
 
     /*工单修改*/

@@ -290,7 +290,7 @@ public class CustomServiceSpotCheckController extends BaseController {
      *工单获取
      */
     @GetMapping("/internal/updateGetWorkOrder")
-    public AjaxResult updateGetWorkOrder(String workOrderNo) {
+    public AjaxResult updateGetWorkOrder(@RequestParam("workOrderNo") String workOrderNo) {
         return AjaxResult.success(qualityInspectionAcceptService.updateSendByVoById(workOrderNo));
     }
 
@@ -299,7 +299,7 @@ public class CustomServiceSpotCheckController extends BaseController {
      *工单修改判断弹框
      */
     @GetMapping("/internal/updateGetWorkOrder1")
-    public AjaxResult updateGetWorkOrder1(String workOrderNo) {
+    public AjaxResult updateGetWorkOrder1(@RequestParam("workOrderNo") String workOrderNo) {
         return AjaxResult.success(qualityInspectionAcceptService.updateSendByVoByIdById1(workOrderNo));
     }
 

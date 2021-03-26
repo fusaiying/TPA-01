@@ -26,6 +26,14 @@ export function updateGetWorkOrder(workOrderNo) {
 }
 
 //# 工单查询获取
+export function updateGetWorkOrder1(workOrderNo) {
+  return request({
+    url: '/cs/spotCheck/internal/updateGetWorkOrder1?workOrderNo='+workOrderNo,
+    method: 'get',
+  })
+}
+
+//# 工单查询获取
 export function getWorkOrderFlag(workOrderNo) {
   return request({
     url: '/cs/accept/workOrderAccept/getInfo1/'+workOrderNo,

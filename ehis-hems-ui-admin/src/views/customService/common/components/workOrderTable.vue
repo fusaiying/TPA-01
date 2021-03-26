@@ -59,7 +59,7 @@
     </el-table-column>
     <el-table-column align="center" label="操作" min-width="140" fixed="right">
       <template slot-scope="scope">
-        <el-button :disabled="scope.row.flag=='1'" size="small" type="text" @click="obtainButton(scope.row)">获取
+        <el-button :disabled="scope.row.status!='01'" size="small" type="text" @click="obtainButton(scope.row)">获取
         </el-button>
         <el-button size="small" type="text" @click="modifyButton(scope.row)">修改
         </el-button>
@@ -72,7 +72,7 @@
 
 <script>
   import {getMinData} from '@/api/claim/presentingReview'
-  import {updateGetWorkOrder,getWorkOrderFlag,editWorkOrder} from '@/api/customService/acceptQuery'
+  import {updateGetWorkOrder,getWorkOrderFlag,editWorkOrder,updateGetWorkOrder1} from '@/api/customService/acceptQuery'
   import {encrypt} from "@/utils/rsaEncrypt"
   import moment from "moment";
 
@@ -222,22 +222,36 @@
                 cancelButtonText: '取消',
                 type: 'warning'
               }).then(() => {
-                let url = '/customService/modify';
-                if (row.businessType == '03') {
-                  url = '/customService/complaint/modify';
-                } else if (row.businessType == '02') {
-                  url = '/customService/reservation/modify';
-                }
-                this.$router.push({
-                  path: url,
-                  query: {
-                    workOrderNo: row.workOrderNo,
-                    policyNo: row.policyNo,
-                    policyItemNo: row.policyItemNo,
-                    status: row.status,
-                    businessType: row.businessType
+                //已在个人池的数据需要先获取到本人名下再处理
+                updateGetWorkOrder1(row.workOrderNo).then(res => {
+                  if (res != null && res.code == '200') {
+                    let url = '/customService/modify';
+                    if (row.businessType == '03') {
+                      url = '/customService/complaint/modify';
+                    } else if (row.businessType == '02') {
+                      url = '/customService/reservation/modify';
+                    }
+                    this.$router.push({
+                      path: url,
+                      query: {
+                        workOrderNo: row.workOrderNo,
+                        policyNo: row.policyNo,
+                        policyItemNo: row.policyItemNo,
+                        status: row.status,
+                        businessType: row.businessType
+                      }
+                    })
+                  } else {
+                    this.$message({
+                      message: '获取失败!',
+                      type: 'error',
+                      center: true,
+                      showClose: true
+                    })
                   }
+                  this.$emit("searchHandle")
                 })
+
               }).catch(() => {
                 this.$message({
                   type: 'info',

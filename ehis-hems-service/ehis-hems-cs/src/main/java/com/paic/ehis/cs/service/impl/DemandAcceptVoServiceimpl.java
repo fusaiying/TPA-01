@@ -298,8 +298,8 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         workOrderAccept.setAcceptTime(DateUtils.parseDate(DateUtils.getTime()));
         workOrderAccept.setCreateBy(SecurityUtils.getUsername());
         workOrderAccept.setCreateTime(DateUtils.parseDate(DateUtils.getTime()));
-        workOrderAccept.setUpdateBy(SecurityUtils.getUsername());
-        workOrderAccept.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
+        /*workOrderAccept.setUpdateBy(SecurityUtils.getUsername());
+        workOrderAccept.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));*/
         workOrderAccept.setWorkOrderNo(demandAcceptVo.getWorkOrderNo());
         workOrderAccept.setBusinessType(demandAcceptVo.getBusinessType());
         demandAcceptVoMapper.insertWorkOrderAccept(workOrderAccept);

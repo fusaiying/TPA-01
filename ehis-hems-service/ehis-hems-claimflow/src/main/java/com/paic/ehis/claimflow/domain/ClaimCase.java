@@ -2,13 +2,13 @@ package com.paic.ehis.claimflow.domain;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-
 import com.paic.ehis.common.core.annotation.Excel;
 import com.paic.ehis.common.core.web.domain.BaseEntity;
 import lombok.Data;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -117,6 +117,10 @@ public class ClaimCase extends BaseEntity {
      * 是否财务回退
      */
     private String isFinanceBack;
+
+    /** 追讨金额 */
+    @Excel(name = "追讨金额")
+    private BigDecimal debtAmount;
 
     public String getClaimType() {
         return claimType;

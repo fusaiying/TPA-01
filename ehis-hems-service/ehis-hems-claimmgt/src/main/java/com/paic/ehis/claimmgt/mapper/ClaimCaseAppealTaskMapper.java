@@ -132,6 +132,9 @@ public interface ClaimCaseAppealTaskMapper
     /** claim_case_remark */
     public void insertClaimCasRemarkeCp(ClaimCaseAppealTask bean);
 
+    /** claim_case_remark type == 02 */
+    public void insertClaimCasTypeRemarkeCp(ClaimCaseAppealTask bean);
+
     /** claim_case_policy */
     public void insertClaimCasePolicyCp(ClaimCaseAppealTask bean);
 

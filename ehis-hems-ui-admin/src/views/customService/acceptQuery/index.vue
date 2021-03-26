@@ -204,7 +204,9 @@ export default {
         updateBy: "",//处理人
         acceptorTime:[],//受理时间数组
         appointmentTime:[],//预约时间数组
+        insuredIdNumber:'',
         handlerTime:[],//处理时间数组
+        complaintTime:[],//预约时间
         workOrderNo: "",//工单编号
         policyNo: "",//保单号
         policyItemNo: "",//分单号
@@ -271,6 +273,9 @@ export default {
   methods: {
     resetForm() {
       this.$refs.acceptQueryForm.resetFields()
+      this.acceptQueryForm.handlerTime=[]
+      this.acceptQueryForm.insuredIdNumber=''
+      this.acceptQueryForm.complaintTime=[]
     },
     searchHandle() {
       let query = {

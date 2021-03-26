@@ -56,22 +56,16 @@ public class CustomServiceSpotCheckController extends BaseController {
      * @return
      */
     @GetMapping("/internal/inspectionSendData")
-    public TableDataInfo selectSendPoolDataBy(WorkOrderQueryDTO workOrderQueryDTO)
-    {
+    public TableDataInfo selectSendPoolDataBy(WorkOrderQueryDTO workOrderQueryDTO) {
         //1.分页处理
         startPage();
-        //2.工单状态处理； 04-已完成,已取消，不合格，合格的工单
-            List<String> acceptStatusList = new ArrayList<>();
-            acceptStatusList.add(CodeEnum.ORDER_STATE_04.getCode());
-            acceptStatusList.add(CodeEnum.ORDER_STATE_05.getCode());
-            workOrderQueryDTO.setAcceptStatusList(acceptStatusList);
-
-            //3.业务类型为： 01-信息需求和03-投诉的才可以质检
-            List<String> businessTypeList = new ArrayList<>();
-            businessTypeList.add(CodeEnum.BUSINESS_TYPE_01.getCode());
-            businessTypeList.add(CodeEnum.BUSINESS_TYPE_03.getCode());
-            workOrderQueryDTO.setBusinessTypeList(businessTypeList);
-            logger.debug("可发起质检工作池入参: {}", workOrderQueryDTO);
+       //2.工单状态处理； 04-已完成,已取消，不合格，合格的工单
+        //3.业务类型为： 01-信息需求和03-投诉的才可以质检
+        List<String> businessTypeList = new ArrayList<>();
+        businessTypeList.add(CodeEnum.BUSINESS_TYPE_01.getCode());
+        businessTypeList.add(CodeEnum.BUSINESS_TYPE_03.getCode());
+        workOrderQueryDTO.setBusinessTypeList(businessTypeList);
+        logger.debug("可发起质检工作池入参: {}", workOrderQueryDTO);
         List<AcceptVo> list = qualityInspectionAcceptService.selectSendPoolDataTwo(workOrderQueryDTO);
         logger.debug("可发起质检工作池结果:{}", list);
         return getDataTable(list);

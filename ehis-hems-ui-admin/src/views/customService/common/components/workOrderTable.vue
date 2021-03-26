@@ -63,7 +63,7 @@
         </el-button>
         <el-button size="small" type="text" @click="modifyButton(scope.row)">修改
         </el-button>
-        <el-button size="small" type="text" @click="cancleBytton(scope.row)">取消
+        <el-button :disabled="scope.row.status=='05'" size="small" type="text" @click="cancleBytton(scope.row)">取消
         </el-button>
       </template>
     </el-table-column>

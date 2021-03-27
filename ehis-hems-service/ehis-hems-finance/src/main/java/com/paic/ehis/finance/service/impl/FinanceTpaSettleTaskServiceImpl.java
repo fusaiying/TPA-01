@@ -273,6 +273,8 @@ public class FinanceTpaSettleTaskServiceImpl implements IFinanceTpaSettleTaskSer
                     policyAndRiskService.settledPolicy(policyAndRiskRelation);
                     detailInfos.add(tpaSettleDetailInfo);
                 }
+            }else{
+                throw new Exception("该出单公司在该截止日期前已结算完毕！");
             }
             tpaSettleInfo.setDetailInfos(detailInfos);
             assert companyRiskPolicy != null;

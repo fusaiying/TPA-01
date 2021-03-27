@@ -38,7 +38,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </insert>
 
 
-    <resultMap type="FlowLog" id="FlowLogResult">
+    <resultMap type="com.paic.ehis.cs.domain.FlowLog" id="FlowLogResult">
         <result property="flowId"    column="flow_id"    />
         <result property="workOrderNo"    column="work_order_no"    />
         <result property="subId"    column="sub_id"    />
@@ -64,7 +64,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select flow_id, work_order_no, sub_id, sub_type, link_code, operate_code, make_by, um_num, make_time, remarks, opinion, to_department, to_reason, attachment_flag, status, created_by, created_time, updated_by, updated_time from flow_log
     </sql>
 
-    <select id="selectFlowLogList" parameterType="FlowLog" resultMap="FlowLogResult">
+    <select id="selectFlowLogList" parameterType="com.paic.ehis.cs.domain.FlowLog" resultMap="FlowLogResult">
         <include refid="selectFlowLogVo"/>
         <where>
             <if test="workOrderNo != null  and workOrderNo != ''"> and work_order_no = #{workOrderNo}</if>
@@ -93,7 +93,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where flow_id = #{flowId}
     </select>
 
-    <insert id="insertFlowLog" parameterType="FlowLog">
+    <insert id="insertFlowLog" parameterType="com.paic.ehis.cs.domain.FlowLog">
         insert into flow_log
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="flowId != null">flow_id,</if>
@@ -139,7 +139,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
     </insert>
 
-    <update id="updateFlowLog" parameterType="FlowLog">
+    <update id="updateFlowLog" parameterType="com.paic.ehis.cs.domain.FlowLog">
         update flow_log
         <trim prefix="SET" suffixOverrides=",">
             <if test="workOrderNo != null">work_order_no = #{workOrderNo},</if>

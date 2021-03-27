@@ -4,7 +4,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.paic.ehis.cs.mapper.FieldMapMapper">
     
-    <resultMap type="FieldMap" id="FieldMapResult">
+    <resultMap type="com.paic.ehis.cs.domain.FieldMap" id="FieldMapResult">
         <result property="sourceName"    column="source_name"    />
         <result property="typeCode"    column="type_code"    />
         <result property="fieldOrder"    column="field_order"    />
@@ -23,7 +23,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select source_name, type_code, field_order, source_filed_name, source_field_mean, target_table_name, target_column_name, target_column_mean, created_by, created_time, updated_by, updated_time from field_map
     </sql>
 
-    <select id="selectFieldMapList" parameterType="FieldMap" resultMap="FieldMapResult">
+    <select id="selectFieldMapList" parameterType="com.paic.ehis.cs.domain.FieldMap" resultMap="FieldMapResult">
         <include refid="selectFieldMapVo"/>
         <where>  
             <if test="sourceFieldMean != null  and sourceFieldMean != ''"> and source_field_mean = #{sourceFieldMean}</if>
@@ -53,7 +53,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where source_name = #{sourceName}
     </select>
         
-    <insert id="insertFieldMap" parameterType="FieldMap">
+    <insert id="insertFieldMap" parameterType="com.paic.ehis.cs.domain.FieldMap">
         insert into field_map
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="sourceName != null">source_name,</if>
@@ -85,7 +85,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
     </insert>
 
-    <update id="updateFieldMap" parameterType="FieldMap">
+    <update id="updateFieldMap" parameterType="com.paic.ehis.cs.domain.FieldMap">
         update field_map
         <trim prefix="SET" suffixOverrides=",">
             <if test="typeCode != null">type_code = #{typeCode},</if>

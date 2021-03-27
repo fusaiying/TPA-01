@@ -6,6 +6,8 @@ import feign.hystrix.FallbackFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @Component
 public class CustomServiceFallbackFactory implements FallbackFactory<CustomServiceService>
@@ -25,6 +27,8 @@ public class CustomServiceFallbackFactory implements FallbackFactory<CustomServi
             public AjaxResult batchAcceptVomonth(String invalidDate) {
                 return null;
             }
+            @Override
+            public AjaxResult invalidAcceptDetailInfo(String invalidDate){return null;}
         };
     }
 }

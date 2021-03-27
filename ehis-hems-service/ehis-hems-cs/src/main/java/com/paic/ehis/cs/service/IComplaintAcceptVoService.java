@@ -4,7 +4,6 @@ import com.paic.ehis.cs.domain.ComplaintsCascade;
 import com.paic.ehis.cs.domain.dto.AcceptDTO;
 import com.paic.ehis.cs.domain.vo.ComplaintAcceptVo;
 import com.paic.ehis.cs.domain.vo.ComplaintDealVo;
-import com.paic.ehis.cs.domain.vo.DemandAcceptVo;
 import com.paic.ehis.cs.domain.vo.Level3;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,5 +40,8 @@ public interface IComplaintAcceptVoService {
     public List<ComplaintsCascade> selectComplaintsCascadeList();
     public List<Level3> selectLevel1();
     public List<Level3> selectLevel2(String parentCode);
+
+    //投诉服务处理页面数据
+    public ComplaintDealVo selectServiceProcess(String workOrderNo);
 
 }

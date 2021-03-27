@@ -22,7 +22,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select item_id, inspection_id, item_type, item_key, value, item_remark, status, created_by, created_time, updated_by, updated_time from quality_inspection_item
     </sql>
 
-    <select id="selectQualityInspectionItemList" parameterType="QualityInspectionItem" resultMap="QualityInspectionItemResult">
+    <select id="selectQualityInspectionItemList" parameterType="com.paic.ehis.cs.domain.QualityInspectionItem" resultMap="QualityInspectionItemResult">
         <include refid="selectQualityInspectionItemVo"/>
         <where>  
             <if test="inspectionId != null  and inspectionId != ''"> and inspection_id = #{inspectionId}</if>
@@ -43,7 +43,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where item_id = #{itemId}
     </select>
         
-    <insert id="insertQualityInspectionItem" parameterType="QualityInspectionItem">
+    <insert id="insertQualityInspectionItem" parameterType="com.paic.ehis.cs.domain.QualityInspectionItem">
         insert into quality_inspection_item
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="itemId != null">item_id,</if>

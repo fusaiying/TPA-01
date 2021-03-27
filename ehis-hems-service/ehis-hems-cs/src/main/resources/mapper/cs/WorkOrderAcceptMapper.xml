@@ -32,6 +32,33 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="activationNum"    column="activation_num"    />
     </resultMap>
 
+    <resultMap type="com.paic.ehis.cs.domain.vo.ComplaintDealVo" id="ComplaintDealVoResult">
+        <result property="workOrderNo"    column="work_order_no"    />
+        <result property="level1"    column="handle_prop3"    />
+        <result property="level2"    column="handle_prop4"    />
+        <result property="pieceworkFlag"    column="flag"    />
+        <result property="complaintStatus"    column="handle_prop5"    />
+        <result property="complaintTenable"    column="handle_prop1"    />
+        <result property="faseReason"    column="handle_prop6"    />
+        <result property="repeatedComplaint"    column="handle_prop7"    />
+        <result property="reason1"    column="handle_prop8"    />
+        <result property="reason2"    column="handle_prop9"    />
+        <result property="reason3"    column="handle_prop10"    />
+        <result property="complaintLink"    column="handle_prop11"    />
+        <result property="complaintQuestion"    column="handle_prop12"    />
+        <result property="outsideState"    column="handle_prop13"    />
+        <result property="riskType"    column="handle_prop14"    />
+        <result property="marketChannel"    column="handle_prop15"    />
+        <result property="complaintCategory"    column="handle_prop16"    />
+        <result property="rootDepartment"    column="handle_prop17"    />
+        <result property="actionCause"    column="handle_prop30"    />
+        <result property="treatmentProgress"    column="handle_prop18"    />
+        <result property="treatmentResult"    column="remark"    />
+        <result property="customerFeedback"    column="handle_prop2"    />
+        <result property="rootImprovement"    column="handle_prop19"    />
+        <result property="actPromptly"    column="handle_prop20"    />
+    </resultMap>
+
     <sql id="selectWorkOrderAcceptVo">
         select work_order_no, activation_num,business_type, policy_no, policy_item_no, risk_code, insured_no, insured_name, holder_no, holder_name, accept_by, accept_time, modify_by, modify_time, vip_flag, organ_code, status, end_date, click_time, hang_flag, hang_reason, create_by, create_time, update_by, update_time from work_order_accept
     </sql>
@@ -208,7 +235,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
     </delete>
 
-    <select id="selectServiceProcess" parameterType="String" resultMap="">
+    <select id="selectServiceProcess" parameterType="String" resultMap="ComplaintDealVoResult">
         SELECT
             woa.work_order_no,
             whi.handle_prop3,

@@ -210,9 +210,9 @@ public class FinanceTpaSettleTaskServiceImpl implements IFinanceTpaSettleTaskSer
                     if ("02".equals(tpaSettleDTO.getSettlementType())) {
                         tpaSettleInfo.setServiceSettleAmount((baseIssuingRule.getSettlementvalue().multiply(companyRiskPolicy.getSumPerm()))
                                 .add(tpaSettleInfo.getServiceSettleAmount()));
-                    }else {
-                        tpaSettleInfo.setServiceSettleAmount(new BigDecimal(String.valueOf(0)));
                     }
+                }else {
+                    tpaSettleInfo.setServiceSettleAmount(new BigDecimal(String.valueOf(0)));
                 }
                 financeTpaSettleTask.setServiceSettleAmount(tpaSettleInfo.getServiceSettleAmount());
                 tpaSettleInfos.add(tpaSettleInfo);

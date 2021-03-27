@@ -10,6 +10,7 @@ import com.paic.ehis.cs.domain.vo.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * 质检受理服务 IQualityInspectionAcceptService
@@ -96,5 +97,7 @@ public interface IQualityInspectionAcceptService
     //一个月批处理
     List<AcceptVo> batchAcceptVomonth(String invalidDateStar);
     List<QualityInspectionHandleVo> selectQualityFlagVO(QualityInspectionDTO qualityInspectionDTO);
+
+    List<AcceptVo> invalidAcceptDetailInfo(String invalidDateStr);
 
 }

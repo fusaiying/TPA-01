@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.paic.ehis.cs.mapper.HcsModificationMapper">
 
-    <resultMap type="HcsModification" id="HcsModificationResult">
+    <resultMap type="com.paic.ehis.cs.domain.HcsModification" id="HcsModificationResult">
         <result property="workOrderNo"    column="work_order_no"    />
         <result property="alterId"    column="alter_id"    />
         <result property="alterBy"    column="alter_by"    />
@@ -25,7 +25,7 @@
         select work_order_no, alter_id, alter_by, um_code, alter_time, alter_channel, alter_content, rela_edit_id, call_serial_num, status, created_by, created_time, updated_by, updated_time from hcs_modification
     </sql>
 
-    <select id="selectHcsModificationList" parameterType="HcsModification" resultMap="HcsModificationResult">
+    <select id="selectHcsModificationList" parameterType="com.paic.ehis.cs.domain.HcsModification" resultMap="HcsModificationResult">
         <include refid="selectHcsModificationVo"/>
         <where>
             <if test="alterBy != null  and alterBy != ''"> and alter_by = #{alterBy}</if>
@@ -51,7 +51,7 @@
         where work_order_no = #{workOrderNo}
     </select>
 
-    <insert id="insertHcsModification" parameterType="HcsModification">
+    <insert id="insertHcsModification" parameterType="com.paic.ehis.cs.domain.HcsModification">
         insert into hcs_modification
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="workOrderNo != null">work_order_no,</if>
@@ -87,7 +87,7 @@
         </trim>
     </insert>
 
-    <update id="updateHcsModification" parameterType="HcsModification">
+    <update id="updateHcsModification" parameterType="com.paic.ehis.cs.domain.HcsModification">
         update hcs_modification
         <trim prefix="SET" suffixOverrides=",">
             <if test="alterId != null">alter_id = #{alterId},</if>
@@ -107,7 +107,7 @@
         where work_order_no = #{workOrderNo}
     </update>
 
-    <update id="updateHcsStauts" parameterType="HcsModification">
+    <update id="updateHcsStauts" parameterType="com.paic.ehis.cs.domain.HcsModification">
         update hcs_modification set status='N' where alter_id in
         <foreach item="alterId" collection="array" open="(" separator="," close=")">
             #{alterId}

@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 质检受理服务实现 QualityInspectionAcceptServiceImpl
@@ -405,6 +406,7 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
         return qualityInspectionAcceptMapper.selectQualityFlagVO(qualityInspectionDTO);
     }
 
+
     //信息需求一周分配案件批处理
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     @Override
@@ -741,6 +743,27 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
                     workOrderQueryDTO.setWorkOrderNo(null);
                 }
             }
+        }
+        return acceptVos;
+    }
+
+    //预约12点批处理
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    @Override
+    public List<AcceptVo> invalidAcceptDetailInfo(String invalidDateStr) {
+        if (StringUtils.isEmpty(invalidDateStr)) {
+            throw new RuntimeException("日期为空！");
+        }
+        Date invalidDate =DateUtils.parseDate(invalidDateStr);
+        List<AcceptVo> acceptVos=qualityInspectionAcceptMapper.selectInvalidAcceptDetailInfo(invalidDate);
+        if(StringUtils.isNotEmpty(acceptVos)){
+            List<String> workOrderNoList=acceptVos.stream().map(bsc -> bsc.getWorkOrderNo()).collect(Collectors.toList());
+            String[] workOrderNoMany=new String[acceptVos.size()];
+            for(int i=0;i<workOrderNoList.size();i++){
+                workOrderNoMany[i] =workOrderNoList.get(i);
+            }
+            //批量将预约案件状态从已处理变成已修改
+            workOrderAcceptMapper.deleteAcceptDetailInfoMany(workOrderNoMany);
         }
         return acceptVos;
     }

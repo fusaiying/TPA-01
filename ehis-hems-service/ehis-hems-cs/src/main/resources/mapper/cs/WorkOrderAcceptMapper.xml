@@ -201,4 +201,50 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where  work_order_no = #{workOrderNo} and ifnull(click_time,'')= ''
     </update>
 
+    <delete id="deleteAcceptDetailInfoMany" parameterType="String">
+        update work_order_accept  set status='04' where work_order_no in
+        <foreach item="workOrderNo" collection="array" open="(" separator="," close=")">
+            #{workOrderNo}
+        </foreach>
+    </delete>
+
+    <select id="selectServiceProcess" parameterType="String" resultMap="">
+        SELECT
+            woa.work_order_no,
+            whi.handle_prop3,
+            whi.handle_prop4,
+            whi.flag,
+            whi.handle_prop5,
+            whi.handle_prop1,
+            whi.handle_prop6,
+            whi.handle_prop7,
+            whi.handle_prop8,
+            whi.handle_prop9,
+            whi.handle_prop10,
+            whi.handle_prop11,
+            whi.handle_prop12,
+            whi.handle_prop13,
+            whi.handle_prop14,
+            whi.handle_prop15,
+            whi.handle_prop16,
+            whi.handle_prop17,
+            whi.handle_prop30,
+            whi.handle_prop18,
+            whi.remark,
+            whi.handle_prop2,
+            whi.handle_prop19,
+            whi.handle_prop20
+        FROM
+            work_order_accept woa
+                LEFT JOIN accept_detail_info adi ON woa.work_order_no = adi.work_order_no
+                LEFT JOIN person_info pi ON woa.insured_no = pi.person_id
+                LEFT JOIN quality_inspection_accept qia ON woa.work_order_no = qia.work_order_no
+                LEFT JOIN work_handle_info whi ON woa.work_order_no = whi.work_order_no
+        WHERE
+            1 = 1
+          AND woa.STATUS = '04'
+          AND woa.business_type = '03'
+          and woa.work_order_no=#{workOrderNo}
+    </select>
+
 </mapper>

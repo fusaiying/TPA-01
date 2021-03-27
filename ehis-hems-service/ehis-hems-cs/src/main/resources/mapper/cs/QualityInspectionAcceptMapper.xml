@@ -362,9 +362,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </if>
     </update>
 
+    <!--按周抽检规则：已结案的案件未被质检过和未被激活过（修改过）-->
     <select id="getWorkOrderCountByUserId" parameterType="com.paic.ehis.cs.domain.dto.WorkOrderQueryDTO" resultMap="AcceptResult">
-        select woa.update_by,count(*) as count,GROUP_CONCAT(work_order_no) as work_order_nos,woa.activation_num from work_order_accept woa where 1=1
-        and woa.work_order_no not in (select work_order_no from quality_inspection_accept)
+        SELECT
+        woa.update_by,
+        count( * ) AS count,
+        GROUP_CONCAT( work_order_no ) AS work_order_nos
+        FROM
+        work_order_accept woa
+        WHERE
+        1 = 1
+        AND woa.work_order_no not IN ( SELECT work_order_no FROM quality_inspection_accept qia WHERE woa.work_order_no=qia.work_order_no )
+        and woa.status='04' and woa.activation_num='0'
         <if test="updateBy != null and updateBy != ''"> and woa.update_by = #{updateBy}</if>
         <if test="status != null and status != ''"> and woa.status = #{status}</if>
         <if test="workOrderNo != null and workOrderNo != ''"> and woa.work_order_no = #{workOrderNo}</if>
@@ -374,27 +383,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <if test="endCaseEndTime != null ">
             and DATE_FORMAT(woa.end_date,'%Y-%m-%d') <![CDATA[<=]]> #{endCaseEndTime}
         </if>
-        <if test="acceptStatusList != null">
-            and status IN (
-            <foreach collection="acceptStatusList" item="status"
-                     separator=",">
-                #{status}
-            </foreach>
-            )
-        </if>
-        group by woa.update_by,woa.activation_num
+        GROUP BY
+        woa.update_by
     </select>
 
+
+    <!--按月抽检规则：已结案的案件案件首次被激活（修改过一次），并且案件不在质检中或质检结果为合格的案件-->
     <select id="getWorkOrderCountByUserIdMonth" parameterType="com.paic.ehis.cs.domain.dto.WorkOrderQueryDTO" resultMap="AcceptResult">
         SELECT
         woa.update_by,
-        woa.work_order_no ,
-        woa.activation_num
+        count( * ) AS count,
+        GROUP_CONCAT( work_order_no ) AS work_order_nos
         FROM
         work_order_accept woa
         WHERE
         1 = 1
-        AND woa.work_order_no IN ( SELECT work_order_no FROM quality_inspection_accept WHERE STATUS = '01' OR ( STATUS = '03' AND result = '01' ) )
+        AND woa.work_order_no IN ( SELECT work_order_no FROM quality_inspection_accept WHERE  STATUS = '03' AND result = '01' )
+        woa.activation_num='1'
+        and woa.status='04'
         <if test="updateBy != null and updateBy != ''">and woa.update_by = #{updateBy}</if>
         <if test="status != null and status != ''"> and woa.status = #{status}</if>
         <if test="workOrderNo != null and workOrderNo != ''"> and woa.work_order_no = #{workOrderNo}</if>
@@ -404,15 +410,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <if test="endCaseEndTime != null ">
             and DATE_FORMAT(woa.end_date,'%Y-%m-%d') <![CDATA[<=]]> #{endCaseEndTime}
         </if>
-        <if test="acceptStatusList != null">
-            and status IN (
-            <foreach collection="acceptStatusList" item="status"
-                     separator=",">
-                #{status}
-            </foreach>
-            )
-        </if>
-
+        GROUP BY
+        woa.update_by
     </select>
 
     <select id="selectInvalidAcceptDetailInfo" resultMap="AcceptResult">

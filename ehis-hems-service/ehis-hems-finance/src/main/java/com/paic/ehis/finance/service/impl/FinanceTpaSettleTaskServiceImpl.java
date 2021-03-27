@@ -220,7 +220,7 @@ public class FinanceTpaSettleTaskServiceImpl implements IFinanceTpaSettleTaskSer
                 tpaSettleInfos.add(tpaSettleInfo);
                 earliestDay=companyRiskPolicy.getValidStartDate().before(earliestDay)?companyRiskPolicy.getValidStartDate():earliestDay;
             }
-            if (StringUtils.isNotNull(financeTpaSettleTask.getSettleStartDate())) {
+            if (StringUtils.isNull(financeTpaSettleTask.getSettleStartDate())) {
                 financeTpaSettleTask.setSettleStartDate(earliestDay);
             }
             financeTpaSettleTask.setSettleTaskNo(taskNo);
@@ -286,7 +286,7 @@ public class FinanceTpaSettleTaskServiceImpl implements IFinanceTpaSettleTaskSer
             if ("01".equals(tpaSettleDTO.getSettlementType())){
                 tpaSettleInfo.setServiceSettleAmount(companyRule.getSettlementvalue().multiply(companyRiskPolicy.getSumPerm()));
             }
-            if (!StringUtils.isNotNull(financeTpaSettleTask.getSettleStartDate())) {
+            if (StringUtils.isNull(financeTpaSettleTask.getSettleStartDate())) {
                 financeTpaSettleTask.setSettleStartDate(companyRiskPolicy.getValidStartDate());
             }
             financeTpaSettleTask.setServiceSettleAmount(tpaSettleInfo.getServiceSettleAmount());

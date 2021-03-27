@@ -175,9 +175,12 @@ public class FinanceTpaSettleTaskServiceImpl implements IFinanceTpaSettleTaskSer
                         BeanUtils.copyProperties(companyRiskPolicy, financeTpaSettleDetail);
                         financeTpaSettleDetail.setRiskCode(companyRiskPolicy.getRiskCode());
                         tpaSettleDetailInfo.setRiskName(baseIssuingRule.getRiskName());
-                        if ("02".equals(tpaSettleDTO.getSettlementType())) {//保费比例
-                            tpaSettleDetailInfo.setPremiumRatio(baseIssuingRule.getSettlementvalue());
+                        if ("01".equals(tpaSettleDTO.getSettlementType())) {//保费比例
+                            tpaSettleDetailInfo.setPremiumRatio(baseIssuingRule.getSettlementvalue().divide(new BigDecimal(String.valueOf(100)),2,BigDecimal.ROUND_HALF_UP));
                             tpaSettleDetailInfo.setServiceAmount(companyRiskPolicy.getPrem().multiply(tpaSettleDetailInfo.getPremiumRatio()));
+                        }
+                        if ("02".equals(tpaSettleDTO.getSettlementType())){
+                            tpaSettleDetailInfo.setServiceAmount(baseIssuingRule.getSettlementvalue());
                         }
                         financeTpaSettleDetail.setSettleTaskNo(taskNo);
                         financeTpaSettleDetail.setServiceAmount(tpaSettleDetailInfo.getServiceAmount());
@@ -246,9 +249,12 @@ public class FinanceTpaSettleTaskServiceImpl implements IFinanceTpaSettleTaskSer
                     //子页面下拉数据
                     BeanUtils.copyProperties(companyRiskPolicy, tpaSettleDetailInfo);
                     tpaSettleDetailInfo.setRiskName(companyRule.getRiskName());
-                    if ("02".equals(tpaSettleDTO.getSettlementType())) {//保费比例
-                        tpaSettleDetailInfo.setPremiumRatio(companyRule.getSettlementvalue());
+                    if ("01".equals(tpaSettleDTO.getSettlementType())) {//保费比例
+                        tpaSettleDetailInfo.setPremiumRatio(companyRule.getSettlementvalue().divide(new BigDecimal(String.valueOf(100)),2,BigDecimal.ROUND_HALF_UP));
                         tpaSettleDetailInfo.setServiceAmount(companyRiskPolicy.getPrem().multiply(tpaSettleDetailInfo.getPremiumRatio()));
+                    }
+                    if ("02".equals(tpaSettleDTO.getSettlementType())){
+                        tpaSettleDetailInfo.setServiceAmount(companyRule.getSettlementvalue());
                     }
                     financeTpaSettleDetail.setSettleTaskNo(taskNo);
                     financeTpaSettleDetail.setServiceAmount(tpaSettleDetailInfo.getServiceAmount());
@@ -264,10 +270,10 @@ public class FinanceTpaSettleTaskServiceImpl implements IFinanceTpaSettleTaskSer
             tpaSettleInfo.setRiskCode(tpaSettleDTO.getRiskCode());
             tpaSettleInfo.setRiskName(companyRule.getRiskName());
             tpaSettleInfo.setSettlementType(tpaSettleDTO.getSettlementType());
-            if ("01".equals(tpaSettleDTO.getSettlementType())){
+            if ("02".equals(tpaSettleDTO.getSettlementType())){
                 tpaSettleInfo.setServiceSettleAmount(companyRule.getSettlementvalue().multiply(new BigDecimal(companyRiskPolicy.getTotalPeople())));
             }
-            if ("02".equals(tpaSettleDTO.getSettlementType())){
+            if ("01".equals(tpaSettleDTO.getSettlementType())){
                 tpaSettleInfo.setServiceSettleAmount(companyRule.getSettlementvalue().multiply(companyRiskPolicy.getSumPerm()));
             }
 

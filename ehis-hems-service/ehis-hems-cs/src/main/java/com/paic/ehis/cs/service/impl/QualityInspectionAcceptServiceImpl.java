@@ -414,16 +414,11 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
         if (StringUtils.isEmpty(invalidDateStar)) {
             throw new RuntimeException("日期为空！");
         }
+        Date invalidDate =DateUtils.parseDate(invalidDateStar);
         SimpleDateFormat foramt = new SimpleDateFormat("yyyy-MM-dd");
-        Date date = null;
-        try {
-            date = foramt.parse(invalidDateStar);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
         Calendar cal = Calendar.getInstance();
         Calendar cal1 = Calendar.getInstance();
-        cal.setTime(date);
+        cal.setTime(invalidDate);
            if (1 == cal.get(Calendar.DAY_OF_WEEK)) {
             cal.add(Calendar.DATE, -1);
         }
@@ -438,22 +433,7 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
         WorkOrderQueryDTO workOrderQueryDTO = new WorkOrderQueryDTO();//根据工单状态
         workOrderQueryDTO.setEndCaseStartTime(foramt.format(cal.getTime()) + " 00:00:00");//获取上周一
         workOrderQueryDTO.setEndCaseEndTime(foramt.format(cal1.getTime()) + " 23:59:59");//获取上周天
-
-        //2.工单状态处理； 04-已完成的工单且没有被质检过
-        workOrderQueryDTO.setAcceptStatus(CodeEnum.ORDER_STATE_04.getCode());
-        //3.业务类型为： 01-信息需求和03-投诉的才可以质检
-        List<String> businessTypeList = new ArrayList<>();
-        businessTypeList.add(CodeEnum.BUSINESS_TYPE_01.getCode());
-        businessTypeList.add(CodeEnum.BUSINESS_TYPE_03.getCode());
-        workOrderQueryDTO.setBusinessTypeList(businessTypeList);
-        List<AcceptVo> acceptVos = new ArrayList<>();
-        List<String> acceptStatusList = new ArrayList<>();
-        {
-            acceptStatusList.add("04");
-            acceptStatusList.add("05");
-        }
-        workOrderQueryDTO.setAcceptStatusList(acceptStatusList);
-        List<AcceptVo> list = qualityInspectionAcceptMapper.getWorkOrderCountByUserId(workOrderQueryDTO);//根据操作人分组获取工单
+        List<AcceptVo> list = qualityInspectionAcceptMapper.getWorkOrderCountByUserId(workOrderQueryDTO);//
         if (null != list) {
             int i = list.size();
             for (AcceptVo acceptVo : list) {
@@ -566,7 +546,7 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
                 }
             }
         }
-        return acceptVos;
+        return null;
     }
 
     //信息需求一月分配案件批处理
@@ -576,19 +556,13 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
         if (StringUtils.isEmpty(invalidDateStar)) {
             throw new RuntimeException("日期为空！");
         }
-
+        Date invalidDate =DateUtils.parseDate(invalidDateStar);
         SimpleDateFormat foramt = new SimpleDateFormat("yyyy-MM-dd");
-        Date date = null;
-        try {
-            date = foramt.parse(invalidDateStar);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
         Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
+        cal.setTime(invalidDate);
         WorkOrderQueryDTO workOrderQueryDTO = new WorkOrderQueryDTO();//根据工单状态
         try {
-            date = foramt.parse(invalidDateStar);
+            Date date = foramt.parse(invalidDateStar);
             Calendar c = Calendar.getInstance();
             //设置为指定日期
             c.setTime(date);
@@ -603,7 +577,7 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
             e.printStackTrace();
         }
         try {
-            date = foramt.parse(invalidDateStar);
+            Date date = foramt.parse(invalidDateStar);
             Calendar c1 = Calendar.getInstance();
             //设置为指定日期
             c1.setTime(date);
@@ -618,20 +592,7 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
             e.printStackTrace();
         }
 
-        //2.工单状态处理； 04-已完成的工单且没有被质检过
-        workOrderQueryDTO.setAcceptStatus(CodeEnum.ORDER_STATE_04.getCode());
-        //3.业务类型为： 01-信息需求和03-投诉的才可以质检
-        List<String> businessTypeList = new ArrayList<>();
-        businessTypeList.add(CodeEnum.BUSINESS_TYPE_01.getCode());
-        businessTypeList.add(CodeEnum.BUSINESS_TYPE_03.getCode());
-        workOrderQueryDTO.setBusinessTypeList(businessTypeList);
         List<AcceptVo> acceptVos = new ArrayList<>();
-        List<String> acceptStatusList = new ArrayList<>();
-        {
-            acceptStatusList.add("04");
-            acceptStatusList.add("05");
-        }
-        workOrderQueryDTO.setAcceptStatusList(acceptStatusList);
         List<AcceptVo> list = qualityInspectionAcceptMapper.getWorkOrderCountByUserIdMonth(workOrderQueryDTO);//根据操作人分组获取工单
         if (null != list) {
             int i = list.size();

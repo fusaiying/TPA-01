@@ -399,7 +399,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         WHERE
         1 = 1
         AND woa.work_order_no IN ( SELECT work_order_no FROM quality_inspection_accept WHERE  STATUS = '03' AND result = '01' )
-        woa.activation_num='1'
+        and  woa.activation_num='1'
         and woa.status='04'
         <if test="updateBy != null and updateBy != ''">and woa.update_by = #{updateBy}</if>
         <if test="status != null and status != ''"> and woa.status = #{status}</if>

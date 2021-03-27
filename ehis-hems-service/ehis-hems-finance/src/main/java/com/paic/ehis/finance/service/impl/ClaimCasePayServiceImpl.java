@@ -1,6 +1,5 @@
 package com.paic.ehis.finance.service.impl;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.paic.ehis.common.core.domain.R;
 import com.paic.ehis.common.core.exception.BaseException;
 import com.paic.ehis.common.core.utils.DateUtils;
@@ -13,12 +12,11 @@ import com.paic.ehis.finance.domain.dto.ClaimCasePayDTO;
 import com.paic.ehis.finance.domain.vo.*;
 import com.paic.ehis.finance.mapper.*;
 import com.paic.ehis.finance.service.IClaimCasePayService;
-import com.paic.ehis.finance.utils.ObjectNullUtil;
 import com.paic.ehis.system.api.GetProviderInfoService;
 import com.paic.ehis.system.api.RemoteUserService;
 import com.paic.ehis.system.api.domain.BaseProviderInfo;
 import com.paic.ehis.system.api.domain.BaseProviderSettle;
-import com.paic.ehis.system.api.domain.SysUser;
+import com.paic.ehis.system.api.domain.FinanceBorrowInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

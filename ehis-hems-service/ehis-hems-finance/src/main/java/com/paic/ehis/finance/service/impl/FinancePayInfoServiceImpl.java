@@ -3,6 +3,8 @@ package com.paic.ehis.finance.service.impl;
 import com.paic.ehis.common.core.domain.R;
 import com.paic.ehis.common.core.exception.BaseException;
 import com.paic.ehis.common.core.utils.DateUtils;
+import com.paic.ehis.system.api.domain.FinanceBorrowInfo;
+import com.paic.ehis.finance.mapper.FinanceBorrowInfoMapper;
 import com.paic.ehis.system.api.GetProviderInfoService;
 import com.paic.ehis.system.api.domain.BaseProviderInfo;
 import com.paic.ehis.finance.domain.ClaimBatch;
@@ -36,6 +38,9 @@ public class FinancePayInfoServiceImpl implements IFinancePayInfoService
 
     @Autowired
     private ClaimBatchMapper claimBatchMapper;
+
+    @Autowired
+    private FinanceBorrowInfoMapper financeBorrowInfoMapper;
 
     /**
      * 查询支付信息
@@ -146,5 +151,38 @@ public class FinancePayInfoServiceImpl implements IFinancePayInfoService
 
             }
         return transferfailedVos1;
+    }
+
+    /**
+     * 置借款数据为无效
+     *
+     * @param rptNo
+     * @return
+     */
+    @Override
+    public int deleteFinanceBorrow(String rptNo) {
+        return financeBorrowInfoMapper.updateFinanceBorrowInfoByRptNo(rptNo);
+    }
+
+    /**
+     * 根据报案号查询借款信息
+     *
+     * @param rptNo
+     * @return
+     */
+    @Override
+    public FinanceBorrowInfo selectBorrowInfo(String rptNo) {
+        return financeBorrowInfoMapper.selectFinanceBorrowInfoByRptNo(rptNo);
+    }
+
+    /**
+     * 更新借款表数据
+     *
+     * @param borrowInfo
+     * @return
+     */
+    @Override
+    public int updateBorrowInfo(FinanceBorrowInfo borrowInfo) {
+        return financeBorrowInfoMapper.updateBorrowInfoByRptNo(borrowInfo);
     }
 }

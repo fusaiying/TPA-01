@@ -1,6 +1,6 @@
 package com.paic.ehis.finance.mapper;
 
-import com.paic.ehis.finance.domain.FinanceBorrowInfo;
+import com.paic.ehis.system.api.domain.FinanceBorrowInfo;
 
 import java.util.List;
 
@@ -70,10 +70,19 @@ public interface FinanceBorrowInfoMapper
 
     /**
      * 修改案件借款明细
+     * 置借款数据为无效
      *
      * @param rptNo
      * @return
      */
     public int updateFinanceBorrowInfoByRptNo(String rptNo);
+
+    /**
+     * 根据报案号更新借款表信息
+     *
+     * @param borrowInfo
+     * @return
+     */
+    public int updateBorrowInfoByRptNo(FinanceBorrowInfo borrowInfo);
 
 }

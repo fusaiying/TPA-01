@@ -5,6 +5,7 @@ import com.paic.ehis.common.core.web.domain.BaseEntity;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * 案件赔付费用项明细对象 claim_case_cal_item
@@ -72,4 +73,14 @@ public class ClaimCaseCalItemDTO extends BaseEntity
     /** 赔付比例 */
     @Excel(name = "赔付比例")
     private BigDecimal payRate;
+
+    private String hospitalCode;
+
+    /** 治疗起期 */
+    private Date treatmentStartDate;
+
+    /** 治疗止期 */
+    private Date treatmentEndDate;
+
+    private String department;
 }

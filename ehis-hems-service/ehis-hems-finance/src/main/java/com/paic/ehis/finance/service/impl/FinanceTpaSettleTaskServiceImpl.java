@@ -156,7 +156,9 @@ public class FinanceTpaSettleTaskServiceImpl implements IFinanceTpaSettleTaskSer
                 FinanceTpaSettleTask tpaSettleTask = new FinanceTpaSettleTask();
                 tpaSettleTask.setSettleTaskNo(financeTpaSettleDetails.get(0).getSettleTaskNo());
                 List<FinanceTpaSettleTask> financeTpaSettleTasks = financeTpaSettleTaskMapper.selectFinanceTpaSettleTaskList(tpaSettleTask);
-                financeTpaSettleTask.setSettleStartDate(financeTpaSettleTasks.get(0).getSettleEndDate());
+                if (StringUtils.isNotEmpty(financeTpaSettleTasks)) {
+                    financeTpaSettleTask.setSettleStartDate(financeTpaSettleTasks.get(0).getSettleEndDate());
+                }
             }
             List<BaseIssuingcompanyRule> baseIssuingRules = baseIssuingcompanyRiskrelaMapper.selectCompanyRiskrelaRiskByTpa(tpaSettleDTO);
             for (BaseIssuingcompanyRule baseIssuingRule : baseIssuingRules) {
@@ -175,9 +177,12 @@ public class FinanceTpaSettleTaskServiceImpl implements IFinanceTpaSettleTaskSer
                         BeanUtils.copyProperties(companyRiskPolicy, financeTpaSettleDetail);
                         financeTpaSettleDetail.setRiskCode(companyRiskPolicy.getRiskCode());
                         tpaSettleDetailInfo.setRiskName(baseIssuingRule.getRiskName());
-                        if ("02".equals(tpaSettleDTO.getSettlementType())) {//保费比例
-                            tpaSettleDetailInfo.setPremiumRatio(baseIssuingRule.getSettlementvalue());
+                        if ("01".equals(tpaSettleDTO.getSettlementType())) {//保费比例
+                            tpaSettleDetailInfo.setPremiumRatio(baseIssuingRule.getSettlementvalue().divide(new BigDecimal(String.valueOf(100)),2,BigDecimal.ROUND_HALF_UP));
                             tpaSettleDetailInfo.setServiceAmount(companyRiskPolicy.getPrem().multiply(tpaSettleDetailInfo.getPremiumRatio()));
+                        }
+                        if ("02".equals(tpaSettleDTO.getSettlementType())){
+                            tpaSettleDetailInfo.setServiceAmount(baseIssuingRule.getSettlementvalue());
                         }
                         financeTpaSettleDetail.setSettleTaskNo(taskNo);
                         financeTpaSettleDetail.setServiceAmount(tpaSettleDetailInfo.getServiceAmount());
@@ -197,6 +202,9 @@ public class FinanceTpaSettleTaskServiceImpl implements IFinanceTpaSettleTaskSer
                 tpaSettleInfo.setRiskName(baseIssuingRule.getRiskName());
                 tpaSettleInfo.setSettlementType(tpaSettleDTO.getSettlementType());
                 //设值 页面展示的服务费结算总金额
+                if (0 == tpaSettleInfo.getServiceSettleAmount().compareTo(new BigDecimal(String.valueOf(0)))){
+                    tpaSettleInfo.setServiceSettleAmount(new BigDecimal(String.valueOf(0)));
+                }
                 if ("01".equals(tpaSettleDTO.getSettlementType())) {
                     tpaSettleInfo.setServiceSettleAmount((baseIssuingRule.getSettlementvalue().multiply(new BigDecimal(companyRiskPolicy.getTotalPeople())))
                             .add(tpaSettleInfo.getServiceSettleAmount()));
@@ -225,7 +233,9 @@ public class FinanceTpaSettleTaskServiceImpl implements IFinanceTpaSettleTaskSer
                 FinanceTpaSettleTask tpaSettleTask = new FinanceTpaSettleTask();
                 tpaSettleTask.setSettleTaskNo(financeTpaSettleDetails.get(0).getSettleTaskNo());
                 List<FinanceTpaSettleTask> financeTpaSettleTasks = financeTpaSettleTaskMapper.selectFinanceTpaSettleTaskList(tpaSettleTask);
-                financeTpaSettleTask.setSettleStartDate(financeTpaSettleTasks.get(0).getSettleEndDate());
+                if (StringUtils.isNotEmpty(financeTpaSettleTasks)) {
+                    financeTpaSettleTask.setSettleStartDate(financeTpaSettleTasks.get(0).getSettleEndDate());
+                }
             }
             //查询得到险种对应的信息
             BaseIssuingcompanyRule baseIssuingcompanyRule = new BaseIssuingcompanyRule();
@@ -246,9 +256,12 @@ public class FinanceTpaSettleTaskServiceImpl implements IFinanceTpaSettleTaskSer
                     //子页面下拉数据
                     BeanUtils.copyProperties(companyRiskPolicy, tpaSettleDetailInfo);
                     tpaSettleDetailInfo.setRiskName(companyRule.getRiskName());
-                    if ("02".equals(tpaSettleDTO.getSettlementType())) {//保费比例
-                        tpaSettleDetailInfo.setPremiumRatio(companyRule.getSettlementvalue());
+                    if ("01".equals(tpaSettleDTO.getSettlementType())) {//保费比例
+                        tpaSettleDetailInfo.setPremiumRatio(companyRule.getSettlementvalue().divide(new BigDecimal(String.valueOf(100)),2,BigDecimal.ROUND_HALF_UP));
                         tpaSettleDetailInfo.setServiceAmount(companyRiskPolicy.getPrem().multiply(tpaSettleDetailInfo.getPremiumRatio()));
+                    }
+                    if ("02".equals(tpaSettleDTO.getSettlementType())){
+                        tpaSettleDetailInfo.setServiceAmount(companyRule.getSettlementvalue());
                     }
                     financeTpaSettleDetail.setSettleTaskNo(taskNo);
                     financeTpaSettleDetail.setServiceAmount(tpaSettleDetailInfo.getServiceAmount());
@@ -264,13 +277,12 @@ public class FinanceTpaSettleTaskServiceImpl implements IFinanceTpaSettleTaskSer
             tpaSettleInfo.setRiskCode(tpaSettleDTO.getRiskCode());
             tpaSettleInfo.setRiskName(companyRule.getRiskName());
             tpaSettleInfo.setSettlementType(tpaSettleDTO.getSettlementType());
-            if ("01".equals(tpaSettleDTO.getSettlementType())){
+            if ("02".equals(tpaSettleDTO.getSettlementType())){
                 tpaSettleInfo.setServiceSettleAmount(companyRule.getSettlementvalue().multiply(new BigDecimal(companyRiskPolicy.getTotalPeople())));
             }
-            if ("02".equals(tpaSettleDTO.getSettlementType())){
+            if ("01".equals(tpaSettleDTO.getSettlementType())){
                 tpaSettleInfo.setServiceSettleAmount(companyRule.getSettlementvalue().multiply(companyRiskPolicy.getSumPerm()));
             }
-
             if (!StringUtils.isNotNull(financeTpaSettleTask.getSettleStartDate())) {
                 financeTpaSettleTask.setSettleStartDate(companyRiskPolicy.getValidStartDate());
             }

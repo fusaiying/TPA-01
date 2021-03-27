@@ -44,6 +44,9 @@ public class FinanceTpaSettleDetail extends BaseEntity
     @Excel(name = "服务费金额")
     private BigDecimal serviceAmount;
 
+    /* 备注 */
+    private String remark;
+
     /** 状态（Y-有效，N-无效） */
     @Excel(name = "状态", readConverterExp = "Y=-有效，N-无效")
     private String status;

@@ -158,15 +158,17 @@ public class FinanceTpaSettleTaskServiceImpl implements IFinanceTpaSettleTaskSer
                 List<FinanceTpaSettleTask> financeTpaSettleTasks = financeTpaSettleTaskMapper.selectFinanceTpaSettleTaskList(tpaSettleTask);
                 if (StringUtils.isNotEmpty(financeTpaSettleTasks)) {
                     financeTpaSettleTask.setSettleStartDate(financeTpaSettleTasks.get(0).getSettleEndDate());
+                    policyAndRiskRelation.setStartTime(financeTpaSettleTask.getSettleStartDate());
                 }
+
+                policyAndRiskRelation.setEndTime(financeTpaSettleTask.getSettleEndDate());
+                policyAndRiskRelation.setCompanyCode(financeTpaSettleTask.getCompanyCode());
             }
             List<BaseIssuingcompanyRule> baseIssuingRules = baseIssuingcompanyRiskrelaMapper.selectCompanyRiskrelaRiskByTpa(tpaSettleDTO);
             for (BaseIssuingcompanyRule baseIssuingRule : baseIssuingRules) {
                 //通过险种、保单关联得到对应的保单数据
                 policyAndRiskRelation.setRiskCode(baseIssuingRule.getRiskcode());
-                policyAndRiskRelation.setStartTime(financeTpaSettleTask.getSettleStartDate());
-                policyAndRiskRelation.setEndTime(financeTpaSettleTask.getSettleEndDate());
-                policyAndRiskRelation.setCompanyCode(financeTpaSettleTask.getCompanyCode());
+
 
                 TableDataInfo relationCompanyList = policyAndRiskService.getRelationCompanyList(policyAndRiskRelation);
                 if (StringUtils.isNotEmpty(relationCompanyList.getRows())) {
@@ -236,6 +238,7 @@ public class FinanceTpaSettleTaskServiceImpl implements IFinanceTpaSettleTaskSer
                 List<FinanceTpaSettleTask> financeTpaSettleTasks = financeTpaSettleTaskMapper.selectFinanceTpaSettleTaskList(tpaSettleTask);
                 if (StringUtils.isNotEmpty(financeTpaSettleTasks)) {
                     financeTpaSettleTask.setSettleStartDate(financeTpaSettleTasks.get(0).getSettleEndDate());
+                    policyAndRiskRelation.setStartTime(financeTpaSettleTask.getSettleStartDate());
                 }
             }
             //查询得到险种对应的信息
@@ -247,7 +250,6 @@ public class FinanceTpaSettleTaskServiceImpl implements IFinanceTpaSettleTaskSer
 
             //通过险种、保单关联得到对应的保单数据
             policyAndRiskRelation.setRiskCode(tpaSettleDTO.getRiskCode());
-            policyAndRiskRelation.setStartTime(financeTpaSettleTask.getSettleStartDate());
             policyAndRiskRelation.setEndTime(financeTpaSettleTask.getSettleEndDate());
             policyAndRiskRelation.setCompanyCode(financeTpaSettleTask.getCompanyCode());
             TableDataInfo relationCompanyList = policyAndRiskService.getRelationCompanyList(policyAndRiskRelation);

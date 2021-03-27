@@ -114,7 +114,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="organCode" column="organ_code"/>
         <result property="insuredPersonId" column="insured_no"/>
         <result property="holderPersonId" column="holder_no"/>
-        <result property="acceptUserId" column="accept_by"/>
+        <result property="acceptBy" column="accept_by"/>
         <result property="modifyUserId" column="modify_by"/>
         <result property="endDate" column="end_date"/>
         <result property="callPersonId" column="call_person_id"/>

@@ -7,8 +7,10 @@ import com.paic.ehis.cs.domain.dto.QualityFlagDTO;
 import com.paic.ehis.cs.domain.dto.QualityInspectionDTO;
 import com.paic.ehis.cs.domain.dto.WorkOrderQueryDTO;
 import com.paic.ehis.cs.domain.vo.*;
+import feign.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -76,5 +78,7 @@ public interface QualityInspectionAcceptMapper {
 
     //查询符合一个月抽检规则的数据
     public List<AcceptVo> getWorkOrderCountByUserIdMonth(WorkOrderQueryDTO workOrderQueryDTO);
+
+    public List<AcceptVo> selectInvalidAcceptDetailInfo(@Param("invalidDate") Date invalidDate);
 
 }

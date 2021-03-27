@@ -36,7 +36,7 @@
         <result property="oldmodifyBy" column="oldmodify_by"/>
         <result property="changeTime" column="change_time"/>
         <result property="complaintTime" column="prop18"/>
-        <result property="appointmentTime" column="prop14"/>
+        <result property="appointmentDate" column="prop14"/>
     </resultMap>
 
 

@@ -202,16 +202,17 @@ public class FinanceTpaSettleTaskServiceImpl implements IFinanceTpaSettleTaskSer
                 tpaSettleInfo.setRiskName(baseIssuingRule.getRiskName());
                 tpaSettleInfo.setSettlementType(tpaSettleDTO.getSettlementType());
                 //设值 页面展示的服务费结算总金额
-                if (0 == tpaSettleInfo.getServiceSettleAmount().compareTo(new BigDecimal(String.valueOf(0)))){
+                if (StringUtils.isNotNull(tpaSettleInfo.getServiceSettleAmount()) && 0 < new BigDecimal(String.valueOf(0)).compareTo(tpaSettleInfo.getServiceSettleAmount())){
+                    if ("01".equals(tpaSettleDTO.getSettlementType())) {
+                        tpaSettleInfo.setServiceSettleAmount((baseIssuingRule.getSettlementvalue().multiply(new BigDecimal(companyRiskPolicy.getTotalPeople())))
+                                .add(tpaSettleInfo.getServiceSettleAmount()));
+                    }
+                    if ("02".equals(tpaSettleDTO.getSettlementType())) {
+                        tpaSettleInfo.setServiceSettleAmount((baseIssuingRule.getSettlementvalue().multiply(companyRiskPolicy.getSumPerm()))
+                                .add(tpaSettleInfo.getServiceSettleAmount()));
+                    }
+                }else {
                     tpaSettleInfo.setServiceSettleAmount(new BigDecimal(String.valueOf(0)));
-                }
-                if ("01".equals(tpaSettleDTO.getSettlementType())) {
-                    tpaSettleInfo.setServiceSettleAmount((baseIssuingRule.getSettlementvalue().multiply(new BigDecimal(companyRiskPolicy.getTotalPeople())))
-                            .add(tpaSettleInfo.getServiceSettleAmount()));
-                }
-                if ("02".equals(tpaSettleDTO.getSettlementType())) {
-                    tpaSettleInfo.setServiceSettleAmount((baseIssuingRule.getSettlementvalue().multiply(companyRiskPolicy.getSumPerm()))
-                            .add(tpaSettleInfo.getServiceSettleAmount()));
                 }
                 financeTpaSettleTask.setServiceSettleAmount(tpaSettleInfo.getServiceSettleAmount());
                 tpaSettleInfos.add(tpaSettleInfo);

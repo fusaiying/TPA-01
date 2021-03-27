@@ -4,7 +4,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.paic.ehis.cs.mapper.CallAgainMapper">
     
-    <resultMap type="CallAgain" id="CallAgainResult">
+    <resultMap type="com.paic.ehis.cs.domain.CallAgain" id="CallAgainResult">
         <result property="callSerialNum"    column="call_serial_num"    />
         <result property="workOrderNo"    column="work_order_no"    />
         <result property="remark"    column="remark"    />
@@ -21,7 +21,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select call_serial_num, work_order_no, remark, status, created_by, created_time, updated_by, updated_time from call_again
     </sql>
 
-    <select id="selectCallAgainList" parameterType="CallAgain" resultMap="CallAgainResult">
+    <select id="selectCallAgainList" parameterType="com.paic.ehis.cs.domain.CallAgain" resultMap="CallAgainResult">
         <include refid="selectCallAgainVo"/>
         <where>  
             <if test="workOrderNo != null  and workOrderNo != ''"> and work_order_no = #{workOrderNo}</if>
@@ -33,7 +33,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
     </select>
 
-    <select id="selectCallAgain" parameterType="CallAgain" resultMap="CallAgainResult">
+    <select id="selectCallAgain" parameterType="com.paic.ehis.cs.domain.CallAgain" resultMap="CallAgainResult">
         SELECT DISTINCT
         t1.call_serial_num,
         t1.work_order_no,
@@ -54,7 +54,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where call_serial_num = #{callSerialNum}
     </select>
         
-    <insert id="insertCallAgain" parameterType="CallAgain">
+    <insert id="insertCallAgain" parameterType="com.paic.ehis.cs.domain.CallAgain">
         insert into call_again
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="callSerialNum != null">call_serial_num,</if>
@@ -78,7 +78,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
     </insert>
 
-    <update id="updateCallAgain" parameterType="CallAgain">
+    <update id="updateCallAgain" parameterType="com.paic.ehis.cs.domain.CallAgain">
         update call_again
         <trim prefix="SET" suffixOverrides=",">
             <if test="workOrderNo != null and workOrderNo != ''">work_order_no = #{workOrderNo},</if>

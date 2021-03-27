@@ -2,6 +2,7 @@ package com.paic.ehis.cs.mapper;
 
 import com.paic.ehis.cs.domain.WorkOrderAccept;
 import com.paic.ehis.cs.domain.vo.ComplaintAcceptVo;
+import com.paic.ehis.cs.domain.vo.ComplaintDealVo;
 
 import java.util.List;
 
@@ -102,4 +103,9 @@ public interface WorkOrderAcceptMapper
      * @return 结果
      */
     public int updateClickTime(WorkOrderAccept workOrderAccept);
+
+    //根据工单号批量修改预约案件的状态为已完成
+    public int deleteAcceptDetailInfoMany(String[] workOrderNoMany);
+
+    public ComplaintDealVo selectServiceProcess(String workOrderNo);
 }

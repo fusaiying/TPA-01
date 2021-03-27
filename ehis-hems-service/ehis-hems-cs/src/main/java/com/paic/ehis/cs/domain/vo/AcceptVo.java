@@ -224,4 +224,6 @@ public class AcceptVo extends BaseEntity
     //禁用工单拆查询获取操作
     private String flag;
     private Integer activationNum;
+
+    private String[] workOrderNoMany;
 }

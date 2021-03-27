@@ -109,7 +109,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="policyNo != null  and policyNo != ''"> and prr.policy_no = #{policyNo}</if>
             <if test="riskCode != null  and riskCode != ''"> and prr.risk_code = #{riskCode}</if>
             <if test="companyCode != null  and companyCode != ''"> and pi.company_code = #{companyCode}</if>
-            <if test="startTime != null  and endTime != null"> and pi.valid_start_date between #{startTime} and #{endTime} </if>
+            <if test="startTime != null  and endTime != null"> and pi.valid_start_date &gt;= #{startTime}  </if>
+            and pi.valid_start_date &lt;= #{endTime}
             and prr.status = 'Y'
             and  pi.settle_flag is null
 --             pi.settle_flag != 'Y' or

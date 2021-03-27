@@ -138,7 +138,7 @@
           <el-table-column prop="updatedBy" align="center" label="质检人" show-overflow-tooltip/>
           <el-table-column prop="updatedTime" align="center" label="质检日期" show-overflow-tooltip>
             <template slot-scope="scope">
-              <span>{{ scope.row.updateTime | changeDate }}</span>
+              <span>{{parseTime(scope.row.updatedTime, '{y}-{m}-{d}')}}</span>
             </template>
           </el-table-column>
           <el-table-column align="center" prop="result" label="质检结果" show-overflow-tooltip>
@@ -251,6 +251,7 @@ export default {
 
         endCaseStartDate: undefined,
         endCaseEndDate: undefined,
+        endCaseupdateTime: undefined,
         inspectionStartDate: undefined,
         inspectionEndDate: undefined,
         organCode: this.inspectionQueryForm.organCode,

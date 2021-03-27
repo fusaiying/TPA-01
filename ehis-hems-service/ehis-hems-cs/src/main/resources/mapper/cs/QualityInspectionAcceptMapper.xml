@@ -245,10 +245,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="endDate != null and endDate != ''"> and woa.end_date = #{endDate}</if>
             <if test="updatedTime != null and updatedTime != ''"> and qia.created_time = #{updatedTime}</if>
             <if test="inspectionStartDate != null ">
-                and DATE_FORMAT(qia.updated_time,'%Y-%m-%d') <![CDATA[>=]]> #{inspectionStartDate}
+                and DATE_FORMAT(qia.created_time,'%Y-%m-%d') <![CDATA[>=]]> #{inspectionStartDate}
             </if>
             <if test="inspectionEndDate != null ">
-                and DATE_FORMAT(qia.updated_time,'%Y-%m-%d') <![CDATA[<=]]> #{inspectionEndDate}
+                and DATE_FORMAT(qia.created_time,'%Y-%m-%d') <![CDATA[<=]]> #{inspectionEndDate}
             </if>
             <if test="organCode != null and organCode != ''"> and woa.organ_code = #{organCode}</if>
             <if test="updatedBy != null and updatedBy != ''"> and qia.updated_by = #{updatedBy}</if>

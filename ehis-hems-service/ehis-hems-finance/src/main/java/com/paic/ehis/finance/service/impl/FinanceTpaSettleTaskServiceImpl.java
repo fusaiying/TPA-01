@@ -131,7 +131,7 @@ public class FinanceTpaSettleTaskServiceImpl implements IFinanceTpaSettleTaskSer
         financeTpaSettleDetail.setUpdateTime(DateUtils.getNowDate());
 
         financeSettleRecord.setTaskType("01");
-        financeSettleRecord.setOperator("");
+        financeSettleRecord.setOperator(SecurityUtils.getUsername());
         financeSettleRecord.setHistoryFlag("N");
         financeSettleRecord.setOperation("01");
         financeSettleRecord.setStatus("Y");

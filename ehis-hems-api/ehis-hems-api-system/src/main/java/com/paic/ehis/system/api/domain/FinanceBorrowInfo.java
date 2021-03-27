@@ -1,4 +1,4 @@
-package com.paic.ehis.finance.domain;
+package com.paic.ehis.system.api.domain;
 
 import com.paic.ehis.common.core.annotation.Excel;
 import com.paic.ehis.common.core.web.domain.BaseEntity;

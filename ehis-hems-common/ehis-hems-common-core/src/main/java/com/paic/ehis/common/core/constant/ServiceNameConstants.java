@@ -51,4 +51,9 @@ public class ServiceNameConstants
      * 客服模块的serviceid
      */
     public static final String CS_SERVICE = "ehis-hems-cs";
+
+    /**
+     * 财务模块的serviceid
+     */
+    public static final String FINANCE_SERVICE = "ehis-hems-finance";
 }

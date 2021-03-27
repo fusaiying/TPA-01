@@ -6,6 +6,7 @@ import com.paic.ehis.common.core.web.domain.AjaxResult;
 import com.paic.ehis.common.core.web.page.TableDataInfo;
 import com.paic.ehis.common.log.annotation.Log;
 import com.paic.ehis.common.log.enums.BusinessType;
+import com.paic.ehis.system.api.domain.FinanceBorrowInfo;
 import com.paic.ehis.finance.domain.FinancePayInfo;
 import com.paic.ehis.finance.domain.dto.TransferfailedDTO;
 import com.paic.ehis.finance.domain.vo.TransferfailedVo;
@@ -106,5 +107,38 @@ public class FinancePayInfoController extends BaseController
         startPage(transferfailedDTO);
         List<TransferfailedVo> list = financePayInfoService.selectTransferfailedList(transferfailedDTO);
         return getDataTable(list);
+    }
+
+    /**
+     * 置借款数据为无效
+     *
+     * @param rptNo
+     * @return
+     */
+    @PostMapping("/deleteBorrow")
+    public int deleteBorrow(@RequestBody String rptNo){
+        return financePayInfoService.deleteFinanceBorrow(rptNo);
+    }
+
+    /**
+     * 根据保单号查询借款信息
+     *
+     * @param rptNo
+     * @return
+     */
+    @PostMapping("/selectBorrowInfo")
+    public FinanceBorrowInfo selectBorrowInfo(@RequestBody String rptNo){
+        return financePayInfoService.selectBorrowInfo(rptNo);
+    }
+
+    /**
+     * 更新借款表数据
+     *
+     * @param borrowInfo
+     * @return
+     */
+    @PostMapping("/updateBorrowInfo")
+    public int updateBorrowInfo(@RequestBody FinanceBorrowInfo borrowInfo){
+        return financePayInfoService.updateBorrowInfo(borrowInfo);
     }
 }

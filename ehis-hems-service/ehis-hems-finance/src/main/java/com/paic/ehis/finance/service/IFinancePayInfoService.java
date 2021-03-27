@@ -1,5 +1,6 @@
 package com.paic.ehis.finance.service;
 
+import com.paic.ehis.system.api.domain.FinanceBorrowInfo;
 import com.paic.ehis.finance.domain.FinancePayInfo;
 import com.paic.ehis.finance.domain.dto.TransferfailedDTO;
 import com.paic.ehis.finance.domain.vo.TransferfailedVo;
@@ -67,4 +68,27 @@ public interface IFinancePayInfoService
      */
     public List<TransferfailedVo> selectTransferfailedList(TransferfailedDTO transferfailedDTO);
 
+    /**
+     * 置借款数据无效
+     *
+     * @param rptNo
+     * @return
+     */
+    public int deleteFinanceBorrow(String rptNo);
+
+    /**
+     * 根据报案号查询借款信息
+     *
+     * @param rptNo
+     * @return
+     */
+    public FinanceBorrowInfo selectBorrowInfo(String rptNo);
+
+    /**
+     * 更新借款表数据
+     *
+     * @param borrowInfo
+     * @return
+     */
+    public int updateBorrowInfo(FinanceBorrowInfo borrowInfo);
 }

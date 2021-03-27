@@ -20,7 +20,9 @@ import com.paic.ehis.common.core.utils.sql.SqlUtil;
 import com.paic.ehis.common.core.web.domain.AjaxResult;
 import com.paic.ehis.common.core.web.page.TableDataInfo;
 import com.paic.ehis.system.api.PolicyAndRiskService;
+import com.paic.ehis.system.api.RemoteFinancialServicce;
 import com.paic.ehis.system.api.domain.ClaimCasePolicy;
+import com.paic.ehis.system.api.domain.FinanceBorrowInfo;
 import com.paic.ehis.system.api.domain.PolicyAndRiskRelation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -92,6 +94,9 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
 
     @Autowired
     private ClaimCaseDebtMapper claimCaseDebtMapper;
+
+    @Autowired
+    private RemoteFinancialServicce remoteFinancialServicce;
 
 
     /**
@@ -1222,7 +1227,35 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
             }
         }
 
-        claimCase.setPayStatus("01");
+        // 判断结案时是否存在未支付借款
+        // 判断结案时，是否有支付状态，没有置成可支付状态；有，判断借款金额和支付金额是否一致，一致支付状态不改，不一致改成可支付状态
+        // 支付状态为“未支付”，把借款表数据消掉；支付状态为“支付中/支付完成/..”，判断借款金额和支付金额是否一致
+        ClaimCase aCase = claimCaseMapper.selectClaimCaseById(claimCase.getRptNo());
+        if (StringUtils.isNotEmpty(aCase.getPayStatus())){
+            if ("01".equals(aCase.getPayStatus())){
+                // 借款表数据置为无效
+                int row = remoteFinancialServicce.deleteBorrow(claimCase.getRptNo());
+            } else {
+                // 查询理算表里金额
+                ClaimCaseCal caseCal = claimCaseCalMapper.selectClaimCaseCalByRptNo(aCase.getRptNo());
+                // 查询借款表里金额
+                FinanceBorrowInfo borrowInfo = remoteFinancialServicce.selectBorrowInfo(aCase.getRptNo());
+                if (caseCal.getPayAmount().compareTo(borrowInfo.getBorrowAmount()) != 0 ){
+                    // 借款表数据更新成支付数据
+                    FinanceBorrowInfo financeBorrowInfo = new FinanceBorrowInfo();
+                    financeBorrowInfo.setRptNo(aCase.getRptNo());
+                    financeBorrowInfo.setBorrowAmount(caseCal.getPayAmount());
+                    financeBorrowInfo.setUpdateBy(SecurityUtils.getUsername());
+                    financeBorrowInfo.setUpdateTime(DateUtils.getNowDate());
+                    remoteFinancialServicce.updateBorrowInfo(financeBorrowInfo);
+                    // 支付状态
+                    claimCase.setPayStatus("01");
+                }
+            }
+
+        } else {
+            claimCase.setPayStatus("01");
+        }
         return claimCaseMapper.updateClaimCaseNew(claimCase);
     }
 
@@ -1521,7 +1554,36 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
                     claimCaseDebtMapper.updateClaimCaseDebt(claimCaseDebt);
                 }
             }
-            claimCase.setPayStatus("01");
+
+            // 判断结案时是否存在未支付借款
+            // 判断结案时，是否有支付状态，没有置成可支付状态；有，判断借款金额和支付金额是否一致，一致支付状态不改，不一致改成可支付状态
+            // 支付状态为“未支付”，把借款表数据消掉；支付状态为“支付中/支付完成/..”，判断借款金额和支付金额是否一致
+            ClaimCase aCase = claimCaseMapper.selectClaimCaseById(claimCase.getRptNo());
+            if (StringUtils.isNotEmpty(aCase.getPayStatus())){
+                if ("01".equals(aCase.getPayStatus())){
+                    // 借款表数据置为无效
+                    int row = remoteFinancialServicce.deleteBorrow(claimCase.getRptNo());
+                } else {
+                    // 查询理算表里金额
+                    ClaimCaseCal caseCal = claimCaseCalMapper.selectClaimCaseCalByRptNo(aCase.getRptNo());
+                    // 查询借款表里金额
+                    FinanceBorrowInfo borrowInfo = remoteFinancialServicce.selectBorrowInfo(aCase.getRptNo());
+                    if (caseCal.getPayAmount().compareTo(borrowInfo.getBorrowAmount()) != 0 ){
+                        // 借款表数据更新成支付数据
+                        FinanceBorrowInfo financeBorrowInfo = new FinanceBorrowInfo();
+                        financeBorrowInfo.setRptNo(aCase.getRptNo());
+                        financeBorrowInfo.setBorrowAmount(caseCal.getPayAmount());
+                        financeBorrowInfo.setUpdateBy(SecurityUtils.getUsername());
+                        financeBorrowInfo.setUpdateTime(DateUtils.getNowDate());
+                        remoteFinancialServicce.updateBorrowInfo(financeBorrowInfo);
+                        // 支付状态
+                        claimCase.setPayStatus("01");
+                    }
+                }
+
+            } else {
+                claimCase.setPayStatus("01");
+            }
             return claimCaseMapper.updateClaimCaseNew(claimCase);
         }
         claimCaseCheckDTO1.setUpdateBy(SecurityUtils.getUsername());

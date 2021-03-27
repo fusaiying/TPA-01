@@ -209,7 +209,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="endDate" column="end_date"/>
         <result property="itemType" column="item_type"/>
         <result property="updatedBy" column="updated_by"/>
-        <result property="updatedTime" column="updated_time"/>
+        <result property="updatedTime" column="created_time"/>
         <result property="result" column="result"/>
         <result property="inspectionId" column="inspection_id"/>
         <result property="businessType" column="business_type"/>
@@ -227,6 +227,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         woa.policy_item_no,
         qia.updated_by,
         qia.updated_time,
+        qia.created_time,
         qia.result,
         woa.organ_code,
         woa.end_date,
@@ -242,7 +243,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                 and DATE_FORMAT(woa.end_date,'%Y-%m-%d') <![CDATA[<=]]> #{endCaseEndDate}
             </if>
             <if test="endDate != null and endDate != ''"> and woa.end_date = #{endDate}</if>
-            <if test="updatedTime != null and updatedTime != ''"> and qia.updated_time = #{updatedTime}</if>
+            <if test="updatedTime != null and updatedTime != ''"> and qia.created_time = #{updatedTime}</if>
             <if test="inspectionStartDate != null ">
                 and DATE_FORMAT(qia.updated_time,'%Y-%m-%d') <![CDATA[>=]]> #{inspectionStartDate}
             </if>

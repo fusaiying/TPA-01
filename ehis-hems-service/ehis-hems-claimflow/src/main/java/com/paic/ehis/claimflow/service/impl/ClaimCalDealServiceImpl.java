@@ -1,17 +1,15 @@
 package com.paic.ehis.claimflow.service.impl;
 
-import com.paic.ehis.claimflow.domain.ClaimCaseCal;
-import com.paic.ehis.claimflow.domain.ClaimCaseCalBill;
-import com.paic.ehis.claimflow.domain.ClaimCaseCalItem;
+import com.paic.ehis.claimflow.domain.*;
 import com.paic.ehis.claimflow.mapper.*;
 import com.paic.ehis.claimflow.service.IClaimCalDealService;
 import com.paic.ehis.common.core.annotation.Excel;
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.SecurityUtils;
-import com.paic.ehis.system.api.domain.ClaimCaseBillInfo;
-import com.paic.ehis.system.api.domain.ClaimCaseCalInfo;
+import com.paic.ehis.system.api.domain.*;
 import com.paic.ehis.system.api.domain.ClaimCasePolicy;
 import com.paic.ehis.system.api.domain.dto.*;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -33,13 +31,19 @@ public class ClaimCalDealServiceImpl implements IClaimCalDealService {
     private ClaimCaseCalItemMapper claimCaseCalItemMapper;
 
     @Autowired
+    private ClaimCaseMapper claimCaseMapper;
+
+    @Autowired
+    private ClaimCaseInsuredMapper claimCaseInsuredMapper;
+
+    @Autowired
+    private ClaimCasePolicyMapper claimCasePolicyMapper;
+
+    @Autowired
     private ClaimCaseBillMapper claimCaseBillMapper;
 
     @Autowired
     private ClaimCaseBillDetailMapper claimCaseBillDetailMapper;
-
-    @Autowired
-    private ClaimCasePolicyMapper claimCasePolicyMapper;
 
 
     /**
@@ -80,19 +84,50 @@ public class ClaimCalDealServiceImpl implements IClaimCalDealService {
      * @return
      */
     @Override
-    public List<ClaimCaseBillInfo> selectClaimCaseBillInfo(String rptNo) {
-        List<ClaimCaseBillInfo> claimCaseBillInfoList = new ArrayList<ClaimCaseBillInfo>();
+    public ClaimCaseCalculateInfo selectClaimCaseInfo(String rptNo) {
+        ClaimCaseCalculateInfo claimCaseCalculateInfo = new ClaimCaseCalculateInfo();
 
-        List<ClaimCaseBillDTO> claimCaseBillList = claimCaseBillMapper.selectClaimCaseBillDTOByRptNo(rptNo);
-        claimCaseBillList.forEach(ccb -> {
-            ClaimCaseBillInfo ccbI = new ClaimCaseBillInfo();
-            List<ClaimCaseBillDetailDTO> ClaimCaseBillDetailList = claimCaseBillDetailMapper.selectClaimCaseBillDetailDTOByRptNo(rptNo,ccb.getBillId());
-            ccbI.setClaimCaseBill(ccb);
-            ccbI.setClaimCaseBillDetailList(ClaimCaseBillDetailList);
-            claimCaseBillInfoList.add(ccbI);
-        });
+        ClaimCase claimCase = claimCaseMapper.selectClaimCaseById(rptNo);
+        BeanUtils.copyProperties(claimCase,claimCaseCalculateInfo);
 
-        return claimCaseBillInfoList;
+        List<ClaimCaseInsured> insuredList = claimCaseInsuredMapper.selectCaseList(rptNo);
+        if (insuredList.size()>0) {
+            ClaimCaseInsured claimCaseInsured = insuredList.get(0);
+            BeanUtils.copyProperties(claimCaseInsured,claimCaseCalculateInfo);
+        }
+
+        List<ClaimCasePolicy> claimCasePolicies = claimCasePolicyMapper.selectClaimCasePolicyByRptNo(rptNo);
+        if (claimCasePolicies.size()>0) {
+            ClaimCasePolicy claimCasePolicy = claimCasePolicies.get(0);
+            BeanUtils.copyProperties(claimCasePolicy,claimCaseCalculateInfo);
+        }
+
+        List<ClaimCaseBillInfo> claimCaseBillInfoList = new ArrayList<>();
+        ClaimCaseBill claimCaseBillQuery = new ClaimCaseBill();
+        claimCaseBillQuery.setRptNo(rptNo);
+        List<ClaimCaseBill> claimCaseBills = claimCaseBillMapper.selectClaimCaseBillList(claimCaseBillQuery);
+        for (ClaimCaseBill claimCaseBill : claimCaseBills) {
+
+            ClaimCaseBillInfo claimCaseBillInfo = new ClaimCaseBillInfo();
+            BeanUtils.copyProperties(claimCaseBill,claimCaseBillInfo);
+
+
+            List<ClaimCaseBillDetailInfo> claimCaseBillDetailInfoList = new ArrayList<>();
+
+            List<ClaimCaseBillDetail> claimCaseBillDetails = claimCaseBillDetailMapper.selectClaimCaseBillDetailByBillId(claimCaseBill.getBillId());
+            for (ClaimCaseBillDetail claimCaseBillDetail : claimCaseBillDetails) {
+                ClaimCaseBillDetailInfo claimCaseBillDetailInfo = new ClaimCaseBillDetailInfo();
+                BeanUtils.copyProperties(claimCaseBillDetail,claimCaseBillDetailInfo);
+
+                claimCaseBillDetailInfoList.add(claimCaseBillDetailInfo);
+            }
+            claimCaseBillInfo.setClaimCaseBillDetailInfoList(claimCaseBillDetailInfoList);
+
+            claimCaseBillInfoList.add(claimCaseBillInfo);
+        }
+        claimCaseCalculateInfo.setClaimCaseBillInfoList(claimCaseBillInfoList);
+
+        return claimCaseCalculateInfo;
     }
 
     /**
@@ -191,6 +226,21 @@ public class ClaimCalDealServiceImpl implements IClaimCalDealService {
         }
 
         return i;
+    }
+
+    @Override
+    public List<ClaimCaseCalItemDTO> getCaInfo(ClaimCaseCalItemDTO claimCaseCalItemDTO) {
+
+        List<ClaimCaseCalItemDTO> claimCaseCalItemDTOList = new ArrayList<>();
+        ClaimCaseCalItem claimCaseCalItem = new ClaimCaseCalItem();
+        BeanUtils.copyProperties(claimCaseCalItemDTO,claimCaseCalItem);
+        List<ClaimCaseCalItem> claimCaseCalItems = claimCaseCalItemMapper.selectClaimCaseCalItemList(claimCaseCalItem);
+        for (ClaimCaseCalItem caseCalItem : claimCaseCalItems) {
+            ClaimCaseCalItemDTO calItemDTO = new ClaimCaseCalItemDTO();
+            BeanUtils.copyProperties(caseCalItem,calItemDTO);
+            claimCaseCalItemDTOList.add(calItemDTO);
+        }
+        return claimCaseCalItemDTOList;
     }
 
 

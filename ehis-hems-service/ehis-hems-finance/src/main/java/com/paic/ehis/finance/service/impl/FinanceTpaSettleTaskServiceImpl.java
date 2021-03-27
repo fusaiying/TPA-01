@@ -156,7 +156,9 @@ public class FinanceTpaSettleTaskServiceImpl implements IFinanceTpaSettleTaskSer
                 FinanceTpaSettleTask tpaSettleTask = new FinanceTpaSettleTask();
                 tpaSettleTask.setSettleTaskNo(financeTpaSettleDetails.get(0).getSettleTaskNo());
                 List<FinanceTpaSettleTask> financeTpaSettleTasks = financeTpaSettleTaskMapper.selectFinanceTpaSettleTaskList(tpaSettleTask);
-                financeTpaSettleTask.setSettleStartDate(financeTpaSettleTasks.get(0).getSettleEndDate());
+                if (StringUtils.isNotEmpty(financeTpaSettleTasks)) {
+                    financeTpaSettleTask.setSettleStartDate(financeTpaSettleTasks.get(0).getSettleEndDate());
+                }
             }
             List<BaseIssuingcompanyRule> baseIssuingRules = baseIssuingcompanyRiskrelaMapper.selectCompanyRiskrelaRiskByTpa(tpaSettleDTO);
             for (BaseIssuingcompanyRule baseIssuingRule : baseIssuingRules) {
@@ -231,7 +233,9 @@ public class FinanceTpaSettleTaskServiceImpl implements IFinanceTpaSettleTaskSer
                 FinanceTpaSettleTask tpaSettleTask = new FinanceTpaSettleTask();
                 tpaSettleTask.setSettleTaskNo(financeTpaSettleDetails.get(0).getSettleTaskNo());
                 List<FinanceTpaSettleTask> financeTpaSettleTasks = financeTpaSettleTaskMapper.selectFinanceTpaSettleTaskList(tpaSettleTask);
-                financeTpaSettleTask.setSettleStartDate(financeTpaSettleTasks.get(0).getSettleEndDate());
+                if (StringUtils.isNotEmpty(financeTpaSettleTasks)) {
+                    financeTpaSettleTask.setSettleStartDate(financeTpaSettleTasks.get(0).getSettleEndDate());
+                }
             }
             //查询得到险种对应的信息
             BaseIssuingcompanyRule baseIssuingcompanyRule = new BaseIssuingcompanyRule();

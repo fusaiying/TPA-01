@@ -33,7 +33,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
     <select id="selectFeeitemCodeRuleList" resultMap="ruleResultMap" parameterType="java.lang.String">
         SELECT rule.rule_no, rule.plan_code, rule.risk_code, rule.rule_element, rule.element_value, rule.element_unit, rule.cumulative_mode,
-        cons.constraint_no, cons.rule_no, cons.constraint_type, cons.value1, cons.value2, cons.constraint_unit,
+        cons.constraint_no, cons.rule_no, cons.constraint_type, cons.value1, cons.value2, cons.constraint_unit
         FROM claim_rule rule INNER JOIN claim_rule_relation relation ON rule.rule_no = relation.rule_no
         INNER JOIN claim_rule_constraint cons ON rule.rule_no = cons.rule_no
         WHERE rule.status = 'Y' AND rule.rule_element = #{ruleElement} AND rule.element_unit = #{elementUnit}
@@ -43,7 +43,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectDetailCodeRuleList" resultMap="ruleResultMap" parameterType="java.lang.String">
         SELECT rule.rule_no, rule.plan_code, rule.risk_code, rule.rule_element, rule.element_value, rule.element_unit, rule.cumulative_mode,
-        cons.constraint_no, cons.rule_no, cons.constraint_type, cons.value1, cons.value2, cons.constraint_unit,
+        cons.constraint_no, cons.rule_no, cons.constraint_type, cons.value1, cons.value2, cons.constraint_unit
         FROM claim_rule rule INNER JOIN claim_rule_relation relation ON rule.rule_no = relation.rule_no
         INNER JOIN claim_rule_constraint cons ON rule.rule_no = cons.rule_no
         WHERE rule.status = 'Y' AND rule.rule_element = #{ruleElement} AND rule.element_unit = #{elementUnit}
@@ -53,7 +53,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectDutyCodeRuleList" resultMap="ruleResultMap" parameterType="java.lang.String">
         SELECT rule.rule_no, rule.plan_code, rule.risk_code, rule.rule_element, rule.element_value, rule.element_unit, rule.cumulative_mode,
-        cons.constraint_no, cons.rule_no, cons.constraint_type, cons.value1, cons.value2, cons.constraint_unit,
+        cons.constraint_no, cons.rule_no, cons.constraint_type, cons.value1, cons.value2, cons.constraint_unit
         FROM claim_rule rule INNER JOIN claim_rule_relation relation ON rule.rule_no = relation.rule_no
         INNER JOIN claim_rule_constraint cons ON rule.rule_no = cons.rule_no
         WHERE rule.status = 'Y' AND rule.rule_element = #{ruleElement} AND rule.element_unit = #{elementUnit}
@@ -63,7 +63,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectPlanCodeRuleList" resultMap="ruleResultMap" parameterType="java.lang.String">
         SELECT rule.rule_no, rule.plan_code, rule.risk_code, rule.rule_element, rule.element_value, rule.element_unit, rule.cumulative_mode,
-        cons.constraint_no, cons.rule_no, cons.constraint_type, cons.value1, cons.value2, cons.constraint_unit,
+        cons.constraint_no, cons.rule_no, cons.constraint_type, cons.value1, cons.value2, cons.constraint_unit
         FROM claim_rule rule INNER JOIN claim_rule_relation relation ON rule.rule_no = relation.rule_no
         INNER JOIN claim_rule_constraint cons ON rule.rule_no = cons.rule_no
         WHERE rule.status = 'Y' AND rule.rule_element = #{ruleElement} AND rule.element_unit = #{elementUnit}

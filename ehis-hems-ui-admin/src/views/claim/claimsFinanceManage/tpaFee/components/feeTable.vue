@@ -91,6 +91,16 @@ export default {
 
     //删除
     delFun(row) {
+      // 02-待结算  该任务为待结算状态，不允许进行删除操作，请核实
+      // 03-已结算  该任务为已结算状态，不允许进行删除操作，请核实
+      if(row.settleStatus === '02') {
+        this.$message.warning('该任务为待结算状态，不允许进行删除操作，请核实');
+        return false;
+      }
+      if(row.settleStatus === '03') {
+        this.$message.warning('该任务为已结算状态，不允许进行删除操作，请核实');
+        return false;
+      }
       const params = {};
       params.settleTaskNo =  row.settleTaskNo;
       this.$confirm('确定删除', '提示', {

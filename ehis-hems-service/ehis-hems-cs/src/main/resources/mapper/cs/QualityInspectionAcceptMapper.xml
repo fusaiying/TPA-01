@@ -71,7 +71,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         woa.policy_no,woa.policy_item_no,woa.risk_code,woa.insured_no,woa.insured_name,woa.holder_no,woa.end_date,woa.holder_name,woa.accept_by,woa.accept_time,woa.modify_by,woa.modify_time,woa.create_by,woa.update_by,woa.update_time,woa.organ_code,woa.vip_flag,adi.priority_level,woa.status
         from work_order_accept woa
         left join accept_detail_info adi on woa.work_order_no = adi.work_order_no left join person_info pi on woa.insured_no=pi.person_id
-        LEFT JOIN quality_inspection_accept qia ON woa.work_order_no = qia.work_order_no  AND qia.STATUS = '03'
+        LEFT JOIN quality_inspection_accept qia ON woa.work_order_no = qia.work_order_no
         WHERE
         1 = 1
         <if test="businessTypeList != null ">
@@ -124,7 +124,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         order by woa.accept_time asc
     </select>
 
-    <!--质检信息列表查询-->
+    <!--发起质检信息列表查询-->
     <select id="selectSendByVoTwo" parameterType="com.paic.ehis.cs.domain.dto.WorkOrderQueryDTO" resultMap="AcceptResult">
         select woa.work_order_no,woa.business_type,adi.channel_code,adi.item_code,concat(woa.business_type,'-', adi.item_code) as business_service,
         woa.policy_no,woa.policy_item_no,woa.risk_code,woa.insured_no,woa.insured_name,woa.holder_no,woa.end_date,woa.holder_name,woa.accept_by,woa.accept_time,woa.modify_by,woa.modify_time,woa.create_by,woa.update_by,woa.update_time,woa.organ_code,woa.vip_flag,adi.priority_level,woa.status
@@ -134,8 +134,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         LEFT JOIN person_info pi ON woa.insured_no = pi.person_id
         WHERE
         1 = 1
-        and woa.status in ('04','05')
-        and not EXISTS (select 1 from quality_inspection_accept qia where qia.status  in('01','02') and woa.work_order_no=qia.work_order_no )
+        AND woa.STATUS not in( '01','02')
+        AND woa.business_type NOT IN ( '02' )
+        AND NOT EXISTS ( SELECT 1 FROM quality_inspection_accept qia WHERE qia.STATUS IN ( '01', '02' ) AND woa.work_order_no = qia.work_order_no )
         AND adi.item_code NOT IN ( 'B00034' )
         <if test="businessTypeList != null ">
             and woa.business_type IN (
@@ -362,7 +363,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </if>
     </update>
 
-    <!--按周抽检规则：已结案的案件未被质检过和未被激活过（修改过）-->
+    <!--信息需求按周抽检规则：已结案的案件未被质检过和未被激活过（修改过）-->
     <select id="getWorkOrderCountByUserId" parameterType="com.paic.ehis.cs.domain.dto.WorkOrderQueryDTO" resultMap="AcceptResult">
         SELECT
         woa.update_by,
@@ -388,7 +389,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
 
-    <!--按月抽检规则：已结案的案件案件首次被激活（修改过一次），并且案件不在质检中或质检结果为合格的案件-->
+    <!--信息需求按月抽检规则：已结案的案件案件首次被激活（修改过一次），并且案件不在质检中或质检结果为合格的案件-->
     <select id="getWorkOrderCountByUserIdMonth" parameterType="com.paic.ehis.cs.domain.dto.WorkOrderQueryDTO" resultMap="AcceptResult">
         SELECT
         woa.update_by,
@@ -414,6 +415,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         woa.update_by
     </select>
 
+    <!--预约12点批处理-->
     <select id="selectInvalidAcceptDetailInfo" resultMap="AcceptResult">
         SELECT
             woa.work_order_no,
@@ -428,5 +430,26 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         WHERE
             1 = 1 and woa.business_type='02' and woa.status='03'
         and <![CDATA[prop18 < #{invalidDate}]]>
+    </select>
+
+    <!--投诉每周一凌晨四点批处理-->
+    <select id="selectInvalidQiaMondayFour" resultMap="AcceptResult">
+        SELECT
+            woa.update_by,
+            count( * ) AS count,
+	GROUP_CONCAT( woa.work_order_no ) AS work_order_nos
+        FROM
+            work_order_accept woa
+            LEFT JOIN accept_detail_info adi ON woa.work_order_no = adi.work_order_no
+            LEFT JOIN person_info pi ON woa.insured_no = pi.person_id
+        WHERE
+            1 = 1
+          AND woa.STATUS NOT IN ( '01', '02' )
+          AND woa.business_type IN ( '03' )
+          AND NOT EXISTS ( SELECT 1 FROM quality_inspection_accept qia WHERE woa.work_order_no = qia.work_order_no )
+          AND adi.item_code NOT IN ( 'B00034' )
+          and <![CDATA[woa.end_date < #{invalidDate}]]>
+        GROUP BY
+            woa.update_by
     </select>
 </mapper>

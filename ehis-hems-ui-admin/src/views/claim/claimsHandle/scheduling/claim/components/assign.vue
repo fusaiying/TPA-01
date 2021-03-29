@@ -48,6 +48,10 @@
       type: Boolean,
       default: false
     },
+    roleCode: {
+      type: String,
+      default: ''
+    },
     roleSelects: {
       type: Array,
       default: function () {
@@ -65,12 +69,20 @@
     value: function (newValue) {
       this.dialogVisible = newValue;
     },
+    roleCode: function (newValue) {
+      this.preRoleCode = newValue;
+      if(newValue !== '') {
+        this.userForm.roleCode = newValue;
+      }
+
+    },
     roleSelects: function (newVal){
       this.roles = newVal;
     },
   },
   data() {
     return {
+        preRoleCode:'',
         mappingValue:{},
         roles:[],
         dialogVisible:false,
@@ -98,7 +110,11 @@
       this.$refs.userForm.validate((valid) => {
         if (valid) {
           const params = this.userForm;
-          params.isEqually = 'Y';
+          if(this.userForm.status === '01' || this.userForm.status === 'Y') {
+            params.isEqually = 'Y';
+          } else {
+            params.isEqually = 'N';
+          }
           params.mappingValue = this.roleMappingValue[this.userForm.roleCode];
           params.roleCode = this.userForm.roleCode;
           editInfoAverage(params).then(response => {

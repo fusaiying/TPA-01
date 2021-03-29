@@ -19,16 +19,31 @@ public class CustomServiceFallbackFactory implements FallbackFactory<CustomServi
     {
         log.error("用户服务调用失败:{}", throwable.getMessage());
         return new CustomServiceService() {
+
+            //信息需求一周批处理
             @Override
             public AjaxResult batchAcceptVo(String invalidDate) {
                 return null;
             }
+
+            //信息需求一个月批处理
             @Override
             public AjaxResult batchAcceptVomonth(String invalidDate) {
                 return null;
             }
+
+            //预约12点批处理
             @Override
-            public AjaxResult invalidAcceptDetailInfo(String invalidDate){return null;}
+            public AjaxResult invalidAcceptDetailInfo(String invalidDate){
+                return null;
+            }
+
+            //投诉每周一凌晨四点批处理
+            @Override
+            public AjaxResult selectInvalidQiaMondayFour(String invalidDate) {
+                return null;
+            }
+
         };
     }
 }

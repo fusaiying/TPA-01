@@ -48,4 +48,11 @@ public interface IDemandAcceptVoService {
      */
     List<WorkOrderVo> selectWorkOrder(AcceptDTO acceptDTO);
 
+    /**
+     * 工单详情查询
+     * @param workOrderNo
+     * @return
+     */
+    public DemandAcceptVo selectDemandAcceptList3(String workOrderNo);
+
 }

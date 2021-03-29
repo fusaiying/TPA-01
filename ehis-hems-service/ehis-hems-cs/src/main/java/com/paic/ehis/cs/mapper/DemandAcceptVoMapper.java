@@ -17,6 +17,8 @@ public interface DemandAcceptVoMapper {
 
     public List<DemandAcceptVo> selectDemandAcceptVoList2(WorkOrderQueryDTO workOrderQueryDTO);
 
+    public DemandAcceptVo selectDemandAcceptVoList3(String workOrderNo);
+
     public List<WorkOrderVo> selectWorkOrder(AcceptDTO acceptDTO);
 
     public DemandAcceptVo selectDemandAcceptVo(String workOrderNo);

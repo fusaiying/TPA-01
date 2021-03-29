@@ -8,8 +8,8 @@
       <el-form ref="form" :model="form" style="" label-width="130px" label-position="right" size="mini">
         <el-row>
           <el-col :span="8">
-            <el-form-item label="角色查询：" prop="roleId">
-              <el-select v-model="form.roleId" class="item-width" size="mini" placeholder="请选择">
+            <el-form-item label="角色查询：" prop="roleCode">
+              <el-select v-model="form.roleCode" class="item-width" size="mini" placeholder="请选择">
                 <el-option v-for="option in roleSelects" :key="option.dictValue" :label="option.dictLabel" :value="option.dictValue" />
               </el-select>
             </el-form-item>
@@ -66,7 +66,7 @@
     <user-modal :value="diaVisible" :roleSelects="roleSelects"  :fixInfo="fixInfo"  @closeDialogVisable="closeDialogVisable" @gettableData="gettableData"/>
 
     <!-- 一键分配弹框 -->
-    <assign-modal :value="assignDiaVisible" :roleMappingValue="roleMappingValue"  :roleSelects="roleSelects"  @closeAssignDiaVisible="closeAssignDiaVisible" @gettableData="gettableData"/>
+    <assign-modal :value="assignDiaVisible" :roleMappingValue="roleMappingValue" :roleSelects="roleSelects"  @closeAssignDiaVisible="closeAssignDiaVisible" @gettableData="gettableData"/>
 
   </div>
 </template>
@@ -96,7 +96,7 @@
         data() {
             return {
               form:{
-                roleId:'',
+                roleCode:'',
               },
               fixInfo: {
                 rowdata :'',
@@ -160,7 +160,7 @@
         },
         //查询
         gettableData () {
-          if(this.form.roleId === '' || this.form.roleId === null) {
+          if(this.form.roleCode === '' || this.form.roleCode === null) {
             this.$message({ type: 'warning',  message: '请选择角色进行查询'});
             return false;
           }
@@ -170,8 +170,8 @@
           const params = {
             pageNum:this.pageInfo.currentPage,
             pageSize:this.pageInfo.pageSize,
-            mappingValue:this.roleMappingValue[this.form.roleId],
-            roleCode: this.form.roleId,
+            mappingValue:this.roleMappingValue[this.form.roleCode],
+            roleCode: this.form.roleCode,
             orderByColumn:'t1.create_time',
             isAsc:'desc'
           };
@@ -190,9 +190,6 @@
           this.pageInfo.pageSize = 10;
           this.gettableData();
         },
-        assignFun(){
-          this.assignDiaVisible = true;
-        },
         editFun(row) {
           this.fixInfo = {
             rowdata :row,
@@ -203,16 +200,16 @@
         getStatusName(row, col){
           if(row.status == 'Y' || row.status == '01') {
             return '有效';
-          } else {
+          } else if(row.status == 'N' || row.status == '02') {
             return '无效';
+          } else {
+            return '';
           }
         },
         rateOrEqually(row, col){
-          if(row.isEqually == 'Y' && row.status == '02') {
-            return '0';
-          } else if(row.isEqually == 'Y') {
+          if(row.isEqually == 'Y') {
             return '均分';
-          } else {
+          }  else {
             return row.rate;
           }
         },
@@ -228,12 +225,12 @@
             if(response.data) {
               for(let i=0; i<response.data.length; i++) {
                 let obj= new Object();
-               let roleId =  response.data[i].userRoleId.toString()
+               let roleCode =  response.data[i].roleCode.toString()
                let mappingValue = response.data[i].mappingValue;
                 obj.dictLabel = response.data[i].roleName;
-                obj.dictValue = roleId;
+                obj.dictValue = roleCode;
                 this.roleSelects.push(obj);
-                this.roleMappingValue[roleId] = mappingValue;
+                this.roleMappingValue[roleCode] = mappingValue;
               }
             }
           }).catch(error => {

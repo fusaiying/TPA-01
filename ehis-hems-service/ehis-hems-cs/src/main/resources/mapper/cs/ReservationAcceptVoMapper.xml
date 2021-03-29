@@ -35,8 +35,8 @@
         <result property="callCenterId" column="call_center_id"/>
         <result property="oldmodifyBy" column="oldmodify_by"/>
         <result property="changeTime" column="change_time"/>
-        <result property="complaintTime" column="prop18"/>
-        <result property="appointmentDate" column="prop14"/>
+        <!--<result property="complaintTime" column="prop18"/>
+        <result property="appointmentDate" column="prop14"/>-->
     </resultMap>
 
 
@@ -101,7 +101,13 @@ SELECT
         b.prop22,
         b.prop23,
         b.prop24,
-        b.prop25
+        b.prop25,
+        b.prop26,
+        b.prop27,
+        b.prop28,
+        b.prop29,
+        b.prop30,
+        b.prop31
         FROM
         accept_detail_info b
         LEFT JOIN work_order_accept a ON b.work_order_no = a.work_order_no

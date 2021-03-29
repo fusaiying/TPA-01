@@ -131,7 +131,7 @@ public class FinanceTpaSettleTaskServiceImpl implements IFinanceTpaSettleTaskSer
         financeTpaSettleDetail.setUpdateTime(DateUtils.getNowDate());
 
         financeSettleRecord.setTaskType("01");
-        financeSettleRecord.setOperator("");
+        financeSettleRecord.setOperator(SecurityUtils.getUsername());
         financeSettleRecord.setHistoryFlag("N");
         financeSettleRecord.setOperation("01");
         financeSettleRecord.setStatus("Y");
@@ -220,7 +220,7 @@ public class FinanceTpaSettleTaskServiceImpl implements IFinanceTpaSettleTaskSer
                 tpaSettleInfos.add(tpaSettleInfo);
                 earliestDay=companyRiskPolicy.getValidStartDate().before(earliestDay)?companyRiskPolicy.getValidStartDate():earliestDay;
             }
-            if (StringUtils.isNotNull(financeTpaSettleTask.getSettleStartDate())) {
+            if (StringUtils.isNull(financeTpaSettleTask.getSettleStartDate())) {
                 financeTpaSettleTask.setSettleStartDate(earliestDay);
             }
             financeTpaSettleTask.setSettleTaskNo(taskNo);
@@ -273,6 +273,8 @@ public class FinanceTpaSettleTaskServiceImpl implements IFinanceTpaSettleTaskSer
                     policyAndRiskService.settledPolicy(policyAndRiskRelation);
                     detailInfos.add(tpaSettleDetailInfo);
                 }
+            }else{
+                throw new Exception("该出单公司在该截止日期前已结算完毕！");
             }
             tpaSettleInfo.setDetailInfos(detailInfos);
             assert companyRiskPolicy != null;
@@ -286,7 +288,7 @@ public class FinanceTpaSettleTaskServiceImpl implements IFinanceTpaSettleTaskSer
             if ("01".equals(tpaSettleDTO.getSettlementType())){
                 tpaSettleInfo.setServiceSettleAmount(companyRule.getSettlementvalue().multiply(companyRiskPolicy.getSumPerm()));
             }
-            if (!StringUtils.isNotNull(financeTpaSettleTask.getSettleStartDate())) {
+            if (StringUtils.isNull(financeTpaSettleTask.getSettleStartDate())) {
                 financeTpaSettleTask.setSettleStartDate(companyRiskPolicy.getValidStartDate());
             }
             financeTpaSettleTask.setServiceSettleAmount(tpaSettleInfo.getServiceSettleAmount());

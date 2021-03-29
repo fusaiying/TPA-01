@@ -433,31 +433,43 @@ public class FinanceTpaSettleTaskServiceImpl implements IFinanceTpaSettleTaskSer
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     @Override
     public int confirmTpaSettleTask(String settleTaskNo) {
+
+        String username = SecurityUtils.getUsername();
+        Date nowDate = DateUtils.getNowDate();
+
         FinanceTpaSettleTask financeTpaSettleTask = new FinanceTpaSettleTask();
         FinanceSettleRecord settleRecord = new FinanceSettleRecord();
 
         financeTpaSettleTask.setSettleTaskNo(settleTaskNo);
-        financeTpaSettleTask.setSettleStatus("03");
-        financeTpaSettleTask.setUpdateBy(SecurityUtils.getUsername());
-        financeTpaSettleTask.setUpdateTime(DateUtils.getNowDate());
+        /***
+         待确认	01
+         待结算	02
+         已结算	03
+         */
+        financeTpaSettleTask.setSettleStatus("02");
+        financeTpaSettleTask.setUpdateBy(username);
+        financeTpaSettleTask.setUpdateTime(nowDate);
 
         FinanceSettleRecord financeSettleRecord = financeSettleRecordMapper.selectNRecordBySettleTaskNo(settleTaskNo);
-        financeSettleRecord.setHistoryFlag("Y");
-        financeSettleRecord.setOperator(SecurityUtils.getUsername());
-        financeSettleRecord.setUpdateBy(SecurityUtils.getUsername());
-        financeSettleRecord.setUpdateTime(DateUtils.getNowDate());
-        financeSettleRecordMapper.updateFinanceSettleRecord(financeSettleRecord);
+        if(null != financeSettleRecord) {
+            financeSettleRecord.setHistoryFlag("Y");
+            financeSettleRecord.setOperator(username);
+            financeSettleRecord.setUpdateBy(username);
+            financeSettleRecord.setUpdateTime(nowDate);
+            financeSettleRecordMapper.updateFinanceSettleRecord(financeSettleRecord);
+            settleRecord.setOrgRecordId(financeSettleRecord.getRecordId());
+        }
         settleRecord.setOperator("");
         settleRecord.setTaskType("01");
         settleRecord.setHistoryFlag("N");
-        settleRecord.setSettleTaskNo(financeSettleRecord.getSettleTaskNo());
+        settleRecord.setSettleTaskNo(settleTaskNo);
         settleRecord.setOperation("03");
-        settleRecord.setOrgRecordId(financeSettleRecord.getRecordId());
         settleRecord.setStatus("Y");
-        settleRecord.setCreateBy(SecurityUtils.getUsername());
-        settleRecord.setCreateTime(DateUtils.getNowDate());
-        settleRecord.setUpdateBy(SecurityUtils.getUsername());
-        settleRecord.setUpdateTime(DateUtils.getNowDate());
+        settleRecord.setCreateBy(username);
+        settleRecord.setCreateTime(nowDate);
+        settleRecord.setUpdateBy(username);
+        settleRecord.setUpdateTime(nowDate);
+        settleRecord.setOperator(username);
 //        Long userId = SecurityUtils.getLoginUser().getUserId();
 //        SysUser sysUser = sysUserMapper.selectUserById(userId);
 //        settleRecord.setDeptCode( sysUser.getDeptId().toString());

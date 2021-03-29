@@ -223,7 +223,7 @@ public class FinanceTpaSettleTaskController extends BaseController
     }*/
 
     /**
-     * 获取TPA服务费结算任务详细信息
+     *  确认TPA服务费结算任务
      */
     @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:task:query')")
     @PutMapping(value = "/{settleTaskNo}")

@@ -87,7 +87,7 @@ public class ClaimCaseCalController extends BaseController
      * @return
      * auth: hjw
      */
-    @GetMapping(value = "/preClaimInfo{rptNo}")
+    @GetMapping(value = "/preClaimInfo/{rptNo}")
     public AjaxResult getPreClaimInfo(@PathVariable("rptNo") String rptNo)
     {
         return AjaxResult.success(claimCaseCalService.selectPreCalConclusionByRptNo(rptNo));

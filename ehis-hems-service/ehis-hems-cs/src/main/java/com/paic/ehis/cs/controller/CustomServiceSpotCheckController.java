@@ -442,7 +442,7 @@ public class CustomServiceSpotCheckController extends BaseController {
     }
 
     @GetMapping("/getAttachmentList/selectServiceProcess/{workOrderNo}")
-    public ComplaintDealVo selectServiceProcess(String workOrderNo){
-        return iComplaintAcceptVoService.selectServiceProcess(workOrderNo);
+    public AjaxResult  selectServiceProcess(String workOrderNo){
+        return AjaxResult.success(iComplaintAcceptVoService.selectServiceProcess(workOrderNo));
     }
 }

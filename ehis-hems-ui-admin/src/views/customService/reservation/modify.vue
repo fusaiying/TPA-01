@@ -386,12 +386,25 @@
         </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="预约日期："  style="white-space: nowrap" prop="complaintTime">
+            <el-form-item label="预约日期："  style="white-space: nowrap" prop="appointmentDate">
               <el-date-picker class="item-width"
-                v-model="workPoolData.complaintTime"
-                type="datetime"
-                placeholder="选择日期时间">
+                v-model="workPoolData.appointmentDate"
+                type="date"
+                placeholder="选择日期时间"
+                value-format="YYYY-MM-dd">
               </el-date-picker>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="预约时间："  style="white-space: nowrap" prop="complaintTimes">
+              <el-time-picker class="item-width"
+                              is-range
+                              v-model="workPoolData.complaintTimes"
+                              range-separator="-"
+                              start-placeholder="开始时间"
+                              end-placeholder="结束时间"
+                              value-format="HH:mm:ss">
+              </el-time-picker>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -932,9 +945,12 @@
           medicalInstitution: [
             {required: true, message: "医疗机构不能为空", trigger: ["blur","change"]}
           ],
-          complaintTime: [
-            {required: true, message: "预约时间不能为空", trigger: ["blur","change"]},
+          appointmentDate: [
+            {required: true, message: "预约日期不能为空", trigger: ["blur","change"]},
             {required: true, validator: checkComplaintTime, trigger: "blur"}
+          ],
+          complaintTimes: [
+            {required: true, message: "预约时间不能为空", trigger: ["blur","change"]}
           ],
           province: [
             {required: true, message: "预约医院不能为空", trigger: ["blur","change"]}
@@ -1084,7 +1100,7 @@
         if (this.workPoolDataFlag&&this.ruleFormFlag) {
           this.workPoolData.workOrderNo=this.$route.query.workOrderNo;
           this.workPoolData.symptomTimes=this.workPoolData.a+'-'+this.workPoolData.b;
-          //this.ruleForm.symptomTimes=this.ruleForm.a+'-'+this.ruleForm.b;
+          this.workPoolData.complaintTime = this.workPoolData.complaintTimes[0]+'-'+this.workPoolData.complaintTimes[1];
           let send=this.workPoolData
           modifyReservationSubmit(send).then(res => {
             if (res != null && res.code === 200) {
@@ -1110,15 +1126,17 @@
           let query = this.queryParams
           demandListAndPublicPool(query).then(res => {
             if (res != null && res.code === 200) {
-              this.workPoolData = res.rows[0]
-              this.totalCount = res.total
+              this.workPoolData = res.rows[0];
+              this.totalCount = res.total;
               if (this.workPoolData.symptomTimes != null && this.workPoolData.symptomTimes != '') {
-                let arr=this.workPoolData.symptomTimes.split('-')
-                console.log(arr)
-                /*this.ruleForm.a=arr[0];
-                this.ruleForm.b=arr[1];*/
+                let arr=this.workPoolData.symptomTimes.split('-');
                 this.$set(this.workPoolData, `a`, arr[0]);
                 this.$set(this.workPoolData, `b`, arr[1]);
+              }
+              if(this.workPoolData.complaintTime != null && this.workPoolData.complaintTime !=''){
+                //预约时间反显
+                let timeArr=this.workPoolData.complaintTime.split('-');
+                this.$set(this.workPoolData, `complaintTimes`, timeArr);
               }
               let queryData={
                 hospitalCode:res.rows[0].medicalInstitution,

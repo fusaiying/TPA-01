@@ -141,7 +141,7 @@
       },
 
       created: function() {
-        this.initData();
+       // this.initData();
       },
       methods: {
 
@@ -152,7 +152,7 @@
           this.assignDiaVisible = false
         },
         initData(){
-         // this.gettableData();
+          this.gettableData();
         },
         //重置
         reset(form) {

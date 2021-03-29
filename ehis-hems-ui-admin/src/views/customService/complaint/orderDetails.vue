@@ -631,7 +631,7 @@
 
 <script>
   import moment from 'moment'
-  import { complaintDealSubmit, selectHangFlag, reasonThree, reasonTwo, classTwo, complainSearchServer ,collaborative,transferInfo } from '@/api/customService/complaint'
+  import { complaintDealSubmit, selectHangFlag, reasonThree, reasonTwo, classTwo, selectServiceProcess ,collaborative,transferInfo } from '@/api/customService/complaint'
   import {demandListAndPublicPool,demandListAndPersonalPool,dealAdd,FlowLogSearch,HMSSearch,dealADD} from '@/api/customService/demand'
   import upLoad from "../common/modul/upload";
   import {complainSearch,comSearch}  from  '@/api/customService/consultation'
@@ -727,6 +727,7 @@
           pieceworkFlag: "",
           complaintStatus: "",
           complaintTenable: "",
+          acceptor: "",
           faseReason: "",
           repeatedComplaint: "",
           reason1: "",
@@ -830,6 +831,7 @@
       if (this.$route.query.flag!=null && this.$route.query.flag!=''){
         this.flag = true;
       }
+      console.log(this.queryParams.workOrderNo);
       //window.aaa = this;
       this.searchHandle()
       this.searchFlowLog()
@@ -924,8 +926,7 @@
       deal(){},
       //反显信息需求
       searchHandleServer() {
-        let query=this.queryParams
-        complainSearchServer(query).then(res => {
+        selectServiceProcess(this.queryParams.workOrderNo).then(res => {
           if (res != null && res.code === 200) {
             console.log("投诉页面server反显数据",res.data)
             this.sendForm = res.data;

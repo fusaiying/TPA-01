@@ -47,12 +47,6 @@ public class ClaimCaseDistController extends BaseController
     @PostMapping("/selectClaimCaseDist")
     public TableDataInfo selectClaimCaseDist(@RequestBody ClaimUserRole claimUserRole)
     {
-        List<ClaimUserRole> claimUserRoleList = claimCaseDistService.selectClaimUserRole(claimUserRole);
-        if(StringUtils.isEmpty(claimUserRoleList) || claimUserRoleList.size() > 1){
-            return getDataTableErr("角色信息查询错误！");
-        }
-        claimUserRole = claimUserRoleList.get(0);
-
         MenuIdDTO menuIdDTO = new MenuIdDTO();
         menuIdDTO.setMenuId(Long.valueOf(claimUserRole.getMappingValue()));
         menuIdDTO.setPageNum(claimUserRole.getPageNum());
@@ -65,6 +59,12 @@ public class ClaimCaseDistController extends BaseController
             String jsonRoleUserInfoDTOListStr = JSON.toJSONString(data);
             roleUserInfoDTOList = JSON.parseArray(jsonRoleUserInfoDTOListStr,RoleUserInfoDTO.class);
         }
+
+        List<ClaimUserRole> claimUserRoleList = claimCaseDistService.selectClaimUserRole(claimUserRole);
+        if(StringUtils.isEmpty(claimUserRoleList) || claimUserRoleList.size() > 1){
+            return getDataTableErr("角色信息查询错误！");
+        }
+        claimUserRole = claimUserRoleList.get(0);
 
         List<RoleUserInfoDTO> termRoleUserInfoDTOList = new ArrayList<>();
         for (RoleUserInfoDTO roleUserInfoDTO:roleUserInfoDTOList) {

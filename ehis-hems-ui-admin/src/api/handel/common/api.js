@@ -111,6 +111,14 @@ export function calInfo(rptNo) {
   })
 }
 
+// 查询申诉原案件赔付信息详细
+export function preClaimInfo(rptNo) {
+  return request({
+    url: '/claimflow/cal/preClaimInfo/' + rptNo,
+    method: 'get'
+  })
+}
+
 
 // 理算审核  审核完毕险种产品重设验证  (主要需要rptNo)
 export function verifyProReset(query){

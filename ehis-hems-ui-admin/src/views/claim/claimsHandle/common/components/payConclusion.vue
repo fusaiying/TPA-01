@@ -75,7 +75,7 @@
   </el-card>
 </template>
 <script>
-import {calInfo} from '@/api/handel/common/api';
+import {preClaimInfo} from '@/api/handel/common/api';
 
 let dictss = [{dictType: 'conclusion'}, {dictType: 'rejected_reasons'}];
 export default {
@@ -132,7 +132,7 @@ export default {
   computed: {},
   methods: {
     getCalInfo() {
-      calInfo(this.fixInfo.rptNo.split('-')[0]).then(res => {
+      preClaimInfo(this.fixInfo.rptNo).then(res => {
         if (res.code === 200 && res.data) {
          // console.log("申述案件赔付结论 : ",res.data)
           this.conclusionInfo = res.data;

@@ -33,7 +33,7 @@
           <el-row>
             <el-col :span="24">
               <el-form-item label="分配比例：" prop="rate">
-                <el-input v-model="userForm.rate"  class="item-width" size="mini" placeholder="请输入" />
+                <el-input v-model="userForm.rate"  class="item-width" size="mini" @input="changePrice()" placeholder="请输入" />
               </el-form-item>
             </el-col>
           </el-row>
@@ -109,6 +109,17 @@
     },
   },
   data() {
+    const checkRate = (rule, value, callback) => {
+      if (!value && value !== 0) {
+        callback(new Error("分配比例必填"));
+      } else {
+        if (parseFloat(value) > 100) {
+          callback(new Error("分配比例介于 0 - 100 之间"));
+        } else {
+          callback();
+        }
+      }
+    };
     return {
       editData:{},
       custLevel:[],
@@ -124,7 +135,7 @@
         rules: {
           roleCode: {trigger: ['change'], required: false, message: '角色必填'},
           userName: {trigger: ['change'], required: true, message: '操作用户必填'},
-          rate: {trigger: ['change'], required: true, message: '分配比例必填'},
+          rate: {trigger: ['change'], required: true,  validator:checkRate},
           status: {trigger: ['change'], required: true, message: '分配状态必填'},
         },
       roles:[],
@@ -143,17 +154,18 @@
     });
   },
   methods: {
+    changePrice(){
+      this.userForm.rate = this.userForm.rate.replace(/[^\d.]/g,"") //清除非 数字和小数点的字符
+      this.userForm.rate = this.userForm.rate.replace(/\.{2,}/g,".") //清除第二个小数点
+      this.userForm.rate = this.userForm.rate.replace(/^\./g,""); //验证第一个字符是数字而不是字符
+      this.userForm.rate = this.userForm.rate.replace(".","$#$").replace(/\./g,"").replace("$#$",".");
+      this.userForm.rate = this.userForm.rate.replace(/^(\-)*(\d+)\.(\d\d).*$/,'$1$2.$3'); //保留两位小数
+      this.userForm.rate = this.userForm.rate.indexOf(".") > 0? this.userForm.rate.split(".")[0].substring(0, 11) + "." + this.userForm.rate.split(".")[1]: this.userForm.rate.substring(0, 11); //限制只能输入7位正整数
+    },
     saveInfoFun(){
       this.$refs.userForm.validate((valid) => {
         if (valid) {
-          if(this.userForm.status == '01') {
-            this.userForm.status = 'Y';
-          } else {
-            this.userForm.status = 'N';
-          }
-
           const params = this.userForm;
-
           editInfo(params).then(response => {
             if (response.code == '200') {
               this.$message({

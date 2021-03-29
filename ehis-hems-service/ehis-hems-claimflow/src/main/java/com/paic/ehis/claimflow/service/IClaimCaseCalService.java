@@ -97,4 +97,14 @@ public interface IClaimCaseCalService
      */
     public ClaimCaseCal selectExchangeRateForeign(ClaimCaseCal claimCaseCal);
 
+
+    /***
+     * 申诉案件根据 申诉的报案号，查询上一个报案信息
+     * @param rptNo
+     * @return
+     * auth: hjw
+     */
+    public CalConclusionVo selectPreCalConclusionByRptNo(String rptNo);
+
+
 }

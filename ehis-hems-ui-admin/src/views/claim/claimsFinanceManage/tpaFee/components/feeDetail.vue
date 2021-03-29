@@ -95,13 +95,13 @@
         this.tableData= [];
         let type = this.fixInfoDetail.type ;
         // 发起结算
-        if(type == "launch") {
+        if(type === "launch") {
           this.initiateTaskData();
         }
-        if(type == "show") {
+        if(type === "show") {
           this.initData();
         }
-        if(type == 'confirm') {
+        if(type === 'confirm') {
           this.confimInfo = true;
           this.initData();
         }

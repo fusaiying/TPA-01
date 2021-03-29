@@ -144,9 +144,6 @@
        // this.initData();
       },
       methods: {
-        assignFun(){
-          this.assignDiaVisible = true;
-        },
         closeDialogVisable() {
           this.diaVisible = false
         },
@@ -196,6 +193,10 @@
           this.assignDiaVisible = true;
         },
         editFun(row) {
+          if(row.isEqually === 'Y') {
+            this.$message({ type: 'warning',  message: '请先取消一键均分'});
+            return false;
+          }
           this.fixInfo = {
             rowdata :row,
             type :'edit'

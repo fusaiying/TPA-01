@@ -96,9 +96,9 @@
          this.userForm.userName = newVal.rowdata.userName;
          this.userForm.distId = newVal.rowdata.distId;
         if(newVal.rowdata.status == 'Y' || newVal.rowdata.status == '01') {
-          this.userForm.status = '01';
+          this.userForm.status = 'Y';
         } else {
-          this.userForm.status = '02';
+          this.userForm.status = 'N';
         }
       }
     },

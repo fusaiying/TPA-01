@@ -79,7 +79,7 @@ public interface QualityInspectionAcceptMapper {
     //查询符合一个月抽检规则的数据
     public List<AcceptVo> getWorkOrderCountByUserIdMonth(WorkOrderQueryDTO workOrderQueryDTO);
 
-    public List<AcceptVo> selectInvalidAcceptDetailInfo(@Param("invalidDate") Date invalidDate);
+    public List<AcceptVo> selectInvalidAcceptDetailInfo(WorkOrderQueryDTO workOrderQueryDTO);
 
     public List<AcceptVo> selectInvalidQiaMondayFour(WorkOrderQueryDTO workOrderQueryDTO);
 

@@ -714,7 +714,19 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
             throw new RuntimeException("日期为空！");
         }
         Date invalidDate =DateUtils.parseDate(invalidDateStr);
-        List<AcceptVo> acceptVos=qualityInspectionAcceptMapper.selectInvalidAcceptDetailInfo(invalidDate);
+        SimpleDateFormat foramt = new SimpleDateFormat("yyyy-MM-dd");
+
+        Calendar calendar1 = Calendar.getInstance();
+        calendar1.setTime(invalidDate);
+        calendar1.set(calendar1.get(Calendar.YEAR), calendar1.get(Calendar.MONTH), calendar1.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
+
+        Calendar calendar2 = Calendar.getInstance();
+        calendar1.set(calendar2.get(Calendar.YEAR), calendar2.get(Calendar.MONTH), calendar2.get(Calendar.DAY_OF_MONTH), 23, 59, 59);
+
+        WorkOrderQueryDTO workOrderQueryDTO = new WorkOrderQueryDTO();//根据工单状态
+        workOrderQueryDTO.setEndCaseStartTime(foramt.format(calendar1.getTime()));//获取今天凌晨0点
+        workOrderQueryDTO.setEndCaseEndTime(foramt.format(calendar2.getTime()));//获取当天23点59分59秒Date
+        List<AcceptVo> acceptVos=qualityInspectionAcceptMapper.selectInvalidAcceptDetailInfo(workOrderQueryDTO);
         if(StringUtils.isNotEmpty(acceptVos)){
             List<String> workOrderNoList=acceptVos.stream().map(bsc -> bsc.getWorkOrderNo()).collect(Collectors.toList());
             String[] workOrderNoMany=new String[acceptVos.size()];

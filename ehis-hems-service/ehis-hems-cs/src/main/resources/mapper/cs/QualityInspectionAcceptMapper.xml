@@ -431,7 +431,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                 LEFT JOIN quality_inspection_accept qia ON woa.work_order_no = qia.work_order_no
         WHERE
             1 = 1 and woa.business_type='02' and woa.status='03'
-        and <![CDATA[prop18 < #{invalidDate}]]>
+        <if test="updateBy != null and updateBy != ''">and woa.update_by = #{updateBy}</if>
+        <if test="status != null and status != ''"> and woa.status = #{status}</if>
+        <if test="workOrderNo != null and workOrderNo != ''"> and woa.work_order_no = #{workOrderNo}</if>
+        <if test="endCaseStartTime != null ">
+            and DATE_FORMAT(adi.prop18,'%Y-%m-%d') <![CDATA[>=]]> #{endCaseStartTime}
+        </if>
+        <if test="endCaseEndTime != null ">
+            and DATE_FORMAT(adi.prop18,'%Y-%m-%d') <![CDATA[<=]]> #{endCaseEndTime}
+        </if>
+
     </select>
 
     <!--投诉每周一凌晨四点批处理-->

@@ -40,28 +40,19 @@
               <el-table-column prop="rptNo" label="被保人" align="center"/>
               <el-table-column prop="rptNo" label="险种" align="center"/>
               <el-table-column prop="rptNo" label="生效日期" align="center"/>
-
-              <el-table-column  v-if="dataSettelType === '01'" prop="rptNo" label="保费比例%" align="center"/>
               <el-table-column  v-if="dataSettelType === '01'" prop="rptNo" label="保费" align="center"/>
-
+              <el-table-column  v-if="dataSettelType === '01'" prop="rptNo" label="保费比例%" align="center"/>
               <el-table-column prop="name" label="服务费CNY" align="center"/>
               <el-table-column prop="rptNo" label="备注" align="center"/>
-
-
-
-
             </el-table>
           </template>
         </el-table-column>
         <el-table-column align="center" prop="companyName"  label="出单公司" show-overflow-tooltip/>
         <el-table-column align="center" prop="riskName" label="险种" show-overflow-tooltip/>
-
         <el-table-column v-if="dataSettelType === '02'" align="center" prop="totalPeople" label="总人数" show-overflow-tooltip/>
         <el-table-column v-if="dataSettelType === '02'" align="center" prop="settlementValue" label="服务费/人" show-overflow-tooltip/>
-
         <el-table-column v-if="dataSettelType === '01'" align="center" prop="sumPerm" label="总保费" show-overflow-tooltip/>
         <el-table-column v-if="dataSettelType === '01'" align="center" prop="settlementValue" label="保费比例%" show-overflow-tooltip/>
-
         <el-table-column align="center" prop="serviceSettleAmount" label="服务费总金额CNY" show-overflow-tooltip/>
         <el-table-column align="center" prop="remark" label="备注" show-overflow-tooltip/>
       </el-table>

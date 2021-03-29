@@ -158,6 +158,17 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         return demandAcceptVos;
     }
 
+    /**
+     * 个人工单详情查询方法
+     * @param workOrderNo
+     * @return
+     */
+    @Override
+    public DemandAcceptVo selectDemandAcceptList3(String workOrderNo) {
+
+        return demandAcceptVoMapper.selectDemandAcceptVoList3(workOrderNo);
+    }
+
     @Override
     public DemandAcceptVo selectDemandAcceptVo(String workOrderNo) {
         DemandAcceptVo demandAcceptVo = demandAcceptVoMapper.selectDemandAcceptVo(workOrderNo);

@@ -72,6 +72,20 @@ public class CustomServiceDemandController extends BaseController {
     }
 
     /**
+     * 个人工单详情查询方法
+     */
+    @GetMapping("/internal/PersonalPool")
+    public AjaxResult listAndPool(@RequestParam("workOrderNo") String workOrderNo) {
+//        startPage();
+//        workOrderQueryDTO.setUpdateBy(SecurityUtils.getUsername());
+        logger.info("工单详情查询条件：{}",workOrderNo);
+        DemandAcceptVo demandAcceptVo = iDemandAcceptVoService.selectDemandAcceptList3(workOrderNo);
+        logger.info("工单详情查询结果：{}",demandAcceptVo);
+        return AjaxResult.success(demandAcceptVo);
+    }
+
+
+    /**
      * 根据工单号获取信息需求受理信息
      * @param workOrderNo
      * @return

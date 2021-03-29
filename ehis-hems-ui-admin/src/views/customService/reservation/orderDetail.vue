@@ -312,19 +312,26 @@
         </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="预约日期：" prop="complaintTime">
+            <el-form-item label="预约日期：" prop="appointmentDate">
               <el-date-picker class="item-width"
-                              v-model="ruleForm.complaintTime"
+                              v-model="ruleForm.appointmentDate"
                               type="datetime"
                               placeholder="选择日期时间">x
               </el-date-picker>
             </el-form-item>
           </el-col>
-          <!--<el-col :span="8">
-            <el-form-item label="预约时间：" prop="complaintTime">
-              <el-input v-model="ruleForm.complaintTime" class="item-width" readonly size="mini" placeholder="请输入"/>
+          <el-col :span="8">
+            <el-form-item label="预约时间："  style="white-space: nowrap" prop="complaintTimes">
+              <el-time-picker class="item-width"
+                              is-range
+                              v-model="ruleForm.complaintTimes"
+                              range-separator="-"
+                              start-placeholder="开始时间"
+                              end-placeholder="结束时间"
+                              value-format="HH:mm:ss">
+              </el-time-picker>
             </el-form-item>
-          </el-col>-->
+          </el-col>
           <el-col :span="8">
             <el-form-item label="医疗机构：" prop="email">
               <el-col :span="14">
@@ -880,6 +887,11 @@
                   this.$set(this.ruleForm, `a`, arr[0]);
                   this.$set(this.ruleForm, `b`, arr[1]);
                 }
+                if(this.ruleForm.complaintTime != null && this.ruleForm.complaintTime !=''){
+                  //预约时间反显
+                  let timeArr=this.ruleForm.complaintTime.split('-');
+                  this.$set(this.ruleForm, `complaintTimes`, timeArr);
+                }
                   this.totalCount = res.total
                   console.log('response', res.total)
                   if (res.rows.length <= 0) {
@@ -898,10 +910,9 @@
           workOrderNo.businessType = "02"
           complainSearchServer(workOrderNo).then(res => {
               if (res != null && res.code === 200) {
-                  console.log("预约页面server反显数据", res.data)
-
+                  console.log("预约页面server反显数据", res.data);
                   this.submitForm = res.data;
-                  console.log(this.submitForm, "85848541484848")
+                  console.log(this.submitForm, "85848541484848");
                   if (res.rows.length <= 0) {
                       return this.$message.warning(
                           "未查询到数据！"

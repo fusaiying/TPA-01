@@ -173,6 +173,12 @@ SELECT
         b.prop23,
         b.prop24,
         b.prop25,
+        b.prop26,
+        b.prop27,
+        b.prop28,
+        b.prop29,
+        b.prop30,
+        b.prop31,
         CASE
         WHEN hm.nnn IS NOT NULL THEN
         1 ELSE 0
@@ -193,7 +199,7 @@ SELECT
         <if test="acceptTimeStart != null and acceptTimeEnd != null"> and a.accept_time between #{acceptTimeStart} and DATE_ADD(#{acceptTimeEnd},INTERVAL 1 DAY)</if>
         <if test="modifyBy != null  and modifyBy != ''"> and a.modify_by = #{modifyBy}</if>
         <if test="modifyTimeStart != null and modifyTimeEnd != null"> and a.modify_time between #{modifyTimeStart} and DATE_ADD(#{modifyTimeEnd},INTERVAL 1 DAY)</if>
-        <if test="complaintTimeStart != null and complaintTimeEnd != null"> and b.prop18 between DATE_ADD(#{complaintTimeStart},INTERVAL -1 DAY) and DATE_ADD(#{complaintTimeEnd},INTERVAL 0 DAY)</if>
+        <if test="complaintTimeStart != null and complaintTimeEnd != null"> and b.prop14 between DATE_ADD(#{complaintTimeStart},INTERVAL -1 DAY) and DATE_ADD(#{complaintTimeEnd},INTERVAL 0 DAY)</if>
         <if test="workOrderNo != null and workOrderNo != ''" > and a.work_order_no= #{workOrderNo}</if>
         <if test="policyNo != null  and policyNo != ''"> and a.policy_no = #{policyNo}</if>
         <if test="policyItemNo != null  and policyItemNo != ''"> and a.policy_item_no = #{policyItemNo}</if>
@@ -272,6 +278,12 @@ SELECT
         b.prop23,
         b.prop24,
         b.prop25,
+        b.prop26,
+        b.prop27,
+        b.prop28,
+        b.prop29,
+        b.prop30,
+        b.prop31,
         CASE
         WHEN hm.nnn IS NOT NULL THEN
         1 ELSE 0
@@ -293,7 +305,7 @@ SELECT
         <if test="acceptTimeStart != null and acceptTimeEnd != null"> and a.accept_time between #{acceptTimeStart} and DATE_ADD(#{acceptTimeEnd},INTERVAL 1 DAY)</if>
         <if test="modifyBy != null  and modifyBy != ''"> and a.modify_by = #{modifyBy}</if>
         <if test="modifyTimeStart != null and modifyTimeEnd != null"> and a.modify_time between #{modifyTimeStart} and DATE_ADD(#{modifyTimeEnd},INTERVAL 1 DAY)</if>
-        <if test="complaintTimeStart != null and complaintTimeEnd != null"> and b.prop18 between DATE_ADD(#{complaintTimeStart},INTERVAL -1 DAY) and DATE_ADD(#{complaintTimeEnd},INTERVAL 0 DAY)</if>
+        <if test="complaintTimeStart != null and complaintTimeEnd != null"> and b.prop14 between DATE_ADD(#{complaintTimeStart},INTERVAL -1 DAY) and DATE_ADD(#{complaintTimeEnd},INTERVAL 0 DAY)</if>
         <if test="workOrderNo != null and workOrderNo != ''" > and a.work_order_no= #{workOrderNo}</if>
         <if test="policyNo != null  and policyNo != ''"> and a.policy_no = #{policyNo}</if>
         <if test="policyItemNo != null  and policyItemNo != ''"> and a.policy_item_no = #{policyItemNo}</if>

@@ -310,20 +310,25 @@
         </el-row>
 
         <el-row>
-          <!--<el-col :span="8">
-            <el-form-item label="预约日期：" prop="appointmentDate">
-              <el-input v-model="sendForm.appointmentDate" class="item-width" size="mini" placeholder="请输入"/>
-            </el-form-item>
-          </el-col>-->
           <el-col :span="8">
-            <el-form-item label="预约日期：" prop="complaintTime">
-              <!--<el-input v-model="sendForm.complaintTime" class="item-width" size="mini" placeholder="请输入"/>-->
+            <el-form-item label="预约日期：" prop="appointmentDate">
               <el-date-picker class="item-width"
-                              v-model="sendForm.complaintTime"
+                              v-model="sendForm.appointmentDate"
                               type="datetime"
                               placeholder="选择日期时间">
               </el-date-picker>
-
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="预约时间："  style="white-space: nowrap" prop="complaintTimes">
+              <el-time-picker class="item-width"
+                              is-range
+                              v-model="sendForm.complaintTimes"
+                              range-separator="-"
+                              start-placeholder="开始时间"
+                              end-placeholder="结束时间"
+                              value-format="HH:mm:ss">
+              </el-time-picker>
             </el-form-item>
           </el-col>
           <el-form ref="ruleForm" :model="ruleForm" :rules="rules" style="padding-bottom: 30px;" label-width="170px"
@@ -1094,9 +1099,14 @@
         demandListAndPersonalPool(query).then(res => {
           console.log('共公池', res.rows)
           if (res != null && res.code === 200) {
-            this.sendForm = res.rows[0]
-            this.totalCount = res.total
-            console.log('response', res.total)
+            this.sendForm = res.rows[0];
+            this.totalCount = res.total;
+            console.log('response', res.total);
+            if(this.sendForm.complaintTime != null && this.sendForm.complaintTime !=''){
+              //预约时间反显
+              let timeArr=this.sendForm.complaintTime.split('-');
+              this.$set(this.sendForm, `complaintTimes`, timeArr);
+            }
             if (res.rows.length <= 0) {
               return this.$message.warning(
                 "未查询到数据！"

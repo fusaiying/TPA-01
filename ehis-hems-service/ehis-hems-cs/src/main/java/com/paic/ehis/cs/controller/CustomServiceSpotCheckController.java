@@ -408,7 +408,7 @@ public class CustomServiceSpotCheckController extends BaseController {
     }
 
 
-    //信息需求失效批处理
+    //信息需求抽检批处理
     @GetMapping("/internal/batchAcceptVo/invalidDate/{invalidDate}")
     public AjaxResult batchAcceptVo(@PathVariable("invalidDate") String invalidDate){
         try{
@@ -419,7 +419,7 @@ public class CustomServiceSpotCheckController extends BaseController {
         return AjaxResult.success("执行成功");
     }
 
-    //信息需求一个月失效批处理
+    //信息需求一个月抽检批处理
     @GetMapping("/internal/batchAcceptVo/invalidDateMonth/{invalidDate}")
     public AjaxResult batchAcceptVomonth(@PathVariable("invalidDate") String invalidDate){
         try{
@@ -441,8 +441,20 @@ public class CustomServiceSpotCheckController extends BaseController {
         return AjaxResult.success("执行成功");
     }
 
+    //服务处理回显接口
     @GetMapping("/getAttachmentList/selectServiceProcess/{workOrderNo}")
     public AjaxResult  selectServiceProcess(String workOrderNo){
         return AjaxResult.success(iComplaintAcceptVoService.selectServiceProcess(workOrderNo));
+    }
+
+    //投诉一周抽检批处理
+    @GetMapping("/internal/batchAcceptVo/selectInvalidQiaMondayFour/{invalidDate}")
+    public AjaxResult selectInvalidQiaMondayFour(@PathVariable("invalidDate") String invalidDate){
+        try{
+            qualityInspectionAcceptService.selectInvalidQiaMondayFour(invalidDate);
+        }catch(RuntimeException e){
+            return AjaxResult.error(e.getMessage());
+        }
+        return AjaxResult.success("执行成功");
     }
 }

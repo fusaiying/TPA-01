@@ -24,6 +24,7 @@
         size="small"
         highlight-current-row
         tooltip-effect="dark"
+        @expand-change="getMinData"
         style="width: 100%;"> <!--   @expand-change="getMinData" -->
         <el-table-column  type="expand">
           <template slot-scope="scope">
@@ -34,24 +35,25 @@
                       v-loading="loading"
                       tooltip-effect="dark"
                       style="width: 100%;">
-              <el-table-column prop="rptNo" label="保单号" align="center"/>
-              <el-table-column prop="rptNo" label="分单号" align="center"/>
-              <el-table-column prop="rptNo" label="投保人" align="center"/>
-              <el-table-column prop="rptNo" label="被保人" align="center"/>
-              <el-table-column prop="rptNo" label="险种" align="center"/>
-              <el-table-column prop="rptNo" label="生效日期" align="center"/>
-
-              <el-table-column prop="rptNo" label="保费比例%" align="center"/>
-              <el-table-column prop="rptNo" label="保费" align="center"/>
-
-              <el-table-column prop="name" label="服务费CNY" align="center"/>
-              <el-table-column prop="rptNo" label="备注" align="center"/>
+              <el-table-column prop="policyNo" label="保单号" align="center"/>
+              <el-table-column prop="policyItemNo" label="分单号" align="center"/>
+              <el-table-column prop="appName" label="投保人" align="center"/>
+              <el-table-column prop="name" label="被保人" align="center"/>
+              <el-table-column prop="riskName" label="险种" align="center"/>
+              <el-table-column prop="validStartDate" label="生效日期" align="center"/>
+              <el-table-column  v-if="dataSettelType === '01'" prop="prem" label="保费" align="center"/>
+              <el-table-column  v-if="dataSettelType === '01'" prop="premiumRatio" label="保费比例%" align="center"/>
+              <el-table-column prop="serviceAmount" label="服务费CNY" align="center"/>
+              <el-table-column prop="remark" label="备注" align="center"/>
             </el-table>
           </template>
         </el-table-column>
         <el-table-column align="center" prop="companyName"  label="出单公司" show-overflow-tooltip/>
         <el-table-column align="center" prop="riskName" label="险种" show-overflow-tooltip/>
-        <el-table-column align="center" prop="totalPeople" label="总人数" show-overflow-tooltip/>
+        <el-table-column v-if="dataSettelType === '02'" align="center" prop="totalPeople" label="总人数" show-overflow-tooltip/>
+        <el-table-column v-if="dataSettelType === '02'" align="center" prop="settlementValue" label="服务费/人" show-overflow-tooltip/>
+        <el-table-column v-if="dataSettelType === '01'" align="center" prop="sumPerm" label="总保费" show-overflow-tooltip/>
+        <el-table-column v-if="dataSettelType === '01'" align="center" prop="settlementValue" label="保费比例%" show-overflow-tooltip/>
         <el-table-column align="center" prop="serviceSettleAmount" label="服务费总金额CNY" show-overflow-tooltip/>
         <el-table-column align="center" prop="remark" label="备注" show-overflow-tooltip/>
       </el-table>
@@ -71,6 +73,7 @@
 
   import moment from 'moment'
   import {taskViewDetail, initiateTask,updateConfirm} from '@/api/tpaFee/api'
+  import {childData} from "@/api/invoice/api";
 
   export default {
   props: {
@@ -82,15 +85,8 @@
   },
   watch: {
     fixInfo: function (newValue) {
-      console.log("detail newValue")
-      console.log(newValue)
-      console.log("detail newValue")
-
+      this.dataSettelType = newValue.rowData.settlementType;
       this.fixInfoDetail = newValue;
-      console.log("fixInfoDetail")
-      console.log(this.fixInfoDetail)
-      console.log("fixInfoDetail")
-
     },
     value: function (newValue) {
       this.dialogVisable = newValue;
@@ -123,6 +119,7 @@
   },
   data() {
     return {
+      dataSettelType:'',
       confimInfo:false,
       loading : false,
       dialogVisable : false,
@@ -160,6 +157,12 @@
     getYesOrNoName(value){
       return this.selectDictLabel(this.ysOrNo, value)
     },
+    getMinData(row, expandedRows) {
+      //判断只有展开是做请求
+      if (expandedRows.length > 0) {
+        row.minData = row.detailInfos;
+      }
+    },
     initData(){
       this.loading = true;
       const params = {};
@@ -174,10 +177,12 @@
             if (_data.length !== 0) {
               _data.forEach(item => {
                 item.editing = false;
-                item.minData = [item.detailInfos]
+                item.minData = []
               })
             }
             this.tableData= _data;
+            console.log(" this.tableData", this.tableData)
+
           }
         }).finally(() => {
             this.loading = false;

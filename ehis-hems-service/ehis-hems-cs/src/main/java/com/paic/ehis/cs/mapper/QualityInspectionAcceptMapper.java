@@ -81,4 +81,6 @@ public interface QualityInspectionAcceptMapper {
 
     public List<AcceptVo> selectInvalidAcceptDetailInfo(@Param("invalidDate") Date invalidDate);
 
+    public List<AcceptVo> selectInvalidQiaMondayFour(WorkOrderQueryDTO workOrderQueryDTO);
+
 }

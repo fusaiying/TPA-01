@@ -327,7 +327,8 @@
               <el-date-picker
                 v-model="workPoolData.complaintTime"
                 type="datetime"
-                placeholder="选择日期时间">
+                placeholder="选择日期时间"
+                value-format="yyyy-MM-dd HH:mm:ss">
               </el-date-picker>
             </el-form-item>
           </el-col>
@@ -362,7 +363,7 @@
           style=" width: 100%;">
           <el-table-column align="center" width="140" prop="status" label="状态" show-overflow-tooltip>
             <template slot-scope="scope" v-if="scope.row.linkCode">
-              <span>{{ selectDictLabel(cs_order_state, scope.row.linkCode) }}</span>
+              <span>{{ selectDictLabel(cs_link_code, scope.row.linkCode) }}</span>
             </template>
           </el-table-column>
           <el-table-column align="center" prop="operateCode" label="操作" show-overflow-tooltip>
@@ -659,7 +660,9 @@
     {dictType: 'cs_question_circ'},
     {dictType: 'cs_marketingchannel_code'},
     {dictType: 'card_type'},
-    {dictType: 'rgtSex'}
+    {dictType: 'rgtSex'},
+    {dictType: 'cs_link_code'}
+
 
 
     ]
@@ -681,6 +684,7 @@
       return {
         card_type: [],//证件类型
         ids:[],//多选框
+        cs_link_code:[],
         flag:false,
         //流转用
         flowLogData:[],
@@ -976,7 +980,9 @@
       this.cs_marketingchannel_codeOption = this.dictList.find(item => {
         return item.dictType === 'cs_marketingchannel_code'
       }).dictDate
-
+      this.cs_link_code = this.dictList.find(item => {
+        return item.dictType === 'cs_link_code'
+      }).dictDate
     },
     methods: {
       //客户基本信息查询

@@ -69,7 +69,7 @@
       </div>
 
       <!--服务费结算列表 start -->
-      <feeTable  :table-data="initTableData" :status="status"  @openDetail="openDetail"/>
+      <feeTable  :table-data="initTableData" :status="status"  @openDetail="openDetail" @initData="initData"/>
       <!--服务费结算列表 end-->
 
       <!--分页组件-->

@@ -546,7 +546,7 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
                 }
             }
         }
-        return null;
+        return list;
     }
 
     //信息需求一月分配案件批处理
@@ -705,7 +705,7 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
                 }
             }
         }
-        return acceptVos;
+        return list;
     }
 
     //预约12点批处理
@@ -728,5 +728,145 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
         }
         return acceptVos;
     }
+
+    @Override
+    public List<AcceptVo> selectInvalidQiaMondayFour(String invalidDateStar) {
+        if (StringUtils.isEmpty(invalidDateStar)) {
+            throw new RuntimeException("日期为空！");
+        }
+        Date invalidDate =DateUtils.parseDate(invalidDateStar);
+        SimpleDateFormat foramt = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar cal = Calendar.getInstance();
+        Calendar cal1 = Calendar.getInstance();
+        cal.setTime(invalidDate);
+        if (1 == cal.get(Calendar.DAY_OF_WEEK)) {
+            cal.add(Calendar.DATE, -1);
+        }
+        cal.add(Calendar.DAY_OF_MONTH, -7);//时间减去7天
+        cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);//Calendar.MONDAY 这个是周一
+
+        if (1 == cal1.get(Calendar.DAY_OF_WEEK)) {
+            cal1.add(Calendar.DATE, -1);
+        }
+        cal1.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);//这个是周日
+        WorkOrderQueryDTO workOrderQueryDTO = new WorkOrderQueryDTO();//根据工单状态
+        workOrderQueryDTO.setEndCaseStartTime(foramt.format(cal.getTime()) + " 00:00:00");//获取上周一
+        workOrderQueryDTO.setEndCaseEndTime(foramt.format(cal1.getTime()) + " 23:59:59");//获取上周天
+
+        List<AcceptVo> list = qualityInspectionAcceptMapper.selectInvalidQiaMondayFour(workOrderQueryDTO);//
+        if (null != list) {
+            int i = list.size();
+            for (AcceptVo acceptVo : list) {
+                String workOrderNos = acceptVo.getWorkOrderNos();
+                String[] strings = workOrderNos.split(",");
+                Set<String> set = new HashSet<String>();
+                Random random = new Random();
+                double h = i * 0.1;
+                if (h <= 1 && h > 0) {
+                    int j = 1;//抽取总量的10%，如计算结果≤1，则取1
+                    int a = 0;
+                    while (true) {
+                        a = random.nextInt(strings.length);
+                        set.add(strings[a]);
+                        if (set.size() >= j) {
+                            break;
+                        }
+                    }
+                    for (String ran : set) {
+                        System.out.println(ran);
+                        workOrderQueryDTO.setWorkOrderNo(ran);
+                        String workOrderNo = ran; //只取一条工单
+                        WorkOrderAccept workOrderAccept = workOrderAcceptMapper.selectWorkOrderAcceptById(workOrderNo);
+                        if (null != workOrderAccept.getActivationNum()) {//说明此案件未被激活过
+                            Map<String, String> param = null;
+                            FlowLog flowLog = null;
+                            QualityInspectionAccept qualityInspectionAccept = null;
+                            List<FlowLog> flowLogList = new ArrayList<>();
+                            List<QualityInspectionAccept> list1 = new ArrayList<>();
+                            flowLog = new FlowLog();
+                            //流转记录添加
+                            String flow_id = PubFun.createMySqlMaxNoUseCache("cs_flow_id", 20, 20);
+                            flowLog.setFlowId(flow_id);
+                            flowLog.setCreatedBy(String.valueOf(SecurityUtils.getUsername()));
+                            flowLog.setCreatedTime(DateUtils.getNowDate());
+                            flowLog.setUpdatedBy(String.valueOf(SecurityUtils.getUsername()));
+                            flowLog.setUpdatedTime(DateUtils.getNowDate());
+                            flowLog.setWorkOrderNo(workOrderNo);
+                            flowLog.setLinkCode(param.get("linkCode"));
+                            flowLog.setOperateCode(param.get("operateCode"));
+                            flowLogList.add(flowLog);
+
+                            qualityInspectionAccept = new QualityInspectionAccept();
+                            qualityInspectionAccept.setWorkOrderNo(workOrderNo);
+                            qualityInspectionAccept.setStatus(param.get("status"));
+                            qualityInspectionAccept.setCreatedBy(String.valueOf(SecurityUtils.getUsername()));
+                            qualityInspectionAccept.setCreatedTime(DateUtils.getNowDate());
+                            qualityInspectionAccept.setUpdatedBy(String.valueOf(SecurityUtils.getUsername()));
+                            qualityInspectionAccept.setUpdatedTime(DateUtils.getNowDate());
+                            list1.add(qualityInspectionAccept);
+                            //记录操作轨迹
+                            flowLogMapper.insertBatch(flowLogList);
+                            qualityInspectionAcceptMapper.insertAcceptBatch(list1);
+                        }
+                    }
+                } else if (h > 1) {
+                    int j = (int) h;//抽取总量的10%，计算结果＞1，则向下取整
+                    int a = 0;
+                    while (true) {
+                        a = random.nextInt(strings.length);
+                        set.add(strings[a]);
+                        if (set.size() >= j) {
+                            break;
+                        }
+                    }
+                    for (String ran : set) {
+                        System.out.println(ran);
+                        String workOrderNo = ran;
+                        WorkOrderAccept workOrderAccept = workOrderAcceptMapper.selectWorkOrderAcceptById(workOrderNo);
+                        if (null != workOrderAccept.getActivationNum()) {//说明此案件未被激活过
+                            String[] ids = set.toArray(new String[0]);
+                            Map<String, String> param = null;
+                            FlowLog flowLog = null;
+                            QualityInspectionAccept qualityInspectionAccept = null;
+                            List<FlowLog> flowLogList = new ArrayList<>();
+                            List<QualityInspectionAccept> list1 = new ArrayList<>();
+                            for (int b = 0; b < ids.length; b++) {
+                                flowLog = new FlowLog();
+                                //流转记录添加
+                                String flow_id = PubFun.createMySqlMaxNoUseCache("cs_flow_id", 20, 20);
+                                flowLog.setFlowId(flow_id);
+                                flowLog.setCreatedBy(String.valueOf(SecurityUtils.getUsername()));
+                                flowLog.setCreatedTime(DateUtils.getNowDate());
+                                flowLog.setUpdatedBy(String.valueOf(SecurityUtils.getUsername()));
+                                flowLog.setUpdatedTime(DateUtils.getNowDate());
+                                flowLog.setWorkOrderNo(ids[b]);
+                                flowLog.setLinkCode(param.get("linkCode"));
+                                flowLog.setOperateCode(param.get("operateCode"));
+                                flowLogList.add(flowLog);
+
+                                qualityInspectionAccept = new QualityInspectionAccept();
+                                qualityInspectionAccept.setWorkOrderNo(ids[b]);
+                                qualityInspectionAccept.setStatus(param.get("status"));
+                                qualityInspectionAccept.setCreatedBy(String.valueOf(SecurityUtils.getUsername()));
+                                qualityInspectionAccept.setCreatedTime(DateUtils.getNowDate());
+                                qualityInspectionAccept.setUpdatedBy(String.valueOf(SecurityUtils.getUsername()));
+                                qualityInspectionAccept.setUpdatedTime(DateUtils.getNowDate());
+                                list1.add(qualityInspectionAccept);
+                            }
+                            //记录操作轨迹
+                            flowLogMapper.insertBatch(flowLogList);
+                            qualityInspectionAcceptMapper.insertAcceptBatch(list1);
+                            workOrderQueryDTO.setWorkOrderNo(ran);
+                        }
+                    }
+                } else if (h == 0) {
+                    int j = 0;//抽取总量的10%，计算结果为0，则取0
+                    System.out.println(j);
+                }
+            }
+        }
+        return list;
+    }
+
 }
 

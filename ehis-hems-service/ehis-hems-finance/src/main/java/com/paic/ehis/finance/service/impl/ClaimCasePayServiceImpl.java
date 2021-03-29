@@ -106,6 +106,11 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService {
                 BaseProviderInfo hospital = result.getData().get(0);
                 map.put("hospitalCode", hospital.getChname1());
             }
+            ClaimCasePaymentVO claimCasePaymentVO = claimCaseCalMapper.selectClaimCaseCalAmountByBatchNo(map.get("batchNo").toString());
+            if (StringUtils.isNotNull(claimCasePaymentVO)){
+                map.put("calAmount", claimCasePaymentVO.getCalAmount());
+            }
+
         }
         return initList;
     }
@@ -153,6 +158,10 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService {
             if (result.getData().size() > 0) {
                 BaseProviderInfo hospital = result.getData().get(0);
                 map.put("hospitalCode", hospital.getChname1());
+            }
+            ClaimCasePaymentVO claimCasePaymentVO = claimCaseCalMapper.selectClaimCaseCalAmountByBatchNo(map.get("batchNo").toString());
+            if (StringUtils.isNotNull(claimCasePaymentVO)){
+                map.put("calAmount", claimCasePaymentVO.getCalAmount());
             }
         }
         return batchList;
@@ -303,7 +312,8 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService {
                 payInfoVO.setDebtAmount(new BigDecimal(0));
                 payInfoVO.setBorrowAmount(new BigDecimal(0));
             }
-            if ("97".equals(payInfoVO.getCaseStatus())) {
+
+           if ("97".equals(payInfoVO.getCaseStatus())) {
                 payInfoVO.setPayAmount(new BigDecimal(0));
                 payInfoVO.setDebtAmount(new BigDecimal(0));
             }
@@ -644,6 +654,10 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService {
                 BaseProviderInfo hospital = result.getData().get(0);
                 map.put("hospitalCode", hospital.getChname1());
             }
+            ClaimCasePaymentVO claimCasePaymentVO = claimCaseCalMapper.selectClaimCaseCalAmountByBatchNo(map.get("batchNo").toString());
+            if (StringUtils.isNotNull(claimCasePaymentVO)){
+                map.put("calAmount", claimCasePaymentVO.getCalAmount());
+            }
         }
         return initList;
     }
@@ -687,6 +701,10 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService {
             if (result.getData().size() > 0) {
                 BaseProviderInfo hospital = result.getData().get(0);
                 map.put("hospitalCode", hospital.getChname1());
+            }
+            ClaimCasePaymentVO claimCasePaymentVO = claimCaseCalMapper.selectClaimCaseCalAmountByBatchNo(map.get("batchNo").toString());
+            if (StringUtils.isNotNull(claimCasePaymentVO)){
+                map.put("calAmount", claimCasePaymentVO.getCalAmount());
             }
         }
         return batchList;

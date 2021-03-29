@@ -392,7 +392,7 @@
           style=" width: 100%;">
           <el-table-column align="center" width="140" prop="status" label="状态" show-overflow-tooltip>
             <template slot-scope="scope" v-if="scope.row.linkCode">
-              <span>{{ selectDictLabel(cs_order_state, scope.row.linkCode) }}</span>
+              <span>{{ selectDictLabel(cs_link_code, scope.row.linkCode) }}</span>
             </template>
           </el-table-column>
           <el-table-column align="center" prop="operateCode" label="操作" show-overflow-tooltip>
@@ -528,6 +528,7 @@ let dictss = [
   {dictType: 'cs_end_case'},
   {dictType: 'cs_cancle_reason'},
   {dictType: 'cs_service_item'},
+  {dictType: 'cs_link_code'},
 ]
 export default {
   components: {
@@ -580,6 +581,7 @@ export default {
       cs_feedback_type: [],
       cs_end_case: [],
       cs_service_item: [],
+      cs_link_code: [],
       sendForm: {
         channle: "",
         textarea: "",
@@ -701,7 +703,9 @@ export default {
     this.cs_service_item = this.dictList.find(item => {
       return item.dictType === 'cs_service_item'
     }).dictDate
-
+    this.cs_link_code = this.dictList.find(item => {
+      return item.dictType === 'cs_link_code'
+    }).dictDate
   },
 
   methods: {

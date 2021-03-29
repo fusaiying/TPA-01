@@ -365,7 +365,7 @@
                 v-model="ruleForm.appointmentDate"
                 type="date"
                 placeholder="选择日期"
-                value-format="YYYY-MM-dd">
+                value-format="yyyy-MM-dd">
               </el-date-picker>
             </el-form-item>
           </el-col>

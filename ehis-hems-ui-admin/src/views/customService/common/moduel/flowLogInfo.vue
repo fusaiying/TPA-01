@@ -34,6 +34,7 @@
             </el-link>
           </template>
         </el-table-column>
+        <modify-details ref="modifyDetails"></modify-details>
         <el-table-column prop="opinion" align="center" label="处理意见" show-overflow-tooltip/>
         <el-table-column prop="toDepartment" align="center" label="流转部门" show-overflow-tooltip/>
         <el-table-column prop="toReason" align="center" label="流传原因" show-overflow-tooltip/>
@@ -52,7 +53,8 @@
 
 <script>
   import moment from "moment";
-  import {FlowLogSearch} from '@/api/customService/demand'
+  import {FlowLogSearch} from '@/api/customService/demand';
+  import modifyDetails from "../modul/modifyDetails";
 
   let dictss = [
     {dictType: 'cs_identity'},
@@ -67,6 +69,9 @@
     {dictType: 'cs_action_type'},
   ]
   export default {
+    components: {
+      modifyDetails,
+    },
     name: "flowLogInfo",
     props: {
       routerParams: Object
@@ -90,7 +95,7 @@
           workOrderNo: "",
           policyNo: "",
           policyItemNo: "",
-          status: ""
+          status: "",
         },
         dictList: [],
         cs_link_code: [],
@@ -147,9 +152,9 @@
     },
     methods: {
       modifyDetails(s) {
-        this.$refs.modifyDetails.queryParams.subId = s.subId
-        this.$refs.modifyDetails.queryParams.workOrderNo = this.queryParams.workOrderNo;
-        this.$refs.modifyDetails.open()
+          this.$refs.modifyDetails.queryParams.subId = s.subId,
+          this.$refs.modifyDetails.queryParams.workOrderNo = this.queryParams.workOrderNo;
+          this.$refs.modifyDetails.open()
         ;
       },
       searchFlowLog() {

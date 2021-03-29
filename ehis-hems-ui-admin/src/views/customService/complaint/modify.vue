@@ -198,7 +198,8 @@
               <el-date-picker
                 v-model="workPoolData.complaintTime"
                 type="datetime"
-                placeholder="选择日期时间">
+                placeholder="选择日期时间"
+                value-format="yyyy-MM-dd HH:mm:ss">
               </el-date-picker>
             </el-form-item>
           </el-col>

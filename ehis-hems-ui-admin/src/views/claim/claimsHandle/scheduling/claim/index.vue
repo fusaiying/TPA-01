@@ -45,6 +45,7 @@
             <el-table-column prop="userName" label="操作用户"  align="center" show-overflow-tooltip />
             <el-table-column prop="rate" label="分配比例" :formatter="rateOrEqually"  align="center" show-overflow-tooltip />
             <el-table-column prop="status" label="是否有效" :formatter="getStatusName" align="center" show-overflow-tooltip />
+            <el-table-column prop="userOrganCode" label="所属机构" v-if="show" align="center" show-overflow-tooltip />
             <el-table-column label="操作" align="center" style="padding-top: 0px;">
               <template slot-scope="scope">
                 <el-button   size="mini" type="text" icon="el-icon-edit" @click="editFun(scope.row)">编辑</el-button>
@@ -66,7 +67,7 @@
     <user-modal :value="diaVisible" :roleSelects="roleSelects"  :fixInfo="fixInfo"  @closeDialogVisable="closeDialogVisable" @gettableData="gettableData"/>
 
     <!-- 一键分配弹框 -->
-    <assign-modal :value="assignDiaVisible" :roleMappingValue="roleMappingValue" :roleSelects="roleSelects"  @closeAssignDiaVisible="closeAssignDiaVisible" @gettableData="gettableData"/>
+    <assign-modal :roleCode="form.roleCode" :value="assignDiaVisible" :roleMappingValue="roleMappingValue" :roleSelects="roleSelects"  @closeAssignDiaVisible="closeAssignDiaVisible" @gettableData="gettableData"/>
 
   </div>
 </template>
@@ -127,6 +128,7 @@
               ysOrNo:[],
               roleSelects:[],
               roleMappingValue:{},
+              show:false
             }
         },
       mounted(){
@@ -144,9 +146,6 @@
        // this.initData();
       },
       methods: {
-        assignFun(){
-          this.assignDiaVisible = true;
-        },
         closeDialogVisable() {
           this.diaVisible = false
         },
@@ -196,6 +195,10 @@
           this.assignDiaVisible = true;
         },
         editFun(row) {
+          if(row.isEqually === 'Y') {
+            this.$message({ type: 'warning',  message: '请先取消一键均分'});
+            return false;
+          }
           this.fixInfo = {
             rowdata :row,
             type :'edit'

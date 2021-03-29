@@ -100,7 +100,8 @@ public class ClaimCaseCalBillServiceImpl implements IClaimCaseCalBillService
                 exchangeRate.setDateConvert(claimCaseBill.getTreatmentStartDate());
                 exchangeRate = exchangeRateService.getExchangeRate(exchangeRate);
                 if(StringUtils.isNull(exchangeRate)){
-                    return null;
+                    exchangeRate = new SyncExchangeRate();
+                    exchangeRate.setParities(new BigDecimal(1));
                 }
                 caseCalBillVo.setCopay(caseCalBillVo.getCopay().multiply(exchangeRate.getParities()).setScale(2,BigDecimal.ROUND_HALF_DOWN));
                 caseCalBillVo.setBillAmount(caseCalBillVo.getBillAmount().multiply(exchangeRate.getParities()).setScale(2,BigDecimal.ROUND_HALF_DOWN));

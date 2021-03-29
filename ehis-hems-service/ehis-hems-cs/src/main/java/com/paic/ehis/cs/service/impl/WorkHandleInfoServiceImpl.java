@@ -199,6 +199,7 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
         workHandleInfo.setWorkOrderNo(serviceProcessingVo.getWorkOrderNo());
         workHandleInfo.setCreatedBy(SecurityUtils.getUsername());
         WorkHandleInfo workHandleInfo1=workHandleInfoMapper.selectCreatedBy(workHandleInfo);
+        WorkOrderAccept workOrderAccept1=workOrderAcceptMapper.selectWorkOrderAcceptById(serviceProcessingVo.getWorkOrderNo());
         if (workHandleInfo1==null) {
             //生成轨迹表
             FlowLog flowLog=new FlowLog();
@@ -240,7 +241,12 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
             }else  if (serviceProcessingVo.getBusinessProcess().equals("02")){
                 workOrderAccept.setStatus("02");
             }
-            workOrderAccept.setEndDate(DateUtils.parseDate(DateUtils.getTime()));
+            if (workOrderAccept1.getEndDate()==null){
+                workOrderAccept.setEndDate(DateUtils.parseDate(DateUtils.getTime()));
+            }else{
+                workOrderAccept.setLastEndDate(DateUtils.parseDate(DateUtils.getTime()));
+            }
+
             workOrderAccept.setUpdateBy(SecurityUtils.getUsername());
             workOrderAcceptMapper.updateWorkOrderAccept(workOrderAccept);
             //无本人操作历史   则增加一条新数据
@@ -296,7 +302,11 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
             //修改主表状态为已处理
             WorkOrderAccept workOrderAccept=new WorkOrderAccept();
             workOrderAccept.setWorkOrderNo(serviceProcessingVo.getWorkOrderNo());
-            workOrderAccept.setEndDate(DateUtils.parseDate(DateUtils.getTime()));
+            if (workOrderAccept1.getEndDate()==null){
+                workOrderAccept.setEndDate(DateUtils.parseDate(DateUtils.getTime()));
+            }else{
+                workOrderAccept.setLastEndDate(DateUtils.parseDate(DateUtils.getTime()));
+            }
             workOrderAccept.setUpdateBy(SecurityUtils.getUsername());
             if(serviceProcessingVo.getBusinessProcess().equals("01")){
                 workOrderAccept.setStatus("04");/*已完成*/

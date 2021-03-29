@@ -91,4 +91,6 @@ public class ClaimCasePayInfoVO implements Serializable {
     @Excel(name = "支付状态",readConverterExp = "01=可支付,02=支付中,03=已支付,04=转账失败,05=退票")
     private String payStatus;
 
+    /** 案件性质（01-TPA案件、02-核心案件） */
+    private String caseProp;
 }

@@ -80,7 +80,7 @@
         <if test="acceptTimeStart != null and acceptTimeEnd != null"> and t1.create_Time between #{acceptTimeStart} and DATE_ADD(#{acceptTimeEnd},INTERVAL 1 DAY)</if>
         <if test="modifyBy != null  and modifyBy != ''"> and t1.update_by = #{modifyBy}</if>
         <if test="modifyTimeStart != null and modifyTimeEnd != null"> and t1.modify_time between #{modifyTimeStart} and DATE_ADD(#{modifyTimeEnd},INTERVAL 1 DAY)</if>
-        <if test="appointmentTimeStart != null and appointmentTimeEnd != null"> and t2.prop10 between DATE_ADD(#{appointmentTimeStart},INTERVAL -1 DAY) and DATE_ADD(#{appointmentTimeEnd},INTERVAL 0 DAY)</if>
+        <if test="appointmentTimeStart != null and appointmentTimeEnd != null"> and t2.prop10 between #{appointmentTimeStart} and DATE_ADD(#{appointmentTimeEnd},INTERVAL 1 DAY)</if>
         <if test="workOrderNo != null and workOrderNo != ''" > and t1.work_order_no= #{workOrderNo}</if>
         <if test="policyNo != null  and policyNo != ''"> and t1.policy_no = #{policyNo}</if>
         <if test="policyItemNo != null  and policyItemNo != ''"> and t1.policy_item_no = #{policyItemNo}</if>
@@ -148,7 +148,7 @@
             <if test="acceptTimeStart != null and acceptTimeEnd != null"> and t1.create_Time between #{acceptTimeStart} and DATE_ADD(#{acceptTimeEnd},INTERVAL 1 DAY)</if>
             <if test="modifyBy != null  and modifyBy != ''"> and t1.update_by = #{modifyBy}</if>
             <if test="modifyTimeStart != null and modifyTimeEnd != null"> and t1.modify_time between #{modifyTimeStart} and DATE_ADD(#{modifyTimeEnd},INTERVAL 1 DAY)</if>
-        <if test="appointmentTimeStart != null and appointmentTimeEnd != null"> and t2.prop10 between DATE_ADD(#{appointmentTimeStart},INTERVAL -1 DAY) and DATE_ADD(#{appointmentTimeEnd},INTERVAL 0 DAY)</if>
+        <if test="appointmentTimeStart != null and appointmentTimeEnd != null"> and t2.prop10 between #{appointmentTimeStart} and DATE_ADD(#{appointmentTimeEnd},INTERVAL 1 DAY)</if>
             <if test="workOrderNo != null and workOrderNo != ''" > and t1.work_order_no= #{workOrderNo}</if>
             <if test="policyNo != null  and policyNo != ''"> and t1.policy_no = #{policyNo}</if>
             <if test="policyItemNo != null  and policyItemNo != ''"> and t1.policy_item_no = #{policyItemNo}</if>

@@ -74,7 +74,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         LEFT JOIN quality_inspection_accept qia ON woa.work_order_no = qia.work_order_no
         WHERE
         1 = 1
-        AND  NOT EXISTS ( SELECT 1 FROM quality_inspection_accept qia WHERE qia.STATUS IN ( '01', '02' ) AND woa.work_order_no = qia.work_order_no )
         <if test="businessTypeList != null ">
             and woa.business_type IN (
             <foreach collection="businessTypeList" item="businessType"
@@ -114,10 +113,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <if test="mobilePhone != null  and mobilePhone != ''"> and pi.mobile_phone = #{mobilePhone}</if>
         <if test="organCode != null  and organCode != ''"> and woa.organ_code = #{organCode}</if>
         <if test="appointmentStartDate != null ">
-            and DATE_FORMAT(adi.prop18,'%Y-%m-%d') <![CDATA[>=]]> #{appointmentStartDate}
+            and DATE_FORMAT(adi.prop14,'%Y-%m-%d') <![CDATA[>=]]> #{appointmentStartDate}
         </if>
         <if test="appointmentEndDate != null ">
-            and DATE_FORMAT(adi.prop18,'%Y-%m-%d') <![CDATA[<=]]> #{appointmentEndDate}
+            and DATE_FORMAT(adi.prop14,'%Y-%m-%d') <![CDATA[<=]]> #{appointmentEndDate}
         </if>
         <if test="priorityLevel != null  and priorityLevel != ''"> and adi.priority_level = #{priorityLevel}</if>
         <if test="vipFlag != null  and vipFlag != ''"> and woa.vip_flag = #{vipFlag}</if>
@@ -376,6 +375,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         1 = 1
         AND woa.work_order_no not IN ( SELECT work_order_no FROM quality_inspection_accept qia WHERE woa.work_order_no=qia.work_order_no )
         and woa.status='04' and woa.activation_num='0'
+        and woa.business_type='01'
         <if test="updateBy != null and updateBy != ''"> and woa.update_by = #{updateBy}</if>
         <if test="status != null and status != ''"> and woa.status = #{status}</if>
         <if test="workOrderNo != null and workOrderNo != ''"> and woa.work_order_no = #{workOrderNo}</if>
@@ -400,9 +400,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         work_order_accept woa
         WHERE
         1 = 1
-        AND woa.work_order_no IN ( SELECT work_order_no FROM quality_inspection_accept WHERE  STATUS = '03' AND result = '01' )
-        and  woa.activation_num='1'
+        AND woa.work_order_no IN ( SELECT work_order_no FROM quality_inspection_accept WHERE  (STATUS = '03' AND result = '01') or status='01' )
+        and woa.activation_num='1'
         and woa.status='04'
+        and woa.business_type='01'
         <if test="updateBy != null and updateBy != ''">and woa.update_by = #{updateBy}</if>
         <if test="status != null and status != ''"> and woa.status = #{status}</if>
         <if test="workOrderNo != null and workOrderNo != ''"> and woa.work_order_no = #{workOrderNo}</if>
@@ -433,20 +434,32 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         and <![CDATA[prop18 < #{invalidDate}]]>
     </select>
 
-    <!--预约12点批处理-->
-    <select id="selectInvalidAcceptDetailInfo1" resultMap="AcceptResult">
+    <!--投诉每周一凌晨四点批处理-->
+    <select id="selectInvalidQiaMondayFour" resultMap="AcceptResult">
         SELECT
-            woa.work_order_no,
-            woa.business_type,
-            woa.STATUS,
-            adi.prop18
+            woa.update_by,
+            count( * ) AS count,
+	GROUP_CONCAT( woa.work_order_no ) AS work_order_nos
         FROM
             work_order_accept woa
-                LEFT JOIN accept_detail_info adi ON woa.work_order_no = adi.work_order_no
-                LEFT JOIN person_info pi ON woa.insured_no = pi.person_id
-                LEFT JOIN quality_inspection_accept qia ON woa.work_order_no = qia.work_order_no
+            LEFT JOIN accept_detail_info adi ON woa.work_order_no = adi.work_order_no
+            LEFT JOIN person_info pi ON woa.insured_no = pi.person_id
         WHERE
-            1 = 1 and woa.business_type='02' and woa.status='03'
-          and <![CDATA[prop18 < #{invalidDate}]]>
+            1 = 1
+          AND woa.STATUS NOT IN ( '01', '02' )
+          AND woa.business_type IN ( '03' )
+          AND NOT EXISTS ( SELECT 1 FROM quality_inspection_accept qia WHERE woa.work_order_no = qia.work_order_no )
+          AND adi.item_code NOT IN ( 'B00034' )
+        <if test="updateBy != null and updateBy != ''">and woa.update_by = #{updateBy}</if>
+        <if test="status != null and status != ''"> and woa.status = #{status}</if>
+        <if test="workOrderNo != null and workOrderNo != ''"> and woa.work_order_no = #{workOrderNo}</if>
+        <if test="endCaseStartTime != null ">
+            and DATE_FORMAT(woa.end_date,'%Y-%m-%d') <![CDATA[>=]]> #{endCaseStartTime}
+        </if>
+        <if test="endCaseEndTime != null ">
+            and DATE_FORMAT(woa.end_date,'%Y-%m-%d') <![CDATA[<=]]> #{endCaseEndTime}
+        </if>
+        GROUP BY
+            woa.update_by
     </select>
 </mapper>

@@ -95,7 +95,7 @@
           </el-table-column>
           <el-table-column align="center" prop="calAmount" label="理赔总金额" width="100" show-overflow-tooltip>
             <template slot-scope="scope">
-              <span>{{scope.row.calAmount}} {{scope.row.currency}}</span>
+              <span>{{scope.row.calAmount}} CNY</span>
             </template>
           </el-table-column>
           <el-table-column align="center" prop="isAppeal" label="是否申诉" width="100" show-overflow-tooltip>

@@ -110,7 +110,7 @@
   },
   data() {
     const checkRate = (rule, value, callback) => {
-      if (!value) {
+      if (!value && value !== 0) {
         callback(new Error("分配比例必填"));
       } else {
         if (parseFloat(value) > 100) {

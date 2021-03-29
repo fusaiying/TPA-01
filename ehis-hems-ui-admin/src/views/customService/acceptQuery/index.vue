@@ -149,7 +149,7 @@
             size="mini"
             type="success"
             icon="el-icon-search"
-            @click="searchHandle"
+            @click="getTableData"
           >查询
           </el-button>
           <el-button size="mini" type="primary" @click="resetForm">重置</el-button>
@@ -164,7 +164,7 @@
         </span>
         <el-divider/>
 
-        <workOrderTable :table-data="workPoolData" @searchHandle="getTableData" />
+        <workOrderTable :table-data="workPoolData" @searchHandle="searchHandle" />
         <pagination
           v-show="totalCount>0"
           :total="totalCount"

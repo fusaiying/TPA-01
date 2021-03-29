@@ -492,6 +492,7 @@ public class FinanceTpaSettleTaskServiceImpl implements IFinanceTpaSettleTaskSer
         }
         financeTpaSettleTask.setUpdateBy(SecurityUtils.getUsername());
         financeTpaSettleTask.setUpdateTime(DateUtils.getNowDate());
+        financeTpaSettleTask.setStatus("N");
         financeSettleRecordMapper.removeFinanceSettleRecords(financeTpaSettleTask.getSettleTaskNo());
         return financeTpaSettleTaskMapper.modifyTaskSettle(financeTpaSettleTask);
     }

@@ -876,8 +876,11 @@
       this.queryParams.policyItemNo=this.$route.query.policyItemNo;
       this.queryParams.status=this.$route.query.status;
       if (this.$route.query.flag!=null && this.$route.query.flag!=''){
+        this.flag = this.$route.query.flag;
+      }else{
         this.flag = true;
       }
+
       if(this.queryParams.status=='04'){
         this.showFlag=true
       }

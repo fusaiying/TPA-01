@@ -96,7 +96,7 @@
         this.userForm.rate = newVal.rowdata.rate;
         this.userForm.userName = newVal.rowdata.userName;
         this.userForm.distId = newVal.rowdata.distId
-        this.userForm.orangeCode = newVal.rowdata.orangeCode;
+        this.userForm.userOrganCode = newVal.rowdata.orangeCode;
         if(newVal.rowdata.status === 'Y' || newVal.rowdata.status === '01') {
           this.userForm.status = 'Y';
         } else {
@@ -119,7 +119,7 @@
           roleCode:'',
           rate :'',
           status:'',
-          orangeCode:'',
+          userOrganCode:'',
         },
         rules: {
           roleCode: {trigger: ['change'], required: false, message: '角色必填'},

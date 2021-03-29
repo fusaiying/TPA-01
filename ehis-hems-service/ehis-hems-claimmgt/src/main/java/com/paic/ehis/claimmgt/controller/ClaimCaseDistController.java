@@ -78,8 +78,8 @@ public class ClaimCaseDistController extends BaseController
                 roleUserInfoDTO.setRate(vo.getRate());
                 roleUserInfoDTO.setStatus(vo.getStatus());
                 roleUserInfoDTO.setIsEqually(claimUserRole.getIsEqually());
-                termRoleUserInfoDTOList.add(roleUserInfoDTO);
             }
+            termRoleUserInfoDTOList.add(roleUserInfoDTO);
         }
         tableDataInfo.setRows(termRoleUserInfoDTOList);
 
@@ -128,5 +128,22 @@ public class ClaimCaseDistController extends BaseController
         return AjaxResult.success();
     }
 
+    /**
+     * 获取理赔案件操作人
+     * @param operation 流程节点
+     * @param roleCode 角色编码
+     * @param organCode 机构编码
+     * @return
+     */
+    @GetMapping("/getClaimCaseOperator")
+    public AjaxResult getClaimCaseOperator(String operation, String roleCode, String organCode){
+        String userName = "";
+        try{
+            userName = claimCaseDistService.getClaimCaseOperator(operation,roleCode,organCode);
+        }catch (Exception e){
+            return AjaxResult.error("获取理赔案件操作人失败，原因："+e.getMessage());
+        }
 
+        return AjaxResult.success(userName);
+    }
 }

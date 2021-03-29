@@ -2,6 +2,7 @@ package com.paic.ehis.claimmgt.mapper;
 
 import com.paic.ehis.claimmgt.domain.ClaimCaseDist;
 import com.paic.ehis.claimmgt.domain.ClaimUserRole;
+import com.paic.ehis.claimmgt.domain.dto.ClaimCaseOperationDTO;
 
 import java.util.List;
 
@@ -51,4 +52,10 @@ public interface ClaimCaseDistMapper
      */
     public int updateClaimUserRole(ClaimUserRole claimUserRole);
 
+    /**
+     * 根据用户信息查询案件数量
+     * @param claimCaseOperationDTO
+     * @return
+     */
+    public int selectCaseCountByClaimCaseOperation(ClaimCaseOperationDTO claimCaseOperationDTO);
 }

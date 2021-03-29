@@ -114,7 +114,7 @@
         callback(new Error("分配比例必填"));
       } else {
         if (parseFloat(value) > 100) {
-          callback(new Error("诊疗费折扣介于 0 - 100 之间"));
+          callback(new Error("分配比例介于 0 - 100 之间"));
         } else {
           callback();
         }

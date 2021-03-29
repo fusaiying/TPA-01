@@ -24,7 +24,9 @@
             <el-col :span="24">
               <el-form-item label="分配状态">
                 <el-radio-group v-model="userForm.status">
-                  <el-radio  v-for="dict in statusOptions"  :key="dict.dictValue"  :label="dict.dictValue" >{{dict.dictLabel}}  </el-radio>
+<!--                  <el-radio  v-for="dict in statusOptions"  :key="dict.dictValue"  :label="dict.dictValue" >{{dict.dictLabel}}  </el-radio>-->
+                  <el-radio label="Y">有效</el-radio>
+                  <el-radio label="N">无效</el-radio>
                 </el-radio-group>
               </el-form-item>
             </el-col>

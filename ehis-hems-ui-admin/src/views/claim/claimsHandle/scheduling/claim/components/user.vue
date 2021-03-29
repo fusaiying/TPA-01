@@ -42,7 +42,9 @@
             <el-col :span="24">
               <el-form-item  prop="status" label="分配状态">
                 <el-radio-group v-model="userForm.status">
-                  <el-radio  v-for="dict in statusOptions"  :key="dict.dictValue"  :label="dict.dictValue" >{{dict.dictLabel}}  </el-radio>
+<!--                  <el-radio  v-for="dict in statusOptions"  :key="dict.dictValue"  :label="dict.dictValue" >{{dict.dictLabel}}  </el-radio>-->
+                  <el-radio label="Y">有效</el-radio>
+                  <el-radio label="N">无效</el-radio>
                 </el-radio-group>
               </el-form-item>
             </el-col>
@@ -89,13 +91,13 @@
     },
     fixInfo: function (newVal){
       this.editData = newVal;
-      //console.log("this.editData",this.editData)
       if( this.editData.type == 'edit') {
         this.userForm.roleCode  = newVal.rowdata.roleCode;
         this.userForm.rate = newVal.rowdata.rate;
         this.userForm.userName = newVal.rowdata.userName;
-        this.userForm.distId = newVal.rowdata.distId;
-        if(newVal.rowdata.status == 'Y' || newVal.rowdata.status == '01') {
+        this.userForm.distId = newVal.rowdata.distId
+        this.userForm.orangeCode = newVal.rowdata.orangeCode;
+        if(newVal.rowdata.status === 'Y' || newVal.rowdata.status === '01') {
           this.userForm.status = 'Y';
         } else {
           this.userForm.status = 'N';
@@ -117,6 +119,7 @@
           roleCode:'',
           rate :'',
           status:'',
+          orangeCode:'',
         },
         rules: {
           roleCode: {trigger: ['change'], required: false, message: '角色必填'},

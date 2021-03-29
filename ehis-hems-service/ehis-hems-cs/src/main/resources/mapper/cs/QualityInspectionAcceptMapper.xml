@@ -113,10 +113,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <if test="mobilePhone != null  and mobilePhone != ''"> and pi.mobile_phone = #{mobilePhone}</if>
         <if test="organCode != null  and organCode != ''"> and woa.organ_code = #{organCode}</if>
         <if test="appointmentStartDate != null ">
-            and DATE_FORMAT(adi.prop10,'%Y-%m-%d') <![CDATA[>=]]> #{appointmentStartDate}
+            and DATE_FORMAT(adi.prop18,'%Y-%m-%d') <![CDATA[>=]]> #{appointmentStartDate}
         </if>
         <if test="appointmentEndDate != null ">
-            and DATE_FORMAT(adi.prop10,'%Y-%m-%d') <![CDATA[<=]]> #{appointmentEndDate}
+            and DATE_FORMAT(adi.prop18,'%Y-%m-%d') <![CDATA[<=]]> #{appointmentEndDate}
         </if>
         <if test="priorityLevel != null  and priorityLevel != ''"> and adi.priority_level = #{priorityLevel}</if>
         <if test="vipFlag != null  and vipFlag != ''"> and woa.vip_flag = #{vipFlag}</if>
@@ -399,7 +399,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         WHERE
         1 = 1
         AND woa.work_order_no IN ( SELECT work_order_no FROM quality_inspection_accept WHERE  STATUS = '03' AND result = '01' )
-        woa.activation_num='1'
+        and  woa.activation_num='1'
         and woa.status='04'
         <if test="updateBy != null and updateBy != ''">and woa.update_by = #{updateBy}</if>
         <if test="status != null and status != ''"> and woa.status = #{status}</if>

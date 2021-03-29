@@ -164,7 +164,7 @@
         </span>
         <el-divider/>
 
-        <workOrderTable :table-data="workPoolData" @searchHandle="searchHandle" />
+        <workOrderTable :table-data="workPoolData" @searchHandle="getTableData" />
         <pagination
           v-show="totalCount>0"
           :total="totalCount"
@@ -196,6 +196,7 @@ export default {
   data() {
     return {
       caseNumber: false,//查询条件（报案号）是否显示
+      defaultData : true,
       // 查询参数
       acceptQueryForm: {
         itemCode: "",//服务信息
@@ -277,6 +278,13 @@ export default {
       this.acceptQueryForm.insuredIdNumber=''
       this.acceptQueryForm.complaintTime=[]
     },
+    //查询
+    getTableData() {
+        this.defaultData = false;
+        this.queryParams.pageNum = 1;
+        this.queryParams.pageSize = 10;
+        this.searchHandle();
+    },
     searchHandle() {
       let query = {
         pageNum: this.queryParams.pageNum,
@@ -314,6 +322,17 @@ export default {
       if (this.acceptQueryForm.complaintTime) {
         query.appointmentStartDate = this.acceptQueryForm.complaintTime[0]
         query.appointmentEndDate = this.acceptQueryForm.complaintTime[1]
+      }
+
+      let startTime = '';
+      let endTime = '';
+      if(this.defaultData) {
+
+          startTime = moment().subtract('month', 1).format('YYYY-MM-DD') + ' ' + '00:00:00'
+          endTime = moment(new Date().getTime()).format('YYYY-MM-DD') + ' ' + '23:59:59'
+
+          query.acceptStartDate = startTime;
+          query.acceptEndDate = endTime;
       }
 
       selectWorkOrder(query).then(res => {

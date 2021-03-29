@@ -96,7 +96,7 @@
     <el-card class="box-card" style="margin-top: 10px;">
       <div slot="header" class="clearfix">
         <span>查询结果（{{ totalCount }}）</span>
-        <el-row gutter="20" style="float: right">
+        <el-row :gutter="20" style="float: right">
           <el-button type="primary" size="mini" @click="sendMany">质检详情清单导出</el-button>
           <el-button type="primary" size="mini" @click="sendMany1">质检差错清单导出</el-button>
         </el-row>

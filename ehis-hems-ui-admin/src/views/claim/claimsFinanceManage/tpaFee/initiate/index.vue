@@ -286,7 +286,7 @@
         if(this.formSearch.companyCode == ''
           || this.formSearch.settleEndDate ==  ''
           || this.formSearch.settlementType ==  '') {
-          this.$message.info('请录入出单公司、结算方式、结算止期后发起结算！');
+          this.$message.warning('请录入出单公司、结算方式、结算止期后发起结算！');
           return false;
         }
         this.fixInfo = {

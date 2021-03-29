@@ -394,7 +394,7 @@ public class WorkOrderAcceptServiceImpl implements IWorkOrderAcceptService
     public WorkOrderAccept selectWorkOrderAcceptById1(String workOrderNo) {
         WorkOrderAccept workOrderAccept = workOrderAcceptMapper.selectWorkOrderAcceptById1(workOrderNo);
         String updateBy = SecurityUtils.getUsername();
-        if (null != workOrderAccept) {
+        if (null != workOrderAccept.getUpdateBy()) {
             if (workOrderAccept.getUpdateBy().equals(updateBy)) {//当前案件操作人自己查询后获取按钮
                 workOrderAccept.setFlag("2");
             } else {
@@ -410,7 +410,7 @@ public class WorkOrderAcceptServiceImpl implements IWorkOrderAcceptService
     public WorkOrderAccept selectWorkOrderAcceptById2(String workOrderNo) {
         WorkOrderAccept workOrderAccept = workOrderAcceptMapper.selectWorkOrderAcceptById1(workOrderNo);
         String updateBy = SecurityUtils.getUsername();
-        if (null != workOrderAccept) {
+        if (null != workOrderAccept.getUpdateBy()) {
             if (workOrderAccept.getUpdateBy().equals(updateBy)) {//当前案件操作人非自己查询后按钮
                 workOrderAccept.setFlag1("2");
             } else {

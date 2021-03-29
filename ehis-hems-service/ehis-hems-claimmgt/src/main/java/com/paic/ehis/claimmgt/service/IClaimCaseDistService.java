@@ -43,4 +43,13 @@ public interface IClaimCaseDistService
     int editClaimUserRole(ClaimUserRole claimUserRole);
 
 
+    /**
+     * 获取理赔案件操作人
+     * @param operation 流程节点
+     * @param roleCode 角色编码
+     * @param organCode 机构编码
+     * @return
+     */
+    String getClaimCaseOperator(String operation, String roleCode, String organCode);
+
 }

@@ -94,6 +94,11 @@ public class WorkOrderAccept extends BaseEntity
     @Excel(name = "结案日期", width = 30, dateFormat = "yyyy-MM-dd")
     private Date endDate;
 
+    /** 最后结案日期 */
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @Excel(name = "最后结案日期", width = 30, dateFormat = "yyyy-MM-dd")
+    private Date lastEndDate;
+
     /** 处理时间 信息需求，预约点击处理超链接记录此时间；投诉为完成时间 */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Excel(name = "处理时间 信息需求，预约点击处理超链接记录此时间；投诉为完成时间", width = 30, dateFormat = "yyyy-MM-dd")

@@ -190,6 +190,9 @@
           this.pageInfo.pageSize = 10;
           this.gettableData();
         },
+        assignFun(){
+          this.assignDiaVisible = true;
+        },
         editFun(row) {
           this.fixInfo = {
             rowdata :row,

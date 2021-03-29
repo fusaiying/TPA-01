@@ -54,7 +54,6 @@
   import moment from "moment";
   import {FlowLogSearch} from '@/api/customService/demand';
 
-
   let dictss = [
     {dictType: 'cs_identity'},
     {dictType: 'cs_sex'},

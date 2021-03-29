@@ -828,7 +828,7 @@
       this.queryParams.policyItemNo=this.$route.query.policyItemNo;
       this.queryParams.status=this.$route.query.status;
       if (this.$route.query.flag!=null && this.$route.query.flag!=''){
-        this.flag = this.$route.query.flag;
+        this.flag = true;
       }
       //window.aaa = this;
       this.searchHandle()

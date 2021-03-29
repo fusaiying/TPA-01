@@ -548,7 +548,7 @@ export default {
     this.queryParams.status = this.$route.query.status;
     this.search.workOrderNo = this.$route.query.workOrderNo;
     if (this.$route.query.flag!=null && this.$route.query.flag!=''){
-      this.flag = this.$route.query.flag;
+      this.flag = true;
     }
     this.searchHandle()
     this.searchFlowLog()

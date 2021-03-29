@@ -157,6 +157,7 @@
         collectionId:'',
         // 复选框任务号
         taskNoList:[],
+        btnSearch:false,
       }
     },
     mounted(){
@@ -234,6 +235,7 @@
         this.$refs.formSearch.resetFields()
       },
       searchHandle() {
+        this.btnSearch = true;
         this.pendPageInfo.page = 1;
         this.pendPageInfo.pageSize = 10;
         this.total = 0;

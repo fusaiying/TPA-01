@@ -1014,10 +1014,12 @@
         selectServiceProcess(this.queryParams.workOrderNo).then(res => {
           if (res != null && res.code === 200) {
             console.log("投诉页面server反显数据",res.data)
-            this.sendForm = res.data;
-            this.reasonTwo('0');
-            this.reasonThree('0');
-            this.classTwo('0');
+            if(res.data!=null && res.data!='') {
+              this.sendForm = res.data;
+              this.reasonTwo('0');
+              this.reasonThree('0');
+              this.classTwo('0');
+            }
 /*            if (res.rows.length <= 0) {
               return this.$message.warning(
                 "未查询到数据！"

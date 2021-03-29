@@ -204,6 +204,7 @@
         this.$refs.formSearch.resetFields()
       },
       searchHandle() {
+        this.btnSearch = true;
         this.pendPageInfo.page = 1;
         this.pendPageInfo.pageSize = 10;
         this.total = 0;

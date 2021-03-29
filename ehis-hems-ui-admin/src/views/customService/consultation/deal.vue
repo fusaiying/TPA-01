@@ -194,7 +194,7 @@
 
 
     <el-card class="box-card" style="margin-top: 10px;">
-      <el-form ref="ruleForm" :model="ruleForm" style="padding-bottom: 30px;" label-width="160px" disabled="true"
+      <el-form ref="ruleForm" :model="ruleForm" style="padding-bottom: 30px;" label-width="160px" :disabled="true"
                label-position="right" size="mini">
         <span
           style="color: blue">{{
@@ -508,6 +508,7 @@ export default {
       workPoolData: {
         contactsPerson: {
           homePhone1: [],
+          linePhone1:[]
         },
         callPerson: {},
 

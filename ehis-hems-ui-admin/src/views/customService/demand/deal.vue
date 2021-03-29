@@ -189,7 +189,7 @@
 
 
     <el-card class="box-card" style="margin-top: 10px;">
-      <el-form ref="ruleForm" :model="ruleForm" style="padding-bottom: 30px;" label-width="170px" :disabled="isDisabled"
+      <el-form ref="ruleForm" :model="ruleForm" style="padding-bottom: 30px;" label-width="180px" :disabled="isDisabled"
                label-position="right" size="mini">
 
         <span
@@ -430,15 +430,15 @@
       </div>
     </el-card>
 
-    <el-card>
+    <el-card class="box-card" style="margin-top: 10px;">
       <el-form ref="ruleForm" :model="ruleForm" :rules="changeForm.rules" style="padding-bottom: 30px;"
-               label-width="100px"
+               label-width="180px"
                label-position="right" size="mini">
         <span style="color: blue">服务处理</span>
-        <div style="text-align: right; margin-right: 8px;">
-          <el-button type="primary" size="mini" @click="modify">修改</el-button>
+        <span style="float: right;">
+           <el-button type="primary" size="mini" @click="modify">修改</el-button>
           <el-button type="primary" size="mini" @click="cancle">取消</el-button>
-        </div>
+          </span>
         <el-divider/>
         <el-row>
           <el-col :span="8">

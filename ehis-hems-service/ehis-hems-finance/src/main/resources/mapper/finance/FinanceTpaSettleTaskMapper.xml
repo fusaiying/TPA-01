@@ -222,7 +222,10 @@
             <if test="updateTime != null">update_time = #{updateTime},</if>
             <if test="deptCode != null and deptCode != ''">dept_code = #{deptCode},</if>
         </trim>
-        where task_id = #{taskId}
+        <where>
+            <if test="taskId != null  and taskId != ''"> and task_id = #{taskId}</if>
+            <if test="settleTaskNo != null  and settleTaskNo != ''"> and settle_task_no = #{settleTaskNo}</if>
+        </where>
     </update>
 
     <update id="modifyTaskSettle" parameterType="FinanceTpaSettleTask">

@@ -230,7 +230,8 @@
           channelCode: undefined,
           serviceItem: undefined,
           contactsPerson: {
-            homePhone1:['','','','']
+            homePhone1:['','','',''],
+            linePhone1:[]
           },
           callRelationBy: undefined,
           priorityLevel: undefined,

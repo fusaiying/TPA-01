@@ -389,8 +389,9 @@
             <el-form-item label="预约日期："  style="white-space: nowrap" prop="appointmentDate">
               <el-date-picker class="item-width"
                 v-model="workPoolData.appointmentDate"
-                type="datetime"
-                placeholder="选择日期时间">
+                type="date"
+                placeholder="选择日期时间"
+                value-format="YYYY-MM-dd">
               </el-date-picker>
             </el-form-item>
           </el-col>

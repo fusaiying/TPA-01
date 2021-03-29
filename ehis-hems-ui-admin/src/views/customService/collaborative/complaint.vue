@@ -808,7 +808,6 @@ export default {
     }
   },
   created() {
-    debugger
     this.queryParams.workOrderNo = this.$route.query.workOrderNo;
     this.queryParams.policyNo = this.$route.query.policyNo;
     this.queryParams.policyItemNo = this.$route.query.policyItemNo;

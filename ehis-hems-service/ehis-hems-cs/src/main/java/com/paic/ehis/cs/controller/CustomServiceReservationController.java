@@ -62,7 +62,7 @@ public class CustomServiceReservationController extends BaseController {
     }
 
     //个人预约修改页面反显
-    @GetMapping("/internal/listAndPersonalPool")
+    @GetMapping("/internal/PersonalPool")
     public AjaxResult PersonalPool(String workOrderNo) {
         startPage();
         logger.info("工单详情查询条件：{}", workOrderNo);

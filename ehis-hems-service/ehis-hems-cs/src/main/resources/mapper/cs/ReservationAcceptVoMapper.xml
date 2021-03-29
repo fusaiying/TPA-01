@@ -329,6 +329,113 @@ SELECT
         isRedWord DESC,b.priority_level ASC,a.create_time desc
     </select>
 
+    <select id="selectReservationAcceptVoList3" parameterType="com.paic.ehis.cs.domain.dto.AcceptDTO"
+            resultMap="ReservationAcceptVoResult">
+        SELECT
+        a.work_order_no,
+        a.business_type,
+        a.policy_no,
+        a.policy_item_no,
+        a.risk_code,
+        a.insured_no,
+        a.insured_name,
+        a.holder_no,
+        a.holder_name,
+        a.accept_by,
+        a.accept_time,
+        a.modify_by,
+        a.modify_time,
+        a.vip_flag,
+        a.organ_code,
+        a.STATUS,
+        a.create_by,
+        a.create_time,
+        a.update_by,
+        a.update_time,
+        b.complaint_person_id,
+        b.channel_code,
+        b.item_code,
+        b.call_person_id,
+        b.call_relation_by,
+        b.priority_level,
+        b.contacts_person_id,
+        b.contacts_relation_by,
+        b.call_center_id,
+        b.email,
+        b.organ_code,
+        b.content,
+        b.complaint_person_id,
+        b.create_by create_by2,
+        b.create_time create_time2,
+        b.update_by update_by2,
+        b.update_time update_time2,
+        b.prop0,
+        b.prop1,
+        b.prop2,
+        b.prop3,
+        b.prop4,
+        b.prop5,
+        b.prop6,
+        b.prop7,
+        b.prop8,
+        b.prop9,
+        b.prop10,
+        b.prop11,
+        b.prop12,
+        b.prop16,
+        b.prop17,
+        b.prop18,
+        b.prop19,
+        b.prop20,
+        b.prop21,
+        b.prop22,
+        b.prop23,
+        b.prop24,
+        b.prop25,
+        b.prop26,
+        b.prop27,
+        b.prop28,
+        b.prop29,
+        b.prop30,
+        b.prop31,
+        CASE
+        WHEN hm.nnn IS NOT NULL THEN
+        1 ELSE 0
+        END AS isRedWord,
+        (case when (select 1 from transfer_by where work_order_no = a.work_order_no limit 1)=1 then b.create_by else '' end) oldmodify_by,
+        (select make_time from flow_log where work_order_no = a.work_order_no and operate_code = '03' order by make_time desc limit 1) change_time
+        FROM
+        accept_detail_info b
+        LEFT JOIN work_order_accept a ON b.work_order_no = a.work_order_no
+        LEFT JOIN person_info c ON b.contacts_person_id = c.person_id
+        LEFT JOIN ( SELECT DISTINCT  work_order_no AS nnn FROM hcs_modification WHERE call_serial_num IS NOT NULL AND STATUS = 'Y' ) hm ON b.work_order_no = hm.nnn
+        WHERE
+        1=1
+        <if test="channelCode != null  and channelCode != ''"> and b.channel_code = #{channelCode}</if>
+        <if test="itemCode != null  and itemCode != ''"> and b.item_code = #{itemCode}</if>
+        <if test="acceptBy != null  and acceptBy != ''"> and ifnull(a.accept_by,a.create_by) like concat('%',#{acceptBy},'%')</if>
+        <if test="acceptTime != null "> and a.accept_time = #{acceptTime}</if>
+        <if test="acceptTimeStart != null and acceptTimeEnd != null"> and a.accept_time between #{acceptTimeStart} and DATE_ADD(#{acceptTimeEnd},INTERVAL 1 DAY)</if>
+        <if test="modifyBy != null  and modifyBy != ''"> and a.modify_by = #{modifyBy}</if>
+        <if test="modifyTimeStart != null and modifyTimeEnd != null"> and a.modify_time between #{modifyTimeStart} and DATE_ADD(#{modifyTimeEnd},INTERVAL 1 DAY)</if>
+        <if test="appointmentTimeStart != null and appointmentTimeEnd != null"> and b.prop14 between #{complaintTimeStart} and DATE_ADD(#{complaintTimeEnd},INTERVAL 1 DAY)</if>
+        <if test="workOrderNo != null and workOrderNo != ''" > and a.work_order_no= #{workOrderNo}</if>
+        <if test="policyNo != null  and policyNo != ''"> and a.policy_no = #{policyNo}</if>
+        <if test="policyItemNo != null  and policyItemNo != ''"> and a.policy_item_no = #{policyItemNo}</if>
+        <if test="insuredName != null  and insuredName != ''"> and a.insured_name like concat('%', #{insuredName}, '%')</if>
+        <if test="holderName != null  and holderName != ''"> and a.holder_name like concat('%', #{holderName}, '%')</if>
+        <if test="vipFlag != null  and vipFlag != ''"> and a.vip_flag = #{vipFlag}</if>
+        <if test="organCode != null  and organCode != ''"> and a.organ_code = #{organCode}</if>
+        <if test="priorityLevel != null  and priorityLevel != ''"> and b.priority_level = #{priorityLevel}</if>
+        <if test="status != null  and status != ''"> and a.status = #{status}</if>
+        <if test="idNumber != null  and idNumber != ''"> and c.id_number = #{idNumber}</if>
+        <if test="mobilePhone != null  and mobilePhone != ''"> and c.mobile_phone = #{mobilePhone}</if>
+        <!--<if test="complaintTime != null  and complaintTime != ''"> and complaintTime = #{complaintTime}</if>-->
+        <if test="operationBy != null and operationBy != ''"> and a.update_by = #{operationBy}</if>
+        ORDER BY
+        isRedWord DESC,b.priority_level ASC,a.create_time desc
+    </select>
+
     <update id="updateStatusM" parameterType="String" >
         update work_order_accept set status = '02'
         where status='01'and business_type='02' and work_order_no in

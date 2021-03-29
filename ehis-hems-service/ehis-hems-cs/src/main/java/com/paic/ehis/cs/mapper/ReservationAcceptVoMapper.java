@@ -15,6 +15,13 @@ public interface ReservationAcceptVoMapper {
     /*个人池*/
     public List<ReservationAcceptVo> selectReservationAcceptVoList2(AcceptDTO acceptDTO);
 
+    /**
+     *个人预约修改页面反显
+     * @param workOrderNo
+     * @return
+     */
+    public ReservationAcceptVo selectReservationAcceptVoList3(String workOrderNo);
+
     /*获取*/
     public int updateStatusM(String[] workOrderNos);
     public int updateOrderCancelStatus(String workOrderNo);

@@ -61,6 +61,15 @@ public class CustomServiceReservationController extends BaseController {
         return getDataTable(list);
     }
 
+    //个人预约修改页面反显
+    @GetMapping("/internal/listAndPersonalPool")
+    public AjaxResult PersonalPool(String workOrderNo) {
+        startPage();
+        logger.info("工单详情查询条件：{}", workOrderNo);
+        ReservationAcceptVo reservationAcceptVo = iReservationAcceptVoService.selectReservationAcceptVoList3(workOrderNo);
+        logger.info("工单详情查询结果：{}", reservationAcceptVo);
+        return AjaxResult.success(reservationAcceptVo);
+    }
 
 //    @PreAuthorize("@ss.hasPermi('system:customService::edit')")
     @Log(title = "增加 ", businessType = BusinessType.INSERT)

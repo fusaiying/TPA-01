@@ -354,4 +354,18 @@ public class ClaimCaseCalServiceImpl implements IClaimCaseCalService
         return claimCaseCal;
     }
 
+    /***
+     * 申诉案件根据 申诉的报案号，查询上一个报案信息
+     * @param rptNo
+     * @return CalConclusionVo
+     * auth: hjw
+     */
+    public CalConclusionVo selectPreCalConclusionByRptNo(String rptNo) {
+        CalConclusionVo precalConclusionVo = claimCaseCalMapper.selectPreCalConclusionByRptNo(rptNo);
+        if(null != precalConclusionVo) {
+            precalConclusionVo = this.selectClaimCaseCalInformation(precalConclusionVo.getRptNo());
+        }
+        return precalConclusionVo;
+    }
+
 }

@@ -93,8 +93,9 @@
       if( this.editData.type == 'edit') {
         this.userForm.roleCode  = newVal.rowdata.roleCode;
         this.userForm.rate = newVal.rowdata.rate;
-         this.userForm.userName = newVal.rowdata.userName;
-         this.userForm.distId = newVal.rowdata.distId;
+        this.userForm.userName = newVal.rowdata.userName;
+        this.userForm.distId = newVal.rowdata.distId;
+        this.userForm.userOrganCode = newVal.rowdata.userOrganCode;
         if(newVal.rowdata.status == 'Y' || newVal.rowdata.status == '01') {
           this.userForm.status = 'Y';
         } else {
@@ -117,6 +118,7 @@
           roleCode:'',
           rate :'',
           status:'',
+          userOrganCode:'',
         },
         rules: {
           roleCode: {trigger: ['change'], required: false, message: '角色必填'},
@@ -143,7 +145,14 @@
     saveInfoFun(){
       this.$refs.userForm.validate((valid) => {
         if (valid) {
+          if(this.userForm.status == '01') {
+            this.userForm.status = 'Y';
+          } else {
+            this.userForm.status = 'N';
+          }
+
           const params = this.userForm;
+
           editInfo(params).then(response => {
             if (response.code == '200') {
               this.$message({

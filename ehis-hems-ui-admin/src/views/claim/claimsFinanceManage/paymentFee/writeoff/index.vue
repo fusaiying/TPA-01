@@ -188,11 +188,11 @@
       },
       dealFun(){
         if(this.taskNoList.length === 0) {
-          this.$message({ type: 'info',  message: '请选择需要进行核销的任务!'});
+          this.$message({ type: 'warning',  message: '请选择需要进行核销的任务!'});
           return false;
         }
         if(this.collectionId === '') {
-          this.$message({ type: 'info',  message: '请选择收款明细!'});
+          this.$message({ type: 'warning',  message: '请选择收款明细!'});
           return false;
         }
         //updateSettleEndStatus

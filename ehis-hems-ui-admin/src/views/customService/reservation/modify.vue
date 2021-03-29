@@ -391,7 +391,7 @@
                 v-model="workPoolData.appointmentDate"
                 type="date"
                 placeholder="选择日期时间"
-                value-format="YYYY-MM-dd">
+                value-format="yyyy-MM-dd">
               </el-date-picker>
             </el-form-item>
           </el-col>

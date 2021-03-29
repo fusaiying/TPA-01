@@ -52,7 +52,8 @@
 
 <script>
   import moment from "moment";
-  import {FlowLogSearch} from '@/api/customService/demand'
+  import {FlowLogSearch} from '@/api/customService/demand';
+  import modifyDetails from "../common/modul/modifyDetails";
 
   let dictss = [
     {dictType: 'cs_identity'},

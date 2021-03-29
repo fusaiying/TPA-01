@@ -144,7 +144,9 @@
        // this.initData();
       },
       methods: {
-
+        assignFun(){
+          this.assignDiaVisible = true;
+        },
         closeDialogVisable() {
           this.diaVisible = false
         },

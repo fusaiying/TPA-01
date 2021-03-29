@@ -237,7 +237,7 @@
                         workOrderNo: row.workOrderNo,
                         policyNo: row.policyNo,
                         policyItemNo: row.policyItemNo,
-                        status: row.status,
+                        status: '02',
                         businessType: row.businessType
                       }
                     })

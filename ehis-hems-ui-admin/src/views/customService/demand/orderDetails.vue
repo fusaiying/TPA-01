@@ -612,7 +612,9 @@ export default {
       if(this.queryParams.policyNo != null && this.queryParams.policyNo !=""){
         policyInfoData(query).then(res => {
           if (res != null && res.code === 200) {
-            this.baseInfo = res.data;
+            if (res.data != null) {
+              this.baseInfo = res.data;
+            }
           }
         }).catch(res => {
 

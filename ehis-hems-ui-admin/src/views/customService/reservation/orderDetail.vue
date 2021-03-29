@@ -449,7 +449,7 @@
           style=" width: 100%;">
           <el-table-column align="center" width="140" prop="status" label="状态" show-overflow-tooltip>
             <template slot-scope="scope" v-if="scope.row.linkCode">
-              <span>{{ selectDictLabel(cs_order_state, scope.row.linkCode) }}</span>
+              <span>{{ selectDictLabel(cs_link_code, scope.row.linkCode) }}</span>
             </template>
           </el-table-column>
           <el-table-column align="center" prop="operateCode" label="操作" show-overflow-tooltip>
@@ -548,6 +548,8 @@
     {dictType: 'cs_service_item'},
     {dictType: 'cs_action_type'},
     {dictType: 'cs_order_state'},
+    {dictType: 'cs_link_code'},
+
   ]
   export default {
     components: { transfer ,
@@ -576,6 +578,7 @@
         cs_order_state:[],
         cs_whether_flag: [],
         cs_time_unit: [],
+        cs_link_code: [],
         //流转用
         flowLogData:[],
         flowLogCount: 0,
@@ -740,6 +743,10 @@
       this.cs_time_unit = this.dictList.find(item => {
         return item.dictType === 'cs_time_unit'
       }).dictDate
+      this.cs_link_code = this.dictList.find(item => {
+        return item.dictType === 'cs_link_code'
+      }).dictDate
+
     },
     methods: {
       //超链接用

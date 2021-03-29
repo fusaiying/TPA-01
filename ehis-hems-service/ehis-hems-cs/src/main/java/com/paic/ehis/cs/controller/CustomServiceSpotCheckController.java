@@ -411,6 +411,13 @@ public class CustomServiceSpotCheckController extends BaseController {
     //信息需求抽检批处理
     @GetMapping("/internal/batchAcceptVo/invalidDate/{invalidDate}")
     public AjaxResult batchAcceptVo(@PathVariable("invalidDate") String invalidDate){
+        Map<String,String> param=new HashMap<>();
+        //操作后主流程状态
+        param.put("status",CodeEnum.INSPECTION_STATE_01.getCode());
+        //操作前主流程状态
+        param.put("linkCode",CodeEnum.ORDER_STATE_04.getCode());//已完成的可质检
+        //操作按钮代码
+        param.put("operateCode",CodeEnum.ACTION_TYPE_13.getCode());
         try{
             qualityInspectionAcceptService.batchAcceptVo(invalidDate);
         }catch(RuntimeException e){
@@ -422,6 +429,13 @@ public class CustomServiceSpotCheckController extends BaseController {
     //信息需求一个月抽检批处理
     @GetMapping("/internal/batchAcceptVo/invalidDateMonth/{invalidDate}")
     public AjaxResult batchAcceptVomonth(@PathVariable("invalidDate") String invalidDate){
+        Map<String,String> param=new HashMap<>();
+        //操作后主流程状态
+        param.put("status",CodeEnum.INSPECTION_STATE_01.getCode());
+        //操作前主流程状态
+        param.put("linkCode",CodeEnum.ORDER_STATE_04.getCode());//已完成的可质检
+        //操作按钮代码
+        param.put("operateCode",CodeEnum.ACTION_TYPE_13.getCode());
         try{
             qualityInspectionAcceptService.batchAcceptVomonth(invalidDate);
         }catch(RuntimeException e){
@@ -433,6 +447,9 @@ public class CustomServiceSpotCheckController extends BaseController {
     //预约12点批处理
     @GetMapping("/internal/invalidAcceptDetailInfo/{invalidDate}")
     public AjaxResult invalidAcceptDetailInfo(@PathVariable("invalidDate") String invalidDate){
+        Map<String,String> param=new HashMap<>();
+        param.put("linkCode",CodeEnum.LINK_CODE_04.getCode());
+        param.put("operateCode",CodeEnum.ACTION_TYPE_08.getCode());
         try{
             qualityInspectionAcceptService.invalidAcceptDetailInfo(invalidDate);
         }catch(RuntimeException e){
@@ -450,6 +467,13 @@ public class CustomServiceSpotCheckController extends BaseController {
     //投诉一周抽检批处理
     @GetMapping("/internal/batchAcceptVo/selectInvalidQiaMondayFour/{invalidDate}")
     public AjaxResult selectInvalidQiaMondayFour(@PathVariable("invalidDate") String invalidDate){
+        Map<String,String> param=new HashMap<>();
+        //操作后主流程状态
+        param.put("status",CodeEnum.INSPECTION_STATE_01.getCode());
+        //操作前主流程状态
+        param.put("linkCode",CodeEnum.ORDER_STATE_04.getCode());//已完成的可质检
+        //操作按钮代码
+        param.put("operateCode",CodeEnum.ACTION_TYPE_13.getCode());
         try{
             qualityInspectionAcceptService.selectInvalidQiaMondayFour(invalidDate);
         }catch(RuntimeException e){

@@ -6,7 +6,6 @@ import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.common.core.utils.StringUtils;
 import com.paic.ehis.cs.domain.*;
 import com.paic.ehis.cs.domain.dto.QualityDTO;
-import com.paic.ehis.cs.domain.dto.QualityFlagDTO;
 import com.paic.ehis.cs.domain.dto.QualityInspectionDTO;
 import com.paic.ehis.cs.domain.dto.WorkOrderQueryDTO;
 import com.paic.ehis.cs.domain.vo.*;
@@ -467,9 +466,9 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
                             //流转记录添加
                             String flow_id = PubFun.createMySqlMaxNoUseCache("cs_flow_id", 20, 20);
                             flowLog.setFlowId(flow_id);
-                            flowLog.setCreatedBy(String.valueOf(SecurityUtils.getUsername()));
+                            flowLog.setCreatedBy("SYSTEM");
                             flowLog.setCreatedTime(DateUtils.getNowDate());
-                            flowLog.setUpdatedBy(String.valueOf(SecurityUtils.getUsername()));
+                            flowLog.setUpdatedBy("SYSTEM");
                             flowLog.setUpdatedTime(DateUtils.getNowDate());
                             flowLog.setWorkOrderNo(workOrderNo);
                             flowLog.setLinkCode(param.get("linkCode"));
@@ -479,9 +478,9 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
                             qualityInspectionAccept = new QualityInspectionAccept();
                             qualityInspectionAccept.setWorkOrderNo(workOrderNo);
                             qualityInspectionAccept.setStatus(param.get("status"));
-                            qualityInspectionAccept.setCreatedBy(String.valueOf(SecurityUtils.getUsername()));
+                            qualityInspectionAccept.setCreatedBy("SYSTEM");
                             qualityInspectionAccept.setCreatedTime(DateUtils.getNowDate());
-                            qualityInspectionAccept.setUpdatedBy(String.valueOf(SecurityUtils.getUsername()));
+                            qualityInspectionAccept.setUpdatedBy("SYSTEM");
                             qualityInspectionAccept.setUpdatedTime(DateUtils.getNowDate());
                             list1.add(qualityInspectionAccept);
                             //记录操作轨迹
@@ -515,9 +514,9 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
                                 //流转记录添加
                                 String flow_id = PubFun.createMySqlMaxNoUseCache("cs_flow_id", 20, 20);
                                 flowLog.setFlowId(flow_id);
-                                flowLog.setCreatedBy(String.valueOf(SecurityUtils.getUsername()));
+                                flowLog.setCreatedBy("SYSTEM");
                                 flowLog.setCreatedTime(DateUtils.getNowDate());
-                                flowLog.setUpdatedBy(String.valueOf(SecurityUtils.getUsername()));
+                                flowLog.setUpdatedBy("SYSTEM");
                                 flowLog.setUpdatedTime(DateUtils.getNowDate());
                                 flowLog.setWorkOrderNo(ids[b]);
                                 flowLog.setLinkCode(param.get("linkCode"));
@@ -527,9 +526,9 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
                                 qualityInspectionAccept = new QualityInspectionAccept();
                                 qualityInspectionAccept.setWorkOrderNo(ids[b]);
                                 qualityInspectionAccept.setStatus(param.get("status"));
-                                qualityInspectionAccept.setCreatedBy(String.valueOf(SecurityUtils.getUsername()));
+                                qualityInspectionAccept.setCreatedBy("SYSTEM");
                                 qualityInspectionAccept.setCreatedTime(DateUtils.getNowDate());
-                                qualityInspectionAccept.setUpdatedBy(String.valueOf(SecurityUtils.getUsername()));
+                                qualityInspectionAccept.setUpdatedBy("SYSTEM");
                                 qualityInspectionAccept.setUpdatedTime(DateUtils.getNowDate());
                                 list1.add(qualityInspectionAccept);
                             }
@@ -592,7 +591,6 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
             e.printStackTrace();
         }
 
-        List<AcceptVo> acceptVos = new ArrayList<>();
         List<AcceptVo> list = qualityInspectionAcceptMapper.getWorkOrderCountByUserIdMonth(workOrderQueryDTO);//根据操作人分组获取工单
         if (null != list) {
             int i = list.size();
@@ -626,9 +624,9 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
                             //流转记录添加
                             String flow_id = PubFun.createMySqlMaxNoUseCache("cs_flow_id", 20, 20);
                             flowLog.setFlowId(flow_id);
-                            flowLog.setCreatedBy(String.valueOf(SecurityUtils.getUsername()));
+                            flowLog.setCreatedBy("SYSTEM");
                             flowLog.setCreatedTime(DateUtils.getNowDate());
-                            flowLog.setUpdatedBy(String.valueOf(SecurityUtils.getUsername()));
+                            flowLog.setUpdatedBy("SYSTEM");
                             flowLog.setUpdatedTime(DateUtils.getNowDate());
                             flowLog.setWorkOrderNo(workOrderNo);
                             flowLog.setLinkCode(param.get("linkCode"));
@@ -638,9 +636,9 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
                             qualityInspectionAccept = new QualityInspectionAccept();
                             qualityInspectionAccept.setWorkOrderNo(workOrderNo);
                             qualityInspectionAccept.setStatus(param.get("status"));
-                            qualityInspectionAccept.setCreatedBy(String.valueOf(SecurityUtils.getUsername()));
+                            qualityInspectionAccept.setCreatedBy("SYSTEM");
                             qualityInspectionAccept.setCreatedTime(DateUtils.getNowDate());
-                            qualityInspectionAccept.setUpdatedBy(String.valueOf(SecurityUtils.getUsername()));
+                            qualityInspectionAccept.setUpdatedBy("SYSTEM");
                             qualityInspectionAccept.setUpdatedTime(DateUtils.getNowDate());
                             list1.add(qualityInspectionAccept);
                             //记录操作轨迹
@@ -675,9 +673,9 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
                                 //流转记录添加
                                 String flow_id = PubFun.createMySqlMaxNoUseCache("cs_flow_id", 20, 20);
                                 flowLog.setFlowId(flow_id);
-                                flowLog.setCreatedBy(String.valueOf(SecurityUtils.getUsername()));
+                                flowLog.setCreatedBy("SYSTEM");
                                 flowLog.setCreatedTime(DateUtils.getNowDate());
-                                flowLog.setUpdatedBy(String.valueOf(SecurityUtils.getUsername()));
+                                flowLog.setUpdatedBy("SYSTEM");
                                 flowLog.setUpdatedTime(DateUtils.getNowDate());
                                 flowLog.setWorkOrderNo(ids[b]);
                                 flowLog.setLinkCode(param.get("linkCode"));
@@ -687,9 +685,9 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
                                 qualityInspectionAccept = new QualityInspectionAccept();
                                 qualityInspectionAccept.setWorkOrderNo(ids[b]);
                                 qualityInspectionAccept.setStatus(param.get("status"));
-                                qualityInspectionAccept.setCreatedBy(String.valueOf(SecurityUtils.getUsername()));
+                                qualityInspectionAccept.setCreatedBy("SYSTEM");
                                 qualityInspectionAccept.setCreatedTime(DateUtils.getNowDate());
-                                qualityInspectionAccept.setUpdatedBy(String.valueOf(SecurityUtils.getUsername()));
+                                qualityInspectionAccept.setUpdatedBy("SYSTEM");
                                 qualityInspectionAccept.setUpdatedTime(DateUtils.getNowDate());
                                 list1.add(qualityInspectionAccept);
                             }
@@ -729,6 +727,7 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
         return acceptVos;
     }
 
+    //投诉批处理
     @Override
     public List<AcceptVo> selectInvalidQiaMondayFour(String invalidDateStar) {
         if (StringUtils.isEmpty(invalidDateStar)) {
@@ -787,9 +786,9 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
                             //流转记录添加
                             String flow_id = PubFun.createMySqlMaxNoUseCache("cs_flow_id", 20, 20);
                             flowLog.setFlowId(flow_id);
-                            flowLog.setCreatedBy(String.valueOf(SecurityUtils.getUsername()));
+                            flowLog.setCreatedBy("SYSTEM");
                             flowLog.setCreatedTime(DateUtils.getNowDate());
-                            flowLog.setUpdatedBy(String.valueOf(SecurityUtils.getUsername()));
+                            flowLog.setUpdatedBy("SYSTEM");
                             flowLog.setUpdatedTime(DateUtils.getNowDate());
                             flowLog.setWorkOrderNo(workOrderNo);
                             flowLog.setLinkCode(param.get("linkCode"));
@@ -799,9 +798,9 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
                             qualityInspectionAccept = new QualityInspectionAccept();
                             qualityInspectionAccept.setWorkOrderNo(workOrderNo);
                             qualityInspectionAccept.setStatus(param.get("status"));
-                            qualityInspectionAccept.setCreatedBy(String.valueOf(SecurityUtils.getUsername()));
+                            qualityInspectionAccept.setCreatedBy("SYSTEM");
                             qualityInspectionAccept.setCreatedTime(DateUtils.getNowDate());
-                            qualityInspectionAccept.setUpdatedBy(String.valueOf(SecurityUtils.getUsername()));
+                            qualityInspectionAccept.setUpdatedBy("SYSTEM");
                             qualityInspectionAccept.setUpdatedTime(DateUtils.getNowDate());
                             list1.add(qualityInspectionAccept);
                             //记录操作轨迹
@@ -835,9 +834,9 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
                                 //流转记录添加
                                 String flow_id = PubFun.createMySqlMaxNoUseCache("cs_flow_id", 20, 20);
                                 flowLog.setFlowId(flow_id);
-                                flowLog.setCreatedBy(String.valueOf(SecurityUtils.getUsername()));
+                                flowLog.setCreatedBy("SYSTEM");
                                 flowLog.setCreatedTime(DateUtils.getNowDate());
-                                flowLog.setUpdatedBy(String.valueOf(SecurityUtils.getUsername()));
+                                flowLog.setUpdatedBy("SYSTEM");
                                 flowLog.setUpdatedTime(DateUtils.getNowDate());
                                 flowLog.setWorkOrderNo(ids[b]);
                                 flowLog.setLinkCode(param.get("linkCode"));
@@ -847,9 +846,9 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
                                 qualityInspectionAccept = new QualityInspectionAccept();
                                 qualityInspectionAccept.setWorkOrderNo(ids[b]);
                                 qualityInspectionAccept.setStatus(param.get("status"));
-                                qualityInspectionAccept.setCreatedBy(String.valueOf(SecurityUtils.getUsername()));
+                                qualityInspectionAccept.setCreatedBy("SYSTEM");
                                 qualityInspectionAccept.setCreatedTime(DateUtils.getNowDate());
-                                qualityInspectionAccept.setUpdatedBy(String.valueOf(SecurityUtils.getUsername()));
+                                qualityInspectionAccept.setUpdatedBy("SYSTEM");
                                 qualityInspectionAccept.setUpdatedTime(DateUtils.getNowDate());
                                 list1.add(qualityInspectionAccept);
                             }

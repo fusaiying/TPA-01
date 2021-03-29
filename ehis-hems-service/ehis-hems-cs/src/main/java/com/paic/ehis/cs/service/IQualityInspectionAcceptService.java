@@ -97,6 +97,7 @@ public interface IQualityInspectionAcceptService
 
     //信息需求一个月批处理
     List<AcceptVo> batchAcceptVomonth(String invalidDateStar);
+
     List<QualityInspectionHandleVo> selectQualityFlagVO(QualityInspectionDTO qualityInspectionDTO);
 
     //预约12点批处理

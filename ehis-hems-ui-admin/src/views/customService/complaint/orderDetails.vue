@@ -1,200 +1,195 @@
 <template>
   <div class="app-container">
+    <!--客户基本信息 -->
     <el-card class="box-card" style="margin-top: 10px;">
       <span style="color: blue">客户基本信息</span>
       <el-divider/>
-      <el-form ref="sendForm" :model="sendForm" style="padding-bottom: 30px;" label-width="120px"
-               label-position="right" size="mini" :disabled="flag">
+      <el-form ref="baseInfo" :model="baseInfo" label-width="180px"
+               label-position="right" size="mini" >
         <el-row>
-          <!--clearable是清楚输入框内容 readly、只读不可以编辑 ；不可以共存-->
           <el-col :span="8">
-            <el-form-item label="保单号：" prop="Service"  >
-              <el-input readonly v-model="sendForm.acceptor" class="item-width"  size="mini" placeholder="请输入"/>
+            <el-form-item label="保单号：">
+              <span>{{ baseInfo.policyNo }}</span>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="投保人姓名：" prop="channel" readonly>
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini" placeholder="请输入"/>
+            <el-form-item label="投保人姓名：">
+              <span>{{ baseInfo.appName }}</span>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item style="white-space: nowrap" label="投保人证件号:"  prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini" placeholder="请输入"/>
+            <el-form-item label="投保人证件号：">
+              <span>{{ baseInfo.appName }}</span>
             </el-form-item>
           </el-col>
         </el-row>
 
         <el-row>
           <el-col :span="8">
-            <el-form-item style="white-space: nowrap" label="投保人证件类型:"  prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini" placeholder="请输入"/>
+            <el-form-item label="投保人证件类型：">
+              <span>{{ baseInfo.appName }}</span>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="分单号:"  prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini" placeholder="请输入"/>
+            <el-form-item label="分单号：">
+              <span>{{ baseInfo.policyItemNo }}</span>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="被保人姓名:"  prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini" placeholder="请输入"/>
+            <el-form-item label="被保人姓名：">
+              <span>{{ baseInfo.name }}</span>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="被保人性别：">
+              <span>{{selectDictLabel(rgtSex, baseInfo.sex)}}</span>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="被保人出生日期：">
+              <span>{{ baseInfo.birthday }}</span>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="被保人证件号：">
+              <span>{{ baseInfo.idNo }}</span>
             </el-form-item>
           </el-col>
         </el-row>
 
         <el-row>
           <el-col :span="8">
-            <el-form-item label="被保人性别:"  prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini" />
+            <el-form-item label="被保人证件类型：">
+              <span>{{selectDictLabel(card_type, baseInfo.idType)}}</span>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item style="white-space: nowrap" label="被保人出生日期:"  prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini" />
+            <el-form-item label="被保人电话：">
+              <span>{{ baseInfo.mobile }}</span>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="被保人证件号:"  prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini" />
-            </el-form-item>
-          </el-col>
-        </el-row>
-
-        <el-row>
-          <el-col :span="8">
-            <el-form-item style="white-space: nowrap" label="被保人证件类型:"  prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="被保人电话:"  prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="投保日期:"  prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini" />
+            <el-form-item label="投保日期：">
+              <span>{{ baseInfo.validStartDate }}</span>
             </el-form-item>
           </el-col>
         </el-row>
 
         <el-row>
           <el-col :span="8">
-            <el-form-item label="承保日期:"  prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini" />
+            <el-form-item label="承保日期：">
+              <span>{{ baseInfo.validStartDate }}</span>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="保溢生效日:"  prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini" />
+            <el-form-item label="保益生效日：">
+              <span>{{ baseInfo.validStartDate }}</span>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="保溢满期日:"  prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini" />
-            </el-form-item>
-          </el-col>
-        </el-row>
-
-        <el-row>
-          <el-col :span="8">
-            <el-form-item label="主招揽业务员:"  prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item style="white-space: nowrap" label="主招揽业务员电话:"  prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="VIP标识:"  prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini" />
+            <el-form-item label="保益满期日：">
+              <span>{{ baseInfo.validEndDate }}</span>
             </el-form-item>
           </el-col>
         </el-row>
 
         <el-row>
           <el-col :span="8">
-            <el-form-item style="white-space: nowrap" label="是否UHCG会员:"  prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini" />
+            <el-form-item label="主招揽业务员：">
+              <span>{{ baseInfo.mainSolicit }}</span>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item style="white-space: nowrap" label="与主保险人关系:"  prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini" />
+            <el-form-item label="主招揽业务员电话：">
+              <span>{{ baseInfo.solicitPhone }}</span>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="出单机构:"  prop="Acceptor">
-              <el-select v-model="sendForm.organCode" class="item-width" clearable placeholder="请选择">
-                <el-option v-for="item in cs_organization" :key="item.dictValue" :label="item.dictLabel"
-                           :value="item.dictValue"/>
-              </el-select>
+            <el-form-item label="VIP标识：">
+              <span>{{ baseInfo.vipFlag }}</span>
             </el-form-item>
           </el-col>
         </el-row>
 
         <el-row>
           <el-col :span="8">
-            <el-form-item label="险种代码:"  prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini" />
+            <el-form-item label="是否UHCG会员：">
+              <span>{{ baseInfo.uhcgFlag }}</span>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="计划名称:"  prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini" />
+            <el-form-item label="与主保险人关系：">
+              <span>{{ baseInfo.relationBy }}</span>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="保单生效日:"  prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini" />
-            </el-form-item>
-          </el-col>
-        </el-row>
-
-        <el-row>
-          <el-col :span="8">
-            <el-form-item label="首次生效日:"  prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item style="white-space: nowrap" label="AM(服务经理):"  prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item style="white-space: nowrap" label="BD(销售经理):"  prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini" />
+            <el-form-item label="出单机构：">
+              <span>{{ baseInfo.companyName }}</span>
             </el-form-item>
           </el-col>
         </el-row>
 
         <el-row>
           <el-col :span="8">
-            <el-form-item style="white-space: nowrap" label="特定医院赔付比例:"  prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini" />
+            <el-form-item label="险种代码：">
+              <span>{{ baseInfo.riskCodesStr }}</span>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="被保人性质:"  prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini" />
+            <el-form-item label="计划名称：">
+              <span>{{ baseInfo.planCode }}</span>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="投保来源:"  prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini" />
+            <el-form-item label="保单生效日：">
+              <span>{{ baseInfo.validStartDate }}</span>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="首次生效日：">
+              <span>{{ baseInfo.firstValidDate }}</span>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="AM(服务经理)：">
+              <span>{{ baseInfo.acceptor }}</span>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="BD(销售经理)：">
+              <span>{{ baseInfo.acceptor }}</span>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="特定医院赔付比例：">
+              <span>{{ baseInfo.specialRatio }}</span>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="被保人性质：">
+              <span>{{ baseInfo.insuredType }}</span>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="投保来源：">
+              <span>{{ baseInfo.policyFrom }}</span>
             </el-form-item>
           </el-col>
         </el-row>
       </el-form>
-
     </el-card>
 
-
+    <!--基因改善-服务受理信息 -->
     <el-card class="box-card" style="margin-top: 10px;">
-      <el-form ref="ruleForm" :model="ruleForm"  style="padding-bottom: 30px;" label-width="150px"
+      <el-form ref="ruleForm" :model="ruleForm"  style="padding-bottom: 30px;" label-width="180px"
                label-position="right" size="mini" :disabled="flag">
         <span style="color: blue">基因改善-服务受理信息</span>
         <el-divider/>
@@ -353,7 +348,7 @@
 
       </el-form>
     </el-card>
-
+<!--业务流转情况 -->
     <el-card class="box-card" style="margin-top: 10px;">
       <div slot="header" class="clearfix">
         <span style="color:blue;">业务流转情况</span>
@@ -401,8 +396,8 @@
         />
       </div>
     </el-card>
-
-    <el-card v-if="queryParams.status=='04'" class="box-card" style="margin-top: 10px;">
+    <!--服务处理 -->
+    <el-card v-if="showFlag" class="box-card" style="margin-top: 10px;">
       <el-form  ref="sendForm" :model="sendForm"  style="padding-bottom: 30px;" label-width="180px"
                label-position="right" size="mini" disabled>
         <span style="color: blue">服务处理</span>
@@ -590,7 +585,7 @@
         </el-col>
       </el-form>
     </el-card>
-
+    <!--附件信息 -->
     <el-card class="box-card" style="margin-top: 10px;">
       <div slot="header" class="clearfix">
         <span style="color: blue">附件信息<el-button  type="primary" style="float: right" size="mini" @click="upload" disabled>上传附件</el-button></span>
@@ -637,6 +632,7 @@
   import {complainSearch,comSearch}  from  '@/api/customService/consultation'
   import {getAttachmentListById} from "@/api/customService/spotCheck";
   import modifyDetails from "../common/modul/modifyDetails";
+  import {policyInfoData} from "@/api/customService/common";
 
 
   let dictss = [
@@ -662,6 +658,10 @@
     {dictType: 'cs_risk_type'},
     {dictType: 'cs_question_circ'},
     {dictType: 'cs_marketingchannel_code'},
+    {dictType: 'card_type'},
+    {dictType: 'rgtSex'}
+
+
     ]
   export default {
     components: {
@@ -679,6 +679,7 @@
     data() {
 
       return {
+        card_type: [],//证件类型
         ids:[],//多选框
         flag:false,
         //流转用
@@ -720,6 +721,45 @@
         dialogFormVisible: false,
         updateBy: undefined,
         //新增的数据传输
+        //客户基本信息数据
+        baseInfo: {
+          policyNo: undefined,
+          policyItemNo: undefined,
+          appName: undefined,
+          validStartDate: "",
+          orgPolicyItemNo: "",
+          validEndDate: "",
+          policyRiskType: "",
+          policyStatus: "",
+          specialAgreement: "",
+          companyName: undefined,
+          companyCode: undefined,
+          policyType: "",
+          planCode: "",
+          orgPolicyNo: "",
+          ssFlag: "",
+          policyManageCom: "",
+          riskCodesStr: undefined,
+          insuredNo: undefined,
+          name: undefined,
+          idType: undefined,
+          idNo: undefined,
+          birthday: undefined,
+          occupation: "",
+          nationality: "",
+          idStartDate: "",
+          idEndDate: "",
+          mobile: undefined,
+          email: undefined,
+          phone: undefined,
+          province: undefined,
+          city: undefined,
+          district: undefined,
+          address: undefined,
+          orgInsuredNo: undefined,
+        },
+
+        //服务处理数据
         sendForm: {
           sign: "",//控制暂存还是提交用
           level1: "",
@@ -750,6 +790,8 @@
           businessProcess: "",
           workOrderNo: '',
         },
+        //服务信息是否展示
+        showFlag: false,
         caseNumber: false,//查询条件（报案号）是否显示
         // 查询参数
         queryParams: {
@@ -821,6 +863,7 @@
         cs_marketingchannel_codeOption: [],
         cs_question_circ: [],
         cs_feedback_type: [],
+        rgtSex:[]//性别
       }
     },
     created() {
@@ -831,11 +874,18 @@
       if (this.$route.query.flag!=null && this.$route.query.flag!=''){
         this.flag = true;
       }
-      console.log(this.queryParams.workOrderNo);
+      if(this.queryParams.status=='04'){
+        this.showFlag=true
+      }
+      else {
+        this.showFlag=false
+      }
+
       //window.aaa = this;
       this.searchHandle()
       this.searchFlowLog()
       this.searchHCS()
+      this.searchBaseInfo()
       let query = {
         workOrderNo: this.queryParams.workOrderNo,
         businessType: this.queryParams.businessType,
@@ -916,15 +966,41 @@
       this.cs_link_circ = this.dictList.find(item => {
         return item.dictType === 'cs_link_circ'
       }).dictDate
+      this.card_type = this.dictList.find(item => {
+        return item.dictType === 'card_type'
+      }).dictDate
+
+      this.rgtSex = this.dictList.find(item => {
+        return item.dictType === 'rgtSex'
+      }).dictDate
       this.cs_marketingchannel_codeOption = this.dictList.find(item => {
         return item.dictType === 'cs_marketingchannel_code'
       }).dictDate
+
     },
     methods: {
+      //客户基本信息查询
+      searchBaseInfo() {
+        let query = {
+          policyNo: this.queryParams.policyNo,
+          policyItemNo: this.queryParams.policyItemNo,
+        }
+        if(this.queryParams.policyNo != null && this.queryParams.policyNo !=""){
+          policyInfoData(query).then(res => {
+            if (res != null && res.code === 200) {
+              if (res.data != null) {
+                this.baseInfo = res.data;
+              }
+            }
+          }).catch(res => {
+
+          })
+        }
+      },
       //新增按钮
       //取消
       deal(){},
-      //反显信息需求
+      //服务处理查询
       searchHandleServer() {
         selectServiceProcess(this.queryParams.workOrderNo).then(res => {
           if (res != null && res.code === 200) {
@@ -933,11 +1009,11 @@
             this.reasonTwo('0');
             this.reasonThree('0');
             this.classTwo('0');
-            if (res.rows.length <= 0) {
+/*            if (res.rows.length <= 0) {
               return this.$message.warning(
                 "未查询到数据！"
               )
-            }
+            }*/
           }
         }).catch(res => {
 

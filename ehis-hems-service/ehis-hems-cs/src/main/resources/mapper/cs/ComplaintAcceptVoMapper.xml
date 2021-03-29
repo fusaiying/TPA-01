@@ -141,7 +141,7 @@
         AND t1.business_type = '03'
         AND t1.STATUS = '02'
 
-            <if test="channelCode != null  and crhannelCode != ''"> and t2.channel_code = #{channelCode}</if>
+            <if test="channelCode != null  and channelCode != ''"> and t2.channel_code = #{channelCode}</if>
             <if test="itemCode != null  and itemCode != ''"> and t2.item_code = #{itemCode}</if>
             <if test="acceptBy != null  and acceptBy != ''"> and ifnull(t1.accept_by,t1.create_by) like concat('%',#{acceptBy},'%')</if>
             <if test="acceptTime != null "> and t1.accept_time = #{acceptTime}</if>

@@ -276,11 +276,29 @@ public class ClaimCaseCalServiceImpl implements IClaimCaseCalService
 //                reult = claimCaseCalMapper.selectClaimCaseCalInformation(claimCaseCal.getRptNo());
 //            }
             try {
+                /**
+                 * modify by  :  hjw   如果是申诉案件 ， 需要更新 payMount字段
+                 * time:2021-06-29
+                 */
+                /** start */
+                String rptNo = claimCaseCal.getRptNo();
+                if(rptNo.indexOf("-") > 0) {
+                    ClaimCaseCal nowClaimCaseCal = claimCaseCalMapper.selectClaimCaseCalByRptNo(rptNo);
+                    CalConclusionVo precalConclusionVo = claimCaseCalMapper.selectPreCalConclusionByRptNo(rptNo);
+                    if(null != precalConclusionVo) {
+                        BigDecimal defaultValue = new BigDecimal(0);
+                        ClaimCaseCal preClaimCaseCal = claimCaseCalMapper.selectClaimCaseCalByRptNo(precalConclusionVo.getRptNo());
+                        BigDecimal payAmount = nowClaimCaseCal.getPayAmount() == null ? defaultValue : nowClaimCaseCal.getPayAmount();
+                        BigDecimal prePayAmount = preClaimCaseCal.getPayAmount() == null ? defaultValue : preClaimCaseCal.getPayAmount();
+                        claimCaseCal.setPayAmount(payAmount.subtract(prePayAmount));
+                    }
+                }
+                /** end */
                 claimCaseCal.setUpdateBy(SecurityUtils.getUsername());
                 claimCaseCal.setUpdateTime(DateUtils.getNowDate());
                 int i = claimCaseCalMapper.updateClaimCaseCalByRptNo(claimCaseCal);
                 if (i > 0){
-                    reult = claimCaseCalMapper.selectClaimCaseCalInformation(claimCaseCal.getRptNo());
+                    reult = claimCaseCalMapper.selectClaimCaseCalInformation(rptNo);
                 }
         } catch (Exception e){
 

@@ -106,6 +106,20 @@ public class BaseController
     }
 
     /**
+     * 响应请求分页数据(查询失败)
+     */
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    protected TableDataInfo getDataTableErr(String msg)
+    {
+        TableDataInfo rspData = new TableDataInfo();
+        rspData.setCode(HttpStatus.ERROR);
+        rspData.setRows(null);
+        rspData.setMsg(msg);
+        rspData.setTotal(0);
+        return rspData;
+    }
+
+    /**
      * 响应返回结果
      * 
      * @param rows 影响行数

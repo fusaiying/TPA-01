@@ -419,7 +419,7 @@ public class CustomServiceSpotCheckController extends BaseController {
         //操作按钮代码
         param.put("operateCode",CodeEnum.ACTION_TYPE_13.getCode());
         try{
-            qualityInspectionAcceptService.batchAcceptVo(invalidDate);
+            qualityInspectionAcceptService.batchAcceptVo(invalidDate,param);
         }catch(RuntimeException e){
             return AjaxResult.error(e.getMessage());
         }
@@ -437,7 +437,7 @@ public class CustomServiceSpotCheckController extends BaseController {
         //操作按钮代码
         param.put("operateCode",CodeEnum.ACTION_TYPE_13.getCode());
         try{
-            qualityInspectionAcceptService.batchAcceptVomonth(invalidDate);
+            qualityInspectionAcceptService.batchAcceptVomonth(invalidDate,param);
         }catch(RuntimeException e){
             return AjaxResult.error(e.getMessage());
         }
@@ -475,7 +475,7 @@ public class CustomServiceSpotCheckController extends BaseController {
         //操作按钮代码
         param.put("operateCode",CodeEnum.ACTION_TYPE_13.getCode());
         try{
-            qualityInspectionAcceptService.selectInvalidQiaMondayFour(invalidDate);
+            qualityInspectionAcceptService.selectInvalidQiaMondayFour(invalidDate,param);
         }catch(RuntimeException e){
             return AjaxResult.error(e.getMessage());
         }

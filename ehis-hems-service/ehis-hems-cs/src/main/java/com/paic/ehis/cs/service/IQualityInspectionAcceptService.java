@@ -93,10 +93,10 @@ public interface IQualityInspectionAcceptService
 //    public List<AttachmentInfo> getAttachmentList(WorkOrderQueryDTO workOrderQueryDTO);
 
     //信息需求一周批处理
-    List<AcceptVo> batchAcceptVo(String invalidDateStar);
+    List<AcceptVo> batchAcceptVo(String invalidDateStar, Map<String,String> param);
 
     //信息需求一个月批处理
-    List<AcceptVo> batchAcceptVomonth(String invalidDateStar);
+    List<AcceptVo> batchAcceptVomonth(String invalidDateStar, Map<String,String> param);
 
     List<QualityInspectionHandleVo> selectQualityFlagVO(QualityInspectionDTO qualityInspectionDTO);
 
@@ -104,6 +104,6 @@ public interface IQualityInspectionAcceptService
     List<AcceptVo> invalidAcceptDetailInfo(String invalidDateStr);
 
     //投诉每周一凌晨四点批处理
-    List<AcceptVo> selectInvalidQiaMondayFour(String invalidDateStar);
+    List<AcceptVo> selectInvalidQiaMondayFour(String invalidDateStar, Map<String,String> param);
 
 }

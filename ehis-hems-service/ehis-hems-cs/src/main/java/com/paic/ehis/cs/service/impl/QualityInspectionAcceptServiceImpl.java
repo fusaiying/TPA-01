@@ -409,7 +409,7 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
     //信息需求一周分配案件批处理
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     @Override
-    public List<AcceptVo> batchAcceptVo(String invalidDateStar) {
+    public List<AcceptVo> batchAcceptVo(String invalidDateStar,Map<String,String> param) {
         if (StringUtils.isEmpty(invalidDateStar)) {
             throw new RuntimeException("日期为空！");
         }
@@ -457,7 +457,7 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
                         String workOrderNo = ran; //只取一条工单
                         WorkOrderAccept workOrderAccept = workOrderAcceptMapper.selectWorkOrderAcceptById(workOrderNo);
                         if (null != workOrderAccept.getActivationNum()) {//说明此案件未被激活过
-                            Map<String, String> param = null;
+                         //   Map<String, String> param = null;
                             FlowLog flowLog = null;
                             QualityInspectionAccept qualityInspectionAccept = null;
                             List<FlowLog> flowLogList = new ArrayList<>();
@@ -504,7 +504,7 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
                         WorkOrderAccept workOrderAccept = workOrderAcceptMapper.selectWorkOrderAcceptById(workOrderNo);
                         if (null != workOrderAccept.getActivationNum()) {//说明此案件未被激活过
                             String[] ids = set.toArray(new String[0]);
-                            Map<String, String> param = null;
+                            //Map<String, String> param = null;
                             FlowLog flowLog = null;
                             QualityInspectionAccept qualityInspectionAccept = null;
                             List<FlowLog> flowLogList = new ArrayList<>();
@@ -551,7 +551,7 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
     //信息需求一月分配案件批处理
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     @Override
-    public List<AcceptVo> batchAcceptVomonth(String invalidDateStar) {
+    public List<AcceptVo> batchAcceptVomonth(String invalidDateStar,Map<String,String> param) {
         if (StringUtils.isEmpty(invalidDateStar)) {
             throw new RuntimeException("日期为空！");
         }
@@ -615,7 +615,7 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
                         String workOrderNo = ran; //只取一条工单
                         WorkOrderAccept workOrderAccept = workOrderAcceptMapper.selectWorkOrderAcceptById(workOrderNo);
                         if (workOrderAccept.getActivationNum().equals("1")) {//说明此案件被激活一次
-                            Map<String, String> param = null;
+                         //   Map<String, String> param = null;
                             FlowLog flowLog = null;
                             QualityInspectionAccept qualityInspectionAccept = null;
                             List<FlowLog> flowLogList = new ArrayList<>();
@@ -663,7 +663,7 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
                         WorkOrderAccept workOrderAccept = workOrderAcceptMapper.selectWorkOrderAcceptById(workOrderNo);
                         if (workOrderAccept.getActivationNum().equals("1")) {//说明此案件被激活一次
                             String[] ids = set.toArray(new String[0]);
-                            Map<String, String> param = null;
+                           // Map<String, String> param = null;
                             FlowLog flowLog = null;
                             QualityInspectionAccept qualityInspectionAccept = null;
                             List<FlowLog> flowLogList = new ArrayList<>();
@@ -729,7 +729,7 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
 
     //投诉批处理
     @Override
-    public List<AcceptVo> selectInvalidQiaMondayFour(String invalidDateStar) {
+    public List<AcceptVo> selectInvalidQiaMondayFour(String invalidDateStar, Map<String,String> param) {
         if (StringUtils.isEmpty(invalidDateStar)) {
             throw new RuntimeException("日期为空！");
         }
@@ -777,7 +777,7 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
                         String workOrderNo = ran; //只取一条工单
                         WorkOrderAccept workOrderAccept = workOrderAcceptMapper.selectWorkOrderAcceptById(workOrderNo);
                         if (null != workOrderAccept.getActivationNum()) {//说明此案件未被激活过
-                            Map<String, String> param = null;
+                           // Map<String, String> param = null;
                             FlowLog flowLog = null;
                             QualityInspectionAccept qualityInspectionAccept = null;
                             List<FlowLog> flowLogList = new ArrayList<>();
@@ -824,7 +824,7 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
                         WorkOrderAccept workOrderAccept = workOrderAcceptMapper.selectWorkOrderAcceptById(workOrderNo);
                         if (null != workOrderAccept.getActivationNum()) {//说明此案件未被激活过
                             String[] ids = set.toArray(new String[0]);
-                            Map<String, String> param = null;
+                            //Map<String, String> param = null;
                             FlowLog flowLog = null;
                             QualityInspectionAccept qualityInspectionAccept = null;
                             List<FlowLog> flowLogList = new ArrayList<>();

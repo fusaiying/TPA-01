@@ -174,6 +174,73 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
         return reservationAcceptVos;
     }
 
+    /**
+     * 个人预约修改页面
+     * @param workOrderNo
+     * @return
+     */
+    @Override
+    public ReservationAcceptVo selectReservationAcceptVoList3(String workOrderNo) {
+        ReservationAcceptVo reservationAcceptVo= reservationAcceptVoMapper.selectReservationAcceptVoList3(workOrderNo);
+        String sourceName="ReservationAcceptVo";
+        String targetTableName="accept_detail_info";
+        List<FieldMap> KVMap=fieldMapMapper.selectKVMap(targetTableName,sourceName);
+
+        PersonInfo callPerson=personInfoMapper.selectPersonInfoById(reservationAcceptVo.getCallPersonId());
+        if (callPerson!= null) {
+            reservationAcceptVo.setCallPerson(callPerson);
+        } else {
+            reservationAcceptVo.setCallPerson(new PersonInfo());
+        }
+        PersonInfo contactsPerson =personInfoMapper.selectPersonInfoById(reservationAcceptVo.getContactsPersonId());
+        if (contactsPerson!= null) {
+            String linePhone=contactsPerson.getLinePhone();
+            if (linePhone!=null){
+                String[] linePhone1=linePhone.split("\\-");
+                contactsPerson.setLinePhone1(linePhone1);
+            }else{
+                contactsPerson.setLinePhone1(new String[4]);
+            }
+            String homePhone=contactsPerson.getHomePhone();
+            if (homePhone!=null){
+                String[] homePhone1=homePhone.split("\\-");
+                contactsPerson.setHomePhone1(homePhone1);
+            }else {
+                contactsPerson.setHomePhone1(new String[4]);
+            }
+            String workPhone=contactsPerson.getWorkPhone();
+            if (workPhone!=null){
+                String[] workPhone1=workPhone.split("\\-");
+                contactsPerson.setWorkPhone1(workPhone1);
+            }else{
+                contactsPerson.setWorkPhone1(new String[4]);
+            }
+            reservationAcceptVo.setContactsPerson(contactsPerson);
+        } else {
+            reservationAcceptVo.setContactsPerson(new PersonInfo());
+        }
+        PersonInfo complaintPerson=personInfoMapper.selectPersonInfoById(reservationAcceptVo.getComplaintPersonId());
+        if (complaintPerson!= null) {
+            reservationAcceptVo.setComplaintPerson(contactsPerson);
+        } else {
+            reservationAcceptVo.setComplaintPerson(new PersonInfo());
+        }
+        reservationAcceptVo.setOperatorLast(userInfoMapper.selectUserInfoById(reservationAcceptVo.getCreateBy()));
+        reservationAcceptVo.setReviser(userInfoMapper.selectUserInfoById(reservationAcceptVo.getUpdateBy()));
+        AcceptDetailInfo acceptDetailInfo=acceptDetailInfoMapper.selectAcceptDetailInfoById(reservationAcceptVo.getWorkOrderNo());
+
+        for (FieldMap fieldMap:KVMap){
+            fieldMap.getTargetColumnName();
+            fieldMap.getSourceFiledName();
+            Map map=new HashMap<String,String>();
+            map.put(fieldMap.getSourceFiledName(),fieldMap.getTargetColumnName());
+            VoUtils voUtils=new VoUtils<DemandAcceptVo>();
+            reservationAcceptVo= (ReservationAcceptVo) voUtils.fromVoToVo(reservationAcceptVo,map,acceptDetailInfo);
+        }
+
+        return reservationAcceptVo;
+    }
+
     @Override
     public int updateStatusM(String[] workOrderNos) {
         reservationAcceptVoMapper.updateStatusM(workOrderNos);

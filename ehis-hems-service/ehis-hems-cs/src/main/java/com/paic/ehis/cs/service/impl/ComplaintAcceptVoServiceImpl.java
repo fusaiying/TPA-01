@@ -734,9 +734,8 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
             workOrderAccept.setStatus("04");
             if (workOrderAcceptA.getEndDate()==null){
                 workOrderAccept.setEndDate(DateUtils.parseDate(DateUtils.getTime()));
-            }else{
-                workOrderAccept.setLastEndDate(DateUtils.parseDate(DateUtils.getTime()));
             }
+            workOrderAccept.setLastEndDate(DateUtils.parseDate(DateUtils.getTime()));
             workOrderAcceptMapper.updateWorkOrderAccept(workOrderAccept);
 
             if (workHandleInfos == null) {

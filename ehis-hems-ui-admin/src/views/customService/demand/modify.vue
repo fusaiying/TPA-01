@@ -283,7 +283,7 @@ import {
   demandListAndPublicPool,
   demandListAndPersonalPool,
   FlowLogSearch,
-  modifySubmit
+  modifySubmit, PersonalPool
 } from '@/api/customService/demand'
 import modifyDetails from "../common/modul/modifyDetails";
 
@@ -589,9 +589,41 @@ export default {
     close() {
 
     },
-    //反显信息需求
+    //信息需求   修改页面
     searchHandle() {
-      if (this.queryParams.status == "01") {
+      const query = this.queryParams
+      PersonalPool(query).then(res => {
+        if (res != null && res.code === 200) {
+          if (res.data!=null && res.data!=''){
+            let workPoolData = res.data;
+            let editInfo = {
+              editReason: "",
+              editRemark: ""
+            };
+            workPoolData.editInfo = editInfo;
+            workPoolData.officeCountry = "";
+            workPoolData.officeNumber = "";
+            workPoolData.officeQuhao = "";
+            workPoolData.officeSecondNumber = "";
+            this.workPoolData = workPoolData;
+          }
+          if (this.$route.query.status=='02'){
+            this.workPoolData.editInfo.editReason='01'
+          }else if (this.$route.query.status=='03'){
+            this.workPoolData.editInfo.editReason='02'
+          }else if (this.$route.query.status=='04'){
+            this.workPoolData.editInfo.editReason='03'
+          }
+
+        }
+      }).catch(res => {
+        return this.$message.error(
+          "信息需求受理数据加载异常！"
+        )
+      })
+
+
+/*      if (this.queryParams.status == "01") {
         let query = this.queryParams
         demandListAndPublicPool(query).then(res => {
           if (res != null && res.code === 200) {
@@ -666,7 +698,7 @@ export default {
 
         })
 
-      }
+      }*/
 
     },
     //查询轨迹表

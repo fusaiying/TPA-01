@@ -146,14 +146,7 @@
     saveInfoFun(){
       this.$refs.userForm.validate((valid) => {
         if (valid) {
-          if(this.userForm.status == '01') {
-            this.userForm.status = 'Y';
-          } else {
-            this.userForm.status = 'N';
-          }
-
           const params = this.userForm;
-
           editInfo(params).then(response => {
             if (response.code == '200') {
               this.$message({

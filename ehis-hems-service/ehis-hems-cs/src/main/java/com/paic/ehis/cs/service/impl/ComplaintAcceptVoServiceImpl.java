@@ -719,6 +719,8 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
         workHandleInfo.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         WorkHandleInfo workHandleInfos=workHandleInfoMapper.selectCreatedBy(workHandleInfo);
 
+        WorkOrderAccept workOrderAcceptA=workOrderAcceptMapper.selectWorkOrderAcceptById(complaintDealVo.getWorkOrderNo());
+
 
         //将所有状态置为N
         //WorkHandleInfo workHandleInfo = new WorkHandleInfo();
@@ -730,7 +732,11 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
             WorkOrderAccept workOrderAccept=new WorkOrderAccept();
             workOrderAccept.setWorkOrderNo(complaintDealVo.getWorkOrderNo());
             workOrderAccept.setStatus("04");
-            workOrderAccept.setEndDate(DateUtils.parseDate(DateUtils.getTime()));
+            if (workOrderAcceptA.getEndDate()==null){
+                workOrderAccept.setEndDate(DateUtils.parseDate(DateUtils.getTime()));
+            }else{
+                workOrderAccept.setLastEndDate(DateUtils.parseDate(DateUtils.getTime()));
+            }
             workOrderAcceptMapper.updateWorkOrderAccept(workOrderAccept);
 
             if (workHandleInfos == null) {
@@ -804,6 +810,7 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
             workOrderAccept2.setUpdateBy(SecurityUtils.getUsername());
             workOrderAccept2.setCreateBy(SecurityUtils.getUsername());
             workOrderAccept2.setEndDate(DateUtils.parseDate(DateUtils.getTime()));
+            workOrderAccept2.setLastEndDate(DateUtils.parseDate(DateUtils.getTime()));
             workOrderAcceptMapper.insertWorkOrderAccept(workOrderAccept2);
 
             AcceptDetailInfo acceptDetailInfo1=acceptDetailInfoMapper.selectAcceptDetailInfoById(workOrderNo);

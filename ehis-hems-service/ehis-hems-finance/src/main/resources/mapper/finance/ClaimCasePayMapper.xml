@@ -18,6 +18,7 @@
         <result property="debtAmount"    column="debt_amount"    />
         <result property="borrowAmount"    column="borrow_amount"    />
         <result property="payStatus"    column="pay_status"    />
+        <result property="caseProp"    column="case_prop"    />
     </resultMap>
     <resultMap type="com.paic.ehis.finance.domain.vo.ClaimCaseForeignPayInfoVO" id="ForeignPayResult">
         <result property="rptNo"    column="rpt_no"    />
@@ -49,7 +50,7 @@
             c.name,
             sum(  ifNUll(b.bill_amount,0) ) bill_amount,
             (sum( ifNUll(b.bill_amount,0) ) - sum( ifNUll(b.hos_discount_amount,0) )) discounted_amount,
-            sum( ifNUll(b.tp_advance_payment + b.ss_advance_payment,0) ) advance_payment,
+            sum( ifNUll(b.tp_advance_payment,0) + ifNUll(b.ss_advance_payment,0) ) advance_payment,
             sum( ifNUll(b.copay,0)) copay,
             ifNUll(d.cal_amount,0) pay_amount,
             ifNUll(d.debt_amount,0) debt_amount,
@@ -110,7 +111,7 @@
             c.`name`,
             sum( ifNUll(b.bill_amount,0) ) bill_amount,
             (sum( ifNUll(b.bill_amount,0) ) - sum( ifNUll(b.hos_discount_amount,0) )) discounted_amount,
-            sum( ifNUll(b.tp_advance_payment + b.ss_advance_payment,0) ) advance_payment,
+            sum( ifNUll(b.tp_advance_payment,0) + ifNUll(b.ss_advance_payment,0) ) advance_payment,
             sum( ifNUll(b.copay,0) ) copay,
             ifNUll(d.cal_amount,0) pay_amount,
             ifNUll(d.debt_amount,0) debt_amount,

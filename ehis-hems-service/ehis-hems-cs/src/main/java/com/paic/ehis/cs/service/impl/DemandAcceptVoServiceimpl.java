@@ -166,7 +166,49 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
     @Override
     public DemandAcceptVo selectDemandAcceptList3(String workOrderNo) {
 
-        return demandAcceptVoMapper.selectDemandAcceptVoList3(workOrderNo);
+        DemandAcceptVo demandAcceptVos = demandAcceptVoMapper.selectDemandAcceptVoList3(workOrderNo);
+
+        String sourceName = "DemandAcceptVo";
+        String targetTableName = "accept_detail_info";
+        List<FieldMap> KVMap = fieldMapMapper.selectKVMap(targetTableName, sourceName);
+
+        PersonInfo callPerson = personInfoMapper.selectPersonInfoById(demandAcceptVos.getCallPersonId());
+        if (callPerson != null) {
+            demandAcceptVos.setCallPerson(callPerson);
+        } else {
+            demandAcceptVos.setCallPerson(new PersonInfo());
+        }
+        PersonInfo contactsPerson = personInfoMapper.selectPersonInfoById(demandAcceptVos.getContactsPersonId());
+
+        if (contactsPerson != null) {
+                //  demandAcceptVo1.setContactsPerson(contactsPerson);
+            String linePhone = contactsPerson.getLinePhone();
+            String[] linePhone1 = StringUtils.isEmpty(linePhone) ? new String[4] : linePhone.split("\\-");
+            contactsPerson.setLinePhone1(linePhone1);
+            String homePhone = contactsPerson.getHomePhone();
+            String[] homePhone1 = StringUtils.isEmpty(homePhone) ? new String[4] : homePhone.split("\\-");
+            contactsPerson.setHomePhone1(homePhone1);
+            String workPhone = contactsPerson.getWorkPhone();
+            String[] workPhone1 = StringUtils.isEmpty(workPhone) ? new String[4] : workPhone.split("\\-");
+            contactsPerson.setWorkPhone1(workPhone1);
+            demandAcceptVos.setContactsPerson(contactsPerson);
+
+        } else {
+            demandAcceptVos.setContactsPerson(new PersonInfo());
+        }
+
+        AcceptDetailInfo acceptDetailInfo = acceptDetailInfoMapper.selectAcceptDetailInfoById(demandAcceptVos.getWorkOrderNo());
+
+        for (FieldMap fieldMap : KVMap) {
+            fieldMap.getTargetColumnName();
+            fieldMap.getSourceFiledName();
+            Map map = new HashMap<String, String>();
+            map.put(fieldMap.getSourceFiledName(), fieldMap.getTargetColumnName());
+            VoUtils voUtils = new VoUtils<DemandAcceptVo>();
+            demandAcceptVos = (DemandAcceptVo) voUtils.fromVoToVo(demandAcceptVos, map, acceptDetailInfo);
+            }
+
+        return demandAcceptVos;
     }
 
     @Override

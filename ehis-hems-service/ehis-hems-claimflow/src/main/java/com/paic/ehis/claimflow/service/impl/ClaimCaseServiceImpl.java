@@ -1569,13 +1569,13 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
                     // 查询借款表里金额
                     FinanceBorrowInfo borrowInfo = remoteFinancialServicce.selectBorrowInfo(aCase.getRptNo());
                     if (caseCal.getPayAmount().compareTo(borrowInfo.getBorrowAmount()) != 0 ){
-                        // 借款表数据更新成支付数据
-                        FinanceBorrowInfo financeBorrowInfo = new FinanceBorrowInfo();
-                        financeBorrowInfo.setRptNo(aCase.getRptNo());
-                        financeBorrowInfo.setBorrowAmount(caseCal.getPayAmount());
-                        financeBorrowInfo.setUpdateBy(SecurityUtils.getUsername());
-                        financeBorrowInfo.setUpdateTime(DateUtils.getNowDate());
-                        remoteFinancialServicce.updateBorrowInfo(financeBorrowInfo);
+                        // 借款表数据更新成支付数据  不需要
+//                        FinanceBorrowInfo financeBorrowInfo = new FinanceBorrowInfo();
+//                        financeBorrowInfo.setRptNo(aCase.getRptNo());
+//                        financeBorrowInfo.setBorrowAmount(caseCal.getPayAmount());
+//                        financeBorrowInfo.setUpdateBy(SecurityUtils.getUsername());
+//                        financeBorrowInfo.setUpdateTime(DateUtils.getNowDate());
+//                        remoteFinancialServicce.updateBorrowInfo(financeBorrowInfo);
                         // 支付状态
                         claimCase.setPayStatus("01");
                     }

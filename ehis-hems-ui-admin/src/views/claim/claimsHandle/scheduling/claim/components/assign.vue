@@ -24,7 +24,9 @@
             <el-col :span="24">
               <el-form-item label="分配状态">
                 <el-radio-group v-model="userForm.status">
-                  <el-radio  v-for="dict in statusOptions"  :key="dict.dictValue"  :label="dict.dictValue" >{{dict.dictLabel}}  </el-radio>
+<!--                  <el-radio  v-for="dict in statusOptions"  :key="dict.dictValue"  :label="dict.dictValue" >{{dict.dictLabel}}  </el-radio>-->
+                  <el-radio label="Y">有效</el-radio>
+                  <el-radio label="N">无效</el-radio>
                 </el-radio-group>
               </el-form-item>
             </el-col>
@@ -88,7 +90,7 @@
         dialogVisible:false,
         userForm : {
           roleCode:'',
-          status:'01',
+          status:'Y',
         },
         rules: {
           roleCode: {trigger: ['change'], required: true, message: '角色必填'},
@@ -112,8 +114,10 @@
           const params = this.userForm;
           if(this.userForm.status === '01' || this.userForm.status === 'Y') {
             params.isEqually = 'Y';
+            params.status = "Y";
           } else {
             params.isEqually = 'N';
+            params.status = "N";
           }
           params.mappingValue = this.roleMappingValue[this.userForm.roleCode];
           params.roleCode = this.userForm.roleCode;

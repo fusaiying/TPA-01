@@ -185,7 +185,7 @@
       </el-form>
 
     </el-card>
-
+<!-- 信息需求页面-->
     <el-card class="box-card" style="margin-top: 10px;">
       <el-form style="padding-bottom: 30px;" label-width="180px"
                label-position="right" size="mini" :disabled="true">
@@ -421,6 +421,7 @@ import moment from 'moment'
 import {
   demandListAndPublicPool,
   demandListAndPersonalPool,
+  PersonalPool,
   FlowLogSearch,
   orderDetailSearch
 } from '@/api/customService/demand'
@@ -648,15 +649,13 @@ export default {
       this.$refs.modifyDetails.open();
       ;
     },
-    //反显信息需求
+    //信息需求查询
     searchHandle() {
-      if (this.queryParams.status == "01") {
-        console.log("status值", this.queryParams.status)
         const query = this.queryParams
-        demandListAndPublicPool(query).then(res => {
+      PersonalPool(query).then(res => {
           if (res != null && res.code === 200) {
-            if (res.rows.length>0){
-              let workPoolData = res.rows[0];
+            if (res.data!=null && res.data!=''){
+              let workPoolData = res.data;
               let editInfo = {
                 editReason: "",
                 editRemark: ""
@@ -675,33 +674,6 @@ export default {
             "信息需求受理数据加载异常！"
           )
         })
-      } else {
-        let query = this.queryParams
-        demandListAndPersonalPool(query).then(res => {
-          if (res != null && res.code === 200) {
-            if (res.rows.length>0){
-              let workPoolData = res.rows[0];
-              let editInfo = {
-                editReason: "",
-                editRemark: ""
-              };
-              workPoolData.editInfo = editInfo
-              workPoolData.officeCountry = ""
-              workPoolData.officeNumber = ""
-              workPoolData.officeQuhao = ""
-              workPoolData.officeSecondNumber = ""
-              this.workPoolData = workPoolData;
-            }
-
-            console.log(this.workPoolData);
-          }
-        }).catch(res => {
-          return this.$message.error(
-            "信息需求受理数据加载异常！"
-          );
-        })
-
-      }
     },
     //查询轨迹表
     searchFlowLog() {

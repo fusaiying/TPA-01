@@ -169,7 +169,12 @@
             if (_data.length !== 0) {
               _data.forEach(item => {
                 item.editing = false;
-                item.minData = [item.detailInfos]
+                if(item.detailInfos.length > 0) {
+                  item.minData = [item.detailInfos[0]]
+                } else {
+                  item.minData = []
+                }
+
               })
             }
             this.tableData= _data;

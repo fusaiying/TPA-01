@@ -88,7 +88,7 @@
         dialogVisible:false,
         userForm : {
           roleCode:'',
-          status:'01',
+          status:'Y',
         },
         rules: {
           roleCode: {trigger: ['change'], required: true, message: '角色必填'},
@@ -112,8 +112,10 @@
           const params = this.userForm;
           if(this.userForm.status === '01' || this.userForm.status === 'Y') {
             params.isEqually = 'Y';
+            params.status = "Y";
           } else {
             params.isEqually = 'N';
+            params.status = "N";
           }
           params.mappingValue = this.roleMappingValue[this.userForm.roleCode];
           params.roleCode = this.userForm.roleCode;

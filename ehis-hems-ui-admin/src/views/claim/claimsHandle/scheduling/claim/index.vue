@@ -45,7 +45,7 @@
             <el-table-column prop="userName" label="操作用户"  align="center" show-overflow-tooltip />
             <el-table-column prop="rate" label="分配比例" :formatter="rateOrEqually"  align="center" show-overflow-tooltip />
             <el-table-column prop="status" label="是否有效" :formatter="getStatusName" align="center" show-overflow-tooltip />
-            <el-table-column prop="userOrganCode" label="所属机构" v-if="show" align="center" show-overflow-tooltip />
+            <el-table-column prop="orangeCode" label="所属机构" v-if="show" align="center" show-overflow-tooltip />
             <el-table-column label="操作" align="center" style="padding-top: 0px;">
               <template slot-scope="scope">
                 <el-button   size="mini" type="text" icon="el-icon-edit" @click="editFun(scope.row)">编辑</el-button>

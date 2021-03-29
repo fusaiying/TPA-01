@@ -73,6 +73,7 @@ public class FinanceTpaSettleTaskController extends BaseController
     @GetMapping("/tpaList")
     public TableDataInfo tpaList(TpaSettleDTO tpaSettleDTO)
     {
+        startPage(tpaSettleDTO);
         List<FinanceTpaSettleTask> list = financeTpaSettleTaskService.selectTpaSettleTaskList(tpaSettleDTO);
         return getDataTable(list);
     }

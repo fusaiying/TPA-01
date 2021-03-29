@@ -189,7 +189,7 @@
 
     </el-card>
     <el-card class="box-card" style="margin-top: 10px;">
-      <el-form ref="ruleForm" :model="ruleForm" :rules="rules" style="padding-bottom: 30px;" label-width="180px"
+      <el-form ref="ruleForm" :model="ruleForm" :rules="rules" style="padding-bottom: 30px;" label-width="150px"
                label-position="right" size="mini" >
 
         <span style="color: blue">服务受理信息</span>
@@ -360,13 +360,25 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-
-            <el-form-item label="预约日期："  style="white-space: nowrap" prop="complaintTime">
+            <el-form-item label="预约日期："  style="white-space: nowrap" prop="appointmentDate">
               <el-date-picker class="item-width"
-                v-model="ruleForm.complaintTime"
-                type="datetime"
-                placeholder="选择日期时间">
+                v-model="ruleForm.appointmentDate"
+                type="date"
+                placeholder="选择日期"
+                value-format="YYYY-MM-dd">
               </el-date-picker>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="预约时间："  style="white-space: nowrap" prop="complaintTimes">
+              <el-time-picker class="item-width"
+                is-range
+                v-model="ruleForm.complaintTimes"
+                range-separator="-"
+                start-placeholder="开始时间"
+                end-placeholder="结束时间"
+                value-format="HH:mm:ss">
+              </el-time-picker>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -693,9 +705,12 @@ export default {
         medicalInstitution: [
           {required: true, message: "医疗机构不能为空", trigger: ["blur","change"]}
         ],
-        complaintTime: [
+        appointmentDate: [
           {required: true, message: "预约日期不能为空", trigger: ["blur","change"]},
           {required: true, validator: checkComplaintTime, trigger: "blur"}
+        ],
+        complaintTimes: [
+          {required: true, message: "预约时间不能为空", trigger: ["blur","change"]}
         ],
         province: [
           {required: true, message: "预约医院不能为空", trigger: ["blur","change"]}
@@ -853,6 +868,7 @@ export default {
       this.$refs.ruleForm.validate((valid) => {
       if (valid) {
       this.ruleForm.symptomTimes=this.ruleForm.a+'-'+this.ruleForm.b;
+      this.ruleForm.complaintTime = this.ruleForm.complaintTimes[0]+'-'+this.ruleForm.complaintTimes[1];
       let insert=this.ruleForm
       addReservationInsert(insert).then(res => {
         console.log("insert",insert)

@@ -116,7 +116,7 @@
           userName: '',
           roleCode:'',
           rate :'',
-          status:'01',
+          status:'',
         },
         rules: {
           roleCode: {trigger: ['change'], required: false, message: '角色必填'},

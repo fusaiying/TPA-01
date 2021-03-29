@@ -10,6 +10,15 @@ export function demandListAndPublicPool(query) {
 }
 
 //# 查询未处理的信息需求数据
+export function PersonalPool(query) {
+  return request({
+    url: '/cs/demand/internal/PersonalPool',
+    method: 'get',
+    params: query
+  })
+}
+
+//# 查询未处理的信息需求数据
 export function demandListAndPersonalPool(query) {
   return request({
     url: '/cs/demand/internal/listAndPersonalPool',

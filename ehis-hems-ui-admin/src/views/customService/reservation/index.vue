@@ -108,9 +108,9 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="预约日期：" prop="complaintTime">
+            <el-form-item label="预约日期：" prop="appointmentDate">
               <el-date-picker
-                v-model="sendForm.complaintTime"
+                v-model="sendForm.appointmentDate"
                 class="item-width"
                 type="daterange"
                 range-separator="~"
@@ -193,9 +193,9 @@
               <span>{{ selectDictLabel(cs_service_item, scope.row.itemCode) }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="complaintTime" label="预约日期" align="center" show-overflow-tooltip>
+          <el-table-column prop="appointmentDate" label="预约日期" align="center" show-overflow-tooltip>
             <template slot-scope="scope">
-              <span>{{ scope.row.complaintTime | changeDate }}</span>
+              <span>{{ scope.row.appointmentDate | changeDate }}</span>
             </template>
           </el-table-column>
           <el-table-column align="center" prop="medicalInstitution" label="预约医院" show-overflow-tooltip/>
@@ -278,9 +278,9 @@
               <span>{{ selectDictLabel(cs_service_item, scope.row.itemCode) }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="complaintTime" label="预约日期" align="center" show-overflow-tooltip>
+          <el-table-column prop="appointmentDate" label="预约日期" align="center" show-overflow-tooltip>
             <template slot-scope="scope">
-              <span>{{ scope.row.complaintTime | changeDate }}</span>
+              <span>{{ scope.row.appointmentDate | changeDate }}</span>
             </template>
           </el-table-column>
           <el-table-column align="center" prop="medicalInstitution" label="预约医院" show-overflow-tooltip/>
@@ -595,9 +595,9 @@ export default {
         this.$set(queryParams,'acceptTimeStart',this.sendForm.acceptorTime[0]);
         this.$set(queryParams,'acceptTimeEnd',this.sendForm.acceptorTime[1]);
       }
-      if(this.sendForm.complaintTime){
-        this.$set(queryParams,'complaintTimeStart',this.sendForm.complaintTime[0]);
-        this.$set(queryParams,'complaintTimeEnd',this.sendForm.complaintTime[1]);
+      if(this.sendForm.appointmentDate){
+        this.$set(queryParams,'appointmentTimeStart',this.sendForm.appointmentDate[0]);
+        this.$set(queryParams,'appointmentTimeEnd',this.sendForm.appointmentDate[1]);
       }
 
       demandListAndPublicPool(queryParams).then(res => {
@@ -623,7 +623,7 @@ export default {
         this.$set(queryParams,'acceptTimeStart',this.sendForm.acceptorTime[0]);
         this.$set(queryParams,'acceptTimeEnd',this.sendForm.acceptorTime[1]);
       }
-      if(this.sendForm.appointmentTime){
+      if(this.sendForm.appointmentDate){
         this.$set(queryParams,'appointmentTimeStart',this.sendForm.appointmentTime[0]);
         this.$set(queryParams,'appointmentTimeEnd',this.sendForm.appointmentTime[1]);
       }

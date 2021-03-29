@@ -66,7 +66,7 @@
     <user-modal :value="diaVisible" :roleSelects="roleSelects"  :fixInfo="fixInfo"  @closeDialogVisable="closeDialogVisable" @gettableData="gettableData"/>
 
     <!-- 一键分配弹框 -->
-    <assign-modal :value="assignDiaVisible" :roleMappingValue="roleMappingValue" :roleSelects="roleSelects"  @closeAssignDiaVisible="closeAssignDiaVisible" @gettableData="gettableData"/>
+    <assign-modal :roleCode="form.roleCode" :value="assignDiaVisible" :roleMappingValue="roleMappingValue" :roleSelects="roleSelects"  @closeAssignDiaVisible="closeAssignDiaVisible" @gettableData="gettableData"/>
 
   </div>
 </template>

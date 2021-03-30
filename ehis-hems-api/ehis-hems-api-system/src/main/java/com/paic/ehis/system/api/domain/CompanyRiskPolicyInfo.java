@@ -1,4 +1,4 @@
-package com.paic.ehis.claimflow.domain;
+package com.paic.ehis.system.api.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
@@ -56,6 +56,9 @@ public class CompanyRiskPolicyInfo implements Serializable {
 
     /** 总保费 */
     private BigDecimal sumPerm;
+
+    /* 承保机构 */
+    private String policyManageCom;
 
     /** 总人数 */
     private int totalPeople;

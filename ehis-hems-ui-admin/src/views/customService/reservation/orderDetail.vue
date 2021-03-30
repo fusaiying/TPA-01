@@ -826,7 +826,7 @@
           }
         })
       },
-      //反显信息需求
+      //客户基本信息
       searchHandle() {
         let query=this.queryParams
        // console.log("query",query)
@@ -846,6 +846,8 @@
 
         })
       },
+
+
       //上传附件
       upload(){ this.$refs.upload.open();},
       //下载
@@ -862,27 +864,8 @@
       handleSelectionChange(val) {
         this.dataonLineListSelections = val
       },
-      //反显信息需求
-      searchHandle() {
-          let workOrderNo = this.queryParams
-          console.log("workOrderNo", workOrderNo)
-          demandListAndPersonalPool(workOrderNo).then(res => {
-              console.log('共公池', res.rows)
-              if (res != null && res.code === 200) {
-                  this.sendForm = res.rows[0]
-                  this.totalCount = res.total
-                  console.log('response', res.total)
-                  if (res.rows.length <= 0) {
-                      return this.$message.warning(
-                          "未查询到数据！"
-                      )
-                  }
-              }
-          }).catch(res => {
 
-          })
-      },
-      //反显信息需求
+      //服务受理信息查询
       searchHandle() {
           let workOrderNo = this.queryParams
           console.log("workOrderNo", workOrderNo)

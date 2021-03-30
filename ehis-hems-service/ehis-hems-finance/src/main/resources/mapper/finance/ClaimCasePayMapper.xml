@@ -38,6 +38,9 @@
         <result property="exchangeRate" column="exchange_rate"/>
         <result property="payAmountForeign" column="pay_amount_foreign"/>
         <result property="billCurrency" column="bill_currency"/>
+        <result property="caseProp"    column="case_prop"    />
+        <result property="flag"    column="flag"    />
+        <result property="flag2"    column="flag2"    />
     </resultMap>
 
     <select id="selectPayInfoList" parameterType="string" resultMap="PayResult">
@@ -120,12 +123,22 @@
             a.case_status,
             a.pay_status,
             a.case_prop,
-			d.bill_currency currency
+			d.bill_currency currency,
+				(case when d.bill_currency=cb.currency then 'Y' ELSE 'N' END) as flag,
+			(SELECT COUNT(*) from(
+SELECT
+  cb.batch_no,ccc.bill_currency
+from claim_case cc left join claim_batch cb on cb.batch_no=cc.batch_no left join claim_case_cal ccc on ccc.rpt_no=cc.rpt_no
+where 1=1
+and cb.batch_no=#{batchNo}
+and cc.case_status not in ('05','98','06')
+GROUP BY cb.batch_no,ccc.bill_currency ) d) as flag2
         FROM
             claim_case a
             LEFT JOIN claim_case_bill b ON a.rpt_no = b.rpt_no AND b.`status` = 'Y'
             LEFT JOIN claim_case_insured c ON a.rpt_no = c.rpt_no AND c.`status` = 'Y'
             LEFT JOIN claim_case_cal d ON a.rpt_no = d.rpt_no AND d.`status` = 'Y'
+            LEFT JOIN claim_batch cb on a.batch_no= cb.batch_no AND cb.`status` = 'Y'
         WHERE
             a.batch_no = #{batchNo}
             AND a.STATUS = 'Y' and a.case_prop='01'
@@ -154,11 +167,21 @@
             a.case_status,
             a.pay_status,
             a.case_prop,
-			d.bill_currency currency
+			d.bill_currency currency,
+			(case when d.bill_currency=cb.currency then 'Y' ELSE 'N' END) as flag,
+			(SELECT COUNT(*) from(
+SELECT
+  cb.batch_no,ccc.bill_currency
+from claim_case cc left join claim_batch cb on cb.batch_no=cc.batch_no left join claim_case_cal_core ccc on ccc.rpt_no=cc.rpt_no
+where 1=1
+and cb.batch_no=#{batchNo}
+and cc.case_status not in ('05','98','06')
+GROUP BY cb.batch_no,ccc.bill_currency ) d) as flag2
         FROM
             claim_case a
             LEFT JOIN claim_case_cal_core_policy c ON a.rpt_no = c.rpt_no  AND c.`status` = 'Y' and c.amount_type='04'
             LEFT JOIN claim_case_cal_core d ON a.rpt_no = d.rpt_no  AND d.`status` = 'Y'
+            LEFT JOIN claim_batch cb on a.batch_no= cb.batch_no AND cb.`status` = 'Y'
         WHERE
             a.batch_no =#{batchNo}
             AND a.STATUS = 'Y' and a.case_prop='02'

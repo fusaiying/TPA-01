@@ -10,6 +10,8 @@ import com.paic.ehis.common.core.web.domain.AjaxResult;
 import com.paic.ehis.common.core.web.page.TableDataInfo;
 import com.paic.ehis.common.log.annotation.Log;
 import com.paic.ehis.common.log.enums.BusinessType;
+import com.paic.ehis.system.api.domain.CompanyRiskPolicyInfo;
+import com.paic.ehis.system.api.domain.PolicyAndRiskRelation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,6 +42,16 @@ public class PolicyInfoController extends BaseController
         startPage();
         List<PolicyInfo> list = policyInfoService.selectPolicyInfoList(policyInfo);
         return getDataTable(list);
+    }
+    /**
+     * 跨服务 根据保单号、分单号查询保单信息列表
+     */
+    //@PreAuthorize("@ss.hasPermi('system:info:list')")
+    @PostMapping("/policyInfoByPolicyNoList")
+    public CompanyRiskPolicyInfo selectPolicyInfoListByPolicyNo(@RequestBody PolicyAndRiskRelation policyAndRiskRelation)
+    {
+       return  policyInfoService.selectPolicyInfoListByPolicyNo(policyAndRiskRelation);
+
     }
 
     /**

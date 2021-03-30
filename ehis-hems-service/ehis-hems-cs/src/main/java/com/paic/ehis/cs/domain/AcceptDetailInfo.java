@@ -146,12 +146,12 @@ public class AcceptDetailInfo extends BaseEntity
 
     /**是否首次就诊*/
     private String firstFlag;
-
-    /**就诊日期*/
-    private String clinicDate;
-
-    /**就诊时间*/
-    private String clinicTime;
+//   使用预约日期appointmentDate和预约时间段complaintTime
+//    /**就诊日期*/
+//    private String clinicDate;
+//
+//    /**就诊时间*/
+//    private String clinicTime;
 
     /**就诊医院省*/
     private String province;
@@ -327,21 +327,21 @@ public class AcceptDetailInfo extends BaseEntity
         this.firstFlag = firstFlag;
     }
 
-    public String getClinicDate() {
-        return clinicDate;
-    }
-
-    public void setClinicDate(String clinicDate) {
-        this.clinicDate = clinicDate;
-    }
-
-    public String getClinicTime() {
-        return clinicTime;
-    }
-
-    public void setClinicTime(String clinicTime) {
-        this.clinicTime = clinicTime;
-    }
+//    public String getClinicDate() {
+//        return clinicDate;
+//    }
+//
+//    public void setClinicDate(String clinicDate) {
+//        this.clinicDate = clinicDate;
+//    }
+//
+//    public String getClinicTime() {
+//        return clinicTime;
+//    }
+//
+//    public void setClinicTime(String clinicTime) {
+//        this.clinicTime = clinicTime;
+//    }
 
     public String getProvince() {
         return province;
@@ -994,8 +994,8 @@ public class AcceptDetailInfo extends BaseEntity
                 ", hospitalWorkCall='" + hospitalWorkCall + '\'' +
                 ", earliestTime='" + earliestTime + '\'' +
                 ", firstFlag='" + firstFlag + '\'' +
-                ", clinicDate='" + clinicDate + '\'' +
-                ", clinicTime='" + clinicTime + '\'' +
+//                ", clinicDate='" + clinicDate + '\'' +
+//                ", clinicTime='" + clinicTime + '\'' +
                 ", province='" + province + '\'' +
                 ", city='" + city + '\'' +
                 ", settlementFlag='" + settlementFlag + '\'' +

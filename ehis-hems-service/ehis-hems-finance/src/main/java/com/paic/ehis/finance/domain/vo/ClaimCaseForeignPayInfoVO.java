@@ -105,5 +105,6 @@ public class ClaimCaseForeignPayInfoVO implements Serializable {
 
     /** 案件性质（01-TPA案件、02-核心案件） */
     private String caseProp;
+    private Integer flag2;
 
 }

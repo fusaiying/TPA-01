@@ -46,6 +46,7 @@ public interface IComplaintAcceptVoService {
 
     //投诉服务处理页面数据
     public ComplaintDealVo selectServiceProcess1(String workOrderNo);
+
     @Transactional(propagation = Propagation.REQUIRED,rollbackFor = Exception.class)
     int updateComplaintAcceptVoProcess(ComplaintAcceptVo complaintAcceptVo,ComplaintDealVo complaintDealVo);
 

@@ -43,6 +43,7 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
     private FlowLogMapper flowLogMapper;
 
 
+
     @Override
     public List<ComplaintAcceptVo> selectComplaintAcceptVoList(AcceptDTO acceptDTO) {
         DemandAcceptVo demandAcceptVo = new DemandAcceptVo();
@@ -1486,14 +1487,15 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
                 }
             }
         }
+
         //轨迹表插入
         flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id", 20, 20));
         flowLog.setMakeTime(DateUtils.parseDate(DateUtils.getTime()));
         flowLog.setMakeBy(SecurityUtils.getUsername());
         flowLog.setOperateCode("03");
-        flowLog.setLinkCode(workOrderAccept.getStatus());
+        flowLog.setLinkCode("02");
         flowLog.setSubId(editId);
-        flowLog.setWorkOrderNo(complaintAcceptVo.getWorkOrderNo());//质检中
+        flowLog.setWorkOrderNo(complaintDealVo.getWorkOrderNo());//质检中
         flowLog.setCreatedBy(SecurityUtils.getUsername());
         flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         flowLog.setUpdatedBy(SecurityUtils.getUsername());

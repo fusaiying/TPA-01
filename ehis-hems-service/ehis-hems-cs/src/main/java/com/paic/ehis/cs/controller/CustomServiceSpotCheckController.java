@@ -407,7 +407,7 @@ public class CustomServiceSpotCheckController extends BaseController {
         qualityInspectionDTO.setCreatedTime(DateUtils.getNowDate());
         qualityInspectionDTO.setUpdatedBy(SecurityUtils.getUsername());
         qualityInspectionDTO.setUpdatedTime(DateUtils.getNowDate());
-        return toAjax(qualityInspectionHandleService.insertHandleInfo(qualityInspectionDTO));
+        return toAjax(qualityInspectionHandleService.insertHandleInfo1(qualityInspectionDTO));
     }
 
     /**

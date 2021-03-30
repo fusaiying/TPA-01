@@ -297,7 +297,7 @@ public class CodeDictController extends BaseController
                 tCodeDict.setCodeType("cs_complaint_business_item");
                 tCodeDict.setCode(tSuccList.get(i).getCode());
                 List<CodeDict> tOldCodeDictList = codeDictService.selectCodeDictList(tCodeDict);
-                if(tOldCodeDictList != null && tOldCodeDictList.size()>0){
+                if(tOldCodeDictList == null || tOldCodeDictList.size()<=0){
                     tCodeDict.setCodeName(tSuccList.get(i).getCodeName());
                     tCodeDict.setStatus("1");
                     tCodeDict.setOrderNo(tSuccList.get(i).getOrderNo());

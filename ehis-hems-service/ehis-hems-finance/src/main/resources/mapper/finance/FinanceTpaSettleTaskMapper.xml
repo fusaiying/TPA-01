@@ -74,43 +74,35 @@
     <select id="selectFinanceTpaSettleTaskViewDetail" parameterType="FinanceTpaSettleTask" resultMap="TpaSettleTaskViewDetailResult">
         SELECT
         task.settle_task_no,
+        detail.risk_code,
+        product.risk_name,
         task.company_code,
         company.company_name,
-        detail.risk_code,
-        detail.risk_name,
-        detail.settlement_value,
-        task.settlement_type,
-        task.service_settle_amount,
         task.remark,
-        ft.totalPeople
+        task.service_settle_amount,
+        rule.settlement_value,
+        ( SELECT count( * ) FROM finance_tpa_settle_detail a where a.settle_task_no=task.settle_task_no and a.risk_code=detail.risk_code) totalPeople
         FROM
-        finance_tpa_settle_task task
-        LEFT JOIN (
-        SELECT
-        ftsd.settle_task_no,
-        ftsd.risk_code,
-        product.risk_name,
-        rule.settlement_value
-        FROM
-        finance_tpa_settle_detail ftsd
-        LEFT JOIN claim_product product ON ftsd.risk_code = product.risk_code
+        finance_tpa_settle_detail detail
+        LEFT JOIN finance_tpa_settle_task task ON task.settle_task_no = detail.settle_task_no
+        left join base_issuingcompany company ON company.company_code = task.company_code AND company.STATUS = 'Y'
+        left join claim_product product ON detail.risk_code = product.risk_code
         AND product.STATUS = 'Y'
-        left join base_issuingcompany_rule rule on rule.company_code=ftsd.company_code and ftsd.risk_code=rule.risk_code and rule.status='Y'
-        WHERE
-        ftsd.STATUS = 'Y'
-        LIMIT 1
-        ) detail ON detail.settle_task_no = task.settle_task_no
-        LEFT JOIN  base_issuingcompany company ON company.company_code = task.company_code AND company.STATUS = 'Y'
-        LEFT JOIN (
-        SELECT COUNT( policy_no ) AS totalPeople,
-        settle_task_no
-        FROM finance_tpa_settle_detail
-        WHERE STATUS = 'Y'
-        GROUP BY settle_task_no LIMIT 1 ) ft
-        ON ft.settle_task_no = task.settle_task_no
+        left join base_issuingcompany_rule rule on rule.company_code=task.company_code and detail.risk_code=rule.risk_code and rule.status='Y'
         <where>
             <if test="settleTaskNo != null  and settleTaskNo != ''"> and task.settle_task_no = #{settleTaskNo}</if>
         </where>
+        GROUP BY
+        risk_code,
+        company_code,
+        service_settle_amount,
+        remark,
+        risk_name,
+        company_code,
+        company_name,
+        service_settle_amount,
+        settlement_value
+
     </select>
 
     <select id="selectTpaSettleTaskList" parameterType="com.paic.ehis.finance.domain.dto.TpaSettleDTO" resultMap="FinanceTpaSettleTaskResult">
@@ -136,7 +128,7 @@
             <if test="settleStatus != null  and settleStatus != ''"> and ftsk.settle_status =  #{settleStatus}</if>
             <if test="status != null  and status != ''"> and ftsk.status = #{status}</if>
             <if test="creationStartDate != null  and creationEndDate != null"> and ftsk.create_time between #{creationStartDate} and #{creationEndDate}</if>
-            <if test="deptCode != null  and deptCode != ''"> and ftsk.dept_code = #{deptCode}</if>
+<!--            <if test="deptCode != null  and deptCode != ''"> and ftsk.dept_code = #{deptCode}</if>-->
             <if test="pageType != null  and pageType == '01'"> and ftsk.settle_status in ('01','02')</if>
             <if test="pageType != null  and pageType == '03'"> and ftsk.settle_status in ('02','03')</if>
         </where>

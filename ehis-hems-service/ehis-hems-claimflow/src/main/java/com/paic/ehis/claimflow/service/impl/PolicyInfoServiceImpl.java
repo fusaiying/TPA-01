@@ -10,6 +10,8 @@ import com.paic.ehis.claimflow.domain.vo.PolicyVo;
 import com.paic.ehis.claimflow.mapper.PolicyInfoMapper;
 import com.paic.ehis.claimflow.mapper.PolicyRiskRelationMapper;
 import com.paic.ehis.claimflow.service.IPolicyInfoService;
+import com.paic.ehis.system.api.domain.CompanyRiskPolicyInfo;
+import com.paic.ehis.system.api.domain.PolicyAndRiskRelation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,6 +42,17 @@ public class PolicyInfoServiceImpl implements IPolicyInfoService
     public PolicyInfo selectPolicyInfoById(String policyNo)
     {
         return policyInfoMapper.selectPolicyInfoById(policyNo);
+    }
+
+    /**
+     * 查询保单信息列表
+     *
+     * @param policyAndRiskRelation 保单信息
+     * @return 保单信息集合
+     */
+    @Override
+    public CompanyRiskPolicyInfo selectPolicyInfoListByPolicyNo(PolicyAndRiskRelation policyAndRiskRelation) {
+        return policyInfoMapper.selectPolicyInfoListByPolicyNo(policyAndRiskRelation);
     }
 
     /**

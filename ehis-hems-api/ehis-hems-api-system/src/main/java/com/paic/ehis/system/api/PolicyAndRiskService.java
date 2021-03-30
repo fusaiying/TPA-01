@@ -4,10 +4,13 @@ package com.paic.ehis.system.api;
 import com.paic.ehis.common.core.constant.ServiceNameConstants;
 import com.paic.ehis.common.core.web.domain.AjaxResult;
 import com.paic.ehis.common.core.web.page.TableDataInfo;
+import com.paic.ehis.system.api.domain.CompanyRiskPolicyInfo;
 import com.paic.ehis.system.api.domain.PolicyAndRiskRelation;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -55,5 +58,14 @@ public interface PolicyAndRiskService {
          */
         @PostMapping(value ="/policyRelation/settledPolicy")
         public AjaxResult settledPolicy(@RequestBody PolicyAndRiskRelation policyAndRiskRelation);
+
+        /**
+         * 根据保单号、分单号查询保单信息列表
+         *
+         * @param policyAndRiskRelation 保单信息
+         * @return 保单信息集合
+         */
+        @PostMapping("/policyInfoByPolicyNoList")
+        public CompanyRiskPolicyInfo selectPolicyInfoListByPolicyNo(@RequestBody PolicyAndRiskRelation policyAndRiskRelation);
 
 }

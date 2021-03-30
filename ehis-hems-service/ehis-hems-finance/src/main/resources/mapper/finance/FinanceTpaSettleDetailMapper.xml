@@ -33,7 +33,7 @@
     </resultMap>
 
     <sql id="selectFinanceTpaSettleDetailVo">
-        select detail_id, settle_task_no, company_code, policy_no, policy_item_no, service_amount, remark, status, create_by, create_time, update_by, update_time, dept_code from finance_tpa_settle_detail
+        select detail_id, settle_task_no, company_code,risk_code, policy_no, policy_item_no, service_amount, remark, status, create_by, create_time, update_by, update_time, dept_code from finance_tpa_settle_detail
     </sql>
 
     <select id="selectFinanceTpaSettleDetailList" parameterType="FinanceTpaSettleDetail" resultMap="FinanceTpaSettleDetailResult">

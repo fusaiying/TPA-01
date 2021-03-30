@@ -150,6 +150,6 @@ public class ClaimCaseDistController extends BaseController
             return AjaxResult.error("获取理赔案件操作人失败，原因："+e.getMessage());
         }
 
-        return AjaxResult.success(userName);
+        return AjaxResult.success("查询成功",userName);
     }
 }

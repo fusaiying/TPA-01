@@ -82,7 +82,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         cccb.pay_conclusion
         FROM
         claim_case_cal_bill cccb
-        LEFT JOIN claim_case_bill ccb ON ccb.bill_id = cccb.bill_id
+        LEFT JOIN claim_case_bill ccb ON ccb.bill_id = cccb.bill_id and cccb.status='Y'
         <where>
             <if test="rptNo != null  and rptNo != ''"> and ccb.rpt_no = #{rptNo}</if>
             <if test="billId != null "> and ccb.bill_id = #{billId}</if>

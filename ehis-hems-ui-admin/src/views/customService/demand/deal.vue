@@ -983,6 +983,7 @@ export default {
             workPoolData.officeNumber = "";
             workPoolData.officeQuhao = "";
             workPoolData.officeSecondNumber = "";
+            this.workPoolData = workPoolData;
             this.workPoolData.contactsPerson.linePhones0 = ''
             this.workPoolData.contactsPerson.linePhones1 = ''
             this.workPoolData.contactsPerson.linePhones2 = ''
@@ -1006,7 +1007,8 @@ export default {
             else if(this.workPoolData.contactsPerson.linePhone1.length==1){
               this.workPoolData.contactsPerson.linePhones0 = this.workPoolData.contactsPerson.linePhone1[0];
             }
-            this.workPoolData = workPoolData;
+            console.log(this.workPoolData)
+
           }
 
         }

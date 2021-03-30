@@ -1,8 +1,11 @@
 package com.paic.ehis.claimflow.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.paic.ehis.claimflow.constant.ClaimOperationConstant;
+import com.paic.ehis.claimflow.constant.ClaimRoleConstant;
 import com.paic.ehis.claimflow.domain.*;
 import com.paic.ehis.claimflow.domain.dto.*;
 import com.paic.ehis.claimflow.domain.vo.*;
@@ -20,7 +23,9 @@ import com.paic.ehis.common.core.utils.sql.SqlUtil;
 import com.paic.ehis.common.core.web.domain.AjaxResult;
 import com.paic.ehis.common.core.web.page.TableDataInfo;
 import com.paic.ehis.system.api.PolicyAndRiskService;
+import com.paic.ehis.system.api.RemoteClaimMgtService;
 import com.paic.ehis.system.api.RemoteFinancialServicce;
+import com.paic.ehis.system.api.domain.ClaimCaseCalculateInfo;
 import com.paic.ehis.system.api.domain.ClaimCasePolicy;
 import com.paic.ehis.system.api.domain.FinanceBorrowInfo;
 import com.paic.ehis.system.api.domain.PolicyAndRiskRelation;
@@ -97,6 +102,9 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
 
     @Autowired
     private RemoteFinancialServicce remoteFinancialServicce;
+
+    @Autowired
+    private RemoteClaimMgtService remoteClaimMgtService;
 
 
     /**
@@ -207,6 +215,17 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
      */
     @Override
     public int updateClaimCase(ClaimCase claimCase) {
+        if(ClaimOperationConstant.ClaimReview.equals(claimCase.getCaseStatus())){
+            //获取下一环节处理人
+            AjaxResult nextUserNameAR = remoteClaimMgtService.getClaimCaseOperator(ClaimOperationConstant.ClaimReview, ClaimRoleConstant.ClaimReview,"");
+            Object data = nextUserNameAR.get(AjaxResult.DATA_TAG);
+            if(data != null){
+                String jsonCaseInfoStr = JSON.toJSONString(data);
+                String nextUserName = JSON.parseObject(jsonCaseInfoStr, String.class);
+                claimCase.setUpdateBy(nextUserName);
+            }
+        }
+
         claimCase.setUpdateTime(DateUtils.getNowDate());
         return claimCaseMapper.updateClaimCase(claimCase);
     }
@@ -339,8 +358,6 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
                 claimCaseShuntClass.getClaimCase().setCaseProp("01");
                 claimCaseShuntClass.setCaseStypeFind("01");
 
-                //走TPA流程
-
                 //判断是否为审核岗退回受理
                 // 通过查询报案号为本报案号,数据状态为"Y",是否为历史节点："N",流程节点为："07"审核的上一流程节点ID；
                 ClaimCaseRecord claimCaseRecord = new ClaimCaseRecord();
@@ -350,21 +367,29 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
                 claimCaseRecord.setOperation("03");//03-录入
                 List<ClaimCaseRecord> claimCaseRecords = claimCaseRecordMapper.selectClaimCaseRecordList(claimCaseRecord);
                 ClaimCaseRecord claimCaseRecord1 = new ClaimCaseRecord();
+                String nextUserName = SecurityUtils.getUsername();
                 if (null == claimCaseRecords || claimCaseRecords.size() == 0) {
                     //为空的情况
                     //第一次处理-案件状态05->06
-                    claimCase.setCaseStatus("03");//03-录入
-                    claimCaseRecord1.setOperation("03");//案件操作记录-录入03
+                    claimCase.setCaseStatus("06");//03-录入
+                    claimCaseRecord1.setOperation("06");//案件操作记录-录入03
 
-                    //将原有的
+                    //获取下一环节处理人
+                    AjaxResult nextUserNameAR = remoteClaimMgtService.getClaimCaseOperator(ClaimOperationConstant.BillEntry, ClaimRoleConstant.BillEntry,"");
+                    Object data = nextUserNameAR.get(AjaxResult.DATA_TAG);
+                    if(data != null){
+                        String jsonCaseInfoStr = JSON.toJSONString(data);
+                        nextUserName = JSON.parseObject(jsonCaseInfoStr, String.class);
+                    }
                 } else {
                     //不为空的情况
                     //第二次处理-案件状态05->07
-                    claimCase.setCaseStatus("04");//案件信息-审核04
-                    claimCaseRecord1.setOperation("04");//案件操作记录-审核04
+                    claimCase.setCaseStatus("07");//案件信息-审核04
+                    claimCaseRecord1.setOperation("07");//案件操作记录-审核04
                 }
                 claimCase.setStatus("Y");
-                claimCase.setUpdateBy(SecurityUtils.getUsername());
+
+                claimCase.setUpdateBy(nextUserName);
                 claimCase.setUpdateTime(DateUtils.getNowDate());
                 claimCaseMapper.updateClaimCase(claimCase);//完成案件信息改变
 
@@ -1586,7 +1611,17 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
             }
             return claimCaseMapper.updateClaimCaseNew(claimCase);
         }
-        claimCaseCheckDTO1.setUpdateBy(SecurityUtils.getUsername());
+
+        //获取下一环节处理人
+        AjaxResult nextUserNameAR = remoteClaimMgtService.getClaimCaseOperator(ClaimOperationConstant.BillEntry, ClaimRoleConstant.BillEntry,"");
+        Object data = nextUserNameAR.get(AjaxResult.DATA_TAG);
+        String nextUserName = "";
+        if(data != null){
+            String jsonCaseInfoStr = JSON.toJSONString(data);
+            nextUserName = JSON.parseObject(jsonCaseInfoStr, String.class);
+        }
+
+        claimCaseCheckDTO1.setUpdateBy(nextUserName);
         claimCaseCheckDTO1.setUpdateTime(DateUtils.getNowDate());
         return claimCaseMapper.updateClaimCaseCheck(claimCaseCheckDTO1);
     }

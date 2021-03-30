@@ -275,6 +275,7 @@ public class CodeDictController extends BaseController
         codeDictTemporaryService.updateBusinessIDNotNUll(tBatchNo);///*投保业务类别ID不能为空*/
         codeDictTemporaryService.updateBusinessNameNotNUll(tBatchNo);///*投保业务类别名称不能为空*/
         codeDictTemporaryService.updateInsuranceIDRE(tBatchNo);///*投保来源ID重复 ID相同*/
+        codeDictTemporaryService.updateInsuranceIDRE2(tBatchNo);///*投保来源ID重复 ID相同 临时表主表数据对比*/
         codeDictTemporaryService.updateBusinessIDRE(tBatchNo);///*投保业务类别 ID相同  name不同 临时表数据对比
         codeDictTemporaryService.updateBusinessIDRE2(tBatchNo);///*投保业务类别 ID相同  name不同 临时表主表数据对比
         codeDictTemporaryService.updateBusinessToIns(tBatchNo);///*投保业务分类错误 则投保来源也错误*/

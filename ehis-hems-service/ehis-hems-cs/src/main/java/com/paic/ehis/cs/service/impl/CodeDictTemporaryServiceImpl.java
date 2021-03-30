@@ -63,9 +63,15 @@ public class CodeDictTemporaryServiceImpl implements ICodeDictTemporaryService
         return codeDictTemporaryMapper.updateBusinessNameNotNUll(batchno);
     }
 
-    /*投保来源ID重复 ID相同*/
+    /*投保来源ID重复 ID相同 临时表数据对比*/
     @Override
     public int updateInsuranceIDRE(String batchno){
+        return codeDictTemporaryMapper.updateInsuranceIDRE(batchno);
+    }
+
+    /*投保来源ID重复 ID相同 临时表和主表数据对比*/
+    @Override
+    public int updateInsuranceIDRE2(String batchno){
         return codeDictTemporaryMapper.updateInsuranceIDRE(batchno);
     }
 

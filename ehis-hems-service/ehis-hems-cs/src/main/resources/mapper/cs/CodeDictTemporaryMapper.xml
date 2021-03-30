@@ -101,7 +101,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
 
     <!--投保来源ID重复 ID相同-->
-    <update id="updateInsuranceIDRE" parameterType="String">
+    <update id="updateInsuranceIDRE2" parameterType="String">
         update code_dict_temporary a,code_dict b set a.reason = CONCAT(ifnull(a.reason,''),'投保来源ID重复;')
         where a.batch_no=#{batchno} and a.status='0' and ifnull(a.code,'')!='' and ifnull(b.code,'')!=''
         and a.code_type = 'cs_insurance_source' and b.code_type = 'cs_insurance_source'

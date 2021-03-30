@@ -13,7 +13,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="validStartDate"    column="valid_start_date"    />
     </resultMap>
 
-    <resultMap type="com.paic.ehis.claimflow.domain.CompanyRiskPolicyInfo" id="CompanyRiskPolicyResult">
+    <resultMap type="com.paic.ehis.system.api.domain.CompanyRiskPolicyInfo" id="CompanyRiskPolicyResult">
         <result property="policyItemNo"    column="policy_item_no"    />
         <result property="policyNo"    column="policy_no"    />
         <result property="riskCode"    column="risk_code"    />

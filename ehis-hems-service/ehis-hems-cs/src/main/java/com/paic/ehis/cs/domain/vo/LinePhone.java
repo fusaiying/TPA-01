@@ -1,8 +1,13 @@
-package com.paic.ehis.cs.domain;
+package com.paic.ehis.cs.domain.vo;
 
 import lombok.Data;
+import lombok.ToString;
 
+/**
+ * 接口固定电话对象
+ */
 @Data
+@ToString
 public class LinePhone {
     /** 电话号码*/
     private String phoneNo;

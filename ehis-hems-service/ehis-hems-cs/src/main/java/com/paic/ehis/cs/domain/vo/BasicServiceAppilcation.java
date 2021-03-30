@@ -1,11 +1,18 @@
-package com.paic.ehis.cs.domain;
+package com.paic.ehis.cs.domain.vo;
 
+import com.paic.ehis.cs.domain.vo.LinePhone;
 import lombok.Data;
+import lombok.ToString;
 
 import java.io.Serializable;
 import java.util.Date;
 
+/**
+ * 基础受理对象：信息需求，投诉
+ * 注意投诉中的转义字段
+ */
 @Data
+@ToString
 public class BasicServiceAppilcation implements Serializable {
 
     /** 来电人与被保人关系代码*/
@@ -173,7 +180,7 @@ public class BasicServiceAppilcation implements Serializable {
     /** 投诉人姓名*/
     private String complainName;
 
-    /** 是否已劝解 沟通删除*/
+    /** 是否已劝解 */
     private String isReconciled;
 
     /** 优先级*/

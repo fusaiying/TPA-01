@@ -1,5 +1,6 @@
-package com.paic.ehis.cs.domain;
+package com.paic.ehis.cs.domain.vo;
 
+import com.paic.ehis.cs.domain.vo.LinePhone;
 import lombok.Data;
 import lombok.ToString;
 

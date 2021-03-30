@@ -58,6 +58,15 @@ public class HcsModification extends BaseEntity
     @Excel(name = "状态")
     private String status;
 
+    //处理优先级 取值 0,1 越大优先级越高
+    private String modifyPriority;
+
+    //修改类型
+    private String alterType;
+
+    //外部系统主键号
+    private String otherNo;
+
     /** 创建人 */
     @Excel(name = "创建人")
     private String createdBy;

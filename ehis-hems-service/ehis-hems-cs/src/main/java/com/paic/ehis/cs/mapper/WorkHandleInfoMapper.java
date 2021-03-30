@@ -24,6 +24,8 @@ public interface WorkHandleInfoMapper
      */
     public WorkHandleInfo selectWorkHandleInfoById(Long handleId);
 
+    public WorkHandleInfo selectWorkHandleInfoByIdWork(String workOrderNo);
+
     /**
      * 查询工单处理信息 列表
      * 

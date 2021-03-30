@@ -41,7 +41,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectQualityInspectionHandleVo"/>
         where inspection_id = #{inspectionId}
     </select>
-        
+
+    <select id="selectQualityInspectionHandleById1" parameterType="String" resultMap="QualityInspectionHandleResult">
+        <include refid="selectQualityInspectionHandleVo"/>
+        where work_order_no = #{workOrderNo}
+    </select>
     <insert id="insertQualityInspectionHandle" parameterType="com.paic.ehis.cs.domain.QualityInspectionHandle">
         insert into quality_inspection_handle
         <trim prefix="(" suffix=")" suffixOverrides=",">

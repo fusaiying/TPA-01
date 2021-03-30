@@ -418,8 +418,8 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
         acceptDetailInfo.setHospitalWorkCall(reservationAcceptVo.getHospitalWorkCall());
         acceptDetailInfo.setEarliestTime(reservationAcceptVo.getEarliestTime());
         acceptDetailInfo.setFirstFlag(reservationAcceptVo.getFirstFlag());
-        acceptDetailInfo.setClinicDate(reservationAcceptVo.getClinicDate());
-        acceptDetailInfo.setClinicTime(reservationAcceptVo.getClinicTime());
+//        acceptDetailInfo.setClinicDate(reservationAcceptVo.getClinicDate());
+//        acceptDetailInfo.setClinicTime(reservationAcceptVo.getClinicTime());
         acceptDetailInfo.setProvince(reservationAcceptVo.getProvince());
         acceptDetailInfo.setCity(reservationAcceptVo.getCity());
         acceptDetailInfo.setSettlementFlag(reservationAcceptVo.getSettlementFlag());

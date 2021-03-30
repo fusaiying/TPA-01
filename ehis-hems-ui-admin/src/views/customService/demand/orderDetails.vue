@@ -651,55 +651,30 @@ export default {
     },
     //信息需求查询
     searchHandle() {
-      if (this.queryParams.status == "01") {
-          console.log("status值", this.queryParams.status)
-          const query = this.queryParams
-          demandListAndPublicPool(query).then(res => {
-              if (res != null && res.code === 200) {
-                  if (res.rows.length>0){
-                      let workPoolData = res.rows[0];
-                      let editInfo = {
-                          editReason: "",
-                          editRemark: ""
-                      };
-                      workPoolData.editInfo = editInfo;
-                      workPoolData.officeCountry = "";
-                      workPoolData.officeNumber = "";
-                      workPoolData.officeQuhao = "";
-                      workPoolData.officeSecondNumber = "";
-                      this.workPoolData = workPoolData;
-                  }
+      const query = this.queryParams
+      PersonalPool(query).then(res => {
+        if (res != null && res.code === 200) {
+          if (res.data!=null && res.data!=''){
+            let workPoolData = res.data;
+            let editInfo = {
+              editReason: "",
+              editRemark: ""
+            };
+            workPoolData.editInfo = editInfo;
+            workPoolData.officeCountry = "";
+            workPoolData.officeNumber = "";
+            workPoolData.officeQuhao = "";
+            workPoolData.officeSecondNumber = "";
+            this.workPoolData = workPoolData;
+          }
 
-              }
-          }).catch(res => {
-              return this.$message.error(
-                  "信息需求受理数据加载异常！"
-              )
-          })
-      } else{
-          PersonalPool(query).then(res => {
-              if (res != null && res.code === 200) {
-                  if (res.data!=null && res.data!=''){
-                      let workPoolData = res.data;
-                      let editInfo = {
-                          editReason: "",
-                          editRemark: ""
-                      };
-                      workPoolData.editInfo = editInfo;
-                      workPoolData.officeCountry = "";
-                      workPoolData.officeNumber = "";
-                      workPoolData.officeQuhao = "";
-                      workPoolData.officeSecondNumber = "";
-                      this.workPoolData = workPoolData;
-                  }
+        }
+      }).catch(res => {
+        return this.$message.error(
+          "信息需求受理数据加载异常！"
+        )
+      })
 
-              }
-          }).catch(res => {
-              return this.$message.error(
-                  "信息需求受理数据加载异常！"
-              )
-          })
-      }
     },
     //查询轨迹表
     searchFlowLog() {

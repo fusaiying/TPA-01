@@ -248,7 +248,7 @@ public class WorkOrderAcceptServiceImpl implements IWorkOrderAcceptService
         //预约日期
         reservationAcceptVo.setAppointmentDate(businessData.getPreengagementDate());
         //就诊时间段
-        reservationAcceptVo.setClinicTime(businessData.getClinicTime());
+        reservationAcceptVo.setComplaintTime(businessData.getClinicTime());
         //是否持有有效证件
         reservationAcceptVo.setValidCertificate(businessData.getHasValidCertificate());
         //医疗机构编号

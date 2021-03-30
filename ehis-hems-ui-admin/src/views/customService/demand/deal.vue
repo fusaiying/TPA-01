@@ -552,7 +552,7 @@ import {
   dealAdd,
   FlowLogSearch,
   HMSSearch,
-  dealADD
+  dealADD, PersonalPool
 } from '@/api/customService/demand'
 import transfer from "../common/modul/transfer";
 import upLoad from "../common/modul/upload";
@@ -757,7 +757,8 @@ export default {
       //数据反显用
       workPoolData: {
         contactsPerson: {
-          homePhone1: []
+          homePhone1: [],
+          linePhone1: []
         },
         callPerson: {},
 
@@ -968,7 +969,54 @@ export default {
     },
     //反显信息需求
     searchHandle() {
-      let query = this.queryParams
+      const query = this.queryParams
+      PersonalPool(query).then(res => {
+        if (res != null && res.code === 200) {
+          if (res.data!=null && res.data!=''){
+            let workPoolData = res.data;
+            let editInfo = {
+              editReason: "",
+              editRemark: ""
+            };
+            workPoolData.editInfo = editInfo;
+            workPoolData.officeCountry = "";
+            workPoolData.officeNumber = "";
+            workPoolData.officeQuhao = "";
+            workPoolData.officeSecondNumber = "";
+            this.workPoolData.contactsPerson.linePhones0 = ''
+            this.workPoolData.contactsPerson.linePhones1 = ''
+            this.workPoolData.contactsPerson.linePhones2 = ''
+            this.workPoolData.contactsPerson.linePhones3 = ''
+            if(this.workPoolData.contactsPerson.linePhone1.length==4) {
+              this.workPoolData.contactsPerson.linePhones0 = this.workPoolData.contactsPerson.linePhone1[0];
+              this.workPoolData.contactsPerson.linePhones1 = this.workPoolData.contactsPerson.linePhone1[1];
+              this.workPoolData.contactsPerson.linePhones2 = this.workPoolData.contactsPerson.linePhone1[2];
+              this.workPoolData.contactsPerson.linePhones3 = this.workPoolData.contactsPerson.linePhone1[3];
+            }
+            else if(this.workPoolData.contactsPerson.linePhone1.length==3){
+              this.workPoolData.contactsPerson.linePhones0 = this.workPoolData.contactsPerson.linePhone1[0];
+              this.workPoolData.contactsPerson.linePhones1 = this.workPoolData.contactsPerson.linePhone1[1];
+              this.workPoolData.contactsPerson.linePhones2 = this.workPoolData.contactsPerson.linePhone1[2];
+            }
+            else if(this.workPoolData.contactsPerson.linePhone1.length==2){
+              this.workPoolData.contactsPerson.linePhones0 = this.workPoolData.contactsPerson.linePhone1[0];
+              this.workPoolData.contactsPerson.linePhones1 = this.workPoolData.contactsPerson.linePhone1[1];
+
+            }
+            else if(this.workPoolData.contactsPerson.linePhone1.length==1){
+              this.workPoolData.contactsPerson.linePhones0 = this.workPoolData.contactsPerson.linePhone1[0];
+            }
+            this.workPoolData = workPoolData;
+          }
+
+        }
+      }).catch(res => {
+        return this.$message.error(
+          "信息需求受理数据加载异常！"
+        )
+      })
+
+   /*   let query = this.queryParams
       demandListAndPersonalPool(query).then(res => {
         if (res != null && res.code === 200 && res.rows) {
           this.workPoolData = res.rows[0]
@@ -979,15 +1027,15 @@ export default {
           this.workPoolData.contactsPerson.linePhones2 = this.workPoolData.contactsPerson.linePhone1[2];
           this.workPoolData.contactsPerson.linePhones3 = this.workPoolData.contactsPerson.linePhone1[3];
 
-          /* if (res.rows.length <= 0) {
+          /!* if (res.rows.length <= 0) {
              return this.$message.warning(
                "未查询到数据！"
              )
-           }*/
+           }*!/
         }
       }).catch(res => {
 
-      })
+      })*/
     },
     //反显暂存信息
     searchHandleServer() {

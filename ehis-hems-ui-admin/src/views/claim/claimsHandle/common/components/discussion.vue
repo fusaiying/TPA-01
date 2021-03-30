@@ -945,7 +945,7 @@
             if(this.conclusionInfo.claimCheck != '' && this.conclusionInfo.claimCheck != null) {
               this.conclusionForm.claimCheck = this.conclusionInfo.claimCheck; // 核赔依据
             }
-            if(res.data.isAppeal == '01') {
+            if(res.data.isAppeal == '02') {
               this.appealCase = true;
             }
           }

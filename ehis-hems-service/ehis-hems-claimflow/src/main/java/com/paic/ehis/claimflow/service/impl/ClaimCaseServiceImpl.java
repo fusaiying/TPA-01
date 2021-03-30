@@ -1221,7 +1221,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
 
         ClaimCaseCal claimCaseCal = claimCaseCalMapper.selectClaimCaseCalByRptNo(claimCase.getRptNo());
         if (claimCaseCal.getDebtAmount().compareTo(new BigDecimal(String.valueOf(0))) != 0){
-            if ("01".equals(claimCase.getIsAppeal())){
+            if ("02".equals(claimCase.getIsAppeal())){
                 ClaimCaseDebt claimCaseDebt = claimCaseDebtMapper.selectClaimCaseDebtByRptNo(claimCase.getRptNo());
                 if (StringUtils.isNotNull(claimCaseDebt)) {
                     claimCaseDebt.setRptNo(claimCase.getRptNo());
@@ -1549,7 +1549,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
 
             //追讨生成
             if (claimCaseCheckDTO.getDebtAmount().compareTo(new BigDecimal(String.valueOf(0))) != 0){
-                if ("01".equals(claimCase.getIsAppeal())){
+                if ("02".equals(claimCase.getIsAppeal())){
                     ClaimCaseDebt claimCaseDebt = claimCaseDebtMapper.selectClaimCaseDebtByRptNo(claimCaseCheckDTO.getRptNo());
                     if (StringUtils.isNotNull(claimCaseDebt)) {
                         claimCaseDebt.setRptNo(claimCaseCheckDTO.getRptNo());

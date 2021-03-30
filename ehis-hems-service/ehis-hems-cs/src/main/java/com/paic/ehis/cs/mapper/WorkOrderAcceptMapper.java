@@ -109,6 +109,8 @@ public interface WorkOrderAcceptMapper
 
     public ComplaintDealVo selectServiceProcess(String workOrderNo);
 
+    public ComplaintDealVo selectServiceProcess1(String workOrderNo);
+
 
     /**
      * 根据外部受理号去的工单信息

@@ -313,10 +313,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             left join work_order_accept a on a.work_order_no = c.work_order_no
         where 1=1 and c.status = '02' and d.status ='01' and a.update_by=#{updatedBy}
             <if test="firstEndCaseStartTime != null and firstEndCaseStartTime != ''">
-                and a.end_date <![CDATA[>=]]> #{firstEndCaseStartTime}
+                and DATE_FORMAT(a.end_date,'%Y-%m-%d') <![CDATA[>=]]> #{firstEndCaseStartTime}
             </if>
             <if test="firstEndCaseEndTime != null and firstEndCaseEndTime != ''">
-                and a.end_date <![CDATA[<=]]> #{firstEndCaseEndTime}
+                and DATE_FORMAT(a.end_date,'%Y-%m-%d') <![CDATA[<=]]> #{firstEndCaseEndTime}
             </if>
             <if test="workOrderNo != null and workOrderNo != ''">
                 and c.work_order_no = #{workOrderNo}

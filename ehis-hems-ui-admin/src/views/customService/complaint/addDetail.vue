@@ -439,7 +439,8 @@
 
       </div>
       <div style="text-align: right; margin-right: 1px;">
-        <el-button  type="primary" size="mini" @click="submit" :disabled="this.checkSubmitFlag=='01'">提交</el-button>
+        <!--<el-button  type="primary" size="mini" @click="submit" :disabled="this.checkSubmitFlag=='01'">提交</el-button>-->
+        <el-button  type="primary" size="mini" @click="submit" >提交</el-button>
         <el-button  type="primary"size="mini" @click="hiddenShow">关闭</el-button>
       </div>
     </el-card>

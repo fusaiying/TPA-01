@@ -65,6 +65,6 @@ public interface FinancePayDetailInfoMapper
      * @param rptNo 报案号
      * @return 支付明细信息
      */
-    public FinancePayDetailInfo selectFinancePayDetailInfoByRptNo(String rptNo);
+    public FinancePayDetailInfo selectFinancePayDetailInfoByRptNos(String rptNo);
 
 }

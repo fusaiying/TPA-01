@@ -159,13 +159,6 @@ export function selectServiceProcess(workOrderNo) {
   })
 }
 
-// 查询投诉处理信息
-export function selectServiceProcess(workOrderNo) {
-  return request({
-    url: '/cs/spotCheck/getAttachmentList/selectServiceProcess1/'+workOrderNo,
-    method: 'get',
-  })
-}
 
 
 

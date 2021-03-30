@@ -195,7 +195,7 @@ export default {
       let query;
       this.download('cs/dict/internal/downloadTemplant', {
         ...query
-      }, `ComplaintBusiness_导入模板}.xlsx`).catch(res=>{
+      }, `ComplaintBusiness_导入模板.xlsx`).catch(res=>{
         this.$message({
           message: res,
           type: 'error',

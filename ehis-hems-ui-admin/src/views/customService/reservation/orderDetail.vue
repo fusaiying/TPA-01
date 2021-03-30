@@ -3,7 +3,7 @@
     <el-card class="box-card" style="margin-top: 10px;">
       <span style="color: blue">客户基本信息</span>
       <el-divider/>
-      <el-form ref="sendForm" :model="sendForm" style="padding-bottom: 30px;" label-width="100px"
+      <el-form ref="sendForm" :model="sendForm" style="padding-bottom: 30px;" label-width="170px"
                label-position="right" size="mini">
         <el-row>
           <!--clearable是清楚输入框内容 readly、只读不可以编辑 ；不可以共存-->
@@ -197,7 +197,7 @@
 
 
     <el-card class="box-card" style="margin-top: 10px;">
-      <el-form ref="ruleForm" :model="ruleForm" :rules="rules" style="padding-bottom: 30px;" label-width="150px"
+      <el-form ref="ruleForm" :model="ruleForm" :rules="rules" style="padding-bottom: 30px;" label-width="170px"
                :disabled="isDisabled"
                label-position="right" size="mini">
 
@@ -488,7 +488,7 @@
 
 
     <el-card>
-      <el-form ref="submitForm" :model="ruleForm" :rules="rules" style="padding-bottom: 30px;" label-width="130px"
+      <el-form ref="submitForm" :model="ruleForm" :rules="rules" style="padding-bottom: 30px;" label-width="170px"
                label-position="right" size="mini">
         <span style="color: blue">服务处理</span>
         <el-divider/>
@@ -522,14 +522,16 @@
 </template>
 
 <script>
+
   import moment from 'moment'
   import {FlowLogSearch,HMSSearch} from '@/api/customService/demand'
-  import {demandListAndPublicPool,demandListAndPersonalPool,dealReservationSubmit} from '@/api/customService/reservation'
+  import {demandListAndPublicPool,demandListAndPersonalPool,dealReservationSubmit,getPersonalPool} from '@/api/customService/reservation'
 
   import transfer from "../common/modul/transfer";
   import upLoad from "../common/modul/upload";
   import coOrganizer from "../common/modul/coOrganizer";
   import modifyDetails from "../common/modul/modifyDetails";
+  import {policyInfoData} from "@/api/customService/common";
 
   let dictss = [
     {dictType: 'cs_channel'},
@@ -703,6 +705,7 @@
       this.queryParams.policyItemNo=this.$route.query.policyItemNo;
       this.queryParams.status=this.$route.query.status;
       //window.aaa = this;
+      this.searchSendFormInfo()
       this.searchHandle()
       this.searchFlowLog()
       this.searchHCS()
@@ -826,8 +829,26 @@
           }
         })
       },
+      //客户信息加载
+      searchSendFormInfo() {
+        let query = {
+          policyNo: this.queryParams.policyNo,
+          policyItemNo: this.queryParams.policyItemNo,
+        }
+        if(this.queryParams.policyNo != null && this.queryParams.policyNo !=""){
+          policyInfoData(query).then(res => {
+            if (res != null && res.code === 200) {
+              if (res.data != null) {
+                this.sendForm = res.data;
+              }
+            }
+          }).catch(res => {
+
+          })
+        }
+      },
       //客户基本信息
-      searchHandle() {
+  /*    searchHandle() {
         let query=this.queryParams
        // console.log("query",query)
         demandListAndPersonalPool(query).then(res => {
@@ -845,7 +866,7 @@
         }).catch(res => {
 
         })
-      },
+      },*/
 
 
       //上传附件
@@ -869,10 +890,10 @@
       searchHandle() {
           let workOrderNo = this.queryParams
           console.log("workOrderNo", workOrderNo)
-          demandListAndPublicPool(workOrderNo).then(res => {
-              console.log('个人池', res.rows)
+        getPersonalPool(workOrderNo).then(res => {
+
               if (res != null && res.code === 200) {
-                  this.ruleForm = res.rows[0]
+                  this.ruleForm = res.data
                 if (this.ruleForm.symptomTimes != null && this.ruleForm.symptomTimes != '') {
                   let arr=this.ruleForm.symptomTimes.split('-');
                   this.$set(this.ruleForm, `a`, arr[0]);
@@ -883,13 +904,13 @@
                   let timeArr=this.ruleForm.complaintTime.split('-');
                   this.$set(this.ruleForm, `complaintTimes`, timeArr);
                 }
-                  this.totalCount = res.total
+/*                  this.totalCount = res.total
                   console.log('response', res.total)
                   if (res.rows.length <= 0) {
                       return this.$message.warning(
                           "未查询到数据！"
                       )
-                  }
+                  }*/
               }
           }).catch(res => {
 

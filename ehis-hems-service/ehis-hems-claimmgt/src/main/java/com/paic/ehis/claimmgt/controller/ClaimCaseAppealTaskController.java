@@ -89,6 +89,22 @@ public class ClaimCaseAppealTaskController extends BaseController
     @PutMapping
     public AjaxResult edit(@RequestBody ClaimCaseAppealTask claimCaseAppealTask)
     {
+
+        //初审确认  同意 / 不同意  （申诉完成 / 申诉退回）
+        if(claimCaseAppealTask.getDealType().equalsIgnoreCase("audit")) {
+            if(claimCaseAppealTask.getIsAgree().equals("01")) {
+                /**
+                 初审决定选择同意，点击初审确认后，
+                 此时申诉案件报案号为原报案号-1（流水），
+                 并且流转至理赔审核岗原审核人工作池，
+                 同时将原案件的批次信息、就诊人信息、申请人信息、收款人信息、受理信息、账单信息、赔付明细（重新匹配理算）、
+                 赔付备注（类型为申诉案件）带入申诉案件中，需要重新进行赔付计算，重新下发赔付结论。
+                 */
+                String newRptNo = claimCaseAppealTaskService.getNewRptNo(claimCaseAppealTask.getAppealRptNo());
+                claimCaseAppealTask.setNewRptNo(newRptNo);
+                claimCaseAppealTaskService.clearClaimTableData(claimCaseAppealTask);
+            }
+        }
         claimCaseAppealTask = claimCaseAppealTaskService.updateClaimCaseAppealTask(claimCaseAppealTask);
         if(claimCaseAppealTask.getDealType().equalsIgnoreCase("audit")) {
             if (claimCaseAppealTask.getIsAgree().equals("01")) {

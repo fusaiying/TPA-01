@@ -309,6 +309,10 @@ export default {
         endCaseStartTime: undefined,
         endCaseEndTime: undefined
       }
+      if (this.poolQueryForm.endCaseTime) {
+          query2.endCaseStartTime = this.poolQueryForm.endCaseTime[0]
+          query2.endCaseEndTime = this.poolQueryForm.endCaseTime[1]
+      }
       inspectionListAndPersonalPool(query2).then(res => {
         console.log('------------: ', res)
         if (res != null && res.code === 200) {

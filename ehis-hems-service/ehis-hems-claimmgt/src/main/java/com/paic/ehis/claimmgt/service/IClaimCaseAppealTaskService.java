@@ -76,4 +76,8 @@ public interface IClaimCaseAppealTaskService
      * @param claimCaseAppealTask 案件申诉任务
      */
     public int updateClaimCaseAppealBill(ClaimCaseAppealTask claimCaseAppealTask);
+
+    public void clearClaimTableData(ClaimCaseAppealTask bean);
+
+    public String getNewRptNo(String appealRptNo);
 }

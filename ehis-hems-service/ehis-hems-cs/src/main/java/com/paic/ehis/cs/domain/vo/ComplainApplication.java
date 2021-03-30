@@ -1,11 +1,16 @@
-package com.paic.ehis.cs.domain;
+package com.paic.ehis.cs.domain.vo;
 
+import com.paic.ehis.cs.domain.vo.LinePhone;
 import lombok.Data;
 import lombok.ToString;
 
 import java.io.Serializable;
 import java.util.Date;
 
+/**
+ * 接口投诉对象
+ * 备用
+ */
 @Data
 @ToString
 public class ComplainApplication implements Serializable {

@@ -333,9 +333,12 @@ public class CustomServiceSpotCheckController extends BaseController {
     @PostMapping("/internal/selectWorkOrder/exportTwo")
     public void exportTwo(HttpServletResponse response, QualityInspectionDTO qualityInspectionDTO) throws IOException
     {
-        List<QualityInspectionHandleVo> list = qualityInspectionAcceptService.selectQualityFlagVO(qualityInspectionDTO);
+        String bus=qualityInspectionDTO.getBusinessType();
+        if(null!=bus) {
+            List<QualityInspectionHandleVo> list = qualityInspectionAcceptService.selectQualityFlagVO(qualityInspectionDTO);
         ExcelUtil<QualityInspectionHandleVo> util = new ExcelUtil<QualityInspectionHandleVo>(QualityInspectionHandleVo.class);
         util.exportExcel(response, list, "WorkOrderTwo");
+    }
     }
 
 

@@ -52,7 +52,21 @@
       <div slot="header" class="clearfix">
         <span>查询结果（{{ totalCount }}）</span>
         <span style="float: right;">
-          <el-button type="primary" size="mini" @click="listUpload">上传清单</el-button>
+          <el-upload
+            class="upload-demo"
+            :headers="upload.headers"
+            :action="upload.url"
+            :disabled="upload.isUploading"
+            :show-file-list="false"
+            :on-success="uploadSuccess"
+            :before-upload="beforeUpload"
+            :on-progress="uploadProgress"
+            accept=".xls,.xlsx"
+            title="提示：仅允许导入文件名为任务号，且“xls”或“xlsx”格式文件！"
+            style="display: initial; margin: 0px 10px;"
+          >
+              <el-button size="mini" type="primary">清单导入</el-button>
+            </el-upload>
           <el-button type="primary" size="mini" @click="listExport">导出清单</el-button>
         </span>
         <el-divider/>
@@ -81,11 +95,20 @@
 </template>
 
 <script>
-import {selectCodeDictQuery} from '@/api/customService/codeDict'
+import {selectCodeDictQuery,uploadComplaintCategory} from '@/api/customService/codeDict';
+import {getToken} from "@/utils/auth";
 
 export default {
   data() {
     return {
+      upload: {
+        // 是否禁用上传
+        isUploading: false,
+        // 设置上传的请求头部
+        headers: {Authorization: "Bearer " + getToken()},
+        // 上传的地址
+        url: process.env.VUE_APP_BASE_API + "/cs/dict/internal/uploadComplaintCategory"
+      },
       caseNumber: false,//查询条件（报案号）是否显示
       // 查询参数
       codeQueryForm: {
@@ -164,7 +187,39 @@ export default {
     },
     listUpload() {
 
-    }
+    },
+
+    /** 上传前 */
+    beforeUpload(file) {
+      const fileName = file.name.substring(file.name.lastIndexOf('.')+1);
+      if (fileName === "xls" || fileName === "xlsx") {
+        return true;
+      } else {
+        this.$message.warning('只能上传excel文件！');
+        return false;
+      }
+    },
+
+    /** 上传中 */
+    uploadProgress() {
+      this.upload.isUploading = true;
+    },
+
+    /** 导入成功后事件 */
+    uploadSuccess(response, file, fileList){
+      this.upload.isUploading = false;
+      if (response != null && response.code === 200) {
+        this.msgSuccess('导入成功！');
+      } else {
+        this.$message({
+          message: response.msg,
+          type: 'warning',
+          showClose: true,
+          duration: 5000
+        })
+      }
+    },
+
   }
 }
 </script>

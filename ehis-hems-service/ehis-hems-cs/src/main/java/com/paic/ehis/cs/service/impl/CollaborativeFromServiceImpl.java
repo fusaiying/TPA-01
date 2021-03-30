@@ -297,8 +297,7 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
         FlowLog flowLog=new FlowLog();
         flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id",20,20));
         flowLog.setLinkCode(tDmandAcceptVo.getStatus());
-        flowLog.setStatus("04");
-        flowLog.setOperateCode("08");
+        flowLog.setOperateCode("11");
         flowLog.setMakeBy(SecurityUtils.getUsername());
         //没有um帐号
         flowLog.setUmNum(SecurityUtils.getUsername());

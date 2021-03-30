@@ -12,6 +12,7 @@ import com.paic.ehis.common.log.enums.BusinessType;
 import com.paic.ehis.cs.domain.CodeDict;
 import com.paic.ehis.cs.domain.CodeDictTemporary;
 import com.paic.ehis.cs.domain.dto.CodeDictDTO;
+import com.paic.ehis.cs.domain.vo.CodeDictUploadVo;
 import com.paic.ehis.cs.domain.vo.CodeDictVo;
 import com.paic.ehis.cs.service.ICodeDictService;
 import com.paic.ehis.cs.service.ICodeDictTemporaryService;
@@ -205,7 +206,9 @@ public class CodeDictController extends BaseController
             tCodeDictTemporary.setCode(tCodeDictVo.getInsuranceSourceCode());
             tCodeDictTemporary.setCodeName(tCodeDictVo.getInsuranceSourceName());
             tCodeDictTemporary.setStatus("0");//状态默认0暂存
-            tCodeDictTemporary.setOrderNo(Long.parseLong(tCodeDictVo.getComplaintBusinessCode()));//顺序默认等于编号
+            if(tCodeDictVo.getInsuranceSourceCode() != null && !"".equals(tCodeDictVo.getInsuranceSourceCode())){
+                tCodeDictTemporary.setOrderNo(Long.parseLong(tCodeDictVo.getComplaintBusinessCode()));//顺序默认等于编号
+            }
             tCodeDictTemporary.setRemarks("投保来源");
             tCodeDictTemporary.setReason("");
             tCodeDictTemporary.setParentCode(tCodeDictVo.getComplaintBusinessCode());
@@ -224,7 +227,9 @@ public class CodeDictController extends BaseController
             tCodeDictTemporary.setCode(tCodeDictVo.getComplaintBusinessCode());
             tCodeDictTemporary.setCodeName(tCodeDictVo.getComplaintBusinessName());
             tCodeDictTemporary.setStatus("0");//状态默认0暂存
-            tCodeDictTemporary.setOrderNo(Long.parseLong(tCodeDictVo.getComplaintBusinessCode()));//顺序默认等于编号
+            if(tCodeDictVo.getInsuranceSourceCode() != null && !"".equals(tCodeDictVo.getInsuranceSourceCode())){
+                tCodeDictTemporary.setOrderNo(Long.parseLong(tCodeDictVo.getComplaintBusinessCode()));//顺序默认等于编号
+            }
             tCodeDictTemporary.setRemarks("投诉业务类别");
             tCodeDictTemporary.setReason("");
             tCodeDictTemporary.setCreatedBy(SecurityUtils.getUsername());
@@ -267,7 +272,7 @@ public class CodeDictController extends BaseController
         //查询导入成功数据
         CodeDictTemporary tSelCodeDictTemporary = new CodeDictTemporary();
         tSelCodeDictTemporary.setBatchNo(tBatchNo);
-        tSelCodeDictTemporary.setStatus("01");
+        tSelCodeDictTemporary.setStatus("1");
         List<CodeDictTemporary> tSuccList = codeDictTemporaryService.selectCodeDictTemporaryList(tSelCodeDictTemporary);
         for(int i=0;i<tSuccList.size();i++){
             CodeDict tCodeDict = new CodeDict();
@@ -309,18 +314,23 @@ public class CodeDictController extends BaseController
         //查询导入失败数据 只查询cs_insurance_source 投保来源
         tSelCodeDictTemporary = new CodeDictTemporary();
         tSelCodeDictTemporary.setBatchNo(tBatchNo);
-        tSelCodeDictTemporary.setStatus("09");
+        tSelCodeDictTemporary.setStatus("9");
         tSelCodeDictTemporary.setCodeType("cs_insurance_source");
         List<CodeDictTemporary> tSBList = codeDictTemporaryService.selectCodeDictTemporaryList(tSelCodeDictTemporary);
 
         //查询导入成功数据 只查询cs_insurance_source 投保来源
         tSelCodeDictTemporary = new CodeDictTemporary();
         tSelCodeDictTemporary.setBatchNo(tBatchNo);
-        tSelCodeDictTemporary.setStatus("01");
+        tSelCodeDictTemporary.setStatus("1");
         tSelCodeDictTemporary.setCodeType("cs_insurance_source");
         List<CodeDictTemporary> tCGList = codeDictTemporaryService.selectCodeDictTemporaryList(tSelCodeDictTemporary);
 
+        CodeDictUploadVo tCodeDictUploadVo= new CodeDictUploadVo();
+        tCodeDictUploadVo.setCgNumber(tCGList.size()+"");
+        tCodeDictUploadVo.setSbNumber(tSBList.size()+"");
+        tCodeDictUploadVo.setBatchNo(tBatchNo);
+
         //先默认返回成功条数  优化了后期再改
-        return toAjax(tSBList.size());
+        return AjaxResult.success(tCodeDictUploadVo);
     }
 }

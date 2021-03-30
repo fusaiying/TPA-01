@@ -123,6 +123,19 @@ public class CodeDictController extends BaseController
         util.exportExcel(response, list, "投诉业务类别");
     }
 
+    /**
+     * 导出模板
+     */
+//    @PreAuthorize("@ss.hasPermi('system:enum:export')")
+    @Log(title = "业务码 ", businessType = BusinessType.EXPORT)
+    @PostMapping("/downloadTemplant")
+    public void downloadTemplant(HttpServletResponse response, CodeDictDTO codeDictDTO) throws IOException
+    {
+        List<CodeDictVo> list = new ArrayList<>();
+        ExcelUtil<CodeDictVo> util = new ExcelUtil<CodeDictVo>(CodeDictVo.class);
+        util.exportExcel(response, list, "投诉业务类别");
+    }
+
 
     @GetMapping("/updateCodeEnumVo")
     public AjaxResult updateCodeEnumVo(List<CodeDictVo> list){

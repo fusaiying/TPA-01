@@ -52,6 +52,7 @@
       <div slot="header" class="clearfix">
         <span>查询结果（{{ totalCount }}）</span>
         <span style="float: right;">
+          <el-button type="primary" size="mini" @click="downloadTemplate">下载模板</el-button>
           <el-upload
             class="upload-demo"
             :headers="upload.headers"
@@ -189,6 +190,21 @@ export default {
 
     },
 
+    /*下载导入模板*/
+    downloadTemplate(){
+      let query;
+      this.download('cs/dict/internal/downloadTemplant', {
+        ...query
+      }, `ComplaintBusiness_导入模板}.xlsx`).catch(res=>{
+        this.$message({
+          message: res,
+          type: 'error',
+          center: true,
+          showClose: true
+        })
+      })
+    },
+
     /** 上传前 */
     beforeUpload(file) {
       const fileName = file.name.substring(file.name.lastIndexOf('.')+1);
@@ -207,7 +223,6 @@ export default {
 
     /** 导入成功后事件 */
     uploadSuccess(response, file, fileList){
-      alert(response);
       this.upload.isUploading = false;
       if (response != null && response.code === 200) {
         this.msgSuccess('导入成功'+response.data.cgNumber+'条，失败'+response.data.sbNumber+'条！');

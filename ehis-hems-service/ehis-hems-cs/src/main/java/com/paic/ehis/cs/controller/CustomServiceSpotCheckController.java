@@ -479,6 +479,12 @@ public class CustomServiceSpotCheckController extends BaseController {
         return AjaxResult.success(iComplaintAcceptVoService.selectServiceProcess(workOrderNo));
     }
 
+    //服务处理回显接口
+    @GetMapping("/getAttachmentList/selectServiceProcess1/{workOrderNo}")
+    public AjaxResult  selectServiceProcess1(String workOrderNo){
+        return AjaxResult.success(iComplaintAcceptVoService.selectServiceProcess1(workOrderNo));
+    }
+
     //投诉一周抽检批处理
     @GetMapping("/internal/batchAcceptVo/selectInvalidQiaMondayFour/{invalidDate}")
     public AjaxResult selectInvalidQiaMondayFour(@PathVariable("invalidDate") String invalidDate){

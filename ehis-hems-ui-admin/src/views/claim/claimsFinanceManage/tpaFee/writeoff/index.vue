@@ -309,10 +309,10 @@
         this.detailDialog = false
       },
       openDetail(info){
-        console.log("info *****************")
-        console.log(info)
-        console.log("info *****************")
-        this.fixInfo = info;
+        this.fixInfo = {
+          rowData:info.row,
+          type:info.type,
+        };
         this.detailDialog = true
       },
       openDialog(){

@@ -72,7 +72,7 @@ public class CodeDictTemporaryServiceImpl implements ICodeDictTemporaryService
     /*投保来源ID重复 ID相同 临时表和主表数据对比*/
     @Override
     public int updateInsuranceIDRE2(String batchno){
-        return codeDictTemporaryMapper.updateInsuranceIDRE(batchno);
+        return codeDictTemporaryMapper.updateInsuranceIDRE2(batchno);
     }
 
     /*投保业务类别 ID相同  name不同 临时表数据对比*/

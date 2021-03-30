@@ -1,7 +1,6 @@
 package com.paic.ehis.claimflow.controller;
 
 
-import com.paic.ehis.claimflow.domain.CompanyRiskPolicyInfo;
 import com.paic.ehis.claimflow.domain.PolicyAndRiskRelation;
 import com.paic.ehis.claimflow.domain.PolicyRiskRelation;
 import com.paic.ehis.claimflow.service.IPolicyRiskRelationService;
@@ -11,6 +10,7 @@ import com.paic.ehis.common.core.web.domain.AjaxResult;
 import com.paic.ehis.common.core.web.page.TableDataInfo;
 import com.paic.ehis.common.log.annotation.Log;
 import com.paic.ehis.common.log.enums.BusinessType;
+import com.paic.ehis.system.api.domain.CompanyRiskPolicyInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

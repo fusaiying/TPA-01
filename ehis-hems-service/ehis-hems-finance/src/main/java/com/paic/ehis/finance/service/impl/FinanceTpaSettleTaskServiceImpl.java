@@ -17,6 +17,7 @@ import com.paic.ehis.finance.mapper.*;
 import com.paic.ehis.finance.service.IFinanceTpaSettleTaskService;
 import com.paic.ehis.system.api.PolicyAndRiskService;
 import com.paic.ehis.system.api.domain.ClaimCaseBillInfo;
+import com.paic.ehis.system.api.domain.CompanyRiskPolicyInfo;
 import com.paic.ehis.system.api.domain.PolicyAndRiskRelation;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -93,6 +94,7 @@ public class FinanceTpaSettleTaskServiceImpl implements IFinanceTpaSettleTaskSer
      * @param tpaSettleDTO TPA服务费结算任务
      * @return TPA服务费结算任务集合
      */
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     @Override
     public List<TpaSettleInfo> tpaTaskInitiated(TpaSettleDTO tpaSettleDTO) throws Exception {
         TpaSettleInfo tpaSettleInfo = new TpaSettleInfo();
@@ -321,7 +323,22 @@ public class FinanceTpaSettleTaskServiceImpl implements IFinanceTpaSettleTaskSer
      */
     @Override
     public List<TpaSettleInfo> selectFinanceTpaSettleTaskViewDetail(FinanceTpaSettleTask financeTpaSettleTask) {
-        return financeTpaSettleTaskMapper.selectFinanceTpaSettleTaskViewDetail(financeTpaSettleTask);
+
+        List<TpaSettleInfo> tpaSettleInfos = financeTpaSettleTaskMapper.selectFinanceTpaSettleTaskViewDetail(financeTpaSettleTask);
+        for (TpaSettleInfo tpaSettleInfo : tpaSettleInfos) {
+            List<TpaSettleDetailInfo> detailInfos = tpaSettleInfo.getDetailInfos();
+            for (TpaSettleDetailInfo detailInfo : detailInfos) {
+                PolicyAndRiskRelation policyAndRiskRelation = new PolicyAndRiskRelation();
+                policyAndRiskRelation.setPolicyNo(detailInfo.getPolicyNo());
+                policyAndRiskRelation.setPolicyItemNo(detailInfo.getPolicyItemNo());
+                policyAndRiskRelation.setStatus(ClaimStatus.DATAYES.getCode());
+                CompanyRiskPolicyInfo companyRiskPolicyInfo = policyAndRiskService.selectPolicyInfoListByPolicyNo(policyAndRiskRelation);
+                detailInfo.setInsuredNo(companyRiskPolicyInfo.getInsuredNo());
+                detailInfo.setName(companyRiskPolicyInfo.getName());
+                detailInfo.setAppName(companyRiskPolicyInfo.getAppName());
+            }
+        }
+        return tpaSettleInfos;
     }
 
     /**

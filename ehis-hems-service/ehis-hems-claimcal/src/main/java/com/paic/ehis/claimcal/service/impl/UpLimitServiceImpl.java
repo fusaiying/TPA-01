@@ -120,7 +120,7 @@ public class UpLimitServiceImpl implements UpLimitService {
                 }
                 BigDecimal calAmount = detailInfo.getCalAmount();
 
-                BigDecimal dayLimitMoney = calAmount.divide(new BigDecimal(treatmentDays));
+                BigDecimal dayLimitMoney = calAmount.divide(new BigDecimal(treatmentDays),2);
                 List<ClaimRuleInfo> dayLimitMoneyRuleList = new ArrayList<>();
                 List<ClaimRuleInfo> dayLimitMoneyFeeitemRuleList = selectRuleInfoMapper.selectFeeitemCodeRuleList(RuleElement.DAYLIMIT.getCode(), ElementUnit.MONEY.getCode(), riskCode, planCode, dutyCode, dutyDetailCode, feeItemCode);
                 List<ClaimRuleInfo> dayLimitMoneyDetailRuleList = selectRuleInfoMapper.selectDetailCodeRuleList(RuleElement.DAYLIMIT.getCode(), ElementUnit.MONEY.getCode(), riskCode, planCode, dutyCode, dutyDetailCode);

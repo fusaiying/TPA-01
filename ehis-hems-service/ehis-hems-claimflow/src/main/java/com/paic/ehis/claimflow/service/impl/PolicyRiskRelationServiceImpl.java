@@ -1,11 +1,11 @@
 package com.paic.ehis.claimflow.service.impl;
 
-import com.paic.ehis.claimflow.domain.CompanyRiskPolicyInfo;
 import com.paic.ehis.claimflow.domain.PolicyAndRiskRelation;
 import com.paic.ehis.claimflow.domain.PolicyRiskRelation;
 import com.paic.ehis.claimflow.mapper.PolicyRiskRelationMapper;
 import com.paic.ehis.claimflow.service.IPolicyRiskRelationService;
 import com.paic.ehis.common.core.utils.DateUtils;
+import com.paic.ehis.system.api.domain.CompanyRiskPolicyInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -296,7 +296,7 @@ public class CodeDictController extends BaseController
                 //不存在则插入 防止重复插入
                 tCodeDict.setCodeType("cs_complaint_business_item");
                 tCodeDict.setCode(tSuccList.get(i).getCode());
-                List<CodeDict> tOldCodeDictList = codeDictService.selectCodeDictList(tCodeDict);
+                List<CodeDict> tOldCodeDictList = codeDictService.selectCodeDictList2(tCodeDict);
                 if(tOldCodeDictList == null || tOldCodeDictList.size()<=0){
                     tCodeDict.setCodeName(tSuccList.get(i).getCodeName());
                     tCodeDict.setStatus("1");

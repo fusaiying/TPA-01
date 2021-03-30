@@ -181,8 +181,6 @@
               })
             }
             this.tableData= _data;
-            console.log(" this.tableData", this.tableData)
-
           }
         }).finally(() => {
             this.loading = false;

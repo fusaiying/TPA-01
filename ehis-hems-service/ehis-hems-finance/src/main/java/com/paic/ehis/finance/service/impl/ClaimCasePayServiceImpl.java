@@ -260,7 +260,7 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService {
                     if (!"98".equals(payInfoVO.getCaseStatus())) {
                         if ("99".equals(payInfoVO.getCaseStatus())) {
                             //判断已经结案的支付金额是否与理算表的支付金额一致
-                            FinancePayDetailInfo financePayDetailInfo = financePayDetailInfoMapper.selectFinancePayDetailInfoByRptNo(payInfoVO.getRptNo());
+                            FinancePayDetailInfo financePayDetailInfo = financePayDetailInfoMapper.selectFinancePayDetailInfoByRptNos(payInfoVO.getRptNo());
                             if (StringUtils.isNotNull(financePayDetailInfo) && financePayDetailInfo.getPayAmount().compareTo(claimCaseCal.getPayAmount()) != 0) {
                                 payAmount = payAmount.add(claimCaseCal.getPayAmount().subtract(financePayDetailInfo.getPayAmount()));
                             } else {
@@ -818,7 +818,7 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService {
                 if (!"98".equals(payInfoVO.getCaseStatus())) {
                     if ("99".equals(payInfoVO.getCaseStatus())) {
                         //判断已经支付的金额是否与理算表的支付金额一致
-                        FinancePayDetailInfo financePayDetailInfo = financePayDetailInfoMapper.selectFinancePayDetailInfoByRptNo(payInfoVO.getRptNo());
+                        FinancePayDetailInfo financePayDetailInfo = financePayDetailInfoMapper.selectFinancePayDetailInfoByRptNos(payInfoVO.getRptNo());
                         if (StringUtils.isNotNull(financePayDetailInfo) && financePayDetailInfo.getPayAmount().compareTo(claimCaseCal.getPayAmount()) != 0) {
                             payAmount = payAmount.add(claimCaseCal.getPayAmount().subtract(financePayDetailInfo.getPayAmount()));
                         } else {

@@ -179,6 +179,8 @@
         companySelect:[],
         //结算状态
         settleStatus:[],
+        preStart:'',
+        preEnd:'',
 
       }
     },
@@ -213,13 +215,15 @@
         let createTimeStrt = '';
         let createTimeEnd = '';
         let createTimeArr = this.formSearch.createTimeArr;
-        if('' != createTimeArr) {
+        if('' !== createTimeArr && null !== createTimeArr) {
           createTimeStrt = createTimeArr[0];
           createTimeEnd = createTimeArr[1];
           let entime = moment(createTimeStrt)
           let letime = moment(createTimeEnd)
           let dif = letime.diff(entime, 'months')
-          if(dif > 3) {
+          if(dif > 3 && this.preStart !== createTimeStrt && this.preEnd !== createTimeEnd ) {
+            this.preStart = createTimeStrt ;
+            this.preEnd = createTimeEnd ;
             // 时间跨度太长，是否确认
             this.$confirm('时间跨度太长，是否确认', '提示', {
               confirmButtonText: '确定',

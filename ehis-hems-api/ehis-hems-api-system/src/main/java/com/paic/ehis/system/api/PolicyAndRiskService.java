@@ -65,7 +65,7 @@ public interface PolicyAndRiskService {
          * @param policyAndRiskRelation 保单信息
          * @return 保单信息集合
          */
-        @PostMapping("/policyInfoByPolicyNoList")
+        @PostMapping(value ="/info/policyInfoByPolicyNoList")
         public CompanyRiskPolicyInfo selectPolicyInfoListByPolicyNo(@RequestBody PolicyAndRiskRelation policyAndRiskRelation);
 
 }

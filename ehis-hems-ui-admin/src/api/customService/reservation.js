@@ -17,7 +17,7 @@ export function demandListAndPersonalPool(query) {
   })
 }
 //#个人预约修改页面反显
-export function PersonalPool(query) {
+export function getPersonalPool(query) {
   return request({
     url: '/cs/reservation/internal/PersonalPool',
     method: 'get',

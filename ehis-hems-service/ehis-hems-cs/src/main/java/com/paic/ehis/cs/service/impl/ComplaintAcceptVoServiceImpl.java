@@ -257,6 +257,7 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
     }
 
 
+    //投诉受理信息修改
     @Transactional(propagation = Propagation.REQUIRED,rollbackFor = Exception.class)
     @Override
     public int updateComplaintAcceptVo(ComplaintAcceptVo complaintAcceptVo) {
@@ -468,6 +469,8 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
                 }
             }
         }
+
+        //--对比修改前后端的值
         for (int i = 0; i < keyList.size(); i++) {
             String mapkey = keyList.get(i);
             if (outList.contains(mapkey)) {
@@ -503,7 +506,7 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
             }
         }
 
-
+//联系人
         Map map3 = JSONObject.parseObject(JSONObject.toJSONString(callPerson1), Map.class);
         Map map4 = JSONObject.parseObject(JSONObject.toJSONString(callPerson), Map.class);
         Iterator<String> iter5 = map3.keySet().iterator();
@@ -542,6 +545,7 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
 
         }
 
+        //联系人
         Map map5 = JSONObject.parseObject(JSONObject.toJSONString(contactsPerson1), Map.class);
         Map map6 = JSONObject.parseObject(JSONObject.toJSONString(contactsPerson), Map.class);
         Iterator<String> iter3 = map6.keySet().iterator();
@@ -579,6 +583,7 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
             }
         }
 
+        //投诉人
         Map map7 = JSONObject.parseObject(JSONObject.toJSONString(complaintPerson1), Map.class);
         Map map8 = JSONObject.parseObject(JSONObject.toJSONString(complaintPerson), Map.class);
         Iterator<String> iter4 = map7.keySet().iterator();
@@ -646,6 +651,7 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
 
         return  complaintAcceptVoMapper.insertFlowLog(flowLog);
     }
+
 
     /**
      * 投诉处理   暂存

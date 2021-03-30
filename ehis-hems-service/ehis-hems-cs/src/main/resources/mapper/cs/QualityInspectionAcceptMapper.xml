@@ -313,10 +313,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             left join work_order_accept a on a.work_order_no = c.work_order_no
         where 1=1 and c.status = '02' and d.status ='01' and a.update_by=#{updatedBy}
             <if test="firstEndCaseStartTime != null and firstEndCaseStartTime != ''">
-                and a.end_date <![CDATA[>=]]> #{firstEndCaseStartTime}
+                and DATE_FORMAT(a.end_date,'%Y-%m-%d') <![CDATA[>=]]> #{firstEndCaseStartTime}
             </if>
             <if test="firstEndCaseEndTime != null and firstEndCaseEndTime != ''">
-                and a.end_date <![CDATA[<=]]> #{firstEndCaseEndTime}
+                and DATE_FORMAT(a.end_date,'%Y-%m-%d') <![CDATA[<=]]> #{firstEndCaseEndTime}
             </if>
             <if test="workOrderNo != null and workOrderNo != ''">
                 and c.work_order_no = #{workOrderNo}
@@ -423,7 +423,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             woa.work_order_no,
             woa.business_type,
             woa.STATUS,
-            adi.prop18
+            adi.prop14
         FROM
             work_order_accept woa
                 LEFT JOIN accept_detail_info adi ON woa.work_order_no = adi.work_order_no
@@ -434,13 +434,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <if test="updateBy != null and updateBy != ''">and woa.update_by = #{updateBy}</if>
         <if test="status != null and status != ''"> and woa.status = #{status}</if>
         <if test="workOrderNo != null and workOrderNo != ''"> and woa.work_order_no = #{workOrderNo}</if>
-        <if test="appointmentStartDate1 != null ">
-            and DATE_FORMAT(adi.prop18,'%Y-%m-%d') <![CDATA[>=]]> #{appointmentStartDate1}
-        </if>
-        <if test="appointmentEndDate1 != null ">
-            and DATE_FORMAT(adi.prop18,'%Y-%m-%d') <![CDATA[<=]]> #{appointmentEndDate1}
-        </if>
-
+        <if test="appointmentStartDate1 != null and workOrderNo != ''">and adi.prop14= #{appointmentStartDate1} </if>
     </select>
 
     <!--投诉每周一凌晨四点批处理-->

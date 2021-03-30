@@ -309,13 +309,20 @@
 
         <el-row>
           <el-col :span="8">
-            <el-form-item label="就诊日期：">
-              <el-input v-model="ruleForm.clinicDate" class="item-width" size="mini" placeholder="请输入"/>
+            <el-form-item label="就诊日期：" prop="appointmentDate">
+              <el-input v-model="ruleForm.appointmentDate" class="item-width" size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="就诊时间：" prop="email">
-              <el-input v-model="ruleForm.clinicTime" class="item-width" size="mini" placeholder="请输入"/>
+            <el-form-item label="就诊时间：" prop="appointmentDate">
+              <el-time-picker class="item-width"
+                              is-range
+                              v-model="ruleForm.complaintTimes"
+                              range-separator="-"
+                              start-placeholder="开始时间"
+                              end-placeholder="结束时间"
+                              value-format="HH:mm:ss">
+              </el-time-picker>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -787,7 +794,12 @@
           demandListAndPublicPool(query).then(res => {
             if (res!=null && res.code === 200) {
               this.ruleForm =  res.rows[0];
-              this.totalCount = res.total
+              this.totalCount = res.total;
+              if(this.ruleForm.complaintTime != null && this.ruleForm.complaintTime !=''){
+                //预约时间反显
+                let timeArr=this.ruleForm.complaintTime.split('-');
+                this.$set(this.ruleForm, `complaintTimes`, timeArr);
+              }
               console.log('公共', this.ruleForm)
               if (res.rows.length <= 0) {
                 return this.$message.warning(
@@ -803,6 +815,11 @@
           demandListAndPersonalPool(query).then(res => {
             if (res!= null && res.code === 200) {
                this.ruleForm = res.rows[0];
+              if(this.ruleForm.complaintTime != null && this.ruleForm.complaintTime !=''){
+                //预约时间反显
+                let timeArr=this.ruleForm.complaintTime.split('-');
+                this.$set(this.ruleForm, `complaintTimes`, timeArr);
+              }
               console.log(this.workPoolData)
               if (res.rows.length <= 0) {
                 return this.$message.warning(

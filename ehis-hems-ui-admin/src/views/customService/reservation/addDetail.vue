@@ -894,7 +894,6 @@ export default {
       this.$refs.sendForm.resetFields()
     },
     searchHandle() {
-      debugger;
       let query = {
         pageNum: this.queryParams.pageNum,
         pageSize: this.queryParams.pageSize,
@@ -917,7 +916,6 @@ export default {
         phone:this.sendForm.phone,
         state:this.sendForm.state
       }
-      debugger;
       console.log('query: ',query)
       demandListAndPublicPool(query).then(res => {
         console.log('------------: ',res)

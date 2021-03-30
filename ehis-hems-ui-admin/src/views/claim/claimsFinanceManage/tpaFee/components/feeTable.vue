@@ -75,6 +75,7 @@ export default {
         type:'',
       },
       settleStatus:[],
+      settlementTypeSelect:[],
     }
   },
   mounted(){

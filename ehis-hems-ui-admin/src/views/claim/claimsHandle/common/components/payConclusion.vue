@@ -119,7 +119,7 @@ export default {
       return item.dictType === 'rejected_reasons'
     }).dictDate
 
-    if(this.fixInfo.isAppeal === '01') {
+    if(this.fixInfo.isAppeal === '02') {
       this.getCalInfo()
     }
   },

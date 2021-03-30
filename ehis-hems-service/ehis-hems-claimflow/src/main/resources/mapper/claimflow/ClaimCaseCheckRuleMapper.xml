@@ -111,11 +111,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         t1.create_by,
         t1.create_time,
         t1.update_by,
-        CASE
-
-        WHEN t1.update_time IS NOT NULL THEN
-        t1.update_time ELSE NULL
-        END AS update_time,
+        t1.update_time,
         t2.pay_conclusion
         FROM
         claim_case_check_rule t1

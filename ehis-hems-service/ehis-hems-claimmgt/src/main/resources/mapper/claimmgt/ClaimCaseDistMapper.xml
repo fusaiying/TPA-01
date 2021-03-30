@@ -125,7 +125,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             a.status = 'Y' and b.status = 'Y'
             <if test="userName != null  and userName != ''"> and a.update_by = #{userName}</if>
             <if test="userOrganCode != null  and userOrganCode != ''"> and b.organ_code = #{userOrganCode}</if>
-            <if test="userOrganCode != null  and userOrganCode != ''"> and a.case_status = #{operation}</if>
+            <if test="operation != null  and operation != ''"> and a.case_status = #{operation}</if>
         </where>
     </select>
 </mapper>

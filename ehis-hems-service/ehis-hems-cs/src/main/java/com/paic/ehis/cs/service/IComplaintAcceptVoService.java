@@ -44,4 +44,6 @@ public interface IComplaintAcceptVoService {
     //投诉服务处理页面数据
     public ComplaintDealVo selectServiceProcess(String workOrderNo);
 
+    //投诉服务处理页面数据
+    public ComplaintDealVo selectServiceProcess1(String workOrderNo);
 }

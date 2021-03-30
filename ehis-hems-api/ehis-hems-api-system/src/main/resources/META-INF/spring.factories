@@ -5,4 +5,5 @@ org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
   com.paic.ehis.system.api.factory.RemoteClaimCalFallbackFactory, \
   com.paic.ehis.system.api.factory.ClaimCalServiceFallbackFactory, \
   com.paic.ehis.system.api.factory.ClaimFlowServiceFallbackFactory, \
-  com.paic.ehis.system.api.factory.BaseServiceFallbackFactory
+  com.paic.ehis.system.api.factory.BaseServiceFallbackFactory,\
+  com.paic.ehis.system.api.factory.RemoteClaimMgtFallbackFactory

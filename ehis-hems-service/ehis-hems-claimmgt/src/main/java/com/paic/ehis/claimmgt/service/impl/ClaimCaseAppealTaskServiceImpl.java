@@ -115,9 +115,9 @@ public class ClaimCaseAppealTaskServiceImpl implements IClaimCaseAppealTaskServi
                 同时将原案件的批次信息、就诊人信息、申请人信息、收款人信息、受理信息、账单信息、赔付明细（重新匹配理算）、
                 赔付备注（类型为申诉案件）带入申诉案件中，需要重新进行赔付计算，重新下发赔付结论。
                 */
-//               String newRptNo = this.getNewRptNo(bean.getAppealRptNo());
-//               bean.setNewRptNo(newRptNo);
-              // this.clearClaimTableData(bean);
+               String newRptNo = this.getNewRptNo(bean.getAppealRptNo());
+               bean.setNewRptNo(newRptNo);
+               this.clearClaimTableData(bean);
                this.insertTableData(bean);
            } else {
                bean.setAppealStatus("04");

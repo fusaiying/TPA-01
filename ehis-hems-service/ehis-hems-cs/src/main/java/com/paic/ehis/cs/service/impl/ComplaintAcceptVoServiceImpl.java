@@ -949,5 +949,10 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
         return workOrderAcceptMapper.selectServiceProcess(workOrderNo);
     }
 
+    @Override
+    public ComplaintDealVo selectServiceProcess1(String workOrderNo) {
+        return workOrderAcceptMapper.selectServiceProcess1(workOrderNo);
+    }
+
 
 }

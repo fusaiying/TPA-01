@@ -332,25 +332,23 @@ FROM
     claimmain.claim_case b,
     (
 
-        select cc.batch_no ,ccc.bill_currency,sum(ccc.cal_amount) cal_amount,sum(ccc.total_bill_amount) total_bill_amount
+        select cc.batch_no ,sum(ccc.cal_amount) cal_amount,sum(ccc.total_bill_amount) total_bill_amount
         from claimmain.claim_case cc  left join claimmain.claim_case_cal ccc on ccc.rpt_no=cc.rpt_no
         where cc.case_prop='01' and ccc.STATUS = 'Y' AND cc.STATUS = 'Y'
-        group by ccc.bill_currency,cc.batch_no
+        group by cc.batch_no
         union
-        select cc.batch_no ,ccc.bill_currency,sum(ccc.cal_amount) cal_amount,sum(ccc.bill_amount) total_bill_amount
+        select cc.batch_no ,sum(ccc.cal_amount) cal_amount,sum(ccc.bill_amount) total_bill_amount
         from claimmain.claim_case cc left join  claimmain.claim_case_cal_core ccc on ccc.rpt_no=cc.rpt_no
         where cc.case_prop='02' and ccc.STATUS = 'Y' AND cc.STATUS = 'Y'
-        group by ccc.bill_currency,cc.batch_no
+        group by cc.batch_no
  ) c
     ,(
  select aa.batch_no from
  (
-  select cc.batch_no ,ccc.bill_currency
-  from claimmain.claim_case_cal ccc left join claimmain.claim_case cc on ccc.rpt_no=cc.rpt_no
-  where ccc.STATUS = 'Y' AND cc.STATUS = 'Y'
-  group by ccc.bill_currency,cc.batch_no
+        select cc.batch_no from  claim_case cc  LEFT JOIN claim_case_cal ccc on cc.rpt_no=ccc.rpt_no
+        where 1=1  and ccc.bill_currency!='CNY' GROUP BY cc.batch_no  having count(*)>0
  ) aa
- group by aa.batch_no having count(*)=1
+ group by aa.batch_no
  ) d
 where 1=1
  and d.batch_no=a.batch_no
@@ -358,7 +356,6 @@ where 1=1
     AND a.claim_type = '01'
     AND c.batch_no = d.batch_no
     AND a.organ_code = #{organCode}
-    AND c.bill_currency != 'CNY'
 		 ) h
       left join sys_organ_info soi on h.organCode=soi.organ_code and soi.status='Y'
         <where>

@@ -195,6 +195,7 @@ public class ClaimCaseBillController extends BaseController
         ClaimCase claimCase = new ClaimCase();
         claimCase.setRptNo(rptNo);
         claimCase.setCaseStatus("07");
+
         return toAjax(claimCaseService.updateClaimCase(claimCase));
     }
 

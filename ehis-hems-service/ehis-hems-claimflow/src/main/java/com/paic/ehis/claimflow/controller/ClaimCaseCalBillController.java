@@ -58,8 +58,8 @@ public class ClaimCaseCalBillController extends BaseController
     public TableDataInfo informationList(ClaimCaseCalBill claimCaseCalBill)
     {
 
-        return null; //List<CaseCalBillVo> list = claimCaseCalBillService.selectCaseCalInformationList(claimCaseCalBill);
-        // return getDataTable(list);
+         List<CaseCalBillVo> list = claimCaseCalBillService.selectCaseCalInformationList(claimCaseCalBill);
+         return getDataTable(list);
     }
 
     /**

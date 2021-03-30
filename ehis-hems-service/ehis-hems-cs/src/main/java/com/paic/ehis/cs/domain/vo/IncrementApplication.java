@@ -1,11 +1,14 @@
-package com.paic.ehis.cs.domain;
+package com.paic.ehis.cs.domain.vo;
 
 import lombok.Data;
 import lombok.ToString;
 
 import java.io.Serializable;
-import java.util.Date;
 
+/**
+ * 增值服务- 客服模块预约受理
+ * TODO 没有渠道信息？
+ */
 @Data
 @ToString
 public class IncrementApplication implements Serializable {

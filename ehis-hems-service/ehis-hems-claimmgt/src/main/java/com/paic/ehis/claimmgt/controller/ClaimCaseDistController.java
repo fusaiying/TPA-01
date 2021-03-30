@@ -142,7 +142,7 @@ public class ClaimCaseDistController extends BaseController
      * @return
      */
     @GetMapping("/getClaimCaseOperator")
-    public AjaxResult getClaimCaseOperator(String operation, String roleCode, String organCode){
+    public AjaxResult getClaimCaseOperator(@RequestParam("operation") String operation,@RequestParam("roleCode") String roleCode,@RequestParam("organCode") String organCode){
         String userName = "";
         try{
             userName = claimCaseDistService.getClaimCaseOperator(operation,roleCode,organCode);

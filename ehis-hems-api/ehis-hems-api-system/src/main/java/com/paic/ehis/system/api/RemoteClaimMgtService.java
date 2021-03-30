@@ -5,6 +5,7 @@ import com.paic.ehis.common.core.web.domain.AjaxResult;
 import com.paic.ehis.system.api.factory.RemoteClaimMgtFallbackFactory;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @FeignClient(contextId = "RemoteClaimMgtService", value = ServiceNameConstants.CLAIM_MGT_SERVICE, fallbackFactory = RemoteClaimMgtFallbackFactory.class)
 public interface RemoteClaimMgtService {
@@ -17,5 +18,5 @@ public interface RemoteClaimMgtService {
      * @return
      */
     @GetMapping("/dist/getClaimCaseOperator")
-    public AjaxResult getClaimCaseOperator(String operation, String roleCode, String organCode);
+    public AjaxResult getClaimCaseOperator(@RequestParam("operation") String operation,@RequestParam("roleCode") String roleCode,@RequestParam("organCode") String organCode);
 }

@@ -340,7 +340,7 @@
         <el-divider></el-divider>
         <el-table
           :header-cell-style="{color:'black',background:'#f8f8ff'}"
-          :data="flowLogData"
+          :data="HCSPoolData"
           size="small"
           highlight-current-row
           tooltip-effect="dark"

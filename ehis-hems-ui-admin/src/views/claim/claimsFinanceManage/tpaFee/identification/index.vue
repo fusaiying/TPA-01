@@ -159,13 +159,13 @@
         let createTimeStrt = '';
         let createTimeEnd = '';
         let createTimeArr = this.formSearch.createTimeArr;
-        if('' != createTimeArr) {
+        if('' !== createTimeArr && createTimeArr != null) {
           createTimeStrt = createTimeArr[0];
           createTimeEnd = createTimeArr[1];
           let entime = moment(createTimeStrt)
           let letime = moment(createTimeEnd)
           let dif = letime.diff(entime, 'months')
-          if(dif > 3 && this.preStart !== createTimeStrt && this.preEnd !== createTimeEnd ) {
+          if(dif > 3 && (this.preStart !== createTimeStrt || this.preEnd !== createTimeEnd) ) {
             this.preStart = createTimeStrt ;
             this.preEnd = createTimeEnd ;
             // 时间跨度太长，是否确认

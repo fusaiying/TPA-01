@@ -15,7 +15,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="出单公司：" prop="companyCode">
-              <el-select v-model="formSearch.companyCode" clearable class="item-width" placeholder="请选择">
+              <el-select v-model="formSearch.companyCode" clearable class="item-width" placeholder="请选择" @change="companyChange" >
                 <el-option v-for="option in companySelect" :key="option.dictValue" :label="option.dictLabel" :value="option.dictValue" />
               </el-select>
             </el-form-item>

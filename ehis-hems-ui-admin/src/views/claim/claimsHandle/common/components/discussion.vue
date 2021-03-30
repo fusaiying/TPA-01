@@ -746,9 +746,10 @@
             insuredNo: this.conclusionInfo.insuredNo,
             debtAmount:this.conclusionInfo.debtAmount,
           };
-          addRecoveryInfo(params).then(res => {
-            console.log(res);
-          });
+          // 追讨记录在后台生成
+          // addRecoveryInfo(params).then(res => {
+          //   console.log(res);
+          // });
         }
         const params = {
           rptNo : this.rptNo,

@@ -25,6 +25,8 @@ public interface QualityInspectionHandleMapper
      */
     public QualityInspectionHandle selectQualityInspectionHandleById(String inspectionId);
 
+    public QualityInspectionHandle selectQualityInspectionHandleById1(String workOrderNo);
+
     /**
      * 查询质检处理 列表
      * 
@@ -76,8 +78,6 @@ public interface QualityInspectionHandleMapper
     public List<QualityInspectionItemVo> getQualityHandleItemInfo(QualityInspectionDTO qualityInspectionDTO);
 
     public int insertHandleInfo(QualityInspectionDTO qualityInspectionDTO);
-
-    public int insertHandleInfo1(QualityInspectionDTO qualityInspectionDTO, Map<String,String> param);
 
     public int updateHandleInfoById(QualityInspectionDTO qualityInspectionDTO);
 }

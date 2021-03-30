@@ -207,9 +207,10 @@ export default {
 
     /** 导入成功后事件 */
     uploadSuccess(response, file, fileList){
+      alert(response);
       this.upload.isUploading = false;
       if (response != null && response.code === 200) {
-        this.msgSuccess('导入成功！');
+        this.msgSuccess('导入成功'+response.data.cgNumber+'条，失败'+response.data.sbNumber+'条！');
       } else {
         this.$message({
           message: response.msg,

@@ -1568,7 +1568,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
                         caseDebt.setCreateTime(DateUtils.getNowDate());
                         caseDebt.setUpdateBy(SecurityUtils.getUsername());
                         caseDebt.setUpdateTime(DateUtils.getNowDate());
-                        claimCaseDebtMapper.insertClaimCaseDebt(claimCaseDebt);
+                        claimCaseDebtMapper.insertClaimCaseDebt(caseDebt);
                     }
                 }else{
                     CalConclusionVo calConclusionVo = claimCaseCalMapper.selectPreCalConclusionByRptNo(claimCaseCheckDTO.getRptNo());

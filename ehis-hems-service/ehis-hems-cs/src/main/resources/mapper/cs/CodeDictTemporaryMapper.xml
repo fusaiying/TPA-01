@@ -23,7 +23,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectCodeDictTemporary">
-        select serial_No,batch_No,code_type, code, code_name, code_alias, status, parent_code, remarks, order_no,reason, created_by, created_time, updated_by, updated_time from code_dict
+        select serial_No,batch_No,code_type, code, code_name, code_alias, status, parent_code, remarks, order_no,reason, created_by, created_time, updated_by, updated_time from code_dict_temporary
     </sql>
 
     <!--插入数据-->
@@ -126,23 +126,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <!--成功更新状态 变成01-->
     <update id="updateSuccess" parameterType="String">
-        update code_dict_temporary a set a.status='01'
-        where a.batch_no='' and a.status='0' and ifnull(b.reason,'') = ''
+        update code_dict_temporary a set a.status='1'
+        where a.batch_no=#{batchno} and a.status='0' and ifnull(a.reason,'') = ''
     </update>
 
     <!--失败更新状态 变更09-->
     <update id="updateFailure" parameterType="String">
-        update code_dict_temporary a set a.status='09'
-        where a.batch_no='' and a.status='0' and ifnull(b.reason,'') != ''
+        update code_dict_temporary a set a.status='9'
+        where a.batch_no=#{batchno} and a.status='0' and ifnull(a.reason,'') != ''
     </update>
 
     <!--查询数据-->
     <select id="selectCodeDictTemporaryList" parameterType="com.paic.ehis.cs.domain.CodeDictTemporary" resultMap="CodeDictTemporaryResult">
         <include refid="selectCodeDictTemporary"></include>
         <where>
-            <if test="serialno != null  and serialno != ''"> and serial_no = #{serialno}</if>
-            <if test="batchno != null  and batchno != ''"> and batch_no = #{batchno}</if>
+            <if test="serialNo != null  and serialNo != ''"> and serial_no = #{serialno}</if>
+            <if test="batchNo != null  and batchNo != ''"> and batch_no = #{batchNo}</if>
             <if test="codeName != null  and codeName != ''"> and code_name = #{codeName}</if>
+            <if test="codeType != null  and codeType != ''"> and code_type = #{codeType}</if>
             <if test="codeAlias != null  and codeAlias != ''"> and code_alias = #{codeAlias}</if>
             <if test="status != null  and status != ''"> and status = #{status}</if>
             <if test="parentCode != null  and parentCode != ''"> and parent_code = #{parentCode}</if>

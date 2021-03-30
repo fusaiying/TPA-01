@@ -708,7 +708,6 @@
       }
     },
     created() {
-      debugger;
       window.aaa = this;
       this.searchHandle()
       this.getDicts("cs_complaint_item").then(response => {
@@ -771,7 +770,6 @@
         this.$refs.sendForm.resetFields()
       },
       searchHandle() {
-        debugger;
         let query = {
           pageNum: this.queryParams.pageNum,
           pageSize: this.queryParams.pageSize,

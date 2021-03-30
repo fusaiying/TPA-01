@@ -475,7 +475,7 @@ public class CustomServiceSpotCheckController extends BaseController {
 
     //服务处理回显接口
     @GetMapping("/getAttachmentList/selectServiceProcess/{workOrderNo}")
-    public AjaxResult  selectServiceProcess(String workOrderNo){
+    public AjaxResult  selectServiceProcess(@PathVariable("workOrderNo")String workOrderNo){
         return AjaxResult.success(iComplaintAcceptVoService.selectServiceProcess(workOrderNo));
     }
 

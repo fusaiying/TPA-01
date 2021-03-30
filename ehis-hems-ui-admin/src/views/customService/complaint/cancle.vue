@@ -602,6 +602,8 @@ export default {
   data() {
 
     return {
+      //附件信息数据
+      HCSPoolData: [],
       isDisabled:true,
       //流转用
       flowLogData: [],
@@ -782,19 +784,14 @@ export default {
     resetForm() {
       this.$refs.sendForm.resetFields()
     },
-    //反显信息需求
+    //投诉 服务受理信息查询
     searchHandle() {
-      let workOrderNo = this.queryParams.workOrderNo
+      let workOrderNo=this.queryParams.workOrderNo
+
       complainSearch(workOrderNo).then(res => {
         if (res != null && res.code === 200) {
           this.workPoolData = res.data
-          console.log("投诉取消页面数据", this.workPoolData)
 
-          if (res.rows.length <= 0) {
-            return this.$message.warning(
-              "未查询到数据！"
-            )
-          }
         }
       }).catch(res => {
 

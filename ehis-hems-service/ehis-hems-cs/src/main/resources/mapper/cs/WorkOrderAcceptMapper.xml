@@ -123,6 +123,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="organCode != null">organ_code,</if>
             <if test="status != null and status != ''">status,</if>
             <if test="endDate != null">end_date,</if>
+            <if test="lastEndDate != null">last_end_date,</if>
             <if test="clickTime != null">click_time,</if>
             <if test="hangFlag != null">hang_flag,</if>
             <if test="hangReason != null">hang_reason,</if>

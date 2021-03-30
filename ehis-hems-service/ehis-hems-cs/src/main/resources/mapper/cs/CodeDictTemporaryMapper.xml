@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.cs.mapper.CodeDictTemporaryMapper">
+    
+    <resultMap type="com.paic.ehis.cs.domain.CodeDictTemporary" id="CodeDictTemporaryResult">
+        <result property="serialNo"    column="serial_No"    />
+        <result property="batchNo"    column="batch_No"    />
+        <result property="codeType"    column="code_type"    />
+        <result property="code"    column="code"    />
+        <result property="codeName"    column="code_name"    />
+        <result property="codeAlias"    column="code_alias"    />
+        <result property="status"    column="status"    />
+        <result property="parentCode"    column="parent_code"    />
+        <result property="remarks"    column="remarks"    />
+        <result property="orderNo"    column="order_no"    />
+        <result property="reason"    column="reason"    />
+        <result property="createdBy"    column="created_by"    />
+        <result property="createdTime"    column="created_time"    />
+        <result property="updatedBy"    column="updated_by"    />
+        <result property="updatedTime"    column="updated_time"    />
+    </resultMap>
+
+    <sql id="selectCodeDictTemporary">
+        select serial_No,batch_No,code_type, code, code_name, code_alias, status, parent_code, remarks, order_no,reason, created_by, created_time, updated_by, updated_time from code_dict
+    </sql>
+
+    <!--插入数据-->
+    <insert id="insertCodeDictTemporary" parameterType="com.paic.ehis.cs.domain.CodeDictTemporary">
+        insert into code_dict_temporary
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="serialNo != null">serial_No,</if>
+            <if test="batchNo != null">batch_No,</if>
+            <if test="reason != null">reason,</if>
+            <if test="codeType != null">code_type,</if>
+            <if test="code != null">code,</if>
+            <if test="codeName != null">code_name,</if>
+            <if test="codeAlias != null">code_alias,</if>
+            <if test="status != null and status != ''">status,</if>
+            <if test="parentCode != null">parent_code,</if>
+            <if test="remarks != null">remarks,</if>
+            <if test="orderNo != null">order_no,</if>
+            <if test="createdBy != null and createdBy != ''">created_by,</if>
+            <if test="createdTime != null">created_time,</if>
+            <if test="updatedBy != null and updatedBy != ''">updated_by,</if>
+            <if test="updatedTime != null">updated_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="serialNo != null">#{serialNo},</if>
+            <if test="batchNo != null">#{batchNo},</if>
+            <if test="reason != null">#{reason},</if>
+            <if test="codeType != null">#{codeType},</if>
+            <if test="code != null">#{code},</if>
+            <if test="codeName != null">#{codeName},</if>
+            <if test="codeAlias != null">#{codeAlias},</if>
+            <if test="status != null and status != ''">#{status},</if>
+            <if test="parentCode != null">#{parentCode},</if>
+            <if test="remarks != null">#{remarks},</if>
+            <if test="orderNo != null">#{orderNo},</if>
+            <if test="createdBy != null and createdBy != ''">#{createdBy},</if>
+            <if test="createdTime != null">#{createdTime},</if>
+            <if test="updatedBy != null and updatedBy != ''">#{updatedBy},</if>
+            <if test="updatedTime != null">#{updatedTime},</if>
+        </trim>
+    </insert>
+
+    <!--投保来源ID不能为空-->
+    <update id="updateInsuranceIDNotNUll" parameterType="String">
+        update code_dict_temporary set reason = CONCAT(ifnull(reason,''),'投保来源ID不能为空;')
+        where batch_no=#{batchno} and ifnull(code,'')='' and code_type = 'cs_insurance_source' and status='0'
+    </update>
+
+    <!--投保来源名称不能为空-->
+    <update id="updateInsuranceNameNotNUll" parameterType="String">
+        update code_dict_temporary set reason = CONCAT(ifnull(reason,''),'投保来源名称不能为空;')
+        where batch_no=#{batchno} and ifnull(code_name,'')='' and code_type = 'cs_insurance_source' and status='0'
+    </update>
+
+    <!--投保业务类别ID不能为空-->
+    <!--业务类别数据的Code为空  或者  投保来源的ParentCode为空都要提示-->
+    <update id="updateBusinessIDNotNUll" parameterType="String">
+        update code_dict_temporary set reason = CONCAT(ifnull(reason,''),'投保业务类别ID不能为空;')
+        where batch_no=#{batchno} and status='0'
+        and ((ifnull(code,'')='' and code_type = 'cs_complaint_business_item' )
+        or (ifnull(Parent_Code,'')='' and code_type = 'cs_insurance_source'))
+    </update>
+
+    <!--投保来源名称不能为空-->
+    <update id="updateBusinessNameNotNUll" parameterType="String">
+        update code_dict_temporary set reason = CONCAT(ifnull(reason,''),'投保业务类别名称不能为空;')
+        where batch_no=#{batchno} and ifnull(code_name,'')='' and code_type = 'cs_complaint_business_item' and status='0'
+    </update>
+
+    <!--投保来源ID重复 ID相同-->
+    <update id="updateInsuranceIDRE" parameterType="String">
+        update code_dict_temporary a,code_dict_temporary b set a.reason = CONCAT(ifnull(a.reason,''),'投保来源ID重复;')
+        where a.batch_no=#{batchno} and a.status='0' and a.batch_no =b.batch_no and ifnull(a.code,'')!='' and ifnull(b.code,'')!=''
+        and a.code_type = 'cs_insurance_source' and b.code_type = 'cs_insurance_source'
+        and a.serial_no != b.serial_no and a.code = b.code
+    </update>
+
+    <!--投保业务类别 ID相同  name不同 临时表的数据要对比下-->
+    <update id="updateBusinessIDRE" parameterType="String">
+        update code_dict_temporary a,code_dict_temporary b set a.reason = CONCAT(ifnull(a.reason,''),'投保业务分类ID相同名称不同;')
+        where a.batch_no=#{batchno} and a.status='0' and a.batch_no =b.batch_no and ifnull(a.code,'')!='' and ifnull(b.code,'')!=''
+        and a.code_type = 'cs_complaint_business_item' and b.code_type = 'cs_complaint_business_item'
+        and a.serial_no != b.serial_no and a.code = b.code and a.code_name!=b.code_name
+    </update>
+
+    <!--投保业务类别 ID相同  name不同 临时表和主表的数据也要对比下-->
+    <update id="updateBusinessIDRE2" parameterType="String">
+        update code_dict_temporary a,code_dict b set a.reason = CONCAT(ifnull(a.reason,''),'投保业务分类ID相同名称不同;')
+        where a.batch_no=#{batchno} and a.status='0' and ifnull(a.code,'')!=''
+        and a.code_type = 'cs_complaint_business_item' and b.code_type = 'cs_complaint_business_item'
+        and a.code = b.code and a.code_name!=b.code_name
+    </update>
+
+    <!--投保业务分类错误 则投保来源也错误-->
+    <update id="updateBusinessToIns" parameterType="String">
+        update code_dict_temporary a,code_dict_temporary b set a.reason = CONCAT(ifnull(a.reason,''),'投保业务内容错误;')
+        where a.batch_no=#{batchno} and a.status='0' and a.batch_no =b.batch_no and ifnull(a.code,'')!='' and ifnull(a.Parent_Code,'')!='' and ifnull(b.code,'')!=''
+        and a.code_type = 'cs_insurance_source' and b.code_type = 'cs_complaint_business_item'
+        and a.Parent_Code = b.code and ifnull(b.reason,'') != ''
+    </update>
+
+    <!--成功更新状态 变成01-->
+    <update id="updateSuccess" parameterType="String">
+        update code_dict_temporary a set a.status='01'
+        where a.batch_no='' and a.status='0' and ifnull(b.reason,'') = ''
+    </update>
+
+    <!--失败更新状态 变更09-->
+    <update id="updateFailure" parameterType="String">
+        update code_dict_temporary a set a.status='09'
+        where a.batch_no='' and a.status='0' and ifnull(b.reason,'') != ''
+    </update>
+
+    <!--查询数据-->
+    <select id="selectCodeDictTemporaryList" parameterType="com.paic.ehis.cs.domain.CodeDictTemporary" resultMap="CodeDictTemporaryResult">
+        <include refid="selectCodeDictTemporary"></include>
+        <where>
+            <if test="serialno != null  and serialno != ''"> and serial_no = #{serialno}</if>
+            <if test="batchno != null  and batchno != ''"> and batch_no = #{batchno}</if>
+            <if test="codeName != null  and codeName != ''"> and code_name = #{codeName}</if>
+            <if test="codeAlias != null  and codeAlias != ''"> and code_alias = #{codeAlias}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="parentCode != null  and parentCode != ''"> and parent_code = #{parentCode}</if>
+            <if test="remarks != null  and remarks != ''"> and remarks = #{remarks}</if>
+            <if test="orderNo != null "> and order_no = #{orderNo}</if>
+            <if test="reason != null  and reason != ''"> and reason = #{orderNo}</if>
+            <if test="createdBy != null  and createdBy != ''"> and created_by = #{createdBy}</if>
+            <if test="createdTime != null "> and created_time = #{createdTime}</if>
+            <if test="updatedBy != null  and updatedBy != ''"> and updated_by = #{updatedBy}</if>
+            <if test="updatedTime != null "> and updated_time = #{updatedTime}</if>
+        </where>
+    </select>
+    
+</mapper>

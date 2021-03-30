@@ -434,11 +434,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <if test="updateBy != null and updateBy != ''">and woa.update_by = #{updateBy}</if>
         <if test="status != null and status != ''"> and woa.status = #{status}</if>
         <if test="workOrderNo != null and workOrderNo != ''"> and woa.work_order_no = #{workOrderNo}</if>
-        <if test="endCaseStartTime != null ">
-            and DATE_FORMAT(adi.prop18,'%Y-%m-%d') <![CDATA[>=]]> #{endCaseStartTime}
+        <if test="appointmentStartDate1 != null ">
+            and DATE_FORMAT(adi.prop18,'%Y-%m-%d') <![CDATA[>=]]> #{appointmentStartDate1}
         </if>
-        <if test="endCaseEndTime != null ">
-            and DATE_FORMAT(adi.prop18,'%Y-%m-%d') <![CDATA[<=]]> #{endCaseEndTime}
+        <if test="appointmentEndDate1 != null ">
+            and DATE_FORMAT(adi.prop18,'%Y-%m-%d') <![CDATA[<=]]> #{appointmentEndDate1}
         </if>
 
     </select>

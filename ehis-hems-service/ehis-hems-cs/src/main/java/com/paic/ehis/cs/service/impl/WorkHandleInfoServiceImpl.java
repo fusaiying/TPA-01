@@ -243,10 +243,8 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
             }
             if (workOrderAccept1.getEndDate()==null){
                 workOrderAccept.setEndDate(DateUtils.parseDate(DateUtils.getTime()));
-            }else{
-                workOrderAccept.setLastEndDate(DateUtils.parseDate(DateUtils.getTime()));
             }
-
+            workOrderAccept.setLastEndDate(DateUtils.parseDate(DateUtils.getTime()));
             workOrderAccept.setUpdateBy(SecurityUtils.getUsername());
             workOrderAcceptMapper.updateWorkOrderAccept(workOrderAccept);
             //无本人操作历史   则增加一条新数据
@@ -304,9 +302,8 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
             workOrderAccept.setWorkOrderNo(serviceProcessingVo.getWorkOrderNo());
             if (workOrderAccept1.getEndDate()==null){
                 workOrderAccept.setEndDate(DateUtils.parseDate(DateUtils.getTime()));
-            }else{
-                workOrderAccept.setLastEndDate(DateUtils.parseDate(DateUtils.getTime()));
             }
+            workOrderAccept.setLastEndDate(DateUtils.parseDate(DateUtils.getTime()));
             workOrderAccept.setUpdateBy(SecurityUtils.getUsername());
             if(serviceProcessingVo.getBusinessProcess().equals("01")){
                 workOrderAccept.setStatus("04");/*已完成*/
@@ -559,6 +556,8 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
         workHandleInfo.setWorkOrderNo(reservationDealVo.getWorkOrderNo());
         workHandleInfo.setCreatedBy(SecurityUtils.getUsername());
         WorkHandleInfo workHandleInfo1=workHandleInfoMapper.selectCreatedBy(workHandleInfo);
+        WorkOrderAccept workOrderAcceptA=workOrderAcceptMapper.selectWorkOrderAcceptById(reservationDealVo.getWorkOrderNo());
+
         if (workHandleInfo1==null) {
             //将所有状态置为N
             workHandleInfo.setWorkOrderNo(reservationDealVo.getWorkOrderNo());
@@ -566,7 +565,10 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
             //修改主表状态为已处理
             WorkOrderAccept workOrderAccept=new WorkOrderAccept();
             workOrderAccept.setWorkOrderNo(reservationDealVo.getWorkOrderNo());
-            workOrderAccept.setEndDate(DateUtils.parseDate(DateUtils.getTime()));
+            if (workOrderAcceptA.getEndDate()==null){
+                workOrderAccept.setEndDate(DateUtils.parseDate(DateUtils.getTime()));
+            }
+            workOrderAccept.setLastEndDate(DateUtils.parseDate(DateUtils.getTime()));
             if(reservationDealVo.getBusinessProcess().equals("01")){
                 workOrderAccept.setStatus("03");
             }else  if (reservationDealVo.getBusinessProcess().equals("02")){
@@ -625,7 +627,10 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
             //修改主表状态为已处理
             WorkOrderAccept workOrderAccept=new WorkOrderAccept();
             workOrderAccept.setWorkOrderNo(reservationDealVo.getWorkOrderNo());
-            workOrderAccept.setEndDate(DateUtils.parseDate(DateUtils.getTime()));
+            if (workOrderAcceptA.getEndDate()==null){
+                workOrderAccept.setEndDate(DateUtils.parseDate(DateUtils.getTime()));
+            }
+            workOrderAccept.setLastEndDate(DateUtils.parseDate(DateUtils.getTime()));
             if(reservationDealVo.getBusinessProcess().equals("01")){
                 workOrderAccept.setStatus("03");
             }else  if (reservationDealVo.getBusinessProcess().equals("02")){

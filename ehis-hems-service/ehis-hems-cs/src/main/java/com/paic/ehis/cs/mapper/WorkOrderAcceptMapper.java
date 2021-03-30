@@ -2,7 +2,6 @@ package com.paic.ehis.cs.mapper;
 
 import com.paic.ehis.cs.domain.WorkOrderAccept;
 import com.paic.ehis.cs.domain.vo.ComplaintAcceptVo;
-import com.paic.ehis.cs.domain.vo.ComplaintDealVo;
 
 import java.util.List;
 
@@ -108,4 +107,12 @@ public interface WorkOrderAcceptMapper
     public int deleteAcceptDetailInfoMany(String[] workOrderNoMany);
 
     public ComplaintDealVo selectServiceProcess(String workOrderNo);
+
+
+    /**
+     * 根据外部受理号去的工单信息
+     * @param workOrderAccept
+     * @return
+     */
+    public List<WorkOrderAccept> getWorkOrderAcceptByOtherNo(WorkOrderAccept workOrderAccept);
 }

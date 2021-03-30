@@ -224,6 +224,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             where work_order_no=#{workOrderNo}
     </select>
 
+    <select id="getWorkOrderAcceptByOtherNo" parameterType="com.paic.ehis.cs.domain.WorkOrderAccept" resultMap="WorkOrderAcceptResult">
+        <include refid="selectWorkOrderAcceptVo"/>
+        where other_no = #{otherNo}
+        <if test="businessType != null and businessType != ''">and business_type = #{businessType}</if>
+    </select>
+
     <update id="updateClickTime"  parameterType="com.paic.ehis.cs.domain.WorkOrderAccept">
         update work_order_accept
         set click_time = #{clickTime} , update_by=#{updateBy} , update_time = #{updateTime}

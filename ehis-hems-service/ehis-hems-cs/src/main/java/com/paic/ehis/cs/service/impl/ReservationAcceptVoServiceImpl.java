@@ -278,6 +278,8 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
         workOrderAccept.setOrganCode(reservationAcceptVo.getOrganCode());
         workOrderAccept.setUpdateTime(reservationAcceptVo.getUpdateTime());
         workOrderAccept.setWorkOrderNo(reservationAcceptVo.getWorkOrderNo());
+        workOrderAccept.setPolicyNo(reservationAcceptVo.getPolicyNo());
+        workOrderAccept.setPolicyItemNo(reservationAcceptVo.getPolicyItemNo());
         workOrderAccept.setCreateTime(reservationAcceptVo.getCreateTime());
         workOrderAccept.setBusinessType(reservationAcceptVo.getBusinessType());
         workOrderAccept.setOtherNo(reservationAcceptVo.getOtherNo());
@@ -297,6 +299,7 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
         acceptDetailInfo.setContactsPersonId(contactsPersonId);
         acceptDetailInfo.setContactsRelationBy(reservationAcceptVo.getContactsRelationBy());
         acceptDetailInfo.setEmail(reservationAcceptVo.getEmail());
+        acceptDetailInfo.setOrganCode(reservationAcceptVo.getOrganCode());
         acceptDetailInfo.setContent(reservationAcceptVo.getContent());
         acceptDetailInfo.setStatus(CodeEnum.ORDER_STATE_01.getCode());
         acceptDetailInfo.setCreateBy(reservationAcceptVo.getCreateBy());
@@ -320,24 +323,29 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
         personInfo1.setPersonId(callPersonId);
         personInfo1.setName(reservationAcceptVo.getCallPerson().getName());
         personInfo1.setMobilePhone(reservationAcceptVo.getCallPerson().getMobilePhone());
-        personInfo1.setCreatedBy(SecurityUtils.getUsername());
+        personInfo1.setCreatedBy(reservationAcceptVo.getCreateBy());
         personInfo1.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
-        personInfo1.setUpdatedBy(SecurityUtils.getUsername());
+        personInfo1.setUpdatedBy(reservationAcceptVo.getUpdateBy());
         personInfo1.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
         personInfoMapper.insertPersonInfo(personInfo1);
         //插入联系人
-        personInfo2.setPersonId(contactsPersonId);
-        personInfo2.setSex(reservationAcceptVo.getContactsPerson().getSex());
-        personInfo2.setName(reservationAcceptVo.getContactsPerson().getName());
-        personInfo2.setLanguage(reservationAcceptVo.getContactsPerson().getLanguage());
-        personInfo2.setMobilePhone(reservationAcceptVo.getContactsPerson().getMobilePhone());
-        personInfo2.setHomePhone("---");
-        personInfo2.setWorkPhone("---");
-        personInfo2.setCreatedBy(SecurityUtils.getUsername());
-        personInfo2.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
-        personInfo2.setUpdatedBy(SecurityUtils.getUsername());
-        personInfo2.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
-        personInfoMapper.insertPersonInfo(personInfo2);
+        if(reservationAcceptVo.getContactsPerson()!=null){
+            personInfo2.setPersonId(contactsPersonId);
+            personInfo2.setSex(reservationAcceptVo.getContactsPerson().getSex());
+            personInfo2.setName(reservationAcceptVo.getContactsPerson().getName());
+            personInfo2.setLanguage(reservationAcceptVo.getContactsPerson().getLanguage());
+            personInfo2.setMobilePhone(reservationAcceptVo.getContactsPerson().getMobilePhone());
+            String homePhone=reservationAcceptVo.getContactsPerson().getHomePhone();
+            String workPhone=reservationAcceptVo.getContactsPerson().getWorkPhone();
+            personInfo2.setHomePhone(StringUtils.isNotEmpty(homePhone)? homePhone:"---");
+            personInfo2.setWorkPhone(StringUtils.isNotEmpty(workPhone)? workPhone:"---");
+            personInfo2.setCreatedBy(reservationAcceptVo.getCreateBy());
+            personInfo2.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+            personInfo2.setUpdatedBy(reservationAcceptVo.getUpdateBy());
+            personInfo2.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+            personInfoMapper.insertPersonInfo(personInfo2);
+        }
+
 
         //轨迹表插入
         flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id",20,20));
@@ -347,9 +355,9 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
         flowLog.setMakeTime(DateUtils.parseDate(DateUtils.getTime()));
         flowLog.setMakeBy(SecurityUtils.getUsername());
         flowLog.setStatus(workOrderAccept.getStatus());
-        flowLog.setCreatedBy(SecurityUtils.getUsername());
+        flowLog.setCreatedBy(reservationAcceptVo.getCreateBy());
         flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
-        flowLog.setUpdatedBy(SecurityUtils.getUsername());
+        flowLog.setUpdatedBy(reservationAcceptVo.getUpdateBy());
         flowLog.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
         return  flowLogMapper.insertFlowLog(flowLog);
     }
@@ -698,7 +706,7 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
         flowLog.setMakeTime(DateUtils.parseDate(DateUtils.getTime()));
         flowLog.setMakeBy(SecurityUtils.getUsername());
         flowLog.setOperateCode("03");
-        flowLog.setLinkCode(workOrderAccept.getStatus());
+        flowLog.setStatus(workOrderAccept.getStatus());
         flowLog.setSubId(editId);
         flowLog.setWorkOrderNo(reservationAcceptVo.getWorkOrderNo());
         flowLog.setCreatedBy(SecurityUtils.getUsername());

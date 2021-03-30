@@ -1,7 +1,9 @@
 package com.paic.ehis.cs.service;
 
 import com.paic.ehis.cs.domain.*;
+import com.paic.ehis.cs.domain.vo.BasicServiceAppilcation;
 import com.paic.ehis.cs.domain.vo.ComplaintAcceptVo;
+import com.paic.ehis.cs.domain.vo.IncrementApplication;
 
 import java.util.List;
 
@@ -19,7 +21,7 @@ public interface IWorkOrderAcceptService
      *@param businessData
      * @return  结果
      */
-    public int insertBasicServiceApplication(BasicServiceAppilcation businessData);
+    public int insertBasicServiceApplication(WorkOrderAccept workOrderAccept,BasicServiceAppilcation businessData);
 
     /**
      * 增值服务受理处理
@@ -28,7 +30,12 @@ public interface IWorkOrderAcceptService
      */
     public int insertIncrementServiceApplication(IncrementApplication businessData);
 
-
+    /**
+     * 根据外部受理号判断是否重复受理
+     * @param workOrderAccept
+     * @return
+     */
+    public String isExistAcceptByOtherNo(WorkOrderAccept workOrderAccept);
 
 
 

@@ -1,6 +1,7 @@
 package com.paic.ehis.cs.service;
 
 import com.paic.ehis.cs.domain.HcsModification;
+import com.paic.ehis.cs.domain.vo.ModifyServiceApplication;
 
 import java.util.List;
 
@@ -60,4 +61,11 @@ public interface IHcsModificationService
      * @return 结果
      */
     public int deleteHcsModificationById(String workOrderNo);
+
+    /**
+     * 落库外部HCS信息
+     * @param modifyServiceApplication
+     * @return
+     */
+    public int  addModifyServiceAccept(ModifyServiceApplication modifyServiceApplication);
 }

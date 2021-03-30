@@ -160,6 +160,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <if test="acceptEndDate != null ">
             and DATE_FORMAT(woa.accept_time,'%Y-%m-%d') <![CDATA[<=]]> #{acceptEndDate}
         </if>
+        <if test="createBy != null  and createBy != ''"> and woa.create_by = #{createBy}</if>
         <if test="updateBy != null  and updateBy != ''"> and woa.update_by = #{updateBy}</if>
         <if test="updateStartDate != null ">
             and DATE_FORMAT(woa.update_time,'%Y-%m-%d') <![CDATA[>=]]> #{updateStartDate}

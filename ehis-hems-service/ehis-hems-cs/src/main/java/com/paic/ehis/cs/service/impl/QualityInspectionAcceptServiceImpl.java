@@ -466,9 +466,9 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
                             //流转记录添加
                             String flow_id = PubFun.createMySqlMaxNoUseCache("cs_flow_id", 20, 20);
                             flowLog.setFlowId(flow_id);
-                            flowLog.setCreatedBy("SYSTEM");
+                            flowLog.setCreatedBy("SYSTEM_WEEK");
                             flowLog.setCreatedTime(DateUtils.getNowDate());
-                            flowLog.setUpdatedBy("SYSTEM");
+                            flowLog.setUpdatedBy("SYSTEM_WEEK");
                             flowLog.setUpdatedTime(DateUtils.getNowDate());
                             flowLog.setWorkOrderNo(workOrderNo);
                             flowLog.setLinkCode(param.get("linkCode"));
@@ -478,9 +478,9 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
                             qualityInspectionAccept = new QualityInspectionAccept();
                             qualityInspectionAccept.setWorkOrderNo(workOrderNo);
                             qualityInspectionAccept.setStatus(param.get("status"));
-                            qualityInspectionAccept.setCreatedBy("SYSTEM");
+                            qualityInspectionAccept.setCreatedBy("SYSTEM_WEEK");
                             qualityInspectionAccept.setCreatedTime(DateUtils.getNowDate());
-                            qualityInspectionAccept.setUpdatedBy("SYSTEM");
+                            qualityInspectionAccept.setUpdatedBy("SYSTEM_WEEK");
                             qualityInspectionAccept.setUpdatedTime(DateUtils.getNowDate());
                             list1.add(qualityInspectionAccept);
                             //记录操作轨迹
@@ -514,9 +514,9 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
                                 //流转记录添加
                                 String flow_id = PubFun.createMySqlMaxNoUseCache("cs_flow_id", 20, 20);
                                 flowLog.setFlowId(flow_id);
-                                flowLog.setCreatedBy("SYSTEM");
+                                flowLog.setCreatedBy("SYSTEM_WEEK");
                                 flowLog.setCreatedTime(DateUtils.getNowDate());
-                                flowLog.setUpdatedBy("SYSTEM");
+                                flowLog.setUpdatedBy("SYSTEM_WEEK");
                                 flowLog.setUpdatedTime(DateUtils.getNowDate());
                                 flowLog.setWorkOrderNo(ids[b]);
                                 flowLog.setLinkCode(param.get("linkCode"));
@@ -526,9 +526,9 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
                                 qualityInspectionAccept = new QualityInspectionAccept();
                                 qualityInspectionAccept.setWorkOrderNo(ids[b]);
                                 qualityInspectionAccept.setStatus(param.get("status"));
-                                qualityInspectionAccept.setCreatedBy("SYSTEM");
+                                qualityInspectionAccept.setCreatedBy("SYSTEM_WEEK");
                                 qualityInspectionAccept.setCreatedTime(DateUtils.getNowDate());
-                                qualityInspectionAccept.setUpdatedBy("SYSTEM");
+                                qualityInspectionAccept.setUpdatedBy("SYSTEM_WEEK");
                                 qualityInspectionAccept.setUpdatedTime(DateUtils.getNowDate());
                                 list1.add(qualityInspectionAccept);
                             }
@@ -624,9 +624,9 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
                             //流转记录添加
                             String flow_id = PubFun.createMySqlMaxNoUseCache("cs_flow_id", 20, 20);
                             flowLog.setFlowId(flow_id);
-                            flowLog.setCreatedBy("SYSTEM");
+                            flowLog.setCreatedBy("SYSTEM_MONTH");
                             flowLog.setCreatedTime(DateUtils.getNowDate());
-                            flowLog.setUpdatedBy("SYSTEM");
+                            flowLog.setUpdatedBy("SYSTEM_MONTH");
                             flowLog.setUpdatedTime(DateUtils.getNowDate());
                             flowLog.setWorkOrderNo(workOrderNo);
                             flowLog.setLinkCode(param.get("linkCode"));
@@ -636,9 +636,9 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
                             qualityInspectionAccept = new QualityInspectionAccept();
                             qualityInspectionAccept.setWorkOrderNo(workOrderNo);
                             qualityInspectionAccept.setStatus(param.get("status"));
-                            qualityInspectionAccept.setCreatedBy("SYSTEM");
+                            qualityInspectionAccept.setCreatedBy("SYSTEM_MONTH");
                             qualityInspectionAccept.setCreatedTime(DateUtils.getNowDate());
-                            qualityInspectionAccept.setUpdatedBy("SYSTEM");
+                            qualityInspectionAccept.setUpdatedBy("SYSTEM_MONTH");
                             qualityInspectionAccept.setUpdatedTime(DateUtils.getNowDate());
                             list1.add(qualityInspectionAccept);
                             //记录操作轨迹
@@ -673,9 +673,9 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
                                 //流转记录添加
                                 String flow_id = PubFun.createMySqlMaxNoUseCache("cs_flow_id", 20, 20);
                                 flowLog.setFlowId(flow_id);
-                                flowLog.setCreatedBy("SYSTEM");
+                                flowLog.setCreatedBy("SYSTEM_MONTH");
                                 flowLog.setCreatedTime(DateUtils.getNowDate());
-                                flowLog.setUpdatedBy("SYSTEM");
+                                flowLog.setUpdatedBy("SYSTEM_MONTH");
                                 flowLog.setUpdatedTime(DateUtils.getNowDate());
                                 flowLog.setWorkOrderNo(ids[b]);
                                 flowLog.setLinkCode(param.get("linkCode"));
@@ -685,9 +685,9 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
                                 qualityInspectionAccept = new QualityInspectionAccept();
                                 qualityInspectionAccept.setWorkOrderNo(ids[b]);
                                 qualityInspectionAccept.setStatus(param.get("status"));
-                                qualityInspectionAccept.setCreatedBy("SYSTEM");
+                                qualityInspectionAccept.setCreatedBy("SYSTEM_MONTH");
                                 qualityInspectionAccept.setCreatedTime(DateUtils.getNowDate());
-                                qualityInspectionAccept.setUpdatedBy("SYSTEM");
+                                qualityInspectionAccept.setUpdatedBy("SYSTEM_MONTH");
                                 qualityInspectionAccept.setUpdatedTime(DateUtils.getNowDate());
                                 list1.add(qualityInspectionAccept);
                             }
@@ -798,9 +798,9 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
                             //流转记录添加
                             String flow_id = PubFun.createMySqlMaxNoUseCache("cs_flow_id", 20, 20);
                             flowLog.setFlowId(flow_id);
-                            flowLog.setCreatedBy("SYSTEM");
+                            flowLog.setCreatedBy("SYSTEM_WEEK");
                             flowLog.setCreatedTime(DateUtils.getNowDate());
-                            flowLog.setUpdatedBy("SYSTEM");
+                            flowLog.setUpdatedBy("SYSTEM_WEEK");
                             flowLog.setUpdatedTime(DateUtils.getNowDate());
                             flowLog.setWorkOrderNo(workOrderNo);
                             flowLog.setLinkCode(param.get("linkCode"));
@@ -810,9 +810,9 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
                             qualityInspectionAccept = new QualityInspectionAccept();
                             qualityInspectionAccept.setWorkOrderNo(workOrderNo);
                             qualityInspectionAccept.setStatus(param.get("status"));
-                            qualityInspectionAccept.setCreatedBy("SYSTEM");
+                            qualityInspectionAccept.setCreatedBy("SYSTEM_WEEK");
                             qualityInspectionAccept.setCreatedTime(DateUtils.getNowDate());
-                            qualityInspectionAccept.setUpdatedBy("SYSTEM");
+                            qualityInspectionAccept.setUpdatedBy("SYSTEM_WEEK");
                             qualityInspectionAccept.setUpdatedTime(DateUtils.getNowDate());
                             list1.add(qualityInspectionAccept);
                             //记录操作轨迹
@@ -846,9 +846,9 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
                                 //流转记录添加
                                 String flow_id = PubFun.createMySqlMaxNoUseCache("cs_flow_id", 20, 20);
                                 flowLog.setFlowId(flow_id);
-                                flowLog.setCreatedBy("SYSTEM");
+                                flowLog.setCreatedBy("SYSTEM_WEEK");
                                 flowLog.setCreatedTime(DateUtils.getNowDate());
-                                flowLog.setUpdatedBy("SYSTEM");
+                                flowLog.setUpdatedBy("SYSTEM_WEEK");
                                 flowLog.setUpdatedTime(DateUtils.getNowDate());
                                 flowLog.setWorkOrderNo(ids[b]);
                                 flowLog.setLinkCode(param.get("linkCode"));
@@ -858,9 +858,9 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
                                 qualityInspectionAccept = new QualityInspectionAccept();
                                 qualityInspectionAccept.setWorkOrderNo(ids[b]);
                                 qualityInspectionAccept.setStatus(param.get("status"));
-                                qualityInspectionAccept.setCreatedBy("SYSTEM");
+                                qualityInspectionAccept.setCreatedBy("SYSTEM_WEEK");
                                 qualityInspectionAccept.setCreatedTime(DateUtils.getNowDate());
-                                qualityInspectionAccept.setUpdatedBy("SYSTEM");
+                                qualityInspectionAccept.setUpdatedBy("SYSTEM_WEEK");
                                 qualityInspectionAccept.setUpdatedTime(DateUtils.getNowDate());
                                 list1.add(qualityInspectionAccept);
                             }

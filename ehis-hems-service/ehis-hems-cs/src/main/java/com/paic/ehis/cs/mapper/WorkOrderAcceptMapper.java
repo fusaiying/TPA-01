@@ -2,6 +2,7 @@ package com.paic.ehis.cs.mapper;
 
 import com.paic.ehis.cs.domain.WorkOrderAccept;
 import com.paic.ehis.cs.domain.vo.ComplaintAcceptVo;
+import com.paic.ehis.cs.domain.vo.ComplaintDealVo;
 
 import java.util.List;
 

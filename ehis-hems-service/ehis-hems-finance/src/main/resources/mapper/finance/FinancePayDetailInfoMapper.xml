@@ -104,7 +104,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{payDetailId}
         </foreach>
     </delete>
-    <select id="selectFinancePayDetailInfoByRptNo" parameterType="String" resultMap="FinancePayDetailInfoResult">
+    <select id="selectFinancePayDetailInfoByRptNos" parameterType="String" resultMap="FinancePayDetailInfoResult">
         <include refid="selectFinancePayDetailInfoVo"/>
         where rpt_no = #{rptNo}
     </select>

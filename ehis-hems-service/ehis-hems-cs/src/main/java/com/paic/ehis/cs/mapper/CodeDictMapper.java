@@ -36,6 +36,14 @@ public interface CodeDictMapper
      */
     public List<CodeDict> selectCodeDictList(CodeDict codeDict);
 
+    /**
+     * 查询业务码 列表
+     *
+     * @param codeDict 业务码
+     * @return 业务码 集合
+     */
+    public List<CodeDict> selectCodeDictList2(CodeDict codeDict);
+
     public List<CodeDict> selectComplaintBusiness(CodeDict codeDict);
 
     public List<CodeDict> selectInsuranceSource(CodeDict codeDict);

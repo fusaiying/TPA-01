@@ -188,7 +188,7 @@
 
 
     <el-card class="box-card" style="margin-top: 10px;">
-      <el-form ref="ruleForm" :model="ruleForm"  style="padding-bottom: 30px;" label-width="170px"
+      <el-form ref="ruleForm" :model="sendForm"  style="padding-bottom: 30px;" label-width="170px"
                :disabled="isDisabled"
                label-position="right" size="mini">
 
@@ -684,18 +684,6 @@
     data() {
       // 表单校验
       const isRule = {
-        Service: [
-          {required: true, message: "服务项目不能为空", trigger: "blur"}
-        ],
-        priority: [
-          {required: true, message: "优先级不能为空", trigger: "blur"}
-        ],
-        lxperson: [
-          {required: true, message: "联系人不能为空", trigger: "blur"}
-        ],
-        orderNum: [
-          {required: true, message: "联系人与被保人关系不能为空", trigger: "blur"}
-        ],
         times: [
           {required: true, message: "处理时长关系不能为空", trigger: "blur"}
         ],
@@ -710,9 +698,7 @@
         customerFeedback: [
           {required: true, message: "客户反馈不能为空", trigger: "blur"}
         ],
-        costsIncurred: [
-          {required: true, message: "是否需要担保函不能为空", trigger: "blur"}
-        ],
+
       };
       // 表单校验
       const noRules = {
@@ -915,7 +901,6 @@
       this.queryParams.status = this.$route.query.status;
       //window.aaa = this;
       this.searchSendFormInfo()
-      this.searchHandle()
       this.searchFlowLog()
       this.searchHCS()
       this.searchHandleServer()
@@ -992,6 +977,7 @@
       }).dictDate
       //初始化按钮状态
       this.checkButton();
+      this.searchHandle()
     },
     methods: {
       //客户信息加载
@@ -1078,7 +1064,6 @@
             console.log("预约页面server反显数据", res.data)
 
             this.submitForm = res.data;
-            console.log(this.submitForm, "85848541484848")
             if (res.rows.length <= 0) {
               return this.$message.warning(
                 "未查询到数据！"
@@ -1159,18 +1144,21 @@
           }
         })
       },
-      //反显信息需求
+      //预约--服务受理信息
       searchHandle() {
         let workOrderNo = this.queryParams
-        console.log("workOrderNo", workOrderNo)
         getPersonalPool(workOrderNo).then(res => {
           if (res != null && res.code === 200) {
             this.sendForm = res.data
-/*            if (this.sendForm.symptomTimes != null && this.sendForm.symptomTimes != '') {
+            if (this.sendForm.symptomTimes != null && this.sendForm.symptomTimes != '') {
               let arr=this.sendForm.symptomTimes.split('-');
-              this.$set(this.sendForm, `a`, arr[0]);
-              this.$set(this.sendForm, `b`, arr[1]);
-            }*/
+              console.log(this.cs_time_unit)
+              console.log(arr)
+            let obj= this.cs_time_unit.find(item =>{
+               return item.dictValue==arr[1]
+             })
+              this.$set(this.sendForm,'symptomTimes',arr[0]+obj.dictLabel)
+            }
             if(this.sendForm.complaintTime != null && this.sendForm.complaintTime !=''){
               //预约时间反显
               let timeArr=this.sendForm.complaintTime.split('-');
@@ -1213,12 +1201,11 @@
         let workOrderNo = this.queryParams
         workOrderNo.status = ""
         FlowLogSearch(workOrderNo).then(res => {
-          console.log(workOrderNo)
+
           console.log('轨迹表', res.rows)
           if (res != null && res.code === 200) {
             this.flowLogData = res.rows
             this.flowLogCount = res.total
-            console.log("searchFlowLog", this.flowLogData)
             this.flowLogCount = res.total
             if (res.rows.length <= 0) {
               return this.$message.warning(
@@ -1235,8 +1222,7 @@
         let workOrderNo = this.queryParams
         workOrderNo.status = ""
         HMSSearch(workOrderNo).then(res => {
-          console.log(workOrderNo)
-          console.log('HCS', res.rows)
+
           if (res != null && res.code === 200) {
             this.HCSPoolData = res.rows
             this.HCSTotal = res.total

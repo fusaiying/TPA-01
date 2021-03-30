@@ -356,7 +356,7 @@ export default {
   filters: {
     changeDate: function (value) {
       if (value !== null) {
-        return moment(value).format('YYYY-MM-DD HH:mm:ss')
+        return moment(value).format('YYYY-MM-DD')
       }
     }
   },

@@ -1221,7 +1221,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
 
         ClaimCaseCal claimCaseCal = claimCaseCalMapper.selectClaimCaseCalByRptNo(claimCase.getRptNo());
         if (claimCaseCal.getDebtAmount().compareTo(new BigDecimal(String.valueOf(0))) != 0){
-            if ("02".equals(claimCase.getIsAppeal())){
+            if ("01".equals(claimCase.getIsAppeal())){
                 ClaimCaseDebt claimCaseDebt = claimCaseDebtMapper.selectClaimCaseDebtByRptNo(claimCase.getRptNo());
                 if (StringUtils.isNotNull(claimCaseDebt)) {
                     claimCaseDebt.setRptNo(claimCase.getRptNo());
@@ -1245,10 +1245,13 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
             }else{
                 CalConclusionVo calConclusionVo = claimCaseCalMapper.selectPreCalConclusionByRptNo(claimCase.getRptNo());
                 ClaimCaseDebt claimCaseDebt = claimCaseDebtMapper.selectClaimCaseDebtByRptNo(calConclusionVo.getRptNo());
-                claimCaseDebt.setDebtAmount(calConclusionVo.getDebtAmount());
-                claimCaseDebt.setUpdateBy(SecurityUtils.getUsername());
-                claimCaseDebt.setUpdateTime(DateUtils.getNowDate());
-                claimCaseDebtMapper.updateClaimCaseDebt(claimCaseDebt);
+                if(null != claimCaseDebt) {
+                    claimCaseDebt.setDebtAmount(calConclusionVo.getDebtAmount());
+                    claimCaseDebt.setUpdateBy(SecurityUtils.getUsername());
+                    claimCaseDebt.setUpdateTime(DateUtils.getNowDate());
+                    claimCaseDebtMapper.updateClaimCaseDebt(claimCaseDebt);
+                }
+
             }
         }
 
@@ -1549,7 +1552,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
 
             //追讨生成
             if (claimCaseCheckDTO.getDebtAmount().compareTo(new BigDecimal(String.valueOf(0))) != 0){
-                if ("02".equals(claimCase.getIsAppeal())){
+                if ("01".equals(claimCase.getIsAppeal())){
                     ClaimCaseDebt claimCaseDebt = claimCaseDebtMapper.selectClaimCaseDebtByRptNo(claimCaseCheckDTO.getRptNo());
                     if (StringUtils.isNotNull(claimCaseDebt)) {
                         claimCaseDebt.setRptNo(claimCaseCheckDTO.getRptNo());
@@ -1573,10 +1576,12 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
                 }else{
                     CalConclusionVo calConclusionVo = claimCaseCalMapper.selectPreCalConclusionByRptNo(claimCaseCheckDTO.getRptNo());
                     ClaimCaseDebt claimCaseDebt = claimCaseDebtMapper.selectClaimCaseDebtByRptNo(calConclusionVo.getRptNo());
-                    claimCaseDebt.setDebtAmount(calConclusionVo.getDebtAmount());
-                    claimCaseDebt.setUpdateBy(SecurityUtils.getUsername());
-                    claimCaseDebt.setUpdateTime(DateUtils.getNowDate());
-                    claimCaseDebtMapper.updateClaimCaseDebt(claimCaseDebt);
+                    if(null != claimCaseDebt) {
+                        claimCaseDebt.setDebtAmount(calConclusionVo.getDebtAmount());
+                        claimCaseDebt.setUpdateBy(SecurityUtils.getUsername());
+                        claimCaseDebt.setUpdateTime(DateUtils.getNowDate());
+                        claimCaseDebtMapper.updateClaimCaseDebt(claimCaseDebt);
+                    }
                 }
             }
 

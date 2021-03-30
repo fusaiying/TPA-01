@@ -732,7 +732,23 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService {
         /*  for (ClaimCaseForeignPayInfoVO payInfo : payInfoList) {*/
         FinancePayInfo financePayInfo = financePayInfoMapper.selectFinancePayInfoByBatchNo(batchNo);
         ClaimBatch claimBatch1 = claimBatchMapper.selectClaimBatchById(batchNo);
+        Boolean currencyFlag=true;
         for (ClaimCaseForeignPayInfoVO payInfo : payInfoList) {
+            if (payInfo.getFlag2()>=2){
+                if (!StringUtils.isNotNull(payInfo.getCurrency())){
+                    payInfo.setFlag("N");
+                }
+            }else {
+                if (StringUtils.isNotNull(payInfo.getCurrency())){
+                    payInfo.setFlag("Y");
+                }else {
+                    payInfo.setFlag("N");
+                }
+            }
+
+            if ("05".equals(payInfo.getCaseStatus()) || "06".equals(payInfo.getCaseStatus()) || "98".equals(payInfo.getCaseStatus())){
+                payInfo.setFlag("Y");
+            }
             //判断是否第一次支付
             if (StringUtils.isNotNull(financePayInfo)) {
                 if ("01".equals(payInfo.getPayStatus())) {
@@ -767,13 +783,6 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService {
             } else {
                 payInfo.setBorrowAmount(new BigDecimal("0"));
             }
-
-            // 判断账单币种与批次币种是否一致
-            if (batchCurrency.equals(payInfo.getBillCurrency())) {
-                payInfo.setFlag("Y");
-            } else {
-                payInfo.setFlag("N");
-            }
         }
         claimCaseForeignPayVO.setCaseInfoList(payInfoList);
         if (StringUtils.isNotNull(financePayInfo)) {
@@ -786,14 +795,26 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService {
         BigDecimal calAmount = new BigDecimal("0.00");
         BigDecimal foreignPayAmount = new BigDecimal("0.00");
         for (ClaimCaseForeignPayInfoVO payInfoVO : payInfoList) {
+            //判断批次下币种是否一致
+            if (payInfoVO.getFlag2()>=2){
+                currencyFlag=false;
+            }
+           /* if (!"98".equals(payInfoVO.getCaseStatus()) &&  !"05".equals(payInfoVO.getCaseStatus())){
+                if (payInfoList.get(0).getCurrency()!=null && !payInfoList.get(0).getCurrency().equals(payInfoVO.getCurrency())){
+                    currencyFlag=false;
+                }
+            }*/
             //支付金额大于0 并且无支付中的状态
             if ("02".equals(payInfoVO.getPayStatus())) {
                 payFlag = "false";
             }
             // 1、判断案件是可支付状态
+            ClaimCaseCal claimCaseCal = claimCaseCalMapper.selectClaimCaseCalByRptNo(payInfoVO.getRptNo());
+            if (StringUtils.isNotNull(claimCaseCal)){
+                calAmount = calAmount.add(claimCaseCal.getCalAmount());
+            }
             if ("01".equals(payInfoVO.getPayStatus())) {
                 // 获取支付金额 理赔金额 外币支付总金额
-                ClaimCaseCal claimCaseCal = claimCaseCalMapper.selectClaimCaseCalByRptNo(payInfoVO.getRptNo());
                 if (!"98".equals(payInfoVO.getCaseStatus())) {
                     if ("99".equals(payInfoVO.getCaseStatus())) {
                         //判断已经支付的金额是否与理算表的支付金额一致
@@ -806,7 +827,6 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService {
                     } else {
                         payAmount = payAmount.add(claimCaseCal.getPayAmount());
                     }
-                    calAmount = calAmount.add(claimCaseCal.getCalAmount());
                 }
                 foreignPayAmount = foreignPayAmount.add(claimCaseCal.getPayAmountForeign());
                 // 是否已存在轨迹为“支付环节”
@@ -872,8 +892,8 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService {
         }
         ClaimBatch claimBatch = claimBatchMapper.selectClaimBatchById(batchNo);
         // 该批次下所有账单币种是否一致，不一致时支付币种与外币支付总金额为空
-        boolean currFlag = payInfoList.stream().anyMatch(m -> "N".equals(m.getFlag()));
-        if (!currFlag) {
+        //boolean currFlag = payInfoList.stream().anyMatch(m -> "N".equals(m.getFlag()));
+        if (currencyFlag) {
             // 封装支付币种
             claimCasePaymentVO.setCurrency(claimBatch.getCurrency());
             claimCasePaymentVO.setForeignPayAmount(foreignPayAmount);

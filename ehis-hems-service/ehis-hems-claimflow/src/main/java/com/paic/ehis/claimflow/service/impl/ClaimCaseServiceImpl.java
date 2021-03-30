@@ -1610,6 +1610,8 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
                 claimCase.setPayStatus("01");
             }
             /****
+             * modify by : houjiawei
+             * time : 2021-3-30
              * 如果是申诉案件 且 本次支付差额 为 0 ，则 支付状态为 03 已支付
              */
             if(claimCaseCheckDTO.getCaseType().equals("02") && (claimCaseCheckDTO.getPaymentDifference().compareTo(BigDecimal.ZERO)==0)) {

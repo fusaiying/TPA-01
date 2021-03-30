@@ -3,7 +3,7 @@
     <el-card class="box-card" style="margin-top: 10px;">
       <span style="color: blue">客户基本信息</span>
       <el-divider></el-divider>
-      <el-form ref="sendForm" :model="sendForm" style="padding-bottom: 30px;" label-width="150px"
+      <el-form ref="sendForm" :model="sendForm" style="padding-bottom: 30px;" label-width="170px"
                label-position="right" size="mini">
         <el-row>
           <!--clearable是清楚输入框内容 readly、只读不可以编辑 ；不可以共存-->
@@ -189,7 +189,7 @@
 
     </el-card>
     <el-card class="box-card" style="margin-top: 10px;">
-      <el-form ref="workPoolData" :rules="rules" :model="workPoolData"  style="padding-bottom: 30px;" label-width="150px"
+      <el-form ref="workPoolData" :rules="rules" :model="workPoolData"  style="padding-bottom: 30px;" label-width="170px"
                label-position="right" size="mini">
 
         <span style="color: blue">口腔责任直接结算-服务受理信息</span>
@@ -670,9 +670,15 @@
   import Hospital from "../hospital/hospital";
   import {FlowLogSearch} from '@/api/customService/demand'
   import modifyDetails from "../common/modul/modifyDetails";
-  import {demandListAndPublicPool,demandListAndPersonalPool,modifyReservationSubmit} from '@/api/customService/reservation'
+  import {
+    demandListAndPublicPool,
+    demandListAndPersonalPool,
+    modifyReservationSubmit,
+    getPersonalPool
+  } from '@/api/customService/reservation'
   import {getAddress} from "@/api/baseInfo/medicalManage";
   import {getHospitalInfo} from '@/api/customService/reservation'
+  import {policyInfoData} from "@/api/customService/common";
   let dictss = [
     {dictType: 'cs_identity'},
     {dictType: 'cs_sex'},
@@ -811,9 +817,19 @@
 
         },
         totalCount: 0,
-        //需要填入数据的部分
         ruleForm:{
-
+          workOrderNo:"",
+          businessProcess:"",
+          remark:"",
+          customerFeedback:"",
+          closeType:"",
+          costsIncurred:"",
+          callPerson : {
+            mobilePhone:'',
+          },
+          contactsPerson :{
+            name:'',
+          }
         },
         // 表单校验
         // 表单校验根据Form 组件提供了表单验证的功能，只需要通过 rules 属性传入约定的验证规则，并将 Form-Item 的 prop 属性设置为需校验的字段名即可
@@ -1082,6 +1098,25 @@
       this.getAddressData()
     },
     methods: {
+      //客户信息加载
+      searchSendFormInfo() {
+        let query = {
+          policyNo: this.queryParams.policyNo,
+          policyItemNo: this.queryParams.policyItemNo,
+        }
+        if(this.queryParams.policyNo != null && this.queryParams.policyNo !=""){
+          policyInfoData(query).then(res => {
+            if (res != null && res.code === 200) {
+              if (res.data != null) {
+                this.sendForm = res.data;
+              }
+            }
+          }).catch(res => {
+
+          })
+        }
+      },
+
       //超链接用
       modifyDetails(s){
         this.$refs.modifyDetails.queryParams.subId=s.subId,
@@ -1122,7 +1157,50 @@
       },
       //反显信息需求
       searchHandle: function () {
-        if (this.queryParams.status == "01") {
+        let workOrderNo = this.queryParams
+        console.log("workOrderNo", workOrderNo)
+        getPersonalPool(workOrderNo).then(res => {
+          if (res != null && res.code === 200) {
+            this.workPoolData = res.data
+           // console.log(this.ruleForm)
+            if (this.workPoolData.symptomTimes != null && this.workPoolData.symptomTimes != '') {
+              let arr=this.workPoolData.symptomTimes.split('-');
+              this.$set(this.workPoolData, `a`, arr[0]);
+              this.$set(this.workPoolData, `b`, arr[1]);
+            }
+            if(this.workPoolData.complaintTime != null && this.workPoolData.complaintTime !=''){
+              //预约时间反显
+              let timeArr=this.workPoolData.complaintTime.split('-');
+              this.$set(this.workPoolData, `complaintTimes`, timeArr);
+            }
+            let queryData={
+              hospitalCode:this.workPoolData.medicalInstitution,
+              hospitalName:this.workPoolData.hospitalName,
+              province:this.workPoolData.province,
+              city:this.workPoolData.city,
+            }
+            if (this.workPoolData.medicalInstitution!='9999'){
+              getHospitalInfo (queryData).then(res => {
+                if (res != null && res !== '' && res.rows.length>0) {
+                  if (res.rows[0].deptList && res.rows[0].deptList.length>0){
+                    this.departmentOption=res.rows[0].deptList
+                  }else {
+                    this.departmentOption=[]
+                  }
+                }
+              })
+            }else {
+              this.departmentOption=[]
+            }
+            this.region.push(this.workPoolData.province)
+            this.region.push(this.workPoolData.city)
+          }
+        }).catch(res => {
+
+        })
+
+
+/*        if (this.queryParams.status == "01") {
           let query = this.queryParams
           demandListAndPublicPool(query).then(res => {
             if (res != null && res.code === 200) {
@@ -1178,8 +1256,8 @@
               if (this.workPoolData.symptomTimes != null && this.workPoolData.symptomTimes != '') {
                 let arr=this.workPoolData.symptomTimes.split('-')
                 console.log(arr)
-                /*this.ruleForm.a=arr[0]
-                this.ruleForm.b=arr[1]*/
+                /!*this.ruleForm.a=arr[0]
+                this.ruleForm.b=arr[1]*!/
                 this.$set(this.workPoolData, `a`, arr[0]);
                 this.$set(this.workPoolData, `b`, arr[1]);
               }
@@ -1215,7 +1293,7 @@
 
           })
 
-        }
+        }*/
       },
       //查询轨迹表
       searchFlowLog() {

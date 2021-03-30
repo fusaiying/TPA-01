@@ -77,6 +77,9 @@ public class ClaimCaseCal extends BaseEntity
     /** 是否申诉 */
     private String isAppeal;
 
+    /**本次支付差额*/
+    private BigDecimal paymentDifference;
+
     public void setCalId(Long calId) 
     {
         this.calId = calId;
@@ -201,6 +204,30 @@ public class ClaimCaseCal extends BaseEntity
 
     public void setIsAppeal(String isAppeal) {
         this.isAppeal = isAppeal;
+    }
+
+    public BigDecimal getTotalBillAmount() {
+        return totalBillAmount;
+    }
+
+    public void setTotalBillAmount(BigDecimal totalBillAmount) {
+        this.totalBillAmount = totalBillAmount;
+    }
+
+    public BigDecimal getTotalBillAmountForeign() {
+        return totalBillAmountForeign;
+    }
+
+    public void setTotalBillAmountForeign(BigDecimal totalBillAmountForeign) {
+        this.totalBillAmountForeign = totalBillAmountForeign;
+    }
+
+    public BigDecimal getPaymentDifference() {
+        return paymentDifference;
+    }
+
+    public void setPaymentDifference(BigDecimal paymentDifference) {
+        this.paymentDifference = paymentDifference;
     }
 
     @Override

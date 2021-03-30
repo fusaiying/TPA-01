@@ -1,83 +1,85 @@
-INSERT INTO `sn-cs`.field_map (source_name,type_code,field_order,source_filed_name,source_field_mean,target_table_name,target_column_name,target_column_mean,created_by,created_time,updated_by,updated_time) VALUES
-('ComplaintAcceptVo','投诉',1,'complaintTime','预约时间','accept_detail_info','prop10','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00')
-,('ComplaintAcceptVo','投诉',2,'attachmentFlag','有无附件','accept_detail_info','prop0','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00')
-,('ComplaintAcceptVo','投诉',2,'persuasionFlag','是否已劝解','accept_detail_info','prop2','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00')
-,('ComplaintDealVo','投诉',1,'level1','一级投诉分类','work_handle_info','handleProp3','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00')
-,('ComplaintDealVo','投诉',2,'level2','二级投诉分类','work_handle_info','handleProp4','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00')
-,('ComplaintDealVo','投诉',3,'pieceworkFlag','是否计件','work_handle_info','flag','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00')
-,('ComplaintDealVo','投诉',4,'complaintStatus','投诉状态','work_handle_info','handleProp5','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00')
-,('ComplaintDealVo','投诉',5,'complaintTenable','投诉是否成立','work_handle_info','handleProp1','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00')
-,('ComplaintDealVo','投诉',6,'faseReason','投诉不成立理由','work_handle_info','handleProp6','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00')
-,('ComplaintDealVo','投诉',7,'repeatedComplaint','重复投诉','work_handle_info','handleProp7','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00')
+INSERT INTO `sn-cs`.field_map (source_name,type_code,field_order,source_filed_name,source_field_mean,target_table_name,target_column_name,target_column_mean,created_by,created_time,updated_by,updated_time,status) VALUES
+('ComplaintAcceptVo','投诉',1,'complaintTime','预约时间','accept_detail_info','prop10','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00',1)
+,('ComplaintAcceptVo','投诉',2,'attachmentFlag','有无附件','accept_detail_info','prop0','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00',1)
+,('ComplaintAcceptVo','投诉',2,'persuasionFlag','是否已劝解','accept_detail_info','prop2','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00',1)
+,('ComplaintDealVo','投诉',1,'level1','一级投诉分类','work_handle_info','handleProp3','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00',1)
+,('ComplaintDealVo','投诉',2,'level2','二级投诉分类','work_handle_info','handleProp4','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00',1)
+,('ComplaintDealVo','投诉',3,'pieceworkFlag','是否计件','work_handle_info','flag','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00',1)
+,('ComplaintDealVo','投诉',4,'complaintStatus','投诉状态','work_handle_info','handleProp5','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00',1)
+,('ComplaintDealVo','投诉',5,'complaintTenable','投诉是否成立','work_handle_info','handleProp1','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00',1)
+,('ComplaintDealVo','投诉',6,'faseReason','投诉不成立理由','work_handle_info','handleProp6','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00',1)
+,('ComplaintDealVo','投诉',7,'repeatedComplaint','重复投诉','work_handle_info','handleProp7','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00',1)
 ;
-INSERT INTO `sn-cs`.field_map (source_name,type_code,field_order,source_filed_name,source_field_mean,target_table_name,target_column_name,target_column_mean,created_by,created_time,updated_by,updated_time) VALUES
-('ComplaintDealVo','投诉',8,'reason1','一级投诉原因','work_handle_info','handleProp8','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00')
-,('ComplaintDealVo','投诉',9,'reason2','二级投诉原因','work_handle_info','handleProp9','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00')
-,('ComplaintDealVo','投诉',10,'reason3','三级投诉原因','work_handle_info','handleProp10','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00')
-,('ComplaintDealVo','投诉',11,'complaintLink','投诉环节(报保监)','work_handle_info','handleProp11','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00')
-,('ComplaintDealVo','投诉',12,'complaintQuestion','投诉问题(报保监)','work_handle_info','handleProp12','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00')
-,('ComplaintDealVo','投诉',13,'outsideState','行协调解或外部鉴定状态','work_handle_info','handleProp13','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00')
-,('ComplaintDealVo','投诉',14,'riskType','险种类型','work_handle_info','handleProp14','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00')
-,('ComplaintDealVo','投诉',15,'marketChannel','营销渠道','work_handle_info','handleProp15','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00')
-,('ComplaintDealVo','投诉',16,'complaintCategory','投诉业务类别','work_handle_info','handleProp16','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00')
-,('ComplaintDealVo','投诉',17,'rootDepartment','投诉根因部门','work_handle_info','handleProp17','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00')
+INSERT INTO `sn-cs`.field_map (source_name,type_code,field_order,source_filed_name,source_field_mean,target_table_name,target_column_name,target_column_mean,created_by,created_time,updated_by,updated_time,status) VALUES
+('ComplaintDealVo','投诉',8,'reason1','一级投诉原因','work_handle_info','handleProp8','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00',1)
+,('ComplaintDealVo','投诉',9,'reason2','二级投诉原因','work_handle_info','handleProp9','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00',1)
+,('ComplaintDealVo','投诉',10,'reason3','三级投诉原因','work_handle_info','handleProp10','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00',1)
+,('ComplaintDealVo','投诉',11,'complaintLink','投诉环节(报保监)','work_handle_info','handleProp11','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00',1)
+,('ComplaintDealVo','投诉',12,'complaintQuestion','投诉问题(报保监)','work_handle_info','handleProp12','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00',1)
+,('ComplaintDealVo','投诉',13,'outsideState','行协调解或外部鉴定状态','work_handle_info','handleProp13','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00',1)
+,('ComplaintDealVo','投诉',14,'riskType','险种类型','work_handle_info','handleProp14','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00',1)
+,('ComplaintDealVo','投诉',15,'marketChannel','营销渠道','work_handle_info','handleProp15','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00',1)
+,('ComplaintDealVo','投诉',16,'complaintCategory','投诉业务类别','work_handle_info','handleProp16','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00',1)
+,('ComplaintDealVo','投诉',17,'rootDepartment','投诉根因部门','work_handle_info','handleProp17','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00',1)
 ;
-INSERT INTO `sn-cs`.field_map (source_name,type_code,field_order,source_filed_name,source_field_mean,target_table_name,target_column_name,target_column_mean,created_by,created_time,updated_by,updated_time) VALUES
-('ComplaintDealVo','投诉',18,'actionCause','致诉原因','work_handle_info','handleProp30','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00')
-,('ComplaintDealVo','投诉',19,'treatmentProgress','处理进展','work_handle_info','handleProp18','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00')
-,('ComplaintDealVo','投诉',20,'treatmentResult','处理结果','work_handle_info','remark','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00')
-,('ComplaintDealVo','投诉',21,'customerFeedback','客户反馈','work_handle_info','handleProp2','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00')
-,('ComplaintDealVo','投诉',22,'rootImprovement','根因改善','work_handle_info','handleProp19','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00')
-,('ComplaintDealVo','投诉',23,'actPromptly','投诉损失','work_handle_info','handleProp20','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00')
-,('ComplaintDealVo','投诉',24,'improvementMeasures','改善措施','work_handle_info','handleProp21','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00')
-,('DemandAcceptVo','信息需求',1,'bankTransfer','是否涉及银行转账','accept_detail_info','prop2','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00')
-,('DemandAcceptVo','信息需求',2,'bankName','开户行','accept_detail_info','prop7','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00')
-,('DemandAcceptVo','信息需求',3,'bankLocation','开户地','accept_detail_info','prop8','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00')
+INSERT INTO `sn-cs`.field_map (source_name,type_code,field_order,source_filed_name,source_field_mean,target_table_name,target_column_name,target_column_mean,created_by,created_time,updated_by,updated_time,status) VALUES
+('ComplaintDealVo','投诉',18,'actionCause','致诉原因','work_handle_info','handleProp30','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00',1)
+,('ComplaintDealVo','投诉',19,'treatmentProgress','处理进展','work_handle_info','handleProp18','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00',1)
+,('ComplaintDealVo','投诉',20,'treatmentResult','处理结果','work_handle_info','remark','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00',1)
+,('ComplaintDealVo','投诉',21,'customerFeedback','客户反馈','work_handle_info','handleProp2','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00',1)
+,('ComplaintDealVo','投诉',22,'rootImprovement','根因改善','work_handle_info','handleProp19','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00',1)
+,('ComplaintDealVo','投诉',23,'actPromptly','投诉损失','work_handle_info','handleProp20','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00',1)
+,('ComplaintDealVo','投诉',24,'improvementMeasures','改善措施','work_handle_info','handleProp21','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00',1)
+,('DemandAcceptVo','信息需求',1,'bankTransfer','是否涉及银行转账','accept_detail_info','prop2','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00',1)
+,('DemandAcceptVo','信息需求',2,'bankName','开户行','accept_detail_info','prop7','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00',1)
+,('DemandAcceptVo','信息需求',3,'bankLocation','开户地','accept_detail_info','prop8','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00',1)
 ;
-INSERT INTO `sn-cs`.field_map (source_name,type_code,field_order,source_filed_name,source_field_mean,target_table_name,target_column_name,target_column_mean,created_by,created_time,updated_by,updated_time) VALUES
-('DemandAcceptVo','信息需求',4,'accountNumber','账号','accept_detail_info','prop10','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00')
-,('DemandAcceptVo','信息需求',5,'bankHolder','户名','accept_detail_info','prop11','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00')
-,('DemandAcceptVo','信息需求',6,'attachmentFlag','有无附件','accept_detail_info','prop1','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00')
-,('ReservationAcceptVo','预约',1,'outpatientSettlement','门诊直接结算服务项目','accept_detail_info','prop0','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00')
-,('ReservationAcceptVo','预约',2,'visitType','就诊类型','accept_detail_info','prop2','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00')
-,('ReservationAcceptVo','预约',3,'disease','疾病名称','accept_detail_info','prop7','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00')
-,('ReservationAcceptVo','预约',4,'symptomsSigns','症状或体征','accept_detail_info','prop16','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00')
-,('ReservationAcceptVo','预约',5,'symptomTimes','本次疾病/症状起病时间','accept_detail_info','prop4','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00')
-,('ReservationAcceptVo','预约',6,'timeUnit','时间单位','accept_detail_info','prop3','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00')
-,('ReservationAcceptVo','预约',7,'accidentFlag','是否意外','accept_detail_info','prop1','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00')
+INSERT INTO `sn-cs`.field_map (source_name,type_code,field_order,source_filed_name,source_field_mean,target_table_name,target_column_name,target_column_mean,created_by,created_time,updated_by,updated_time,status) VALUES
+('DemandAcceptVo','信息需求',4,'accountNumber','账号','accept_detail_info','prop10','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00',1)
+,('DemandAcceptVo','信息需求',5,'bankHolder','户名','accept_detail_info','prop11','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00',1)
+,('DemandAcceptVo','信息需求',6,'attachmentFlag','有无附件','accept_detail_info','prop1','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00',1)
+,('ReservationAcceptVo','预约',1,'outpatientSettlement','门诊直接结算服务项目','accept_detail_info','prop0','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00',1)
+,('ReservationAcceptVo','预约',2,'visitType','就诊类型','accept_detail_info','prop2','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00',1)
+,('ReservationAcceptVo','预约',3,'disease','疾病名称','accept_detail_info','prop7','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00',1)
+,('ReservationAcceptVo','预约',4,'symptomsSigns','症状或体征','accept_detail_info','prop16','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00',1)
+,('ReservationAcceptVo','预约',5,'symptomTimes','本次疾病/症状起病时间','accept_detail_info','prop4','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00',1)
+,('ReservationAcceptVo','预约',6,'timeUnit','时间单位','accept_detail_info','prop3','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00',1)
+,('ReservationAcceptVo','预约',7,'accidentFlag','是否意外','accept_detail_info','prop1','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00',1)
 ;
-INSERT INTO `sn-cs`.field_map (source_name,type_code,field_order,source_filed_name,source_field_mean,target_table_name,target_column_name,target_column_mean,created_by,created_time,updated_by,updated_time) VALUES
-('ReservationAcceptVo','预约',8,'accidentReason','意外原因','accept_detail_info','prop17','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00')
-,('ReservationAcceptVo','预约',9,'validCertificate','是否持有效证件','accept_detail_info','prop5','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00')
-,('ReservationAcceptVo','预约',10,'settlementCard','是否持有直结卡','accept_detail_info','prop6','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00')
-,('ReservationAcceptVo','预约',11,'complaintTime','预约时间','accept_detail_info','prop18','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00')
-,('ReservationAcceptVo','预约',12,'hospitalDays','预计住院天数','accept_detail_info','prop8','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00')
-,('ReservationAcceptVo','预约',13,'medicalInstitution','医疗机构','accept_detail_info','prop11','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00')
-,('ReservationAcceptVo','预约',14,'department','科室','accept_detail_info','prop10','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00')
-,('ReservationAcceptVo','预约',15,'bunk','床位','accept_detail_info','prop9','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00')
-,('ReservationAcceptVo','预约',16,'compensationRatio','医院赔付比例','accept_detail_info','prop12','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00')
-,('ReservationAcceptVo','预约',17,'appointmentDate','预约日期','accept_detail_info','prop14','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00')
+INSERT INTO `sn-cs`.field_map (source_name,type_code,field_order,source_filed_name,source_field_mean,target_table_name,target_column_name,target_column_mean,created_by,created_time,updated_by,updated_time,status) VALUES
+('ReservationAcceptVo','预约',8,'accidentReason','意外原因','accept_detail_info','prop17','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00',1)
+,('ReservationAcceptVo','预约',9,'validCertificate','是否持有效证件','accept_detail_info','prop5','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00',1)
+,('ReservationAcceptVo','预约',10,'settlementCard','是否持有直结卡','accept_detail_info','prop6','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00',1)
+,('ReservationAcceptVo','预约',11,'complaintTime','预约时间','accept_detail_info','prop18','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00',1)
+,('ReservationAcceptVo','预约',12,'hospitalDays','预计住院天数','accept_detail_info','prop8','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00',1)
+,('ReservationAcceptVo','预约',13,'medicalInstitution','医疗机构ID','accept_detail_info','prop11','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00',1)
+,('ReservationAcceptVo','预约',14,'department','科室','accept_detail_info','prop10','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00',1)
+,('ReservationAcceptVo','预约',15,'bunk','床位','accept_detail_info','prop9','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00',1)
+,('ReservationAcceptVo','预约',16,'compensationRatio','医院赔付比例','accept_detail_info','prop12','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00',1)
+,('ReservationAcceptVo','预约',17,'appointmentDate','预约日期','accept_detail_info','prop14','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00',1)
 ;
-INSERT INTO `sn-cs`.field_map (source_name,type_code,field_order,source_filed_name,source_field_mean,target_table_name,target_column_name,target_column_mean,created_by,created_time,updated_by,updated_time) VALUES
-('ReservationAcceptVo','预约',18,'hospitalWorkCall','医院工作来电','accept_detail_info','prop15','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00')
-,('ReservationAcceptVo','预约',19,'earliestTime','类似疾病症状最早发生时间','accept_detail_info','prop19','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00')
-,('ReservationAcceptVo','预约',20,'firstFlag','是否首次就诊','accept_detail_info','prop20','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00')
-,('ReservationAcceptVo','预约',21,'clinicDate','就诊日期','accept_detail_info','prop21','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00')
-,('ReservationAcceptVo','预约',22,'clinicTime','就诊时间','accept_detail_info','prop22','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00')
-,('ReservationAcceptVo','预约',23,'province','就诊医院省','accept_detail_info','prop23','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00')
-,('ReservationAcceptVo','预约',24,'city','就诊医院市','accept_detail_info','prop24','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00')
-,('ReservationAcceptVo','预约',25,'settlementFlag','是否申请直结','accept_detail_info','prop25','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00')
-,('ReservationDealVo','预约',1,'times','处理时长','work_handle_info','handleProp13','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00')
-,('ReservationDealVo','预约',2,'businessProcess','业务处理情况','work_handle_info','handleProp1','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00')
+INSERT INTO `sn-cs`.field_map (source_name,type_code,field_order,source_filed_name,source_field_mean,target_table_name,target_column_name,target_column_mean,created_by,created_time,updated_by,updated_time,status) VALUES
+('ReservationAcceptVo','预约',18,'hospitalWorkCall','医院电话','accept_detail_info','prop15','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00',1)
+,('ReservationAcceptVo','预约',19,'earliestTime','类似疾病症状最早发生时间','accept_detail_info','prop19','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00',1)
+,('ReservationAcceptVo','预约',20,'firstFlag','是否首次就诊','accept_detail_info','prop20','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00',1)
+,('ReservationAcceptVo','预约',21,'clinicDate','就诊日期','accept_detail_info','prop21','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00',1)
+,('ReservationAcceptVo','预约',22,'clinicTime','就诊时间','accept_detail_info','prop22','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00',1)
+,('ReservationAcceptVo','预约',23,'province','就诊医院省','accept_detail_info','prop23','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00',1)
+,('ReservationAcceptVo','预约',24,'city','就诊医院市','accept_detail_info','prop24','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00',1)
+,('ReservationAcceptVo','预约',25,'settlementFlag','是否申请直结','accept_detail_info','prop25','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00',1)
+,('ReservationAcceptVo','预约',26,'hospitalName','医疗机构名称','accept_detail_info','prop26','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00',1)
+,('ReservationAcceptVo','预约',27,'hospitalAddress','医院地址','accept_detail_info','prop29','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00',1)
 ;
-INSERT INTO `sn-cs`.field_map (source_name,type_code,field_order,source_filed_name,source_field_mean,target_table_name,target_column_name,target_column_mean,created_by,created_time,updated_by,updated_time) VALUES
-('ReservationDealVo','预约',3,'customerFeedback','客户反馈','work_handle_info','handleProp2','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00')
-,('ReservationDealVo','预约',4,'closeType','结案类型','work_handle_info','handleProp3','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00')
-,('ReservationDealVo','预约',5,'costsIncurred','是否需要担保函','work_handle_info','handleProp30','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00')
-,('ServiceProcessingVo','信息需求',1,'businessProcess','业务处理情况','work_handle_info','handleProp1','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00')
-,('ServiceProcessingVo','信息需求',2,'customerFeedback','客户反馈','work_handle_info','handleProp2','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00')
-,('ServiceProcessingVo','信息需求',3,'closeType','结案类型','work_handle_info','handleProp3','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00')
-,('ServiceProcessingVo','信息需求',4,'costsIncurred','安抚或通融发生费用成本','work_handle_info','handleProp30','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00')
+INSERT INTO `sn-cs`.field_map (source_name,type_code,field_order,source_filed_name,source_field_mean,target_table_name,target_column_name,target_column_mean,created_by,created_time,updated_by,updated_time,status) VALUES
+('ReservationDealVo','预约',1,'times','处理时长','work_handle_info','handleProp13','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00',1)
+,('ReservationDealVo','预约',2,'businessProcess','业务处理情况','work_handle_info','handleProp1','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00',1)
+,('ReservationDealVo','预约',3,'customerFeedback','客户反馈','work_handle_info','handleProp2','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00',1)
+,('ReservationDealVo','预约',4,'closeType','结案类型','work_handle_info','handleProp3','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00',1)
+,('ReservationDealVo','预约',5,'costsIncurred','是否需要担保函','work_handle_info','handleProp30','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00',1)
+,('ServiceProcessingVo','信息需求',1,'businessProcess','业务处理情况','work_handle_info','handleProp1','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00',1)
+,('ServiceProcessingVo','信息需求',2,'customerFeedback','客户反馈','work_handle_info','handleProp2','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00',1)
+,('ServiceProcessingVo','信息需求',3,'closeType','结案类型','work_handle_info','handleProp3','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00',1)
+,('ServiceProcessingVo','信息需求',4,'costsIncurred','安抚或通融发生费用成本','work_handle_info','handleProp30','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00',1)
 ;
 
 
@@ -101,6 +103,42 @@ INSERT INTO `sn-cs`.code_dict (code_type,code,code_name,code_alias,status,parent
 ,('cs_complaint_business_item','7','互联网销售业务',NULL,'1',NULL,NULL,'投诉业务类别',5,'admin','2021-02-09 09:36:00','admin','2021-02-09 09:36:00')
 ,('cs_complaint_business_item','8','互联网销售业务',NULL,'1',NULL,NULL,'投诉业务类别',6,'admin','2021-02-09 09:36:00','admin','2021-02-09 09:36:00')
 ,('cs_complaint_business_item','9','互联网销售业务',NULL,'1',NULL,NULL,'投诉业务类别',7,'admin','2021-02-09 09:36:00','admin','2021-02-09 09:36:00')
+,('cs_inspection_class_complaint','01','时效性',NULL,'1',NULL,NULL,'投诉质检分类',1,'admin','2021-02-09 09:36:00','admin','2021-02-09 09:36:00')
+,('cs_inspection_class_complaint','02','准确性',NULL,'1',NULL,NULL,'投诉质检分类',2,'admin','2021-02-09 09:36:00','admin','2021-02-09 09:36:00')
+,('cs_inspection_class_complaint','03','真实性',NULL,'1',NULL,NULL,'投诉质检分类',3,'admin','2021-02-09 09:36:00','admin','2021-02-09 09:36:00')
+;
+INSERT INTO `sn-cs`.code_dict (code_type,code,code_name,code_alias,status,parent_code,parent_code_type,remarks,order_no,created_by,created_time,updated_by,updated_time) VALUES
+('cs_inspection_item_complaint','01','投诉件录入时效',NULL,'1','01','cs_inspection_class_complaint','投诉质检项目',1,'admin','2021-02-09 09:36:00','admin','2021-02-09 09:36:00')
+,('cs_inspection_item_complaint','02','响应时间',NULL,'1','01','cs_inspection_class_complaint','投诉质检项目',2,'admin','2021-02-09 09:36:00','admin','2021-02-09 09:36:00')
+,('cs_inspection_item_complaint','03','根因改善闭环时效',NULL,'1','01','cs_inspection_class_complaint','投诉质检项目',3,'admin','2021-02-09 09:36:00','admin','2021-02-09 09:36:00')
+,('cs_inspection_item_complaint','04','受理渠道',NULL,'1','02','cs_inspection_class_complaint','投诉质检项目',4,'admin','2021-02-09 09:36:00','admin','2021-02-09 09:36:00')
+,('cs_inspection_item_complaint','05','投诉分类',NULL,'1','02','cs_inspection_class_complaint','投诉质检项目',5,'admin','2021-02-09 09:36:00','admin','2021-02-09 09:36:00')
+,('cs_inspection_item_complaint','06','监管计件',NULL,'1','02','cs_inspection_class_complaint','投诉质检项目',6,'admin','2021-02-09 09:36:00','admin','2021-02-09 09:36:00')
+,('cs_inspection_item_complaint','07','监管撤诉状态',NULL,'1','02','cs_inspection_class_complaint','投诉质检项目',7,'admin','2021-02-09 09:36:00','admin','2021-02-09 09:36:00')
+,('cs_inspection_item_complaint','08','投诉原因',NULL,'1','02','cs_inspection_class_complaint','投诉质检项目',8,'admin','2021-02-09 09:36:00','admin','2021-02-09 09:36:00')
+,('cs_inspection_item_complaint','09','客户反馈',NULL,'1','02','cs_inspection_class_complaint','投诉质检项目',9,'admin','2021-02-09 09:36:00','admin','2021-02-09 09:36:00')
+,('cs_inspection_item_complaint','10','投诉损失',NULL,'1','02','cs_inspection_class_complaint','投诉质检项目',10,'admin','2021-02-09 09:36:00','admin','2021-02-09 09:36:00')
+;
+INSERT INTO `sn-cs`.code_dict (code_type,code,code_name,code_alias,status,parent_code,parent_code_type,remarks,order_no,created_by,created_time,updated_by,updated_time) VALUES
+('cs_inspection_item_complaint','11','投诉是否成立',NULL,'1','02','cs_inspection_class_complaint','投诉质检项目',11,'admin','2021-02-09 09:36:00','admin','2021-02-09 09:36:00')
+,('cs_inspection_item_complaint','12','投诉根因部门',NULL,'1','02','cs_inspection_class_complaint','投诉质检项目',12,'admin','2021-02-09 09:36:00','admin','2021-02-09 09:36:00')
+,('cs_inspection_item_complaint','13','根因改善',NULL,'1','02','cs_inspection_class_complaint','投诉质检项目',13,'admin','2021-02-09 09:36:00','admin','2021-02-09 09:36:00')
+,('cs_inspection_item_complaint','14','致诉根因',NULL,'1','02','cs_inspection_class_complaint','投诉质检项目',14,'admin','2021-02-09 09:36:00','admin','2021-02-09 09:36:00')
+,('cs_inspection_item_complaint','15','处理结果',NULL,'1','02','cs_inspection_class_complaint','投诉质检项目',15,'admin','2021-02-09 09:36:00','admin','2021-02-09 09:36:00')
+,('cs_inspection_item_complaint','16','附件完整性',NULL,'1','02','cs_inspection_class_complaint','投诉质检项目',16,'admin','2021-02-09 09:36:00','admin','2021-02-09 09:36:00')
+,('cs_inspection_item_complaint','17','征求处理意见',NULL,'1','02','cs_inspection_class_complaint','投诉质检项目',17,'admin','2021-02-09 09:36:00','admin','2021-02-09 09:36:00')
+,('cs_inspection_item_complaint','18','处理意见',NULL,'1','02','cs_inspection_class_complaint','投诉质检项目',18,'admin','2021-02-09 09:36:00','admin','2021-02-09 09:36:00')
+,('cs_inspection_item_complaint','19','行协调或外部鉴定状态',NULL,'1','02','cs_inspection_class_complaint','投诉质检项目',19,'admin','2021-02-09 09:36:00','admin','2021-02-09 09:36:00')
+,('cs_inspection_item_complaint','20','案件真实性',NULL,'1','03','cs_inspection_class_complaint','投诉质检项目',20,'admin','2021-02-09 09:36:00','admin','2021-02-09 09:36:00')
+;
+INSERT INTO `sn-cs`.code_dict (code_type,code,code_name,code_alias,status,parent_code,parent_code_type,remarks,order_no,created_by,created_time,updated_by,updated_time) VALUES
+('cs_inspection_item_demand','21','是否时效内响应客户',NULL,'1',NULL,NULL,'信息需求质检项目',21,'admin','2021-02-09 09:36:00','admin','2021-02-09 09:36:00')
+,('cs_inspection_item_demand','22','是否符合短信结案规则',NULL,'1',NULL,NULL,'信息需求质检项目',22,'admin','2021-02-09 09:36:00','admin','2021-02-09 09:36:00')
+,('cs_inspection_item_demand','23','是否电话通知客户',NULL,'1',NULL,NULL,'信息需求质检项目',23,'admin','2021-02-09 09:36:00','admin','2021-02-09 09:36:00')
+,('cs_inspection_item_demand','24','是否满足客户诉求',NULL,'1',NULL,NULL,'信息需求质检项目',24,'admin','2021-02-09 09:36:00','admin','2021-02-09 09:36:00')
+,('cs_inspection_item_demand','25','是否及时升级投诉',NULL,'1',NULL,NULL,'信息需求质检项目',25,'admin','2021-02-09 09:36:00','admin','2021-02-09 09:36:00')
+,('cs_inspection_item_demand','26','是否规范记录',NULL,'1',NULL,NULL,'信息需求质检项目',26,'admin','2021-02-09 09:36:00','admin','2021-02-09 09:36:00')
+,('cs_inspection_item_demand','27','是否有其他错误',NULL,'1',NULL,NULL,'信息需求质检项目',27,'admin','2021-02-09 09:36:00','admin','2021-02-09 09:36:00')
 ,('cs_insurance_source','07','金融旗舰店-移动端',NULL,'1','1',NULL,'投保来源',8,'admin','2021-02-09 09:36:00','admin','2021-02-09 09:36:00')
 ,('cs_insurance_source','08','寿险绑定',NULL,'1','6',NULL,'投保来源',22,'admin','2021-02-09 09:36:00','admin','2021-02-09 09:36:00')
 ,('cs_insurance_source','10199','员福e生保H5',NULL,'1','6',NULL,'投保来源',23,'admin','2021-02-09 09:36:00','admin','2021-02-09 09:36:00')
@@ -313,107 +351,59 @@ INSERT INTO `sn-cs`.code_dict (code_type,code,code_name,code_alias,status,parent
 ('cs_service_item','B00034','根因改善',NULL,'1',NULL,NULL,'服务项目',10,'admin','2021-02-09 09:36:00','admin','2021-02-09 09:36:00')
 ;
 
-INSERT INTO `sn-cs`.code_dict
-(code_type, code, code_name, code_alias, status, parent_code, parent_code_type, remarks, order_no, created_by, created_time, updated_by, updated_time)
-VALUES('cs_inspection_class_complaint', '01', '时效性', NULL, '1', NULL, NULL, '投诉质检分类', 1, 'admin', '2021-02-09 09:36:00', 'admin', '2021-02-09 09:36:00');
-INSERT INTO `sn-cs`.code_dict
-(code_type, code, code_name, code_alias, status, parent_code, parent_code_type, remarks, order_no, created_by, created_time, updated_by, updated_time)
-VALUES('cs_inspection_class_complaint', '02', '准确性', NULL, '1', NULL, NULL, '投诉质检分类', 2, 'admin', '2021-02-09 09:36:00', 'admin', '2021-02-09 09:36:00');
-INSERT INTO `sn-cs`.code_dict
-(code_type, code, code_name, code_alias, status, parent_code, parent_code_type, remarks, order_no, created_by, created_time, updated_by, updated_time)
-VALUES('cs_inspection_class_complaint', '03', '真实性', NULL, '1', NULL, NULL, '投诉质检分类', 3, 'admin', '2021-02-09 09:36:00', 'admin', '2021-02-09 09:36:00');
-INSERT INTO `sn-cs`.code_dict
-(code_type, code, code_name, code_alias, status, parent_code, parent_code_type, remarks, order_no, created_by, created_time, updated_by, updated_time)
-VALUES('cs_inspection_item_complaint', '01', '投诉件录入时效', NULL, '1', '01', 'cs_inspection_class_complaint', '投诉质检项目', 1, 'admin', '2021-02-09 09:36:00', 'admin', '2021-02-09 09:36:00');
-INSERT INTO `sn-cs`.code_dict
-(code_type, code, code_name, code_alias, status, parent_code, parent_code_type, remarks, order_no, created_by, created_time, updated_by, updated_time)
-VALUES('cs_inspection_item_complaint', '02', '响应时间', NULL, '1', '01', 'cs_inspection_class_complaint', '投诉质检项目', 2, 'admin', '2021-02-09 09:36:00', 'admin', '2021-02-09 09:36:00');
-INSERT INTO `sn-cs`.code_dict
-(code_type, code, code_name, code_alias, status, parent_code, parent_code_type, remarks, order_no, created_by, created_time, updated_by, updated_time)
-VALUES('cs_inspection_item_complaint', '03', '根因改善闭环时效', NULL, '1', '01', 'cs_inspection_class_complaint', '投诉质检项目', 3, 'admin', '2021-02-09 09:36:00', 'admin', '2021-02-09 09:36:00');
-INSERT INTO `sn-cs`.code_dict
-(code_type, code, code_name, code_alias, status, parent_code, parent_code_type, remarks, order_no, created_by, created_time, updated_by, updated_time)
-VALUES('cs_inspection_item_complaint', '04', '受理渠道', NULL, '1', '02', 'cs_inspection_class_complaint', '投诉质检项目', 4, 'admin', '2021-02-09 09:36:00', 'admin', '2021-02-09 09:36:00');
-INSERT INTO `sn-cs`.code_dict
-(code_type, code, code_name, code_alias, status, parent_code, parent_code_type, remarks, order_no, created_by, created_time, updated_by, updated_time)
-VALUES('cs_inspection_item_complaint', '05', '投诉分类', NULL, '1', '02', 'cs_inspection_class_complaint', '投诉质检项目', 5, 'admin', '2021-02-09 09:36:00', 'admin', '2021-02-09 09:36:00');
-INSERT INTO `sn-cs`.code_dict
-(code_type, code, code_name, code_alias, status, parent_code, parent_code_type, remarks, order_no, created_by, created_time, updated_by, updated_time)
-VALUES('cs_inspection_item_complaint', '06', '监管计件', NULL, '1', '02', 'cs_inspection_class_complaint', '投诉质检项目', 6, 'admin', '2021-02-09 09:36:00', 'admin', '2021-02-09 09:36:00');
-INSERT INTO `sn-cs`.code_dict
-(code_type, code, code_name, code_alias, status, parent_code, parent_code_type, remarks, order_no, created_by, created_time, updated_by, updated_time)
-VALUES('cs_inspection_item_complaint', '07', '监管撤诉状态', NULL, '1', '02', 'cs_inspection_class_complaint', '投诉质检项目', 7, 'admin', '2021-02-09 09:36:00', 'admin', '2021-02-09 09:36:00');
-INSERT INTO `sn-cs`.code_dict
-(code_type, code, code_name, code_alias, status, parent_code, parent_code_type, remarks, order_no, created_by, created_time, updated_by, updated_time)
-VALUES('cs_inspection_item_complaint', '08', '投诉原因', NULL, '1', '02', 'cs_inspection_class_complaint', '投诉质检项目', 8, 'admin', '2021-02-09 09:36:00', 'admin', '2021-02-09 09:36:00');
-INSERT INTO `sn-cs`.code_dict
-(code_type, code, code_name, code_alias, status, parent_code, parent_code_type, remarks, order_no, created_by, created_time, updated_by, updated_time)
-VALUES('cs_inspection_item_complaint', '09', '客户反馈', NULL, '1', '02', 'cs_inspection_class_complaint', '投诉质检项目', 9, 'admin', '2021-02-09 09:36:00', 'admin', '2021-02-09 09:36:00');
-INSERT INTO `sn-cs`.code_dict
-(code_type, code, code_name, code_alias, status, parent_code, parent_code_type, remarks, order_no, created_by, created_time, updated_by, updated_time)
-VALUES('cs_inspection_item_complaint', '10', '投诉损失', NULL, '1', '02', 'cs_inspection_class_complaint', '投诉质检项目', 10, 'admin', '2021-02-09 09:36:00', 'admin', '2021-02-09 09:36:00');
-INSERT INTO `sn-cs`.code_dict
-(code_type, code, code_name, code_alias, status, parent_code, parent_code_type, remarks, order_no, created_by, created_time, updated_by, updated_time)
-VALUES('cs_inspection_item_complaint', '11', '投诉是否成立', NULL, '1', '02', 'cs_inspection_class_complaint', '投诉质检项目', 11, 'admin', '2021-02-09 09:36:00', 'admin', '2021-02-09 09:36:00');
-INSERT INTO `sn-cs`.code_dict
-(code_type, code, code_name, code_alias, status, parent_code, parent_code_type, remarks, order_no, created_by, created_time, updated_by, updated_time)
-VALUES('cs_inspection_item_complaint', '12', '投诉根因部门', NULL, '1', '02', 'cs_inspection_class_complaint', '投诉质检项目', 12, 'admin', '2021-02-09 09:36:00', 'admin', '2021-02-09 09:36:00');
-INSERT INTO `sn-cs`.code_dict
-(code_type, code, code_name, code_alias, status, parent_code, parent_code_type, remarks, order_no, created_by, created_time, updated_by, updated_time)
-VALUES('cs_inspection_item_complaint', '13', '根因改善', NULL, '1', '02', 'cs_inspection_class_complaint', '投诉质检项目', 13, 'admin', '2021-02-09 09:36:00', 'admin', '2021-02-09 09:36:00');
-INSERT INTO `sn-cs`.code_dict
-(code_type, code, code_name, code_alias, status, parent_code, parent_code_type, remarks, order_no, created_by, created_time, updated_by, updated_time)
-VALUES('cs_inspection_item_complaint', '14', '致诉根因', NULL, '1', '02', 'cs_inspection_class_complaint', '投诉质检项目', 14, 'admin', '2021-02-09 09:36:00', 'admin', '2021-02-09 09:36:00');
-INSERT INTO `sn-cs`.code_dict
-(code_type, code, code_name, code_alias, status, parent_code, parent_code_type, remarks, order_no, created_by, created_time, updated_by, updated_time)
-VALUES('cs_inspection_item_complaint', '15', '处理结果', NULL, '1', '02', 'cs_inspection_class_complaint', '投诉质检项目', 15, 'admin', '2021-02-09 09:36:00', 'admin', '2021-02-09 09:36:00');
-INSERT INTO `sn-cs`.code_dict
-(code_type, code, code_name, code_alias, status, parent_code, parent_code_type, remarks, order_no, created_by, created_time, updated_by, updated_time)
-VALUES('cs_inspection_item_complaint', '16', '附件完整性', NULL, '1', '02', 'cs_inspection_class_complaint', '投诉质检项目', 16, 'admin', '2021-02-09 09:36:00', 'admin', '2021-02-09 09:36:00');
-INSERT INTO `sn-cs`.code_dict
-(code_type, code, code_name, code_alias, status, parent_code, parent_code_type, remarks, order_no, created_by, created_time, updated_by, updated_time)
-VALUES('cs_inspection_item_complaint', '17', '征求处理意见', NULL, '1', '02', 'cs_inspection_class_complaint', '投诉质检项目', 17, 'admin', '2021-02-09 09:36:00', 'admin', '2021-02-09 09:36:00');
-INSERT INTO `sn-cs`.code_dict
-(code_type, code, code_name, code_alias, status, parent_code, parent_code_type, remarks, order_no, created_by, created_time, updated_by, updated_time)
-VALUES('cs_inspection_item_complaint', '18', '处理意见', NULL, '1', '02', 'cs_inspection_class_complaint', '投诉质检项目', 18, 'admin', '2021-02-09 09:36:00', 'admin', '2021-02-09 09:36:00');
-INSERT INTO `sn-cs`.code_dict
-(code_type, code, code_name, code_alias, status, parent_code, parent_code_type, remarks, order_no, created_by, created_time, updated_by, updated_time)
-VALUES('cs_inspection_item_complaint', '19', '行协调或外部鉴定状态', NULL, '1', '02', 'cs_inspection_class_complaint', '投诉质检项目', 19, 'admin', '2021-02-09 09:36:00', 'admin', '2021-02-09 09:36:00');
-INSERT INTO `sn-cs`.code_dict
-(code_type, code, code_name, code_alias, status, parent_code, parent_code_type, remarks, order_no, created_by, created_time, updated_by, updated_time)
-VALUES('cs_inspection_item_complaint', '20', '案件真实性', NULL, '1', '03', 'cs_inspection_class_complaint', '投诉质检项目', 20, 'admin', '2021-02-09 09:36:00', 'admin', '2021-02-09 09:36:00');
-INSERT INTO `sn-cs`.code_dict
-(code_type, code, code_name, code_alias, status, parent_code, parent_code_type, remarks, order_no, created_by, created_time, updated_by, updated_time)
-VALUES('cs_inspection_item_demand', '21', '是否时效内响应客户', NULL, '1', NULL, NULL, '信息需求质检项目', 21, 'admin', '2021-02-09 09:36:00', 'admin', '2021-02-09 09:36:00');
-INSERT INTO `sn-cs`.code_dict
-(code_type, code, code_name, code_alias, status, parent_code, parent_code_type, remarks, order_no, created_by, created_time, updated_by, updated_time)
-VALUES('cs_inspection_item_demand', '22', '是否符合短信结案规则', NULL, '1', NULL, NULL, '信息需求质检项目', 22, 'admin', '2021-02-09 09:36:00', 'admin', '2021-02-09 09:36:00');
-INSERT INTO `sn-cs`.code_dict
-(code_type, code, code_name, code_alias, status, parent_code, parent_code_type, remarks, order_no, created_by, created_time, updated_by, updated_time)
-VALUES('cs_inspection_item_demand', '23', '是否电话通知客户', NULL, '1', NULL, NULL, '信息需求质检项目', 23, 'admin', '2021-02-09 09:36:00', 'admin', '2021-02-09 09:36:00');
-INSERT INTO `sn-cs`.code_dict
-(code_type, code, code_name, code_alias, status, parent_code, parent_code_type, remarks, order_no, created_by, created_time, updated_by, updated_time)
-VALUES('cs_inspection_item_demand', '24', '是否满足客户诉求', NULL, '1', NULL, NULL, '信息需求质检项目', 24, 'admin', '2021-02-09 09:36:00', 'admin', '2021-02-09 09:36:00');
-INSERT INTO `sn-cs`.code_dict
-(code_type, code, code_name, code_alias, status, parent_code, parent_code_type, remarks, order_no, created_by, created_time, updated_by, updated_time)
-VALUES('cs_inspection_item_demand', '25', '是否及时升级投诉', NULL, '1', NULL, NULL, '信息需求质检项目', 25, 'admin', '2021-02-09 09:36:00', 'admin', '2021-02-09 09:36:00');
-INSERT INTO `sn-cs`.code_dict
-(code_type, code, code_name, code_alias, status, parent_code, parent_code_type, remarks, order_no, created_by, created_time, updated_by, updated_time)
-VALUES('cs_inspection_item_demand', '26', '是否规范记录', NULL, '1', NULL, NULL, '信息需求质检项目', 26, 'admin', '2021-02-09 09:36:00', 'admin', '2021-02-09 09:36:00');
-INSERT INTO `sn-cs`.code_dict
-(code_type, code, code_name, code_alias, status, parent_code, parent_code_type, remarks, order_no, created_by, created_time, updated_by, updated_time)
-VALUES('cs_inspection_item_demand', '27', '是否有其他错误', NULL, '1', NULL, NULL, '信息需求质检项目', 27, 'admin', '2021-02-09 09:36:00', 'admin', '2021-02-09 09:36:00');
 
-
-
-
-
-
+delete from claimmain.sys_dict_type where dict_type in (
+'cs_action_type',
+'cs_appeal_flag',
+'cs_attachment_type',
+'cs_business_type',
+'cs_cancle_reason',
+'cs_channel',
+'cs_classify_level1',
+'cs_collaborative_state',
+'cs_communication_language',
+'cs_complaint_item',
+'cs_confirm_status',
+'cs_consultation_type',
+'cs_demandAcceptVo',
+'cs_demand_item',
+'cs_direct_settlement',
+'cs_drop_status',
+'cs_eidt_reason',
+'cs_end_case',
+'cs_feedback_type',
+'cs_handle_state',
+'cs_identity',
+'cs_inspection_result',
+'cs_inspection_state',
+'cs_link_circ',
+'cs_link_code',
+'cs_marketingchannel_code',
+'cs_mediation_appraisal',
+'cs_opinion_handle',
+'cs_order_state',
+'cs_organization',
+'cs_priority',
+'cs_question_circ',
+'cs_reason_level1',
+'cs_relation',
+'cs_reservation_item',
+'cs_risk_type',
+'cs_service_item',
+'cs_sex',
+'cs_time_unit',
+'cs_value',
+'cs_vip_flag',
+'cs_whether_flag'
+);
 
 
 INSERT INTO claimmain.sys_dict_type
 (dict_name, dict_type, status, create_by, create_time, update_by, update_time, remark)
 VALUES('操作类型', 'cs_action_type', '0', 'admin', '2021-03-02 14:38:03', '', NULL, '客服操作类型编码');
+INSERT INTO claimmain.sys_dict_type
+(dict_name, dict_type, status, create_by, create_time, update_by, update_time, remark)
+VALUES('是否申诉', 'cs_appeal_flag', '0', 'admin', '2021-03-12 10:38:00', 'admin', '2021-03-12 10:38:26', NULL);
 INSERT INTO claimmain.sys_dict_type
 (dict_name, dict_type, status, create_by, create_time, update_by, update_time, remark)
 VALUES('附件类型', 'cs_attachment_type', '0', 'admin', '2021-02-26 19:15:07', 'admin', '2021-02-26 19:15:55', '客服附件类型编码');
@@ -482,6 +472,12 @@ INSERT INTO claimmain.sys_dict_type
 VALUES('投诉环节', 'cs_link_circ', '0', 'admin', '2021-02-27 11:54:39', '', NULL, '客服投诉环节（报保监）编码');
 INSERT INTO claimmain.sys_dict_type
 (dict_name, dict_type, status, create_by, create_time, update_by, update_time, remark)
+VALUES('流程类型', 'cs_link_code', '0', 'admin', '2021-03-24 11:54:57', 'admin', '2021-03-24 11:55:26', '流程类型列表');
+INSERT INTO claimmain.sys_dict_type
+(dict_name, dict_type, status, create_by, create_time, update_by, update_time, remark)
+VALUES('营销渠道', 'cs_marketingchannel_code', '0', 'admin', '2021-03-26 09:15:51', 'admin', '2021-03-26 09:22:01', '营销渠道');
+INSERT INTO claimmain.sys_dict_type
+(dict_name, dict_type, status, create_by, create_time, update_by, update_time, remark)
 VALUES('行协调解或外部鉴定状态', 'cs_mediation_appraisal', '0', 'admin', '2021-02-27 12:01:35', '', NULL, '客服行协调解或外部鉴定状态编码');
 INSERT INTO claimmain.sys_dict_type
 (dict_name, dict_type, status, create_by, create_time, update_by, update_time, remark)
@@ -521,11 +517,59 @@ INSERT INTO claimmain.sys_dict_type
 VALUES('时间单位', 'cs_time_unit', '0', 'admin', '2021-03-05 21:30:24', '', NULL, '客服时间单位编码');
 INSERT INTO claimmain.sys_dict_type
 (dict_name, dict_type, status, create_by, create_time, update_by, update_time, remark)
+VALUES('是否存在差错', 'cs_value', '0', 'admin', '2021-03-12 10:19:29', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_type
+(dict_name, dict_type, status, create_by, create_time, update_by, update_time, remark)
 VALUES('VIP标识', 'cs_vip_flag', '0', 'admin', '2021-01-24 14:06:48', '', NULL, '客服VIP标识编码');
 INSERT INTO claimmain.sys_dict_type
 (dict_name, dict_type, status, create_by, create_time, update_by, update_time, remark)
 VALUES('是否', 'cs_whether_flag', '0', 'admin', '2021-02-09 16:25:42', 'admin', '2021-02-26 19:00:57', '客服是否编码');
 
+
+delete from claimmain.sys_dict_data where dict_type in (
+'cs_action_type',
+'cs_appeal_flag',
+'cs_attachment_type',
+'cs_business_type',
+'cs_cancle_reason',
+'cs_channel',
+'cs_classify_level1',
+'cs_collaborative_state',
+'cs_communication_language',
+'cs_complaint_item',
+'cs_confirm_status',
+'cs_consultation_type',
+'cs_demandAcceptVo',
+'cs_demand_item',
+'cs_direct_settlement',
+'cs_drop_status',
+'cs_eidt_reason',
+'cs_end_case',
+'cs_feedback_type',
+'cs_handle_state',
+'cs_identity',
+'cs_inspection_result',
+'cs_inspection_state',
+'cs_link_circ',
+'cs_link_code',
+'cs_marketingchannel_code',
+'cs_mediation_appraisal',
+'cs_opinion_handle',
+'cs_order_state',
+'cs_organization',
+'cs_priority',
+'cs_question_circ',
+'cs_reason_level1',
+'cs_relation',
+'cs_reservation_item',
+'cs_risk_type',
+'cs_service_item',
+'cs_sex',
+'cs_time_unit',
+'cs_value',
+'cs_vip_flag',
+'cs_whether_flag'
+);
 
 INSERT INTO claimmain.sys_dict_data
 (dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
@@ -904,7 +948,7 @@ INSERT INTO claimmain.sys_dict_data
 VALUES(2, '获取', '02', 'cs_action_type', NULL, NULL, 'N', '0', 'admin', '2021-03-02 14:39:09', '', NULL, '客服操作类型编码类型');
 INSERT INTO claimmain.sys_dict_data
 (dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
-VALUES(3, '修改', '03', 'cs_action_type', NULL, NULL, 'N', '0', 'admin', '2021-03-02 14:39:26', '', NULL, '客服操作类型编码类型');
+VALUES(3, '修改', '03', 'cs_action_type', NULL, NULL, 'N', '0', 'admin', '2021-03-02 14:39:26', 'admin', '2021-03-25 11:11:38', '客服操作类型编码类型');
 INSERT INTO claimmain.sys_dict_data
 (dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
 VALUES(4, '取消', '04', 'cs_action_type', NULL, NULL, 'N', '0', 'admin', '2021-03-02 14:39:47', '', NULL, '客服操作类型编码类型');
@@ -928,7 +972,7 @@ INSERT INTO claimmain.sys_dict_data
 VALUES(10, '转办', '10', 'cs_action_type', NULL, NULL, 'N', '0', 'admin', '2021-03-02 14:42:04', '', NULL, '客服操作类型编码类型');
 INSERT INTO claimmain.sys_dict_data
 (dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
-VALUES(11, '协办', '11', 'cs_action_type', NULL, NULL, 'N', '0', 'admin', '2021-03-02 14:42:16', '', NULL, '客服操作类型编码类型');
+VALUES(11, '协办完成', '11', 'cs_action_type', NULL, NULL, 'N', '0', 'admin', '2021-03-02 14:42:16', 'admin', '2021-03-19 15:31:43', '客服操作类型编码类型');
 INSERT INTO claimmain.sys_dict_data
 (dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
 VALUES(12, '暂存', '12', 'cs_action_type', NULL, NULL, 'N', '0', 'admin', '2021-03-02 14:42:41', '', NULL, '客服操作类型编码类型');
@@ -1109,7 +1153,378 @@ VALUES(23, '来电人身份', 'callPerson.identity', 'cs_accept_attribute', NULL
 INSERT INTO claimmain.sys_dict_data
 (dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
 VALUES(24, '来电人移动电话', 'callPerson.mobilePhone', 'cs_accept_attribute', NULL, NULL, 'N', '0', 'admin', '2021-03-07 18:37:01', 'admin', '2021-03-07 20:46:13', '客服信息需求受理对象属性');
-
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(1, '是', '1', 'cs_value', NULL, NULL, 'N', '0', 'admin', '2021-03-12 10:19:59', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(2, '否', '0', 'cs_value', NULL, NULL, 'N', '0', 'admin', '2021-03-12 10:20:24', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(1, '是', '1', 'cs_appeal_flag', NULL, NULL, 'N', '0', 'admin', '2021-03-12 10:38:44', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(2, '否', '0', 'cs_appeal_flag', NULL, NULL, 'N', '0', 'admin', '2021-03-12 10:38:57', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(15, '发起协办', '15', 'cs_action_type', NULL, NULL, 'N', '0', 'admin', '2021-03-19 15:29:36', 'admin', '2021-03-19 15:30:45', '客服操作类型编码类型');
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(16, '撤销协办', '16', 'cs_action_type', NULL, NULL, 'N', '0', 'admin', '2021-03-19 15:31:26', '', NULL, '客服操作类型编码类型');
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '受理渠道', 'channelCode', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 09:59:55', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '保单号', 'policyNo', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:00:06', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '分单号', 'policyItemNo', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:00:16', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '险种号', 'riskCode', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:00:27', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '被保人客户号', 'insuredNo', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:00:38', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '被保人', 'insuredName', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:00:49', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '投保人客户号', 'holderNo', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:01:03', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '投保人', 'holderName', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:01:14', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '受理人', 'acceptBy', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:01:24', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '受理时间', 'acceptTime', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:01:34', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '修改时间', 'modifyTime', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:01:48', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, 'VIP标识', 'vipFlag', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:01:59', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '出单机构', 'organCode', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:02:08', 'admin', '2021-03-24 11:18:02', NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '状态', 'status', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:02:19', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '处理人', 'modifyBy', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:02:27', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, 'E-MAIL', 'email', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:02:37', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '优先级', 'priorityLevel', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:02:49', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '来电人关系', 'callRelationBy', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:02:58', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '联系人与被保人关系', 'contactsRelationBy', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:03:09', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '来电人编号', 'callPerson.personId', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:14:57', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '来电人性别', 'callPerson.sex', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:15:07', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '来电人身份', 'callPerson.identity', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:15:18', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '来电人移动电话', 'callPerson.mobilePhone', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:15:28', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '来电人移动电话', 'callPerson.mobilePhone', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:15:38', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '来电人固定电话', 'callPerson.linePhone', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:15:48', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '来电人固定电话', 'callPerson.linePhone1', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:15:58', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '来电人家庭电话', 'callPerson.homePhone', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:16:12', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '来电人家庭电话', 'callPerson.homePhone1', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:16:25', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '来电人办公电话', 'callPerson.workPhone', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:16:35', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '来电人办公电话', 'callPerson.workPhone1', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:16:45', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '来电人语言', 'callPerson.language', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:16:55', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '来电人E-MAIL', 'callPerson.email', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:17:04', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '来电人传真', 'callPerson.fax', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:17:14', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '来电人证件号', 'callPerson.idNumber', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:17:23', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '来电人证件类型', 'callPerson.idType', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:17:31', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '来电人出生日期', 'callPerson.birthday', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:17:41', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '来电人联系地址', 'callPerson.address', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:17:54', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '联系人编号', 'contactsPerson.personId', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:18:04', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '联系人姓名', 'contactsPerson.name', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:18:16', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '联系人性别', 'contactsPerson.sex', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:18:25', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '联系人身份', 'contactsPerson.identity', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:18:38', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '联系人移动电话', 'contactsPerson.mobilePhone', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:18:48', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '联系人固定电话', 'contactsPerson.linePhone', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:18:58', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '联系人固定电话', 'contactsPerson.linePhone1', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:19:08', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '联系人家庭电话', 'contactsPerson.homePhone', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:19:19', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '联系人家庭电话', 'contactsPerson.homePhone1', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:19:32', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '联系人办公电话', 'contactsPerson.workPhone', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:19:44', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '联系人办公电话', 'contactsPerson.workPhone1', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:19:54', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '联系人语言', 'contactsPerson.language', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:20:04', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '联系人E-MAIL', 'contactsPerson.email', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:20:13', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '联系人传真', 'contactsPerson.fax', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:20:22', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '联系人证件号', 'contactsPerson.idNumber', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:20:30', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '联系人证件类型', 'contactsPerson.idType', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:20:40', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '联系人出生日期', 'contactsPerson.birthday', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:21:00', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '联系人地址', 'contactsPerson.address', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:21:10', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '投诉人编号', 'complaintPerson.personId', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:21:19', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '投诉人姓名', 'complaintPerson.name', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:21:34', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '投诉人身份', 'complaintPerson.identity', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:21:46', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '投诉人移动电话', 'complaintPerson.mobilePhone', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:21:57', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '投诉人固定电话', 'complaintPerson.linePhone', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:22:07', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '投诉人固定电话', 'complaintPerson.linePhone1', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:22:16', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '投诉人家庭电话', 'complaintPerson.homePhone', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:22:25', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '投诉人家庭电话', 'complaintPerson.homePhone1', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:22:35', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '投诉人办公电话', 'complaintPerson.workPhone', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:22:46', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '投诉人办公电话', 'complaintPerson.workPhone1', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:22:56', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '投诉人语言', 'complaintPerson.language', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:23:05', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '投诉人E-MAIL', 'complaintPerson.email', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:23:17', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '投诉人传真', 'complaintPerson.fax', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:23:26', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '投诉人证件号', 'complaintPerson.idNumber', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:23:36', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '投诉人证件类型', 'complaintPerson.idType', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:23:45', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '投诉人出生日期', 'complaintPerson.birthday', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:23:54', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '投诉人联系地址', 'complaintPerson.address', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:24:03', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '是否涉及银行转账', 'bankTransfer', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:24:12', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '开户行', 'bankName', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:24:21', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '开户地', 'bankLocation', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:24:30', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '账号', 'accountNumber', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:24:39', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '户名', 'bankHolder', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:24:59', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '有无附件', 'attachmentFlag', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:25:08', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '业务内容', 'content', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:25:16', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '来电人姓名', 'callName', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:25:26', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '来电人号码', 'callMobilePhone', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:25:35', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '联系人性别', 'contactsSex', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:25:44', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '联系人姓名', 'contactsName', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:25:55', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '联系人语言', 'contactsLanguage', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:26:06', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '联系人电话', 'contactsMobilePhone', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:26:29', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '联系人国家', 'contactsCountry', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:26:37', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '联系人区号', 'contactsQuhao', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:26:48', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '联系人号码', 'contactsNumber', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:26:57', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '联系人分机号', 'contactsSecondNumber', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:27:06', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '联系人国家', 'officeCountry', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:27:14', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '联系人区号', 'officeQuhao', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:27:24', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '联系人号码', 'officeNumber', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:27:34', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '联系人分机号', 'officeSecondNumber', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:27:43', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '修改原因', 'editReason', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:27:51', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '修改说明', 'editRemark', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:28:00', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '电话中心业务流水号', 'callCenterId', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:28:09', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(1, '待处理', '01', 'cs_link_code', NULL, NULL, 'N', '0', 'admin', '2021-03-24 11:58:06', 'admin', '2021-03-25 18:39:21', '客服操作流程编码');
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(2, '处理中', '02', 'cs_link_code', NULL, NULL, 'N', '0', 'admin', '2021-03-24 11:59:39', '', NULL, '客服操作流程编码');
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(3, '已处理', '03', 'cs_link_code', NULL, NULL, 'N', '0', 'admin', '2021-03-24 12:02:31', '', NULL, '客服操作流程编码');
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(4, '已完成', '04', 'cs_link_code', NULL, NULL, 'N', '0', 'admin', '2021-03-24 12:03:22', '', NULL, '客服操作流程编码');
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(5, '已取消', '05', 'cs_link_code', NULL, NULL, 'N', '0', 'admin', '2021-03-24 12:03:39', 'admin', '2021-03-25 18:39:03', '客服操作流程编码');
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(6, '协办中', '06', 'cs_link_code', NULL, NULL, 'N', '0', 'admin', '2021-03-24 12:03:55', '', NULL, '客服操作流程编码');
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(7, '已协办', '07', 'cs_link_code', NULL, NULL, 'N', '0', 'admin', '2021-03-24 12:04:18', '', NULL, '客服操作流程编码');
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(8, '待质检', '08', 'cs_link_code', NULL, NULL, 'N', '0', 'admin', '2021-03-24 12:04:40', '', NULL, '客服操作流程编码');
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(9, '质检中', '09', 'cs_link_code', NULL, NULL, 'N', '0', 'admin', '2021-03-24 12:05:13', '', NULL, '客服操作流程编码');
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(10, '质检完成', '10', 'cs_link_code', NULL, NULL, 'N', '0', 'admin', '2021-03-24 12:05:29', '', NULL, '客服操作流程编码');
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(17, '退回修改', '17', 'cs_action_type', NULL, NULL, 'N', '0', 'admin', '2021-03-24 16:57:13', 'admin', '2021-03-24 16:57:38', '客服操作类型编码类型');
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(18, '结案', '18', 'cs_action_type', NULL, NULL, 'N', '0', 'admin', '2021-03-24 16:58:00', 'admin', '2021-03-24 16:58:18', '客服操作类型编码类型');
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '本次疾病/症状起病时间', 'symptomTimes', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-24 10:28:09', '', NULL, NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '来电人姓名', 'callPerson.name', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-23 19:00:17', 'admin', '2021-03-23 19:03:17', NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(19, '差错提交', '19', 'cs_action_type', NULL, NULL, 'N', '0', 'admin', '2021-03-25 11:12:21', '', NULL, '客服操作类型编码类型');
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '疾病或体征', 'symptomsSigns', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-23 19:00:17', 'admin', '2021-03-23 19:03:17', NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '预约时间', 'complaintTime', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-23 19:00:17', 'admin', '2021-03-23 19:03:17', NULL);
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(20, '案件复核', '20', 'cs_action_type', NULL, NULL, 'N', '0', 'admin', '2021-03-25 18:55:40', '', NULL, '客服操作类型编码类型');
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(1, '银保渠道', '01', 'cs_marketingchannel_code', NULL, NULL, 'N', '0', 'admin', '2021-03-26 09:20:00', '', NULL, '营销渠道码值');
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(2, '直销', '02', 'cs_marketingchannel_code', NULL, NULL, 'N', '0', 'admin', '2021-03-26 09:20:35', '', NULL, '营销渠道码值');
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(3, '兼业代理', '03', 'cs_marketingchannel_code', NULL, NULL, 'N', '0', 'admin', '2021-03-26 09:20:36', 'admin', '2021-03-26 09:20:54', '营销渠道码值');
+INSERT INTO claimmain.sys_dict_data
+(dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(0, '科室', 'department', 'cs_demandAcceptVo', NULL, NULL, 'N', '0', 'admin', '2021-03-23 18:41:55', '', NULL, NULL);
 
 
 

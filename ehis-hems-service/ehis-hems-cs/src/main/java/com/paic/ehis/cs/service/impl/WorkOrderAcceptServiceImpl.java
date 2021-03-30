@@ -435,12 +435,14 @@ public class WorkOrderAcceptServiceImpl implements IWorkOrderAcceptService
     public WorkOrderAccept selectWorkOrderAcceptById2(String workOrderNo) {
         WorkOrderAccept workOrderAccept = workOrderAcceptMapper.selectWorkOrderAcceptById1(workOrderNo);
         String updateBy = SecurityUtils.getUsername();
-        if (null != workOrderAccept.getUpdateBy()) {
+        if (workOrderAccept.getStatus().equals("04") || workOrderAccept.getStatus().equals("05")){
+            workOrderAccept.setFlag1("2");
+        }else if (null != workOrderAccept.getUpdateBy()) {
             if (workOrderAccept.getUpdateBy().equals(updateBy)) {//当前案件操作人非自己查询后按钮
                 workOrderAccept.setFlag1("2");
             } else {
                 workOrderAccept.setFlag1("1");//弹框
-            }
+                }
         }
         return workOrderAccept;
     }

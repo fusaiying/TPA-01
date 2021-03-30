@@ -176,8 +176,9 @@ CREATE TABLE `field_map` (
 `created_time` datetime NOT NULL COMMENT '创建时间',
 `updated_by` varchar(32) NOT NULL COMMENT '更新人',
 `updated_time` datetime NOT NULL COMMENT '更新时间',
+`status` int(11) NOT NULL DEFAULT '1' COMMENT '状态 1-有效;0-无效',
 PRIMARY KEY (`source_name`,`type_code`,`field_order`,`source_filed_name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='受理信息映射表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='受理信息映射表 ';
 
 -- 业务流转信息表 flow_log
 CREATE TABLE `flow_log` (

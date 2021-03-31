@@ -102,18 +102,6 @@ public class CustomServiceComplaintController extends BaseController {
     }
 
     /**
-     * 投诉差错修改
-     * @param complaintAcceptVo
-     * @return
-     */
-    @Log(title = "差错修改 ", businessType = BusinessType.UPDATE)
-    @PutMapping("/updateComplaintAcceptVo/complaintVo")
-    public AjaxResult updateComplaintAcceptVoProcess(@Validated @RequestBody ComplaintAcceptVo complaintAcceptVo,ComplaintDealVo complaintDealVo)
-    {
-        return toAjax(iComplaintAcceptVoService.updateComplaintAcceptVoProcess(complaintAcceptVo,complaintDealVo));
-    }
-
-    /**
      * 取消投诉
      */
 //    @PreAuthorize("@ss.hasPermi('system:customService::edit')")

@@ -24,8 +24,10 @@ public class ClaimCasePayInfoVO implements Serializable {
     /** 批次号 */
     private String batchNo;
 
-    /** 被保人客户号 */
+    /** 是否申诉案件(01=正常，02=申诉) */
     private String insuredNo;
+    /** 被保人客户号 */
+    private String isAppeal;
 
     //  对公支付接口所需数据——flint
     /** 交单来源/业务来源类型 */

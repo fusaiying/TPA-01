@@ -72,4 +72,10 @@ public class TpaSettleDetailInfo implements Serializable {
     /** 备注 */
     @Excel(name = "备注")
     private String remark;
+
+    /* 结算类型 */
+    private String settlementType ;
+
+    /* 结算值 */
+    private String settlementValue ;
 }

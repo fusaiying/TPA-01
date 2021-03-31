@@ -372,6 +372,9 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
         workOrderAccept.setUpdateBy(SecurityUtils.getUsername());
         workOrderAccept.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
         workOrderAccept.setActivationNum(workOrderAccept.getActivationNum()+1);
+        if (workOrderAccept.getStatus().equals("05")){
+            workOrderAccept.setStatus("02");
+        }
         workOrderAcceptMapper.updateWorkOrderAccept(workOrderAccept);
 
         AcceptDetailInfo acceptDetailInfo = acceptDetailInfoMapper.selectAcceptDetailInfoById(workOrderNo);

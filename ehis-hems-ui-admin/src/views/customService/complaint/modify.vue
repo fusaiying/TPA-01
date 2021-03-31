@@ -22,7 +22,7 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="电话中心业务流水号：" prop="callCenterId">
-              <el-input v-model="workPoolData.callCenterId" class="item-width"  size="mini" />
+              <el-input v-model="workPoolData.callCenterId" class="item-width"  size="mini" disabled />
             </el-form-item>
           </el-col>
           <el-col :span="8">

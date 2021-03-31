@@ -292,14 +292,14 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="客户电话：" prop="phone">
-              <el-input v-model="workPoolData.insurer.mobilePhone" class="item-width" size="mini" />
+              <el-input v-model="workPoolData.contactsPerson.homePhone" class="item-width" size="mini" />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="8">
             <el-form-item label="办公电话：" prop="phone">
-              <el-input v-model="workPoolData.insurer.workPhone" class="item-width" size="mini" />
+              <el-input v-model="workPoolData.contactsPerson.workPhone" class="item-width" size="mini" />
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -791,6 +791,7 @@ export default {
       complainSearch(workOrderNo).then(res => {
         if (res != null && res.code === 200) {
           this.workPoolData = res.data
+
 
         }
       }).catch(res => {

@@ -312,20 +312,63 @@ public class CustomServiceSpotCheckController extends BaseController {
         util.exportExcel(response, list, "WorkOrder");
     }
 
-    //************************************************
-        /*
-        质检查询清单导出
-         */
-    @Log(title = "质检查询清单导出", businessType = BusinessType.EXPORT)
+    /**
+     * 投诉质检清单导出
+     * @param response
+     * @param qualityDTO
+     * @throws IOException
+     */
+    @Log(title = "投诉质检清单导出", businessType = BusinessType.EXPORT)
     @PostMapping("/internal/selectWorkOrder/exportOne")
     public void exportOne(HttpServletResponse response, QualityDTO qualityDTO) throws IOException
     {
-        List<QualityAcceptVo> list = qualityInspectionAcceptService.selectQualityVo(qualityDTO);
-        ExcelUtil<QualityAcceptVo> util = new ExcelUtil<QualityAcceptVo>(QualityAcceptVo.class);
+        List<ComplaintQualityInspectionVO> list = qualityInspectionAcceptService.selectQualityVoCom(qualityDTO);
+        ExcelUtil<ComplaintQualityInspectionVO> util = new ExcelUtil<ComplaintQualityInspectionVO>(ComplaintQualityInspectionVO.class);
         util.exportExcel(response, list, "WorkOrderOne");
     }
 
-    //************************************************
+    /**
+     * 信息需求质检清单导出
+     * @param response
+     * @param qualityDTO
+     * @throws IOException
+     */
+    @Log(title = "信息需求质检清单导出", businessType = BusinessType.EXPORT)
+    @PostMapping("/internal/selectWorkOrder/exportOneInformation")
+    public void exportOneInformation(HttpServletResponse response, QualityDTO qualityDTO) throws IOException
+    {
+        List<InformationNeedsQuality> list = qualityInspectionAcceptService.selectQualityVoComInformation(qualityDTO);
+        ExcelUtil<InformationNeedsQuality> util = new ExcelUtil<InformationNeedsQuality>(InformationNeedsQuality.class);
+        util.exportExcel(response, list, "WorkOrderOne");
+    }
+
+    @GetMapping("/internal/selectQualityVo2")
+    public TableDataInfo selectQualityVo2(QualityDTO qualityDTO)
+    {
+        startPage();
+        List<QualityAcceptVo> list = qualityInspectionAcceptService.selectQualityVo2(qualityDTO);
+        return getDataTable(list);
+    }
+    /**
+     * 投诉/信息差错率统计导出
+     * @param response
+     * @param qualityDTO
+     * @throws IOException
+     */
+    @Log(title = "投诉/信息差错率统计导出", businessType = BusinessType.EXPORT)
+    @PostMapping("/internal/selectWorkOrder/exportOneError")
+    public void exportOneError(HttpServletResponse response, QualityDTO qualityDTO) throws IOException
+    {
+        //先进行查询
+        List<QualityAcceptVo> list = qualityInspectionAcceptService.selectQualityVo(qualityDTO);
+
+
+        List<ComplaintErrorRateVO> list1 = qualityInspectionAcceptService.exportOneError(qualityDTO);
+        ExcelUtil<ComplaintErrorRateVO> util = new ExcelUtil<ComplaintErrorRateVO>(ComplaintErrorRateVO.class);
+        util.exportExcel(response, list1, "WorkOrderOne");
+    }
+
+
         /*
         质检差错清单导出
          */

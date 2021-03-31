@@ -31,8 +31,12 @@ public class QualityDTO {
     private String itemCode;
 
     /** 质检状态*/
+    @Excel(name = "质检状态")
     private String status;
 
     /** 质检结果*/
+    @Excel(name = "质检结果")
     private String result;
+
+
 }

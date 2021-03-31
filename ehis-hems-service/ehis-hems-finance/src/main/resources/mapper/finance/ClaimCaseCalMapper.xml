@@ -39,10 +39,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectClaimCaseCalAmountByBatchNo" parameterType="String" resultType="com.paic.ehis.finance.domain.vo.ClaimCasePaymentVO">
        SELECT IFNULL(SUM(c.cal_amount),0) calAmount from (SELECT IFNULL(SUM(ccc.cal_amount),0) cal_amount FROM claim_case cc LEFT JOIN claim_case_cal ccc on cc.rpt_no=ccc.rpt_no and ccc.status='Y' where cc.batch_no= #{batchNo} and not EXISTS (SELECT 1 FROM claim_case_appeal_task cat where cc.rpt_no=cat.appeal_rpt_no and cat.appeal_status='03' AND cat.STATUS='Y' )
-        and cc.status='Y' and cc.case_prop='01'
+        and cc.status='Y' and cc.case_prop='01' and cc.case_status not in ('97','98')
         union all
         select  cast(IFNULL(sum(d.cal_amount),0) as decimal(16,2)) cal_amount from claim_case cc LEFT JOIN (SELECT rpt_no,SUBSTRING_INDEX(GROUP_CONCAT(t.cal_amount ORDER BY t.appeal_serial DESC ),',',1) cal_amount
-FROM claim_case_cal_core t  where t.status='Y' GROUP BY rpt_no) d on d.rpt_no=cc.rpt_no  where cc.STATUS='Y' AND cc.case_prop='02' AND cc.batch_no=#{batchNo}) c
+FROM claim_case_cal_core t  where t.status='Y' GROUP BY rpt_no) d on d.rpt_no=cc.rpt_no  where cc.STATUS='Y' AND cc.case_prop='02' AND cc.batch_no=#{batchNo} and cc.case_status not in ('97','98')) c
     </select>
 
 </mapper>

@@ -1042,7 +1042,10 @@
       //抽检完毕
       caseCheckOver() {
         let data = {
-          rptNo: this.fixInfo.rptNo
+          rptNo: this.fixInfo.rptNo,
+          debtAmount:this.conclusionInfo.debtAmount,
+          paymentDifference:this.conclusionInfo.paymentDifference,
+          isAppeal:this.conclusionInfo.isAppeal,
         }
 
         if(this.appealCase) {

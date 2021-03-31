@@ -1240,7 +1240,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
                     caseDebt.setCreateTime(DateUtils.getNowDate());
                     caseDebt.setUpdateBy(SecurityUtils.getUsername());
                     caseDebt.setUpdateTime(DateUtils.getNowDate());
-                    claimCaseDebtMapper.insertClaimCaseDebt(claimCaseDebt);
+                    claimCaseDebtMapper.insertClaimCaseDebt(caseDebt);
                 }
             }else{
                 CalConclusionVo calConclusionVo = claimCaseCalMapper.selectPreCalConclusionByRptNo(claimCase.getRptNo());
@@ -1283,6 +1283,14 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
 
         } else {
             claimCase.setPayStatus("01");
+        }
+        /****
+         * modify by : houjiawei
+         * time : 2021-3-30
+         * 如果是申诉案件 且 本次支付差额 为 0 ，则 支付状态为 03 已支付
+         */
+        if(claimCase.getIsAppeal().equals("02") && (claimCase.getPaymentDifference().compareTo(BigDecimal.ZERO)==0)) {
+            claimCase.setPayStatus("03");
         }
         return claimCaseMapper.updateClaimCaseNew(claimCase);
     }

@@ -640,6 +640,7 @@
                 billCurrency:this.conclusionForm.billCurrency,
                 payConclusion:this.conclusionForm.payConclusion,
                 refusedReason:this.conclusionForm.refusedReason,
+                payAmountForeign:this.conclusionInfo.payAmountForeign,
                 remark:this.conclusionForm.remark,
                 claimCheck:this.conclusionForm.claimCheck,
                 debtAmount:this.conclusionInfo.debtAmount

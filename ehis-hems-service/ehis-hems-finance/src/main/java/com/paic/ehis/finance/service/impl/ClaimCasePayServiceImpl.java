@@ -461,6 +461,7 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService {
             financePayInfo.setBatchNo(batchNo);
             financePayInfo.setPayCurrency(payment.getCurrency());
             financePayInfo.setSumPayAmount(payment.getPayAmount());
+            financePayInfo.setSumPayAmountForeign(payment.getForeignPayAmount());
             financePayInfo.setSumClaimAmount(payment.getCalAmount());
             financePayInfo.setPayeeBank(payment.getBank());
             financePayInfo.setAccNo(payment.getBankNumber());

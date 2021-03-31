@@ -53,6 +53,8 @@
         <result property="riskCode"    column="risk_code"    />
         <result property="riskName"    column="risk_name"    />
         <result property="serviceAmount"    column="service_amount"    />
+        <result property="settlementType"    column="settlement_type"    />
+        <result property="settlementValue"    column="settlement_value"    />
         <result property="remark"       column="remark"     />
     </resultMap>
     <select id="selectFinanceTpaSettleDetailBySettleTaskNo" parameterType="string" resultMap="tpaSettleDetailMap">
@@ -65,10 +67,13 @@
             policy_no,
             policy_item_no,
             service_amount,
+            rule.settlement_type,
+            rule.settlement_value,
             remark
         FROM
             finance_tpa_settle_detail detail
-	left join claim_product product on product.risk_code=detail.risk_code
+	left join claim_product product on product.risk_code=detail.risk_code and product.status='Y'
+	left join base_issuingcompany_rule rule on rule.company_code=detail.company_code and rule.risk_code=detail.risk_code and rule.status='Y'
 	where settle_task_no = #{settleTaskNo}
     </select>
 

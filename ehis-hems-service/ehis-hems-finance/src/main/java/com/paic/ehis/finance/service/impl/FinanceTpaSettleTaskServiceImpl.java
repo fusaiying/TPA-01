@@ -332,6 +332,7 @@ public class FinanceTpaSettleTaskServiceImpl implements IFinanceTpaSettleTaskSer
                 CompanyRiskPolicyInfo companyRiskPolicyInfo = policyAndRiskService.selectPolicyInfoListByPolicyNo(policyAndRiskRelation);
                 detailInfo.setInsuredNo(companyRiskPolicyInfo.getInsuredNo());
                 detailInfo.setName(companyRiskPolicyInfo.getName());
+                detailInfo.setValidStartDate(companyRiskPolicyInfo.getValidStartDate());
                 detailInfo.setAppName(companyRiskPolicyInfo.getAppName());
             }
         }

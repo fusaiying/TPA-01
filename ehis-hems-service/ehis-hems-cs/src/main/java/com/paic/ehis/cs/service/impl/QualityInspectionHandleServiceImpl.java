@@ -163,6 +163,7 @@ public class QualityInspectionHandleServiceImpl implements IQualityInspectionHan
     }
 
 
+    //差错修改确认
     @Override
     public int insertHandleInfo(HandleDTO handleDTO) {
         iDemandAcceptVoService.insertServiceInfo(handleDTO.getDemandAcceptVo());

@@ -21,16 +21,6 @@
         <result property="deptCode"    column="dept_code"    />
     </resultMap>
 
-    <resultMap id="tpaSettleDetailMap" type="com.paic.ehis.finance.domain.TpaSettleDetailInfo">
-        <id property="settleTaskNo" column="settle_task_no"/>
-        <result property="settleTaskNo"    column="settle_task_no"    />
-        <result property="policyNo"    column="policy_no"    />
-        <result property="policyItemNo"    column="policy_item_no"    />
-        <result property="riskCode"    column="risk_code"    />
-        <result property="riskName"    column="risk_name"    />
-        <result property="serviceAmount"    column="service_amount"    />
-        <result property="remark"       column="remark"     />
-    </resultMap>
 
     <sql id="selectFinanceTpaSettleDetailVo">
         select detail_id, settle_task_no, company_code,risk_code, policy_no, policy_item_no, service_amount, remark, status, create_by, create_time, update_by, update_time, dept_code from finance_tpa_settle_detail
@@ -54,10 +44,32 @@
         <include refid="selectFinanceTpaSettleDetailVo"/>
         where detail_id = #{detailId}
     </select>
-
+    <resultMap id="tpaSettleDetailMap" type="com.paic.ehis.finance.domain.TpaSettleDetailInfo">
+        <id property="settleTaskNo" column="settle_task_no"/>
+        <result property="detailId"    column="detail_id"    />
+        <result property="settleTaskNo"    column="settle_task_no"    />
+        <result property="policyNo"    column="policy_no"    />
+        <result property="policyItemNo"    column="policy_item_no"    />
+        <result property="riskCode"    column="risk_code"    />
+        <result property="riskName"    column="risk_name"    />
+        <result property="serviceAmount"    column="service_amount"    />
+        <result property="remark"       column="remark"     />
+    </resultMap>
     <select id="selectFinanceTpaSettleDetailBySettleTaskNo" parameterType="string" resultMap="tpaSettleDetailMap">
-        <include refid="selectFinanceTpaSettleDetailVo"/>
-        where settle_task_no = #{settleTaskNo}
+         SELECT
+            detail_id,
+            settle_task_no,
+            company_code,
+            detail.risk_code,
+            product.risk_name,
+            policy_no,
+            policy_item_no,
+            service_amount,
+            remark
+        FROM
+            finance_tpa_settle_detail detail
+	left join claim_product product on product.risk_code=detail.risk_code
+	where settle_task_no = #{settleTaskNo}
     </select>
 
 

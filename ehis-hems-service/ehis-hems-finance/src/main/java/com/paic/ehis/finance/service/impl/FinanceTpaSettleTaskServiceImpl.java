@@ -117,16 +117,14 @@ public class FinanceTpaSettleTaskServiceImpl implements IFinanceTpaSettleTaskSer
         financeTpaSettleTask.setSettleEndDate(tpaSettleDTO.getSettleEndDate());
         financeTpaSettleTask.setCompanyCode(tpaSettleDTO.getCompanyCode());
         financeTpaSettleTask.setStatus("Y");
-//        financeTpaSettleTask.setDeptCode( sysUser.getDeptId().toString());
-        financeTpaSettleTask.setDeptCode("unknown");
+        financeTpaSettleTask.setDeptCode(tpaSettleDTO.getDeptCode());
         financeTpaSettleTask.setCreateBy(SecurityUtils.getUsername());
         financeTpaSettleTask.setCreateTime(DateUtils.getNowDate());
         financeTpaSettleTask.setUpdateBy(SecurityUtils.getUsername());
         financeTpaSettleTask.setUpdateTime(DateUtils.getNowDate());
 
         financeTpaSettleDetail.setStatus("Y");
-//        financeTpaSettleDetail.setDeptCode( sysUser.getDeptId().toString());
-        financeTpaSettleDetail.setDeptCode("unknown");
+        financeTpaSettleDetail.setDeptCode(tpaSettleDTO.getDeptCode());
         financeTpaSettleDetail.setCreateBy(SecurityUtils.getUsername());
         financeTpaSettleDetail.setCreateTime(DateUtils.getNowDate());
         financeTpaSettleDetail.setUpdateBy(SecurityUtils.getUsername());
@@ -137,8 +135,7 @@ public class FinanceTpaSettleTaskServiceImpl implements IFinanceTpaSettleTaskSer
         financeSettleRecord.setHistoryFlag("N");
         financeSettleRecord.setOperation("01");
         financeSettleRecord.setStatus("Y");
-//        financeSettleRecord.setDeptCode( sysUser.getDeptId().toString());
-        financeSettleRecord.setDeptCode("unknown");
+        financeSettleRecord.setDeptCode(tpaSettleDTO.getDeptCode());
         financeSettleRecord.setCreateBy(SecurityUtils.getUsername());
         financeSettleRecord.setCreateTime(DateUtils.getNowDate());
         financeSettleRecord.setUpdateBy(SecurityUtils.getUsername());

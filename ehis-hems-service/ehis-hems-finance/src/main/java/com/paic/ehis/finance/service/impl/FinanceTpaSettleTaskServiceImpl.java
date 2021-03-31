@@ -103,7 +103,7 @@ public class FinanceTpaSettleTaskServiceImpl implements IFinanceTpaSettleTaskSer
         ArrayList<TpaSettleInfo> tpaSettleInfos=new ArrayList<>();
         ArrayList<TpaSettleDetailInfo> detailInfos=new ArrayList<>();
         ObjectMapper objectMapper = new ObjectMapper();
-        CompanyRiskPolicy companyRiskPolicy = null;
+        CompanyRiskPolicyInfo companyRiskPolicy = null;
         Date earliestDay=new Date();
         //TPA服务费及明细的新增
         FinanceTpaSettleTask financeTpaSettleTask = new FinanceTpaSettleTask();
@@ -175,7 +175,7 @@ public class FinanceTpaSettleTaskServiceImpl implements IFinanceTpaSettleTaskSer
                 TableDataInfo relationCompanyList = policyAndRiskService.getRelationCompanyList(policyAndRiskRelation);
                 if (StringUtils.isNotEmpty(relationCompanyList.getRows())) {
                     for (Object row : relationCompanyList.getRows()) {
-                        companyRiskPolicy = objectMapper.convertValue(row, CompanyRiskPolicy.class);
+                        companyRiskPolicy = objectMapper.convertValue(row, CompanyRiskPolicyInfo.class);
                         //子页面 下拉列表数据
                         BeanUtils.copyProperties(companyRiskPolicy, tpaSettleDetailInfo);
                         BeanUtils.copyProperties(companyRiskPolicy, financeTpaSettleDetail);
@@ -257,7 +257,7 @@ public class FinanceTpaSettleTaskServiceImpl implements IFinanceTpaSettleTaskSer
             TableDataInfo relationCompanyList = policyAndRiskService.getRelationCompanyList(policyAndRiskRelation);
             if (StringUtils.isNotEmpty(relationCompanyList.getRows())) {
                 for (Object row : relationCompanyList.getRows()) {
-                    companyRiskPolicy = objectMapper.convertValue(row, CompanyRiskPolicy.class);
+                    companyRiskPolicy = objectMapper.convertValue(row, CompanyRiskPolicyInfo.class);
                     //子页面下拉数据
                     BeanUtils.copyProperties(companyRiskPolicy, tpaSettleDetailInfo);
                     tpaSettleDetailInfo.setRiskName(companyRule.getRiskName());

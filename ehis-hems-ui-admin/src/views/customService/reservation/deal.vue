@@ -692,7 +692,7 @@
         ],
         remark: [
           {required: true, message: "处理说明不能为空", trigger: "blur"},
-          {min: 0, max: 2000, message: '长度2000 个字符'}
+          {min: 0, max: 2000, message: '长度2000 个字'}
 
         ],
         customerFeedback: [

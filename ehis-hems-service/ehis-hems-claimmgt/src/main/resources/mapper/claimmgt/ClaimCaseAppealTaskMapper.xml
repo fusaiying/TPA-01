@@ -315,7 +315,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                 `status`,
                 `create_by`,
                 `create_time`,
-                `update_by`,
+                (select create_by from claim_case_record where rpt_no = #{appealRptNo} and status = 'Y'  ANd operation = '07' ORDER BY CREATE_TIME DESC limit 1),
                 `update_time`,
                 case_prop
             FROM claim_case WHERE 	rpt_no = #{appealRptNo} AND STATUS = 'Y'

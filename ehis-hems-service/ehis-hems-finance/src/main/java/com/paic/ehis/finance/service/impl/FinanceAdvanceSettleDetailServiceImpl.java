@@ -58,9 +58,6 @@ public class FinanceAdvanceSettleDetailServiceImpl implements IFinanceAdvanceSet
     @Autowired
     private PolicyAndRiskService policyAndRiskService;
 
-    @Autowired
-    private ClaimFlowService claimFlowService;
-
 
     /**
      * 发起垫付款任务

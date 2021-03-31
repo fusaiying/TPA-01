@@ -1222,7 +1222,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         ClaimCaseCal claimCaseCal = claimCaseCalMapper.selectClaimCaseCalByRptNo(claimCase.getRptNo());
         /***
          * modify by : houjiawei
-         * timei:2021-03-31
+         * time:2021-03-31
          * 普通案件追讨金额处理
          */
         if (claimCaseCal.getDebtAmount().compareTo(new BigDecimal(String.valueOf(0))) != 0){
@@ -1251,7 +1251,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         }
         /***
          * modify by : houjiawei
-         * timei:2021-03-31
+         * time:2021-03-31
          * 申诉案件追讨金额处理
          *
          * 申诉案件如果更新了追讨, 即使原案件没有追讨（追讨为0，申诉案件申诉后有追讨，也是要放在原案件上
@@ -1579,7 +1579,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
             /***
              /***
              * modify by : houjiawei
-             * timei:2021-03-31
+             * time:2021-03-31
              * 普通案件追讨金额处理
              */
             if (claimCaseCheckDTO.getDebtAmount().compareTo(new BigDecimal(String.valueOf(0))) != 0){
@@ -1609,7 +1609,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
 
             /***
              * modify by : houjiawei
-             * timei:2021-03-31
+             * time:2021-03-31
              * 申诉案件追讨金额处理
              *
              * 申诉案件如果更新了追讨, 即使原案件没有追讨（追讨为0，申诉案件申诉后有追讨，也是要放在原案件上

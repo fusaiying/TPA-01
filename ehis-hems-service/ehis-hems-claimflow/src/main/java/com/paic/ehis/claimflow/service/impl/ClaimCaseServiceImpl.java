@@ -1613,7 +1613,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         }
 
         //获取下一环节处理人
-        AjaxResult nextUserNameAR = remoteClaimMgtService.getClaimCaseOperator(ClaimOperationConstant.BillEntry, ClaimRoleConstant.BillEntry,"");
+        AjaxResult nextUserNameAR = remoteClaimMgtService.getClaimCaseOperator(ClaimOperationConstant.RandomInspection, ClaimRoleConstant.ProblemPiece,"");
         Object data = nextUserNameAR.get(AjaxResult.DATA_TAG);
         String nextUserName = "";
         if(data != null){

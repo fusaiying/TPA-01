@@ -633,6 +633,10 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
             editInfo.setEditReason(complaintAcceptVo.getEditInfo().getEditReason());
             editInfoMapper.insertEditInfo(editInfo);
         }
+        //投诉已完成的修改  修改服务处理信息
+        if(complaintAcceptVo.getFlag()){
+            this.complaintHandling(complaintAcceptVo.getComplaintDealVo());
+        }
 
 
         //轨迹表插入

@@ -387,7 +387,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
                     ClaimCaseRecord claimCaseRecord2 = new ClaimCaseRecord();
                     claimCaseRecord2.setRptNo(claimCase.getRptNo());
                     claimCaseRecord2.setStatus("Y");
-                    claimCaseRecord2.setOperator("07");
+                    claimCaseRecord2.setOperation("07");
                     //claimCaseRecord2.setHistoryFlag("Y");
                     List<ClaimCaseRecord> claimCaseRecords1 = claimCaseRecordMapper.selectClaimCaseRecordList(claimCaseRecord2);
                     nextUserName =claimCaseRecords1.get(0).getOperator();

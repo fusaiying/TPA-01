@@ -642,6 +642,7 @@ import transfer from "../common/modul/transfer";
 import upLoad from "../common/modul/upload";
 import coOrganizer from "../common/modul/coOrganizer";
 import modifyDetails from "../common/modul/modifyDetails";
+import {updateClickTime} from "@/api/customService/reservation";
 
 let dictss = [
   {dictType: 'cs_channel'},
@@ -1335,21 +1336,25 @@ export default {
       this.changeForm.rules = this.rules1;
       this.$refs.sendForm.validate((valid) => {
         if (valid) {
-          let insert = this.sendForm
-          insert.sign = "02"
-          insert.workOrderNo = this.$route.query.workOrderNo
-          complaintDealSubmit(insert).then(res => {
+          const queryParams=this.$route.query.workOrderNo
+          updateClickTime(queryParams).then(res => {
             if (res != null && res.code === 200) {
-              this.$message.success("保存成功");
-              if (res.rows.length <= 0) {
-                return this.$message.warning(
-                  "失败！"
-                )
-              }
-            }
-          }).catch(res => {
+              let insert = this.sendForm
+              insert.sign = "02"
+              insert.workOrderNo = this.$route.query.workOrderNo
+              complaintDealSubmit(insert).then(res => {
+                if (res != null && res.code === 200) {
+                  this.$message.success("保存成功");
+                  if (res.rows.length <= 0) {
+                    return this.$message.warning(
+                      "失败！"
+                    )
+                  }
+                }
+              }).catch(res => {
 
-          })
+              })
+            }}).catch(res=>{})
         }else{
           this.$message.warning("请录入必录项");
         }

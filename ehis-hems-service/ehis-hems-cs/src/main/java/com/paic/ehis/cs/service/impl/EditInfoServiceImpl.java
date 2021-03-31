@@ -118,7 +118,7 @@ public class EditInfoServiceImpl implements IEditInfoService
 
         EditInfo editInfo=new EditInfo();
         //随机生成流水号
-        editInfo.setEditId(PubFun.createMySqlMaxNoUseCache("edit_id",10,6));
+        editInfo.setEditId(PubFun.createMySqlMaxNoUseCache("cs_edit_id",10,8));
         editInfo.setWorkOrderId(demandAcceptVo.getWorkOrderNo());
         editInfo.setStatus("05");//05 取消状态
         editInfo.setCreatedBy(SecurityUtils.getUsername());
@@ -157,7 +157,7 @@ public class EditInfoServiceImpl implements IEditInfoService
 
         EditInfo editInfo=new EditInfo();
         //随机生成流水号
-        editInfo.setEditId(PubFun.createMySqlMaxNoUseCache("edit_id",10,6));
+        editInfo.setEditId(PubFun.createMySqlMaxNoUseCache("cs_edit_id",10,8));
         editInfo.setWorkOrderId(reservationAcceptVo.getWorkOrderNo());
         editInfo.setStatus("05");//05 取消状态
         editInfo.setCreatedBy(SecurityUtils.getUsername());
@@ -199,7 +199,7 @@ public class EditInfoServiceImpl implements IEditInfoService
         //取消原因  取消说明
         EditInfo editInfo=new EditInfo();
         //随机生成流水号
-        editInfo.setEditId(PubFun.createMySqlMaxNoUseCache("edit_id",10,6));
+        editInfo.setEditId(PubFun.createMySqlMaxNoUseCache("cs_edit_id",10,8));
         editInfo.setWorkOrderId(complaintAcceptVo.getWorkOrderNo());
         editInfo.setStatus("05");//05 取消状态
         editInfo.setCreatedBy(SecurityUtils.getUsername());

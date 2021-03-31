@@ -425,6 +425,17 @@ public class CustomServiceSpotCheckController extends BaseController {
         return toAjax(qualityInspectionHandleService.insertHandleInfo1(qualityInspectionDTO));
     }
 
+    /**
+     * 质检差错修改数据保存
+     * @param handleDTO
+     * @return
+     */
+    @Transactional
+    @PostMapping("/internal/insetQualityHandleInfo/handleDTO")
+    public AjaxResult insertHandleInfo(@RequestBody HandleDTO handleDTO){
+        return toAjax(qualityInspectionHandleService.insertHandleInfo(handleDTO));
+    }
+
 
     //信息需求抽检批处理
     @GetMapping("/internal/batchAcceptVo/invalidDate/{invalidDate}")

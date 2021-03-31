@@ -162,10 +162,13 @@ public class QualityInspectionHandleServiceImpl implements IQualityInspectionHan
         return qualityInspectionHandleMapper.getHandleInfoList(handleProcessInfoDTO);
     }
 
+
+    //差错修改确认
     @Override
     public int insertHandleInfo(HandleDTO handleDTO) {
         iDemandAcceptVoService.insertServiceInfo(handleDTO.getDemandAcceptVo());
-        iComplaintAcceptVoService.complaintSaveHandling(handleDTO.getComplaintDealVo());
+        iComplaintAcceptVoService.updateComplaintAcceptVoProcess(handleDTO.getComplaintAcceptVo());//受理信息
+        iComplaintAcceptVoService.updateComplaintAcceptVoProcessYW(handleDTO.getComplaintDealVo());//服务处理信息
         iAttachmentInfoService.insertAttachmentInfo(handleDTO.getAttachmentInfo());
         iQualityInspectionItemService.insertItem(handleDTO.getQualityVo());
         return 1;
@@ -327,9 +330,10 @@ public class QualityInspectionHandleServiceImpl implements IQualityInspectionHan
             if(CodeEnum.BUSINESS_TYPE_03.getCode().equals(qualityInspectionDTO.getBusinessType()) && "01".equals(qualityInspectionDTO.getAppealFlag())){
                 ComplaintAcceptVo complaintAcceptVo=qualityInspectionDTO.getComplaintAcceptVo();
                 complaintAcceptVo.setWorkOrderNo(qualityInspectionDTO.getWorkOrderNo());
+                iComplaintAcceptVoService.updateComplaintAcceptVoProcess(complaintAcceptVo);
                 ComplaintDealVo complaintDealVo= qualityInspectionDTO.getComplaintDealVo();
                 complaintDealVo.setWorkOrderNo(qualityInspectionDTO.getWorkOrderNo());
-                iComplaintAcceptVoService.updateComplaintAcceptVoProcess(complaintAcceptVo,complaintDealVo);
+                iComplaintAcceptVoService.updateComplaintAcceptVoProcessYW(complaintDealVo);
             }
             qualityInspectionHandleMapper.updateHandleInfoById(qualityInspectionDTO);
         }else {

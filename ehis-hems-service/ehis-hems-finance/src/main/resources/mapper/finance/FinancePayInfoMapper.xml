@@ -169,32 +169,34 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <!--查询转账失败处理工作池-->
     <select id="selectTransferfailedList" parameterType="com.paic.ehis.finance.domain.dto.TransferfailedDTO" resultMap="TransferfailedVoResult">
         SELECT
-        finance_pay_info.batch_no,
-        claim_case.rpt_no,
-        finance_pay_info.sum_pay_amount,
-        finance_pay_info.payee_bank,
-        finance_pay_info.acc_no,
-        finance_pay_info.acc_name,
-        finance_pay_info.pay_status,
-        finance_pay_info.pay_date,
-        finance_pay_info.pay_fail_date,
-        finance_receipt_col.receipt_no,
-        finance_pay_info.pay_fail_reason,
-        finance_pay_info.STATUS,
-        finance_pay_info.dept_code
+        fpi.batch_no,
+        sum( fpi.sum_pay_amount ) AS sum_pay_amount,
+        fpi.payee_bank,
+        fpi.acc_no,
+        fpi.acc_name,
+        fpi.pay_status,
+        fpi.pay_date,
+        fpi.pay_fail_date,
+        frc.receipt_no,
+        fpi.pay_fail_reason
         FROM
-        finance_pay_info,
-        finance_receipt_col,
-        claim_case
+        finance_pay_info fpi
+        LEFT JOIN claim_case cc ON fpi.batch_no = cc.batch_no AND cc.STATUS = 'Y'
+        LEFT JOIN finance_receipt_col frc ON fpi.dept_code = frc.dept_code AND frc.STATUS = 'Y'
        <where>
-            <if test="batchNo != null  and batchNo != ''"> and finance_pay_info.batch_no = #{batchNo}</if>
-            <if test="payStartDate != null and payEndDate != null"> and finance_pay_info.pay_date between #{payStartDate} and DATE_ADD(#{payEndDate},INTERVAL 1 DAY)</if>
-            AND finance_pay_info.dept_code = finance_receipt_col.dept_code
-            AND (finance_pay_info.pay_status = "04" OR finance_pay_info.pay_status = "05")
-            AND finance_pay_info.STATUS = 'Y'
-            AND finance_receipt_col.STATUS = 'Y'
-            AND claim_case.STATUS = 'Y'
-            AND finance_pay_info.batch_no=claim_case.batch_no
+            <if test="batchNo != null  and batchNo != ''"> and fpi.batch_no = #{batchNo}</if>
+            <if test="payStartDate != null and payEndDate != null"> and fpi.pay_date between #{payStartDate} and DATE_ADD(#{payEndDate},INTERVAL 1 DAY)</if>
+            and fpi.status='Y'  	AND ( fpi.pay_status = '04' OR fpi.pay_status = '05' )
+           GROUP BY
+           fpi.batch_no,
+           fpi.payee_bank,
+           fpi.acc_no,
+           fpi.acc_name,
+           fpi.pay_status,
+           fpi.pay_date,
+           fpi.pay_fail_date,
+           frc.receipt_no,
+           fpi.pay_fail_reason
        </where>
     </select>
 

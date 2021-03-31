@@ -50,7 +50,9 @@ public interface IComplaintAcceptVoService {
     public ComplaintDealVo selectServiceProcess1(String workOrderNo);
 
     @Transactional(propagation = Propagation.REQUIRED,rollbackFor = Exception.class)
-    int updateComplaintAcceptVoProcess(ComplaintAcceptVo complaintAcceptVo,ComplaintDealVo complaintDealVo);
+    int updateComplaintAcceptVoProcess(ComplaintAcceptVo complaintAcceptVo);
 
+    @Transactional(propagation = Propagation.REQUIRED,rollbackFor = Exception.class)
+    int updateComplaintAcceptVoProcessYW(ComplaintDealVo complaintDealVo );
 
 }

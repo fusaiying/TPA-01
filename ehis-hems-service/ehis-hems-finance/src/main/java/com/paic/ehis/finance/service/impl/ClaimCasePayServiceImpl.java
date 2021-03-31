@@ -326,6 +326,10 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService {
         // 封装支付总金额、理赔总金额
         claimCasePaymentVO.setPayAmount(payAmount);
         claimCasePaymentVO.setCalAmount(calAmount);
+        ClaimCasePaymentVO claimCasePaymentVO1 = claimCaseCalMapper.selectClaimCaseCalAmountByBatchNo(batchNo);
+        if (StringUtils.isNotNull(claimCasePaymentVO1)){
+            claimCasePaymentVO.setCalAmount(claimCasePaymentVO1.getCalAmount());
+        }
         if (payAmount.compareTo(new BigDecimal("0.00")) <= 0) {
             payFlag = "false";
         }
@@ -461,6 +465,7 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService {
             financePayInfo.setBatchNo(batchNo);
             financePayInfo.setPayCurrency(payment.getCurrency());
             financePayInfo.setSumPayAmount(payment.getPayAmount());
+            financePayInfo.setSumPayAmountForeign(payment.getForeignPayAmount());
             financePayInfo.setSumClaimAmount(payment.getCalAmount());
             financePayInfo.setPayeeBank(payment.getBank());
             financePayInfo.setAccNo(payment.getBankNumber());
@@ -579,7 +584,7 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService {
             int payNum=0;
             for (ClaimCaseForeignPayInfoVO caseInfo : caseInfoList) {
                 if (!"99".equals(caseInfo.getCaseStatus()) && !"98".equals(caseInfo.getCaseStatus()) && !("05".equals(caseInfo.getCaseStatus()) && caseInfo.getDiscountedAmount().compareTo(new BigDecimal(0)) == 0) && !"04".equals(caseInfo.getCaseStatus()) && !"06".equals(caseInfo.getCaseStatus())
-                        && !"02".equals(caseInfo.getPayStatus()) && !"03".equals(caseInfo.getPayStatus())) {
+                        && !"02".equals(caseInfo.getPayStatus()) && !"03".equals(caseInfo.getPayStatus()) && !"02".equals(caseInfo.getIsAppeal())) {
                     // 支付状态置为可支付
                     payNum++;
                     ClaimCase claimCase = new ClaimCase();
@@ -891,6 +896,7 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService {
                 payInfoVO.setPayStatus("");
                 payInfoVO.setPayAmount(new BigDecimal(0));
                 payInfoVO.setDebtAmount(new BigDecimal(0));
+                payInfoVO.setPayAmountForeign(new BigDecimal(0));
             }
         }
 

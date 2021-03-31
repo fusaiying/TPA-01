@@ -7,6 +7,7 @@ import com.paic.ehis.common.core.utils.PubFun;
 import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.cs.domain.EditInfo;
 import com.paic.ehis.cs.domain.FlowLog;
+import com.paic.ehis.cs.domain.WorkOrderAccept;
 import com.paic.ehis.cs.domain.vo.ComplaintAcceptVo;
 import com.paic.ehis.cs.domain.vo.DemandAcceptVo;
 import com.paic.ehis.cs.domain.vo.ReservationAcceptVo;
@@ -36,6 +37,8 @@ public class EditInfoServiceImpl implements IEditInfoService
     private ReservationAcceptVoMapper reservationAcceptVoMapper;
     @Autowired
     private ComplaintAcceptVoMapper complaintAcceptVoMapper;
+    @Autowired
+    private WorkOrderAcceptMapper workOrderAcceptMapper;
 
     /**
      * 查询修改信息 
@@ -209,6 +212,13 @@ public class EditInfoServiceImpl implements IEditInfoService
         editInfo.setEditReason(complaintAcceptVo.getEditReason());
         editInfo.setEditRemark(complaintAcceptVo.getEditRemark());
         editInfoMapper.insertEditInfo(editInfo);
+
+        //工单表修改
+        WorkOrderAccept workOrderAccept = workOrderAcceptMapper.selectWorkOrderAcceptById(complaintAcceptVo.getWorkOrderNo());
+        workOrderAccept.setUpdateBy(SecurityUtils.getUsername());
+        workOrderAccept.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
+        workOrderAccept.setStatus("05");//取消状态
+        workOrderAcceptMapper.updateWorkOrderAccept(workOrderAccept);
 
 
         //轨迹表生成数据

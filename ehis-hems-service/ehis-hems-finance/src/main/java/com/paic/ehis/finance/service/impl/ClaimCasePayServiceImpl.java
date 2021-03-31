@@ -74,6 +74,9 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService {
             deptId = organCode;
         }
 
+        //获取查询数据  判断是后是第一次支付优先飘红显示
+        ClaimCasePayDTO claimCasePayDTO = new ClaimCasePayDTO();
+        claimCasePayDTO.setOrganCode(deptId);
         List<Map<String, Object>> initList = claimBatchMapper.selectPayBatchInit(deptId);
         BaseProviderSettle baseProviderSettle = new BaseProviderSettle();
         for (Map<String, Object> map : initList) {

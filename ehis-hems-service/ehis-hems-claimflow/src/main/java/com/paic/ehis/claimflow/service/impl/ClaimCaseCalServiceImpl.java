@@ -174,7 +174,7 @@ public class ClaimCaseCalServiceImpl implements IClaimCaseCalService
                                     BigDecimal payAmountForeign = prePayAmount.divide(exchangeRate.getParities(),20,BigDecimal.ROUND_HALF_UP);
                                     precalConclusionVo.setPayAmountForeign(payAmountForeign);
                                     //本次支付差额（外币）=本次外币给付金额-申诉原案件外币给付金额；
-                                    calConclusionVo.setPaymentDifference(calConclusionVo.getPaymentDifference().subtract(precalConclusionVo.getPaymentDifference()));
+                                    calConclusionVo.setPaymentDifference(calConclusionVo.getPayAmountForeign().subtract(payAmountForeign));
 
                                 }
                             }
@@ -185,7 +185,7 @@ public class ClaimCaseCalServiceImpl implements IClaimCaseCalService
                                     BigDecimal payAmountForeign = subtractVa.divide(exchangeRate.getParities(),20,BigDecimal.ROUND_HALF_UP);
                                     precalConclusionVo.setPayAmountForeign(payAmountForeign);
                                     //本次支付差额（外币）=本次外币给付金额-申诉原案件外币给付金额；
-                                    calConclusionVo.setPaymentDifference(calConclusionVo.getPaymentDifference().subtract(precalConclusionVo.getPaymentDifference()));
+                                    calConclusionVo.setPaymentDifference(calConclusionVo.getPayAmountForeign().subtract(payAmountForeign));
 
                                 }
                             }

@@ -1220,6 +1220,11 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         claimCaseRecordMapper.insertClaimCaseRecord(record);
 
         ClaimCaseCal claimCaseCal = claimCaseCalMapper.selectClaimCaseCalByRptNo(claimCase.getRptNo());
+        /***
+         * modify by : houjiawei
+         * timei:2021-03-31
+         * 普通案件追讨金额处理
+         */
         if (claimCaseCal.getDebtAmount().compareTo(new BigDecimal(String.valueOf(0))) != 0){
             if ("01".equals(claimCase.getIsAppeal())){
                 ClaimCaseDebt claimCaseDebt = claimCaseDebtMapper.selectClaimCaseDebtByRptNo(claimCase.getRptNo());
@@ -1242,17 +1247,29 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
                     caseDebt.setUpdateTime(DateUtils.getNowDate());
                     claimCaseDebtMapper.insertClaimCaseDebt(caseDebt);
                 }
-            }else{
-                CalConclusionVo calConclusionVo = claimCaseCalMapper.selectPreCalConclusionByRptNo(claimCase.getRptNo());
-                ClaimCaseDebt claimCaseDebt = claimCaseDebtMapper.selectClaimCaseDebtByRptNo(calConclusionVo.getRptNo());
-                if(null != claimCaseDebt) {
-                    claimCaseDebt.setDebtAmount(calConclusionVo.getDebtAmount());
-                    claimCaseDebt.setUpdateBy(SecurityUtils.getUsername());
-                    claimCaseDebt.setUpdateTime(DateUtils.getNowDate());
-                    claimCaseDebtMapper.updateClaimCaseDebt(claimCaseDebt);
-                }
+            }
+        }
+        /***
+         * modify by : houjiawei
+         * timei:2021-03-31
+         * 申诉案件追讨金额处理
+         *
+         * 申诉案件如果更新了追讨, 即使原案件没有追讨（追讨为0，申诉案件申诉后有追讨，也是要放在原案件上
+         * 更新原案件追讨金额为最新案件的追讨金额 ，那么最新案件的追讨金额更新为0
+         */
+        if ("02".equals(claimCase.getIsAppeal()) && claimCaseCal.getDebtAmount() != null) {
+            CalConclusionVo calConclusionVo = claimCaseCalMapper.selectPreCalConclusionByRptNo(claimCase.getRptNo());
+            ClaimCaseDebt claimCaseDebt = claimCaseDebtMapper.selectClaimCaseDebtByRptNo(calConclusionVo.getRptNo());
+            if(null != claimCaseDebt) {
+                claimCaseDebt.setDebtAmount(calConclusionVo.getDebtAmount());
+                claimCaseDebt.setUpdateBy(SecurityUtils.getUsername());
+                claimCaseDebt.setUpdateTime(DateUtils.getNowDate());
+                claimCaseDebtMapper.updateClaimCaseDebt(claimCaseDebt);
 
             }
+            claimCaseCal.setDebtAmount(new BigDecimal(0));
+            claimCaseCalMapper.updateClaimCaseCalByRptNo(claimCaseCal);
+
         }
 
         // 判断结案时是否存在未支付借款
@@ -1559,6 +1576,12 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
             claimCase.setRptNo(claimCaseCheckDTO.getRptNo());
 
             //追讨生成
+            /***
+             /***
+             * modify by : houjiawei
+             * timei:2021-03-31
+             * 普通案件追讨金额处理
+             */
             if (claimCaseCheckDTO.getDebtAmount().compareTo(new BigDecimal(String.valueOf(0))) != 0){
                 if ("01".equals(claimCase.getIsAppeal())){
                     ClaimCaseDebt claimCaseDebt = claimCaseDebtMapper.selectClaimCaseDebtByRptNo(claimCaseCheckDTO.getRptNo());
@@ -1581,16 +1604,33 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
                         caseDebt.setUpdateTime(DateUtils.getNowDate());
                         claimCaseDebtMapper.insertClaimCaseDebt(caseDebt);
                     }
-                }else{
-                    CalConclusionVo calConclusionVo = claimCaseCalMapper.selectPreCalConclusionByRptNo(claimCaseCheckDTO.getRptNo());
-                    ClaimCaseDebt claimCaseDebt = claimCaseDebtMapper.selectClaimCaseDebtByRptNo(calConclusionVo.getRptNo());
-                    if(null != claimCaseDebt) {
-                        claimCaseDebt.setDebtAmount(calConclusionVo.getDebtAmount());
-                        claimCaseDebt.setUpdateBy(SecurityUtils.getUsername());
-                        claimCaseDebt.setUpdateTime(DateUtils.getNowDate());
-                        claimCaseDebtMapper.updateClaimCaseDebt(claimCaseDebt);
-                    }
                 }
+            }
+
+            /***
+             * modify by : houjiawei
+             * timei:2021-03-31
+             * 申诉案件追讨金额处理
+             *
+             * 申诉案件如果更新了追讨, 即使原案件没有追讨（追讨为0，申诉案件申诉后有追讨，也是要放在原案件上
+             * 更新原案件追讨金额为最新案件的追讨金额 ，那么最新案件的追讨金额更新为0
+             */
+            if ("02".equals(claimCase.getIsAppeal()) && claimCaseCheckDTO.getDebtAmount() != null) {
+                CalConclusionVo calConclusionVo = claimCaseCalMapper.selectPreCalConclusionByRptNo(claimCaseCheckDTO.getRptNo());
+                ClaimCaseDebt claimCaseDebt = claimCaseDebtMapper.selectClaimCaseDebtByRptNo(calConclusionVo.getRptNo());
+                if(null != claimCaseDebt) {
+                    claimCaseDebt.setDebtAmount(calConclusionVo.getDebtAmount());
+                    claimCaseDebt.setUpdateBy(SecurityUtils.getUsername());
+                    claimCaseDebt.setUpdateTime(DateUtils.getNowDate());
+                    claimCaseDebtMapper.updateClaimCaseDebt(claimCaseDebt);
+                }
+                //新案件的追讨金额更新为0
+                ClaimCaseCal cal = new ClaimCaseCal();
+                cal.setDebtAmount(new BigDecimal(0));
+                cal.setRptNo(claimCaseCheckDTO.getRptNo());
+                cal.setUpdateBy(SecurityUtils.getUsername());
+                cal.setUpdateTime(DateUtils.getNowDate());
+                claimCaseCalMapper.updateClaimCaseCalByRptNo(cal);
             }
 
             // 判断结案时是否存在未支付借款

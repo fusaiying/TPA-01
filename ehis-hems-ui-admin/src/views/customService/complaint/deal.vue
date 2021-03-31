@@ -682,6 +682,7 @@ export default {
       }
     }
   },
+
   data() {
     const checkPieceworkFlag = (rule, value, callback) => {
       if (this.sendForm.level2 == '05') {
@@ -709,46 +710,46 @@ export default {
 
     const rules = {
         level1: [
-          {required: true, message: "一级投诉分类不能为空", trigger: "blur"}
+          {required: true, message: "一级投诉分类不能为空", trigger: "change"}
           ],
         level2: [
-          {required: true, message: "二级投诉分类不能为空", trigger: "blur"}
+          {required: true, message: "二级投诉分类不能为空", trigger: "change"}
           ],
         pieceworkFlag: [
-          {required: false, validator: checkPieceworkFlag, trigger: "blur"}
+          {required: false, validator: checkPieceworkFlag, trigger: "change"}
           ],
         complaintStatus: [
-          {required: false, validator: checkComplaintStatus, trigger: "blur"}
+          {required: false, validator: checkComplaintStatus, trigger: "change"}
           ],
         complaintTenable: [
-          {required: true, message: "投诉是否成立不能为空", trigger: "blur"}
+          {required: true, message: "投诉是否成立不能为空", trigger: "change"}
           ],
         repeatedComplaint: [
-          {required: true, message: "重复投诉不能为空", trigger: "blur"}
+          {required: true, message: "重复投诉不能为空", trigger: "change"}
           ],
         reason1: [
-          {required: true, message: "一级投诉原因不能为空", trigger: "blur"}
+          {required: true, message: "一级投诉原因不能为空", trigger: "change"}
           ],
         reason2: [
-          {required: true, message: "二级投诉原因不能为空", trigger: "blur"}
+          {required: true, message: "二级投诉原因不能为空", trigger: "change"}
           ],
         reason3: [
-          {required: true, message: "三级投诉原因不能为空", trigger: "blur"}
+          {required: true, message: "三级投诉原因不能为空", trigger: "change"}
           ],
         complaintLink: [
-          {required: true, message: "投保问题（报保监）不能为空", trigger: "blur"}
+          {required: true, message: "投保问题（报保监）不能为空", trigger: "change"}
           ],
         complaintQuestion: [
-          {required: true, message: "投保问题（报保监）不能为空", trigger: "blur"}
+          {required: true, message: "投保问题（报保监）不能为空", trigger: "change"}
           ],
         outsideState: [
-          {required: true, message: "行协调解或外部鉴不能为空", trigger: "blur"}
+          {required: true, message: "行协调解或外部鉴不能为空", trigger: "change"}
           ],
         riskType: [
-          {required: true, message: "险种类型不能为空", trigger: "blur"}
+          {required: true, message: "险种类型不能为空", trigger: "change"}
           ],
         marketChannel: [
-          {required: true, message: "营销渠道不能为空", trigger: "blur"}
+          {required: true, message: "营销渠道不能为空", trigger: "change"}
           ],
         complaintCategory: [
           {required: true, message: "投诉业务类别不能为空", trigger: "blur"}
@@ -763,7 +764,7 @@ export default {
           {required: true, message: "处理进展不能为空", trigger: "blur"}
           ],
         customerFeedback: [
-          {required: true, message: "客户反馈不能为空", trigger: "blur"}
+          {required: true, message: "客户反馈不能为空", trigger: "change"}
           ],
         treatmentResult: [
           {required: true, message: "处理结果不能为空", trigger: "blur"}
@@ -952,6 +953,12 @@ export default {
   //    transferBtn : false,
     }
   },
+  updated() {
+    this.$nextTick(function () {
+      this.$refs["sendForm"].clearValidate();
+    })
+  },
+
   created() {
     this.queryParams.workOrderNo = this.$route.query.workOrderNo;
     this.queryParams.policyNo = this.$route.query.policyNo;
@@ -1336,7 +1343,7 @@ export default {
       this.changeForm.rules = this.rules1;
       this.$refs.sendForm.validate((valid) => {
         if (valid) {
-          const queryParams=this.$route.query.workOrderNo
+          const queryParams={workOrderNo: this.$route.query.workOrderNo}
           updateClickTime(queryParams).then(res => {
             if (res != null && res.code === 200) {
               let insert = this.sendForm

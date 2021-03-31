@@ -34,6 +34,8 @@ public interface IComplaintAcceptVoService {
     int complaintHandling(ComplaintDealVo complaintDealVo);
     int complaintSaveHandling(ComplaintDealVo complaintDealVo);
 
+    int gyHandling(ComplaintDealVo complaintDealVo);
+
     /**
      * 投诉分类级联关系
      */

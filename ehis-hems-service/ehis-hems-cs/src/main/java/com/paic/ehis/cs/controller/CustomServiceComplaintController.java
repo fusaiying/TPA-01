@@ -143,6 +143,23 @@ public class CustomServiceComplaintController extends BaseController {
     }
 
     /**
+     * 投诉需求处理意见
+     * @param complaintDealVo
+     * @return
+     */
+//    @PreAuthorize("@ss.hasPermi('system:customService::edit')")
+    @Log(title = "获取 ", businessType = BusinessType.INSERT)
+    @PutMapping("/gyHandling")
+    public AjaxResult gyHandling(@Validated @RequestBody ComplaintDealVo complaintDealVo)
+    {
+        if(complaintDealVo.getSign().equals("01")){
+            return toAjax(iComplaintAcceptVoService.complaintHandling(complaintDealVo));
+        }else{
+            return toAjax(iComplaintAcceptVoService.gyHandling(complaintDealVo));
+        }
+    }
+
+    /**
      * 工单挂起
      */
     @Log(title = "修改 ", businessType = BusinessType.UPDATE)

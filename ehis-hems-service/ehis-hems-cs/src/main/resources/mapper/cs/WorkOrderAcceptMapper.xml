@@ -319,4 +319,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             1 = 1
           and woa.work_order_no=#{workOrderNo}
     </select>
+
+
+    <select id="getGYSerial" parameterType="String" resultType="Integer">
+        select max(SUBSTR(work_order_no,18)+0) from accept_detail_info where work_order_no like concat('%',#{workOrderNo},'%')
+    </select>
 </mapper>

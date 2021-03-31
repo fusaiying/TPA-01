@@ -118,4 +118,7 @@ public interface WorkOrderAcceptMapper
      * @return
      */
     public List<WorkOrderAccept> getWorkOrderAcceptByOtherNo(WorkOrderAccept workOrderAccept);
+
+    //根因改善用  获取投诉对应的根因改善最大流水号
+    public int getGYSerial(String workOrderNo);
 }

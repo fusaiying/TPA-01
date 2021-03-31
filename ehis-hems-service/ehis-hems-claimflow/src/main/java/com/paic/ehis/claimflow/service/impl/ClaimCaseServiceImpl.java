@@ -1267,9 +1267,13 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
                 claimCaseDebtMapper.updateClaimCaseDebt(claimCaseDebt);
 
             }
-            claimCaseCal.setDebtAmount(new BigDecimal(0));
+            //更新原案件追讨
+            claimCaseCal.setRptNo(calConclusionVo.getRptNo());
             claimCaseCalMapper.updateClaimCaseCalByRptNo(claimCaseCal);
 
+            //最新案件的追讨金额更新为0
+            claimCaseCal.setDebtAmount(new BigDecimal(0));
+            claimCaseCalMapper.updateClaimCaseCalByRptNo(claimCaseCal);
         }
 
         // 判断结案时是否存在未支付借款
@@ -1624,12 +1628,17 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
                     claimCaseDebt.setUpdateTime(DateUtils.getNowDate());
                     claimCaseDebtMapper.updateClaimCaseDebt(claimCaseDebt);
                 }
-                //新案件的追讨金额更新为0
                 ClaimCaseCal cal = new ClaimCaseCal();
-                cal.setDebtAmount(new BigDecimal(0));
-                cal.setRptNo(claimCaseCheckDTO.getRptNo());
                 cal.setUpdateBy(SecurityUtils.getUsername());
                 cal.setUpdateTime(DateUtils.getNowDate());
+                cal.setDebtAmount(claimCaseCheckDTO.getDebtAmount());
+                //更新原案件追讨
+                cal.setRptNo(calConclusionVo.getRptNo());
+                claimCaseCalMapper.updateClaimCaseCalByRptNo(cal);
+
+                //新案件的追讨金额更新为0
+                cal.setDebtAmount(new BigDecimal(0));
+                cal.setRptNo(claimCaseCheckDTO.getRptNo());
                 claimCaseCalMapper.updateClaimCaseCalByRptNo(cal);
             }
 

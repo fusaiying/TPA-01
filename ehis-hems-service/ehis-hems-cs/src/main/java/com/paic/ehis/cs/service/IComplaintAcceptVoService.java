@@ -34,6 +34,8 @@ public interface IComplaintAcceptVoService {
     int complaintHandling(ComplaintDealVo complaintDealVo);
     int complaintSaveHandling(ComplaintDealVo complaintDealVo);
 
+    int gyHandling(ComplaintDealVo complaintDealVo);
+
     /**
      * 投诉分类级联关系
      */
@@ -46,8 +48,11 @@ public interface IComplaintAcceptVoService {
 
     //投诉服务处理页面数据
     public ComplaintDealVo selectServiceProcess1(String workOrderNo);
-    @Transactional(propagation = Propagation.REQUIRED,rollbackFor = Exception.class)
-    int updateComplaintAcceptVoProcess(ComplaintAcceptVo complaintAcceptVo,ComplaintDealVo complaintDealVo);
 
+    @Transactional(propagation = Propagation.REQUIRED,rollbackFor = Exception.class)
+    int updateComplaintAcceptVoProcess(ComplaintAcceptVo complaintAcceptVo);
+
+    @Transactional(propagation = Propagation.REQUIRED,rollbackFor = Exception.class)
+    int updateComplaintAcceptVoProcessYW(ComplaintDealVo complaintDealVo );
 
 }

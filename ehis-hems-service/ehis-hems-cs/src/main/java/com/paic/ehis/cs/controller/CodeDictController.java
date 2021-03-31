@@ -123,6 +123,19 @@ public class CodeDictController extends BaseController
         util.exportExcel(response, list, "投诉业务类别");
     }
 
+    /**
+     * 导出模板
+     */
+//    @PreAuthorize("@ss.hasPermi('system:enum:export')")
+    @Log(title = "业务码 ", businessType = BusinessType.EXPORT)
+    @PostMapping("/downloadTemplant")
+    public void downloadTemplant(HttpServletResponse response, CodeDictDTO codeDictDTO) throws IOException
+    {
+        List<CodeDictVo> list = new ArrayList<>();
+        ExcelUtil<CodeDictVo> util = new ExcelUtil<CodeDictVo>(CodeDictVo.class);
+        util.exportExcel(response, list, "投诉业务类别");
+    }
+
 
     @GetMapping("/updateCodeEnumVo")
     public AjaxResult updateCodeEnumVo(List<CodeDictVo> list){
@@ -262,6 +275,7 @@ public class CodeDictController extends BaseController
         codeDictTemporaryService.updateBusinessIDNotNUll(tBatchNo);///*投保业务类别ID不能为空*/
         codeDictTemporaryService.updateBusinessNameNotNUll(tBatchNo);///*投保业务类别名称不能为空*/
         codeDictTemporaryService.updateInsuranceIDRE(tBatchNo);///*投保来源ID重复 ID相同*/
+        codeDictTemporaryService.updateInsuranceIDRE2(tBatchNo);///*投保来源ID重复 ID相同 临时表主表数据对比*/
         codeDictTemporaryService.updateBusinessIDRE(tBatchNo);///*投保业务类别 ID相同  name不同 临时表数据对比
         codeDictTemporaryService.updateBusinessIDRE2(tBatchNo);///*投保业务类别 ID相同  name不同 临时表主表数据对比
         codeDictTemporaryService.updateBusinessToIns(tBatchNo);///*投保业务分类错误 则投保来源也错误*/
@@ -282,8 +296,8 @@ public class CodeDictController extends BaseController
                 //不存在则插入 防止重复插入
                 tCodeDict.setCodeType("cs_complaint_business_item");
                 tCodeDict.setCode(tSuccList.get(i).getCode());
-                List<CodeDict> tOldCodeDictList = codeDictService.selectCodeDictList(tCodeDict);
-                if(tOldCodeDictList != null && tOldCodeDictList.size()>0){
+                List<CodeDict> tOldCodeDictList = codeDictService.selectCodeDictList2(tCodeDict);
+                if(tOldCodeDictList == null || tOldCodeDictList.size()<=0){
                     tCodeDict.setCodeName(tSuccList.get(i).getCodeName());
                     tCodeDict.setStatus("1");
                     tCodeDict.setOrderNo(tSuccList.get(i).getOrderNo());

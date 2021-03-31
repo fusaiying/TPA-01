@@ -544,7 +544,7 @@
           </el-form-item>
         </el-row>
         <el-row>
-          <el-form-item label="质诉根因：" prop="actionCause">
+          <el-form-item label="致诉根因：" prop="actionCause">
             <el-input v-model="sendForm.actionCause" clearable size="mini" class="width-full"/>
           </el-form-item>
         </el-row>
@@ -682,7 +682,6 @@ export default {
     }
   },
   data() {
-
     const checkPieceworkFlag = (rule, value, callback) => {
       if (this.sendForm.level2 == '05') {
         if (!value) {

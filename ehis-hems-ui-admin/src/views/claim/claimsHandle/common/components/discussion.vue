@@ -58,7 +58,7 @@
             <el-col :span="8">
               <span class="info_span_col to_right">汇率：</span> <span class="info_span money_class">{{ conclusionInfo.exchangeRate}}</span>
             </el-col>
-            <el-col :span="8">
+            <el-col :span="8" v-if="billCurency !== 'CNY'">
               <span class="info_span_col to_right">外币给付金额：</span> <span class="info_span money_class">{{ conclusionInfo.payAmountForeign}}</span>
             </el-col>
           </el-row>
@@ -640,6 +640,7 @@
                 billCurrency:this.conclusionForm.billCurrency,
                 payConclusion:this.conclusionForm.payConclusion,
                 refusedReason:this.conclusionForm.refusedReason,
+                payAmountForeign:this.conclusionInfo.payAmountForeign,
                 remark:this.conclusionForm.remark,
                 claimCheck:this.conclusionForm.claimCheck,
                 debtAmount:this.conclusionInfo.debtAmount
@@ -1042,7 +1043,10 @@
       //抽检完毕
       caseCheckOver() {
         let data = {
-          rptNo: this.fixInfo.rptNo
+          rptNo: this.fixInfo.rptNo,
+          debtAmount:this.conclusionInfo.debtAmount,
+          paymentDifference:this.conclusionInfo.paymentDifference,
+          isAppeal:this.conclusionInfo.isAppeal,
         }
 
         if(this.appealCase) {

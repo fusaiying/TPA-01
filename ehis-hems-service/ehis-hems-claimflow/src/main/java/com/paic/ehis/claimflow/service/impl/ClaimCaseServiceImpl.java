@@ -1229,8 +1229,13 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         claimCaseRecordMapper.insertClaimCaseRecord(record);
 
         ClaimCaseCal claimCaseCal = claimCaseCalMapper.selectClaimCaseCalByRptNo(claimCase.getRptNo());
+        /***
+         * modify by : houjiawei
+         * time:2021-03-31
+         * 普通案件追讨金额处理
+         */
         if (claimCaseCal.getDebtAmount().compareTo(new BigDecimal(String.valueOf(0))) != 0){
-            if ("02".equals(claimCase.getIsAppeal())){
+            if (null != claimCase.getIsAppeal() && "01".equals(claimCase.getIsAppeal())){
                 ClaimCaseDebt claimCaseDebt = claimCaseDebtMapper.selectClaimCaseDebtByRptNo(claimCase.getRptNo());
                 if (StringUtils.isNotNull(claimCaseDebt)) {
                     claimCaseDebt.setRptNo(claimCase.getRptNo());
@@ -1249,16 +1254,35 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
                     caseDebt.setCreateTime(DateUtils.getNowDate());
                     caseDebt.setUpdateBy(SecurityUtils.getUsername());
                     caseDebt.setUpdateTime(DateUtils.getNowDate());
-                    claimCaseDebtMapper.insertClaimCaseDebt(claimCaseDebt);
+                    claimCaseDebtMapper.insertClaimCaseDebt(caseDebt);
                 }
-            }else{
-                CalConclusionVo calConclusionVo = claimCaseCalMapper.selectPreCalConclusionByRptNo(claimCase.getRptNo());
-                ClaimCaseDebt claimCaseDebt = claimCaseDebtMapper.selectClaimCaseDebtByRptNo(calConclusionVo.getRptNo());
+            }
+        }
+        /***
+         * modify by : houjiawei
+         * time:2021-03-31
+         * 申诉案件追讨金额处理
+         *
+         * 申诉案件如果更新了追讨, 即使原案件没有追讨（追讨为0，申诉案件申诉后有追讨，也是要放在原案件上
+         * 更新原案件追讨金额为最新案件的追讨金额 ，那么最新案件的追讨金额更新为0
+         */
+        if (null != claimCase.getIsAppeal() && "02".equals(claimCase.getIsAppeal()) && claimCaseCal.getDebtAmount() != null) {
+            CalConclusionVo calConclusionVo = claimCaseCalMapper.selectPreCalConclusionByRptNo(claimCase.getRptNo());
+            ClaimCaseDebt claimCaseDebt = claimCaseDebtMapper.selectClaimCaseDebtByRptNo(calConclusionVo.getRptNo());
+            if(null != claimCaseDebt) {
                 claimCaseDebt.setDebtAmount(calConclusionVo.getDebtAmount());
                 claimCaseDebt.setUpdateBy(SecurityUtils.getUsername());
                 claimCaseDebt.setUpdateTime(DateUtils.getNowDate());
                 claimCaseDebtMapper.updateClaimCaseDebt(claimCaseDebt);
+
             }
+            //更新原案件追讨
+            claimCaseCal.setRptNo(calConclusionVo.getRptNo());
+            claimCaseCalMapper.updateClaimCaseCalByRptNo(claimCaseCal);
+
+            //最新案件的追讨金额更新为0
+            claimCaseCal.setDebtAmount(new BigDecimal(0));
+            claimCaseCalMapper.updateClaimCaseCalByRptNo(claimCaseCal);
         }
 
         // 判断结案时是否存在未支付借款
@@ -1274,7 +1298,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
                 ClaimCaseCal caseCal = claimCaseCalMapper.selectClaimCaseCalByRptNo(aCase.getRptNo());
                 // 查询借款表里金额
                 FinanceBorrowInfo borrowInfo = remoteFinancialServicce.selectBorrowInfo(aCase.getRptNo());
-                if (caseCal.getPayAmount().compareTo(borrowInfo.getBorrowAmount()) != 0 ){
+                if (null != borrowInfo && caseCal.getPayAmount().compareTo(borrowInfo.getBorrowAmount()) != 0 ){
                     // 借款表数据更新成支付数据
                     FinanceBorrowInfo financeBorrowInfo = new FinanceBorrowInfo();
                     financeBorrowInfo.setRptNo(aCase.getRptNo());
@@ -1289,6 +1313,14 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
 
         } else {
             claimCase.setPayStatus("01");
+        }
+        /****
+         * modify by : houjiawei
+         * time : 2021-3-30
+         * 如果是申诉案件 且 本次支付差额 为 0 ，则 支付状态为 03 已支付
+         */
+        if(null != claimCase.getIsAppeal() && claimCase.getIsAppeal().equals("02") && (claimCase.getPaymentDifference().compareTo(BigDecimal.ZERO)==0)) {
+            claimCase.setPayStatus("03");
         }
         return claimCaseMapper.updateClaimCaseNew(claimCase);
     }
@@ -1557,8 +1589,14 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
             claimCase.setRptNo(claimCaseCheckDTO.getRptNo());
 
             //追讨生成
+            /***
+             /***
+             * modify by : houjiawei
+             * time:2021-03-31
+             * 普通案件追讨金额处理
+             */
             if (claimCaseCheckDTO.getDebtAmount().compareTo(new BigDecimal(String.valueOf(0))) != 0){
-                if ("02".equals(claimCase.getIsAppeal())){
+                if (null != claimCase.getIsAppeal() && "01".equals(claimCase.getIsAppeal())){
                     ClaimCaseDebt claimCaseDebt = claimCaseDebtMapper.selectClaimCaseDebtByRptNo(claimCaseCheckDTO.getRptNo());
                     if (StringUtils.isNotNull(claimCaseDebt)) {
                         claimCaseDebt.setRptNo(claimCaseCheckDTO.getRptNo());
@@ -1579,14 +1617,38 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
                         caseDebt.setUpdateTime(DateUtils.getNowDate());
                         claimCaseDebtMapper.insertClaimCaseDebt(caseDebt);
                     }
-                }else{
-                    CalConclusionVo calConclusionVo = claimCaseCalMapper.selectPreCalConclusionByRptNo(claimCaseCheckDTO.getRptNo());
-                    ClaimCaseDebt claimCaseDebt = claimCaseDebtMapper.selectClaimCaseDebtByRptNo(calConclusionVo.getRptNo());
+                }
+            }
+
+            /***
+             * modify by : houjiawei
+             * time:2021-03-31
+             * 申诉案件追讨金额处理
+             *
+             * 申诉案件如果更新了追讨, 即使原案件没有追讨（追讨为0，申诉案件申诉后有追讨，也是要放在原案件上
+             * 更新原案件追讨金额为最新案件的追讨金额 ，那么最新案件的追讨金额更新为0
+             */
+            if (null != claimCase.getIsAppeal() && "02".equals(claimCase.getIsAppeal()) && claimCaseCheckDTO.getDebtAmount() != null) {
+                CalConclusionVo calConclusionVo = claimCaseCalMapper.selectPreCalConclusionByRptNo(claimCaseCheckDTO.getRptNo());
+                ClaimCaseDebt claimCaseDebt = claimCaseDebtMapper.selectClaimCaseDebtByRptNo(calConclusionVo.getRptNo());
+                if(null != claimCaseDebt) {
                     claimCaseDebt.setDebtAmount(calConclusionVo.getDebtAmount());
                     claimCaseDebt.setUpdateBy(SecurityUtils.getUsername());
                     claimCaseDebt.setUpdateTime(DateUtils.getNowDate());
                     claimCaseDebtMapper.updateClaimCaseDebt(claimCaseDebt);
                 }
+                ClaimCaseCal cal = new ClaimCaseCal();
+                cal.setUpdateBy(SecurityUtils.getUsername());
+                cal.setUpdateTime(DateUtils.getNowDate());
+                cal.setDebtAmount(claimCaseCheckDTO.getDebtAmount());
+                //更新原案件追讨
+                cal.setRptNo(calConclusionVo.getRptNo());
+                claimCaseCalMapper.updateClaimCaseCalByRptNo(cal);
+
+                //新案件的追讨金额更新为0
+                cal.setDebtAmount(new BigDecimal(0));
+                cal.setRptNo(claimCaseCheckDTO.getRptNo());
+                claimCaseCalMapper.updateClaimCaseCalByRptNo(cal);
             }
 
             // 判断结案时是否存在未支付借款
@@ -1623,7 +1685,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
              * time : 2021-3-30
              * 如果是申诉案件 且 本次支付差额 为 0 ，则 支付状态为 03 已支付
              */
-            if(claimCaseCheckDTO.getCaseType().equals("02") && (claimCaseCheckDTO.getPaymentDifference().compareTo(BigDecimal.ZERO)==0)) {
+            if(null != claimCaseCheckDTO.getCaseType() && claimCaseCheckDTO.getCaseType().equals("02") && (claimCaseCheckDTO.getPaymentDifference().compareTo(BigDecimal.ZERO)==0)) {
                 claimCase.setPayStatus("03");
             }
             return claimCaseMapper.updateClaimCaseNew(claimCase);

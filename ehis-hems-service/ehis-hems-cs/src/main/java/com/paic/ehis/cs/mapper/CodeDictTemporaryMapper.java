@@ -37,6 +37,9 @@ public interface CodeDictTemporaryMapper
     /*投保来源ID重复 ID相同*/
     public int updateInsuranceIDRE(String batchno);
 
+    /*投保来源ID重复 ID相同 临时表和主表数据对比*/
+    public int updateInsuranceIDRE2(String batchno);
+
     /*投保业务类别 ID相同  name不同 临时表数据对比*/
     public int updateBusinessIDRE(String batchno);
 

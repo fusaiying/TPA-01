@@ -532,7 +532,7 @@
           </el-form-item>
         </el-row>
         <el-row>
-          <el-form-item label="质诉根因：" prop="actionCause" >
+          <el-form-item label="致诉根因：" prop="actionCause" >
             <el-input v-model="serverForm.actionCause"  readonly size="mini" class="width-full" disabled="submissionFlag"/>
           </el-form-item>
         </el-row>
@@ -567,11 +567,11 @@
           </el-form-item>
         </el-col>
         <el-col>
-          <el-form-item label="改善措施：" prop="content">
+          <el-form-item label="改善措施：" prop="improvementMeasures">
             <el-input
               type="textarea"
               :rows="2"
-              v-model="serverForm.content"
+              v-model="serverForm.improvementMeasures"
               placeholder="请输入">
             </el-input>
           </el-form-item>
@@ -628,7 +628,7 @@
   import moment from 'moment'
   import {FlowLogSearch,HMSSearch,dealADD,demandListAndPersonalPool} from '@/api/customService/demand'
   import {
-    complaintDealSubmit,
+    gyDealSubmit,
     complainSearchServer,
     reasonTwo,
     reasonThree,
@@ -733,7 +733,7 @@
         },
         // 表单校验
         rules: {
-          content: [
+          improvementMeasures: [
             {required: true, message: "改善措施不能为空", trigger: "blur"}
           ],
 
@@ -996,7 +996,7 @@
         }).catch(res => {
 
         })
-/*        let query=this.queryParams
+        let query=this.queryParams
         complainSearchServer(query).then(res => {
           if (res != null && res.code === 200) {
             console.log("投诉页面server反显数据",res.data)
@@ -1009,7 +1009,7 @@
           }
         }).catch(res => {
 
-        })*/
+        })
       },
 
 
@@ -1081,10 +1081,10 @@
 
         this.$refs.serverForm.validate((valid) => {
           if (valid) {
-            let insert = this.sendForm
+            let insert = this.serverForm;
             insert.sign = "02"
             insert.workOrderNo = this.$route.query.workOrderNo
-            complaintDealSubmit(insert).then(res => {
+            gyDealSubmit(insert).then(res => {
               if (res != null && res.code === 200) {
                 this.$message.success("保存成功");
                 this.checkSubmitFlag = '01';

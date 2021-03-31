@@ -122,6 +122,20 @@ public class ClaimCase extends BaseEntity {
     @Excel(name = "追讨金额")
     private BigDecimal debtAmount;
 
+    /**
+     * 本次支付差额
+     */
+    private BigDecimal paymentDifference;
+
+
+    public BigDecimal getPaymentDifference() {
+        return paymentDifference;
+    }
+
+    public void setPaymentDifference(BigDecimal paymentDifference) {
+        this.paymentDifference = paymentDifference;
+    }
+
     public String getClaimType() {
         return claimType;
     }

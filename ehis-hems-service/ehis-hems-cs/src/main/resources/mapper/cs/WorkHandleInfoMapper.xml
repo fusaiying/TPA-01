@@ -100,7 +100,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where handle_id = #{handleId}
     </select>
 
-    <select id="selectWorkHandleInfoByIdWork" parameterType="Long" resultMap="WorkHandleInfoResult">
+    <select id="selectWorkHandleInfoByIdWork" parameterType="String" resultMap="WorkHandleInfoResult">
         <include refid="selectWorkHandleInfoVo"/>
         where work_order_no = #{workOrderNo}
     </select>

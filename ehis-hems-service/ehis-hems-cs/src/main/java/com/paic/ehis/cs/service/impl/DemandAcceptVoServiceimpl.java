@@ -448,6 +448,7 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         workOrderAccept.setOrganCode(demandAcceptVo.getOrganCode());
         workOrderAccept.setUpdateBy(SecurityUtils.getUsername());
         workOrderAccept.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
+        workOrderAccept.setActivationNum(workOrderAccept.getActivationNum()+1);
         workOrderAcceptMapper.updateWorkOrderAccept(workOrderAccept);
         acceptDetailInfo.setChannelCode(demandAcceptVo.getChannelCode());
         acceptDetailInfo.setCallCenterId(demandAcceptVo.getCallCenterId());

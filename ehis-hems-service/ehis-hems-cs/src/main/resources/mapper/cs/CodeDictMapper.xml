@@ -77,6 +77,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
     </select>
 
+    <select id="selectCodeDictList2" parameterType="com.paic.ehis.cs.domain.CodeDict" resultMap="CodeDictResult">
+        <include refid="selectCodeDictVo"/>
+        <where>
+            <if test="code != null  and code != ''"> and code = #{code}</if>
+            <if test="codeType != null  and codeType != ''"> and code_type = #{codeType}</if>
+            <if test="codeName != null  and codeName != ''"> and code_name = #{codeName}</if>
+            <if test="codeAlias != null  and codeAlias != ''"> and code_alias = #{codeAlias}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="parentCode != null  and parentCode != ''"> and parent_code = #{parentCode}</if>
+            <if test="remarks != null  and remarks != ''"> and remarks = #{remarks}</if>
+            <if test="orderNo != null "> and order_no = #{orderNo}</if>
+            <if test="createdBy != null  and createdBy != ''"> and created_by = #{createdBy}</if>
+            <if test="createdTime != null "> and created_time = #{createdTime}</if>
+            <if test="updatedBy != null  and updatedBy != ''"> and updated_by = #{updatedBy}</if>
+            <if test="updatedTime != null "> and updated_time = #{updatedTime}</if>
+        </where>
+    </select>
+
     <select id="selectComplaintBusiness" parameterType="com.paic.ehis.cs.domain.CodeDict" resultMap="CodeDictResult">
     SELECT code,code_name FROM `code_Dict` where code_type= #{codeType}
     </select>

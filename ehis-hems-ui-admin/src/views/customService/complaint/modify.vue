@@ -367,7 +367,7 @@
           </el-form-item>
         </el-row>
         <el-row>
-          <el-form-item label="质诉根因：" prop="actionCause">
+          <el-form-item label="致诉根因：" prop="actionCause">
             <el-input v-model="sendForm.actionCause" clearable size="mini" class="width-full"/>
           </el-form-item>
         </el-row>
@@ -393,7 +393,7 @@
         </el-col>
         <el-col :span="8">
           <el-form-item label="根因改善：" prop="rootImprovement">
-            <el-input v-model="sendForm.rootImprovement" class="item-width" clearable size="mini" placeholder="请输入"/>
+            <el-input v-model="sendForm.rootImprovement" class="item-width" clearable size="mini" placeholder="请输入" disabled/>
           </el-form-item>
         </el-col>
         <el-col :span="8">
@@ -403,7 +403,7 @@
         </el-col>
       </el-form>
     </el-card>
-
+<!--附件信息-->
     <el-card class="box-card" style="margin-top: 10px;">
       <div slot="header" class="clearfix">
         <span style="color:blue;">附件信息</span>
@@ -441,8 +441,8 @@
       </div>
     </el-card>
 
-    <el-card>
-      <el-form   v-if="this.queryParams.businessType=='05'" label-position="right"
+<!--    <el-card>
+      <el-form   v-if="showFlag" label-position="right"
                label-width="145px" size="mini" style="padding-bottom: 30px;">
         <span style="color: blue">服务处理</span>
         <el-divider/>
@@ -613,7 +613,7 @@
           </el-form-item>
         </el-row>
         <el-row>
-          <el-form-item label="质诉根因：" prop="policyNo" >
+          <el-form-item label="致诉根因：" prop="policyNo" >
             <el-input v-model="workPoolData.policyNo"  class="width-full" clearable size="mini" />
           </el-form-item>
         </el-row>
@@ -623,7 +623,7 @@
           </el-form-item>
         </el-row>
       </el-form>
-    </el-card>
+    </el-card>-->
 
     <el-card class="box-card" style="margin-top: 10px;">
       <el-form  ref="workPoolData3"  :model="workPoolData" :rules="rules"
@@ -665,7 +665,7 @@
   import upLoad from "../common/modul/upload";
   import {complainSearch,comSearch}  from  '@/api/customService/consultation'
   import {
-    classTwo,
+    classTwo, complaintDealSubmit,
     modifyComplaintSubmit,
     reasonThree,
     reasonTwo,
@@ -1102,6 +1102,38 @@
         if (this.workPoolDataFlag&&this.workPoolDataFlag3) {
           let insert = this.workPoolData
           insert.workOrderNo = this.$route.query.workOrderNo
+          if(this.showFlag){
+            insert.flag='true'
+            insert.complaintDealVo=this.sendForm
+          /*  insert.sign = this.sendForm.sign
+            insert.level1 = this.sendForm.level1
+            insert.level2 = this.sendForm.level2
+            insert.pieceworkFlag = this.sendForm.pieceworkFlag
+            insert.complaintStatus = this.sendForm.complaintStatus
+            insert.complaintTenable = this.sendForm.complaintTenable
+            insert.acceptor = this.sendForm.acceptor
+            insert.faseReason = this.sendForm.faseReason
+            insert.repeatedComplaint = this.sendForm.repeatedComplaint
+            insert.reason1 = this.sendForm.reason1
+            insert.reason2 = this.sendForm.reason2
+            insert.reason3 = this.sendForm.reason3
+            insert.complaintLink = this.sendForm.complaintLink
+            insert.complaintQuestion = this.sendForm.complaintQuestion
+            insert.outsideState = this.sendForm.outsideState
+            insert.riskType = this.sendForm.riskType
+            insert.marketChannel = this.sendForm.marketChannel
+            insert.complaintCategory = this.sendForm.complaintCategory
+            insert.rootDepartment = this.sendForm.rootDepartment
+            insert.actionCause = this.sendForm.actionCause
+            insert.treatmentProgress = this.sendForm.treatmentProgress
+
+            insert.treatmentResult = this.sendForm.treatmentResult
+            insert.customerFeedback = this.sendForm.customerFeedback
+            insert.rootImprovement = this.sendForm.rootImprovement
+            insert.actPromptly = this.sendForm.actPromptly
+            insert.improvementMeasures = this.sendForm.improvementMeasures
+            insert.businessProcess = this.sendForm.businessProcess*/
+          }
           modifyComplaintSubmit(insert).then(res => {
             if (res != null && res.code === 200) {
               this.$message.success("保存成功")
@@ -1127,7 +1159,6 @@
       },
       //服务处理查询
       searchHandleServer() {
-
         selectServiceProcess(this.queryParams.workOrderNo).then(res => {
           if (res != null && res.code === 200) {
             console.log('-------------')

@@ -61,15 +61,15 @@
          SELECT
             detail_id,
             settle_task_no,
-            company_code,
+            detail.company_code,
             detail.risk_code,
             product.risk_name,
-            policy_no,
-            policy_item_no,
-            service_amount,
+            detail.policy_no,
+            detail.policy_item_no,
+            detail.service_amount,
             rule.settlement_type,
             rule.settlement_value,
-            remark
+            detail.remark
         FROM
             finance_tpa_settle_detail detail
 	left join claim_product product on product.risk_code=detail.risk_code and product.status='Y'

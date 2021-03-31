@@ -310,7 +310,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                 `pullout_describe`,
                 `end_case_time`,
                 '02',
-                '01',
+                null,
                 `is_finance_back`,
                 `status`,
                 `create_by`,

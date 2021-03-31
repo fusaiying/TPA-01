@@ -1,10 +1,16 @@
 package com.paic.ehis.claimcal.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.paic.ehis.claimcal.service.DataSaveService;
+import com.paic.ehis.common.core.constant.HttpStatus;
+import com.paic.ehis.common.core.web.domain.AjaxResult;
+import com.paic.ehis.system.api.RemoteClaimCalService;
 import com.paic.ehis.system.api.domain.ClaimCaseBillDetailInfo;
 import com.paic.ehis.system.api.domain.ClaimCaseBillInfo;
 import com.paic.ehis.system.api.domain.ClaimCaseCalculateInfo;
+import com.paic.ehis.system.api.domain.dto.ClaimCaseCalItemDTO;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -18,6 +24,8 @@ import java.util.List;
 @Slf4j
 public class DataSaveServiceImpl implements DataSaveService {
 
+    @Autowired
+    private RemoteClaimCalService remoteClaimCalService;
 
 
     @Override
@@ -56,6 +64,13 @@ public class DataSaveServiceImpl implements DataSaveService {
         //准备claim_case_cal_rule
 
         //调用远程接口，insert数据
+
+        AjaxResult ajaxResult = remoteClaimCalService.saveCaseCalInfo(claimCaseCalculateInfo);
+        String jsonCode = JSON.toJSONString(ajaxResult.get(AjaxResult.CODE_TAG));
+        String dealCode = JSON.parseObject(jsonCode,String.class);
+        if(String.valueOf(HttpStatus.SUCCESS).equals(dealCode)){
+            return true;
+        }
         return false;
     }
 }

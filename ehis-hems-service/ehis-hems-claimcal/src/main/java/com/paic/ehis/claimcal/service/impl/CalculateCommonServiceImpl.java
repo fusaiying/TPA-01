@@ -11,10 +11,7 @@ import com.paic.ehis.claimcal.utility.ElementUnit;
 import com.paic.ehis.claimcal.utility.RuleElement;
 import com.paic.ehis.common.core.web.domain.AjaxResult;
 import com.paic.ehis.system.api.RemoteClaimCalService;
-import com.paic.ehis.system.api.domain.BaseProviderInfo;
-import com.paic.ehis.system.api.domain.ClaimCaseBillDetailInfo;
-import com.paic.ehis.system.api.domain.ClaimCaseBillInfo;
-import com.paic.ehis.system.api.domain.ClaimCaseCalculateInfo;
+import com.paic.ehis.system.api.domain.*;
 import com.paic.ehis.system.api.domain.dto.ClaimCaseCalItemDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -279,6 +276,17 @@ public class CalculateCommonServiceImpl implements CalculateCommonService {
         return used;
     }
 
+    @Override
+    public ClaimCaseBillDetailInfo addRuleUsed(ClaimCaseBillDetailInfo detailInfo, String ruleNo, BigDecimal before, BigDecimal used) {
+
+        ClaimCaseRuleInfo claimCaseRuleInfo = new ClaimCaseRuleInfo();
+        claimCaseRuleInfo.setRuleNo(ruleNo);
+        claimCaseRuleInfo.setSurplusValue(before);
+        claimCaseRuleInfo.setUsedValue(used);
+        detailInfo.getClaimCaseRuleInfoList().add(claimCaseRuleInfo);
+
+        return detailInfo;
+    }
 
 
     //日期推移

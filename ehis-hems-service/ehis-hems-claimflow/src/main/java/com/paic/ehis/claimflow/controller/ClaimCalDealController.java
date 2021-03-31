@@ -3,6 +3,7 @@ package com.paic.ehis.claimflow.controller;
 import com.paic.ehis.claimflow.service.IClaimCalDealService;
 import com.paic.ehis.common.core.web.domain.AjaxResult;
 import com.paic.ehis.system.api.domain.ClaimCaseCalInfo;
+import com.paic.ehis.system.api.domain.ClaimCaseCalculateInfo;
 import com.paic.ehis.system.api.domain.dto.ClaimCaseCalItemDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -36,8 +37,8 @@ public class ClaimCalDealController {
     }
 
     @PostMapping("/saveCaseCalInfo")
-    public AjaxResult saveCaseCalInfo(@RequestBody ClaimCaseCalInfo claimCaseCalInfo){
-        iClaimCalDealService.save(claimCaseCalInfo);
+    public AjaxResult saveCaseCalInfo(@RequestBody ClaimCaseCalculateInfo claimCaseCalculateInfo){
+        iClaimCalDealService.save(claimCaseCalculateInfo);
 
         return AjaxResult.success();
     }

@@ -34,19 +34,19 @@ public class InformationNeedsQuality {
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Excel(name = "受理日期", width = 30,  dateFormat = "yyyy-MM-dd HH:mm:ss")
-    private String acceptTime;
+    private Date acceptTime;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Excel(name = "处理日期", width = 30,  dateFormat = "yyyy-MM-dd HH:mm:ss")
-    private String clickTime;
+    private Date clickTime;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Excel(name = "抽检日期", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
-    private String ccreatedTime;
+    private Date ccreatedTime;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Excel(name = "质检日期", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
-    private String zcreatedTime;
+    private Date zcreatedTime;
 
     @Excel(name = "是否时效内响应客户")
     private String zxc21;
@@ -75,16 +75,16 @@ public class InformationNeedsQuality {
     @Excel(name = "申述理由")
     private String appealReason;
 
-    @Excel(name = "质检结果")
+    @Excel(name = "质检结果",readConverterExp = "01=合格,02=不合格")
     private String result;
 
-    @Excel(name = "质检分组")
+    @Excel(name = "质检分组",readConverterExp = "01=增值服务类,02=理赔类,03=其他,04=VIP门诊预约,05=特殊门诊直接结算服务,06=门诊直接结算,07=住院直接结算,08=门诊中医治疗直接结算,B00006=投诉,B00034=根因改善")
     private String center;
 
     @Excel(name = "服务项目")
     private String itemCode;
 
-    @Excel(name = "服务提供结构")
+    @Excel(name = "服务提供结构",readConverterExp = "0000001=上海分公司本部,00000011=上海分公司")
     private String organCode;
 
     @Excel(name = "激活次数")

@@ -15,12 +15,15 @@ import com.paic.ehis.cs.domain.dto.*;
 import com.paic.ehis.cs.domain.vo.*;
 import com.paic.ehis.cs.service.*;
 import com.paic.ehis.cs.utils.CodeEnum;
+import org.apache.poi.hpsf.Decimal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -359,10 +362,42 @@ public class CustomServiceSpotCheckController extends BaseController {
     @PostMapping("/internal/selectWorkOrder/exportOneError")
     public void exportOneError(HttpServletResponse response, QualityDTO qualityDTO) throws IOException
     {
-        //先进行查询
-        List<QualityAcceptVo> list = qualityInspectionAcceptService.selectQualityVo(qualityDTO);
+        //先进行查询//查到人和总数
+        List<QualityAcceptVo> qualityAcceptVos = qualityInspectionAcceptService.selectQualityVo2(qualityDTO);
+        //遍历
+        for (QualityAcceptVo qualityAcceptVo : qualityAcceptVos) {
+            String modifyBy = qualityAcceptVo.getModifyBy();
+            QualityDTO qualityDTO1 = new QualityDTO();
+            qualityDTO1.setEndCaseStartDate();
+            qualityDTO1.setEndCaseEndDate();
+            qualityDTO1.setModifyBy();
+            //不合格
+            qualityDTO1.setResult("02");
+            List<QualityAcceptVo> qualityAcceptVo1 = qualityInspectionAcceptService.selectQualityVo2(qualityDTO1);
+                for (QualityAcceptVo qualityAcceptVo2 : qualityAcceptVo1) {
+                    (qualityAcceptVo2.getModifyBy()).equals(qualityAcceptVo.getModifyBy());
+                     //取20
+                    String num1 = qualityAcceptVo2.getNum();
+                    //取40
+                    String num2 = qualityAcceptVo.getNum();
+                    //计算
+                    Double number1 = Double.valueOf(num1);
+                    Double number2 = Double.valueOf(num2);
+                    Double i = number2 / number1;
+                    //获取格式化对象
+                    NumberFormat nt = NumberFormat.getPercentInstance();
+                    //设置百分数精确度2即保留两位小数
+                    nt.setMinimumFractionDigits(2);
+                    //最后格式化
+                    nt.format(i);
+                    String res = i.toString();
 
-
+                    //放进对象里
+                    qualityDTO.setNum1(num1);
+                    qualityDTO.setNum2(num2);
+                    qualityDTO.setRes(res);
+                }
+        }
         List<ComplaintErrorRateVO> list1 = qualityInspectionAcceptService.exportOneError(qualityDTO);
         ExcelUtil<ComplaintErrorRateVO> util = new ExcelUtil<ComplaintErrorRateVO>(ComplaintErrorRateVO.class);
         util.exportExcel(response, list1, "WorkOrderOne");

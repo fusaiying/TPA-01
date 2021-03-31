@@ -216,6 +216,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="businessType" column="business_type"/>
         <result property="policyNo" column="policy_no"/>
         <result property="policyItemNo" column="policy_item_no"/>
+        <result property="num" column="num"/>
     </resultMap>
 
     <!--质检查询页面-->
@@ -363,8 +364,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
         <result property="way" column="way"/>
     </resultMap>
+    <!--投诉质检清单-->
     <select id="selectQualityVoCom" parameterType="com.paic.ehis.cs.domain.dto.QualityDTO" resultMap="QualityComResult">
--- 投诉质检清单
 select qih.work_order_no,
         adi.organ_code,
 				woa.modify_by,
@@ -461,25 +462,32 @@ from quality_inspection_handle qih,quality_inspection_item qii,work_order_accept
 and whi.`status`='Y'
 and qii.`status`='Y' and woa.business_type='03'
 and cdd.code_type='cs_inspection_class_complaint'*/
-
         <where>
+        1=1 and
             qih.inspection_handler_id=qii.inspection_handler_id and qih.work_order_no=woa.work_order_no and qia.inspection_id=qih.inspection_id and qih.work_order_no=adi.work_order_no
             and whi.`status`='Y'
             and qii.`status`='Y' and woa.business_type='03'
             and cdd.code_type='cs_inspection_class_complaint'
+            <!--<if test="endCaseStartDate != null and endCaseStartDate != ''">
+                and woa.end_date &gt; #{endCaseStartDate}
+            </if>
+            <if test="endCaseEndDate != null and endCaseEndDate != ''">
+                and woa.end_date &lt; #{endCaseEndDate}
+            </if>-->
+
             <if test="endCaseStartDate != null ">
                 and DATE_FORMAT(woa.end_date,'%Y-%m-%d') <![CDATA[>=]]> #{endCaseStartDate}
             </if>
             <if test="endCaseEndDate != null ">
                 and DATE_FORMAT(woa.end_date,'%Y-%m-%d') <![CDATA[<=]]> #{endCaseEndDate}
             </if>
-            <if test="endDate != null and endDate != ''"> and woa.end_date = #{endDate}</if>
+            <if test="endDate != null  and endDate != ''"> and woa.end_date = #{endDate}</if>
             <if test="updatedTime != null and updatedTime != ''"> and qia.created_time = #{updatedTime}</if>
-            <if test="inspectionStartDate != null ">
-                and DATE_FORMAT(qia.created_time,'%Y-%m-%d') <![CDATA[>=]]> #{inspectionStartDate}
+            <if test="inspectionStartDate != null and inspectionStartDate != ''">
+                and qia.created_time &gt;  #{inspectionStartDate}
             </if>
-            <if test="inspectionEndDate != null ">
-                and DATE_FORMAT(qia.created_time,'%Y-%m-%d') <![CDATA[<=]]> #{inspectionEndDate}
+            <if test="inspectionEndDate != null and inspectionEndDate != ''">
+                and qia.created_time &lt; #{inspectionEndDate}
             </if>
             <if test="organCode != null and organCode != ''"> and woa.organ_code = #{organCode}</if>
             <if test="updatedBy != null and updatedBy != ''"> and qia.updated_by = #{updatedBy}</if>
@@ -518,21 +526,21 @@ and cdd.code_type='cs_inspection_class_complaint'*/
         <result property="organCode" column="organ_code"/>
         <result property="activationNum" column="activation_num"/>
     </resultMap>
+    <!--信息需求质检清单-->
     <select id="selectQualityVoComInformation" parameterType="com.paic.ehis.cs.domain.dto.QualityDTO" resultMap="InformationNeedsQuality">
--- 信息需求质检清单
 select qia.inspection_id,
         qia.work_order_no,
 				woa.policy_no,
 				woa.policy_item_no,
 				woa.accept_by,
-				-- 处理人WOAUP(解决)
+
 				woa.update_by cupdate_by,
 				qia.updated_by zupdated_by,
 				qia.status,
 				woa.accept_time,
 				woa.click_time,
 				qia.created_time ccreated_time,
-				-- 质检日期 发起质检日期(解决)
+
 				qia.created_time zcreated_time,
 				(case when (SUM( CASE WHEN qii.item_key = "21" THEN qii.value ELSE 0 END ))='01'then '是' else '否' end) "zxc21",
 				(case when (SUM( CASE WHEN qii.item_key = "22" THEN qii.value ELSE 0 END ))='01'then '是' else '否' end) "zxc22",
@@ -544,10 +552,10 @@ select qia.inspection_id,
 				qih.appeal_flag,
 				qih.appeal_reason,
 				qia.result,
-				-- 质检分组dianhua
+
 				"电话中心处理" center,
 				adi.item_code,
-				-- 服务提供机构--=出单机构(解决)
+
 				adi.organ_code,
 				woa.activation_num
 from quality_inspection_handle qih,quality_inspection_item qii,work_order_accept woa,quality_inspection_accept qia ,accept_detail_info adi,work_handle_info whi,code_dict cdd
@@ -558,24 +566,25 @@ and qii.`status`='Y' and woa.business_type='03'
 and cdd.code_type='cs_inspection_item_demand'*/
 
         <where>
-            qih.inspection_handler_id=qii.inspection_handler_id and qih.work_order_no=woa.work_order_no and qia.inspection_id=qih.inspection_id and -- qih
+            1=1 and
+            qih.inspection_handler_id=qii.inspection_handler_id and qih.work_order_no=woa.work_order_no and qia.inspection_id=qih.inspection_id and
             qih.work_order_no=adi.work_order_no
             and whi.`status`='Y'
             and qii.`status`='Y' and woa.business_type='03'
             and cdd.code_type='cs_inspection_item_demand'
-            <if test="endCaseStartDate != null ">
-                and DATE_FORMAT(woa.end_date,'%Y-%m-%d') <![CDATA[>=]]> #{endCaseStartDate}
+            <if test="endCaseStartDate != null and endCaseStartDate != ''">
+                and woa.end_date &gt; #{endCaseStartDate}
             </if>
-            <if test="endCaseEndDate != null ">
-                and DATE_FORMAT(woa.end_date,'%Y-%m-%d') <![CDATA[<=]]> #{endCaseEndDate}
+            <if test="endCaseEndDate != null and endCaseEndDate != ''">
+                and woa.end_date &lt; #{endCaseEndDate}
             </if>
-            <if test="endDate != null and endDate != ''"> and woa.end_date = #{endDate}</if>
+            <if test="endDate != null "> and woa.end_date = #{endDate}</if>
             <if test="updatedTime != null and updatedTime != ''"> and qia.created_time = #{updatedTime}</if>
-            <if test="inspectionStartDate != null ">
-                and DATE_FORMAT(qia.created_time,'%Y-%m-%d') <![CDATA[>=]]> #{inspectionStartDate}
+            <if test="inspectionStartDate != null and inspectionStartDate != ''">
+                and qia.created_time &gt;  #{inspectionStartDate}
             </if>
-            <if test="inspectionEndDate != null ">
-                and DATE_FORMAT(qia.created_time,'%Y-%m-%d') <![CDATA[<=]]> #{inspectionEndDate}
+            <if test="inspectionEndDate != null and inspectionEndDate != ''">
+                and qia.created_time &lt; #{inspectionEndDate}
             </if>
             <if test="organCode != null and organCode != ''"> and woa.organ_code = #{organCode}</if>
             <if test="updatedBy != null and updatedBy != ''"> and qia.updated_by = #{updatedBy}</if>
@@ -594,19 +603,12 @@ and cdd.code_type='cs_inspection_item_demand'*/
         <result property="errorsRate" column="errors_rate"/>
     </resultMap>
     <select id="selectError" parameterType="com.paic.ehis.cs.domain.dto.QualityDTO" resultMap="ComplaintErrorRateVO">
-    -- 投诉差错率统计
 select
--- 结案时间范围
 null closing_time,
--- 服务提供机构
-adi.organ_code ,
--- 处理人
+"上海分公司本部" adi.organ_code ,
 qia.updated_by,
--- 抽检数量
 null sampling_quantity,
--- 差错数量
 null errors_number,
--- 差错率
 null errors_rate
 from quality_inspection_handle qih,quality_inspection_item qii,work_order_accept  woa, quality_inspection_accept qia ,
 accept_detail_info adi,work_handle_info whi,code_dict cdd
@@ -615,32 +617,33 @@ qih.work_order_no=adi.work_order_no
 and whi.`status`='Y'
 and qii.`status`='Y' and woa.business_type in("01","03")
 and cdd.code_type in("cs_inspection_item_demand","cs_inspection_class_complaint")
-        <!--<where>
-            qih.inspection_handler_id=qii.inspection_handler_id and qih.work_order_no=woa.work_order_no and qia.inspection_id=qih.inspection_id and &#45;&#45; qih
+        <where>
+        1=1 and
+            qih.inspection_handler_id=qii.inspection_handler_id and qih.work_order_no=woa.work_order_no and qia.inspection_id=qih.inspection_id and -- qih
             qih.work_order_no=adi.work_order_no
             and whi.`status`='Y'
             and qii.`status`='Y' and woa.business_type in("01","03")
             and cdd.code_type in("cs_inspection_item_demand","cs_inspection_class_complaint")
             <if test="endCaseStartDate != null ">
-                and DATE_FORMAT(woa.end_date,'%Y-%m-%d') <![CDATA[>=]]> #{endCaseStartDate}
+                and woa.end_date &gt; #{endCaseStartDate}
             </if>
-            <if test="endCaseEndDate != null ">
-                and DATE_FORMAT(woa.end_date,'%Y-%m-%d') <![CDATA[<=]]> #{endCaseEndDate}
+            <if test="endCaseEndDate != null and endCaseEndDate != ''">
+                and woa.end_date &lt; #{endCaseEndDate}
             </if>
-            <if test="endDate != null and endDate != ''"> and woa.end_date = #{endDate}</if>
+            <if test="endDate != null "> and woa.end_date = #{endDate}</if>
             <if test="updatedTime != null and updatedTime != ''"> and qia.created_time = #{updatedTime}</if>
-            <if test="inspectionStartDate != null ">
-                and DATE_FORMAT(qia.created_time,'%Y-%m-%d') <![CDATA[>=]]> #{inspectionStartDate}
+            <if test="inspectionStartDate != null and inspectionStartDate != ''">
+                and qia.created_time &gt;  #{inspectionStartDate}
             </if>
-            <if test="inspectionEndDate != null ">
-                and DATE_FORMAT(qia.created_time,'%Y-%m-%d') <![CDATA[<=]]> #{inspectionEndDate}
+            <if test="inspectionEndDate != null and inspectionEndDate != ''">
+                and qia.created_time &lt; #{inspectionEndDate}
             </if>
             <if test="organCode != null and organCode != ''"> and woa.organ_code = #{organCode}</if>
             <if test="updatedBy != null and updatedBy != ''"> and qia.updated_by = #{updatedBy}</if>
             <if test="itemCode != null and itemCode != ''"> and adi.item_code = #{itemCode}</if>
             <if test="status != null and status != ''"> and qia.status = #{status}</if>
             <if test="result != null and result != ''"> and qia.result = #{result}</if>
-        </where>-->
+        </where>
 GROUP BY qia.updated_by
     </select>
     <select id="selectAcceptByVo" parameterType="com.paic.ehis.cs.domain.dto.WorkOrderQueryDTO" resultMap="AcceptResult">

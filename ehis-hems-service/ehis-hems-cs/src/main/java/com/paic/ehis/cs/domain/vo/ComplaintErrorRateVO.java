@@ -9,7 +9,7 @@ public class ComplaintErrorRateVO {
     //投诉差错率统计
 
     @Excel(name = "结案时间范围")
-    private String closingTime;
+    private Date closingTime;
 
     @Excel(name = "服务提供机构")
     private String organCode;

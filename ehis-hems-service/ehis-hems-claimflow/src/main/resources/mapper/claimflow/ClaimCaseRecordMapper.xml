@@ -31,6 +31,7 @@
             <if test="historyFlag != null  and historyFlag != ''"> and history_flag = #{historyFlag}</if>
             <if test="status != null  and status != ''"> and status = #{status}</if>
         </where>
+        ORDER BY update_time desc
     </select>
 
     <select id="selectClaimCaseRecordById" parameterType="Long" resultMap="ClaimCaseRecordResult">

@@ -168,27 +168,31 @@ public class ClaimCaseCalServiceImpl implements IClaimCaseCalService
                                 calConclusionVo.setPaymentDifference(subtract.subtract(subtract1));
                             }
                         } else {
-                            //01-非全赔
-                            if("01".equals(claimFlag)) {
-                                if(prePayAmount != null) {
-                                    BigDecimal payAmountForeign = prePayAmount.divide(exchangeRate.getParities(),20,BigDecimal.ROUND_HALF_UP);
-                                    precalConclusionVo.setPayAmountForeign(payAmountForeign);
-                                    //本次支付差额（外币）=本次外币给付金额-申诉原案件外币给付金额；
-                                    calConclusionVo.setPaymentDifference(calConclusionVo.getPayAmountForeign().subtract(payAmountForeign));
-
-                                }
-                            }
-                            //02-全赔
-                            if("02".equals(claimFlag)) {
-                                if(preSumBillAmount != null && preDiscountAmount != null) {
-                                    BigDecimal subtractVa = preSumBillAmount.subtract(preDiscountAmount);
-                                    BigDecimal payAmountForeign = subtractVa.divide(exchangeRate.getParities(),20,BigDecimal.ROUND_HALF_UP);
-                                    precalConclusionVo.setPayAmountForeign(payAmountForeign);
-                                    //本次支付差额（外币）=本次外币给付金额-申诉原案件外币给付金额；
-                                    calConclusionVo.setPaymentDifference(calConclusionVo.getPayAmountForeign().subtract(payAmountForeign));
-
-                                }
-                            }
+                            //本次支付差额（外币）=本次外币给付金额-申诉原案件外币给付金额；
+                            calConclusionVo.setPaymentDifference(calConclusionVo.getPayAmountForeign().subtract(precalConclusionVo.getPayAmountForeign()));
+//                            //01-非全赔
+//                            if("01".equals(claimFlag)) {
+//                                if(prePayAmount != null) {
+//                                    //本次支付差额（外币）=本次外币给付金额-申诉原案件外币给付金额；
+//                                    calConclusionVo.setPaymentDifference(calConclusionVo.getPayAmountForeign().subtract(precalConclusionVo.getPayAmountForeign()));
+//                                    BigDecimal payAmountForeign = prePayAmount.divide(exchangeRate.getParities(),20,BigDecimal.ROUND_HALF_UP);
+//                                    precalConclusionVo.setPayAmountForeign(payAmountForeign);
+//
+//
+//                                }
+//                            }
+//                            //02-全赔
+//                            if("02".equals(claimFlag)) {
+//                                if(preSumBillAmount != null && preDiscountAmount != null) {
+//                                    //本次支付差额（外币）=本次外币给付金额-申诉原案件外币给付金额；
+//                                    calConclusionVo.setPaymentDifference(calConclusionVo.getPayAmountForeign().subtract(precalConclusionVo.getPayAmountForeign()));
+//
+//                                    BigDecimal subtractVa = preSumBillAmount.subtract(preDiscountAmount);
+//                                    BigDecimal payAmountForeign = subtractVa.divide(exchangeRate.getParities(),20,BigDecimal.ROUND_HALF_UP);
+//                                    precalConclusionVo.setPayAmountForeign(payAmountForeign);
+//
+//                                }
+//                            }
                         }
                     }
                 }

@@ -364,7 +364,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
                 claimCaseRecord.setRptNo(claimCase.getRptNo());
                 claimCaseRecord.setStatus("Y");
                 //claimCaseRecord.setHistoryFlag("N");
-                claimCaseRecord.setOperation("03");//03-录入
+                claimCaseRecord.setOperation("06");//03-录入
                 List<ClaimCaseRecord> claimCaseRecords = claimCaseRecordMapper.selectClaimCaseRecordList(claimCaseRecord);
                 ClaimCaseRecord claimCaseRecord1 = new ClaimCaseRecord();
                 String nextUserName = SecurityUtils.getUsername();
@@ -384,6 +384,13 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
                 } else {
                     //不为空的情况
                     //第二次处理-案件状态05->07
+                    ClaimCaseRecord claimCaseRecord2 = new ClaimCaseRecord();
+                    claimCaseRecord2.setRptNo(claimCase.getRptNo());
+                    claimCaseRecord2.setStatus("Y");
+                    claimCaseRecord2.setOperator("07");
+                    //claimCaseRecord2.setHistoryFlag("Y");
+                    List<ClaimCaseRecord> claimCaseRecords1 = claimCaseRecordMapper.selectClaimCaseRecordList(claimCaseRecord2);
+                    nextUserName =claimCaseRecords1.get(0).getOperator();
                     claimCase.setCaseStatus("07");//案件信息-审核04
                     claimCaseRecord1.setOperation("07");//案件操作记录-审核04
                 }
@@ -391,6 +398,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
 
                 claimCase.setUpdateBy(nextUserName);
                 claimCase.setUpdateTime(DateUtils.getNowDate());
+                claimCase.setCaseProp("01");
                 claimCaseMapper.updateClaimCase(claimCase);//完成案件信息改变
 
                 //修改受理信息的材料齐全日期：
@@ -432,6 +440,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
             }
         } else if (caseProp == "02") {
 //转去核心健康险
+            //改变案件信息：CaseProp=02
         }
 
         return claimCaseShuntClass;

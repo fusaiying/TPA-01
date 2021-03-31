@@ -57,6 +57,7 @@
         <span>{{ selectDictLabel(cs_organization, scope.row.organCode) }}</span>
       </template>
     </el-table-column>
+    <el-table-column prop="status" width="140" label="状态" align="center" :formatter="getStatus"/>
     <el-table-column align="center" label="操作" min-width="140" fixed="right">
       <template slot-scope="scope">
         <el-button :disabled="scope.row.status!='01'" size="small" type="text" @click="obtainButton(scope.row)">获取
@@ -90,6 +91,8 @@
     {dictType: 'cs_direct_settlement'},
     {dictType: 'cs_consultation_type'},
     {dictType: 'cs_service_item'},
+    {dictType: 'cs_order_state'}
+
   ]
 
   export default {
@@ -128,6 +131,7 @@
         cs_direct_settlement: [],
         cs_consultation_type: [],
         cs_service_item: [],
+        cs_order_state:[]
       }
     },
     async mounted() {
@@ -178,8 +182,18 @@
       this.cs_service_item = this.dictList.find(item => {
         return item.dictType === 'cs_service_item'
       }).dictDate
+      this.cs_order_state = this.dictList.find(item => {
+        return item.dictType === 'cs_order_state'
+      }).dictDate
+
     },
     methods: {
+      //反显状态
+      getStatus(row){
+
+        return this.selectDictLabel(this.cs_order_state,row.status)
+      },
+
       //获取
       obtainButton(row) {
         getWorkOrderFlag(row.workOrderNo).then(response=>{
@@ -214,6 +228,9 @@
       },
       //修改
       modifyButton(row) {
+        console.log(row.status)
+        //状态
+
         editWorkOrder(row.workOrderNo).then(res=>{
           if (res!=null && res.code=='200'){
             if (res.data.flag1 && res.data.flag1 == '1') {

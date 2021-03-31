@@ -372,6 +372,9 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
         workOrderAccept.setUpdateBy(SecurityUtils.getUsername());
         workOrderAccept.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
         workOrderAccept.setActivationNum(workOrderAccept.getActivationNum()+1);
+        if (workOrderAccept.getStatus().equals("05")){
+            workOrderAccept.setStatus("02");
+        }
         workOrderAcceptMapper.updateWorkOrderAccept(workOrderAccept);
 
         AcceptDetailInfo acceptDetailInfo = acceptDetailInfoMapper.selectAcceptDetailInfoById(workOrderNo);
@@ -851,9 +854,11 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
             acceptDetailInfoMapper.insertAcceptDetailInfo(acceptDetailInfo2);
 
 
+            AcceptDetailInfo acceptDetailInfoOld = new  AcceptDetailInfo();
+            acceptDetailInfoOld = acceptDetailInfoMapper.selectAcceptDetailInfoById(workOrderNo);
             //插入来电人
             //查询原有来电人
-            PersonInfo oldCallPerson = personInfoMapper.selectPersonInfoById(acceptDetailInfo1.getCallPersonId());
+            PersonInfo oldCallPerson = personInfoMapper.selectPersonInfoById(acceptDetailInfoOld.getCallPersonId());
             PersonInfo callPerson = new PersonInfo();
             callPerson.setPersonId(acceptDetailInfo2.getCallPersonId());
             callPerson.setName(oldCallPerson.getName());
@@ -865,7 +870,7 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
             complaintAcceptVoMapper.insertPersonInfo(callPerson);
 
             //插入联系人
-            PersonInfo oldContactsPerson = personInfoMapper.selectPersonInfoById(acceptDetailInfo1.getContactsPersonId());
+            PersonInfo oldContactsPerson = personInfoMapper.selectPersonInfoById(acceptDetailInfoOld.getContactsPersonId());
             PersonInfo contactsPerson = new PersonInfo();
             contactsPerson.setPersonId(acceptDetailInfo2.getContactsPersonId());
             contactsPerson.setSex(oldContactsPerson.getSex());
@@ -882,7 +887,7 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
             complaintAcceptVoMapper.insertPersonInfo(contactsPerson);
 
             //插入投诉人
-            PersonInfo oldComplaintPerson = personInfoMapper.selectPersonInfoById(acceptDetailInfo1.getComplaintPersonId());
+            PersonInfo oldComplaintPerson = personInfoMapper.selectPersonInfoById(acceptDetailInfoOld.getComplaintPersonId());
             PersonInfo complaintPerson = new PersonInfo();
             complaintPerson.setPersonId(acceptDetailInfo2.getComplaintPersonId());
             complaintPerson.setIdentity(oldComplaintPerson.getIdentity());
@@ -937,6 +942,7 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
                 workHandleInfoMapper.updateServiceProcessing(workHandleInfo);
             }
 
+            workHandleInfo.setHandleId(Long.parseLong(PubFun.createMySqlMaxNoUseCache("handle_id", 10, 6)));
             workHandleInfo.setWorkOrderNo(workOrderNo2);
             workHandleInfoMapper.insertWorkHandleInfo(workHandleInfo);
 

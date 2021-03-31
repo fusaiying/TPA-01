@@ -3,6 +3,7 @@ package com.paic.ehis.claimcal.service;
 import com.paic.ehis.claimcal.domain.CheckInfoDTO;
 import com.paic.ehis.claimcal.domain.ClaimRuleInfo;
 import com.paic.ehis.claimcal.domain.QueryUsedDTO;
+import com.paic.ehis.system.api.domain.ClaimCaseBillDetailInfo;
 import com.paic.ehis.system.api.domain.ClaimCaseBillInfo;
 import com.paic.ehis.system.api.domain.dto.ClaimCaseCalItemDTO;
 
@@ -19,5 +20,8 @@ public interface CalculateCommonService {
 
 
     BigDecimal getUesdValue(List<ClaimCaseBillInfo> claimCaseBillInfoList, QueryUsedDTO queryUsedDTO);
+
+
+    ClaimCaseBillDetailInfo addRuleUsed(ClaimCaseBillDetailInfo detailInfo, String ruleNo, BigDecimal before, BigDecimal used);
 
 }

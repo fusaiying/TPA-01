@@ -18,6 +18,7 @@
         <result property="debtAmount"    column="debt_amount"    />
         <result property="borrowAmount"    column="borrow_amount"    />
         <result property="payStatus"    column="pay_status"    />
+        <result property="isAppeal"    column="is_appeal"    />
         <result property="caseProp"    column="case_prop"    />
     </resultMap>
     <resultMap type="com.paic.ehis.finance.domain.vo.ClaimCaseForeignPayInfoVO" id="ForeignPayResult">
@@ -39,6 +40,7 @@
         <result property="payAmountForeign" column="pay_amount_foreign"/>
         <result property="billCurrency" column="bill_currency"/>
         <result property="caseProp"    column="case_prop"    />
+        <result property="isAppeal"    column="is_appeal"    />
         <result property="flag"    column="flag"    />
         <result property="flag2"    column="flag2"    />
     </resultMap>
@@ -60,6 +62,7 @@
             a.case_status,
             a.pay_status,
             a.case_prop,
+            a.is_appeal,
             d.bill_currency currency
         FROM
             claim_case a
@@ -92,6 +95,7 @@
             a.case_status,
             a.pay_status,
             a.case_prop,
+            a.is_appeal,
             d.bill_currency currency
         FROM
             claim_case a
@@ -123,6 +127,7 @@
             a.case_status,
             a.pay_status,
             a.case_prop,
+            a.is_appeal,
 			d.bill_currency currency,
 				(case when d.bill_currency=cb.currency then 'Y' ELSE 'N' END) as flag,
 			(SELECT COUNT(*) from(
@@ -167,6 +172,7 @@ GROUP BY cb.batch_no,ccc.bill_currency ) d) as flag2
             a.case_status,
             a.pay_status,
             a.case_prop,
+            a.is_appeal,
 			d.bill_currency currency,
 			(case when d.bill_currency=cb.currency then 'Y' ELSE 'N' END) as flag,
 			(SELECT COUNT(*) from(

@@ -47,6 +47,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="sumHosDiscountAmount"    column="sumHosDiscountAmount"    />
         <result property="hospitalCode"    column="hospital_code"    />
         <result property="prePayStatus"    column="pre_pay_status"    />
+        <result property="caseFlag"    column="case_flag"    />
     </resultMap>
 
     <resultMap type="com.paic.ehis.claimflow.domain.vo.CalBillSummaryVo" id="CalBillSummaryResult">
@@ -105,6 +106,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         bill.sumBillAmount,
         bill.sumHosDiscountAmount,
         cc.hospital_code,
+        tt.case_flag,
         ifnull(ccc.bill_currency,cc.currency) bill_currency,
         ifnull(ccc.pay_conclusion,(
         case when (select count(1) from claim_case_cal_bill where rpt_no =  #{rptNo} and status = 'Y' and  pay_conclusion = '03'

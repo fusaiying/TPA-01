@@ -231,18 +231,7 @@ public class ClaimCaseCalBillServiceImpl implements IClaimCaseCalBillService
             claimCaseCal.setCalAmount(new BigDecimal(String.valueOf(0.00)));
         }
         claimCaseCal.setRefusedAmount(billTotalAmount.subtract(totalDiscountAmount).subtract(claimCaseCal.getCalAmount()));
-        /**
-         * 外币给付金额   2、全赔医院：根据账单币种及汇率对折后金额进行汇率转换
-         * Eg：账单币种HKD，汇率：0.9，赔付金额900CNY
-         * 外币给付金额：900CNY/0.9=1000HKD
-         */
 
-        if ("01".equals(claimFlag)){//非全赔
-
-        }
-        if ("02".equals(claimFlag)){//全赔医院
-
-        }
         claimCaseCalMapper.updateClaimCaseCal(claimCaseCal);
         return claimCaseCalBillMapper.bulkUpdateClaimCaseCalBill(claimCaseCalBills);
     }

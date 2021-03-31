@@ -32,10 +32,10 @@ public interface IClaimCalDealService {
 
     /**
      * 保存理算信息
-     * @param claimCaseCalInfo
+     * @param claimCaseCalculateInfo
      * @return
      */
-    int save(ClaimCaseCalInfo claimCaseCalInfo);
+    int save(ClaimCaseCalculateInfo claimCaseCalculateInfo);
 
     /**
      * 查询使用值信息

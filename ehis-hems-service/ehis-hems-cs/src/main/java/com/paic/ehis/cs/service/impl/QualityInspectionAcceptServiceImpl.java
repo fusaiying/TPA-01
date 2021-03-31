@@ -513,13 +513,12 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
                         String workOrderNo = ran;
                         WorkOrderAccept workOrderAccept = workOrderAcceptMapper.selectWorkOrderAcceptById(workOrderNo);
                         if (null != workOrderAccept.getActivationNum()) {//说明此案件未被激活过
-                            String[] ids = set.toArray(new String[0]);
-                            //Map<String, String> param = null;
+
                             FlowLog flowLog = null;
                             QualityInspectionAccept qualityInspectionAccept = null;
                             List<FlowLog> flowLogList = new ArrayList<>();
                             List<QualityInspectionAccept> list1 = new ArrayList<>();
-                            for (int b = 0; b < ids.length; b++) {
+
                                 flowLog = new FlowLog();
                                 //流转记录添加
                                 String flow_id = PubFun.createMySqlMaxNoUseCache("cs_flow_id", 20, 20);
@@ -528,20 +527,20 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
                                 flowLog.setCreatedTime(DateUtils.getNowDate());
                                 flowLog.setUpdatedBy("SYSTEM_WEEK");
                                 flowLog.setUpdatedTime(DateUtils.getNowDate());
-                                flowLog.setWorkOrderNo(ids[b]);
+                                flowLog.setWorkOrderNo(workOrderNo);
                                 flowLog.setLinkCode(param.get("linkCode"));
                                 flowLog.setOperateCode(param.get("operateCode"));
                                 flowLogList.add(flowLog);
 
                                 qualityInspectionAccept = new QualityInspectionAccept();
-                                qualityInspectionAccept.setWorkOrderNo(ids[b]);
+                                qualityInspectionAccept.setWorkOrderNo(workOrderNo);
                                 qualityInspectionAccept.setStatus(param.get("status"));
                                 qualityInspectionAccept.setCreatedBy("SYSTEM_WEEK");
                                 qualityInspectionAccept.setCreatedTime(DateUtils.getNowDate());
                                 qualityInspectionAccept.setUpdatedBy("SYSTEM_WEEK");
                                 qualityInspectionAccept.setUpdatedTime(DateUtils.getNowDate());
                                 list1.add(qualityInspectionAccept);
-                            }
+
                             //记录操作轨迹
                             flowLogMapper.insertBatch(flowLogList);
                             qualityInspectionAcceptMapper.insertAcceptBatch(list1);
@@ -673,13 +672,11 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
                         String workOrderNo = ran;
                         WorkOrderAccept workOrderAccept = workOrderAcceptMapper.selectWorkOrderAcceptById(workOrderNo);
                         if (workOrderAccept.getActivationNum().equals("1")) {//说明此案件被激活一次
-                            String[] ids = set.toArray(new String[0]);
                            // Map<String, String> param = null;
                             FlowLog flowLog = null;
                             QualityInspectionAccept qualityInspectionAccept = null;
                             List<FlowLog> flowLogList = new ArrayList<>();
                             List<QualityInspectionAccept> list1 = new ArrayList<>();
-                            for (int b = 0; b < ids.length; b++) {
                                 flowLog = new FlowLog();
                                 //流转记录添加
                                 String flow_id = PubFun.createMySqlMaxNoUseCache("cs_flow_id", 20, 20);
@@ -688,20 +685,20 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
                                 flowLog.setCreatedTime(DateUtils.getNowDate());
                                 flowLog.setUpdatedBy("SYSTEM_MONTH");
                                 flowLog.setUpdatedTime(DateUtils.getNowDate());
-                                flowLog.setWorkOrderNo(ids[b]);
+                                flowLog.setWorkOrderNo(workOrderNo);
                                 flowLog.setLinkCode(param.get("linkCode"));
                                 flowLog.setOperateCode(param.get("operateCode"));
                                 flowLogList.add(flowLog);
 
                                 qualityInspectionAccept = new QualityInspectionAccept();
-                                qualityInspectionAccept.setWorkOrderNo(ids[b]);
+                                qualityInspectionAccept.setWorkOrderNo(workOrderNo);
                                 qualityInspectionAccept.setStatus(param.get("status"));
                                 qualityInspectionAccept.setCreatedBy("SYSTEM_MONTH");
                                 qualityInspectionAccept.setCreatedTime(DateUtils.getNowDate());
                                 qualityInspectionAccept.setUpdatedBy("SYSTEM_MONTH");
                                 qualityInspectionAccept.setUpdatedTime(DateUtils.getNowDate());
                                 list1.add(qualityInspectionAccept);
-                            }
+
                             //记录操作轨迹
                             flowLogMapper.insertBatch(flowLogList);
                             qualityInspectionAcceptMapper.insertAcceptBatch(list1);
@@ -840,13 +837,12 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
                         String workOrderNo = ran;
                         WorkOrderAccept workOrderAccept = workOrderAcceptMapper.selectWorkOrderAcceptById(workOrderNo);
                         if (null != workOrderAccept.getActivationNum()) {//说明此案件未被激活过
-                            String[] ids = set.toArray(new String[0]);
                             //Map<String, String> param = null;
                             FlowLog flowLog = null;
                             QualityInspectionAccept qualityInspectionAccept = null;
                             List<FlowLog> flowLogList = new ArrayList<>();
                             List<QualityInspectionAccept> list1 = new ArrayList<>();
-                            for (int b = 0; b < ids.length; b++) {
+
                                 flowLog = new FlowLog();
                                 //流转记录添加
                                 String flow_id = PubFun.createMySqlMaxNoUseCache("cs_flow_id", 20, 20);
@@ -855,20 +851,19 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
                                 flowLog.setCreatedTime(DateUtils.getNowDate());
                                 flowLog.setUpdatedBy("SYSTEM_WEEK");
                                 flowLog.setUpdatedTime(DateUtils.getNowDate());
-                                flowLog.setWorkOrderNo(ids[b]);
+                                flowLog.setWorkOrderNo(workOrderNo);
                                 flowLog.setLinkCode(param.get("linkCode"));
                                 flowLog.setOperateCode(param.get("operateCode"));
                                 flowLogList.add(flowLog);
 
                                 qualityInspectionAccept = new QualityInspectionAccept();
-                                qualityInspectionAccept.setWorkOrderNo(ids[b]);
+                                qualityInspectionAccept.setWorkOrderNo(workOrderNo);
                                 qualityInspectionAccept.setStatus(param.get("status"));
                                 qualityInspectionAccept.setCreatedBy("SYSTEM_WEEK");
                                 qualityInspectionAccept.setCreatedTime(DateUtils.getNowDate());
                                 qualityInspectionAccept.setUpdatedBy("SYSTEM_WEEK");
                                 qualityInspectionAccept.setUpdatedTime(DateUtils.getNowDate());
                                 list1.add(qualityInspectionAccept);
-                            }
                             //记录操作轨迹
                             flowLogMapper.insertBatch(flowLogList);
                             qualityInspectionAcceptMapper.insertAcceptBatch(list1);

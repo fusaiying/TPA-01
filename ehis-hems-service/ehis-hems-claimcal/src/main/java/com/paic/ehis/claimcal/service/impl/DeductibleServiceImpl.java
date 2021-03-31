@@ -11,9 +11,6 @@ import com.paic.ehis.claimcal.utility.RuleElement;
 import com.paic.ehis.system.api.domain.ClaimCaseBillDetailInfo;
 import com.paic.ehis.system.api.domain.ClaimCaseBillInfo;
 import com.paic.ehis.system.api.domain.ClaimCaseCalculateInfo;
-import com.paic.ehis.system.api.domain.dto.ClaimCaseBillDTO;
-import com.paic.ehis.system.api.domain.dto.ClaimCaseBillDetailDTO;
-import com.paic.ehis.system.api.domain.dto.ClaimCaseCalItemDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by xicc on 2021/3/24
@@ -38,6 +36,8 @@ public class DeductibleServiceImpl implements DeductibleService {
 
     @Override
     public ClaimCaseCalculateInfo calculateDeductible(ClaimCaseCalculateInfo claimCaseCalculateInfo) {
+
+        Set<String> exceptSet = claimCaseCalculateInfo.getExceptSet();
 
         String sex = claimCaseCalculateInfo.getSex();
         List<ClaimCaseBillInfo> billInfoList = claimCaseCalculateInfo.getClaimCaseBillInfoList();
@@ -71,7 +71,7 @@ public class DeductibleServiceImpl implements DeductibleService {
 
                         CheckInfoDTO checkInfoDTO = new CheckInfoDTO(treatmentStartDate,validStartDate,sex,hospitalCode,riskCode,planCode,dutyCode);
                         //规则适用判断
-                        if(calculateCommonService.ruleCheck(ruleInfo,checkInfoDTO)){
+                        if(!exceptSet.contains(ruleInfo.getRuleNo()) && calculateCommonService.ruleCheck(ruleInfo,checkInfoDTO)){
                             BigDecimal elementValue = ruleInfo.getElementValue(); //规则值
                             QueryUsedDTO queryUsedDTO = new QueryUsedDTO(policyNo, policyItemNo, RuleElement.YEARDEDUCTIBLE.getCode(), ElementUnit.MONEY.getCode(), riskCode, planCode, dutyCode, dutyDetailCode, feeItemCode, validStartDate, validEndDate, hospitalCode, treatmentStartDate, department);
                             BigDecimal historyValue = calculateCommonService.getUesdValue(billInfoList,queryUsedDTO); //使用值
@@ -87,6 +87,7 @@ public class DeductibleServiceImpl implements DeductibleService {
                                 detailInfo.setCalAmount(calAmount);
                                 detailInfo.setDeduUsed(deduct); //免赔值记录
 
+                                detailInfo = calculateCommonService.addRuleUsed(detailInfo,ruleInfo.getRuleNo(),deduct,calAmount.add(deduct));
                             }
                         }
                     }
@@ -98,7 +99,7 @@ public class DeductibleServiceImpl implements DeductibleService {
 
                         CheckInfoDTO checkInfoDTO = new CheckInfoDTO(treatmentStartDate,validStartDate,sex,hospitalCode,riskCode,planCode,dutyCode);
                         //规则适用判断
-                        if(calculateCommonService.ruleCheck(ruleInfo,checkInfoDTO)){
+                        if(!exceptSet.contains(ruleInfo.getRuleNo()) && calculateCommonService.ruleCheck(ruleInfo,checkInfoDTO)){
                             BigDecimal elementValue = ruleInfo.getElementValue(); //规则值
                             QueryUsedDTO queryUsedDTO = new QueryUsedDTO(policyNo, policyItemNo, RuleElement.TIMEDEDUCTIBLE.getCode(), ElementUnit.MONEY.getCode(), riskCode, planCode, dutyCode, dutyDetailCode, feeItemCode, validStartDate, validEndDate, hospitalCode, treatmentStartDate, department);
                             BigDecimal historyValue = calculateCommonService.getUesdValue(billInfoList,queryUsedDTO); //使用值
@@ -113,6 +114,7 @@ public class DeductibleServiceImpl implements DeductibleService {
                                 detailInfo.setCalAmount(calAmount);
                                 detailInfo.setDeduUsed(deduct); //免赔值记录
 
+                                detailInfo = calculateCommonService.addRuleUsed(detailInfo,ruleInfo.getRuleNo(),deduct,calAmount.add(deduct));
                             }
                         }
                     }
@@ -124,7 +126,7 @@ public class DeductibleServiceImpl implements DeductibleService {
 
                         CheckInfoDTO checkInfoDTO = new CheckInfoDTO(treatmentStartDate,validStartDate,sex,hospitalCode,riskCode,planCode,dutyCode);
                         //规则适用判断
-                        if(calculateCommonService.ruleCheck(ruleInfo,checkInfoDTO)){
+                        if(!exceptSet.contains(ruleInfo.getRuleNo()) && calculateCommonService.ruleCheck(ruleInfo,checkInfoDTO)){
                             BigDecimal elementValue = ruleInfo.getElementValue(); //规则值
                             QueryUsedDTO queryUsedDTO = new QueryUsedDTO(policyNo, policyItemNo, RuleElement.YEARDEDUCTIBLE.getCode(), ElementUnit.MONEY.getCode(), riskCode, planCode, dutyCode, dutyDetailCode, "", validStartDate, validEndDate, hospitalCode, treatmentStartDate, department);
                             BigDecimal historyValue = calculateCommonService.getUesdValue(billInfoList,queryUsedDTO); //使用值
@@ -139,6 +141,7 @@ public class DeductibleServiceImpl implements DeductibleService {
                                 detailInfo.setCalAmount(calAmount);
                                 detailInfo.setDeduUsed(deduct); //免赔值记录
 
+                                detailInfo = calculateCommonService.addRuleUsed(detailInfo,ruleInfo.getRuleNo(),deduct,calAmount.add(deduct));
                             }
                         }
                     }
@@ -150,7 +153,7 @@ public class DeductibleServiceImpl implements DeductibleService {
 
                         CheckInfoDTO checkInfoDTO = new CheckInfoDTO(treatmentStartDate,validStartDate,sex,hospitalCode,riskCode,planCode,dutyCode);
                         //规则适用判断
-                        if(calculateCommonService.ruleCheck(ruleInfo,checkInfoDTO)){
+                        if(!exceptSet.contains(ruleInfo.getRuleNo()) && calculateCommonService.ruleCheck(ruleInfo,checkInfoDTO)){
                             BigDecimal elementValue = ruleInfo.getElementValue(); //规则值
                             QueryUsedDTO queryUsedDTO = new QueryUsedDTO(policyNo, policyItemNo, RuleElement.TIMEDEDUCTIBLE.getCode(), ElementUnit.MONEY.getCode(), riskCode, planCode, dutyCode, dutyDetailCode, "", validStartDate, validEndDate, hospitalCode, treatmentStartDate, department);
                             BigDecimal historyValue = calculateCommonService.getUesdValue(billInfoList,queryUsedDTO); //使用值
@@ -165,6 +168,7 @@ public class DeductibleServiceImpl implements DeductibleService {
                                 detailInfo.setCalAmount(calAmount);
                                 detailInfo.setDeduUsed(deduct); //免赔值记录
 
+                                detailInfo = calculateCommonService.addRuleUsed(detailInfo,ruleInfo.getRuleNo(),deduct,calAmount.add(deduct));
                             }
                         }
                     }
@@ -176,7 +180,7 @@ public class DeductibleServiceImpl implements DeductibleService {
 
                         CheckInfoDTO checkInfoDTO = new CheckInfoDTO(treatmentStartDate,validStartDate,sex,hospitalCode,riskCode,planCode,dutyCode);
                         //规则适用判断
-                        if(calculateCommonService.ruleCheck(ruleInfo,checkInfoDTO)){
+                        if(!exceptSet.contains(ruleInfo.getRuleNo()) && calculateCommonService.ruleCheck(ruleInfo,checkInfoDTO)){
                             BigDecimal elementValue = ruleInfo.getElementValue(); //规则值
                             QueryUsedDTO queryUsedDTO = new QueryUsedDTO(policyNo, policyItemNo, RuleElement.YEARDEDUCTIBLE.getCode(), ElementUnit.MONEY.getCode(), riskCode, planCode, dutyCode, "", "", validStartDate, validEndDate, hospitalCode, treatmentStartDate, department);
                             BigDecimal historyValue = calculateCommonService.getUesdValue(billInfoList,queryUsedDTO); //使用值
@@ -191,6 +195,7 @@ public class DeductibleServiceImpl implements DeductibleService {
                                 detailInfo.setCalAmount(calAmount);
                                 detailInfo.setDeduUsed(deduct); //免赔值记录
 
+                                detailInfo = calculateCommonService.addRuleUsed(detailInfo,ruleInfo.getRuleNo(),deduct,calAmount.add(deduct));
                             }
                         }
                     }
@@ -202,7 +207,7 @@ public class DeductibleServiceImpl implements DeductibleService {
 
                         CheckInfoDTO checkInfoDTO = new CheckInfoDTO(treatmentStartDate,validStartDate,sex,hospitalCode,riskCode,planCode,dutyCode);
                         //规则适用判断
-                        if(calculateCommonService.ruleCheck(ruleInfo,checkInfoDTO)){
+                        if(!exceptSet.contains(ruleInfo.getRuleNo()) && calculateCommonService.ruleCheck(ruleInfo,checkInfoDTO)){
                             BigDecimal elementValue = ruleInfo.getElementValue(); //规则值
                             QueryUsedDTO queryUsedDTO = new QueryUsedDTO(policyNo, policyItemNo, RuleElement.TIMEDEDUCTIBLE.getCode(), ElementUnit.MONEY.getCode(), riskCode, planCode, dutyCode, "", "", validStartDate, validEndDate, hospitalCode, treatmentStartDate, department);
                             BigDecimal historyValue = calculateCommonService.getUesdValue(billInfoList,queryUsedDTO); //使用值
@@ -218,6 +223,7 @@ public class DeductibleServiceImpl implements DeductibleService {
                                 detailInfo.setCalAmount(calAmount);
                                 detailInfo.setDeduUsed(deduct); //免赔值记录
 
+                                detailInfo = calculateCommonService.addRuleUsed(detailInfo,ruleInfo.getRuleNo(),deduct,calAmount.add(deduct));
                             }
                         }
                     }

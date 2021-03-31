@@ -22,6 +22,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
@@ -241,20 +242,23 @@ public class ExcelUtils<T> {
      * @return 结果
      * @throws IOException
      */
-    public void exportExcel(HttpServletResponse response, SXSSFWorkbook workbook,
+    public void exportExcel(HttpServletResponse response, Workbook workbook,
                             String[] sheetTitle, List<String[]> headers, List<List<String>> result1,List<List<String>> result2) throws IOException {
         int[] sheetNum=new int[]{0,1};
+        OutputStream outputStream = null;
         try {
             response.setContentType("application/vnd.ms-excel");
             response.setCharacterEncoding("utf-8");
-            ServletOutputStream outputStream = response.getOutputStream();
+            outputStream = response.getOutputStream();
 
             exportExcel(workbook,sheetNum[0],sheetTitle[0],headers.get(0),result1);
             exportExcel(workbook,sheetNum[1],sheetTitle[1],headers.get(1),result2);
             workbook.write(outputStream);
-            outputStream.close();
         } catch (Exception e) {
             e.printStackTrace();
+        }
+        finally {
+            outputStream.close();
         }
 
     }
@@ -277,7 +281,7 @@ public class ExcelUtils<T> {
      *
      * @return 结果
      */
-    public void exportExcel(SXSSFWorkbook workbook, int sheetNum, String sheetTitle, String[] headers, List<List<String>> result1) throws IOException {
+    public void exportExcel(Workbook workbook, int sheetNum, String sheetTitle, String[] headers, List<List<String>> result1) throws IOException {
 
         // 生成一个表格
         Sheet sheet = workbook.createSheet();

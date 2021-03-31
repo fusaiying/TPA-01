@@ -2,7 +2,7 @@ package com.paic.ehis.system.api;
 
 import com.paic.ehis.common.core.constant.ServiceNameConstants;
 import com.paic.ehis.common.core.web.domain.AjaxResult;
-import com.paic.ehis.system.api.domain.ClaimCaseCalInfo;
+import com.paic.ehis.system.api.domain.ClaimCaseCalculateInfo;
 import com.paic.ehis.system.api.domain.dto.ClaimCaseCalItemDTO;
 import com.paic.ehis.system.api.factory.RemoteClaimCalFallbackFactory;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -24,7 +24,7 @@ public interface RemoteClaimCalService {
     public AjaxResult getCasePolicyInfo(@PathVariable("rptNo") String rptNo);
 
     @PostMapping("/cal/deal/saveCaseCalInfo")
-    public AjaxResult saveCaseCalInfo(@RequestBody ClaimCaseCalInfo claimCaseCalInfo);
+    public AjaxResult saveCaseCalInfo(@RequestBody ClaimCaseCalculateInfo claimCaseCalculateInfo);
 
     @PostMapping("/cal/deal/getUsedValue")
     public AjaxResult getCaInfo(@RequestBody ClaimCaseCalItemDTO claimCaseCalItemDTO);

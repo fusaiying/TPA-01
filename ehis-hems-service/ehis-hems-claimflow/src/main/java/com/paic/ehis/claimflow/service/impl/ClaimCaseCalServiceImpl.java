@@ -1,6 +1,7 @@
 package com.paic.ehis.claimflow.service.impl;
 
 
+import com.paic.ehis.claimflow.domain.ClaimCase;
 import com.paic.ehis.claimflow.domain.ClaimCaseBill;
 import com.paic.ehis.claimflow.domain.ClaimCaseCal;
 import com.paic.ehis.claimflow.domain.SyncExchangeRate;
@@ -8,6 +9,7 @@ import com.paic.ehis.claimflow.domain.vo.CalBillSummaryVo;
 import com.paic.ehis.claimflow.domain.vo.CalConclusionVo;
 import com.paic.ehis.claimflow.mapper.ClaimCaseBillMapper;
 import com.paic.ehis.claimflow.mapper.ClaimCaseCalMapper;
+import com.paic.ehis.claimflow.mapper.ClaimCaseMapper;
 import com.paic.ehis.claimflow.service.IClaimCaseCalService;
 import com.paic.ehis.claimflow.service.IExchangeRateService;
 import com.paic.ehis.common.core.utils.DateUtils;
@@ -22,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -44,6 +47,9 @@ public class ClaimCaseCalServiceImpl implements IClaimCaseCalService
 
     @Autowired
     private IExchangeRateService exchangeRateService;
+
+    @Autowired
+    private ClaimCaseMapper cClaimCaseMapper;
 
     /**
      * 查询案件赔付信息
@@ -168,27 +174,31 @@ public class ClaimCaseCalServiceImpl implements IClaimCaseCalService
                                 calConclusionVo.setPaymentDifference(subtract.subtract(subtract1));
                             }
                         } else {
-                            //01-非全赔
-                            if("01".equals(claimFlag)) {
-                                if(prePayAmount != null) {
-                                    BigDecimal payAmountForeign = prePayAmount.divide(exchangeRate.getParities(),20,BigDecimal.ROUND_HALF_UP);
-                                    precalConclusionVo.setPayAmountForeign(payAmountForeign);
-                                    //本次支付差额（外币）=本次外币给付金额-申诉原案件外币给付金额；
-                                    calConclusionVo.setPaymentDifference(calConclusionVo.getPaymentDifference().subtract(precalConclusionVo.getPaymentDifference()));
-
-                                }
-                            }
-                            //02-全赔
-                            if("02".equals(claimFlag)) {
-                                if(preSumBillAmount != null && preDiscountAmount != null) {
-                                    BigDecimal subtractVa = preSumBillAmount.subtract(preDiscountAmount);
-                                    BigDecimal payAmountForeign = subtractVa.divide(exchangeRate.getParities(),20,BigDecimal.ROUND_HALF_UP);
-                                    precalConclusionVo.setPayAmountForeign(payAmountForeign);
-                                    //本次支付差额（外币）=本次外币给付金额-申诉原案件外币给付金额；
-                                    calConclusionVo.setPaymentDifference(calConclusionVo.getPaymentDifference().subtract(precalConclusionVo.getPaymentDifference()));
-
-                                }
-                            }
+                            //本次支付差额（外币）=本次外币给付金额-申诉原案件外币给付金额；
+                            calConclusionVo.setPaymentDifference(calConclusionVo.getPayAmountForeign().subtract(precalConclusionVo.getPayAmountForeign()));
+//                            //01-非全赔
+//                            if("01".equals(claimFlag)) {
+//                                if(prePayAmount != null) {
+//                                    //本次支付差额（外币）=本次外币给付金额-申诉原案件外币给付金额；
+//                                    calConclusionVo.setPaymentDifference(calConclusionVo.getPayAmountForeign().subtract(precalConclusionVo.getPayAmountForeign()));
+//                                    BigDecimal payAmountForeign = prePayAmount.divide(exchangeRate.getParities(),20,BigDecimal.ROUND_HALF_UP);
+//                                    precalConclusionVo.setPayAmountForeign(payAmountForeign);
+//
+//
+//                                }
+//                            }
+//                            //02-全赔
+//                            if("02".equals(claimFlag)) {
+//                                if(preSumBillAmount != null && preDiscountAmount != null) {
+//                                    //本次支付差额（外币）=本次外币给付金额-申诉原案件外币给付金额；
+//                                    calConclusionVo.setPaymentDifference(calConclusionVo.getPayAmountForeign().subtract(precalConclusionVo.getPayAmountForeign()));
+//
+//                                    BigDecimal subtractVa = preSumBillAmount.subtract(preDiscountAmount);
+//                                    BigDecimal payAmountForeign = subtractVa.divide(exchangeRate.getParities(),20,BigDecimal.ROUND_HALF_UP);
+//                                    precalConclusionVo.setPayAmountForeign(payAmountForeign);
+//
+//                                }
+//                            }
                         }
                     }
                 }
@@ -282,6 +292,8 @@ public class ClaimCaseCalServiceImpl implements IClaimCaseCalService
                  */
                 /** start */
                 String rptNo = claimCaseCal.getRptNo();
+                String username = SecurityUtils.getUsername();
+                Date nowDate = DateUtils.getNowDate();
                 if(rptNo.indexOf("-") > 0) {
                     ClaimCaseCal nowClaimCaseCal = claimCaseCalMapper.selectClaimCaseCalByRptNo(rptNo);
                     CalConclusionVo precalConclusionVo = claimCaseCalMapper.selectPreCalConclusionByRptNo(rptNo);
@@ -294,9 +306,16 @@ public class ClaimCaseCalServiceImpl implements IClaimCaseCalService
                     }
                 }
                 /** end */
-                claimCaseCal.setUpdateBy(SecurityUtils.getUsername());
-                claimCaseCal.setUpdateTime(DateUtils.getNowDate());
+                claimCaseCal.setUpdateBy(username);
+                claimCaseCal.setUpdateTime(nowDate);
                 int i = claimCaseCalMapper.updateClaimCaseCalByRptNo(claimCaseCal);
+
+                ClaimCase claimCase = new ClaimCase();
+                claimCase.setRptNo(rptNo);
+                claimCase.setUpdateBy(username);
+                claimCase.setUpdateTime(nowDate);
+                claimCase.setCaseFlag("01");
+                cClaimCaseMapper.updateClaimCase(claimCase);
                 if (i > 0){
                     reult = claimCaseCalMapper.selectClaimCaseCalInformation(rptNo);
                 }

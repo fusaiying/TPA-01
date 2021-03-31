@@ -4,6 +4,7 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by xicc on 2021/3/25
@@ -84,4 +85,5 @@ public class ClaimCaseBillDetailInfo {
     /** 有效止期 */
     private Date validEndDate;
 
+    private List<ClaimCaseRuleInfo> claimCaseRuleInfoList;
 }

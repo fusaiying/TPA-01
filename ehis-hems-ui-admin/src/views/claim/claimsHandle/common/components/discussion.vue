@@ -369,6 +369,7 @@
           insuredNo:'', // 被保人客户号
           payConclusion:'', //赔付结论
           prePayStatus:'', // 原案件支付状态
+          caseFlag:'',
 
         },
         conclusionForm:{
@@ -685,7 +686,7 @@
           }
         }
           //
-        if(this.conclusionInfo.payConclusion == '' || this.conclusionInfo.payConclusion == null){
+        if(this.conclusionInfo.caseFlag !== '01'){
           this.$message.warning('请先保存再进行审核！')
           return false;
         }

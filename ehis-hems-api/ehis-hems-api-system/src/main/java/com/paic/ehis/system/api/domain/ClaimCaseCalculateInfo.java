@@ -2,8 +2,10 @@ package com.paic.ehis.system.api.domain;
 
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by xicc on 2021/3/25
@@ -30,9 +32,13 @@ public class ClaimCaseCalculateInfo {
     private Date birthday;
     private int age;
 
+    private BigDecimal calAmount;
+    private BigDecimal refusedAmount;
+    private BigDecimal deduUsed;
+    private String payConclusion;
+    private String remark;
 
-
-
+    private Set<String> exceptSet;
     //账单信息列表
     private List<ClaimCaseBillInfo> claimCaseBillInfoList;
 

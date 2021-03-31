@@ -102,7 +102,6 @@
         company_name,
         service_settle_amount,
         settlement_value
-
     </select>
 
     <select id="selectTpaSettleTaskList" parameterType="com.paic.ehis.finance.domain.dto.TpaSettleDTO" resultMap="FinanceTpaSettleTaskResult">

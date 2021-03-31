@@ -79,4 +79,7 @@ public class CalConclusionVo implements Serializable {
 
     /** 支付状态 */
     private String prePayStatus;
+
+    /** 案件标识 */
+    private String caseFlag;
 }

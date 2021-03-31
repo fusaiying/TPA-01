@@ -1,9 +1,5 @@
 package com.paic.ehis.system.api.domain;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.paic.ehis.common.core.annotation.Excel;
-import com.paic.ehis.system.api.domain.dto.ClaimCaseBillDTO;
-import com.paic.ehis.system.api.domain.dto.ClaimCaseBillDetailDTO;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -100,6 +96,23 @@ public class ClaimCaseBillInfo {
     /** 不合理金额 */
     private BigDecimal unableAmount;
 
+    /** 理算金额 */
+    private BigDecimal calAmount;
+
+    /** 拒赔金额 */
+    private BigDecimal refusedAmount;
+
+    /** 本次使用免赔额 */
+    private BigDecimal deduUsed;
+
+    /** 赔付比例 */
+    private BigDecimal payRate;
+
+    /** 赔付结论 */
+    private String payConclusion;
+
+    /** 备注 */
+    private String remark;
 
     private List<ClaimCaseBillDetailInfo> claimCaseBillDetailInfoList;
 }

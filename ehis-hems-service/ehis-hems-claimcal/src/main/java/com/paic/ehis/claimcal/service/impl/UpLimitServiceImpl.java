@@ -16,9 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by xicc on 2021/3/26
@@ -38,6 +36,8 @@ public class UpLimitServiceImpl implements UpLimitService {
 
     @Override
     public ClaimCaseCalculateInfo calculateUpLimit(ClaimCaseCalculateInfo claimCaseCalculateInfo) {
+
+        Set<String> exceptSet = claimCaseCalculateInfo.getExceptSet();
 
         String sex = claimCaseCalculateInfo.getSex();
         List<ClaimCaseBillInfo> billInfoList = claimCaseCalculateInfo.getClaimCaseBillInfoList();
@@ -61,7 +61,10 @@ public class UpLimitServiceImpl implements UpLimitService {
                 Date validEndDate = detailInfo.getValidEndDate();
 
 
-
+                HashMap<String,BigDecimal> timesMap = new HashMap<>();
+                HashMap<String,BigDecimal> daysMap = new HashMap<>();
+                HashMap<String,BigDecimal> dayMoneyMap = new HashMap<>();
+                HashMap<String,BigDecimal> moneyMap = new HashMap<>();
 
                 if(detailInfo.getCalAmount().compareTo(BigDecimal.ZERO)<=0){ continue; }
                 //判断剩余次数
@@ -75,12 +78,14 @@ public class UpLimitServiceImpl implements UpLimitService {
                 for (ClaimRuleInfo ruleInfo : yearLimitTimeRuleList) {
                     CheckInfoDTO checkInfoDTO = new CheckInfoDTO(treatmentStartDate,validStartDate,sex,hospitalCode,riskCode,planCode,dutyCode);
                     //规则适用判断
-                    if(calculateCommonService.ruleCheck(ruleInfo,checkInfoDTO)){
+                    if(!exceptSet.contains(ruleInfo.getRuleNo()) && calculateCommonService.ruleCheck(ruleInfo,checkInfoDTO)){
                         BigDecimal elementValue = ruleInfo.getElementValue(); //规则值
                         QueryUsedDTO queryUsedDTO = new QueryUsedDTO(policyNo, policyItemNo, RuleElement.YEARLIMIT.getCode(), ElementUnit.TIME.getCode(), riskCode, planCode, dutyCode, dutyDetailCode, feeItemCode, validStartDate, validEndDate, hospitalCode, treatmentStartDate, department);
                         BigDecimal historyValue = calculateCommonService.getUesdValue(billInfoList,queryUsedDTO); //使用值
                         BigDecimal restvalue = elementValue.subtract(historyValue); //剩余值
                         restvalue = restvalue.compareTo(BigDecimal.ZERO)>0?restvalue:BigDecimal.ZERO;
+
+                        timesMap.put(ruleInfo.getRuleNo(),restvalue);
 
                         if(restvalue.compareTo(BigDecimal.ZERO) == 0) {
                             detailInfo.setCalAmount(BigDecimal.ZERO);
@@ -103,12 +108,14 @@ public class UpLimitServiceImpl implements UpLimitService {
 
                     CheckInfoDTO checkInfoDTO = new CheckInfoDTO(treatmentStartDate,validStartDate,sex,hospitalCode,riskCode,planCode,dutyCode);
                     //规则适用判断
-                    if(calculateCommonService.ruleCheck(ruleInfo,checkInfoDTO)){
+                    if(!exceptSet.contains(ruleInfo.getRuleNo()) && calculateCommonService.ruleCheck(ruleInfo,checkInfoDTO)){
                         BigDecimal elementValue = ruleInfo.getElementValue(); //规则值
                         QueryUsedDTO queryUsedDTO = new QueryUsedDTO(policyNo, policyItemNo, RuleElement.YEARLIMIT.getCode(), ElementUnit.TIME.getCode(), riskCode, planCode, dutyCode, dutyDetailCode, feeItemCode, validStartDate, validEndDate, hospitalCode, treatmentStartDate, department);
                         BigDecimal historyValue = calculateCommonService.getUesdValue(billInfoList,queryUsedDTO); //使用值
                         BigDecimal restvalue = elementValue.subtract(historyValue); //剩余值
                         restvalue = restvalue.compareTo(BigDecimal.ZERO)>0?restvalue:BigDecimal.ZERO;
+
+                        daysMap.put(ruleInfo.getRuleNo(),restvalue);
 
                         if(restvalue.compareTo(BigDecimal.ZERO) == 0) {
                             detailInfo.setCalAmount(BigDecimal.ZERO);
@@ -131,13 +138,15 @@ public class UpLimitServiceImpl implements UpLimitService {
                 for (ClaimRuleInfo ruleInfo : dayLimitMoneyRuleList) {
                     CheckInfoDTO checkInfoDTO = new CheckInfoDTO(treatmentStartDate,validStartDate,sex,hospitalCode,riskCode,planCode,dutyCode);
                     //规则适用判断
-                    if(calculateCommonService.ruleCheck(ruleInfo,checkInfoDTO)){
+                    if(!exceptSet.contains(ruleInfo.getRuleNo()) && calculateCommonService.ruleCheck(ruleInfo,checkInfoDTO)){
                         BigDecimal elementValue = ruleInfo.getElementValue(); //规则值
 //                        QueryUsedDTO queryUsedDTO = new QueryUsedDTO(policyNo, policyItemNo, RuleElement.TIMELIMIT.getCode(), ElementUnit.MONEY.getCode(), riskCode, planCode, dutyCode, dutyDetailCode, feeItemCode, validStartDate, validEndDate, hospitalCode, treatmentStartDate, department);
 //                        BigDecimal historyValue = calculateCommonService.getUesdValue(billInfoList,queryUsedDTO); //使用值
 //                        BigDecimal restvalue = elementValue.subtract(historyValue); //剩余值
                         BigDecimal restvalue = elementValue;
                         restvalue = restvalue.compareTo(BigDecimal.ZERO)>0?restvalue:BigDecimal.ZERO;
+
+                        dayMoneyMap.put(ruleInfo.getRuleNo(),restvalue);
 
                         if(restvalue.compareTo(BigDecimal.ZERO) == 0) {
                             detailInfo.setCalAmount(BigDecimal.ZERO);
@@ -163,12 +172,14 @@ public class UpLimitServiceImpl implements UpLimitService {
                 for (ClaimRuleInfo ruleInfo : timeLimitMoneyRuleList) {
                     CheckInfoDTO checkInfoDTO = new CheckInfoDTO(treatmentStartDate,validStartDate,sex,hospitalCode,riskCode,planCode,dutyCode);
                     //规则适用判断
-                    if(calculateCommonService.ruleCheck(ruleInfo,checkInfoDTO)){
+                    if(!exceptSet.contains(ruleInfo.getRuleNo()) && calculateCommonService.ruleCheck(ruleInfo,checkInfoDTO)){
                         BigDecimal elementValue = ruleInfo.getElementValue(); //规则值
                         QueryUsedDTO queryUsedDTO = new QueryUsedDTO(policyNo, policyItemNo, RuleElement.TIMELIMIT.getCode(), ElementUnit.MONEY.getCode(), riskCode, planCode, dutyCode, dutyDetailCode, feeItemCode, validStartDate, validEndDate, hospitalCode, treatmentStartDate, department);
                         BigDecimal historyValue = calculateCommonService.getUesdValue(billInfoList,queryUsedDTO); //使用值
                         BigDecimal restvalue = elementValue.subtract(historyValue); //剩余值
                         restvalue = restvalue.compareTo(BigDecimal.ZERO)>0?restvalue:BigDecimal.ZERO;
+
+                        moneyMap.put(ruleInfo.getRuleNo(),restvalue);
 
                         if(restvalue.compareTo(BigDecimal.ZERO) == 0) {
                             detailInfo.setCalAmount(BigDecimal.ZERO);
@@ -190,12 +201,14 @@ public class UpLimitServiceImpl implements UpLimitService {
                 for (ClaimRuleInfo ruleInfo : yearLimitMoneyRuleList) {
                     CheckInfoDTO checkInfoDTO = new CheckInfoDTO(treatmentStartDate,validStartDate,sex,hospitalCode,riskCode,planCode,dutyCode);
                     //规则适用判断
-                    if(calculateCommonService.ruleCheck(ruleInfo,checkInfoDTO)){
+                    if(!exceptSet.contains(ruleInfo.getRuleNo()) && calculateCommonService.ruleCheck(ruleInfo,checkInfoDTO)){
                         BigDecimal elementValue = ruleInfo.getElementValue(); //规则值
                         QueryUsedDTO queryUsedDTO = new QueryUsedDTO(policyNo, policyItemNo, RuleElement.YEARLIMIT.getCode(), ElementUnit.MONEY.getCode(), riskCode, planCode, dutyCode, dutyDetailCode, feeItemCode, validStartDate, validEndDate, hospitalCode, treatmentStartDate, department);
                         BigDecimal historyValue = calculateCommonService.getUesdValue(billInfoList,queryUsedDTO); //使用值
                         BigDecimal restvalue = elementValue.subtract(historyValue); //剩余值
                         restvalue = restvalue.compareTo(BigDecimal.ZERO)>0?restvalue:BigDecimal.ZERO;
+
+                        moneyMap.put(ruleInfo.getRuleNo(),restvalue);
 
                         if(restvalue.compareTo(BigDecimal.ZERO) == 0) {
                             detailInfo.setCalAmount(BigDecimal.ZERO);
@@ -205,7 +218,18 @@ public class UpLimitServiceImpl implements UpLimitService {
                         }
                     }
                 }
-
+                for (Map.Entry<String,BigDecimal> time: timesMap.entrySet()) {
+                    detailInfo = calculateCommonService.addRuleUsed(detailInfo,time.getKey(),time.getValue(),BigDecimal.ONE);
+                }
+                for (Map.Entry<String,BigDecimal> day: daysMap.entrySet()) {
+                    detailInfo = calculateCommonService.addRuleUsed(detailInfo,day.getKey(),day.getValue(),new BigDecimal(treatmentDays));
+                }
+                for (Map.Entry<String,BigDecimal> dayMoney: dayMoneyMap.entrySet()) {
+                    detailInfo = calculateCommonService.addRuleUsed(detailInfo,dayMoney.getKey(),dayMoney.getValue(),calAmount.divide(new BigDecimal(treatmentDays)));
+                }
+                for (Map.Entry<String,BigDecimal> money: moneyMap.entrySet()) {
+                    detailInfo = calculateCommonService.addRuleUsed(detailInfo,money.getKey(),money.getValue(),calAmount);
+                }
                 detailInfo.setCalAmount(calAmount);
 
             }

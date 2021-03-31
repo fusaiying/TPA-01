@@ -297,7 +297,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             `create_by`,
             `create_time`,
             `update_by`,
-            `update_time`
+            `update_time`,
+            case_prop
         ) (
             SELECT
                 #{newRptNo},
@@ -308,14 +309,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                 `pullout_reason`,
                 `pullout_describe`,
                 `end_case_time`,
-                '01',
-                '01',
+                '02',
+                null,
                 `is_finance_back`,
                 `status`,
                 `create_by`,
                 `create_time`,
                 `update_by`,
-                `update_time`
+                `update_time`,
+                case_prop
             FROM claim_case WHERE 	rpt_no = #{appealRptNo} AND STATUS = 'Y'
         )
     </insert>

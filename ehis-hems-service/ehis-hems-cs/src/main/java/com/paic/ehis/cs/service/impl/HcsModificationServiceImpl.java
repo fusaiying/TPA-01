@@ -2,7 +2,9 @@ package com.paic.ehis.cs.service.impl;
 
 import java.util.List;
 
+import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.cs.domain.HcsModification;
+import com.paic.ehis.cs.domain.vo.ModifyServiceApplication;
 import com.paic.ehis.cs.mapper.HcsModificationMapper;
 import com.paic.ehis.cs.service.IHcsModificationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,6 +68,8 @@ public class HcsModificationServiceImpl implements IHcsModificationService
     @Override
     public int updateHcsModification(HcsModification hcsModification)
     {
+        // TODO 要同步状态
+
         return hcsModificationMapper.updateHcsModification(hcsModification);
     }
 
@@ -91,5 +95,38 @@ public class HcsModificationServiceImpl implements IHcsModificationService
     public int deleteHcsModificationById(String workOrderNo)
     {
         return hcsModificationMapper.deleteHcsModificationById(workOrderNo);
+    }
+
+    /**
+     * HCS预约修改，外部系统接入；
+     * @param modifyServiceApplication
+     * @return
+     */
+    @Override
+    public int addModifyServiceAccept(ModifyServiceApplication modifyServiceApplication) {
+        //ModifyServiceApplication 转数据库对象
+        HcsModification hcsModification=new HcsModification();
+        hcsModification.setAlterType(modifyServiceApplication.getType());
+        hcsModification.setAlterId(modifyServiceApplication.getModifySeqNo());
+        hcsModification.setModifyPriority(modifyServiceApplication.getModifyPriority());
+        hcsModification.setWorkOrderNo(modifyServiceApplication.getWorkOrderNo());
+        hcsModification.setAlterContent(modifyServiceApplication.getModifyContent());
+        hcsModification.setOtherNo(modifyServiceApplication.getApplicationCaseNo());
+        //未处理的
+        hcsModification.setStatus("Y");
+        hcsModification.setCreatedBy("interface");
+        hcsModification.setCreatedTime(DateUtils.getNowDate());
+        hcsModification.setUpdatedBy("interface");
+        hcsModification.setUpdatedTime(DateUtils.getNowDate());
+        //操作类型 type modifyService;completeModifyService外部激活
+        // 如果是 completeModifyService 要对案件进行激活处理操作 TODO
+        /**
+         * 在操作是 completeModifyService外部激活的情况下 激活到最近一次操作人的个人池里面吗？？？
+         * 如果是激活 加 激活轨迹
+         */
+        
+
+
+        return hcsModificationMapper.insertHcsModification(hcsModification);
     }
 }

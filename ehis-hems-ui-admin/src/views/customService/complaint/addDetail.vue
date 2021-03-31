@@ -464,13 +464,13 @@
     filters: {
       changeDate: function (value) {
         if (value !== null) {
-          return moment(value).format('YYYY-MM-DD')
+          return moment(value).format('yyyy-MM-DD HH:mm:ss')
         }
       }
     },
     data() {
       const checkComplaintTime= (rule, value, callback) => {
-        let tDate = new Date();
+        let tDate = moment(new Date()).format('yyyy-MM-DD HH:mm:ss');
         if(tDate > value){
           callback(new Error("预约时间不能早于当前日期"));
         }else{
@@ -708,7 +708,6 @@
       }
     },
     created() {
-      debugger;
       window.aaa = this;
       this.searchHandle()
       this.getDicts("cs_complaint_item").then(response => {
@@ -771,7 +770,6 @@
         this.$refs.sendForm.resetFields()
       },
       searchHandle() {
-        debugger;
         let query = {
           pageNum: this.queryParams.pageNum,
           pageSize: this.queryParams.pageSize,

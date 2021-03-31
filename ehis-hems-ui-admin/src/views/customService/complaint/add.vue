@@ -134,7 +134,6 @@
       }
     },
     created() {
-      debugger;
       this.searchHandle()
       this.getDicts("sys_oper_type").then(response => {
         this.states = response.data;

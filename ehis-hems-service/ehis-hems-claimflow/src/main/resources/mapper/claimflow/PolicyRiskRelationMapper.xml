@@ -13,7 +13,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="validStartDate"    column="valid_start_date"    />
     </resultMap>
 
-    <resultMap type="com.paic.ehis.claimflow.domain.CompanyRiskPolicyInfo" id="CompanyRiskPolicyResult">
+    <resultMap type="com.paic.ehis.system.api.domain.CompanyRiskPolicyInfo" id="CompanyRiskPolicyResult">
         <result property="policyItemNo"    column="policy_item_no"    />
         <result property="policyNo"    column="policy_no"    />
         <result property="riskCode"    column="risk_code"    />
@@ -71,8 +71,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         pi.valid_start_date,
         pi.company_code,
         pi.company_name,
-        pi.prem,
-        totalPeople,
+        ifnull(pi.prem,0),
+        ifnull(totalPeople,0),
         sumPerm,
         bestStartDate
         FROM
@@ -81,7 +81,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         AND pi.STATUS = 'Y'
         LEFT JOIN (
         SELECT
-        SUM( prem ) AS sumPerm,
+        SUM( ifnull(prem,0) ) AS sumPerm,
         count( * ) AS totalPeople,
         risk_code,
         a.STATUS
@@ -107,6 +107,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         AND time.STATUS = 'Y'
         <where>
             <if test="policyNo != null  and policyNo != ''"> and prr.policy_no = #{policyNo}</if>
+            <if test="policyItemNo != null  and policyItemNo != ''"> and policy_item_no = #{policyItemNo}</if>
             <if test="riskCode != null  and riskCode != ''"> and prr.risk_code = #{riskCode}</if>
             <if test="companyCode != null  and companyCode != ''"> and pi.company_code = #{companyCode}</if>
             <if test="startTime != null  and startTime != null"> and pi.valid_start_date &gt;= #{startTime}  </if>
@@ -130,6 +131,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         valid_start_date AS bestStartDate,
         company_code,
         policy_no,
+        policy_item_no,
+        valid_start_date,
         STATUS
         FROM
         policy_info info
@@ -139,6 +142,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         AND time.STATUS = 'Y'
         <where>
             <if test="policyNo != null  and policyNo != ''"> and policy_no = #{policyNo}</if>
+            <if test="policyItemNo != null  and policyItemNo != ''"> and policy_item_no = #{policyItemNo}</if>
             <if test="riskCode != null  and riskCode != ''"> and risk_code = #{riskCode}</if>
             <if test="companyCode != null  and companyCode != ''"> and company_code = #{companyCode}</if>
             status = 'Y'

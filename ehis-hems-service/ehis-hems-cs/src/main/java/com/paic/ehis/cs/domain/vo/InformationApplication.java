@@ -1,4 +1,4 @@
-package com.paic.ehis.cs.domain;
+package com.paic.ehis.cs.domain.vo;
 
 import lombok.Data;
 import lombok.ToString;
@@ -6,6 +6,10 @@ import lombok.ToString;
 import java.io.Serializable;
 import java.util.Date;
 
+/**
+ * 接口信息需求对象
+ * 备用
+ */
 @Data
 @ToString
 public class InformationApplication implements Serializable {

@@ -74,6 +74,9 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService {
             deptId = organCode;
         }
 
+        //获取查询数据  判断是后是第一次支付优先飘红显示
+        ClaimCasePayDTO claimCasePayDTO = new ClaimCasePayDTO();
+        claimCasePayDTO.setOrganCode(deptId);
         List<Map<String, Object>> initList = claimBatchMapper.selectPayBatchInit(deptId);
         BaseProviderSettle baseProviderSettle = new BaseProviderSettle();
         for (Map<String, Object> map : initList) {
@@ -260,7 +263,7 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService {
                     if (!"98".equals(payInfoVO.getCaseStatus())) {
                         if ("99".equals(payInfoVO.getCaseStatus())) {
                             //判断已经结案的支付金额是否与理算表的支付金额一致
-                            FinancePayDetailInfo financePayDetailInfo = financePayDetailInfoMapper.selectFinancePayDetailInfoByRptNo(payInfoVO.getRptNo());
+                            FinancePayDetailInfo financePayDetailInfo = financePayDetailInfoMapper.selectFinancePayDetailInfoByRptNos(payInfoVO.getRptNo());
                             if (StringUtils.isNotNull(financePayDetailInfo) && financePayDetailInfo.getPayAmount().compareTo(claimCaseCal.getPayAmount()) != 0) {
                                 payAmount = payAmount.add(claimCaseCal.getPayAmount().subtract(financePayDetailInfo.getPayAmount()));
                             } else {
@@ -458,6 +461,7 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService {
             financePayInfo.setBatchNo(batchNo);
             financePayInfo.setPayCurrency(payment.getCurrency());
             financePayInfo.setSumPayAmount(payment.getPayAmount());
+            financePayInfo.setSumPayAmountForeign(payment.getForeignPayAmount());
             financePayInfo.setSumClaimAmount(payment.getCalAmount());
             financePayInfo.setPayeeBank(payment.getBank());
             financePayInfo.setAccNo(payment.getBankNumber());
@@ -734,6 +738,7 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService {
         ClaimBatch claimBatch1 = claimBatchMapper.selectClaimBatchById(batchNo);
         Boolean currencyFlag=true;
         for (ClaimCaseForeignPayInfoVO payInfo : payInfoList) {
+
             if (payInfo.getFlag2()>=2){
                 if (!StringUtils.isNotNull(payInfo.getCurrency())){
                     payInfo.setFlag("N");
@@ -790,11 +795,26 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService {
         } else {
             payFlag = payFlag1;
         }
+        ClaimBatch claimBatch = claimBatchMapper.selectClaimBatchById(batchNo);
+        // 获取支付信息
+        ClaimCasePaymentVO claimCasePaymentVO = new ClaimCasePaymentVO();
+        // 获取‘是否仅结算理赔责任’ 是01-非全赔 否02-全赔
+        BaseProviderSettle baseProviderSettle = new BaseProviderSettle();
+        baseProviderSettle.setProviderCode(claimBatch.getHospitalcode());
+        baseProviderSettle.setOrgFlag("02");
+        BaseProviderSettle settle = new BaseProviderSettle();
+        if (getProviderInfoService.selectsettleInfoNew(baseProviderSettle).size() > 0) {
+            settle = getProviderInfoService.selectsettleInfoNew(baseProviderSettle).get(0);
+            claimCasePaymentVO.setClaimFlag(settle.getClaimFlag());
+        }
         // 轨迹表生成数据、支付总金额、理赔总金额、外币支付总金额
         BigDecimal payAmount = new BigDecimal("0.00");
         BigDecimal calAmount = new BigDecimal("0.00");
         BigDecimal foreignPayAmount = new BigDecimal("0.00");
         for (ClaimCaseForeignPayInfoVO payInfoVO : payInfoList) {
+            if ("97".equals(payInfoVO.getCaseStatus()) && "02".equals(settle.getClaimFlag())){
+                payInfoVO.setPayAmountForeign(new BigDecimal(0));
+            }
             //判断批次下币种是否一致
             if (payInfoVO.getFlag2()>=2){
                 currencyFlag=false;
@@ -818,7 +838,7 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService {
                 if (!"98".equals(payInfoVO.getCaseStatus())) {
                     if ("99".equals(payInfoVO.getCaseStatus())) {
                         //判断已经支付的金额是否与理算表的支付金额一致
-                        FinancePayDetailInfo financePayDetailInfo = financePayDetailInfoMapper.selectFinancePayDetailInfoByRptNo(payInfoVO.getRptNo());
+                        FinancePayDetailInfo financePayDetailInfo = financePayDetailInfoMapper.selectFinancePayDetailInfoByRptNos(payInfoVO.getRptNo());
                         if (StringUtils.isNotNull(financePayDetailInfo) && financePayDetailInfo.getPayAmount().compareTo(claimCaseCal.getPayAmount()) != 0) {
                             payAmount = payAmount.add(claimCaseCal.getPayAmount().subtract(financePayDetailInfo.getPayAmount()));
                         } else {
@@ -874,8 +894,7 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService {
                 payInfoVO.setDebtAmount(new BigDecimal(0));
             }
         }
-        // 获取支付信息
-        ClaimCasePaymentVO claimCasePaymentVO = new ClaimCasePaymentVO();
+
         //通过批次号查询finance_pay_info表最近一次的数据
         //FinancePayInfo financePayInfo = financePayInfoMapper.selectFinancePayInfoByBatchNo(batchNo);
         if (StringUtils.isNotNull(financePayInfo)) {
@@ -890,7 +909,7 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService {
         if (payAmount.compareTo(new BigDecimal("0.00")) <= 0) {
             payFlag = "false";
         }
-        ClaimBatch claimBatch = claimBatchMapper.selectClaimBatchById(batchNo);
+
         // 该批次下所有账单币种是否一致，不一致时支付币种与外币支付总金额为空
         //boolean currFlag = payInfoList.stream().anyMatch(m -> "N".equals(m.getFlag()));
         if (currencyFlag) {
@@ -915,14 +934,7 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService {
             claimCasePaymentVO.setBankName(hospital.getAccountName());//账户名
             claimCasePaymentVO.setBankNumber(hospital.getAccountNo());//账户号
         }
-        // 获取‘是否仅结算理赔责任’ 是01-非全赔 否02-全赔
-        BaseProviderSettle baseProviderSettle = new BaseProviderSettle();
-        baseProviderSettle.setProviderCode(claimBatch.getHospitalcode());
-        baseProviderSettle.setOrgFlag("02");
-        if (getProviderInfoService.selectsettleInfoNew(baseProviderSettle).size() > 0) {
-            BaseProviderSettle settle = getProviderInfoService.selectsettleInfoNew(baseProviderSettle).get(0);
-            claimCasePaymentVO.setClaimFlag(settle.getClaimFlag());
-        }
+
         claimCaseForeignPayVO.setPayment(claimCasePaymentVO);
         claimCaseForeignPayVO.setPayFlag(payFlag);
         claimCaseForeignPayVO.setBorrowFlag(borrowFlag);

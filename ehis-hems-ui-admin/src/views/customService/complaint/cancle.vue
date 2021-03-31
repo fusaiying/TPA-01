@@ -292,14 +292,14 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="客户电话：" prop="phone">
-              <el-input v-model="workPoolData.insurer.mobilePhone" class="item-width" size="mini" />
+              <el-input v-model="workPoolData.contactsPerson.homePhone" class="item-width" size="mini" />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="8">
             <el-form-item label="办公电话：" prop="phone">
-              <el-input v-model="workPoolData.insurer.workPhone" class="item-width" size="mini" />
+              <el-input v-model="workPoolData.contactsPerson.workPhone" class="item-width" size="mini" />
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -340,7 +340,7 @@
         <el-divider></el-divider>
         <el-table
           :header-cell-style="{color:'black',background:'#f8f8ff'}"
-          :data="flowLogData"
+          :data="HCSPoolData"
           size="small"
           highlight-current-row
           tooltip-effect="dark"
@@ -602,6 +602,8 @@ export default {
   data() {
 
     return {
+      //附件信息数据
+      HCSPoolData: [],
       isDisabled:true,
       //流转用
       flowLogData: [],
@@ -782,19 +784,15 @@ export default {
     resetForm() {
       this.$refs.sendForm.resetFields()
     },
-    //反显信息需求
+    //投诉 服务受理信息查询
     searchHandle() {
-      let workOrderNo = this.queryParams.workOrderNo
+      let workOrderNo=this.queryParams.workOrderNo
+
       complainSearch(workOrderNo).then(res => {
         if (res != null && res.code === 200) {
           this.workPoolData = res.data
-          console.log("投诉取消页面数据", this.workPoolData)
 
-          if (res.rows.length <= 0) {
-            return this.$message.warning(
-              "未查询到数据！"
-            )
-          }
+
         }
       }).catch(res => {
 

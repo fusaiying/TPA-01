@@ -9,17 +9,17 @@
           <!--clearable是清楚输入框内容 readly、只读不可以编辑 ；不可以共存-->
           <el-col :span="8">
             <el-form-item label="保单号：" prop="Service"  >
-              <el-input readonly v-model="sendForm.acceptor" class="item-width"  size="mini" disabled="submissionFlag"/>
+              <el-input readonly v-model="sendForm.acceptor" class="item-width"  size="mini" :disabled="submissionFlag"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="投保人姓名：" prop="channel" readonly>
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini" disabled="submissionFlag"/>
+              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini" :disabled="submissionFlag"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item style="white-space: nowrap" label="投保人证件号:"  prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini" disabled="submissionFlag"/>
+              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini" :disabled="submissionFlag"/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -27,12 +27,12 @@
         <el-row>
           <el-col :span="8">
             <el-form-item style="white-space: nowrap" label="投保人证件类型:"  prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini" disabled="submissionFlag"/>
+              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini" :disabled="submissionFlag"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="分单号:"  prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini" disabled="submissionFlag"/>
+              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini" :disabled="submissionFlag"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -194,7 +194,7 @@
 
 
     <el-card class="box-card" style="margin-top: 10px;">
-      <el-form ref="ruleForm" :model="ruleForm" style="padding-bottom: 30px;" label-width="160px" :disabled="isDisabled"
+      <el-form ref="ruleForm" :model="ruleForm" style="padding-bottom: 30px;" label-width="160px" disabled
                label-position="right" size="mini">
 
         <span style="color: blue">根因改善-服务受理信息</span>
@@ -532,7 +532,7 @@
           </el-form-item>
         </el-row>
         <el-row>
-          <el-form-item label="质诉根因：" prop="actionCause" >
+          <el-form-item label="致诉根因：" prop="actionCause" >
             <el-input v-model="serverForm.actionCause"  readonly size="mini" class="width-full" disabled="submissionFlag"/>
           </el-form-item>
         </el-row>
@@ -567,11 +567,11 @@
           </el-form-item>
         </el-col>
         <el-col>
-          <el-form-item label="改善措施：" prop="content">
+          <el-form-item label="改善措施：" prop="improvementMeasures">
             <el-input
               type="textarea"
               :rows="2"
-              v-model="serverForm.content"
+              v-model="serverForm.improvementMeasures"
               placeholder="请输入">
             </el-input>
           </el-form-item>
@@ -628,11 +628,11 @@
   import moment from 'moment'
   import {FlowLogSearch,HMSSearch,dealADD,demandListAndPersonalPool} from '@/api/customService/demand'
   import {
-    complaintDealSubmit,
+    gyDealSubmit,
     complainSearchServer,
     reasonTwo,
     reasonThree,
-    classTwo
+    classTwo, selectServiceProcess
   } from '@/api/customService/complaint'
   import {complainSearch,comSearch}  from  '@/api/customService/consultation'
 
@@ -682,6 +682,7 @@
     data() {
 
       return {
+        submissionFlag:true,
         checkSubmitFlag:'',
         serverForm:{
           sign:"",//控制暂存还是提交用
@@ -732,7 +733,7 @@
         },
         // 表单校验
         rules: {
-          content: [
+          improvementMeasures: [
             {required: true, message: "改善措施不能为空", trigger: "blur"}
           ],
 
@@ -981,8 +982,20 @@
 
       //取消
       deal(){},
-      //反显信息需求
+      //服务处理查询
       searchHandleServer() {
+        selectServiceProcess(this.queryParams.workOrderNo).then(res => {
+          if (res != null && res.code === 200) {
+            if(res.data!=null && res.data!='') {
+              this.sendForm = res.data;
+              this.reasonTwo('0');
+              this.reasonThree('0');
+              this.classTwo('0');
+            }
+          }
+        }).catch(res => {
+
+        })
         let query=this.queryParams
         complainSearchServer(query).then(res => {
           if (res != null && res.code === 200) {
@@ -998,6 +1011,8 @@
 
         })
       },
+
+
       //反显信息需求
       searchHandle() {
         let query=this.queryParams
@@ -1066,10 +1081,10 @@
 
         this.$refs.serverForm.validate((valid) => {
           if (valid) {
-            let insert = this.sendForm
+            let insert = this.serverForm;
             insert.sign = "02"
             insert.workOrderNo = this.$route.query.workOrderNo
-            complaintDealSubmit(insert).then(res => {
+            gyDealSubmit(insert).then(res => {
               if (res != null && res.code === 200) {
                 this.$message.success("保存成功");
                 this.checkSubmitFlag = '01';

@@ -330,7 +330,7 @@
         update claim_case
         <trim prefix="SET" suffixOverrides=",">
             <if test="caseStatus != null and caseStatus != ''">case_status = #{caseStatus},</if>
-            <if test="updateBy != null and createBy != ''">update_by = #{updateBy},</if>
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
         </trim>
         where rpt_no = #{rptNo}

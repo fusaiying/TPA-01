@@ -203,22 +203,46 @@ public class ClaimCaseCalBillServiceImpl implements IClaimCaseCalBillService
             BaseProviderSettle settle = getProviderInfoService.selectsettleInfoNew(baseProviderSettle).get(0);
             claimFlag=settle.getClaimFlag();
         }
+        SyncExchangeRate exchangeRate = new SyncExchangeRate();
+        exchangeRate.setBeforeMoney("CNY");
+        exchangeRate.setAfterMoney(claimCaseCal.getBillCurrency());
+        exchangeRate.setDateConvert(claimCaseBillMapper.selectEarliestTreatmentBillByRptNo(claimCaseCal.getRptNo()).getTreatmentStartDate());
+        exchangeRate = exchangeRateService.getExchangeRate(exchangeRate);
+        if(StringUtils.isNull(exchangeRate)){
+            exchangeRate = new SyncExchangeRate();
+            exchangeRate.setParities(new BigDecimal(1));
+        }
         if ("01".equals(claimFlag)){//非全赔,如果是全赔，默认是账单总金额不变，且cal表账单总金额字段未加
             claimCaseCal.setCalAmount(pay);
             claimCaseCal.setPayAmount(pay);
             claimCaseCal.setDebtAmount(new BigDecimal(String.valueOf(0.00)));
-
+            //外币给付金额   1、非全赔医院：根据账单币种及汇率对赔付金额进行汇率转换
+            claimCaseCal.setPayAmountForeign(claimCaseCal.getCalAmount().divide(exchangeRate.getParities(),2,BigDecimal.ROUND_HALF_DOWN));
         }
         if ("02".equals(claimFlag)){//全赔医院
             claimCaseCal.setCalAmount(pay);
             //追讨金额=账单金额-折扣金额-赔付金额-流水号自付额；
             claimCaseCal.setDebtAmount(billTotalAmount.subtract(totalDiscountAmount).subtract(totalSelfAmount).subtract(claimCaseCal.getCalAmount()));
             claimCaseCal.setPayAmount(billTotalAmount.subtract(totalDiscountAmount));
+            //外币给付金额   2、全赔医院：根据账单币种及汇率对折后金额进行汇率转换
+            claimCaseCal.setPayAmountForeign((billTotalAmount.subtract(totalDiscountAmount)).divide(exchangeRate.getParities(),2,BigDecimal.ROUND_HALF_DOWN));
         }
         if (size==billDetailDTO.getBillDetailList().size()){//存在拒赔结论时，赔付金额为0，
             claimCaseCal.setCalAmount(new BigDecimal(String.valueOf(0.00)));
         }
         claimCaseCal.setRefusedAmount(billTotalAmount.subtract(totalDiscountAmount).subtract(claimCaseCal.getCalAmount()));
+        /**
+         * 外币给付金额   2、全赔医院：根据账单币种及汇率对折后金额进行汇率转换
+         * Eg：账单币种HKD，汇率：0.9，赔付金额900CNY
+         * 外币给付金额：900CNY/0.9=1000HKD
+         */
+
+        if ("01".equals(claimFlag)){//非全赔
+
+        }
+        if ("02".equals(claimFlag)){//全赔医院
+
+        }
         claimCaseCalMapper.updateClaimCaseCal(claimCaseCal);
         return claimCaseCalBillMapper.bulkUpdateClaimCaseCalBill(claimCaseCalBills);
     }

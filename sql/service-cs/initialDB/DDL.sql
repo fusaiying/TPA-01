@@ -176,8 +176,9 @@ CREATE TABLE `field_map` (
 `created_time` datetime NOT NULL COMMENT '创建时间',
 `updated_by` varchar(32) NOT NULL COMMENT '更新人',
 `updated_time` datetime NOT NULL COMMENT '更新时间',
+`status` int(11) NOT NULL DEFAULT '1' COMMENT '状态 1-有效;0-无效',
 PRIMARY KEY (`source_name`,`type_code`,`field_order`,`source_filed_name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='受理信息映射表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='受理信息映射表 ';
 
 -- 业务流转信息表 flow_log
 CREATE TABLE `flow_log` (
@@ -219,8 +220,11 @@ CREATE TABLE `hcs_modification` (
 `created_time` datetime NOT NULL COMMENT '创建时间',
 `updated_by` varchar(10) NOT NULL COMMENT '更新人',
 `updated_time` datetime NOT NULL COMMENT '更新时间',
+`modify_priority` int(11) DEFAULT NULL COMMENT '处理优先级 取值 0,1 越大优先级越高',
+`alter_type` varchar(64) DEFAULT NULL COMMENT '修改类型',
+`other_no` varchar(32) DEFAULT NULL COMMENT '外部受理关联号 主要关联外部系统受理的工单号',
 PRIMARY KEY (`work_order_no`,`alter_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='HCS预约修改';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='HCS预约修改 '
 
 -- 人员信息表 person_info
 CREATE TABLE `person_info` (
@@ -291,7 +295,7 @@ CREATE TABLE `quality_inspection_item` (
 `item_key` varchar(20) DEFAULT NULL COMMENT '名',
 `value` varchar(50) DEFAULT NULL COMMENT '值',
 `item_remark` varchar(64) DEFAULT NULL COMMENT '说明',
-`status` varchar(2) DEFAULT NULL COMMENT '状态',
+`status` varchar(2) DEFAULT NULL COMMENT '状态 Y-有效;N-无效',
 `created_by` varchar(32) NOT NULL COMMENT '创建人',
 `created_time` datetime NOT NULL COMMENT '创建时间',
 `updated_by` varchar(32) NOT NULL COMMENT '更新人',
@@ -399,7 +403,7 @@ CREATE TABLE `work_order_accept` (
 `vip_flag` varchar(2) DEFAULT NULL COMMENT 'VIP标识',
 `organ_code` varchar(15) DEFAULT NULL COMMENT '出单机构',
 `status` varchar(2) NOT NULL COMMENT '状态 每个业务流程中的状态；如：待处理、处理中（&协办表=协办中）、处理完成、质检中、质检完成；\r\n信息需求公共查询中状态：01-待处理；02-处理中；03-已处理；04-已完成；05-已取消；',
-`end_date` datetime DEFAULT NULL COMMENT '结案日期',
+`end_date` datetime DEFAULT NULL COMMENT '结案日期 首次结案日期',
 `click_time` datetime DEFAULT NULL COMMENT '处理时间 信息需求，预约点击处理超链接记录此时间；投诉为完成时间',
 `hang_flag` varchar(2) DEFAULT NULL COMMENT '有无挂起',
 `hang_reason` varchar(32) DEFAULT NULL COMMENT '挂起原因',
@@ -407,7 +411,9 @@ CREATE TABLE `work_order_accept` (
 `create_time` datetime NOT NULL COMMENT '创建时间',
 `update_by` varchar(10) DEFAULT NULL,
 `update_time` datetime DEFAULT NULL,
-`otherno` varchar(32) DEFAULT NULL COMMENT '外部受理案件号',
+`other_no` varchar(32) DEFAULT NULL COMMENT '外部受理案件号',
 `activation_num` int(11) DEFAULT '0' COMMENT '激活次数',
+`state` int(11) NOT NULL DEFAULT '1' COMMENT '数据有效状态 1-有效;0-无效;',
+`last_end_date` datetime DEFAULT NULL COMMENT '最后结案日期 最后一次结案日期',
 PRIMARY KEY (`work_order_no`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='工单申请信息表 '

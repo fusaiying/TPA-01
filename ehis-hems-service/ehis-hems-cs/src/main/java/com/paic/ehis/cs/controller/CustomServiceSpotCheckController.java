@@ -376,9 +376,12 @@ public class CustomServiceSpotCheckController extends BaseController {
     @PostMapping("/internal/selectWorkOrder/exportTwo")
     public void exportTwo(HttpServletResponse response, QualityInspectionDTO qualityInspectionDTO) throws IOException
     {
-        List<QualityInspectionHandleVo> list = qualityInspectionAcceptService.selectQualityFlagVO(qualityInspectionDTO);
+        String bus=qualityInspectionDTO.getBusinessType();
+        if(null!=bus) {
+            List<QualityInspectionHandleVo> list = qualityInspectionAcceptService.selectQualityFlagVO(qualityInspectionDTO);
         ExcelUtil<QualityInspectionHandleVo> util = new ExcelUtil<QualityInspectionHandleVo>(QualityInspectionHandleVo.class);
         util.exportExcel(response, list, "WorkOrderTwo");
+    }
     }
 
 
@@ -447,7 +450,7 @@ public class CustomServiceSpotCheckController extends BaseController {
         qualityInspectionDTO.setCreatedTime(DateUtils.getNowDate());
         qualityInspectionDTO.setUpdatedBy(SecurityUtils.getUsername());
         qualityInspectionDTO.setUpdatedTime(DateUtils.getNowDate());
-        return toAjax(qualityInspectionHandleService.insertHandleInfo(qualityInspectionDTO));
+        return toAjax(qualityInspectionHandleService.insertHandleInfo1(qualityInspectionDTO));
     }
 
     /**
@@ -463,6 +466,17 @@ public class CustomServiceSpotCheckController extends BaseController {
         qualityInspectionDTO.setUpdatedBy(SecurityUtils.getUsername());
         qualityInspectionDTO.setUpdatedTime(DateUtils.getNowDate());
         return toAjax(qualityInspectionHandleService.insertHandleInfo1(qualityInspectionDTO));
+    }
+
+    /**
+     * 质检差错修改数据保存
+     * @param handleDTO
+     * @return
+     */
+    @Transactional
+    @PostMapping("/internal/insetQualityHandleInfo/handleDTO")
+    public AjaxResult insertHandleInfo(@RequestBody HandleDTO handleDTO){
+        return toAjax(qualityInspectionHandleService.insertHandleInfo(handleDTO));
     }
 
 
@@ -515,8 +529,14 @@ public class CustomServiceSpotCheckController extends BaseController {
 
     //服务处理回显接口
     @GetMapping("/getAttachmentList/selectServiceProcess/{workOrderNo}")
-    public AjaxResult  selectServiceProcess(String workOrderNo){
+    public AjaxResult  selectServiceProcess(@PathVariable("workOrderNo")String workOrderNo){
         return AjaxResult.success(iComplaintAcceptVoService.selectServiceProcess(workOrderNo));
+    }
+
+    //服务处理回显接口
+    @GetMapping("/getAttachmentList/selectServiceProcess1/{workOrderNo}")
+    public AjaxResult  selectServiceProcess1(String workOrderNo){
+        return AjaxResult.success(iComplaintAcceptVoService.selectServiceProcess1(workOrderNo));
     }
 
     //投诉一周抽检批处理

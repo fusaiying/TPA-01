@@ -1,4 +1,4 @@
-package com.paic.ehis.finance.domain;
+package com.paic.ehis.system.api.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
@@ -17,7 +17,7 @@ import java.util.Date;
  * @Version 1.0
  **/
 @Data
-public class CompanyRiskPolicy implements Serializable {
+public class CompanyRiskPolicyInfo implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -38,7 +38,6 @@ public class CompanyRiskPolicy implements Serializable {
 
     /** 被保人姓名 */
     private String name;
-
     /** 投保人姓名 */
     private String appName;
 
@@ -57,6 +56,9 @@ public class CompanyRiskPolicy implements Serializable {
 
     /** 总保费 */
     private BigDecimal sumPerm;
+
+    /* 承保机构 */
+    private String policyManageCom;
 
     /** 总人数 */
     private int totalPeople;

@@ -309,13 +309,20 @@
 
         <el-row>
           <el-col :span="8">
-            <el-form-item label="就诊日期：">
-              <el-input v-model="ruleForm.clinicDate" class="item-width" size="mini" placeholder="请输入"/>
+            <el-form-item label="就诊日期：" prop="appointmentDate">
+              <el-input v-model="ruleForm.appointmentDate" class="item-width" size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="就诊时间：" prop="email">
-              <el-input v-model="ruleForm.clinicTime" class="item-width" size="mini" placeholder="请输入"/>
+            <el-form-item label="就诊时间：" prop="appointmentDate">
+              <el-time-picker class="item-width"
+                              is-range
+                              v-model="ruleForm.complaintTimes"
+                              range-separator="-"
+                              start-placeholder="开始时间"
+                              end-placeholder="结束时间"
+                              value-format="HH:mm:ss">
+              </el-time-picker>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -554,8 +561,14 @@
 <script>
   import moment from 'moment'
   import {FlowLogSearch} from '@/api/customService/demand'
-  import {demandListAndPublicPool,demandListAndPersonalPool,cancelReservationSubmit} from '@/api/customService/reservation'
+  import {
+    demandListAndPublicPool,
+    demandListAndPersonalPool,
+    cancelReservationSubmit,
+    getPersonalPool
+  } from '@/api/customService/reservation'
   import modifyDetails from "../common/modul/modifyDetails";
+  import {policyInfoData} from "@/api/customService/common";
 
   let dictss = [
     {dictType: 'cs_channel'},
@@ -746,6 +759,24 @@
       }).dictDate
     },
     methods: {
+      //客户信息加载
+      searchSendFormInfo() {
+        let query = {
+          policyNo: this.queryParams.policyNo,
+          policyItemNo: this.queryParams.policyItemNo,
+        }
+        if(this.queryParams.policyNo != null && this.queryParams.policyNo !=""){
+          policyInfoData(query).then(res => {
+            if (res != null && res.code === 200) {
+              if (res.data != null) {
+                this.sendForm = res.data;
+              }
+            }
+          }).catch(res => {
+
+          })
+        }
+      },
       //超链接用
       modifyDetails(s){
         this.$refs.modifyDetails.queryParams.subId=s.subId,
@@ -780,14 +811,41 @@
         this.$refs.sendForm.resetFields()
       },
       //反显信息需求
-      //反显信息需求
+      //服务受理信息查询
       searchHandle() {
-        if (this.queryParams.status=="01") {
+        let workOrderNo = this.queryParams
+        console.log("workOrderNo", workOrderNo)
+        getPersonalPool(workOrderNo).then(res => {
+
+          if (res != null && res.code === 200) {
+            this.ruleForm = res.data
+            if (this.ruleForm.symptomTimes != null && this.ruleForm.symptomTimes != '') {
+              let arr=this.ruleForm.symptomTimes.split('-');
+              this.$set(this.ruleForm, `a`, arr[0]);
+              this.$set(this.ruleForm, `b`, arr[1]);
+            }
+            if(this.ruleForm.complaintTime != null && this.ruleForm.complaintTime !=''){
+              //预约时间反显
+              let timeArr=this.ruleForm.complaintTime.split('-');
+              this.$set(this.ruleForm, `complaintTimes`, timeArr);
+            }
+
+          }
+        }).catch(res => {
+
+        })
+
+  /*      if (this.queryParams.status=="01") {
           const query = this.queryParams
           demandListAndPublicPool(query).then(res => {
             if (res!=null && res.code === 200) {
               this.ruleForm =  res.rows[0];
-              this.totalCount = res.total
+              this.totalCount = res.total;
+              if(this.ruleForm.complaintTime != null && this.ruleForm.complaintTime !=''){
+                //预约时间反显
+                let timeArr=this.ruleForm.complaintTime.split('-');
+                this.$set(this.ruleForm, `complaintTimes`, timeArr);
+              }
               console.log('公共', this.ruleForm)
               if (res.rows.length <= 0) {
                 return this.$message.warning(
@@ -803,6 +861,11 @@
           demandListAndPersonalPool(query).then(res => {
             if (res!= null && res.code === 200) {
                this.ruleForm = res.rows[0];
+              if(this.ruleForm.complaintTime != null && this.ruleForm.complaintTime !=''){
+                //预约时间反显
+                let timeArr=this.ruleForm.complaintTime.split('-');
+                this.$set(this.ruleForm, `complaintTimes`, timeArr);
+              }
               console.log(this.workPoolData)
               if (res.rows.length <= 0) {
                 return this.$message.warning(
@@ -814,7 +877,7 @@
 
           })
 
-        }
+        }*/
       },
       handleSelectionChange(val) {
         this.dataonLineListSelections = val

@@ -81,7 +81,6 @@
     },
     methods: {
       searchHandle() {
-        debugger;
         let query = {}
         console.log('query: ',query)
         demandListAndPublicPool(query).then(res => {

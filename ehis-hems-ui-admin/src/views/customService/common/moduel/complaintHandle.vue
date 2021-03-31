@@ -158,7 +158,7 @@
       </el-row>
       <el-row>
         <el-col :span="22">
-          <el-form-item label="质诉根因：" prop="actionCause">
+          <el-form-item label="致诉根因：" prop="actionCause">
             <el-input type="text" v-model="form.actionCause" class="width-full"/>
           </el-form-item>
         </el-col>
@@ -254,7 +254,7 @@
           marketChannel: [{ required: true, message: '营销渠道不能为空', trigger: 'change' }],
           complaintCategory: [{ required: true, message: '投诉业务类别不能为空', trigger: 'blur' }],
           rootDepartment: [{ required: true, message: '投诉根因部门不能为空', trigger: 'blur' }],
-          actionCause: [{ required: true, message: '质诉根因不能为空', trigger: 'blur' }],
+          actionCause: [{ required: true, message: '致诉根因不能为空', trigger: 'blur' }],
           treatmentResult: [{ required: true, message: '处理结果不能为空', trigger: 'blur' }],
           customerFeedback: [{ required: true, message: '客户反馈不能为空', trigger: 'change' }],
           actPromptly: [{ required: true, message: '投诉损失不能为空', trigger: 'blur' }],

@@ -356,7 +356,7 @@
           style=" width: 100%;">
           <el-table-column align="center" width="140" prop="linkCode" label="状态" show-overflow-tooltip>
             <template slot-scope="scope" v-if="scope.row.linkCode">
-              <span>{{ selectDictLabel(cs_order_state, scope.row.linkCode) }}</span>
+              <span>{{ selectDictLabel(cs_link_code, scope.row.linkCode) }}</span>
             </template>
           </el-table-column>
           <el-table-column align="center" prop="operateCode" label="操作" show-overflow-tooltip>
@@ -540,7 +540,7 @@
           </el-form-item>
         </el-row>
         <el-row>
-          <el-form-item label="质诉根因：" prop="actionCause">
+          <el-form-item label="致诉根因：" prop="actionCause">
             <el-input v-model="sendForm.actionCause" clearable size="mini" class="width-full"/>
           </el-form-item>
         </el-row>
@@ -654,7 +654,7 @@ let dictss = [
   {dictType: 'cs_drop_status'},
   {dictType: 'cs_reason_level1'},
   {dictType: 'cs_action_type'},
-  {dictType: 'cs_order_state'},
+  {dictType: 'cs_link_code'},
   {dictType: 'cs_service_item'},
   {dictType: 'cs_business_type'},
   {dictType: 'cs_mediation_appraisal'},
@@ -791,7 +791,7 @@ export default {
       cs_relation: [],
       cs_feedback_type: [],
       cs_end_case: [],
-      cs_order_state: [],//状态
+      cs_link_code: [],//状态
       cs_action_type: [],//操作类型
       cs_priority: [],//优先级
       cs_service_item: [],//服务项目
@@ -872,8 +872,8 @@ export default {
     this.cs_action_type = this.dictList.find(item => {
       return item.dictType === 'cs_action_type'
     }).dictDate
-    this.cs_order_state = this.dictList.find(item => {
-      return item.dictType === 'cs_order_state'
+    this.cs_link_code = this.dictList.find(item => {
+      return item.dictType === 'cs_link_code'
     }).dictDate
     this.cs_service_item = this.dictList.find(item => {
       return item.dictType === 'cs_service_item'

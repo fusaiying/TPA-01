@@ -259,7 +259,7 @@ public class ClaimCaseAppealTaskServiceImpl implements IClaimCaseAppealTaskServi
      * @author: hjw
      * @time : 2021-3-15
      */
-    private String getNewRptNo(String appealRptNo){
+    public String getNewRptNo(String appealRptNo){
         //String appealNewRptNo = claimCaseAppealTaskMapper.getAppealNewRptNo(appealRptNo.split("-")[0]);
         if(appealRptNo.indexOf("-") < 0){
             appealRptNo +="-1" ;
@@ -276,7 +276,8 @@ public class ClaimCaseAppealTaskServiceImpl implements IClaimCaseAppealTaskServi
      * @auhtor: hjw
      * @time:2021-03-15
      * */
-    private void clearClaimTableData(ClaimCaseAppealTask bean){
+    @Override
+    public void clearClaimTableData(ClaimCaseAppealTask bean){
         claimCaseAppealTaskMapper.clearClaimTableData(bean);
     }
 

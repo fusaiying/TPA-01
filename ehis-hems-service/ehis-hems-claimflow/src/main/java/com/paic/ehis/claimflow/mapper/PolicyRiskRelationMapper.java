@@ -1,9 +1,9 @@
 package com.paic.ehis.claimflow.mapper;
 
-import com.paic.ehis.claimflow.domain.CompanyRiskPolicyInfo;
 import com.paic.ehis.claimflow.domain.PolicyAndRiskRelation;
 import com.paic.ehis.claimflow.domain.PolicyRiskRelation;
 import com.paic.ehis.claimflow.domain.vo.ClaimHistory;
+import com.paic.ehis.system.api.domain.CompanyRiskPolicyInfo;
 
 import java.util.List;
 

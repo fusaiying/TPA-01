@@ -99,8 +99,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectWorkHandleInfoVo"/>
         where handle_id = #{handleId}
     </select>
+
+    <select id="selectWorkHandleInfoByIdWork" parameterType="String" resultMap="WorkHandleInfoResult">
+        <include refid="selectWorkHandleInfoVo"/>
+        where work_order_no = #{workOrderNo}
+    </select>
         
-    <insert id="insertWorkHandleInfo" parameterType="WorkHandleInfo">
+    <insert id="insertWorkHandleInfo" parameterType="com.paic.ehis.cs.domain.WorkHandleInfo">
         insert into work_handle_info
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="handleId != null">handle_id,</if>
@@ -188,7 +193,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
     </insert>
 
-    <update id="updateWorkHandleInfo" parameterType="WorkHandleInfo">
+    <update id="updateWorkHandleInfo" parameterType="com.paic.ehis.cs.domain.WorkHandleInfo">
         update work_handle_info
         <trim prefix="SET" suffixOverrides=",">
             <if test="handleType != null and handleType != ''">handle_type = #{handleType},</if>

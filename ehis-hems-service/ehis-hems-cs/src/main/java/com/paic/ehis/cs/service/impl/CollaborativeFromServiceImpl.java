@@ -174,6 +174,7 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
         flowLog.setMakeTime(DateUtils.parseDate(DateUtils.getTime()));
         //没有um帐号
         flowLog.setUmNum(SecurityUtils.getUsername());
+        flowLog.setToReason(demandAcceptVo.getSolicitOpinion());
         flowLog.setCreatedBy(SecurityUtils.getUsername());
         flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         flowLog.setUpdatedBy(SecurityUtils.getUsername());
@@ -231,6 +232,7 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
         flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id",20,20));
         flowLog.setLinkCode(tDmandAcceptVo.getStatus());//状态置为已协办
         flowLog.setOperateCode("11");//节点为协办
+        flowLog.setOpinion(demandAcceptVo.getSolicitOpinion());
         flowLog.setMakeBy(SecurityUtils.getUsername());
         flowLog.setMakeTime(DateUtils.parseDate(DateUtils.getTime()));
         //没有um帐号
@@ -297,8 +299,7 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
         FlowLog flowLog=new FlowLog();
         flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id",20,20));
         flowLog.setLinkCode(tDmandAcceptVo.getStatus());
-        flowLog.setStatus("04");
-        flowLog.setOperateCode("08");
+        flowLog.setOperateCode("11");
         flowLog.setMakeBy(SecurityUtils.getUsername());
         //没有um帐号
         flowLog.setUmNum(SecurityUtils.getUsername());

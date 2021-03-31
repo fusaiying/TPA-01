@@ -167,6 +167,10 @@ public class ComplaintAcceptVo extends BaseEntity {
     private EditInfo editInfo;
 
     private EditDetail editDetail;
+    //是否为投诉已完成
+    private String flag;
+    //服务处理信息
+    private ComplaintDealVo complaintDealVo;
 
     /**
      * 修改原因

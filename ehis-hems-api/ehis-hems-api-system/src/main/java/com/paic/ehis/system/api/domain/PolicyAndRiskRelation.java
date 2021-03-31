@@ -25,6 +25,9 @@ public class PolicyAndRiskRelation implements Serializable
     @Excel(name = "保单号")
     private String policyNo;
 
+    /* 分单号 */
+    private String policyItemNo;
+
     /** 险种编码 */
     @Excel(name = "险种编码")
     private String riskCode;

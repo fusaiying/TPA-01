@@ -4,6 +4,8 @@ import com.paic.ehis.claimflow.domain.PolicyInfo;
 import com.paic.ehis.claimflow.domain.dto.PolicyDTO;
 import com.paic.ehis.claimflow.domain.interfaceclass.InsuredNoAndName;
 import com.paic.ehis.claimflow.domain.vo.PolicyVo;
+import com.paic.ehis.system.api.domain.CompanyRiskPolicyInfo;
+import com.paic.ehis.system.api.domain.PolicyAndRiskRelation;
 
 import java.util.List;
 
@@ -24,8 +26,16 @@ public interface IPolicyInfoService
     public PolicyInfo selectPolicyInfoById(String policyNo);
 
     /**
-     * 查询保单信息列表
+     * 根据保单号、分单号查询保单信息列表
      * 
+     * @param policyAndRiskRelation 保单信息
+     * @return 保单信息集合
+     */
+    public CompanyRiskPolicyInfo selectPolicyInfoListByPolicyNo(PolicyAndRiskRelation policyAndRiskRelation);
+
+    /**
+     * 查询保单信息列表
+     *
      * @param policyInfo 保单信息
      * @return 保单信息集合
      */

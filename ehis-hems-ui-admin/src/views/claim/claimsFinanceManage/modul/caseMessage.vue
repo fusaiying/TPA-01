@@ -112,12 +112,22 @@
                 <span class="size">{{ baseForm.currency }}</span>
               </el-form-item>
             </el-col>
-            <el-col :span="8">
+            <el-col v-if="querys.status==='publicForeign'"  :span="8">
+              <el-form-item label="支付总金额：" prop="payAmount">
+                <span class="size">{{ baseForm.payAmount }} CNY</span>
+              </el-form-item>
+            </el-col>
+            <el-col  v-if="querys.status==='public'" :span="8">
               <el-form-item label="支付总金额：" prop="payAmount">
                 <span class="size">{{ baseForm.payAmount }} {{baseForm.currency}}</span>
               </el-form-item>
             </el-col>
-            <el-col :span="8">
+            <el-col v-if="querys.status==='publicForeign'"  :span="8">
+              <el-form-item label="理赔总金额：" prop="calAmount">
+                <span class="size">{{ baseForm.calAmount }} CNY</span>
+              </el-form-item>
+            </el-col>
+            <el-col  v-if="querys.status==='public'" :span="8">
               <el-form-item label="理赔总金额：" prop="calAmount">
                 <span class="size">{{ baseForm.calAmount }} {{baseForm.currency}}</span>
               </el-form-item>

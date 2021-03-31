@@ -4,35 +4,35 @@ public class ClaimRoleConstant {
     /**
      * 受理
      */
-    public static final String Accept = "05";
+    public static final String Accept = "01";
 
     /**
      * 录入
      */
-    public static final String BillEntry = "06";
+    public static final String BillEntry = "02";
 
     /**
      * 理算审核
      */
-    public static final String ClaimReview = "07";
+    public static final String ClaimReview = "03";
 
     /**
      * 抽检
      */
-    public static final String RandomInspection = "08";
+    public static final String RandomInspection = "04";
 
     /**
      * 问题件
      */
-    public static final String ProblemPiece = "30";
+    public static final String ProblemPiece = "05";
 
     /**
      * 协谈
      */
-    public static final String CoTalk = "31";
+    public static final String CoTalk = "06";
 
     /**
      * 调查
      */
-    public static final String Survey= "32";
+    public static final String Survey= "07";
 }

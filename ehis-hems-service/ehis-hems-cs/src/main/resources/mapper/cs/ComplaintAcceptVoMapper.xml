@@ -113,13 +113,7 @@
         t1.vip_flag,
         t2.priority_level,
         t2.organ_code,
-        (CASE
-        WHEN (
-        t1.STATUS = '02'
-        AND ( SELECT 1 FROM collaborative_from cf WHERE cf.STATUS = '02' AND cf.work_order_no = t1.work_order_no limit 1) = 1
-        ) THEN
-        '06' ELSE t1.STATUS
-        END) STATUS,
+        t1.STATUS,
         CASE
         WHEN hm.nnn IS NOT NULL THEN
         1 ELSE 0

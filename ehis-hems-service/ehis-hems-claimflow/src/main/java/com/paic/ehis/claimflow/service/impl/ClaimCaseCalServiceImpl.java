@@ -127,7 +127,7 @@ public class ClaimCaseCalServiceImpl implements IClaimCaseCalService
                         }
                     }
                     // 需要判断，是否申诉案件；若是 计算 本次支付差额
-                    if(StringUtils.isNotBlank(calConclusionVo.getIsAppeal()) && calConclusionVo.getIsAppeal().equals("01")) {
+                    if(StringUtils.isNotBlank(calConclusionVo.getIsAppeal()) && calConclusionVo.getIsAppeal().equals("02")) {
 
                         CalConclusionVo precalConclusionVo = claimCaseCalMapper.selectPreCalConclusionByRptNo(rptNo);
                         if(precalConclusionVo != null) {

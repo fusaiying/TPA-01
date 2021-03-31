@@ -108,4 +108,17 @@ public interface WorkOrderAcceptMapper
     public int deleteAcceptDetailInfoMany(String[] workOrderNoMany);
 
     public ComplaintDealVo selectServiceProcess(String workOrderNo);
+
+    public ComplaintDealVo selectServiceProcess1(String workOrderNo);
+
+
+    /**
+     * 根据外部受理号去的工单信息
+     * @param workOrderAccept
+     * @return
+     */
+    public List<WorkOrderAccept> getWorkOrderAcceptByOtherNo(WorkOrderAccept workOrderAccept);
+
+    //根因改善用  获取投诉对应的根因改善最大流水号
+    public int getGYSerial(String workOrderNo);
 }

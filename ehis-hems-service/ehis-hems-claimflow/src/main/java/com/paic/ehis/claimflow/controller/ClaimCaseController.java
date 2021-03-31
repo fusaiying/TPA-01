@@ -546,6 +546,7 @@ public class ClaimCaseController extends BaseController {
         claimCaseCheckDTO.setCaseType(claimCaseCal.getIsAppeal());
         claimCaseCheckDTO.setAmount(claimCaseCal.getRefusedAmount());
         claimCaseCheckDTO.setDebtAmount(claimCaseCal.getDebtAmount());
+        claimCaseCheckDTO.setPaymentDifference(claimCaseCal.getPaymentDifference());
         //判断案件是否符合流程抽检岗规则
         //判断后  结案
         return toAjax(claimCaseService.judgeClaimCaseCheckRule(claimCaseCheckDTO));

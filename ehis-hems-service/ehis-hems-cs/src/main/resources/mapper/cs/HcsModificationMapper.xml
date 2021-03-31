@@ -19,15 +19,20 @@
         <result property="createdTime"    column="created_time"    />
         <result property="updatedBy"    column="updated_by"    />
         <result property="updatedTime"    column="updated_time"    />
+        <result property="modifyPriority"    column="modify_priority"    />
+        <result property="otherNo"    column="other_no"    />
     </resultMap>
 
     <sql id="selectHcsModificationVo">
-        select work_order_no, alter_id, alter_by, um_code, alter_time, alter_channel, alter_content, rela_edit_id, call_serial_num, status, created_by, created_time, updated_by, updated_time from hcs_modification
+        select work_order_no, alter_id, alter_by, um_code, alter_time, alter_channel, alter_content, rela_edit_id, call_serial_num, status, created_by, created_time, updated_by, updated_time
+        ,modify_priority,other_no
+        from hcs_modification
     </sql>
 
     <select id="selectHcsModificationList" parameterType="com.paic.ehis.cs.domain.HcsModification" resultMap="HcsModificationResult">
         <include refid="selectHcsModificationVo"/>
         <where>
+            and status ='Y'
             <if test="alterBy != null  and alterBy != ''"> and alter_by = #{alterBy}</if>
             <if test="umCode != null  and umCode != ''"> and um_code = #{umCode}</if>
             <if test="alterTime != null "> and alter_time = #{alterTime}</if>
@@ -35,15 +40,13 @@
             <if test="alterContent != null  and alterContent != ''"> and alter_content = #{alterContent}</if>
             <if test="relaEditId != null  and relaEditId != ''"> and rela_edit_id = #{relaEditId}</if>
             <if test="callSerialNum != null  and callSerialNum != ''"> and call_serial_num = #{callSerialNum}</if>
-            and status ="Y"
             <if test="createdBy != null  and createdBy != ''"> and created_by = #{createdBy}</if>
             <if test="createdTime != null "> and created_time = #{createdTime}</if>
             <if test="updatedBy != null  and updatedBy != ''"> and updated_by = #{updatedBy}</if>
             <if test="updatedTime != null "> and updated_time = #{updatedTime}</if>
             <if test="workOrderNo != null and workOrderNo != ''"> and work_order_no = #{workOrderNo}</if>
-
-
         </where>
+        order by modify_priority desc
     </select>
 
     <select id="selectHcsModificationById" parameterType="String" resultMap="HcsModificationResult">
@@ -64,6 +67,8 @@
             <if test="relaEditId != null">rela_edit_id,</if>
             <if test="callSerialNum != null">call_serial_num,</if>
             <if test="status != null">status,</if>
+            <if test="modifyPriority != null">modify_priority,</if>
+            <if test="otherNo != null">other_no,</if>
             <if test="createdBy != null and createdBy != ''">created_by,</if>
             <if test="createdTime != null">created_time,</if>
             <if test="updatedBy != null and updatedBy != ''">updated_by,</if>
@@ -80,6 +85,8 @@
             <if test="relaEditId != null">#{relaEditId},</if>
             <if test="callSerialNum != null">#{callSerialNum},</if>
             <if test="status != null">#{status},</if>
+            <if test="modifyPriority != null">#{modifyPriority},</if>
+            <if test="otherNo != null">#{otherNo},</if>
             <if test="createdBy != null and createdBy != ''">#{createdBy},</if>
             <if test="createdTime != null">#{createdTime},</if>
             <if test="updatedBy != null and updatedBy != ''">#{updatedBy},</if>

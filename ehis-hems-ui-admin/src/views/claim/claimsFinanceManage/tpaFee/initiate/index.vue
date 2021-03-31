@@ -217,13 +217,13 @@
         let createTimeStrt = '';
         let createTimeEnd = '';
         let createTimeArr = this.formSearch.createTimeArr;
-        if('' != createTimeArr) {
+        if('' !== createTimeArr && createTimeArr != null) {
           createTimeStrt = createTimeArr[0];
           createTimeEnd = createTimeArr[1];
           let entime = moment(createTimeStrt)
           let letime = moment(createTimeEnd)
           let dif = letime.diff(entime, 'months')
-          if(dif > 3 && this.preStart !== createTimeStrt && this.preEnd !== createTimeEnd ) {
+          if(dif > 3 && (this.preStart !== createTimeStrt || this.preEnd !== createTimeEnd) ) {
             this.preStart = createTimeStrt ;
             this.preEnd = createTimeEnd ;
             // 时间跨度太长，是否确认
@@ -288,10 +288,16 @@
         this.detailDialog = true
       },
       openDialog(){
-        if(this.formSearch.companyCode == ''
-          || this.formSearch.settleEndDate ==  ''
-          || this.formSearch.settlementType ==  '') {
-          this.$message.warning('请录入出单公司、结算方式、结算止期后发起结算！');
+        if(this.formSearch.companyCode === '' || this.formSearch.companyCode == null) {
+          this.$message.warning('出单公司未录入，请核实');
+          return false;
+        }
+        if(this.formSearch.settleEndDate ===  '' || this.formSearch.settleEndDate == null) {
+          this.$message.warning('结算止期未录入，请核实');
+          return false;
+        }
+        if(this.formSearch.settlementType ===  '' || this.formSearch.settlementType == null ) {
+          this.$message.warning('结算方式未录入，请核实');
           return false;
         }
         this.fixInfo = {

@@ -397,6 +397,7 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
         workOrderAccept.setOrganCode(reservationAcceptVo.getOrganCode());
         workOrderAccept.setUpdateBy(SecurityUtils.getUsername());
         workOrderAccept.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
+        workOrderAccept.setActivationNum(workOrderAccept.getActivationNum()+1);
         workOrderAcceptMapper.updateWorkOrderAccept(workOrderAccept);
 
         AcceptDetailInfo acceptDetailInfo=acceptDetailInfoMapper.selectAcceptDetailInfoById(workOrderNo);

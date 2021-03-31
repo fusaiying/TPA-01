@@ -22,7 +22,7 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="电话中心业务流水号：" prop="callCenterId">
-              <el-input v-model="workPoolData.callCenterId" class="item-width"  size="mini" />
+              <el-input v-model="workPoolData.callCenterId" class="item-width"  size="mini" disabled />
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -214,6 +214,196 @@
       </el-form>
     </el-card>
 
+    <!--服务处理 -->
+    <el-card v-if="showFlag" class="box-card" style="margin-top: 10px;">
+      <el-form  ref="sendForm" :model="sendForm"  style="padding-bottom: 30px;" label-width="180px"
+                label-position="right" size="mini" >
+        <span style="color: blue">服务处理</span>
+        <el-divider/>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="一级投诉分类：" prop="level1">
+              <el-select v-model="sendForm.level1" class="item-width" @change="classTwo('1')">
+                <el-option v-for="item in cs_classify_level1" :key="item.dictValue" :label="item.dictLabel"
+                           :value="item.dictValue"/>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="二级投诉分类：" prop="level2">
+              <el-select v-model="sendForm.level2" class="item-width" @change="checkLevel2()">
+                <el-option v-for="item in cs_classify_level2" :key="item.code" :label="item.codeName"
+                           :value="item.code"/>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="是否计件：" prop="pieceworkFlag"  v-show="sendForm.level2=='05'">
+              <el-select v-model="sendForm.pieceworkFlag" class="item-width">
+                <el-option v-for="item in cs_whether_flag" :key="item.dictValue" :label="item.dictLabel"
+                           :value="item.dictValue"/>
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="撤诉状态：" prop="complaintStatus" v-show="sendForm.level2=='05'">
+              <el-select v-model="sendForm.complaintStatus" class="item-width" >
+                <el-option v-for="item in cs_drop_status" :key="item.dictValue" :label="item.dictLabel"
+                           :value="item.dictValue"/>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="投诉是否成立：" prop="complaintTenable">
+              <el-select v-model="sendForm.complaintTenable" class="item-width" @change="checkComplaintTenable()">
+                <el-option v-for="item in cs_whether_flag" :key="item.dictValue" :label="item.dictLabel"
+                           :value="item.dictValue"/>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="投诉不成立理由：" prop="faseReason" >
+              <el-input v-model="sendForm.faseReason"
+                        class="item-width"
+                        clearable size="mini"
+                        :disabled="sendForm.complaintTenable!='02'"
+              />
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="重复投诉：" prop="repeatedComplaint">
+              <el-select v-model="sendForm.repeatedComplaint" class="item-width">
+                <el-option v-for="item in cs_whether_flag" :key="item.dictValue" :label="item.dictLabel"
+                           :value="item.dictValue"/>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="一级投诉原因：" prop="reason1">
+              <el-select v-model="sendForm.reason1" class="item-width" @change="reasonTwo('1')">
+                <el-option v-for="item in cs_reason_level1" :key="item.dictValue" :label="item.dictLabel"
+                           :value="item.dictValue"/>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="二级投诉原因：" prop="reason2">
+              <el-select v-model="sendForm.reason2" class="item-width" @change="reasonThree('1')">
+                <el-option v-for="item in cs_reason_level2" :key="item.code" :label="item.codeName"
+                           :value="item.code"/>
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="三级投诉原因：" prop="reason3">
+              <el-select v-model="sendForm.reason3" class="item-width">
+                <el-option v-for="item in cs_reason_level3" :key="item.code" :label="item.codeName"
+                           :value="item.code"/>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="投保环节（报保监）" prop="complaintLink">
+              <el-select v-model="sendForm.complaintLink" class="item-width">
+                <el-option v-for="item in cs_link_circ" :key="item.dictValue" :label="item.dictLabel"
+                           :value="item.dictValue"/>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="投保问题(报保监)：" prop="complaintQuestion">
+              <el-select v-model="sendForm.complaintQuestion" class="item-width">
+                <el-option v-for="item in cs_question_circ" :key="item.dictValue" :label="item.dictLabel"
+                           :value="item.dictValue"/>
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="行协调解或外部鉴定状态：" prop="outsideState">
+              <el-select v-model="sendForm.outsideState" class="item-width">
+                <el-option v-for="item in cs_mediation_appraisal" :key="item.dictValue" :label="item.dictLabel"
+                           :value="item.dictValue"/>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="险种类型：" prop="riskType">
+              <el-select v-model="sendForm.riskType" class="item-width">
+                <el-option v-for="item in cs_risk_type" :key="item.dictValue" :label="item.dictLabel"
+                           :value="item.dictValue"/>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="营销渠道：" prop="marketChannel">
+              <el-select v-model="sendForm.marketChannel" class="item-width">
+                <el-option v-for="item in cs_marketingchannel_codeOption" :key="item.dictValue" :label="item.dictLabel"
+                           :value="item.dictValue"/>
+              </el-select>
+            </el-form-item>
+          </el-col>
+
+
+        </el-row>
+        <el-row>
+          <el-form-item label="投诉业务类别：" prop="complaintCategory">
+            <el-input v-model="sendForm.complaintCategory" clearable size="mini" class="width-full"/>
+          </el-form-item>
+        </el-row>
+        <el-row>
+          <el-form-item label="投诉根因部门：" prop="rootDepartment">
+            <el-input v-model="sendForm.rootDepartment" clearable size="mini" class="width-full"/>
+          </el-form-item>
+        </el-row>
+        <el-row>
+          <el-form-item label="致诉根因：" prop="actionCause">
+            <el-input v-model="sendForm.actionCause" clearable size="mini" class="width-full"/>
+          </el-form-item>
+        </el-row>
+        <el-row>
+          <el-form-item label="处理进展：" prop="treatmentProgress">
+            <el-input v-model="sendForm.treatmentProgress" clearable size="mini" class="width-full"/>
+          </el-form-item>
+        </el-row>
+        <el-row>
+          <el-form-item label="处理结果：" prop="treatmentResult">
+            <el-input v-model="sendForm.treatmentResult" clearable size="mini" class="width-full"/>
+          </el-form-item>
+        </el-row>
+        <el-row>
+        </el-row>
+        <el-col :span="8">
+          <el-form-item label="客户反馈：" prop="customerFeedback">
+            <el-select v-model="sendForm.customerFeedback" class="item-width">
+              <el-option v-for="item in cs_feedback_type" :key="item.dictValue" :label="item.dictLabel"
+                         :value="item.dictValue"/>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item label="根因改善：" prop="rootImprovement">
+            <el-input v-model="sendForm.rootImprovement" class="item-width" clearable size="mini" placeholder="请输入" disabled/>
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item label="投诉损失：" prop="actPromptly">
+            <el-input v-model="sendForm.actPromptly" class="item-width" clearable size="mini" placeholder="请输入"/>
+          </el-form-item>
+        </el-col>
+      </el-form>
+    </el-card>
+<!--附件信息-->
     <el-card class="box-card" style="margin-top: 10px;">
       <div slot="header" class="clearfix">
         <span style="color:blue;">附件信息</span>
@@ -251,8 +441,8 @@
       </div>
     </el-card>
 
-    <el-card>
-      <el-form   v-if="this.queryParams.businessType=='05'" label-position="right"
+<!--    <el-card>
+      <el-form   v-if="showFlag" label-position="right"
                label-width="145px" size="mini" style="padding-bottom: 30px;">
         <span style="color: blue">服务处理</span>
         <el-divider/>
@@ -423,7 +613,7 @@
           </el-form-item>
         </el-row>
         <el-row>
-          <el-form-item label="质诉根因：" prop="policyNo" >
+          <el-form-item label="致诉根因：" prop="policyNo" >
             <el-input v-model="workPoolData.policyNo"  class="width-full" clearable size="mini" />
           </el-form-item>
         </el-row>
@@ -433,7 +623,7 @@
           </el-form-item>
         </el-row>
       </el-form>
-    </el-card>
+    </el-card>-->
 
     <el-card class="box-card" style="margin-top: 10px;">
       <el-form  ref="workPoolData3"  :model="workPoolData" :rules="rules"
@@ -474,7 +664,13 @@
   import {FlowLogSearch} from '@/api/customService/demand'
   import upLoad from "../common/modul/upload";
   import {complainSearch,comSearch}  from  '@/api/customService/consultation'
-  import {modifyComplaintSubmit}  from  '@/api/customService/complaint'
+  import {
+    classTwo, complaintDealSubmit,
+    modifyComplaintSubmit,
+    reasonThree,
+    reasonTwo,
+    selectServiceProcess
+  } from '@/api/customService/complaint'
 
 
 
@@ -488,6 +684,25 @@
     {dictType: 'cs_channel'},
     {dictType: 'cs_whether_flag'},
     {dictType: 'cs_marketingchannel_code'},
+    {dictType: 'cs_channel'},
+    {dictType: 'cs_priority'},
+    {dictType: 'cs_sex'},
+    {dictType: 'cs_communication_language'},
+    {dictType: 'cs_identity'},
+    {dictType: 'cs_whether_flag'},
+    {dictType: 'cs_organization'},
+    {dictType: 'cs_relation'},
+    {dictType: 'cs_order_state'},
+    {dictType: 'cs_action_type'},
+    {dictType: 'cs_feedback_type'},
+    {dictType: 'cs_question_circ'},
+    {dictType: 'cs_risk_type'},
+    {dictType: 'cs_mediation_appraisal'},
+    {dictType: 'cs_drop_status'},
+    {dictType: 'cs_reason_level1'},
+    {dictType: 'cs_link_circ'},
+    {dictType: 'cs_classify_level1'}
+
   ]
   export default {
     components: { upLoad },
@@ -510,6 +725,39 @@
       }
 
       return {
+        //服务处理数据
+        sendForm: {
+          sign: "",//控制暂存还是提交用
+          level1: "",
+          level2: "",
+          pieceworkFlag: "",
+          complaintStatus: "",
+          complaintTenable: "",
+          acceptor: "",
+          faseReason: "",
+          repeatedComplaint: "",
+          reason1: "",
+          reason2: "",
+          reason3: "",
+          complaintLink: "",
+          complaintQuestion: "",
+          outsideState: "",
+          riskType: "",
+          marketChannel: "",
+          complaintCategory: "",
+          rootDepartment: "",
+          actionCause: "",
+          treatmentProgress: "",
+          treatmentResult: "",
+          customerFeedback: "",
+          rootImprovement: "",
+          actPromptly: "",
+          improvementMeasures: "",
+          businessProcess: "",
+          workOrderNo: '',
+        },
+        //服务信息是否展示
+        showFlag: false,
         workPoolDataFlag:false,
         workPoolDataFlag3:false,
         //下拉框
@@ -568,6 +816,24 @@
 
 
         },
+
+
+
+
+
+        cs_reason_level1: [],
+        cs_reason_level2: [],
+        cs_reason_level3: [],
+        cs_link_circ: [],
+        cs_classify_level1: [],
+        cs_classify_level2: [],
+        cs_drop_status: [],
+        cs_mediation_appraisal: [],
+        cs_risk_type: [],
+        cs_question_circ: [],
+        cs_feedback_type: [],
+
+
         businessType:"",
         totalCount: 0,
         // 表单校验
@@ -713,6 +979,14 @@
       this.queryParams.policyItemNo=this.$route.query.policyItemNo;
       this.queryParams.status=this.$route.query.status;
       this.queryParams.businessType=this.$route.query.businessType;
+      if(this.queryParams.status=='04'){
+        this.showFlag=true
+        this.searchHandleServer()
+      }
+      else {
+        this.showFlag=false
+      }
+
       this.searchHandle()
       this.searchFlowLog()
     },
@@ -749,6 +1023,72 @@
       this.cs_marketingchannel_code = this.dictList.find(item => {
         return item.dictType === 'cs_marketingchannel_code'
       }).dictDate
+      this.cs_channel = this.dictList.find(item => {
+        return item.dictType === 'cs_channel'
+      }).dictDate
+      this.cs_priority = this.dictList.find(item => {
+        return item.dictType === 'cs_priority'
+      }).dictDate
+      this.cs_sex = this.dictList.find(item => {
+        return item.dictType === 'cs_sex'
+      }).dictDate
+      this.cs_communication_language = this.dictList.find(item => {
+        return item.dictType === 'cs_communication_language'
+      }).dictDate
+      this.cs_identity = this.dictList.find(item => {
+        return item.dictType === 'cs_identity'
+      }).dictDate
+      this.cs_whether_flag = this.dictList.find(item => {
+        return item.dictType === 'cs_whether_flag'
+      }).dictDate
+      this.cs_organization = this.dictList.find(item => {
+        return item.dictType === 'cs_organization'
+      }).dictDate
+      this.cs_relation = this.dictList.find(item => {
+        return item.dictType === 'cs_relation'
+      }).dictDate
+      this.cs_order_state = this.dictList.find(item => {
+        return item.dictType === 'cs_order_state'
+      }).dictDate
+      this.cs_action_type = this.dictList.find(item => {
+        return item.dictType === 'cs_action_type'
+      }).dictDate
+      this.cs_feedback_type = this.dictList.find(item => {
+        return item.dictType === 'cs_feedback_type'
+      }).dictDate
+      this.cs_question_circ = this.dictList.find(item => {
+        return item.dictType === 'cs_question_circ'
+      }).dictDate
+      this.cs_risk_type = this.dictList.find(item => {
+        return item.dictType === 'cs_risk_type'
+      }).dictDate
+      this.cs_marketingchannel_codeOption = this.dictList.find(item => {
+        return item.dictType === 'cs_marketingchannel_code'
+      }).dictDate
+
+
+
+
+      this.cs_mediation_appraisal = this.dictList.find(item => {
+        return item.dictType === 'cs_mediation_appraisal'
+      }).dictDate
+      this.cs_drop_status = this.dictList.find(item => {
+        return item.dictType === 'cs_drop_status'
+      }).dictDate
+      this.cs_reason_level1 = this.dictList.find(item => {
+        return item.dictType === 'cs_reason_level1'
+      }).dictDate
+      this.cs_link_circ = this.dictList.find(item => {
+        return item.dictType === 'cs_link_circ'
+      }).dictDate
+      this.cs_classify_level1 = this.dictList.find(item => {
+        return item.dictType === 'cs_classify_level1'
+      }).dictDate
+
+
+
+
+
     },
     methods: {
       //提交页面数据
@@ -762,6 +1102,38 @@
         if (this.workPoolDataFlag&&this.workPoolDataFlag3) {
           let insert = this.workPoolData
           insert.workOrderNo = this.$route.query.workOrderNo
+          if(this.showFlag){
+            insert.flag='true'
+            insert.complaintDealVo=this.sendForm
+          /*  insert.sign = this.sendForm.sign
+            insert.level1 = this.sendForm.level1
+            insert.level2 = this.sendForm.level2
+            insert.pieceworkFlag = this.sendForm.pieceworkFlag
+            insert.complaintStatus = this.sendForm.complaintStatus
+            insert.complaintTenable = this.sendForm.complaintTenable
+            insert.acceptor = this.sendForm.acceptor
+            insert.faseReason = this.sendForm.faseReason
+            insert.repeatedComplaint = this.sendForm.repeatedComplaint
+            insert.reason1 = this.sendForm.reason1
+            insert.reason2 = this.sendForm.reason2
+            insert.reason3 = this.sendForm.reason3
+            insert.complaintLink = this.sendForm.complaintLink
+            insert.complaintQuestion = this.sendForm.complaintQuestion
+            insert.outsideState = this.sendForm.outsideState
+            insert.riskType = this.sendForm.riskType
+            insert.marketChannel = this.sendForm.marketChannel
+            insert.complaintCategory = this.sendForm.complaintCategory
+            insert.rootDepartment = this.sendForm.rootDepartment
+            insert.actionCause = this.sendForm.actionCause
+            insert.treatmentProgress = this.sendForm.treatmentProgress
+
+            insert.treatmentResult = this.sendForm.treatmentResult
+            insert.customerFeedback = this.sendForm.customerFeedback
+            insert.rootImprovement = this.sendForm.rootImprovement
+            insert.actPromptly = this.sendForm.actPromptly
+            insert.improvementMeasures = this.sendForm.improvementMeasures
+            insert.businessProcess = this.sendForm.businessProcess*/
+          }
           modifyComplaintSubmit(insert).then(res => {
             if (res != null && res.code === 200) {
               this.$message.success("保存成功")
@@ -785,7 +1157,86 @@
       close(){
 
       },
-      //反显信息需求
+      //服务处理查询
+      searchHandleServer() {
+        selectServiceProcess(this.queryParams.workOrderNo).then(res => {
+          if (res != null && res.code === 200) {
+            console.log('-------------')
+            if(res.data!=null && res.data!='') {
+              this.sendForm = res.data;
+              this.reasonTwo('0');
+              this.reasonThree('0');
+              this.classTwo('0');
+            }
+          }
+        }).catch(res => {
+
+        })
+      },
+      reasonTwo(flag) {
+        const query = {}
+        query.parentCode = this.sendForm.reason1;
+        if(flag=='1'){
+          this.sendForm.reason2 = '';
+          this.sendForm.reason3 = '';
+        }
+        reasonTwo(query).then(res => {
+          if (res != null && res.code === 200) {
+            console.log("cs_reason_level2", res.data)
+            this.cs_reason_level2 = res.data
+            if (res.rows.length <= 0) {
+              return false
+            }
+          }
+        }).catch(res => {
+
+        })
+
+      },
+      reasonThree(flag) {
+        const query = {}
+        query.parentCode = this.sendForm.reason2
+        if(flag=='1'){
+          this.sendForm.reason3 = '';
+        }
+        reasonThree(query).then(res => {
+          if (res != null && res.code === 200) {
+            console.log("cs_reason_level2", res.data)
+            this.cs_reason_level3 = res.data
+            if (res.rows.length <= 0) {
+              return false
+            }
+          }
+        }).catch(res => {
+
+        })
+
+      },
+      classTwo(flag) {
+        const query = {}
+        query.parentCode = this.sendForm.level1;
+        if(flag=='1'){
+          this.sendForm.level2 = '';
+        }
+        classTwo(query).then(res => {
+          if (res != null && res.code === 200) {
+            console.log("二级分类", res.data)
+            this.cs_classify_level2 = res.data
+            if (res.rows.length <= 0) {
+              return false
+            }
+          }
+        }).catch(res => {
+
+        })
+
+      },
+      //投诉是否成立选择是，投诉不成立理由置灰，文本框内容清空
+      checkComplaintTenable(){
+        if(this.sendForm.complaintTenable == "01"){
+          this.sendForm.faseReason = "";
+        }
+      },
       //反显信息需求
       searchHandle() {
         let workOrderNo=this.queryParams.workOrderNo
@@ -842,7 +1293,13 @@
         this.$refs.upload.open();
       },
 
-
+      //选中二级投诉分类后，控制是否计件、撤诉状态的显示与隐藏
+      checkLevel2(){
+        if(this.sendForm.level2 != "05"){
+          this.sendForm.pieceworkFlag = "";
+          this.sendForm.complaintStatus = "";
+        }
+      },
 
     }
   }

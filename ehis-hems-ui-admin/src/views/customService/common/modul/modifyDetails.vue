@@ -13,7 +13,7 @@
         </el-row>
         <el-row>
           <el-form-item label="修改说明：" prop="insuredName">
-            <el-input v-model="ss.editRemark" class="item-width" size="mini" readonly/>
+            <el-input v-model="ss.editRemark" class="item-width" size="mini" :disabled="true"/>
           </el-form-item>
         </el-row>
         <el-card class="box-card" style="margin-top: 10px;">

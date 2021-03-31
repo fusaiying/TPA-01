@@ -550,7 +550,7 @@
           </el-form-item>
         </el-row>
         <el-row>
-          <el-form-item label="质诉根因：" prop="actionCause">
+          <el-form-item label="致诉根因：" prop="actionCause">
             <el-input v-model="sendForm.actionCause" clearable size="mini" class="width-full"/>
           </el-form-item>
         </el-row>
@@ -876,9 +876,10 @@
       this.queryParams.policyItemNo=this.$route.query.policyItemNo;
       this.queryParams.status=this.$route.query.status;
       if (this.$route.query.flag!=null && this.$route.query.flag!=''){
-        this.flag = this.$route.query.flag;
-      }else{
+        //
         this.flag = true;
+      }else{
+        this.flag = false;
       }
 
       if(this.queryParams.status=='04'){
@@ -1011,9 +1012,9 @@
       deal(){},
       //服务处理查询
       searchHandleServer() {
+
         selectServiceProcess(this.queryParams.workOrderNo).then(res => {
           if (res != null && res.code === 200) {
-            console.log("投诉页面server反显数据",res.data)
             if(res.data!=null && res.data!='') {
               this.sendForm = res.data;
               this.reasonTwo('0');
@@ -1030,7 +1031,7 @@
 
         })
       },
-      //反显信息需求
+      //投诉 服务受理信息查询
       searchHandle() {
         let workOrderNo=this.queryParams.workOrderNo
 

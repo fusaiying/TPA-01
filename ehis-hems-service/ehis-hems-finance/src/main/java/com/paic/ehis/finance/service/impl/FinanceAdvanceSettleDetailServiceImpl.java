@@ -15,6 +15,7 @@ import com.paic.ehis.finance.domain.vo.FinanceAdvanceSettleVO;
 import com.paic.ehis.system.api.ClaimFlowService;
 import com.paic.ehis.system.api.PolicyAndRiskService;
 import com.paic.ehis.system.api.RemoteUserService;
+import com.paic.ehis.system.api.domain.CompanyRiskPolicyInfo;
 import com.paic.ehis.system.api.domain.PolicyAndRiskRelation;
 import com.paic.ehis.system.api.domain.SysUser;
 import com.paic.ehis.system.api.domain.dto.ClaimFlowDTO;
@@ -56,9 +57,6 @@ public class FinanceAdvanceSettleDetailServiceImpl implements IFinanceAdvanceSet
 
     @Autowired
     private PolicyAndRiskService policyAndRiskService;
-
-    @Autowired
-    private ClaimFlowService claimFlowService;
 
 
     /**
@@ -130,9 +128,9 @@ public class FinanceAdvanceSettleDetailServiceImpl implements IFinanceAdvanceSet
                 policyAndRiskRelation.setEndTime(financeAdvanceSettleTask.getSettleEndDate());
                 policyAndRiskRelation.setCompanyCode(financeAdvanceSettleTask.getCompanyCode());
                 TableDataInfo relationCompanyList = policyAndRiskService.getRelationCompanyList(policyAndRiskRelation);//查询出单公司险种保单详情
-                CompanyRiskPolicy companyRiskPolicy = null;
+                CompanyRiskPolicyInfo companyRiskPolicy = null;
                 for(Object row : relationCompanyList.getRows()){
-                    companyRiskPolicy = objectMapper.convertValue(row, CompanyRiskPolicy.class);
+                    companyRiskPolicy = objectMapper.convertValue(row, CompanyRiskPolicyInfo.class);
                     BeanUtils.copyProperties(companyRiskPolicy, financeAdvanceSettleDetail);
                     //financeAdvanceSettleDetail.setSettleTaskNo(taskNo);
                     //String name=companyRiskPolicy.getName();

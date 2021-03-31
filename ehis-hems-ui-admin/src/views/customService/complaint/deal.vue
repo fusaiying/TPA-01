@@ -682,7 +682,6 @@ export default {
     }
   },
   data() {
-
     const checkPieceworkFlag = (rule, value, callback) => {
       if (this.sendForm.level2 == '05') {
         if (!value) {

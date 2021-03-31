@@ -368,11 +368,10 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
         FlowLog flowLog = new FlowLog();
         //工单表修改
         WorkOrderAccept workOrderAccept = workOrderAcceptMapper.selectWorkOrderAcceptById(workOrderNo);
-        int activation = '1';
-        workOrderAccept.setActivationNum(activation);
         workOrderAccept.setOrganCode(complaintAcceptVo.getOrganCode());
         workOrderAccept.setUpdateBy(SecurityUtils.getUsername());
         workOrderAccept.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
+        workOrderAccept.setActivationNum(workOrderAccept.getActivationNum()+1);
         workOrderAcceptMapper.updateWorkOrderAccept(workOrderAccept);
 
         AcceptDetailInfo acceptDetailInfo = acceptDetailInfoMapper.selectAcceptDetailInfoById(workOrderNo);
@@ -633,6 +632,10 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
             editInfo.setEditRemark(complaintAcceptVo.getEditInfo().getEditRemark());
             editInfo.setEditReason(complaintAcceptVo.getEditInfo().getEditReason());
             editInfoMapper.insertEditInfo(editInfo);
+        }
+        //投诉已完成的修改  修改服务处理信息
+        if(complaintAcceptVo.getFlag()){
+            this.complaintHandling(complaintAcceptVo.getComplaintDealVo());
         }
 
 
@@ -1213,8 +1216,7 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
         FlowLog flowLog = new FlowLog();
         //工单表修改
         WorkOrderAccept workOrderAccept = workOrderAcceptMapper.selectWorkOrderAcceptById(workOrderNo);
-        int activation = '1';
-        workOrderAccept.setActivationNum(activation);
+        workOrderAccept.setActivationNum(workOrderAccept.getActivationNum()+1);
         workOrderAccept.setOrganCode(complaintAcceptVo.getOrganCode());
         workOrderAccept.setUpdateBy(SecurityUtils.getUsername());
         workOrderAccept.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));

@@ -189,6 +189,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
             <if test="createTime != null">create_time = #{createTime},</if>
             <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="activationNum != null">activation_num = #{activationNum},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
         </trim>
         where work_order_no = #{workOrderNo}

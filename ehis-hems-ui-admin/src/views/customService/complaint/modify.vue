@@ -393,7 +393,7 @@
         </el-col>
         <el-col :span="8">
           <el-form-item label="根因改善：" prop="rootImprovement">
-            <el-input v-model="sendForm.rootImprovement" class="item-width" clearable size="mini" placeholder="请输入"/>
+            <el-input v-model="sendForm.rootImprovement" class="item-width" clearable size="mini" placeholder="请输入" disabled/>
           </el-form-item>
         </el-col>
         <el-col :span="8">
@@ -1102,9 +1102,8 @@
         if (this.workPoolDataFlag&&this.workPoolDataFlag3) {
           let insert = this.workPoolData
           insert.workOrderNo = this.$route.query.workOrderNo
-          insert.flag=false
           if(this.showFlag){
-            insert.flag=true
+            insert.flag='true'
             insert.complaintDealVo=this.sendForm
           /*  insert.sign = this.sendForm.sign
             insert.level1 = this.sendForm.level1

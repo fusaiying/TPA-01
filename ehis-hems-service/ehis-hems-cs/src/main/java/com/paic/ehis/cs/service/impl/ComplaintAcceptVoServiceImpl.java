@@ -634,7 +634,7 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
             editInfoMapper.insertEditInfo(editInfo);
         }
         //投诉已完成的修改  修改服务处理信息
-        if(complaintAcceptVo.getFlag()){
+        if(StringUtils.isNotEmpty(complaintAcceptVo.getFlag())){
             this.complaintHandling(complaintAcceptVo.getComplaintDealVo());
         }
 

@@ -896,6 +896,7 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService {
                 payInfoVO.setPayStatus("");
                 payInfoVO.setPayAmount(new BigDecimal(0));
                 payInfoVO.setDebtAmount(new BigDecimal(0));
+                payInfoVO.setPayAmountForeign(new BigDecimal(0));
             }
         }
 

@@ -207,7 +207,7 @@
       params.companyCode = this.fixInfoDetail.rowData.companyCode;
       params.settleEndDate = this.fixInfoDetail.rowData.settleEndDate;
       params.riskCode = this.fixInfoDetail.rowData.riskCode;
-      params.organCode = this.organCode ;
+      params.deptCode = this.organCode ;
       initiateTask(params).then(res => {
         if (res.code == '200') {
           this.totalNum = res.total;
@@ -228,7 +228,7 @@
     exportData(){
       const params = {};
       params.settleTaskNo = this.fixInfoDetail.rowData.settleTaskNo;
-      params.organCode = this.organCode ;
+      params.deptCode = this.organCode ;
       let type = this.fixInfoDetail.type ;
       if(type == "launch") {
         params.settlementType = this.fixInfoDetail.rowData.settlementType;

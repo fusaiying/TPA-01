@@ -153,7 +153,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
     </delete>
     <resultMap type="com.paic.ehis.finance.domain.vo.TransferfailedVo" id="TransferfailedVoResult">
-        <result property="batchNo"    column="batch_no"    />
+        <result property="batchNo"    column="pay_batch_no"    />
         <result property="payeeBank"    column="payee_bank"    />
         <result property="accNo"    column="acc_no"    />
         <result property="rptNo"    column="rpt_no"    />
@@ -169,7 +169,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <!--查询转账失败处理工作池-->
     <select id="selectTransferfailedList" parameterType="com.paic.ehis.finance.domain.dto.TransferfailedDTO" resultMap="TransferfailedVoResult">
         SELECT
-        fpi.batch_no,
+        fpi.pay_batch_no,
         sum( fpi.sum_pay_amount ) AS sum_pay_amount,
         fpi.payee_bank,
         fpi.acc_no,

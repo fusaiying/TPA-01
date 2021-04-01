@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 
@@ -45,6 +46,8 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
     private EditInfoMapper editInfoMapper;
     @Autowired
     private HcsModificationMapper hcsModificationMapper;
+    @Autowired
+    private HangUpLogMapper hangUpLogMapper;
 
     @Override
     public List<ReservationAcceptVo> selectReservationAcceptVoList(AcceptDTO acceptDTO) {
@@ -733,9 +736,26 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
     public int updateClickTime(AcceptDTO acceptDTO){
         //更新处理时间
         WorkOrderAccept workOrderAccept=workOrderAcceptMapper.selectWorkOrderAcceptById(acceptDTO.getWorkOrderNo());
+
+        HangUpLog hangUpLog = hangUpLogMapper.selectHangUpLogByIdTwo(acceptDTO.getWorkOrderNo());
+        BigDecimal a = hangUpLog.getTimes();
+
+        int ss = 1000;
+        int mi = ss * 60;
+        int hh = mi * 60;
+        int dd = hh * 24;
+        Date date1 = workOrderAccept.getCreateTime();
+        Date date2 = DateUtils.getNowDate();
+        long timeAll = (date2.getTime() - date1.getTime()) / hh - a.intValue();
+
+        BigDecimal handleTime= new BigDecimal(timeAll);
+
+        workOrderAccept.setHandleTime(handleTime);
+
         workOrderAccept.setClickTime(DateUtils.parseDate(DateUtils.getTime()));
         workOrderAccept.setUpdateBy(SecurityUtils.getUsername());
         workOrderAccept.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
+
         return workOrderAcceptMapper.updateClickTime(workOrderAccept);
     }
 

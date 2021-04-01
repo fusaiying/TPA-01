@@ -1268,6 +1268,18 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
          * 申诉案件如果更新了追讨, 即使原案件没有追讨（追讨为0，申诉案件申诉后有追讨，也是要放在原案件上
          * 更新原案件追讨金额为最新案件的追讨金额 ，那么最新案件的追讨金额更新为0
          */
+
+        if (null != claimCase.getIsAppeal() && "02".equals(claimCase.getIsAppeal()) && claimCaseCal.getDebtAmount() != null) {
+            CalConclusionVo calConclusionVo = claimCaseCalMapper.selectPreCalConclusionByRptNo(claimCase.getRptNo());
+            ClaimCaseDebt claimCaseDebt = claimCaseDebtMapper.selectClaimCaseDebtByRptNo(calConclusionVo.getRptNo());
+            if (null != claimCaseDebt) {
+                claimCaseDebt.setDebtAmount(calConclusionVo.getDebtAmount());
+                claimCaseDebt.setUpdateBy(SecurityUtils.getUsername());
+                claimCaseDebt.setUpdateTime(DateUtils.getNowDate());
+                claimCaseDebtMapper.updateClaimCaseDebt(claimCaseDebt);
+
+            }
+        }
 //        if (null != claimCase.getIsAppeal() && "02".equals(claimCase.getIsAppeal()) && claimCaseCal.getDebtAmount() != null) {
 //            CalConclusionVo calConclusionVo = claimCaseCalMapper.selectPreCalConclusionByRptNo(claimCase.getRptNo());
 //            ClaimCaseDebt claimCaseDebt = claimCaseDebtMapper.selectClaimCaseDebtByRptNo(calConclusionVo.getRptNo());
@@ -1632,6 +1644,17 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
              * 申诉案件如果更新了追讨, 即使原案件没有追讨（追讨为0，申诉案件申诉后有追讨，也是要放在原案件上
              * 更新原案件追讨金额为最新案件的追讨金额 ，那么最新案件的追讨金额更新为0
              */
+
+              if (null != claimCase.getIsAppeal() && "02".equals(claimCase.getIsAppeal()) && claimCaseCheckDTO.getDebtAmount() != null) {
+                CalConclusionVo calConclusionVo = claimCaseCalMapper.selectPreCalConclusionByRptNo(claimCaseCheckDTO.getRptNo());
+                ClaimCaseDebt claimCaseDebt = claimCaseDebtMapper.selectClaimCaseDebtByRptNo(calConclusionVo.getRptNo());
+                    if(null != claimCaseDebt) {
+                        claimCaseDebt.setDebtAmount(calConclusionVo.getDebtAmount());
+                        claimCaseDebt.setUpdateBy(SecurityUtils.getUsername());
+                        claimCaseDebt.setUpdateTime(DateUtils.getNowDate());
+                        claimCaseDebtMapper.updateClaimCaseDebt(claimCaseDebt);
+                    }
+              }
 //            if (null != claimCase.getIsAppeal() && "02".equals(claimCase.getIsAppeal()) && claimCaseCheckDTO.getDebtAmount() != null) {
 //                CalConclusionVo calConclusionVo = claimCaseCalMapper.selectPreCalConclusionByRptNo(claimCaseCheckDTO.getRptNo());
 //                ClaimCaseDebt claimCaseDebt = claimCaseDebtMapper.selectClaimCaseDebtByRptNo(calConclusionVo.getRptNo());

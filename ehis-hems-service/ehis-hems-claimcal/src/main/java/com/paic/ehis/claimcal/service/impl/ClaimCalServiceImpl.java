@@ -32,17 +32,9 @@ public class ClaimCalServiceImpl implements IClaimCalService {
     @Autowired
     private RemoteClaimCalService remoteClaimCalService;
 
-    @Autowired
-    private PolicyRiskRelationMapper policyRiskRelationMapper;
 
     @Autowired
-    private ClaimProductDutyDetailMapper claimProductDutyDetailMapper;
-
-    @Autowired
-    private IExchangeRateService exchangeRateService;
-
-    @Autowired
-    private GetProviderInfoService getProviderInfoService;
+    private PayCheckService payCheckService;
 
     @Autowired
     private PayableService payableService;
@@ -91,6 +83,7 @@ public class ClaimCalServiceImpl implements IClaimCalService {
         //责任匹配
 
         //拒赔判断
+        claimCaseCalculateInfo = payCheckService.calculateCheck(claimCaseCalculateInfo);
 
         //可理算金额和汇率转换
         claimCaseCalculateInfo = payableService.calculatePayable(claimCaseCalculateInfo);
@@ -228,8 +221,8 @@ public class ClaimCalServiceImpl implements IClaimCalService {
 //        if(String.valueOf(HttpStatus.SUCCESS).equals(dealCode)){
 //            return true;
 //        }
-
-        return save;
+        log.info("案件{}计算成功",claimCaseCalculateInfo.getRptNo());
+        return true;
     }
 
 }

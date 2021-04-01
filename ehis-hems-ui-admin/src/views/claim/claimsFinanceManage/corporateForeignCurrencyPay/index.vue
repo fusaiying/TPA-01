@@ -158,6 +158,7 @@
         hospitalOptions: [],
         deptListOptions: [],
         sys_yes_noOptions: [],
+        searchNum:1
       }
     },
     async mounted() {
@@ -206,6 +207,23 @@
       })
     },
     methods: {
+      searchTable(){
+        if (this.searchNum==2){
+          search('tab')
+        }else {
+          let query = {
+            pageNum: this.queryParams.pageNum,
+            pageSize: this.queryParams.pageSize,
+            organCode: this.organCode
+          }
+          initForeignList(query).then(res => {
+            if (res != null && res.code === 200) {
+              this.tableData = res.rows
+              this.totalCount = res.total
+            }
+          })
+        }
+      },
       resetForm() {
         this.$refs.searchForm.resetFields()
         this.searchForm.caseDate=[]
@@ -227,6 +245,7 @@
           this.searchForm.pageNum = 1
           this.searchForm.pageSize = 10
         }
+        this.searchNum=2
         foreignList(this.searchForm).then(res => {
           if (res != null && res.code === 200) {
             this.tableData = res.rows

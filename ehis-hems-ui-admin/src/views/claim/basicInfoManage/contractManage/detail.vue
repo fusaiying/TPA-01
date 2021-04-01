@@ -58,6 +58,9 @@
             <span class="info_span to_right">合约编码：</span><span class="info_span">{{ providerContractInfo.contractNo }}</span>
           </el-col>
           <el-col :span="8">
+            <span class="info_span to_right">机构类别：</span><span class="info_span">{{ getServiceTypeNameByValue(providerContractInfo.providerType) }}</span>
+          </el-col>
+          <el-col :span="8">
             <span class="info_span to_right">状态：</span><span class="info_span">{{ getStatuTypeNameByValue(providerContractInfo.bussinessStatus) }}</span>
           </el-col>
           <el-col :span="8">
@@ -378,6 +381,7 @@
         contractLimitTypes: [],
         contractTypes:[],
         statusSlects:[],
+        servicetype: [],
         supplierInfoSelects:[],
         cooperativeUnitSelects:[],
         serviceInfoSelects:[],
@@ -421,6 +425,9 @@
       this.getDicts("state").then(response => {
         this.statusSlects = response.data;
       });
+       this.getDicts("service_type").then(response => {
+         this.servicetype = response.data;
+       });
 
       if (this.flag == '01') {
         //供应商合约
@@ -491,6 +498,9 @@
       getStatuTypeNameByValue(value){
         return this.selectDictLabel(this.statusSlects, value)
       },
+        getServiceTypeNameByValue(value){
+          return this.selectDictLabel(this.servicetype, value)
+        },
       getTypeNameByValue(value){
         return this.selectDictLabel(this.onceTypes, value)
       },
@@ -561,6 +571,11 @@
             } else {
               this.providerContractInfo = detailData;
               // straightT
+
+              getSupplierContractDetail(this.providerContractInfo.connectedContract).then(response => {
+                this.providerContractInfo.connectedContract = response.data.contractName;
+              })
+
               let straightStr = '';
               if(detailData.straight != '') {
                 let straightData =detailData.straight.split(",");
@@ -572,6 +587,8 @@
                 }
                 this.providerContractInfo.straight = (straightStr.substring(1));
               }
+
+
             }
           }
         }).catch(error => {

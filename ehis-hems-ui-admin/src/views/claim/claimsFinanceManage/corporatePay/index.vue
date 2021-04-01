@@ -239,7 +239,7 @@
     methods: {
       searchTable(){
         if (this.searchNum==2){
-          search('tab')
+          this.search('tab')
         }else {
           let query = {
             pageNum: this.queryParams.pageNum,

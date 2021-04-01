@@ -291,7 +291,7 @@ SELECT a.policy_manage_com,a.policy_no,a.insured_no,b.birthday,b.occupation FROM
 
     <select id="selectDutyList" parameterType="String" resultMap="DutyVo">
         select DISTINCT
-            cpdd.plan_code,cpdd.duty_detail_name,cpdd.duty_detail_code,cpdd.apply_reason,c.duty_code,c.risk_code,c.risk_name,
+            cpd.plan_code,cpdd.duty_detail_name,cpdd.duty_detail_code,cpdd.apply_reason,c.duty_code,c.risk_code,c.risk_name,
             c.duty_name
         from claim_product_duty_detail cpdd
                  inner join (select prr.risk_name,cp.risk_code,cpd.duty_name,cpd.duty_code
@@ -299,7 +299,8 @@ SELECT a.policy_manage_com,a.policy_no,a.insured_no,b.birthday,b.occupation FROM
                                       inner join policy_risk_relation prr on prr.risk_name=cp.risk_name
                                       inner join claim_product_duty  cpd on cpd.risk_code=prr.risk_code) c
                             on c.duty_code=cpdd.duty_code
-                 inner join policy_info pi on pi.plan_code=cpdd.plan_code
+                    inner join  claim_product_duty cpd on  cpdd.duty_code=cpd.duty_code
+                 inner join policy_info pi on pi.plan_code=cpd.plan_code
         where c.risk_name = #{riskName}  and pi.insured_no=#{insuredNo}
     </select>
     

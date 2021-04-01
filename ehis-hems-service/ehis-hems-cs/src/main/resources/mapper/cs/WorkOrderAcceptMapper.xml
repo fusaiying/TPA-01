@@ -234,7 +234,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <update id="updateClickTime"  parameterType="com.paic.ehis.cs.domain.WorkOrderAccept">
         update work_order_accept
-        set click_time = #{clickTime} , update_by=#{updateBy} , update_time = #{updateTime}
+        set click_time = #{clickTime} , update_by=#{updateBy} , update_time = #{updateTime}, handle_time = #{handleTime}
         where  work_order_no = #{workOrderNo} and ifnull(click_time,'')= ''
     </update>
 

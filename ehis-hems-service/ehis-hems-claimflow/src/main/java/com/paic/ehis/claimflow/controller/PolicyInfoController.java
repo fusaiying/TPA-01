@@ -53,7 +53,20 @@ public class PolicyInfoController extends BaseController
        return  policyInfoService.selectPolicyInfoListByPolicyNo(policyAndRiskRelation);
 
     }
+    /*跨服务 根据出单公司险种查询 险种层级数据 */
+    @PostMapping("/companyRiskInfo")
+    public CompanyRiskPolicyInfo selectCompanyRiskInfo(@RequestBody PolicyAndRiskRelation policyAndRiskRelation)
+    {
+        return  policyInfoService.selectCompanyRiskInfo(policyAndRiskRelation);
 
+    }
+    /* 跨服务 根据出单公司险种查询 险种层级数据 */
+    @PostMapping("/companyRiskPolicyInfo")
+    public CompanyRiskPolicyInfo selectCompanyRiskPolicyInfo(@RequestBody PolicyAndRiskRelation policyAndRiskRelation)
+    {
+        return  policyInfoService.selectCompanyRiskPolicyInfo(policyAndRiskRelation);
+
+    }
     /**
      * 导出保单信息列表
      */

@@ -71,6 +71,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         pi.valid_start_date,
         pi.company_code,
         pi.company_name,
+        pi.valid_start_date,
         ifnull(pi.prem,0),
         ifnull(totalPeople,0),
         sumPerm,

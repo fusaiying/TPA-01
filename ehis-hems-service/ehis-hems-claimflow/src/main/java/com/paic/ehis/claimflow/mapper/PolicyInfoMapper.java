@@ -43,6 +43,12 @@ public interface PolicyInfoMapper
     /* 根据保单、分单查询保单数据 */
     public CompanyRiskPolicyInfo selectPolicyInfoListByPolicyNo(PolicyAndRiskRelation policyAndRiskRelation);
 
+/* 根据出单公司险种查询 险种层级数据 */
+    public CompanyRiskPolicyInfo selectCompanyRiskInfo(PolicyAndRiskRelation policyAndRiskRelation);
+
+    /* 根据出单公司险种查询 分单层级数据 */
+    public CompanyRiskPolicyInfo selectCompanyRiskPolicyInfo(PolicyAndRiskRelation policyAndRiskRelation);
+
     public CustomerInfoMap selectCustomerInfoMap(String insuredNo);
 
     /**

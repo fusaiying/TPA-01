@@ -162,7 +162,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="payStatus"    column="pay_status"    />
         <result property="payDate"    column="pay_date"    />
         <result property="payFailDate"    column="pay_fail_date"    />
-        <result property="receiptNo"    column="receipt_no"    />
+        <result property="tradeSerial"    column="trade_serial"    />
         <result property="payFailReason"    column="pay_fail_reason"    />
         <result property="deptCode"    column="dept_code"    />
     </resultMap>

@@ -192,18 +192,6 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <el-row>
-          <el-col :span="8">
-            <el-form-item label="预约时间："  style="white-space: nowrap"  prop="complaintTime">
-              <el-date-picker
-                v-model="workPoolData.complaintTime"
-                type="datetime"
-                placeholder="选择日期时间"
-                value-format="yyyy-MM-dd HH:mm:ss">
-              </el-date-picker>
-            </el-form-item>
-          </el-col>
-        </el-row>
         <el-form-item label="投诉内容：" prop="content">
           <el-input
             v-model="workPoolData.content"

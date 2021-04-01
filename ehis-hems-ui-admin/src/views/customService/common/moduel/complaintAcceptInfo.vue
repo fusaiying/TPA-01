@@ -50,7 +50,7 @@
         </el-col>
         <el-col :span="8">
           <el-form-item label="客户号：" prop="insuredPersonId">
-            <el-input v-model="acceptForm.insuredPersonId" class="item-width" size="mini"/>
+            <el-input v-model="acceptForm.insuredPersonId" class="item-width" size="mini" disabled/>
           </el-form-item>
         </el-col>
       </el-row>
@@ -322,7 +322,7 @@
           name1:{validator: checkName1, required: true, trigger: ['blur']},
           name2: {validator: checkName2, required: true, trigger: ['blur']},
           mobilePhone1: {validator: checkMobilePhone1, required: true, trigger: ['blur']},
-          mobilePhone2: {validator: checkMobilePhone2, required: true, trigger: ['blur']},
+          //mobilePhone2: {validator: checkMobilePhone2, required: true, trigger: ['blur']},
           organCode: [{required: true, message: '出单机构不能为空', trigger: 'change'}],
           content: [{required: true, message: '投诉内容不能为空', trigger: 'blur'}]
         }

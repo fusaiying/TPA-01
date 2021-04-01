@@ -54,6 +54,16 @@ public class PolicyInfoServiceImpl implements IPolicyInfoService
     public CompanyRiskPolicyInfo selectPolicyInfoListByPolicyNo(PolicyAndRiskRelation policyAndRiskRelation) {
         return policyInfoMapper.selectPolicyInfoListByPolicyNo(policyAndRiskRelation);
     }
+    /* 根据出单公司险种查询 险种层级数据 */
+    @Override
+    public CompanyRiskPolicyInfo selectCompanyRiskInfo(PolicyAndRiskRelation policyAndRiskRelation) {
+        return policyInfoMapper.selectCompanyRiskInfo(policyAndRiskRelation);
+    }
+    /* 根据出单公司险种查询 分单层级数据 */
+    @Override
+    public CompanyRiskPolicyInfo selectCompanyRiskPolicyInfo(PolicyAndRiskRelation policyAndRiskRelation) {
+        return policyInfoMapper.selectCompanyRiskPolicyInfo(policyAndRiskRelation);
+    }
 
     /**
      * 查询保单信息列表

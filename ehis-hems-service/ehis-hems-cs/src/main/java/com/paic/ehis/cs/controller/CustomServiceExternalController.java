@@ -12,8 +12,9 @@ import com.paic.ehis.cs.domain.vo.*;
 import com.paic.ehis.cs.service.*;
 import com.paic.ehis.cs.utils.CodeEnum;
 import com.paic.ehis.cs.utils.RequestWrapper;
+import com.paic.ehis.system.api.ClaimFlowService;
+import com.paic.ehis.system.api.domain.dto.ClaimFlowDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -37,6 +38,9 @@ public class CustomServiceExternalController extends BaseController {
 
     @Autowired
     private IInterfaceMessageService iInterfaceMessageService;
+
+    @Autowired
+    private ClaimFlowService claimFlowService;
 
 
     //添加到配置文件中
@@ -70,7 +74,7 @@ public class CustomServiceExternalController extends BaseController {
      * @param request
      * @return
      */
-    @Transactional
+//    @Transactional
     @PostMapping("/baseAccept")
     public AjaxResult addBaseAccept(HttpServletRequest request) {
         //请求参数获取
@@ -131,11 +135,31 @@ public class CustomServiceExternalController extends BaseController {
                 return AjaxResult.error("受理案件号重复受理");
             }
             //根据类型不同进行必传条件校验
-//            if ("informationApplication".equals(businessData.getType())) {
-//
-//            } else if("complainApplication".equals(businessData.getType())){
-//
-//            }
+            String accepter = jsonObject.getString("accepter");
+            if (StringUtils.isEmpty(accepter)) {
+                return AjaxResult.error("受理人不能为空");
+            }
+
+            String acceptDate = jsonObject.getString("acceptDate");
+            if (StringUtils.isEmpty(acceptDate)) {
+                return AjaxResult.error("受理时间不能为空");
+            }
+
+            if ("informationApplication".equals(businessData.getType())) {
+                String serviceSecondItemCode = jsonObject.getString("serviceSecondItemCode");
+                if (StringUtils.isEmpty(serviceSecondItemCode)) {
+                    return AjaxResult.error("二级服务项目代码不能为空");
+                }
+            }
+//            InterfaceMessage interfaceMessage=new InterfaceMessage();
+//            interfaceMessage.setParameters(params);
+//            interfaceMessage.setBody(body);
+//            interfaceMessage.setApplicationRole("01");
+//            interfaceMessage.setCreatedBy("interface");
+//            interfaceMessage.setUpdatedBy("interface");
+//            interfaceMessage.setCreatedTime(DateUtils.getNowDate());
+//            interfaceMessage.setUpdatedTime(DateUtils.getNowDate());
+//            iInterfaceMessageService.insertInterfaceMessage(interfaceMessage);
             //转换成业务入参对象
             businessData =JSONObject.toJavaObject(jsonObject, BasicServiceAppilcation.class);
         } catch (Exception e) {
@@ -163,7 +187,7 @@ public class CustomServiceExternalController extends BaseController {
      * @param request
      * @return
      */
-    @Transactional
+//    @Transactional
     @PostMapping("/incrementAccept")
     public AjaxResult addIncrementAccept(HttpServletRequest request) {
         //请求参数获取:
@@ -316,19 +340,84 @@ public class CustomServiceExternalController extends BaseController {
      */
     @PostMapping("queryPolicyListService")
     public AjaxResult queryPolicyListService(HttpServletRequest request){
+//方式二：
+        Map requestMap=request.getParameterMap();
+        JSONArray jArray = new JSONArray();
+        jArray.add(requestMap);
+        String params = jArray.toString();
+        logger.info("理赔信息查询接口请求获取到参数: {}", params);
+        //请求体获取
+        RequestWrapper requestWrapper = new RequestWrapper(request);
+        String body = requestWrapper.getBody();
+        logger.info("理赔信息查询接口请求获取到Body内容:{}", body);
+        if (StringUtils.isEmpty(body)) {
+            return AjaxResult.error("请求体内容不能为空");
+        }
+        //请求体必传信息校验，请求体是Json的
+        ClaimFlowDTO businessData=null;
+        try {
+            JSONObject jsonObject = JSONObject.parseObject(body);
+            String certno = jsonObject.getString("certno");
+            if (StringUtils.isEmpty(certno)) {
+                return AjaxResult.error("分单号不能为空");
+            }
+            //转换成业务入参对象
+            businessData =JSONObject.toJavaObject(jsonObject, ClaimFlowDTO.class);
+        } catch (Exception e) {
+            logger.error("理赔信息查询接口，处理请请求体异常:{}", e.getMessage());
+            return AjaxResult.error("请求体内容不合法");
+        }
 
-        return null;
+        try {
+            return claimFlowService.queryClaimListToGCC(businessData);
+        }catch (Exception e){
+            logger.error("服务器内部处理异常:{}", e.getMessage());
+            return AjaxResult.error("服务器内部处理异常,请联系运维人员");
+        }
     }
 
     /**
-     * 保单信息查询接口
+     * 保单信息资料查询接口
      * @param request
      * @return
      */
     @PostMapping("queryPolicyInfoService")
     public AjaxResult queryPolicyInfoService(HttpServletRequest request){
 
-        return null;
+        //方式二：
+        Map requestMap=request.getParameterMap();
+        JSONArray jArray = new JSONArray();
+        jArray.add(requestMap);
+        String params = jArray.toString();
+        logger.info("保单信息资料查询接口请求获取到参数: {}", params);
+        //请求体获取
+        RequestWrapper requestWrapper = new RequestWrapper(request);
+        String body = requestWrapper.getBody();
+        logger.info("保单信息资料查询接口请求获取到Body内容:{}", body);
+        if (StringUtils.isEmpty(body)) {
+            return AjaxResult.error("请求体内容不能为空");
+        }
+        //请求体必传信息校验，请求体是Json的
+        ClaimFlowDTO businessData=null;
+        try {
+            JSONObject jsonObject = JSONObject.parseObject(body);
+            String policyNo = jsonObject.getString("policyNo");
+            if (StringUtils.isEmpty(policyNo)) {
+                return AjaxResult.error("分单号不能为空");
+            }
+            //转换成业务入参对象
+            businessData =JSONObject.toJavaObject(jsonObject, ClaimFlowDTO.class);
+        } catch (Exception e) {
+            logger.error("保单信息资料查询接口，处理请请求体异常:{}", e.getMessage());
+            return AjaxResult.error("请求体内容不合法");
+        }
+
+        try {
+            return claimFlowService.queryPolicyInfoToGCC(businessData);
+        }catch (Exception e){
+            logger.error("服务器内部处理异常:{}", e.getMessage());
+            return AjaxResult.error("服务器内部处理异常,请联系运维人员");
+        }
     }
 
     /**
@@ -338,8 +427,40 @@ public class CustomServiceExternalController extends BaseController {
      */
     @PostMapping("queryDutyInfoService")
     public AjaxResult queryDutyInfoService(HttpServletRequest request){
+        //方式二：
+        Map requestMap=request.getParameterMap();
+        JSONArray jArray = new JSONArray();
+        jArray.add(requestMap);
+        String params = jArray.toString();
+        logger.info("理赔信息查询接口请求获取到参数: {}", params);
+        //请求体获取
+        RequestWrapper requestWrapper = new RequestWrapper(request);
+        String body = requestWrapper.getBody();
+        logger.info("理赔信息查询接口请求获取到Body内容:{}", body);
+        if (StringUtils.isEmpty(body)) {
+            return AjaxResult.error("请求体内容不能为空");
+        }
+        //请求体必传信息校验，请求体是Json的
+        ClaimFlowDTO businessData=null;
+        try {
+            JSONObject jsonObject = JSONObject.parseObject(body);
+            String certno = jsonObject.getString("certno");
+            if (StringUtils.isEmpty(certno)) {
+                return AjaxResult.error("分单号不能为空");
+            }
+            //转换成业务入参对象
+            businessData =JSONObject.toJavaObject(jsonObject, ClaimFlowDTO.class);
+        } catch (Exception e) {
+            logger.error("理赔信息查询接口，处理请请求体异常:{}", e.getMessage());
+            return AjaxResult.error("请求体内容不合法");
+        }
 
-        return null;
+        try {
+            return claimFlowService.queryClaimListToGCC(businessData);
+        }catch (Exception e){
+            logger.error("服务器内部处理异常:{}", e.getMessage());
+            return AjaxResult.error("服务器内部处理异常,请联系运维人员");
+        }
     }
     /**
      * 理赔信息查询
@@ -348,8 +469,40 @@ public class CustomServiceExternalController extends BaseController {
      */
     @PostMapping("queryClaimInfoService")
     public AjaxResult queryClaimInfoService(HttpServletRequest request){
+        //方式二：
+        Map requestMap=request.getParameterMap();
+        JSONArray jArray = new JSONArray();
+        jArray.add(requestMap);
+        String params = jArray.toString();
+        logger.info("理赔信息查询接口请求获取到参数: {}", params);
+        //请求体获取
+        RequestWrapper requestWrapper = new RequestWrapper(request);
+        String body = requestWrapper.getBody();
+        logger.info("理赔信息查询接口请求获取到Body内容:{}", body);
+        if (StringUtils.isEmpty(body)) {
+            return AjaxResult.error("请求体内容不能为空");
+        }
+        //请求体必传信息校验，请求体是Json的
+        ClaimFlowDTO businessData=null;
+        try {
+            JSONObject jsonObject = JSONObject.parseObject(body);
+            String certno = jsonObject.getString("certno");
+            if (StringUtils.isEmpty(certno)) {
+                return AjaxResult.error("分单号不能为空");
+            }
+            //转换成业务入参对象
+            businessData =JSONObject.toJavaObject(jsonObject, ClaimFlowDTO.class);
+        } catch (Exception e) {
+            logger.error("理赔信息查询接口，处理请请求体异常:{}", e.getMessage());
+            return AjaxResult.error("请求体内容不合法");
+        }
 
-        return null;
+        try {
+            return claimFlowService.queryClaimListToGCC(businessData);
+        }catch (Exception e){
+            logger.error("服务器内部处理异常:{}", e.getMessage());
+            return AjaxResult.error("服务器内部处理异常,请联系运维人员");
+        }
     }
     /**
      * 理赔受理信息查询
@@ -358,8 +511,40 @@ public class CustomServiceExternalController extends BaseController {
      */
     @PostMapping("queryClaimAcceptService")
     public AjaxResult queryClaimAcceptService(HttpServletRequest request){
+        //方式二：
+        Map requestMap=request.getParameterMap();
+        JSONArray jArray = new JSONArray();
+        jArray.add(requestMap);
+        String params = jArray.toString();
+        logger.info("理赔受理信息查询接口请求获取到参数: {}", params);
+        //请求体获取
+        RequestWrapper requestWrapper = new RequestWrapper(request);
+        String body = requestWrapper.getBody();
+        logger.info("理赔受理信息查询接口请求获取到Body内容:{}", body);
+        if (StringUtils.isEmpty(body)) {
+            return AjaxResult.error("请求体内容不能为空");
+        }
+        //请求体必传信息校验，请求体是Json的
+        ClaimFlowDTO businessData=null;
+        try {
+            JSONObject jsonObject = JSONObject.parseObject(body);
+            String docuno = jsonObject.getString("docuno");
+            if (StringUtils.isEmpty(docuno)) {
+                return AjaxResult.error("理赔案件号不能为空");
+            }
+            //转换成业务入参对象
+            businessData =JSONObject.toJavaObject(jsonObject, ClaimFlowDTO.class);
+        } catch (Exception e) {
+            logger.error("理赔受理信息查询接口，处理请请求体异常:{}", e.getMessage());
+            return AjaxResult.error("请求体内容不合法");
+        }
 
-        return null;
+        try {
+            return claimFlowService.queryClaimAcceptList(businessData);
+        }catch (Exception e){
+            logger.error("服务器内部处理异常:{}", e.getMessage());
+            return AjaxResult.error("服务器内部处理异常,请联系运维人员");
+        }
     }
     /**
      * 理赔历史账单明细查询
@@ -369,7 +554,40 @@ public class CustomServiceExternalController extends BaseController {
     @PostMapping("queryClaimBillService")
     public AjaxResult queryClaimBillService(HttpServletRequest request){
 
-        return null;
+        //方式二：
+        Map requestMap=request.getParameterMap();
+        JSONArray jArray = new JSONArray();
+        jArray.add(requestMap);
+        String params = jArray.toString();
+        logger.info("理赔历史账单明细查询接口请求获取到参数: {}", params);
+        //请求体获取
+        RequestWrapper requestWrapper = new RequestWrapper(request);
+        String body = requestWrapper.getBody();
+        logger.info("理赔历史账单明细查询接口请求获取到Body内容:{}", body);
+        if (StringUtils.isEmpty(body)) {
+            return AjaxResult.error("请求体内容不能为空");
+        }
+        //请求体必传信息校验，请求体是Json的
+        ClaimFlowDTO businessData=null;
+        try {
+            JSONObject jsonObject = JSONObject.parseObject(body);
+            String applicationCaseNo = jsonObject.getString("seqno");
+            if (StringUtils.isEmpty(applicationCaseNo)) {
+                return AjaxResult.error("账单序号不能为空");
+            }
+            //转换成业务入参对象
+            businessData =JSONObject.toJavaObject(jsonObject, ClaimFlowDTO.class);
+        } catch (Exception e) {
+            logger.error("理赔历史账单明细查询接口，处理请请求体异常:{}", e.getMessage());
+            return AjaxResult.error("请求体内容不合法");
+        }
+
+        try {
+            return claimFlowService.queryClaimBillDetail(businessData);
+        }catch (Exception e){
+            logger.error("服务器内部处理异常:{}", e.getMessage());
+            return AjaxResult.error("服务器内部处理异常,请联系运维人员");
+        }
     }
 
     /**

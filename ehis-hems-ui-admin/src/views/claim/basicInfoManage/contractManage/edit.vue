@@ -356,7 +356,7 @@
           <el-col :span="8" v-if="countItem">
             <el-form-item label="次均控费除外项目：" prop="averageCostExcept">
               <el-input :disabled="isShow" v-model="providerForm.averageCostExcept" class="item-width" clearable
-                        size="mini"
+                        size="mini" maxlength="100"
                         placeholder="请录入"/>
             </el-form-item>
           </el-col>
@@ -2194,7 +2194,10 @@
               obj = this.providerInfoSelects.find((item) => {
                 return item.dictValue == this.providerForm.providerCode;
               });
-              let proObjName = obj.dictLabel;
+              let proObjName = "";
+              if(obj){
+                proObjName = obj.dictLabel;
+              }
               let baseSupplierContract = {
                 flag: '02',
                 providerName: proObjName,

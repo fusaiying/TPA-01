@@ -346,12 +346,11 @@ export default {
       params.itemCode = this.inspectionQueryForm.itemCode
       params.status = this.inspectionQueryForm.status
       params.result = this.inspectionQueryForm.result
-
       if (query == '01') {
         //调用信息需求质检详情导出的接口
-        this.download('cs/spotCheck/internal/selectWorkOrder/exportOneInformation', params, `质检查询_${new Date().getTime()}.xlsx`)
+        this.download('cs/spotCheck/internal/selectWorkOrder/exportOneInformation', {...params}, `质检查询_${new Date().getTime()}.xlsx`)
       } else if (query == '03') {
-        this.download('cs/spotCheck/internal/selectWorkOrder/exportOne', params, `质检查询_${new Date().getTime()}.xlsx`)
+        this.download('cs/spotCheck/internal/selectWorkOrder/exportOne', {...params}, `质检查询_${new Date().getTime()}.xlsx`)
       }
       /*
             this.download('cs/spotCheck/internal/selectWorkOrder/exportOne', params, `质检查询_${new Date().getTime()}.xlsx`);*/
@@ -359,12 +358,34 @@ export default {
     //质检差错清单导出
     sendMany1() {
       const params = {
-        firstEndCaseStartTime: undefined,
-        firstEndCaseEndTime: undefined,
-        workOrderNo: this.confirmationQueryForm.workOrderNo,
-        serviceItemCode: this.confirmationQueryForm.serviceItem,
-      };
-      this.download('cs/spotCheck/internal/selectWorkOrder/exportTwo', params, `质检差错_${new Date().getTime()}.xlsx`);
+        endCaseStartDate: '',
+        endCaseEndDate: '',
+        inspectionStartDate: '',
+        inspectionEndDate: '',
+        organCode: '',
+        updatedBy: '',
+        itemCode: '',
+        status: '',
+        result: ''
+      }
+      if (this.inspectionQueryForm.endCaseDate != null && this.inspectionQueryForm.endCaseDate != '') {
+        if (this.inspectionQueryForm.endCaseDate.length > 0) {
+          params.endCaseStartDate = this.inspectionQueryForm.endCaseDate[0]
+          params.endCaseEndDate = this.inspectionQueryForm.endCaseDate[1]
+        }
+      }
+      if (this.inspectionQueryForm.inspectionDate != null && this.inspectionQueryForm.inspectionDate != '') {
+        if (this.inspectionQueryForm.inspectionDate.length > 0) {
+          params.inspectionStartDate = this.inspectionQueryForm.inspectionDate[0]
+          params.inspectionEndDate = this.inspectionQueryForm.inspectionDate[1]
+        }
+      }
+      params.organCode = this.inspectionQueryForm.organCode
+      params.updatedBy = this.inspectionQueryForm.updatedBy
+      params.itemCode = this.inspectionQueryForm.itemCode
+      params.status = this.inspectionQueryForm.status
+      params.result = this.inspectionQueryForm.result
+      this.download('cs/spotCheck/internal/selectWorkOrder/exportOneError', {...params}, `质检差错_${new Date().getTime()}.xlsx`);
     },
     send() {
 

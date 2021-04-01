@@ -935,4 +935,86 @@
         </if>
 
     </select>
+
+    <resultMap id="claimListVoMap" type="com.paic.ehis.claimflow.domain.vo.GCCClaimListVo">
+        <result property="mainPlanName"    column="risk_name"    />
+        <result property="polno"    column="policy_no"    />
+        <result property="customerNo"    column="org_insured_no"    />
+        <result property="mainPlanCode"    column="risk_code"    />
+        <result property="age"    column="age"    />
+        <!-- 配置一对多的关系 -->
+        <!-- 一对多级联查询，ofType表示集合中的元素类型，将uid传递给selectOrdersByld -->
+        <collection property="claimList"
+                    column="{polno=policy_no,customerNo=org_insured_no}"
+        ofType="com.paic.ehis.claimflow.domain.vo.GCCClaimInfo"
+        javaType="java.util.List" select="com.paic.ehis.claimflow.mapper.ClaimCaseMapper.queryClaimInfosToGCC"/>
+    </resultMap>
+
+    <select id="queryClaimListToGCC" parameterType="com.paic.ehis.claimflow.domain.dto.ClaimFlowDTO" resultMap="claimListVoMap">
+        select distinct prr.risk_code,prr.risk_name,pi.policy_no,pid.org_insured_no,pid.birthday,
+            TIMESTAMPDIFF(YEAR, pid.birthday, CURDATE()) as age
+        from claim_case_policy ccp left join policy_info pi on ccp.policy_no=pi.policy_no
+            left join policy_risk_relation prr on pi.policy_no=prr.policy_no
+            left join policy_insured pid on pi.insured_no=pid.insured_no
+        where pi.policy_no is not null
+        <if test="certno != null and certno != ''">
+            and pi.policy_item_no=#{certno}
+        </if>
+        <if test="customerNo != null and customerNo != ''">
+            and pid.org_insured_no=#{customerNo}
+        </if>
+    </select>
+    <resultMap id="claimInfosMap" type="com.paic.ehis.claimflow.domain.vo.GCCClaimInfo">
+        <result property="examResult"    column="pay_conclusion"    />
+        <result property="historyAmt"    column="sum_pay_amount"    />
+        <result property="paidAmt"    column="pay_amount"    />
+        <association property="accidentInfoMap" javaType="com.paic.ehis.claimflow.domain.vo.GCCAccidentInfo">
+            <result property="overseasOccurFlag" column="name" />
+            <result property="notiDate" column="customer_application_date" />
+            <result property="acciPlace" column="acc_address" />
+            <result property="statusStageName" column="curr_situation" />
+        </association>
+        <association property="generalInfoMap" javaType="com.paic.ehis.claimflow.domain.vo.GCCGeneralInfo">
+            <result property="rejeCause" column="refused_reason" />
+            <result property="rcptno" column="batch_no" />
+            <result property="caseStsName" column="case_status" />
+            <result property="acciDate" column="acc_date" />
+            <result property="gainedDate" column="pay_date" />
+            <result property="errorDescription" column="pay_fail_reason" />
+            <result property="examComment" column="claim_check" />
+            <result property="acciName" column="name" />
+            <result property="rejeAmt" column="refused_amount" />
+            <result property="caseno" column="rpt_no" />
+            <result property="virementStatus" column="pay_status" />
+            <result property="acciDesc" column="acc_describe" />
+            <result property="isBalancedDirecily" column="claim_type" />
+            <result property="docuno" column="rpt_no" />
+        </association>
+    </resultMap>
+
+    <select id="queryClaimInfosToGCC" parameterType="java.util.Map" resultMap="claimInfosMap">
+        select distinct ccc.refused_reason,cc.batch_no,cc.case_status,acc_date,
+            fpifpdi.pay_date,fpifpdi.pay_fail_reason,
+            ccc.claim_check,ccp.name,
+            ccc.refused_amount,cca.rpt_no,
+            fpifpdi.pay_status,
+            cca.acc_describe,cb.claim_type,cca.rpt_no,ccc.pay_conclusion,
+            (select sum(ccc1.pay_amount) from claim_case cc1,claim_case_cal ccc1
+                where cc1.rpt_no=ccc1.rpt_no and cc1.case_status='99'and cc1.rpt_no=cc.rpt_no
+                group by cc1.rpt_no
+            ) as sum_pay_amount,
+            ccc.pay_amount,cca.customer_application_date,cca.acc_address,cca.curr_situation
+        from claim_case cc left join claim_case_accept cca on cc.rpt_no=cca.rpt_no
+            left join claim_case_policy ccp on cc.rpt_no=ccp.rpt_no
+            left join policy_insured pi on ccp.insured_no=pi.insured_no
+            left join claim_batch cb on cc.batch_no=cb.batch_no
+            left join claim_case_cal ccc on cc.rpt_no=ccc.rpt_no
+            left join (
+                select fpdi.rpt_no,fpi.pay_status,fpi.pay_date,fpi.pay_fail_date,fpi.pay_fail_reason,fpdi.status
+                from finance_pay_info fpi,finance_pay_detail_info fpdi where fpi.pay_batch_no=fpdi.pay_batch_no
+            ) fpifpdi on cc.rpt_no=fpifpdi.rpt_no
+        where cc.status='Y' and cca.status='Y' and ccp.status='Y' and cb.status='Y' and ccc.status='Y' and fpifpdi.status='Y'
+            and ccp.policy_no=#{polno} and pi.org_insured_no=#{customerNo}
+    </select>
+
 </mapper>

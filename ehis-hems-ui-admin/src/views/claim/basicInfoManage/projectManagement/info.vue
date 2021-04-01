@@ -61,6 +61,7 @@
               <el-input v-model="form.serviceName"
                         class="item-width"
                         clearable
+                        maxlength="50"
                         size="mini"
                         placeholder="请输入"/>
             </el-form-item>

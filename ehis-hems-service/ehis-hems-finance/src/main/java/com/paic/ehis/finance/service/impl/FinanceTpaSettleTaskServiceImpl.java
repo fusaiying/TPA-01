@@ -341,7 +341,7 @@ public class FinanceTpaSettleTaskServiceImpl implements IFinanceTpaSettleTaskSer
                 detailInfo.setName(companyRiskPolicyInfo.getName());
                 detailInfo.setPrem(companyRiskPolicyInfo.getPrem());
                 if ("02".equals(tpaSettleInfo.getSettlementType())) {
-                    detailInfo.setPremiumRatio(tpaSettleInfo.getSettlementValue().divide(new BigDecimal(100), 2, BigDecimal.ROUND_HALF_DOWN));
+                    detailInfo.setPremiumRatio(tpaSettleInfo.getSettlementValue());
                 }
                 detailInfo.setValidStartDate(companyRiskPolicyInfo.getValidStartDate());
                 detailInfo.setAppName(companyRiskPolicyInfo.getAppName());

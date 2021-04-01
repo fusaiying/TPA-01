@@ -255,7 +255,15 @@ public class BaseProviderInfoServiceImpl implements IBaseProviderInfoService
             baseProviderInfo.setUpdateBy(SecurityUtils.getUsername());
             baseProviderInfo.setSerialNo(PubFun.createMySqlMaxNoUseCache("providerinfoSer",12,12));
            if("01".equals(baseProviderInfo.getOrgFlag())){
-               baseProviderInfo.setProviderCode("H"+ PubFun.createMySqlMaxNoUseCache("hospitalCode",10,9));
+               //baseProviderInfo.setProviderCode("H"+ PubFun.createMySqlMaxNoUseCache("hospitalCode",10,9));
+               String providerCode = baseProviderInfoMapper.selectMaxCode();
+               providerCode = providerCode.replace("H","0");
+               if(providerCode !=null && providerCode !=""){
+                   providerCode = (Integer.parseInt(providerCode) + 1) +"";
+                   baseProviderInfo.setProviderCode(providerCode);
+               }else{
+                   baseProviderInfo.setProviderCode(providerCode);
+               }
            }else if("02".equals(baseProviderInfo.getOrgFlag())){
                baseProviderInfo.setProviderCode("M"+ PubFun.createMySqlMaxNoUseCache("otherOrgCode",10,9));
            }

@@ -204,4 +204,7 @@ public interface BaseProviderInfoMapper
     public void updateIssue(@RequestBody List<String> serviceCodes);
 
     public void updateIssue1(@RequestBody List<String> serviceCodes);
+
+    //查询目前最大的医院编码
+    public String selectMaxCode();
 }

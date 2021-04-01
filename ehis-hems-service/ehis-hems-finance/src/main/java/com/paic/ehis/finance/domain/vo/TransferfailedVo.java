@@ -52,7 +52,7 @@ public class TransferfailedVo implements Serializable {
 
     /** 收据号 */
     @Excel(name = "收据号")
-    private String receiptNo;
+    private String tradeSerial;
 
     /** 转账失败原因 */
     @Excel(name = "转账失败原因")

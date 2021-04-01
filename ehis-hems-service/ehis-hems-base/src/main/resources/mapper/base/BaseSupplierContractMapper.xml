@@ -83,7 +83,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="contractPartyC != null  and contractPartyC != ''"> and contract_party_c = #{contractPartyC}</if>
             <if test="deposit != null "> and deposit = #{deposit}</if>
             <if test="cooperativeUnit != null  and cooperativeUnit != ''"> and cooperative_unit = #{cooperativeUnit}</if>
-            <if test="straight != null  and straight != ''"> and straight = #{straight}</if>
+            <if test="straight != null "> and straight = #{straight}</if>
             <if test="flag != null  and flag != ''"> and flag = #{flag}</if>
             <if test="contractControlFlag != null  and contractControlFlag != ''"> and contract_control_flag = #{contractControlFlag}</if>
             <if test="treatmentDiscount != null  and treatmentDiscount != ''"> and treatment_discount = #{treatmentDiscount}</if>
@@ -173,7 +173,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="contractPartyC != null and contractPartyC != ''">contract_party_c,</if>
             <if test="deposit != null">deposit,</if>
             <if test="cooperativeUnit != null and cooperativeUnit != ''">cooperative_unit,</if>
-            <if test="straight != null and straight != ''">straight,</if>
+            <if test="straight != null">straight,</if>
             <if test="flag != null">flag,</if>
             <if test="contractControlFlag != null and contractControlFlag != ''">contract_control_flag,</if>
             <if test="treatmentDiscount != null">treatment_discount,</if>
@@ -211,7 +211,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="contractType != null">#{contractType},</if>
             <if test="servcomNo != null">#{servcomNo},</if>
             <if test="providerCode != null and providerCode != ''">#{providerCode},</if>
-            <if test="providerCode != null and providerCode != ''">(select DISTINCT concat(t.chname1, IFNULL(CONCAT(' - ',t.enname1),'')) from base_provider_info t where t.provider_code = #{providerCode} and status = 'Y'),</if>
+            <if test="providerCode != null and providerCode != ''">(select DISTINCT concat(t.provider_code, ' - ', t.chname1) from base_provider_info t where t.provider_code = #{providerCode} and status = 'Y'),</if>
             <if test="contracttermType != null">#{contracttermType},</if>
             <if test="signDate != null">#{signDate},</if>
             <if test="cvaliDate != null">#{cvaliDate},</if>
@@ -225,7 +225,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="contractPartyC != null and contractPartyC != ''">#{contractPartyC},</if>
             <if test="deposit != null">#{deposit},</if>
             <if test="cooperativeUnit != null and cooperativeUnit != ''">#{cooperativeUnit},</if>
-            <if test="straight != null and straight != ''">#{straight},</if>
+            <if test="straight != null ">#{straight},</if>
             <if test="flag != null">#{flag},</if>
             <if test="contractControlFlag != null and contractControlFlag != ''">#{contractControlFlag},</if>
             <if test="treatmentDiscount != null">#{treatmentDiscount},</if>
@@ -271,7 +271,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="contractType != null">contract_type = #{contractType},</if>
             <if test="servcomNo != null">servcom_no = #{servcomNo},</if>
             <if test="providerCode != null and providerCode != ''">provider_code = #{providerCode},</if>
-            <if test="providerCode != null and providerCode != ''">provider_name = (select DISTINCT concat(t.chname1, IFNULL(CONCAT(' - ',t.enname1),'')) from base_provider_info t where t.provider_code =#{providerCode} and status = 'Y'),</if>
+            <if test="providerCode != null and providerCode != ''">provider_name = (select DISTINCT concat(t.provider_code, ' - ',t.chname1) from base_provider_info t where t.provider_code =#{providerCode} and status = 'Y'),</if>
             <if test="contracttermType != null">contractterm_type = #{contracttermType},</if>
             <if test="signDate != null">sign_date = #{signDate},</if>
             <if test="cvaliDate != null">cvali_date = #{cvaliDate},</if>
@@ -285,7 +285,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="contractPartyC != null ">contract_party_c = #{contractPartyC},</if>
             <if test="deposit != null">deposit = #{deposit},</if>
             <if test="cooperativeUnit != null and cooperativeUnit != ''">cooperative_unit = #{cooperativeUnit},</if>
-            <if test="straight != null and straight != ''">straight = #{straight},</if>
+            <if test="straight != null">straight = #{straight},</if>
             <if test="flag != null">flag = #{flag},</if>
             <if test="contractControlFlag != null">contract_control_flag = #{contractControlFlag},</if>
             <if test="treatmentDiscount != null">treatment_discount = #{treatmentDiscount},</if>

@@ -81,6 +81,7 @@
         task.remark,
         task.service_settle_amount,
         rule.settlement_value,
+        rule.settlement_type,
         ( SELECT count( * ) FROM finance_tpa_settle_detail a where a.settle_task_no=task.settle_task_no and a.risk_code=detail.risk_code) totalPeople
         FROM
         finance_tpa_settle_detail detail

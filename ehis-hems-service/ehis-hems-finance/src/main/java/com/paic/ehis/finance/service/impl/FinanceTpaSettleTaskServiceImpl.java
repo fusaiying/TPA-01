@@ -323,6 +323,9 @@ public class FinanceTpaSettleTaskServiceImpl implements IFinanceTpaSettleTaskSer
 
         List<TpaSettleInfo> tpaSettleInfos = financeTpaSettleTaskMapper.selectFinanceTpaSettleTaskViewDetail(financeTpaSettleTask);
         for (TpaSettleInfo tpaSettleInfo : tpaSettleInfos) {
+            if ("01".equals(tpaSettleInfo.getSettlementType())){
+
+            }
             List<TpaSettleDetailInfo> detailInfos = tpaSettleInfo.getDetailInfos();
             for (TpaSettleDetailInfo detailInfo : detailInfos) {
                 PolicyAndRiskRelation policyAndRiskRelation = new PolicyAndRiskRelation();

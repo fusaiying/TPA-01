@@ -4,7 +4,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.paic.ehis.finance.mapper.FinanceBorrowInfoMapper">
     
-    <resultMap type="com.paic.ehis.finance.domain.FinanceBorrowInfo" id="FinanceBorrowInfoResult">
+    <resultMap type="com.paic.ehis.system.api.domain.FinanceBorrowInfo" id="FinanceBorrowInfoResult">
         <result property="borrowId"    column="borrow_id"    />
         <result property="batchNo"    column="batch_no"    />
         <result property="rptNo"    column="rpt_no"    />
@@ -21,7 +21,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select borrow_id, batch_no, rpt_no, borrow_amount, status, create_by, create_time, update_by, update_time, dept_code from finance_borrow_info
     </sql>
 
-    <select id="selectFinanceBorrowInfoList" parameterType="com.paic.ehis.finance.domain.FinanceBorrowInfo" resultMap="FinanceBorrowInfoResult">
+    <select id="selectFinanceBorrowInfoList" parameterType="com.paic.ehis.system.api.domain.FinanceBorrowInfo" resultMap="FinanceBorrowInfoResult">
         <include refid="selectFinanceBorrowInfoVo"/>
         <where>  
             <if test="batchNo != null  and batchNo != ''"> and batch_no = #{batchNo}</if>
@@ -37,7 +37,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where borrow_id = #{borrowId}
     </select>
         
-    <insert id="insertFinanceBorrowInfo" parameterType="com.paic.ehis.finance.domain.FinanceBorrowInfo" useGeneratedKeys="true" keyProperty="borrowId">
+    <insert id="insertFinanceBorrowInfo" parameterType="com.paic.ehis.system.api.domain.FinanceBorrowInfo" useGeneratedKeys="true" keyProperty="borrowId">
         insert into finance_borrow_info
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="batchNo != null and batchNo != ''">batch_no,</if>
@@ -64,7 +64,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
     </insert>
 
-    <update id="updateFinanceBorrowInfo" parameterType="com.paic.ehis.finance.domain.FinanceBorrowInfo">
+    <update id="updateFinanceBorrowInfo" parameterType="com.paic.ehis.system.api.domain.FinanceBorrowInfo">
         update finance_borrow_info
         <trim prefix="SET" suffixOverrides=",">
             <if test="batchNo != null and batchNo != ''">batch_no = #{batchNo},</if>
@@ -91,10 +91,28 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
     </delete>
 
-    <select id="selectFinanceBorrowInfoByRptNo" parameterType="string" resultType="com.paic.ehis.finance.domain.FinanceBorrowInfo">
+    <select id="selectFinanceBorrowInfoByRptNo" parameterType="string" resultType="com.paic.ehis.system.api.domain.FinanceBorrowInfo">
        select borrow_id borrowId,batch_no batchNo,rpt_no rptNo, borrow_amount borrowAmount, status, create_by createBy, create_time createTime,
         update_by updateBy, update_time updateTime, dept_code deptCode from finance_borrow_info
         where rpt_no = #{rptNo} and status = 'Y'
     </select>
-    
+
+    <update id="updateFinanceBorrowInfoByRptNo" parameterType="String">
+        update finance_borrow_info set status='N' where rpt_no=#{rptNo} and status='Y'
+    </update>
+
+    <update id="updateBorrowInfoByRptNo" parameterType="com.paic.ehis.system.api.domain.FinanceBorrowInfo">
+        update finance_borrow_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="batchNo != null and batchNo != ''">batch_no = #{batchNo},</if>
+            <if test="borrowAmount != null">borrow_amount = #{borrowAmount},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="deptCode != null and deptCode != ''">dept_code = #{deptCode},</if>
+        </trim>
+        where rpt_no = #{rptNo}
+    </update>
 </mapper>

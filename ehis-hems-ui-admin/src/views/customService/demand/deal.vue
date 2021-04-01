@@ -189,7 +189,7 @@
 
 
     <el-card class="box-card" style="margin-top: 10px;">
-      <el-form ref="ruleForm" :model="ruleForm" style="padding-bottom: 30px;" label-width="170px" :disabled="isDisabled"
+      <el-form ref="ruleForm" :model="ruleForm" style="padding-bottom: 30px;" label-width="180px" :disabled="isDisabled"
                label-position="right" size="mini">
 
         <span
@@ -353,9 +353,9 @@
           highlight-current-row
           tooltip-effect="dark"
           style=" width: 100%;">
-          <el-table-column align="center" prop="status" label="状态" show-overflow-tooltip>
-            <template slot-scope="scope" v-if="scope.row.status">
-              <span>{{ selectDictLabel(cs_order_state, scope.row.status) }}</span>
+          <el-table-column align="center" prop="linkCode" label="状态" show-overflow-tooltip>
+            <template slot-scope="scope" v-if="scope.row.linkCode">
+              <span>{{ selectDictLabel(cs_link_code, scope.row.linkCode) }}</span>
             </template>
           </el-table-column>
           <el-table-column align="center" prop="operateCode" label="操作" show-overflow-tooltip>
@@ -430,15 +430,15 @@
       </div>
     </el-card>
 
-    <el-card>
+    <el-card class="box-card" style="margin-top: 10px;">
       <el-form ref="ruleForm" :model="ruleForm" :rules="changeForm.rules" style="padding-bottom: 30px;"
-               label-width="100px"
+               label-width="180px"
                label-position="right" size="mini">
         <span style="color: blue">服务处理</span>
-        <div style="text-align: right; margin-right: 8px;">
-          <el-button type="primary" size="mini" @click="modify">修改</el-button>
+        <span style="float: right;">
+           <el-button type="primary" size="mini" @click="modify">修改</el-button>
           <el-button type="primary" size="mini" @click="cancle">取消</el-button>
-        </div>
+          </span>
         <el-divider/>
         <el-row>
           <el-col :span="8">
@@ -552,7 +552,7 @@ import {
   dealAdd,
   FlowLogSearch,
   HMSSearch,
-  dealADD
+  dealADD, PersonalPool
 } from '@/api/customService/demand'
 import transfer from "../common/modul/transfer";
 import upLoad from "../common/modul/upload";
@@ -576,7 +576,7 @@ let dictss = [
   {dictType: 'cs_service_item'},
   {dictType: 'cs_business_type'},
   {dictType: 'cs_action_type'},
-  {dictType: 'cs_order_state'},
+  {dictType: 'cs_link_code'},
   {dictType: 'rgtSex'},
   {dictType: 'card_type'},
 ]
@@ -757,7 +757,8 @@ export default {
       //数据反显用
       workPoolData: {
         contactsPerson: {
-          homePhone1: []
+          homePhone1: [],
+          linePhone1: []
         },
         callPerson: {},
 
@@ -772,7 +773,7 @@ export default {
       totalCount: 0,
       changeSerchData: {},
       dictList: [],
-      cs_order_state: [],//状态
+      cs_link_code: [],//状态
       cs_action_type: [],//操作类型
       cs_channel: [],
       cs_priority: [],
@@ -848,8 +849,8 @@ export default {
     this.cs_action_type = this.dictList.find(item => {
       return item.dictType === 'cs_action_type'
     }).dictDate
-    this.cs_order_state = this.dictList.find(item => {
-      return item.dictType === 'cs_order_state'
+    this.cs_link_code = this.dictList.find(item => {
+      return item.dictType === 'cs_link_code'
     }).dictDate
     this.rgtSex = this.dictList.find(item => {
       return item.dictType === 'rgtSex'
@@ -968,7 +969,56 @@ export default {
     },
     //反显信息需求
     searchHandle() {
-      let query = this.queryParams
+      const query = this.queryParams
+      PersonalPool(query).then(res => {
+        if (res != null && res.code === 200) {
+          if (res.data!=null && res.data!=''){
+            let workPoolData = res.data;
+            let editInfo = {
+              editReason: "",
+              editRemark: ""
+            };
+            workPoolData.editInfo = editInfo;
+            workPoolData.officeCountry = "";
+            workPoolData.officeNumber = "";
+            workPoolData.officeQuhao = "";
+            workPoolData.officeSecondNumber = "";
+            this.workPoolData = workPoolData;
+            this.workPoolData.contactsPerson.linePhones0 = ''
+            this.workPoolData.contactsPerson.linePhones1 = ''
+            this.workPoolData.contactsPerson.linePhones2 = ''
+            this.workPoolData.contactsPerson.linePhones3 = ''
+            if(this.workPoolData.contactsPerson.linePhone1.length==4) {
+              this.workPoolData.contactsPerson.linePhones0 = this.workPoolData.contactsPerson.linePhone1[0];
+              this.workPoolData.contactsPerson.linePhones1 = this.workPoolData.contactsPerson.linePhone1[1];
+              this.workPoolData.contactsPerson.linePhones2 = this.workPoolData.contactsPerson.linePhone1[2];
+              this.workPoolData.contactsPerson.linePhones3 = this.workPoolData.contactsPerson.linePhone1[3];
+            }
+            else if(this.workPoolData.contactsPerson.linePhone1.length==3){
+              this.workPoolData.contactsPerson.linePhones0 = this.workPoolData.contactsPerson.linePhone1[0];
+              this.workPoolData.contactsPerson.linePhones1 = this.workPoolData.contactsPerson.linePhone1[1];
+              this.workPoolData.contactsPerson.linePhones2 = this.workPoolData.contactsPerson.linePhone1[2];
+            }
+            else if(this.workPoolData.contactsPerson.linePhone1.length==2){
+              this.workPoolData.contactsPerson.linePhones0 = this.workPoolData.contactsPerson.linePhone1[0];
+              this.workPoolData.contactsPerson.linePhones1 = this.workPoolData.contactsPerson.linePhone1[1];
+
+            }
+            else if(this.workPoolData.contactsPerson.linePhone1.length==1){
+              this.workPoolData.contactsPerson.linePhones0 = this.workPoolData.contactsPerson.linePhone1[0];
+            }
+            console.log(this.workPoolData)
+
+          }
+
+        }
+      }).catch(res => {
+        return this.$message.error(
+          "信息需求受理数据加载异常！"
+        )
+      })
+
+   /*   let query = this.queryParams
       demandListAndPersonalPool(query).then(res => {
         if (res != null && res.code === 200 && res.rows) {
           this.workPoolData = res.rows[0]
@@ -979,15 +1029,15 @@ export default {
           this.workPoolData.contactsPerson.linePhones2 = this.workPoolData.contactsPerson.linePhone1[2];
           this.workPoolData.contactsPerson.linePhones3 = this.workPoolData.contactsPerson.linePhone1[3];
 
-          /* if (res.rows.length <= 0) {
+          /!* if (res.rows.length <= 0) {
              return this.$message.warning(
                "未查询到数据！"
              )
-           }*/
+           }*!/
         }
       }).catch(res => {
 
-      })
+      })*/
     },
     //反显暂存信息
     searchHandleServer() {
@@ -1023,7 +1073,7 @@ export default {
     //协办
     coOrganizer() {
       this.$refs.coOrganizer.dynamicValidateForm.workOrderNo = this.queryParams.workOrderNo;
-      this.$refs.coOrganizer.open()
+      this.$refs.coOrganizer.open(this.queryParams.workOrderNo);
     },
     //超链接用
     modifyDetails(s) {
@@ -1057,8 +1107,8 @@ export default {
                 }
               }).catch(res => {
               })
-            } else {
-              return false
+            } else{
+              this.$message.warning("请录入必录项");
             }
 
           })

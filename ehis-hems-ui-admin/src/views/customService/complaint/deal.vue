@@ -354,8 +354,8 @@
           tooltip-effect="dark"
           style=" width: 100%;">
           <el-table-column align="center" prop="status" label="状态" show-overflow-tooltip>
-            <template slot-scope="scope" v-if="scope.row.status">
-              <span>{{ selectDictLabel(cs_order_state, scope.row.status) }}</span>
+            <template slot-scope="scope" v-if="scope.row.linkCode">
+              <span>{{ selectDictLabel(cs_link_code, scope.row.linkCode) }}</span>
             </template>
           </el-table-column>
           <el-table-column align="center" prop="operateCode" label="操作" show-overflow-tooltip>
@@ -525,7 +525,7 @@
           <el-col :span="8">
             <el-form-item label="营销渠道：" prop="marketChannel">
               <el-select v-model="sendForm.marketChannel" class="item-width">
-                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in cs_marketingchannel_codeOption" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
@@ -544,7 +544,7 @@
           </el-form-item>
         </el-row>
         <el-row>
-          <el-form-item label="质诉根因：" prop="actionCause">
+          <el-form-item label="致诉根因：" prop="actionCause">
             <el-input v-model="sendForm.actionCause" clearable size="mini" class="width-full"/>
           </el-form-item>
         </el-row>
@@ -612,13 +612,13 @@
         <up-load ref="upload"></up-load>
         <co-organizer @collaborativeFromInfo="collaborativeFromInfo" ref="coOrganizer"></co-organizer>
         <hang-up @hangUpSearch="hangUpSearch" ref="hangUp"></hang-up>
-        <el-button type="primary" size="mini" @click="hangUp" >工单挂起</el-button>
-        <el-button type="primary" size="mini" @click="temporary" :disabled="this.hangUps.hangFlag==='01'">暂存</el-button>
-        <el-button type="primary" size="mini" @click="submit" :disabled="this.hangUps.hangFlag==='01'">提交</el-button>
-        <el-button type="primary" size="mini" @click="matching" :disabled="this.hangUps.hangFlag==='01'">客户信息匹配
+        <el-button type="primary" size="mini" @click="hangUp" :disabled="collaborative">工单挂起</el-button>
+        <el-button type="primary" size="mini" @click="temporary" :disabled="this.hangUps.hangFlag==='01'  || collaborative">暂存</el-button>
+        <el-button type="primary" size="mini" @click="submit" :disabled="this.hangUps.hangFlag==='01'  || collaborative">提交</el-button>
+        <el-button type="primary" size="mini" @click="matching" :disabled="this.hangUps.hangFlag==='01'  || collaborative">客户信息匹配
         </el-button>
-        <el-button type="primary" size="mini" @click="transfer" :disabled="this.hangUps.hangFlag==='01'">转办</el-button>
-        <el-button type="primary" size="mini" @click="coOrganizer" :disabled="this.hangUps.hangFlag==='01'">协办
+        <el-button type="primary" size="mini" @click="transfer" :disabled="this.hangUps.hangFlag==='01'  || collaborative">转办</el-button>
+        <el-button type="primary" size="mini" @click="coOrganizer" :disabled="this.hangUps.hangFlag==='01'  || collaborative">协办
         </el-button>
       </div>
     </el-card>
@@ -642,6 +642,7 @@ import transfer from "../common/modul/transfer";
 import upLoad from "../common/modul/upload";
 import coOrganizer from "../common/modul/coOrganizer";
 import modifyDetails from "../common/modul/modifyDetails";
+import {updateClickTime} from "@/api/customService/reservation";
 
 let dictss = [
   {dictType: 'cs_channel'},
@@ -659,11 +660,12 @@ let dictss = [
   {dictType: 'cs_drop_status'},
   {dictType: 'cs_reason_level1'},
   {dictType: 'cs_action_type'},
-  {dictType: 'cs_order_state'},
+  {dictType: 'cs_link_code'},
   {dictType: 'cs_service_item'},
   {dictType: 'cs_mediation_appraisal'},
   {dictType: 'cs_risk_type'},
   {dictType: 'cs_question_circ'},
+  {dictType: 'cs_marketingchannel_code'},
 ]
 export default {
   components: {
@@ -680,8 +682,8 @@ export default {
       }
     }
   },
-  data() {
 
+  data() {
     const checkPieceworkFlag = (rule, value, callback) => {
       if (this.sendForm.level2 == '05') {
         if (!value) {
@@ -708,46 +710,46 @@ export default {
 
     const rules = {
         level1: [
-          {required: true, message: "一级投诉分类不能为空", trigger: "blur"}
+          {required: true, message: "一级投诉分类不能为空", trigger: "change"}
           ],
         level2: [
-          {required: true, message: "二级投诉分类不能为空", trigger: "blur"}
+          {required: true, message: "二级投诉分类不能为空", trigger: "change"}
           ],
         pieceworkFlag: [
-          {required: false, validator: checkPieceworkFlag, trigger: "blur"}
+          {required: false, validator: checkPieceworkFlag, trigger: "change"}
           ],
         complaintStatus: [
-          {required: false, validator: checkComplaintStatus, trigger: "blur"}
+          {required: false, validator: checkComplaintStatus, trigger: "change"}
           ],
         complaintTenable: [
-          {required: true, message: "投诉是否成立不能为空", trigger: "blur"}
+          {required: true, message: "投诉是否成立不能为空", trigger: "change"}
           ],
         repeatedComplaint: [
-          {required: true, message: "重复投诉不能为空", trigger: "blur"}
+          {required: true, message: "重复投诉不能为空", trigger: "change"}
           ],
         reason1: [
-          {required: true, message: "一级投诉原因不能为空", trigger: "blur"}
+          {required: true, message: "一级投诉原因不能为空", trigger: "change"}
           ],
         reason2: [
-          {required: true, message: "二级投诉原因不能为空", trigger: "blur"}
+          {required: true, message: "二级投诉原因不能为空", trigger: "change"}
           ],
         reason3: [
-          {required: true, message: "三级投诉原因不能为空", trigger: "blur"}
+          {required: true, message: "三级投诉原因不能为空", trigger: "change"}
           ],
         complaintLink: [
-          {required: true, message: "投保问题（报保监）不能为空", trigger: "blur"}
+          {required: true, message: "投保问题（报保监）不能为空", trigger: "change"}
           ],
         complaintQuestion: [
-          {required: true, message: "投保问题（报保监）不能为空", trigger: "blur"}
+          {required: true, message: "投保问题（报保监）不能为空", trigger: "change"}
           ],
         outsideState: [
-          {required: true, message: "行协调解或外部鉴不能为空", trigger: "blur"}
+          {required: true, message: "行协调解或外部鉴不能为空", trigger: "change"}
           ],
         riskType: [
-          {required: true, message: "险种类型不能为空", trigger: "blur"}
+          {required: true, message: "险种类型不能为空", trigger: "change"}
           ],
         marketChannel: [
-          {required: true, message: "营销渠道不能为空", trigger: "blur"}
+          {required: true, message: "营销渠道不能为空", trigger: "change"}
           ],
         complaintCategory: [
           {required: true, message: "投诉业务类别不能为空", trigger: "blur"}
@@ -762,7 +764,7 @@ export default {
           {required: true, message: "处理进展不能为空", trigger: "blur"}
           ],
         customerFeedback: [
-          {required: true, message: "客户反馈不能为空", trigger: "blur"}
+          {required: true, message: "客户反馈不能为空", trigger: "change"}
           ],
         treatmentResult: [
           {required: true, message: "处理结果不能为空", trigger: "blur"}
@@ -933,7 +935,7 @@ export default {
       cs_relation: [],
       cs_feedback_type: [],
       cs_end_case: [],
-      cs_order_state: [],//状态
+      cs_link_code: [],//状态
       cs_action_type: [],//操作类型
       cs_priority: [],//优先级
       cs_service_item: [],//服务项目
@@ -945,11 +947,18 @@ export default {
       cs_mediation_appraisal: [],
       cs_risk_type: [],
       cs_question_circ: [],
+      cs_marketingchannel_codeOption: [],
       logUserName:'',
       collaborative : false,
   //    transferBtn : false,
     }
   },
+  updated() {
+    this.$nextTick(function () {
+      this.$refs["sendForm"].clearValidate();
+    })
+  },
+
   created() {
     this.queryParams.workOrderNo = this.$route.query.workOrderNo;
     this.queryParams.policyNo = this.$route.query.policyNo;
@@ -1016,8 +1025,8 @@ export default {
     this.cs_action_type = this.dictList.find(item => {
       return item.dictType === 'cs_action_type'
     }).dictDate
-    this.cs_order_state = this.dictList.find(item => {
-      return item.dictType === 'cs_order_state'
+    this.cs_link_code = this.dictList.find(item => {
+      return item.dictType === 'cs_link_code'
     }).dictDate
     this.cs_service_item = this.dictList.find(item => {
       return item.dictType === 'cs_service_item'
@@ -1030,6 +1039,9 @@ export default {
     }).dictDate
     this.cs_question_circ = this.dictList.find(item => {
       return item.dictType === 'cs_question_circ'
+    }).dictDate
+    this.cs_marketingchannel_codeOption = this.dictList.find(item => {
+      return item.dictType === 'cs_marketingchannel_code'
     }).dictDate
   },
   methods: {
@@ -1273,8 +1285,7 @@ export default {
       this.changeForm.rules = this.rules2;
       this.$refs.sendForm.clearValidate();
       if(this.sendForm.level1 === null || this.sendForm.level2 === null) {
-        //this.$refs.sendForm.validate((valid) => {});
-        return false;
+        this.$message.warning("请录入必录项");
       } else {
         let insert = this.sendForm
         insert.sign = "01"
@@ -1283,7 +1294,7 @@ export default {
           if (res != null && res.code === 200) {
             this.$refs.coOrganizer.dynamicValidateForm.workOrderNo = this.queryParams.workOrderNo;
 
-            this.$refs.coOrganizer.open();
+            this.$refs.coOrganizer.open(this.queryParams.workOrderNo);
             if (res.rows.length <= 0) {
               return this.$message.warning("失败！");
             }
@@ -1303,7 +1314,7 @@ export default {
               if (res != null && res.code === 200) {
                 this.$refs.coOrganizer.dynamicValidateForm.workOrderNo = this.queryParams.workOrderNo;
 
-                this.$refs.coOrganizer.open();
+                this.$refs.coOrganizer.open(this.queryParams.workOrderNo);
                 if (res.rows.length <= 0) {
                   return this.$message.warning("失败！");
                 }
@@ -1332,23 +1343,27 @@ export default {
       this.changeForm.rules = this.rules1;
       this.$refs.sendForm.validate((valid) => {
         if (valid) {
-          let insert = this.sendForm
-          insert.sign = "02"
-          insert.workOrderNo = this.$route.query.workOrderNo
-          complaintDealSubmit(insert).then(res => {
+          const queryParams={workOrderNo: this.$route.query.workOrderNo}
+          updateClickTime(queryParams).then(res => {
             if (res != null && res.code === 200) {
-              this.$message.success("保存成功")
-              if (res.rows.length <= 0) {
-                return this.$message.warning(
-                  "失败！"
-                )
-              }
-            }
-          }).catch(res => {
+              let insert = this.sendForm
+              insert.sign = "02"
+              insert.workOrderNo = this.$route.query.workOrderNo
+              complaintDealSubmit(insert).then(res => {
+                if (res != null && res.code === 200) {
+                  this.$message.success("保存成功");
+                  if (res.rows.length <= 0) {
+                    return this.$message.warning(
+                      "失败！"
+                    )
+                  }
+                }
+              }).catch(res => {
 
-          })
-        }else {
-          return false
+              })
+            }}).catch(res=>{})
+        }else{
+          this.$message.warning("请录入必录项");
         }
       })
     },

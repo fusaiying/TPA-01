@@ -7,6 +7,7 @@ import com.paic.ehis.common.core.utils.PubFun;
 import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.cs.domain.EditInfo;
 import com.paic.ehis.cs.domain.FlowLog;
+import com.paic.ehis.cs.domain.WorkOrderAccept;
 import com.paic.ehis.cs.domain.vo.ComplaintAcceptVo;
 import com.paic.ehis.cs.domain.vo.DemandAcceptVo;
 import com.paic.ehis.cs.domain.vo.ReservationAcceptVo;
@@ -36,6 +37,8 @@ public class EditInfoServiceImpl implements IEditInfoService
     private ReservationAcceptVoMapper reservationAcceptVoMapper;
     @Autowired
     private ComplaintAcceptVoMapper complaintAcceptVoMapper;
+    @Autowired
+    private WorkOrderAcceptMapper workOrderAcceptMapper;
 
     /**
      * 查询修改信息 
@@ -116,10 +119,9 @@ public class EditInfoServiceImpl implements IEditInfoService
     @Override
     public int cancelSubmit(DemandAcceptVo demandAcceptVo) {
 
-
-            EditInfo editInfo=new EditInfo();
+        EditInfo editInfo=new EditInfo();
         //随机生成流水号
-        editInfo.setEditId(PubFun.createMySqlMaxNoUseCache("edit_id",10,6));
+        editInfo.setEditId(PubFun.createMySqlMaxNoUseCache("cs_edit_id",10,8));
         editInfo.setWorkOrderId(demandAcceptVo.getWorkOrderNo());
         editInfo.setStatus("05");//05 取消状态
         editInfo.setCreatedBy(SecurityUtils.getUsername());
@@ -136,9 +138,11 @@ public class EditInfoServiceImpl implements IEditInfoService
         flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id",20,20));
         flowLog.setWorkOrderNo(demandAcceptVo.getWorkOrderNo());
         flowLog.setMakeBy(SecurityUtils.getUsername());
+        flowLog.setMakeTime(DateUtils.parseDate(DateUtils.getTime()));
         //没有um帐号
         flowLog.setUmNum(SecurityUtils.getUsername());
         flowLog.setLinkCode("05");
+        flowLog.setOperateCode("02");
         flowLog.setCreatedBy(SecurityUtils.getUsername());
         flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         flowLog.setUpdatedBy(SecurityUtils.getUsername());
@@ -156,7 +160,7 @@ public class EditInfoServiceImpl implements IEditInfoService
 
         EditInfo editInfo=new EditInfo();
         //随机生成流水号
-        editInfo.setEditId(PubFun.createMySqlMaxNoUseCache("edit_id",10,6));
+        editInfo.setEditId(PubFun.createMySqlMaxNoUseCache("cs_edit_id",10,8));
         editInfo.setWorkOrderId(reservationAcceptVo.getWorkOrderNo());
         editInfo.setStatus("05");//05 取消状态
         editInfo.setCreatedBy(SecurityUtils.getUsername());
@@ -171,9 +175,11 @@ public class EditInfoServiceImpl implements IEditInfoService
         FlowLog flowLog=new FlowLog();
         flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id",20,20));
         flowLog.setMakeBy(SecurityUtils.getUsername());
+        flowLog.setMakeTime(DateUtils.parseDate(DateUtils.getTime()));
         //没有um帐号
         flowLog.setUmNum(SecurityUtils.getUsername());
         flowLog.setLinkCode("05");
+        flowLog.setOperateCode("03");
         flowLog.setCreatedBy(SecurityUtils.getUsername());
         flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         flowLog.setUpdatedBy(SecurityUtils.getUsername());
@@ -196,7 +202,7 @@ public class EditInfoServiceImpl implements IEditInfoService
         //取消原因  取消说明
         EditInfo editInfo=new EditInfo();
         //随机生成流水号
-        editInfo.setEditId(PubFun.createMySqlMaxNoUseCache("edit_id",10,6));
+        editInfo.setEditId(PubFun.createMySqlMaxNoUseCache("cs_edit_id",10,8));
         editInfo.setWorkOrderId(complaintAcceptVo.getWorkOrderNo());
         editInfo.setStatus("05");//05 取消状态
         editInfo.setCreatedBy(SecurityUtils.getUsername());
@@ -207,13 +213,22 @@ public class EditInfoServiceImpl implements IEditInfoService
         editInfo.setEditRemark(complaintAcceptVo.getEditRemark());
         editInfoMapper.insertEditInfo(editInfo);
 
+        //工单表修改
+        WorkOrderAccept workOrderAccept = workOrderAcceptMapper.selectWorkOrderAcceptById(complaintAcceptVo.getWorkOrderNo());
+        workOrderAccept.setUpdateBy(SecurityUtils.getUsername());
+        workOrderAccept.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
+        workOrderAccept.setStatus("05");//取消状态
+        workOrderAcceptMapper.updateWorkOrderAccept(workOrderAccept);
+
 
         //轨迹表生成数据
         FlowLog flowLog=new FlowLog();
         flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id",20,20));
         flowLog.setWorkOrderNo(complaintAcceptVo.getWorkOrderNo());
         flowLog.setLinkCode("05");//05 取消状态
+        flowLog.setOperateCode("03");
         flowLog.setMakeBy(SecurityUtils.getUsername());
+        flowLog.setMakeTime(DateUtils.parseDate(DateUtils.getTime()));
         //没有um帐号
         flowLog.setUmNum(SecurityUtils.getUsername());
         flowLog.setCreatedBy(SecurityUtils.getUsername());

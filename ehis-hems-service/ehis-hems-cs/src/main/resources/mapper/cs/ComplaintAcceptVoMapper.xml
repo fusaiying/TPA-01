@@ -80,7 +80,7 @@
         <if test="acceptTimeStart != null and acceptTimeEnd != null"> and t1.create_Time between #{acceptTimeStart} and DATE_ADD(#{acceptTimeEnd},INTERVAL 1 DAY)</if>
         <if test="modifyBy != null  and modifyBy != ''"> and t1.update_by = #{modifyBy}</if>
         <if test="modifyTimeStart != null and modifyTimeEnd != null"> and t1.modify_time between #{modifyTimeStart} and DATE_ADD(#{modifyTimeEnd},INTERVAL 1 DAY)</if>
-        <if test="appointmentTimeStart != null and appointmentTimeEnd != null"> and t2.prop10 between DATE_ADD(#{appointmentTimeStart},INTERVAL -1 DAY) and DATE_ADD(#{appointmentTimeEnd},INTERVAL 0 DAY)</if>
+        <if test="appointmentTimeStart != null and appointmentTimeEnd != null"> and t2.prop10 between #{appointmentTimeStart} and DATE_ADD(#{appointmentTimeEnd},INTERVAL 1 DAY)</if>
         <if test="workOrderNo != null and workOrderNo != ''" > and t1.work_order_no= #{workOrderNo}</if>
         <if test="policyNo != null  and policyNo != ''"> and t1.policy_no = #{policyNo}</if>
         <if test="policyItemNo != null  and policyItemNo != ''"> and t1.policy_item_no = #{policyItemNo}</if>
@@ -113,13 +113,7 @@
         t1.vip_flag,
         t2.priority_level,
         t2.organ_code,
-        (CASE
-        WHEN (
-        t1.STATUS = '02'
-        AND ( SELECT 1 FROM collaborative_from cf WHERE cf.STATUS = '02' AND cf.work_order_no = t1.work_order_no ) = 1
-        ) THEN
-        '06' ELSE t1.STATUS
-        END) STATUS,
+        t1.STATUS,
         CASE
         WHEN hm.nnn IS NOT NULL THEN
         1 ELSE 0
@@ -148,7 +142,7 @@
             <if test="acceptTimeStart != null and acceptTimeEnd != null"> and t1.create_Time between #{acceptTimeStart} and DATE_ADD(#{acceptTimeEnd},INTERVAL 1 DAY)</if>
             <if test="modifyBy != null  and modifyBy != ''"> and t1.update_by = #{modifyBy}</if>
             <if test="modifyTimeStart != null and modifyTimeEnd != null"> and t1.modify_time between #{modifyTimeStart} and DATE_ADD(#{modifyTimeEnd},INTERVAL 1 DAY)</if>
-        <if test="appointmentTimeStart != null and appointmentTimeEnd != null"> and t2.prop10 between DATE_ADD(#{appointmentTimeStart},INTERVAL -1 DAY) and DATE_ADD(#{appointmentTimeEnd},INTERVAL 0 DAY)</if>
+        <if test="appointmentTimeStart != null and appointmentTimeEnd != null"> and t2.prop10 between #{appointmentTimeStart} and DATE_ADD(#{appointmentTimeEnd},INTERVAL 1 DAY)</if>
             <if test="workOrderNo != null and workOrderNo != ''" > and t1.work_order_no= #{workOrderNo}</if>
             <if test="policyNo != null  and policyNo != ''"> and t1.policy_no = #{policyNo}</if>
             <if test="policyItemNo != null  and policyItemNo != ''"> and t1.policy_item_no = #{policyItemNo}</if>
@@ -189,7 +183,7 @@ WHERE
     </select>
 
 
-    <insert id="insertWorkOrderAccept" parameterType="WorkOrderAccept">
+    <insert id="insertWorkOrderAccept" parameterType="com.paic.ehis.cs.domain.WorkOrderAccept">
         insert into work_order_accept
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="workOrderNo != null">work_order_no,</if>
@@ -237,7 +231,7 @@ WHERE
         </trim>
     </insert>
 
-    <insert id="insertAcceptDetailInfo" parameterType="AcceptDetailInfo">
+    <insert id="insertAcceptDetailInfo" parameterType="com.paic.ehis.cs.domain.AcceptDetailInfo">
         insert into accept_detail_info
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="workOrderNo != null">work_order_no,</if>
@@ -332,7 +326,7 @@ WHERE
             <if test="prop25 != null">#{prop25},</if>
         </trim>
     </insert>
-    <insert id="insertPersonInfo" parameterType="PersonInfo">
+    <insert id="insertPersonInfo" parameterType="com.paic.ehis.cs.domain.PersonInfo">
         insert into person_info
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="personId != null">person_id,</if>
@@ -377,7 +371,7 @@ WHERE
             <if test="updatedTime != null">#{updatedTime},</if>
         </trim>
     </insert>
-    <insert id="insertFlowLog" parameterType="FlowLog">
+    <insert id="insertFlowLog" parameterType="com.paic.ehis.cs.domain.FlowLog">
         insert into flow_log
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="flowId != null">flow_id,</if>

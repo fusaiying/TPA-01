@@ -147,7 +147,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         b.item_code,
         (case when ifnull(c.organ_code,'')='' then  b.organ_code else c.organ_code end) organ_code,
         c.business_type,
-        TIMESTAMPDIFF(Hour,a.created_time , NOW()) processingTime,
+        (case when a.status ='02' then TIMESTAMPDIFF(Hour,a.created_time , a.updated_time) else '' end) processingTime,
         b.priority_level,
         c.create_time
         FROM
@@ -163,7 +163,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <if test="createdTimeStart != null   and createdTimeEnd != null ">
             and(a.create_time between  #{createdTimeStart} and  #{createdTimeEnd})</if>
         <if test="handleState != null  and handleState != ''"> and a.handle_state = #{handleState}</if>
-        <if test="handleState == null  or handleState == ''"> and a.handle_state != '01' </if>
+        <if test="handleState == null  or handleState == ''"> and a.status = '02' and a.handle_state = '02'</if>
         <if test="itemCode != null  and itemCode != ''"> and b.item_code = #{itemCode}</if>
         <if test="policyNo != null  and policyNo != ''"> and c.policy_no = #{policyNo}</if>
         <if test="policyItemNo != null  and policyItemNo != ''"> and c.policy_item_no = #{policyItemNo}</if>
@@ -208,8 +208,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectCollaborativeFromVo"/>
         where collaborative_id = #{collaborativeId}
     </select>
+
+    <select id="selectCollaborativeFromByWorkId" parameterType="string" resultMap="CollaborativeFromResult">
+        <include refid="selectCollaborativeFromVo"/>
+        where work_order_no = #{workOrderNo}
+    </select>
         
-        <insert id="insertCollaborativeFrom" parameterType="CollaborativeFrom" useGeneratedKeys="true" keyProperty="collaborativeId">
+        <insert id="insertCollaborativeFrom" parameterType="com.paic.ehis.cs.domain.CollaborativeFrom" useGeneratedKeys="true" keyProperty="collaborativeId">
         insert into collaborative_from
             <trim prefix="(" suffix=")" suffixOverrides=",">
                 <if test="workOrderNo != null and workOrderNo != ''">work_order_no,</if>
@@ -249,7 +254,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             </trim>
     </insert>
 
-    <update id="updateCollaborativeFrom" parameterType="CollaborativeFrom">
+    <update id="updateCollaborativeFrom" parameterType="com.paic.ehis.cs.domain.CollaborativeFrom">
         update collaborative_from
         <trim prefix="SET" suffixOverrides=",">
             <if test="workOrderNo != null and workOrderNo != ''">work_order_no = #{workOrderNo},</if>
@@ -271,7 +276,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </trim>
         where collaborative_id = #{collaborativeId}
     </update>
-    <update id="updateConsultationDemand" parameterType="CollaborativeFrom" >
+    <update id="updateConsultationDemand" parameterType="com.paic.ehis.cs.domain.CollaborativeFrom" >
         update collaborative_from
         <trim prefix="SET" suffixOverrides=",">
             <if test="workOrderNo != null and workOrderNo != ''">work_order_no = #{workOrderNo},</if>
@@ -293,7 +298,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </trim>
         where collaborative_id = #{collaborativeId}  and work_order_no = #{workOrderNo}
     </update>
-    <update id="updateConsultationDemandOne" parameterType="CollaborativeFrom">
+    <update id="updateConsultationDemandOne" parameterType="com.paic.ehis.cs.domain.CollaborativeFrom">
         update collaborative_from
         <trim prefix="SET" suffixOverrides=",">
             <if test="workOrderNo != null and workOrderNo != ''">work_order_no = #{workOrderNo},</if>
@@ -326,7 +331,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{collaborativeId}
         </foreach>
     </delete>
-    <update id="updateCollaborativeStatus"   parameterType="CollaborativeFrom" >
+    <update id="updateCollaborativeStatus"   parameterType="com.paic.ehis.cs.domain.CollaborativeFrom" >
         update collaborative_from set status="03"  where work_order_no=#{workOrderNo}
     </update>
 </mapper>

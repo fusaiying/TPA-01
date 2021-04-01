@@ -38,7 +38,7 @@
 
           <el-col :span="8">
             <el-form-item label="服务费/人：" prop="servicefee" v-if="accounttypeShow">
-              <el-input v-model="formSearch.servicefee" class="item-width" style="style="width: 75px"width: 125px" clearable size="mini"
+              <el-input v-model="formSearch.servicefee" class="item-width" style="width: 125px" clearable size="mini"
                         placeholder="请录入" maxlength="6"/>
               <el-input disabled class="item-width" clearable style="width: 75px" placeholder="CNY"/>
             </el-form-item>

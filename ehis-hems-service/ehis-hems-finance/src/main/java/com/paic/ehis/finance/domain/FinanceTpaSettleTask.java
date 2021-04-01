@@ -172,6 +172,7 @@ public class FinanceTpaSettleTask extends BaseEntity
             .append("settlementType", getSettlementType())
             .append("serviceSettleAmount", getServiceSettleAmount())
             .append("settleEndDate", getSettleEndDate())
+            .append("settleStartDate",getSettleStartDate())
             .append("settleStatus", getSettleStatus())
             .append("status", getStatus())
             .append("remark", getRemark())

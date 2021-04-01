@@ -2,186 +2,183 @@
   <div class="app-container">
     <el-card class="box-card" style="margin-top: 10px;">
       <span style="color: blue">客户基本信息</span>
-      <el-divider/>
-      <el-form ref="sendForm" :model="sendForm" style="padding-bottom: 30px;" label-width="170px"
-               label-position="right" size="mini" disabled>
+      <el-form ref="baseInfo" :model="baseInfo" label-width="180px"
+               label-position="right" size="mini" >
         <el-row>
-          <!--clearable是清楚输入框内容 readly、只读不可以编辑 ；不可以共存-->
           <el-col :span="8">
-            <el-form-item label="保单号：" prop="Service">
-              <el-input readonly v-model="sendForm.acceptor" class="item-width" size="mini"/>
+            <el-form-item label="保单号：">
+              <span>{{ baseInfo.policyNo }}</span>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="投保人姓名：" prop="channel" readonly>
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
+            <el-form-item label="投保人姓名：">
+              <span>{{ baseInfo.appName }}</span>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item style="white-space: nowrap" label="投保人证件号：" prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
+            <el-form-item label="投保人证件号：">
+              <span>{{ baseInfo.appName }}</span>
             </el-form-item>
           </el-col>
         </el-row>
 
         <el-row>
           <el-col :span="8">
-            <el-form-item style="white-space: nowrap" label="投保人证件类型：" prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
+            <el-form-item label="投保人证件类型：">
+              <span>{{ baseInfo.appName }}</span>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="分单号：" prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
+            <el-form-item label="分单号：">
+              <span>{{ baseInfo.policyItemNo }}</span>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="被保人姓名：" prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
+            <el-form-item label="被保人姓名：">
+              <span>{{ baseInfo.name }}</span>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="被保人性别：">
+              <span>{{selectDictLabel(rgtSex, baseInfo.sex)}}</span>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="被保人出生日期：">
+              <span>{{ baseInfo.birthday }}</span>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="被保人证件号：">
+              <span>{{ baseInfo.idNo }}</span>
             </el-form-item>
           </el-col>
         </el-row>
 
         <el-row>
           <el-col :span="8">
-            <el-form-item label="被保人性别：" prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
+            <el-form-item label="被保人证件类型：">
+              <span>{{selectDictLabel(card_type, baseInfo.idType)}}</span>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item style="white-space: nowrap" label="被保人出生日期：" prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
+            <el-form-item label="被保人电话：">
+              <span>{{ baseInfo.mobile }}</span>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="被保人证件号：" prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
-            </el-form-item>
-          </el-col>
-        </el-row>
-
-        <el-row>
-          <el-col :span="8">
-            <el-form-item style="white-space: nowrap" label="被保人证件类型：" prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="被保人电话：" prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="投保日期：" prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
+            <el-form-item label="投保日期：">
+              <span>{{ baseInfo.validStartDate }}</span>
             </el-form-item>
           </el-col>
         </el-row>
 
         <el-row>
           <el-col :span="8">
-            <el-form-item label="承保日期：" prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
+            <el-form-item label="承保日期：">
+              <span>{{ baseInfo.validStartDate }}</span>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="保益生效日：" prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
+            <el-form-item label="保益生效日：">
+              <span>{{ baseInfo.validStartDate }}</span>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="保益满期日：" prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
-            </el-form-item>
-          </el-col>
-        </el-row>
-
-        <el-row>
-          <el-col :span="8">
-            <el-form-item label="主招揽业务员：" prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item style="white-space: nowrap" label="主招揽业务员电话：" prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="VIP标识：" prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
+            <el-form-item label="保益满期日：">
+              <span>{{ baseInfo.validEndDate }}</span>
             </el-form-item>
           </el-col>
         </el-row>
 
         <el-row>
           <el-col :span="8">
-            <el-form-item style="white-space: nowrap" label="是否UHCG会员：" prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
+            <el-form-item label="主招揽业务员：">
+              <span>{{ baseInfo.mainSolicit }}</span>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item style="white-space: nowrap" label="与主保险人关系：" prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
+            <el-form-item label="主招揽业务员电话：">
+              <span>{{ baseInfo.solicitPhone }}</span>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="出单机构：" prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
-            </el-form-item>
-          </el-col>
-        </el-row>
-
-        <el-row>
-          <el-col :span="8">
-            <el-form-item label="险种代码：" prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="计划名称：" prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="保单生效日：" prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
+            <el-form-item label="VIP标识：">
+              <span>{{ baseInfo.vipFlag }}</span>
             </el-form-item>
           </el-col>
         </el-row>
 
         <el-row>
           <el-col :span="8">
-            <el-form-item label="首次生效日：" prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
+            <el-form-item label="是否UHCG会员：">
+              <span>{{ baseInfo.uhcgFlag }}</span>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item style="white-space: nowrap" label="AM(服务经理)：" prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
+            <el-form-item label="与主保险人关系：">
+              <span>{{ baseInfo.relationBy }}</span>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item style="white-space: nowrap" label="BD(销售经理)：" prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
+            <el-form-item label="出单机构：">
+              <span>{{ baseInfo.companyName }}</span>
             </el-form-item>
           </el-col>
         </el-row>
 
         <el-row>
           <el-col :span="8">
-            <el-form-item style="white-space: nowrap" label="特定医院赔付比例：" prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
+            <el-form-item label="险种代码：">
+              <span>{{ baseInfo.riskCodesStr }}</span>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="被保人性质：" prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
+            <el-form-item label="计划名称：">
+              <span>{{ baseInfo.planCode }}</span>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="投保来源：" prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
+            <el-form-item label="保单生效日：">
+              <span>{{ baseInfo.validStartDate }}</span>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="首次生效日：">
+              <span>{{ baseInfo.firstValidDate }}</span>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="AM(服务经理)：">
+              <span>{{ baseInfo.acceptor }}</span>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="BD(销售经理)：">
+              <span>{{ baseInfo.acceptor }}</span>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="特定医院赔付比例：">
+              <span>{{ baseInfo.specialRatio }}</span>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="被保人性质：">
+              <span>{{ baseInfo.insuredType }}</span>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="投保来源：">
+              <span>{{ baseInfo.policyFrom }}</span>
             </el-form-item>
           </el-col>
         </el-row>
@@ -191,7 +188,7 @@
 
 
     <el-card class="box-card" style="margin-top: 10px;">
-      <el-form ref="ruleForm" :model="ruleForm" :rules="rules" style="padding-bottom: 30px;" label-width="170px"
+      <el-form ref="ruleForm" :model="sendForm"  style="padding-bottom: 30px;" label-width="170px"
                :disabled="isDisabled"
                label-position="right" size="mini">
 
@@ -312,28 +309,36 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="预约日期：" prop="appointmentDate">
-              <el-input v-model="sendForm.appointmentDate" class="item-width" size="mini" placeholder="请输入"/>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="预约时间：" prop="complaintTime">
-              <!--<el-input v-model="sendForm.complaintTime" class="item-width" size="mini" placeholder="请输入"/>-->
               <el-date-picker class="item-width"
-                              v-model="sendForm.complaintTime"
-                              type="datetime"
-                              placeholder="选择日期时间">
+                              v-model="sendForm.appointmentDate"
+                              type="date"
+                              placeholder="选择日期时间"
+                              value-format="yyyy-MM-dd">
               </el-date-picker>
-
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="医疗机构：" prop="medicalInstitution">
-              <el-input v-model="sendForm.medicalInstitution" input-w class="item-width2" size="mini"
-                        placeholder="请输入"/>
-              <el-button type="primary" @click="searchHandle">详细信息</el-button>
+            <el-form-item label="预约时间："  style="white-space: nowrap" prop="complaintTimes">
+              <el-time-picker class="item-width"
+                              is-range
+                              v-model="sendForm.complaintTimes"
+                              range-separator="-"
+                              start-placeholder="开始时间"
+                              end-placeholder="结束时间"
+                              value-format="HH:mm:ss">
+              </el-time-picker>
             </el-form-item>
           </el-col>
-
+          <el-form ref="ruleForm" :model="sendForm"  style="padding-bottom: 30px;" label-width="170px"
+                   label-position="right" size="mini">
+            <el-col :span="8">
+              <el-form-item label="医疗机构：" prop="hospitalName">
+                <el-input :disabled="isDisabled" v-model="sendForm.hospitalName" input-w class="item-width2" size="mini"
+                          placeholder="请输入"/>
+                <el-button type="primary" @click="openHospitalShow">详细信息</el-button>
+              </el-form-item>
+            </el-col>
+          </el-form>
         </el-row>
         <el-row>
           <el-col :span="8">
@@ -436,8 +441,8 @@
           tooltip-effect="dark"
           style=" width: 100%;">
           <el-table-column align="center" prop="status" label="状态" show-overflow-tooltip>
-            <template slot-scope="scope" v-if="scope.row.status">
-              <span>{{ selectDictLabel(cs_order_state, scope.row.status) }}</span>
+            <template slot-scope="scope" v-if="scope.row.linkCode">
+              <span>{{ selectDictLabel(cs_link_code, scope.row.linkCode) }}</span>
             </template>
           </el-table-column>
           <el-table-column align="center" prop="operateCode" label="操作" show-overflow-tooltip>
@@ -522,9 +527,9 @@
         <el-divider/>
         <el-row>
           <el-col :span="8">
-          <el-form-item label="处理时长：" prop="times">
-            <el-input v-model="submitForm.times" class="width-full" size="mini" disabled/>
-          </el-form-item>
+            <el-form-item label="处理时长：" prop="times">
+              <el-input v-model="submitForm.times" class="width-full" size="mini" disabled/>
+            </el-form-item>
           </el-col>
         </el-row>
         <el-row>
@@ -629,7 +634,7 @@
   import {
     demandListAndPublicPool,
     demandListAndPersonalPool,
-    dealReservationSubmit
+    dealReservationSubmit, getPersonalPool
   } from '@/api/customService/reservation'
 
   import transfer from "../common/modul/transfer";
@@ -637,6 +642,7 @@
   import coOrganizer from "../common/modul/coOrganizer";
   import modifyDetails from "../common/modul/modifyDetails";
   import {complainSearchServer} from '@/api/customService/complaint';
+  import {policyInfoData} from "@/api/customService/common";
 
 
   let dictss = [
@@ -655,7 +661,11 @@
     {dictType: 'cs_time_unit'},
     {dictType: 'cs_service_item'},
     {dictType: 'cs_action_type'},
-    {dictType: 'cs_order_state'},
+    {dictType: 'cs_link_code'},
+    {dictType: 'card_type'},
+    {dictType: 'rgtSex'}
+
+
   ]
   export default {
     components: {
@@ -674,18 +684,6 @@
     data() {
       // 表单校验
       const isRule = {
-        Service: [
-          {required: true, message: "服务项目不能为空", trigger: "blur"}
-        ],
-        priority: [
-          {required: true, message: "优先级不能为空", trigger: "blur"}
-        ],
-        lxperson: [
-          {required: true, message: "联系人不能为空", trigger: "blur"}
-        ],
-        orderNum: [
-          {required: true, message: "联系人与被保人关系不能为空", trigger: "blur"}
-        ],
         times: [
           {required: true, message: "处理时长关系不能为空", trigger: "blur"}
         ],
@@ -694,15 +692,13 @@
         ],
         remark: [
           {required: true, message: "处理说明不能为空", trigger: "blur"},
-          {min: 0, max: 2000, message: '长度2000 个字符'}
+          {min: 0, max: 2000, message: '长度2000 个字'}
 
         ],
         customerFeedback: [
           {required: true, message: "客户反馈不能为空", trigger: "blur"}
         ],
-        costsIncurred: [
-          {required: true, message: "是否需要担保函不能为空", trigger: "blur"}
-        ],
+
       };
       // 表单校验
       const noRules = {
@@ -711,6 +707,43 @@
         ],
       };
       return {
+        //客户信息查询
+        baseInfo: {
+          policyNo: undefined,
+          policyItemNo: undefined,
+          appName: undefined,
+          validStartDate: "",
+          orgPolicyItemNo: "",
+          validEndDate: "",
+          policyRiskType: "",
+          policyStatus: "",
+          specialAgreement: "",
+          companyName: undefined,
+          companyCode: undefined,
+          policyType: "",
+          planCode: "",
+          orgPolicyNo: "",
+          ssFlag: "",
+          policyManageCom: "",
+          riskCodesStr: undefined,
+          insuredNo: undefined,
+          name: undefined,
+          idType: undefined,
+          idNo: undefined,
+          birthday: undefined,
+          occupation: "",
+          nationality: "",
+          idStartDate: "",
+          idEndDate: "",
+          mobile: undefined,
+          email: undefined,
+          phone: undefined,
+          province: undefined,
+          city: undefined,
+          district: undefined,
+          address: undefined,
+          orgInsuredNo: undefined,
+        },
         isDisabled: true,
         rules1: isRule,
         rules2: noRules,
@@ -773,6 +806,8 @@
         //新增的数据传输
         sendForm: {
           email: "",
+          hospitalCode: "",
+          hospitalName: "",
           workOrderNo: '',
           businessProcess: '',
           contactsPerson: {
@@ -853,8 +888,10 @@
         cs_consultation_type: [],
         cs_time_unit: [],
         cs_service_item: [],
-        cs_order_state: [],
+        cs_link_code: [],
         cs_action_type: [],
+        rgtSex: [],//
+        card_type: [],//
       }
     },
     created() {
@@ -863,7 +900,7 @@
       this.queryParams.policyItemNo = this.$route.query.policyItemNo;
       this.queryParams.status = this.$route.query.status;
       //window.aaa = this;
-      this.searchHandle()
+      this.searchSendFormInfo()
       this.searchFlowLog()
       this.searchHCS()
       this.searchHandleServer()
@@ -925,18 +962,43 @@
       this.cs_service_item = this.dictList.find(item => {
         return item.dictType === 'cs_service_item'
       }).dictDate
-      this.cs_order_state = this.dictList.find(item => {
-        return item.dictType === 'cs_order_state'
+      this.cs_link_code = this.dictList.find(item => {
+        return item.dictType === 'cs_link_code'
       }).dictDate
       this.cs_action_type = this.dictList.find(item => {
         return item.dictType === 'cs_action_type'
       }).dictDate
+      this.rgtSex = this.dictList.find(item => {
+        return item.dictType === 'rgtSex'
+      }).dictDate
+
+      this.card_type = this.dictList.find(item => {
+        return item.dictType === 'card_type'
+      }).dictDate
       //初始化按钮状态
       this.checkButton();
+      this.searchHandle()
     },
     methods: {
+      //客户信息加载
+      searchSendFormInfo() {
+        let query = {
+          policyNo: this.queryParams.policyNo,
+          policyItemNo: this.queryParams.policyItemNo,
+        }
+        if(this.queryParams.policyNo != null && this.queryParams.policyNo !=""){
+          policyInfoData(query).then(res => {
+            if (res != null && res.code === 200) {
+              if (res.data != null) {
+                this.baseInfo = res.data;
+              }
+            }
+          }).catch(res => {
 
-      hiddenShow:function () {
+          })
+        }
+      },
+      hiddenShow: function () {
         // 返回上级路由并关闭当前路由
         this.$store.state.tagsView.visitedViews.splice(this.$store.state.tagsView.visitedViews.findIndex(item => item.path === this.$route.path), 1)
         this.$router.push(this.$store.state.tagsView.visitedViews[this.$store.state.tagsView.visitedViews.length - 1].path)
@@ -1002,7 +1064,6 @@
             console.log("预约页面server反显数据", res.data)
 
             this.submitForm = res.data;
-            console.log(this.submitForm, "85848541484848")
             if (res.rows.length <= 0) {
               return this.$message.warning(
                 "未查询到数据！"
@@ -1034,6 +1095,8 @@
             }).catch(res => {
 
             })
+          }else{
+            this.$message.warning("请录入必录项");
           }
         })
       },
@@ -1059,24 +1122,15 @@
       //取消
       //修改按钮
       modify() {
-        if (this.ids.length == 0) {
-          this.$message.warning("先选中一行")
-        }
-        // else {if(this.ids.length>2){
-        //   this.$message.warning("选中一行")
-        // }
-        else {
-          this.$router.push({
-            path: '/customService/reservation/modify',
-            query: {
-              workOrderNo: this.queryParams.workOrderNo,
-              policyNo: this.queryParams.policyNo,
-              policyItemNo: this.queryParams.policyItemNo,
-              status: this.queryParams.status
-            }
-          })
-        }
-        // }
+        this.$router.push({
+          path: '/customService/reservation/modify',
+          query: {
+            workOrderNo: this.queryParams.workOrderNo,
+            policyNo: this.queryParams.policyNo,
+            policyItemNo: this.queryParams.policyItemNo,
+            status: this.queryParams.status
+          }
+        })
       },
       //取消按钮
       cancle() {
@@ -1090,25 +1144,31 @@
           }
         })
       },
-      //反显信息需求
+      //预约--服务受理信息
       searchHandle() {
-        let query = this.queryParams
-        console.log("query", query)
-        demandListAndPersonalPool(query).then(res => {
-          console.log('共公池', res.rows)
+        let workOrderNo = this.queryParams
+        getPersonalPool(workOrderNo).then(res => {
           if (res != null && res.code === 200) {
-            this.sendForm = res.rows[0]
-            this.totalCount = res.total
-            console.log('response', res.total)
-            if (res.rows.length <= 0) {
-              return this.$message.warning(
-                "未查询到数据！"
-              )
+            this.sendForm = res.data
+            if (this.sendForm.symptomTimes != null && this.sendForm.symptomTimes != '') {
+              let arr=this.sendForm.symptomTimes.split('-');
+              console.log(this.cs_time_unit)
+              console.log(arr)
+            let obj= this.cs_time_unit.find(item =>{
+               return item.dictValue==arr[1]
+             })
+              this.$set(this.sendForm,'symptomTimes',arr[0]+obj.dictLabel)
+            }
+            if(this.sendForm.complaintTime != null && this.sendForm.complaintTime !=''){
+              //预约时间反显
+              let timeArr=this.sendForm.complaintTime.split('-');
+              this.$set(this.sendForm, `complaintTimes`, timeArr);
             }
           }
         }).catch(res => {
 
         })
+
       },
       //上传附件
       upload() {
@@ -1126,7 +1186,7 @@
       },
       //协办
       coOrganizer() {
-        this.$refs.coOrganizer.open();
+        this.$refs.coOrganizer.open(this.queryParams.workOrderNo);
 
       },
       resetForm() {
@@ -1141,12 +1201,11 @@
         let workOrderNo = this.queryParams
         workOrderNo.status = ""
         FlowLogSearch(workOrderNo).then(res => {
-          console.log(workOrderNo)
+
           console.log('轨迹表', res.rows)
           if (res != null && res.code === 200) {
             this.flowLogData = res.rows
             this.flowLogCount = res.total
-            console.log("searchFlowLog", this.flowLogData)
             this.flowLogCount = res.total
             if (res.rows.length <= 0) {
               return this.$message.warning(
@@ -1163,8 +1222,7 @@
         let workOrderNo = this.queryParams
         workOrderNo.status = ""
         HMSSearch(workOrderNo).then(res => {
-          console.log(workOrderNo)
-          console.log('HCS', res.rows)
+
           if (res != null && res.code === 200) {
             this.HCSPoolData = res.rows
             this.HCSTotal = res.total
@@ -1178,7 +1236,15 @@
 
         })
       },
-
+      openHospitalShow() {
+        const newpage = this.$router.resolve({
+          name: 'hospitalDetail',
+          query: {
+            providerCode: this.sendForm.medicalInstitution
+          }
+        })
+        window.open(newpage.href, '_blank');
+      }
     }
   }
 </script>

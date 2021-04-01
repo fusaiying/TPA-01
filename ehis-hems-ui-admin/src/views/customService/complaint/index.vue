@@ -46,7 +46,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="处理日期：" prop="HandlerTime">
+            <el-form-item label="处理日期：" prop="handlerTime">
               <el-date-picker
                 v-model="sendForm.handlerTime"
                 class="item-width"

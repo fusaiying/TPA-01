@@ -27,6 +27,9 @@ public class PolicyRiskRelation extends BaseEntity
     @Excel(name = "保单号")
     private String policyNo;
 
+    /* 分单号 */
+    private String policyItemNo;
+
     /** 险种编码 */
     @Excel(name = "险种编码")
     private String riskCode;
@@ -66,7 +69,16 @@ public class PolicyRiskRelation extends BaseEntity
     {
         return policyNo;
     }
-    public void setRiskCode(String riskCode) 
+
+    public String getPolicyItemNo() {
+        return policyItemNo;
+    }
+
+    public void setPolicyItemNo(String policyItemNo) {
+        this.policyItemNo = policyItemNo;
+    }
+
+    public void setRiskCode(String riskCode)
     {
         this.riskCode = riskCode;
     }

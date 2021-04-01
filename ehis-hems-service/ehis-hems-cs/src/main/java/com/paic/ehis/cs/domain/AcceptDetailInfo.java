@@ -146,12 +146,12 @@ public class AcceptDetailInfo extends BaseEntity
 
     /**是否首次就诊*/
     private String firstFlag;
-
-    /**就诊日期*/
-    private String clinicDate;
-
-    /**就诊时间*/
-    private String clinicTime;
+//   使用预约日期appointmentDate和预约时间段complaintTime
+//    /**就诊日期*/
+//    private String clinicDate;
+//
+//    /**就诊时间*/
+//    private String clinicTime;
 
     /**就诊医院省*/
     private String province;
@@ -271,6 +271,30 @@ public class AcceptDetailInfo extends BaseEntity
     @Excel(name = "见转意表")
     private String prop25;
 
+    /** 见转意表 */
+    @Excel(name = "见转意表")
+    private String prop26;
+
+    /** 见转意表 */
+    @Excel(name = "见转意表")
+    private String prop27;
+
+    /** 见转意表 */
+    @Excel(name = "见转意表")
+    private String prop28;
+
+    /** 见转意表 */
+    @Excel(name = "见转意表")
+    private String prop29;
+
+    /** 见转意表 */
+    @Excel(name = "见转意表")
+    private String prop30;
+
+    /** 见转意表 */
+    @Excel(name = "见转意表")
+    private String prop31;
+
     public String getAppointmentDate() {
         return appointmentDate;
     }
@@ -303,21 +327,21 @@ public class AcceptDetailInfo extends BaseEntity
         this.firstFlag = firstFlag;
     }
 
-    public String getClinicDate() {
-        return clinicDate;
-    }
-
-    public void setClinicDate(String clinicDate) {
-        this.clinicDate = clinicDate;
-    }
-
-    public String getClinicTime() {
-        return clinicTime;
-    }
-
-    public void setClinicTime(String clinicTime) {
-        this.clinicTime = clinicTime;
-    }
+//    public String getClinicDate() {
+//        return clinicDate;
+//    }
+//
+//    public void setClinicDate(String clinicDate) {
+//        this.clinicDate = clinicDate;
+//    }
+//
+//    public String getClinicTime() {
+//        return clinicTime;
+//    }
+//
+//    public void setClinicTime(String clinicTime) {
+//        this.clinicTime = clinicTime;
+//    }
 
     public String getProvince() {
         return province;
@@ -880,53 +904,134 @@ public class AcceptDetailInfo extends BaseEntity
         return prop25;
     }
 
+    public String getProp26() {
+        return prop26;
+    }
+
+    public void setProp26(String prop26) {
+        this.prop26 = prop26;
+    }
+
+    public String getProp27() {
+        return prop27;
+    }
+
+    public void setProp27(String prop27) {
+        this.prop27 = prop27;
+    }
+
+    public String getProp28() {
+        return prop28;
+    }
+
+    public void setProp28(String prop28) {
+        this.prop28 = prop28;
+    }
+
+    public String getProp29() {
+        return prop29;
+    }
+
+    public void setProp29(String prop29) {
+        this.prop29 = prop29;
+    }
+
+    public String getProp30() {
+        return prop30;
+    }
+
+    public void setProp30(String prop30) {
+        this.prop30 = prop30;
+    }
+
+    public String getProp31() {
+        return prop31;
+    }
+
+    public void setProp31(String prop31) {
+        this.prop31 = prop31;
+    }
+
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
-            .append("workOrderNo", getWorkOrderNo())
-            .append("channelCode", getChannelCode())
-            .append("itemCode", getItemCode())
-            .append("callPersonId", getCallPersonId())
-            .append("callRelationBy", getCallRelationBy())
-            .append("priorityLevel", getPriorityLevel())
-            .append("contactsPersonId", getContactsPersonId())
-            .append("contactsRelationBy", getContactsRelationBy())
-            .append("callCenterId", getCallCenterId())
-            .append("email", getEmail())
-            .append("organCode", getOrganCode())
-            .append("content", getContent())
-            .append("complaintPersonId", getComplaintPersonId())
-            .append("status", getStatus())
-            .append("createBy", getCreateBy())
-            .append("createTime", getCreateTime())
-            .append("updateBy", getUpdateBy())
-            .append("updateTime", getUpdateTime())
-            .append("prop0", getProp0())
-            .append("prop1", getProp1())
-            .append("prop2", getProp2())
-            .append("prop3", getProp3())
-            .append("prop4", getProp4())
-            .append("prop5", getProp5())
-            .append("prop6", getProp6())
-            .append("prop7", getProp7())
-            .append("prop8", getProp8())
-            .append("prop9", getProp9())
-            .append("prop10", getProp10())
-            .append("prop11", getProp11())
-            .append("prop12", getProp12())
-            .append("prop13", getProp13())
-            .append("prop14", getProp14())
-            .append("prop15", getProp15())
-            .append("prop16", getProp16())
-            .append("prop17", getProp17())
-            .append("prop18", getProp18())
-            .append("prop19", getProp19())
-            .append("prop20", getProp20())
-            .append("prop21", getProp21())
-            .append("prop22", getProp22())
-            .append("prop23", getProp23())
-            .append("prop24", getProp24())
-            .append("prop25", getProp25())
-            .toString();
+        return "AcceptDetailInfo{" +
+                "workOrderNo='" + workOrderNo + '\'' +
+                ", channelCode='" + channelCode + '\'' +
+                ", itemCode='" + itemCode + '\'' +
+                ", callPersonId='" + callPersonId + '\'' +
+                ", callRelationBy='" + callRelationBy + '\'' +
+                ", priorityLevel='" + priorityLevel + '\'' +
+                ", contactsPersonId='" + contactsPersonId + '\'' +
+                ", contactsRelationBy='" + contactsRelationBy + '\'' +
+                ", callCenterId='" + callCenterId + '\'' +
+                ", email='" + email + '\'' +
+                ", organCode='" + organCode + '\'' +
+                ", content='" + content + '\'' +
+                ", complaintPersonId='" + complaintPersonId + '\'' +
+                ", bankTransfer='" + bankTransfer + '\'' +
+                ", bankName='" + bankName + '\'' +
+                ", bankLocation='" + bankLocation + '\'' +
+                ", accountNumber='" + accountNumber + '\'' +
+                ", bankHolder='" + bankHolder + '\'' +
+                ", persuasionFlag='" + persuasionFlag + '\'' +
+                ", outpatientSettlement='" + outpatientSettlement + '\'' +
+                ", visitType='" + visitType + '\'' +
+                ", disease='" + disease + '\'' +
+                ", symptomsSigns='" + symptomsSigns + '\'' +
+                ", symptomTimes='" + symptomTimes + '\'' +
+                ", timeUnit='" + timeUnit + '\'' +
+                ", accidentFlag='" + accidentFlag + '\'' +
+                ", accidentReason='" + accidentReason + '\'' +
+                ", validCertificate='" + validCertificate + '\'' +
+                ", settlementCard='" + settlementCard + '\'' +
+                ", complaintTime='" + complaintTime + '\'' +
+                ", hospitalDays='" + hospitalDays + '\'' +
+                ", medicalInstitution='" + medicalInstitution + '\'' +
+                ", department='" + department + '\'' +
+                ", bunk='" + bunk + '\'' +
+                ", compensationRatio='" + compensationRatio + '\'' +
+                ", appointmentDate='" + appointmentDate + '\'' +
+                ", hospitalWorkCall='" + hospitalWorkCall + '\'' +
+                ", earliestTime='" + earliestTime + '\'' +
+                ", firstFlag='" + firstFlag + '\'' +
+//                ", clinicDate='" + clinicDate + '\'' +
+//                ", clinicTime='" + clinicTime + '\'' +
+                ", province='" + province + '\'' +
+                ", city='" + city + '\'' +
+                ", settlementFlag='" + settlementFlag + '\'' +
+                ", status='" + status + '\'' +
+                ", prop0='" + prop0 + '\'' +
+                ", prop1='" + prop1 + '\'' +
+                ", prop2='" + prop2 + '\'' +
+                ", prop3='" + prop3 + '\'' +
+                ", prop4='" + prop4 + '\'' +
+                ", prop5='" + prop5 + '\'' +
+                ", prop6='" + prop6 + '\'' +
+                ", prop7='" + prop7 + '\'' +
+                ", prop8='" + prop8 + '\'' +
+                ", prop9='" + prop9 + '\'' +
+                ", prop10='" + prop10 + '\'' +
+                ", prop11='" + prop11 + '\'' +
+                ", prop12='" + prop12 + '\'' +
+                ", prop13='" + prop13 + '\'' +
+                ", prop14='" + prop14 + '\'' +
+                ", prop15='" + prop15 + '\'' +
+                ", prop16='" + prop16 + '\'' +
+                ", prop17='" + prop17 + '\'' +
+                ", prop18='" + prop18 + '\'' +
+                ", prop19='" + prop19 + '\'' +
+                ", prop20='" + prop20 + '\'' +
+                ", prop21='" + prop21 + '\'' +
+                ", prop22='" + prop22 + '\'' +
+                ", prop23='" + prop23 + '\'' +
+                ", prop24='" + prop24 + '\'' +
+                ", prop25='" + prop25 + '\'' +
+                ", prop26='" + prop26 + '\'' +
+                ", prop27='" + prop27 + '\'' +
+                ", prop28='" + prop28 + '\'' +
+                ", prop29='" + prop29 + '\'' +
+                ", prop30='" + prop30 + '\'' +
+                ", prop31='" + prop31 + '\'' +
+                '}';
     }
 }

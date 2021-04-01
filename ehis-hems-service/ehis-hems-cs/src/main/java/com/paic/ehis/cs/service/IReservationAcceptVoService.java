@@ -16,6 +16,13 @@ public interface IReservationAcceptVoService {
     /*个人池*/
     public List<ReservationAcceptVo> selectReservationAcceptVoList2(AcceptDTO acceptDTO);
 
+    /**
+     *
+     * @param workOrderNo
+     * @return
+     */
+    public ReservationAcceptVo selectReservationAcceptVoList3(String workOrderNo);
+
     /*获取*/
     public int updateStatusM(String[] workOrderNos);
 

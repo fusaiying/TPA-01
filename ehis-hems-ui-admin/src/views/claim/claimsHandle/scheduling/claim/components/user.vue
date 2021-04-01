@@ -12,8 +12,8 @@
         <el-form ref="userForm" :model="userForm" style="border:0;" label-width="180px" label-position="right" size="mini" :rules="rules" >
           <el-row>
             <el-col :span="24">
-              <el-form-item label="角色：" prop="roleId">
-                <el-select disabled v-model="userForm.roleId"  size="mini" class="item-width" placeholder="请选择">
+              <el-form-item label="角色：" prop="roleCode">
+                <el-select disabled v-model="userForm.roleCode"  size="mini" class="item-width" placeholder="请选择">
                   <el-option v-for="option in roles" :key="option.dictValue" :label="option.dictLabel" :value="option.dictValue" />
                 </el-select>
               </el-form-item>
@@ -22,8 +22,8 @@
 
           <el-row>
             <el-col :span="24">
-              <el-form-item label="操作用户：" prop="userId">
-                <el-select v-model="userForm.userId"  size="mini" class="item-width" placeholder="请选择" @change="getRole">
+              <el-form-item label="操作用户：" prop="userName">
+                <el-select disabled v-model="userForm.userName"  size="mini" class="item-width" placeholder="请选择">
                   <el-option v-for="option in users" :key="option.dictValue" :label="option.dictLabel" :value="option.dictValue" />
                 </el-select>
               </el-form-item>
@@ -33,7 +33,7 @@
           <el-row>
             <el-col :span="24">
               <el-form-item label="分配比例：" prop="rate">
-                <el-input v-model="userForm.rate"  class="item-width" size="mini" placeholder="请输入" />
+                <el-input v-model="userForm.rate"  class="item-width" size="mini" @input="changePrice()" placeholder="请输入" />
               </el-form-item>
             </el-col>
           </el-row>
@@ -42,7 +42,9 @@
             <el-col :span="24">
               <el-form-item  prop="status" label="分配状态">
                 <el-radio-group v-model="userForm.status">
-                  <el-radio  v-for="dict in statusOptions"  :key="dict.dictValue"  :label="dict.dictValue" >{{dict.dictLabel}}  </el-radio>
+<!--                  <el-radio  v-for="dict in statusOptions"  :key="dict.dictValue"  :label="dict.dictValue" >{{dict.dictLabel}}  </el-radio>-->
+                  <el-radio label="Y">有效</el-radio>
+                  <el-radio label="N">无效</el-radio>
                 </el-radio-group>
               </el-form-item>
             </el-col>
@@ -61,7 +63,9 @@
 
   import {editInfo ,roleInfo } from '@/api/scheduling/claimApi'
 
-  import { getDspatchUser } from '@/api/dispatch/api'
+  import {getUserInfo, getUsersByOrganCode} from '@/api/claim/standingBookSearch'
+
+  // import { getDspatchUser } from '@/api/dispatch/api'
   export default {
   props: {
     value: {
@@ -88,15 +92,16 @@
     fixInfo: function (newVal){
       this.editData = newVal;
       if( this.editData.type == 'edit') {
+        this.userForm.roleCode  = newVal.rowdata.roleCode;
         this.userForm.rate = newVal.rowdata.rate;
-         this.userForm.userId = newVal.rowdata.userId.toString();
-         this.userForm.distId = newVal.rowdata.distId.toString();
-        if(newVal.rowdata.status == 'Y' || newVal.rowdata.status == '01') {
-          this.userForm.status = '01';
+        this.userForm.userName = newVal.rowdata.userName;
+        this.userForm.distId = newVal.rowdata.distId
+        this.userForm.userOrganCode = newVal.rowdata.orangeCode;
+        if(newVal.rowdata.status === 'Y' || newVal.rowdata.status === '01') {
+          this.userForm.status = 'Y';
         } else {
-          this.userForm.status = '02';
+          this.userForm.status = 'N';
         }
-        this.getRole(this.userForm.userId)
       }
     },
     roleSelects: function (newVal){
@@ -104,21 +109,33 @@
     },
   },
   data() {
+    const checkRate = (rule, value, callback) => {
+      if (!value && value !== 0) {
+        callback(new Error("分配比例必填"));
+      } else {
+        if (parseFloat(value) > 100) {
+          callback(new Error("分配比例介于 0 - 100 之间"));
+        } else {
+          callback();
+        }
+      }
+    };
     return {
       editData:{},
       custLevel:[],
         dialogVisible:false,
         userForm : {
           distId:'',
-          userId: '',
-          roleId:'',
+          userName: '',
+          roleCode:'',
           rate :'',
-          status:'01',
+          status:'',
+          userOrganCode:'',
         },
         rules: {
-          roleId: {trigger: ['change'], required: false, message: '角色必填'},
-          userId: {trigger: ['change'], required: true, message: '操作用户必填'},
-          rate: {trigger: ['change'], required: true, message: '分配比例必填'},
+          roleCode: {trigger: ['change'], required: false, message: '角色必填'},
+          userName: {trigger: ['change'], required: true, message: '操作用户必填'},
+          rate: {trigger: ['change'], required: true,  validator:checkRate},
           status: {trigger: ['change'], required: true, message: '分配状态必填'},
         },
       roles:[],
@@ -137,14 +154,13 @@
     });
   },
   methods: {
-    getRole(value){
-      roleInfo(value).then(response => {
-        if (response.code == '200') {
-          this.userForm.roleId = response.roleIds.toString();
-        }
-      }).catch(error => {
-        console.log(error);
-      });
+    changePrice(){
+      this.userForm.rate = this.userForm.rate.replace(/[^\d.]/g,"") //清除非 数字和小数点的字符
+      this.userForm.rate = this.userForm.rate.replace(/\.{2,}/g,".") //清除第二个小数点
+      this.userForm.rate = this.userForm.rate.replace(/^\./g,""); //验证第一个字符是数字而不是字符
+      this.userForm.rate = this.userForm.rate.replace(".","$#$").replace(/\./g,"").replace("$#$",".");
+      this.userForm.rate = this.userForm.rate.replace(/^(\-)*(\d+)\.(\d\d).*$/,'$1$2.$3'); //保留两位小数
+      this.userForm.rate = this.userForm.rate.indexOf(".") > 0? this.userForm.rate.split(".")[0].substring(0, 11) + "." + this.userForm.rate.split(".")[1]: this.userForm.rate.substring(0, 11); //限制只能输入7位正整数
     },
     saveInfoFun(){
       this.$refs.userForm.validate((valid) => {
@@ -176,25 +192,28 @@
       })
     },
     getUserData () {
-      const params = {
-        pageNum:1,
-        pageSize:1000,
-        status:'0',
-        delFlag:0,
-        xtype:'getUserData'
-      };
-      getDspatchUser(params).then(response => {
-        if(response.rows != null) {
-          for(let i=0; i<response.rows.length; i++) {
-            let obj= new Object();
-            obj.dictLabel = response.rows[i].userName ;
-            obj.dictValue = response.rows[i].userId.toString();
-            this.users.push(obj);
+      getUserInfo().then(res => {
+        if (res != null && res.code === 200) {
+          let option = {
+            organCode: res.data.organCode,
+            pageNum: 1,
+            pageSize: 200,
           }
+          getUsersByOrganCode(option).then(response => {
+            if (response != null && response.code === 200) {
+              //console.log("response getUsersByOrganCode",response)
+              for (let i = 0; i < response.rows.length; i++) {
+                let obj = new Object();
+                let resdata = response.rows[i]
+                let userName = resdata.userName;
+                obj.dictLabel = userName;
+                obj.dictValue = userName;
+                this.users.push(obj);
+              }
+            }
+          })
         }
-      }).catch(error => {
-        console.log(error);
-      });
+      })
     },
     handleClose() {
       this.dialogVisible = false;

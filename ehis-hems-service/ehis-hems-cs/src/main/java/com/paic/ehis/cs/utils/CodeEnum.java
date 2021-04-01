@@ -32,9 +32,9 @@ public enum CodeEnum {
     INSPECTION_STATE_01("cs_inspection_state","01","待质检"),
     INSPECTION_STATE_02("cs_inspection_state","02","质检中"),
     INSPECTION_STATE_03("cs_inspection_state","03","质检完成"),
-    /*
-    *质检处理状态
-     */
+   /**
+    * 质检处理状态
+    */
     CONFIRM_STATE_01("cs_confirm_state","01","待确认"),
     CONFIRM_STATE_02("cs_confirm_state","02","已确认"),
     CONFIRM_STATE_03("cs_confirm_state","03","结案"),
@@ -68,6 +68,30 @@ public enum CodeEnum {
     /**
      * 操作状态
      */
+    ACTION_TYPE_01("cs_action_type","01","新增"),
+    ACTION_TYPE_02("cs_action_type","02","获取"),
+    ACTION_TYPE_03("cs_action_type","03","修改"),
+    ACTION_TYPE_04("cs_action_type","04","取消"),
+    ACTION_TYPE_05("cs_action_type","05","处理"),
+    ACTION_TYPE_06("cs_action_type","06","受理"),
+    ACTION_TYPE_07("cs_action_type","07","上传附件"),
+    ACTION_TYPE_08("cs_action_type","08","提交"),
+    ACTION_TYPE_09("cs_action_type","09","确定"),
+    ACTION_TYPE_10("cs_action_type","10","转办"),
+    ACTION_TYPE_11("cs_action_type","11","协办完成"),
+    ACTION_TYPE_12("cs_action_type","12","暂存"),
+    ACTION_TYPE_13("cs_action_type","13","发起质检"),
+    ACTION_TYPE_14("cs_action_type","14","响应"),
+    ACTION_TYPE_15("cs_action_type","15","发起协办"),
+    ACTION_TYPE_16("cs_action_type","16","撤销协办"),
+    ACTION_TYPE_17("cs_action_type","17","退回修改"),
+    ACTION_TYPE_18("cs_action_type","18","结案"),
+    ACTION_TYPE_19("cs_action_type","19","差错提交"),
+    ACTION_TYPE_20("cs_action_type","20","案件复核"),
+
+    /**
+     * 代码备用状态
+     */
     OPERATE_CODE_01("cs_operate_code","01","受理"),
     OPERATE_CODE_02("cs_operate_code","02","接收"),
     OPERATE_CODE_03("cs_operate_code","03","修改"),
@@ -92,11 +116,16 @@ public enum CodeEnum {
     OPERATE_CODE_22("cs_operate_code","22","导出"),
     OPERATE_CODE_23("cs_operate_code","23","导入"),
 
-
-
-
-
-
+    SERVICE_ITEM_01("cs_service_item","01","增值服务类"),
+    SERVICE_ITEM_02("cs_service_item","02","理赔类"),
+    SERVICE_ITEM_03("cs_service_item","03","其他"),
+    SERVICE_ITEM_04("cs_service_item","04","VIP门诊预约"),
+    SERVICE_ITEM_05("cs_service_item","05","特殊门诊直接结算服务"),
+    SERVICE_ITEM_06("cs_service_item","06","门诊直接结算"),
+    SERVICE_ITEM_07("cs_service_item","07","住院直接结算"),
+    SERVICE_ITEM_08("cs_service_item","08","门诊中医治疗直接结算"),
+    SERVICE_ITEM_B00006("cs_service_item","B00006","投诉"),
+    SERVICE_ITEM_B00034("cs_service_item","B00034","根因改善"),
 
 
 

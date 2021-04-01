@@ -1,6 +1,7 @@
 package com.paic.ehis.finance.controller;
 
 
+import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.poi.ExcelUtils;
 import com.paic.ehis.common.core.web.controller.BaseController;
 import com.paic.ehis.common.core.web.domain.AjaxResult;
@@ -14,7 +15,9 @@ import com.paic.ehis.finance.domain.TpaSettleDetailInfo;
 import com.paic.ehis.finance.domain.TpaSettleInfo;
 import com.paic.ehis.finance.domain.dto.TpaSettleDTO;
 import com.paic.ehis.finance.service.IFinanceTpaSettleTaskService;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -57,8 +60,7 @@ public class FinanceTpaSettleTaskController extends BaseController
      */
     @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:task:list')")
     @GetMapping("/tpaTaskInitiated")
-    public TableDataInfo tpaTaskInitiated(TpaSettleDTO tpaSettleDTO)
-    {
+    public TableDataInfo tpaTaskInitiated(TpaSettleDTO tpaSettleDTO) throws Exception {
         List<TpaSettleInfo> tpaSettleInfos = financeTpaSettleTaskService.tpaTaskInitiated(tpaSettleDTO);
         return getDataTable(tpaSettleInfos);
     }
@@ -74,6 +76,7 @@ public class FinanceTpaSettleTaskController extends BaseController
     @GetMapping("/tpaList")
     public TableDataInfo tpaList(TpaSettleDTO tpaSettleDTO)
     {
+        startPage(tpaSettleDTO);
         List<FinanceTpaSettleTask> list = financeTpaSettleTaskService.selectTpaSettleTaskList(tpaSettleDTO);
         return getDataTable(list);
     }
@@ -121,10 +124,10 @@ public class FinanceTpaSettleTaskController extends BaseController
                     rowData.add(tpaSettleInfos.get(i).getTotalPeople());
                 }
                 if ("02".equals(tpaSettleInfos.get(0).getSettlementType())){
-                    rowData.add(tpaSettleInfos.get(i).getSumPerm());
+                    rowData.add(String.valueOf(tpaSettleInfos.get(i).getSumPerm()));
                 }
-                rowData.add(tpaSettleInfos.get(i).getSettlementValue());
-                rowData.add(tpaSettleInfos.get(i).getServiceSettleAmount());
+                rowData.add(String.valueOf(tpaSettleInfos.get(i).getSettlementValue()));
+                rowData.add(String.valueOf(tpaSettleInfos.get(i).getServiceSettleAmount()));
                 rowData.add(tpaSettleInfos.get(i).getRemark());
                 data1.add(rowData);
             }
@@ -147,17 +150,18 @@ public class FinanceTpaSettleTaskController extends BaseController
                 rowData.add(detailInfos.get(i).getAppName());
                 rowData.add(detailInfos.get(i).getName());
                 rowData.add(detailInfos.get(i).getRiskName());
-                rowData.add(detailInfos.get(i).getValidStartDate());
+                rowData.add(DateUtils.parseDate(detailInfos.get(i).getValidStartDate()));
                 if ("02".equals(tpaSettleInfos.get(0).getSettlementType())) {
-                    rowData.add(detailInfos.get(i).getPremiumRatio());
-                    rowData.add(detailInfos.get(i).getPrem());
+                    rowData.add(String.valueOf(detailInfos.get(i).getPremiumRatio()));
+                    rowData.add(String.valueOf(detailInfos.get(i).getPrem()));
                 }
-                rowData.add(detailInfos.get(i).getServiceAmount());
+                rowData.add(String.valueOf(detailInfos.get(i).getServiceAmount()));
                 rowData.add(detailInfos.get(i).getRemark());
                 data2.add(rowData);
             }
             ExcelUtils eeu = new ExcelUtils();
-            SXSSFWorkbook workbook = new SXSSFWorkbook();
+//            SXSSFWorkbook workbook = new SXSSFWorkbook();
+            Workbook workbook = new XSSFWorkbook();
             String[] sheetTitle = new String[]{"TPA服务费结算信息","TPA服务费结算明细信息"};
             eeu.exportExcel(response,workbook,sheetTitle, strings, data1,data2);
         } catch (Exception e) {
@@ -223,7 +227,7 @@ public class FinanceTpaSettleTaskController extends BaseController
     }*/
 
     /**
-     * 获取TPA服务费结算任务详细信息
+     *  确认TPA服务费结算任务
      */
     @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:task:query')")
     @PutMapping(value = "/{settleTaskNo}")

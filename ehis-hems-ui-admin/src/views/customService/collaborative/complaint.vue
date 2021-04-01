@@ -354,9 +354,9 @@
           highlight-current-row
           tooltip-effect="dark"
           style=" width: 100%;">
-          <el-table-column align="center" width="140" prop="status" label="状态" show-overflow-tooltip>
-            <template slot-scope="scope" v-if="scope.row.status">
-              <span>{{ selectDictLabel(cs_order_state, scope.row.status) }}</span>
+          <el-table-column align="center" width="140" prop="linkCode" label="状态" show-overflow-tooltip>
+            <template slot-scope="scope" v-if="scope.row.linkCode">
+              <span>{{ selectDictLabel(cs_link_code, scope.row.linkCode) }}</span>
             </template>
           </el-table-column>
           <el-table-column align="center" prop="operateCode" label="操作" show-overflow-tooltip>
@@ -373,7 +373,7 @@
           </el-table-column>
           <el-table-column prop="remarks" align="center" label="说明" show-overflow-tooltip>
             <template slot-scope="scope">
-              <el-link v-if="scope.row.operateCode=='01'" style="font-size:12px" type="primary"
+              <el-link v-if="scope.row.operateCode=='03'" style="font-size:12px" type="primary"
                        @click="modifyDetails(scope.row)">修改说明
               </el-link>
             </template>
@@ -523,7 +523,7 @@
           <el-col :span="8">
             <el-form-item label="营销渠道：" prop="marketChannel">
               <el-select v-model="sendForm.marketChannel" class="item-width">
-                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in cs_marketingchannel_codeOption" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
@@ -540,7 +540,7 @@
           </el-form-item>
         </el-row>
         <el-row>
-          <el-form-item label="质诉根因：" prop="actionCause">
+          <el-form-item label="致诉根因：" prop="actionCause">
             <el-input v-model="sendForm.actionCause" clearable size="mini" class="width-full"/>
           </el-form-item>
         </el-row>
@@ -567,7 +567,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="跟因改善：" prop="rootImprovement">
+          <el-form-item label="根因改善：" prop="rootImprovement">
             <el-input v-model="sendForm.rootImprovement" class="item-width" clearable size="mini" placeholder="请输入"/>
           </el-form-item>
         </el-col>
@@ -610,8 +610,8 @@
         <up-load ref="upload"></up-load>
         <co-organizer ref="coOrganizer"></co-organizer>
         <el-button type="primary" size="mini" @click="temporary">暂存</el-button>
-        <el-button type="primary" size="mini" @click="transfer">转办</el-button>
-        <el-button type="primary" size="mini" @click="coOrganizer">催办</el-button>
+        <el-button type="primary" size="mini" @click="coOrganizer">协办</el-button>
+        <el-button type="primary" size="mini" @click="urge">催办</el-button>
         <el-button type="primary" size="mini" @click="coCancel">撤销</el-button>
       </div>
     </el-card>
@@ -654,12 +654,13 @@ let dictss = [
   {dictType: 'cs_drop_status'},
   {dictType: 'cs_reason_level1'},
   {dictType: 'cs_action_type'},
-  {dictType: 'cs_order_state'},
+  {dictType: 'cs_link_code'},
   {dictType: 'cs_service_item'},
   {dictType: 'cs_business_type'},
   {dictType: 'cs_mediation_appraisal'},
   {dictType: 'cs_risk_type'},
   {dictType: 'cs_question_circ'},
+  {dictType: 'cs_marketingchannel_code'},
 ];
 export default {
   components: {
@@ -790,7 +791,7 @@ export default {
       cs_relation: [],
       cs_feedback_type: [],
       cs_end_case: [],
-      cs_order_state: [],//状态
+      cs_link_code: [],//状态
       cs_action_type: [],//操作类型
       cs_priority: [],//优先级
       cs_service_item: [],//服务项目
@@ -802,11 +803,11 @@ export default {
       cs_whether_flag: [],
       cs_mediation_appraisal: [],
       cs_risk_type: [],
+      cs_marketingchannel_codeOption: [],
       cs_question_circ: [],
     }
   },
   created() {
-    debugger
     this.queryParams.workOrderNo = this.$route.query.workOrderNo;
     this.queryParams.policyNo = this.$route.query.policyNo;
     this.queryParams.policyItemNo = this.$route.query.policyItemNo;
@@ -841,6 +842,9 @@ export default {
     this.cs_whether_flag = this.dictList.find(item => {
       return item.dictType === 'cs_whether_flag'
     }).dictDate
+    this.cs_marketingchannel_code = this.dictList.find(item => {
+      return item.dictType === 'cs_marketingchannel_codeOption'
+    }).dictDate
     this.cs_organization = this.dictList.find(item => {
       return item.dictType === 'cs_organization'
     }).dictDate
@@ -868,8 +872,8 @@ export default {
     this.cs_action_type = this.dictList.find(item => {
       return item.dictType === 'cs_action_type'
     }).dictDate
-    this.cs_order_state = this.dictList.find(item => {
-      return item.dictType === 'cs_order_state'
+    this.cs_link_code = this.dictList.find(item => {
+      return item.dictType === 'cs_link_code'
     }).dictDate
     this.cs_service_item = this.dictList.find(item => {
       return item.dictType === 'cs_service_item'
@@ -1015,7 +1019,8 @@ export default {
     },
     //协办
     coOrganizer() {
-      this.$refs.coOrganizer.open();
+      this.$refs.coOrganizer.dynamicValidateForm.workOrderNo = this.queryParams.workOrderNo;
+      this.$refs.coOrganizer.open(this.queryParams.workOrderNo);
     },
     //超链接用
     modifyDetails(s) {

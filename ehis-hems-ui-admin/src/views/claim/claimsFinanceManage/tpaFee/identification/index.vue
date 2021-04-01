@@ -15,7 +15,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="出单公司：" prop="companyCode">
-              <el-select v-model="formSearch.companyCode" clearable class="item-width" placeholder="请选择">
+              <el-select v-model="formSearch.companyCode" clearable class="item-width" placeholder="请选择" @change="companyChange" >
                 <el-option v-for="option in companySelect" :key="option.dictValue" :label="option.dictLabel" :value="option.dictValue" />
               </el-select>
             </el-form-item>
@@ -69,7 +69,7 @@
       </div>
 
       <!--服务费结算列表 start -->
-      <feeTable  :table-data="initTableData" :status="status"  @openDetail="openDetail"/>
+      <feeTable  :table-data="initTableData" :status="status"  @openDetail="openDetail" @initData="initData"/>
       <!--服务费结算列表 end-->
 
       <!--分页组件-->
@@ -124,6 +124,8 @@
         companySelect:[],
         settlementTypeSelect:[],
         riskCodeSelect:[],
+        preStart:'',
+        preEnd:'',
       }
     },
     mounted(){
@@ -157,13 +159,15 @@
         let createTimeStrt = '';
         let createTimeEnd = '';
         let createTimeArr = this.formSearch.createTimeArr;
-        if('' != createTimeArr) {
+        if('' !== createTimeArr && createTimeArr != null) {
           createTimeStrt = createTimeArr[0];
           createTimeEnd = createTimeArr[1];
           let entime = moment(createTimeStrt)
           let letime = moment(createTimeEnd)
           let dif = letime.diff(entime, 'months')
-          if(dif > 3) {
+          if(dif > 3 && (this.preStart !== createTimeStrt || this.preEnd !== createTimeEnd) ) {
+            this.preStart = createTimeStrt ;
+            this.preEnd = createTimeEnd ;
             // 时间跨度太长，是否确认
             this.$confirm('时间跨度太长，是否确认', '提示', {
               confirmButtonText: '确定',
@@ -214,10 +218,10 @@
         this.detailDialog = false
       },
       openDetail(info){
-        console.log("info *****************")
-        console.log(info)
-        console.log("info *****************")
-        this.fixInfo = info;
+        this.fixInfo = {
+          rowData:info.row,
+          type:info.type,
+        };
         this.detailDialog = true
       },
       openDialog(){

@@ -1,0 +1,162 @@
+<template>
+  <el-table
+    :data="tableData"
+    :header-cell-style="{color:'black',background:'#f8f8ff'}"
+    size="small"
+    highlight-current-row
+    tooltip-effect="dark"
+    v-loading="loading"
+    style="width: 100%;">
+    <el-table-column align="center" min-width="150" prop="appealRptNo" label="报案号" show-overflow-tooltip>
+      <template slot-scope="scope">
+        <el-button width="160" size="small" type="text" @click="viewHandle(scope.row,'show')">{{ scope.row.appealRptNo }}</el-button>
+      </template>
+    </el-table-column>
+    <el-table-column :formatter="getDeliverySourceName"  align="center" min-width="100" prop="caseStatus"  label="交单来源" show-overflow-tooltip/>
+    <el-table-column align="center" min-width="100" prop="name" label="被保人姓名" show-overflow-tooltip/>
+    <el-table-column align="center" prop="idNo" label="证件号码" show-overflow-tooltip/>
+    <el-table-column align="center" prop="claimType" :formatter="getClaimTypeName"  label="理赔类型" show-overflow-tooltip/>
+    <el-table-column align="center" prop="companyName" label="出单公司" show-overflow-tooltip/>
+    <el-table-column align="center" prop="policyManageCom" label="承保机构" show-overflow-tooltip/>
+    <el-table-column align="center" prop="payAmount" label="赔付金额" show-overflow-tooltip/>
+    <el-table-column align="center" prop="auditor" label="审核人" show-overflow-tooltip/>
+    <el-table-column align="center" :formatter="getAppealStatusName" prop="appealStatus" label="申诉状态" show-overflow-tooltip/>
+    <el-table-column align="center" prop="updateTime" label="操作日期" show-overflow-tooltip>
+      <template slot-scope="scope">
+        <span>{{ scope.row.updateTime | changeDate}}</span>
+      </template>
+    </el-table-column>
+    <el-table-column min-width="150" align="center"  v-if="status === '02' || status === '04'" prop="newRptNo" label="修正理赔号" show-overflow-tooltip>
+      <template slot-scope="scope">
+        <span>{{ scope.row.newRptNo}}</span>
+      </template>
+    </el-table-column>
+    <el-table-column  align="center" label="操作">
+      <template slot-scope="scope">
+        <el-button  size="mini"  type="text" @click="handleFun(scope.row)">获取 </el-button>
+      </template>
+    </el-table-column>
+  </el-table>
+</template>
+
+<script>
+import moment from "moment";
+import {updateAppeal} from "@/api/appeal/api";
+
+let dictss = [{dictType: 'appeal_status'}]
+
+export default {
+  filters: {
+    changeDate: function(value) {
+      if (value !== null) {
+        return moment(value).format('YYYY-MM-DD')
+      }
+    }
+  },
+  props: {
+    tableData: {
+      type: Array,
+      default: function() {
+        return []
+      }
+    },
+    deliverySource: {
+      type: Array,
+      default: function() {
+        return []
+      }
+    },
+    claimTypes: {
+      type: Array,
+      default: function() {
+        return []
+      }
+    },
+    status: String,
+  },
+  watch: {
+    tableData:function(newValue) {
+      this.loading = false;
+    },
+  },
+  async mounted(){
+
+    await this.getDictsList(dictss).then(response => {
+      this.dictList = response.data
+    })
+    //申诉状态
+    this.appealStatus = this.dictList.find(item => {
+      return item.dictType === 'appeal_status'
+    }).dictDate
+
+  },
+  data() {
+    return {
+      loading:true,
+      appealStatus:[],
+      detailInfo:{
+        row:'',
+        type:'',
+      },
+    }
+  },
+  methods: {
+    handleFun(row) {
+      //console.log("row" , row);
+      let params = {};
+      params.taskId = row.taskId;
+      params.dealType = 'initPersonPool';
+      updateAppeal(params).then(response => {
+        if (response.code === 200) {
+          this.$message({
+            message: '获取成功！',
+            type: 'success',
+            center: true,
+            showClose: true
+          });
+          this.$emit('initAppealData');
+          this.changeDialogVisable();
+        } else {
+          this.$message({
+            message: '获取失败！',
+            type: 'error',
+            center: true,
+            showClose: true
+          });
+        }
+      }).catch(error => {
+        console.log(error);
+      });
+    },
+    getDeliverySourceName(row,col) {
+      return this.selectDictLabel(this.deliverySource, row.source)
+    },
+    getClaimTypeName(row,col) {
+      return this.selectDictLabel(this.claimTypes, row.claimType)
+    },
+
+    getAppealStatusName(row,col) {
+      return this.selectDictLabel(this.appealStatus, row.appealStatus)
+    },
+    // 处理跳转
+    viewHandle(row, status) {
+      let data = encodeURI(
+        JSON.stringify({
+          batchNo: row.batchNo,
+          claimType: row.claimType,
+          rptNo: row.appealRptNo,
+          status,
+          node: 'calculateReview',
+          styleFlag: 'list',
+        })
+      )
+      this.$router.push({
+        path: '/claims-handle/accept-process',
+        query: {
+          data
+        }
+      })
+    },
+  }
+}
+</script>

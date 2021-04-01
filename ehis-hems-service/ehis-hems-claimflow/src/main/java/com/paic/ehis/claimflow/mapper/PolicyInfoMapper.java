@@ -9,6 +9,8 @@ import com.paic.ehis.claimflow.domain.interfaceclass.InsuredNoAndName;
 import com.paic.ehis.claimflow.domain.vo.DutyVo;
 import com.paic.ehis.claimflow.domain.vo.PolicyListVo;
 import com.paic.ehis.claimflow.domain.vo.PolicyVo;
+import com.paic.ehis.system.api.domain.CompanyRiskPolicyInfo;
+import com.paic.ehis.system.api.domain.PolicyAndRiskRelation;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -37,6 +39,15 @@ public interface PolicyInfoMapper
      * @return 保单信息集合
      */
     public List<PolicyInfo> selectPolicyInfoList(PolicyInfo policyInfo);
+
+    /* 根据保单、分单查询保单数据 */
+    public CompanyRiskPolicyInfo selectPolicyInfoListByPolicyNo(PolicyAndRiskRelation policyAndRiskRelation);
+
+/* 根据出单公司险种查询 险种层级数据 */
+    public CompanyRiskPolicyInfo selectCompanyRiskInfo(PolicyAndRiskRelation policyAndRiskRelation);
+
+    /* 根据出单公司险种查询 分单层级数据 */
+    public CompanyRiskPolicyInfo selectCompanyRiskPolicyInfo(PolicyAndRiskRelation policyAndRiskRelation);
 
     public CustomerInfoMap selectCustomerInfoMap(String insuredNo);
 

@@ -65,12 +65,16 @@ public class AcceptVo extends BaseEntity
     @Excel(name = "修改时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date modifyTime;
     /** 受理人信息 */
-    @Excel(name = "受理人")
+   // @Excel(name = "受理人")
     private String acceptBy;
+    @Excel(name = "受理人")
+    private String createBy;
     /** 目前用不上,受理人信息以登录名称显示 */
     private UserInfo acceptUser=new UserInfo();
     /** 处理人信息 */
     @Excel(name = "处理人")
+    private String updateBy;
+
     private String modifyUserId;
     /** 目前用不上,处理人信息以登录名称显示 */
     private UserInfo modifyUser=new UserInfo();
@@ -219,5 +223,7 @@ public class AcceptVo extends BaseEntity
 
     //禁用工单拆查询获取操作
     private String flag;
+    private Integer activationNum;
 
+    private String[] workOrderNoMany;
 }

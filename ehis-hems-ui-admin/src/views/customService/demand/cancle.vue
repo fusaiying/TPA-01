@@ -291,16 +291,16 @@
           <el-col :span="16">
             <el-form-item label="联系人固定电话：" style="white-space: nowrap" prop="phone">
               国家区号+
-              <el-input v-model="workPoolData.contactsPerson.homePhone1[0]" class="item-width" readonly
+              <el-input v-model="workPoolData.contactsPerson.linePhones0" class="item-width" readonly
                         style="width: 75px"/>
               区号
-              <el-input v-model="workPoolData.contactsPerson.homePhone1[1]" class="item-width" readonly size="mini"
+              <el-input v-model="workPoolData.contactsPerson.linePhones1" class="item-width" readonly size="mini"
                         style="width: 75px" maxlength="50"/>
               号码
-              <el-input v-model="workPoolData.contactsPerson.homePhone1[2]" class="item-width" readonly size="mini"
+              <el-input v-model="workPoolData.contactsPerson.linePhones2" class="item-width" readonly size="mini"
                         style="width: 120px" maxlength="50"/>
               分机号
-              <el-input v-model="workPoolData.contactsPerson.homePhone1[3]" class="item-width" readonly size="mini"
+              <el-input v-model="workPoolData.contactsPerson.linePhones3" class="item-width" readonly size="mini"
                         style="width: 75px" maxlength="50"/>
             </el-form-item>
           </el-col>
@@ -391,8 +391,8 @@
           tooltip-effect="dark"
           style=" width: 100%;">
           <el-table-column align="center" width="140" prop="status" label="状态" show-overflow-tooltip>
-            <template slot-scope="scope" v-if="scope.row.status">
-              <span>{{ selectDictLabel(cs_order_state, scope.row.status) }}</span>
+            <template slot-scope="scope" v-if="scope.row.linkCode">
+              <span>{{ selectDictLabel(cs_link_code, scope.row.linkCode) }}</span>
             </template>
           </el-table-column>
           <el-table-column align="center" prop="operateCode" label="操作" show-overflow-tooltip>
@@ -511,7 +511,7 @@ import {
   demandListAndPublicPool,
   demandListAndPersonalPool,
   FlowLogSearch,
-  cancelSubmit
+  cancelSubmit, PersonalPool
 } from '@/api/customService/demand'
 import modifyDetails from "../common/modul/modifyDetails";
 
@@ -528,6 +528,7 @@ let dictss = [
   {dictType: 'cs_end_case'},
   {dictType: 'cs_cancle_reason'},
   {dictType: 'cs_service_item'},
+  {dictType: 'cs_link_code'},
 ]
 export default {
   components: {
@@ -580,6 +581,7 @@ export default {
       cs_feedback_type: [],
       cs_end_case: [],
       cs_service_item: [],
+      cs_link_code: [],
       sendForm: {
         channle: "",
         textarea: "",
@@ -616,7 +618,8 @@ export default {
       loading: true,
       workPoolData: {
         contactsPerson: {
-          homePhone1: []
+          homePhone1: [],
+          linePhone1: []
         },
         callPerson: {},
         callCenterId: "",
@@ -701,7 +704,9 @@ export default {
     this.cs_service_item = this.dictList.find(item => {
       return item.dictType === 'cs_service_item'
     }).dictDate
-
+    this.cs_link_code = this.dictList.find(item => {
+      return item.dictType === 'cs_link_code'
+    }).dictDate
   },
 
   methods: {
@@ -749,52 +754,53 @@ export default {
     },
     //反显信息需求
     searchHandle() {
-      if (this.queryParams.status == "01") {
-        const query = this.queryParams
-        demandListAndPublicPool(query).then(res => {
-          if (res != null && res.code === 200) {
-            this.workPoolData = res.rows[0];
-            this.totalCount = res.total
-            console.log('公共', res.rows)
-            if (res.rows.length <= 0) {
-              return this.$message.warning(
-                "未查询到数据！"
-              )
-            }
-          }
-        }).catch(res => {
-
-        })
-      } else {
-        let query = this.queryParams
-        demandListAndPersonalPool(query).then(res => {
-          console.log('公共', this.workPoolData)
-          if (res != null && res.code === 200) {
-            let workPoolData = res.rows[0];
+      const query = this.queryParams
+      PersonalPool(query).then(res => {
+        if (res != null && res.code === 200) {
+          if (res.data!=null && res.data!=''){
+            let workPoolData = res.data;
             let editInfo = {
               editReason: "",
               editRemark: ""
             };
-            workPoolData.editInfo = editInfo
-            workPoolData.officeCountry = ""
-            workPoolData.officeNumber = ""
-            workPoolData.officeQuhao = ""
-            workPoolData.officeSecondNumber = ""
+            workPoolData.editInfo = editInfo;
+            workPoolData.officeCountry = "";
+            workPoolData.officeNumber = "";
+            workPoolData.officeQuhao = "";
+            workPoolData.officeSecondNumber = "";
             this.workPoolData = workPoolData;
-            this.totalCount = res.total
-            console.log(this.workPoolData)
-
-            if (res.rows.length <= 0) {
-              return this.$message.warning(
-                "未查询到数据！"
-              )
+            this.workPoolData.contactsPerson.linePhones0 = ''
+            this.workPoolData.contactsPerson.linePhones1 = ''
+            this.workPoolData.contactsPerson.linePhones2 = ''
+            this.workPoolData.contactsPerson.linePhones3 = ''
+            if(this.workPoolData.contactsPerson.linePhone1.length==4) {
+              this.workPoolData.contactsPerson.linePhones0 = this.workPoolData.contactsPerson.linePhone1[0];
+              this.workPoolData.contactsPerson.linePhones1 = this.workPoolData.contactsPerson.linePhone1[1];
+              this.workPoolData.contactsPerson.linePhones2 = this.workPoolData.contactsPerson.linePhone1[2];
+              this.workPoolData.contactsPerson.linePhones3 = this.workPoolData.contactsPerson.linePhone1[3];
             }
+            else if(this.workPoolData.contactsPerson.linePhone1.length==3){
+              this.workPoolData.contactsPerson.linePhones0 = this.workPoolData.contactsPerson.linePhone1[0];
+              this.workPoolData.contactsPerson.linePhones1 = this.workPoolData.contactsPerson.linePhone1[1];
+              this.workPoolData.contactsPerson.linePhones2 = this.workPoolData.contactsPerson.linePhone1[2];
+            }
+            else if(this.workPoolData.contactsPerson.linePhone1.length==2){
+              this.workPoolData.contactsPerson.linePhones0 = this.workPoolData.contactsPerson.linePhone1[0];
+              this.workPoolData.contactsPerson.linePhones1 = this.workPoolData.contactsPerson.linePhone1[1];
+
+            }
+            else if(this.workPoolData.contactsPerson.linePhone1.length==1){
+              this.workPoolData.contactsPerson.linePhones0 = this.workPoolData.contactsPerson.linePhone1[0];
+            }
+
           }
-        }).catch(res => {
 
-        })
-
-      }
+        }
+      }).catch(res => {
+        return this.$message.error(
+          "信息需求受理数据加载异常！"
+        )
+      })
     },
     //查询轨迹表
     searchFlowLog() {

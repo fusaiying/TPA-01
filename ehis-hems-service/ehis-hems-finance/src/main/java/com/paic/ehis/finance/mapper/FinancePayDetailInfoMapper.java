@@ -59,4 +59,12 @@ public interface FinancePayDetailInfoMapper
      * @return 结果
      */
     public int deleteFinancePayDetailInfoByIds(Long[] payDetailIds);
+    /**
+     * 查询支付明细信息
+     *
+     * @param rptNo 报案号
+     * @return 支付明细信息
+     */
+    public FinancePayDetailInfo selectFinancePayDetailInfoByRptNos(String rptNo);
+
 }

@@ -8,8 +8,8 @@
       <el-form ref="form" :model="form" style="" label-width="130px" label-position="right" size="mini">
         <el-row>
           <el-col :span="8">
-            <el-form-item label="角色查询：" prop="roleId">
-              <el-select v-model="form.roleId" class="item-width" size="mini" placeholder="请选择">
+            <el-form-item label="角色查询：" prop="roleCode">
+              <el-select v-model="form.roleCode" class="item-width" size="mini" placeholder="请选择">
                 <el-option v-for="option in roleSelects" :key="option.dictValue" :label="option.dictLabel" :value="option.dictValue" />
               </el-select>
             </el-form-item>
@@ -41,10 +41,11 @@
             class="receive_table"
             :header-cell-style="{color:'black',background:'#f8f8ff'}">
 
-            <el-table-column prop="roleName" label="角色"  align="center" show-overflow-tooltip />
+            <el-table-column prop="roleCode" :formatter="getRoleName" label="角色"  align="center" show-overflow-tooltip />
             <el-table-column prop="userName" label="操作用户"  align="center" show-overflow-tooltip />
             <el-table-column prop="rate" label="分配比例" :formatter="rateOrEqually"  align="center" show-overflow-tooltip />
             <el-table-column prop="status" label="是否有效" :formatter="getStatusName" align="center" show-overflow-tooltip />
+            <el-table-column prop="orangeCode" label="所属机构" v-if="show" align="center" show-overflow-tooltip />
             <el-table-column label="操作" align="center" style="padding-top: 0px;">
               <template slot-scope="scope">
                 <el-button   size="mini" type="text" icon="el-icon-edit" @click="editFun(scope.row)">编辑</el-button>
@@ -66,7 +67,7 @@
     <user-modal :value="diaVisible" :roleSelects="roleSelects"  :fixInfo="fixInfo"  @closeDialogVisable="closeDialogVisable" @gettableData="gettableData"/>
 
     <!-- 一键分配弹框 -->
-    <assign-modal :value="assignDiaVisible"  :roleSelects="roleSelects"  @closeAssignDiaVisible="closeAssignDiaVisible" @gettableData="gettableData"/>
+    <assign-modal :roleCode="form.roleCode" :value="assignDiaVisible" :roleMappingValue="roleMappingValue" :roleSelects="roleSelects"  @closeAssignDiaVisible="closeAssignDiaVisible" @gettableData="gettableData"/>
 
   </div>
 </template>
@@ -96,7 +97,7 @@
         data() {
             return {
               form:{
-                roleId:'',
+                roleCode:'',
               },
               fixInfo: {
                 rowdata :'',
@@ -126,7 +127,8 @@
               },
               ysOrNo:[],
               roleSelects:[],
-
+              roleMappingValue:{},
+              show:false
             }
         },
       mounted(){
@@ -141,10 +143,9 @@
       },
 
       created: function() {
-        this.initData();
+       // this.initData();
       },
       methods: {
-
         closeDialogVisable() {
           this.diaVisible = false
         },
@@ -160,12 +161,18 @@
         },
         //查询
         gettableData () {
+          if(this.form.roleCode === '' || this.form.roleCode === null) {
+            this.$message({ type: 'warning',  message: '请选择角色进行查询'});
+            return false;
+          }
+
 
           this.loading = true;
           const params = {
             pageNum:this.pageInfo.currentPage,
             pageSize:this.pageInfo.pageSize,
-            roleId: this.form.roleId,
+            mappingValue:this.roleMappingValue[this.form.roleCode],
+            roleCode: this.form.roleCode,
             orderByColumn:'t1.create_time',
             isAsc:'desc'
           };
@@ -188,6 +195,10 @@
           this.assignDiaVisible = true;
         },
         editFun(row) {
+          if(row.isEqually === 'Y') {
+            this.$message({ type: 'warning',  message: '请先取消一键均分'});
+            return false;
+          }
           this.fixInfo = {
             rowdata :row,
             type :'edit'
@@ -197,18 +208,21 @@
         getStatusName(row, col){
           if(row.status == 'Y' || row.status == '01') {
             return '有效';
-          } else {
+          } else if(row.status == 'N' || row.status == '02') {
             return '无效';
+          } else {
+            return '';
           }
         },
         rateOrEqually(row, col){
-          if(row.isEqually == 'Y' && row.status == '02') {
-            return '0';
-          } else if(row.isEqually == 'Y') {
+          if(row.isEqually == 'Y') {
             return '均分';
-          } else {
+          }  else {
             return row.rate;
           }
+        },
+        getRoleName(row, col){
+          return this.selectDictLabel(this.roleSelects, row.roleCode)
         },
         getAllRole(){
           const query ={
@@ -216,12 +230,15 @@
             xtype:'roleAll',
           };
           roleAll(query).then(response => {
-            if(response.rows) {
-              for(let i=0; i<response.rows.length; i++) {
+            if(response.data) {
+              for(let i=0; i<response.data.length; i++) {
                 let obj= new Object();
-                obj.dictLabel = response.rows[i].roleName;
-                obj.dictValue = response.rows[i].roleId.toString();
+               let roleCode =  response.data[i].roleCode.toString()
+               let mappingValue = response.data[i].mappingValue;
+                obj.dictLabel = response.data[i].roleName;
+                obj.dictValue = roleCode;
                 this.roleSelects.push(obj);
+                this.roleMappingValue[roleCode] = mappingValue;
               }
             }
           }).catch(error => {

@@ -379,7 +379,8 @@
             <el-date-picker
               v-model="ruleForm.complaintTime"
               type="datetime"
-              placeholder="选择日期时间">
+              placeholder="选择日期时间"
+              value-format="yyyy-MM-dd HH:mm:ss">
             </el-date-picker>
           </el-form-item>
           </el-col>
@@ -394,7 +395,7 @@
 
         </el-row>
 
-        <el-form-item label="业务内容：" prop="content">
+        <el-form-item label="投诉内容：" prop="content">
         <el-input
           type="textarea"
           :rows="3"
@@ -419,7 +420,7 @@
         <up-load  :dialogVisable="dialogVisable"></up-load>
         <el-table
           :header-cell-style="{color:'black',background:'#f8f8ff'}"
-          :data="workPoolData"
+          :data="HCSPoolData"
           size="small"
           highlight-current-row
           tooltip-effect="dark"
@@ -463,13 +464,13 @@
     filters: {
       changeDate: function (value) {
         if (value !== null) {
-          return moment(value).format('YYYY-MM-DD')
+          return moment(value).format('yyyy-MM-DD HH:mm:ss')
         }
       }
     },
     data() {
       const checkComplaintTime= (rule, value, callback) => {
-        let tDate = new Date();
+        let tDate = moment(new Date()).format('yyyy-MM-DD HH:mm:ss');
         if(tDate > value){
           callback(new Error("预约时间不能早于当前日期"));
         }else{
@@ -511,6 +512,7 @@
             identity:"",
 
           },
+          HCSPoolData: [],
           workOrderNo:"",
           complaintTime:"",
           priorityLevel:"",//优先级
@@ -707,7 +709,6 @@
       }
     },
     created() {
-      debugger;
       window.aaa = this;
       this.searchHandle()
       this.getDicts("cs_complaint_item").then(response => {
@@ -770,7 +771,6 @@
         this.$refs.sendForm.resetFields()
       },
       searchHandle() {
-        debugger;
         let query = {
           pageNum: this.queryParams.pageNum,
           pageSize: this.queryParams.pageSize,

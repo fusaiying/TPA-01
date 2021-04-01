@@ -10,9 +10,9 @@
         highlight-current-row
         tooltip-effect="dark"
         style=" width: 100%;">
-        <el-table-column align="center" prop="status" label="状态" show-overflow-tooltip>
-          <template slot-scope="scope" v-if="scope.row.status">
-            <span>{{ selectDictLabel(cs_order_state, scope.row.status) }}</span>
+        <el-table-column align="center" prop="linkCode" label="状态" show-overflow-tooltip>
+          <template slot-scope="scope" v-if="scope.row.linkCode">
+            <span>{{ selectDictLabel(cs_link_code, scope.row.linkCode) }}</span>
           </template>
         </el-table-column>
         <el-table-column align="center" prop="operateCode" label="操作" show-overflow-tooltip>
@@ -34,6 +34,7 @@
             </el-link>
           </template>
         </el-table-column>
+        <modify-details ref="modifyDetails"></modify-details>
         <el-table-column prop="opinion" align="center" label="处理意见" show-overflow-tooltip/>
         <el-table-column prop="toDepartment" align="center" label="流转部门" show-overflow-tooltip/>
         <el-table-column prop="toReason" align="center" label="流传原因" show-overflow-tooltip/>
@@ -52,7 +53,8 @@
 
 <script>
   import moment from "moment";
-  import {FlowLogSearch} from '@/api/customService/demand'
+  import {FlowLogSearch} from '@/api/customService/demand';
+  import modifyDetails from "../modul/modifyDetails";
 
   let dictss = [
     {dictType: 'cs_identity'},
@@ -63,10 +65,13 @@
     {dictType: 'cs_priority'},
     {dictType: 'cs_channel'},
     {dictType: 'cs_whether_flag'},
-    {dictType: 'cs_order_state'},
+    {dictType: 'cs_link_code'},
     {dictType: 'cs_action_type'},
   ]
   export default {
+    components: {
+      modifyDetails,
+    },
     name: "flowLogInfo",
     props: {
       routerParams: Object
@@ -90,10 +95,10 @@
           workOrderNo: "",
           policyNo: "",
           policyItemNo: "",
-          status: ""
+          status: "",
         },
         dictList: [],
-        cs_order_state: [],
+        cs_link_code: [],
         cs_action_type: [],
         cs_service_item: [],
         cs_communication_language: [],
@@ -117,8 +122,8 @@
       this.cs_action_type = this.dictList.find(item => {
         return item.dictType === 'cs_action_type'
       }).dictDate
-      this.cs_order_state = this.dictList.find(item => {
-        return item.dictType === 'cs_order_state'
+      this.cs_link_code = this.dictList.find(item => {
+        return item.dictType === 'cs_link_code'
       }).dictDate
       this.cs_communication_language = this.dictList.find(item => {
         return item.dictType === 'cs_communication_language'
@@ -147,9 +152,9 @@
     },
     methods: {
       modifyDetails(s) {
-        this.$refs.modifyDetails.queryParams.subId = s.subId
-        this.$refs.modifyDetails.queryParams.workOrderNo = this.queryParams.workOrderNo;
-        this.$refs.modifyDetails.open()
+          this.$refs.modifyDetails.queryParams.subId = s.subId,
+          this.$refs.modifyDetails.queryParams.workOrderNo = this.queryParams.workOrderNo;
+          this.$refs.modifyDetails.open()
         ;
       },
       searchFlowLog() {

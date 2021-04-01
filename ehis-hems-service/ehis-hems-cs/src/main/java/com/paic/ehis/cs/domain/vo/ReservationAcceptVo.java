@@ -43,6 +43,10 @@ public class ReservationAcceptVo extends BaseEntity {
     /** 被保人 */
     @Excel(name = "被保人")
     private String insuredName;
+    /** 被保人客户号 */
+    private String insuredNo;
+    /** 被保人*/
+    private PersonInfo insuredPerson;
 
     /** 投保人 */
     @Excel(name = "投保人")
@@ -195,12 +199,12 @@ public class ReservationAcceptVo extends BaseEntity {
 
     /**是否首次就诊*/
     private String firstFlag;
-
-    /**就诊日期*/
-    private String clinicDate;
-
-    /**就诊时间*/
-    private String clinicTime;
+//   使用预约日期appointmentDate和预约时间段complaintTime
+//    /**就诊日期*/
+//    private String clinicDate;
+//
+//    /**就诊时间*/
+//    private String clinicTime;
 
     /**就诊医院省*/
     private String province;
@@ -222,8 +226,12 @@ public class ReservationAcceptVo extends BaseEntity {
     private EditInfo editInfo;
 
     private EditDetail editDetail;
-
-
+    /** 医院名称 */
+    private String hospitalName;
+    /** 医院地址 */
+    private String hospitalAddress;
+    /**外部系统受理号*/
+    private String otherNo;
 
     /**
      * 修改原因

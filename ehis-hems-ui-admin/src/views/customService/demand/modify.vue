@@ -24,7 +24,7 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="电话中心业务流水号：" prop="callCenterId">
-              <el-input v-model="workPoolData.callCenterId" class="item-width" size="mini"/>
+              <el-input v-model="workPoolData.callCenterId" class="item-width" size="mini" :disabled="true"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -175,8 +175,8 @@
             tooltip-effect="dark"
             style=" width: 100%;">
           <el-table-column align="center" prop="status" label="状态" show-overflow-tooltip>
-            <template slot-scope="scope" v-if="scope.row.status">
-              <span>{{ selectDictLabel(cs_order_state, scope.row.status) }}</span>
+            <template slot-scope="scope" v-if="scope.row.linkCode">
+              <span>{{ selectDictLabel(cs_link_code, scope.row.linkCode) }}</span>
             </template>
           </el-table-column>
           <el-table-column align="center" prop="operateCode" label="操作" show-overflow-tooltip>
@@ -283,7 +283,7 @@ import {
   demandListAndPublicPool,
   demandListAndPersonalPool,
   FlowLogSearch,
-  modifySubmit
+  modifySubmit, PersonalPool
 } from '@/api/customService/demand'
 import modifyDetails from "../common/modul/modifyDetails";
 
@@ -296,7 +296,7 @@ let dictss = [
   {dictType: 'cs_priority'},
   {dictType: 'cs_channel'},
   {dictType: 'cs_whether_flag'},
-  {dictType: 'cs_order_state'},
+  {dictType: 'cs_link_code'},
   {dictType: 'cs_action_type'},
 ]
 export default {
@@ -398,7 +398,7 @@ export default {
     };
 
     return {
-      cs_order_state: [],//状态
+      cs_link_code: [],//状态
       cs_action_type: [],//操作类型
       workPoolDataFlag: false,
       workPoolDataFlag3: false,
@@ -506,8 +506,8 @@ export default {
     this.cs_action_type = this.dictList.find(item => {
       return item.dictType === 'cs_action_type'
     }).dictDate
-    this.cs_order_state = this.dictList.find(item => {
-      return item.dictType === 'cs_order_state'
+    this.cs_link_code = this.dictList.find(item => {
+      return item.dictType === 'cs_link_code'
     }).dictDate
     this.cs_communication_language = this.dictList.find(item => {
       return item.dictType === 'cs_communication_language'
@@ -589,27 +589,68 @@ export default {
     close() {
 
     },
-    //反显信息需求
+    //信息需求   修改页面
     searchHandle() {
-      if (this.queryParams.status == "01") {
-        let query = this.queryParams
-        demandListAndPublicPool(query).then(res => {
-          if (res != null && res.code === 200) {
-            let workPoolData = res.rows[0];
+      const query = this.queryParams
+      PersonalPool(query).then(res => {
+        if (res != null && res.code === 200) {
+          if (res.data!=null && res.data!=''){
+            let workPoolData = res.data;
             let editInfo = {
               editReason: "",
               editRemark: ""
             };
-            workPoolData.editReason = "",
+            workPoolData.editInfo = editInfo;
+            workPoolData.officeCountry = "";
+            workPoolData.officeNumber = "";
+            workPoolData.officeQuhao = "";
+            workPoolData.officeSecondNumber = "";
+            this.workPoolData = workPoolData;
+          }
+          if (this.$route.query.status=='02'){
+            this.workPoolData.editInfo.editReason='01'
+          }else if (this.$route.query.status=='03'){
+            this.workPoolData.editInfo.editReason='02'
+          }else if (this.$route.query.status=='04'){
+            this.workPoolData.editInfo.editReason='03'
+          }
+
+        }
+      }).catch(res => {
+        return this.$message.error(
+          "信息需求受理数据加载异常！"
+        )
+      })
+
+
+/*      if (this.queryParams.status == "01") {
+        let query = this.queryParams
+        demandListAndPublicPool(query).then(res => {
+          if (res != null && res.code === 200) {
+            if (res.rows.length>0){
+              let workPoolData = res.rows[0];
+              let editInfo = {
+                editReason: "",
+                editRemark: ""
+              };
+              workPoolData.editReason = "",
                 workPoolData.editRemark = "",
                 workPoolData.editInfo = editInfo
-            workPoolData.officeCountry = ""
-            workPoolData.officeNumber = ""
-            workPoolData.officeQuhao = ""
-            workPoolData.officeSecondNumber = ""
-            workPoolData.item = []
-            this.workPoolData = workPoolData;
+              workPoolData.officeCountry = ""
+              workPoolData.officeNumber = ""
+              workPoolData.officeQuhao = ""
+              workPoolData.officeSecondNumber = ""
+              workPoolData.item = []
+              this.workPoolData = workPoolData;
+            }
             //  this.bankChange(workPoolData.bankTransfer),//初始化是否校验银行
+            if (this.$route.query.status=='02'){
+              this.workPoolData.editInfo.editReason='01'
+            }else if (this.$route.query.status=='03'){
+              this.workPoolData.editInfo.editReason='02'
+            }else if (this.$route.query.status=='04'){
+              this.workPoolData.editInfo.editReason='03'
+            }
             this.totalCount = res.total
             if (res.rows.length <= 0) {
               return this.$message.warning(
@@ -624,17 +665,27 @@ export default {
         let query = this.queryParams
         demandListAndPersonalPool(query).then(res => {
           if (res != null && res.code === 200) {
-            let workPoolData = res.rows[0];
-            let editInfo = {
-              editReason: "",
-              editRemark: ""
-            };
-            workPoolData.editInfo = editInfo
-            workPoolData.officeCountry = ""
-            workPoolData.officeNumber = ""
-            workPoolData.officeQuhao = ""
-            workPoolData.officeSecondNumber = ""
-            this.workPoolData = workPoolData;
+            if (res.rows.length>0){
+              let workPoolData = res.rows[0];
+              let editInfo = {
+                editReason: "",
+                editRemark: ""
+              };
+              workPoolData.editInfo = editInfo
+              workPoolData.officeCountry = ""
+              workPoolData.officeNumber = ""
+              workPoolData.officeQuhao = ""
+              workPoolData.officeSecondNumber = ""
+              this.workPoolData = workPoolData;
+            }
+
+            if (this.$route.query.status=='02'){
+              this.workPoolData.editInfo.editReason='01'
+            }else if (this.$route.query.status=='03'){
+              this.workPoolData.editInfo.editReason='02'
+            }else if (this.$route.query.status=='04'){
+              this.workPoolData.editInfo.editReason='03'
+            }
             // this.bankChange(workPoolData.bankTransfer),
             this.totalCount = res.total
             if (res.rows.length <= 0) {
@@ -647,7 +698,7 @@ export default {
 
         })
 
-      }
+      }*/
 
     },
     //查询轨迹表

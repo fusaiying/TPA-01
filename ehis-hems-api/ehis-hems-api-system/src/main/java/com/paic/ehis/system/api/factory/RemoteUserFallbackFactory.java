@@ -2,7 +2,9 @@ package com.paic.ehis.system.api.factory;
 
 import com.paic.ehis.common.core.domain.R;
 import com.paic.ehis.common.core.web.domain.AjaxResult;
+import com.paic.ehis.common.core.web.page.TableDataInfo;
 import com.paic.ehis.system.api.RemoteUserService;
+import com.paic.ehis.system.api.domain.dto.MenuIdDTO;
 import com.paic.ehis.system.api.model.LoginUser;
 import feign.hystrix.FallbackFactory;
 import org.slf4j.Logger;
@@ -41,6 +43,11 @@ public class RemoteUserFallbackFactory implements FallbackFactory<RemoteUserServ
             @Override
             public AjaxResult userInfo() {
                 return AjaxResult.error("获取用户信息失败，原因：" + throwable.getMessage());
+            }
+
+            @Override
+            public TableDataInfo getUsersByMenuId(MenuIdDTO menuIdDTO) {
+                return null;
             }
         };
     }

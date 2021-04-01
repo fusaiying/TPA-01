@@ -25,6 +25,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="holderPersonId" column="holder_no"/>
         <result property="holderName" column="holder_name"/>
         <result property="acceptBy" column="accept_by"/>
+        <result property="createBy" column="create_by"/>
         <result property="modifyUserId" column="modify_by"/>
         <result property="updateBy" column="update_by"/>
         <result property="updateTime" column="update_time"/>
@@ -40,6 +41,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="callCenterId" column="call_center_id"/>
         <result property="status" column="status"/>
         <result property="count" column="count"/>
+        <result property="activationNum" column="activation_num"/>
     </resultMap>
 
 
@@ -59,14 +61,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <sql id="selectSendVo">
         select woa.work_order_no,woa.business_type,adi.channel_code,adi.item_code,concat(woa.business_type,'-', adi.item_code) as business_service,
-            woa.policy_no,woa.policy_item_no,woa.risk_code,woa.insured_no,woa.insured_name,woa.holder_no,woa.holder_name,woa.accept_by,woa.accept_time,woa.modify_by,woa.modify_time,woa.update_by,woa.update_time,woa.organ_code,woa.vip_flag,adi.priority_level,woa.status
+            woa.policy_no,woa.policy_item_no,woa.risk_code,woa.insured_no,woa.insured_name,woa.holder_no,woa.end_date,woa.holder_name,woa.accept_by,woa.accept_time,woa.modify_by,woa.modify_time,woa.create_by,woa.update_by,woa.update_time,woa.organ_code,woa.vip_flag,adi.priority_level,woa.status
         from work_order_accept woa
             left join accept_detail_info adi on woa.work_order_no = adi.work_order_no left join person_info pi on woa.insured_no=pi.person_id
     </sql>
-<!--质检信息列表查询-->
+    <!--工单信息列表查询-->
     <select id="selectSendByVo" parameterType="com.paic.ehis.cs.domain.dto.WorkOrderQueryDTO" resultMap="AcceptResult">
-        <include refid="selectSendVo"/>
-        where 1=1 and not exists (SELECT 1 FROM quality_inspection_accept qia WHERE qia.work_order_no=woa.work_order_no)
+        select woa.work_order_no,woa.business_type,adi.channel_code,adi.item_code,concat(woa.business_type,'-', adi.item_code) as business_service,
+        woa.policy_no,woa.policy_item_no,woa.risk_code,woa.insured_no,woa.insured_name,woa.holder_no,woa.end_date,woa.holder_name,woa.accept_by,woa.accept_time,woa.modify_by,woa.modify_time,woa.create_by,woa.update_by,woa.update_time,woa.organ_code,woa.vip_flag,adi.priority_level,woa.status
+        from work_order_accept woa
+        left join accept_detail_info adi on woa.work_order_no = adi.work_order_no left join person_info pi on woa.insured_no=pi.person_id
+        WHERE
+        1 = 1
         <if test="businessTypeList != null ">
             and woa.business_type IN (
             <foreach collection="businessTypeList" item="businessType"
@@ -106,30 +112,93 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <if test="mobilePhone != null  and mobilePhone != ''"> and pi.mobile_phone = #{mobilePhone}</if>
         <if test="organCode != null  and organCode != ''"> and woa.organ_code = #{organCode}</if>
         <if test="appointmentStartDate != null ">
-            and DATE_FORMAT(adi.prop18,'%Y-%m-%d') <![CDATA[>=]]> #{appointmentStartDate}
+            and DATE_FORMAT(adi.prop14,'%Y-%m-%d') <![CDATA[>=]]> #{appointmentStartDate}
         </if>
         <if test="appointmentEndDate != null ">
-            and DATE_FORMAT(adi.prop18,'%Y-%m-%d') <![CDATA[<=]]> #{appointmentEndDate}
+            and DATE_FORMAT(adi.prop14,'%Y-%m-%d') <![CDATA[<=]]> #{appointmentEndDate}
         </if>
         <if test="priorityLevel != null  and priorityLevel != ''"> and adi.priority_level = #{priorityLevel}</if>
         <if test="vipFlag != null  and vipFlag != ''"> and woa.vip_flag = #{vipFlag}</if>
         <if test="status != null  and status != ''"> and woa.status = #{status}</if>
-
+        order by woa.accept_time asc
     </select>
 
-    <!--可质检工单根据工单号查询是处理中的数据-->
+    <!--发起质检信息列表查询-->
+    <select id="selectSendByVoTwo" parameterType="com.paic.ehis.cs.domain.dto.WorkOrderQueryDTO" resultMap="AcceptResult">
+        select woa.work_order_no,woa.business_type,adi.channel_code,adi.item_code,concat(woa.business_type,'-', adi.item_code) as business_service,
+        woa.policy_no,woa.policy_item_no,woa.risk_code,woa.insured_no,woa.insured_name,woa.holder_no,woa.end_date,woa.holder_name,woa.accept_by,woa.accept_time,woa.modify_by,woa.modify_time,woa.create_by,woa.update_by,woa.update_time,woa.organ_code,woa.vip_flag,adi.priority_level,woa.status
+        FROM
+        work_order_accept woa
+        LEFT JOIN accept_detail_info adi ON woa.work_order_no = adi.work_order_no
+        LEFT JOIN person_info pi ON woa.insured_no = pi.person_id
+        WHERE
+        1 = 1
+        AND woa.STATUS not in( '01','02')
+        AND woa.business_type NOT IN ( '02' )
+        AND NOT EXISTS ( SELECT 1 FROM quality_inspection_accept qia WHERE qia.STATUS IN ( '01', '02' ) AND woa.work_order_no = qia.work_order_no )
+        AND adi.item_code NOT IN ( 'B00034' )
+        <if test="businessTypeList != null ">
+            and woa.business_type IN (
+            <foreach collection="businessTypeList" item="businessType"
+                     separator=",">
+                #{businessType}
+            </foreach>
+            )
+        </if>
+        <if test="endCaseStartTime != null ">
+            and DATE_FORMAT(woa.end_date,'%Y-%m-%d') <![CDATA[>=]]> #{endCaseStartTime}
+        </if>
+        <if test="endCaseEndTime != null ">
+            and DATE_FORMAT(woa.end_date,'%Y-%m-%d') <![CDATA[<=]]> #{endCaseEndTime}
+        </if>
+        <if test="itemCode != null  and itemCode != ''"> and adi.item_code = #{itemCode}</if>
+        <if test="channelCode != null  and channelCode != ''"> and adi.channel_code = #{channelCode}</if>
+        <if test="acceptBy != null  and acceptBy != ''"> and woa.accept_by = #{acceptBy}</if>
+        <if test="acceptStartDate != null ">
+            and DATE_FORMAT(woa.accept_time,'%Y-%m-%d') <![CDATA[>=]]> #{acceptStartDate}
+        </if>
+        <if test="acceptEndDate != null ">
+            and DATE_FORMAT(woa.accept_time,'%Y-%m-%d') <![CDATA[<=]]> #{acceptEndDate}
+        </if>
+        <if test="createBy != null  and createBy != ''"> and woa.create_by = #{createBy}</if>
+        <if test="updateBy != null  and updateBy != ''"> and woa.update_by = #{updateBy}</if>
+        <if test="updateStartDate != null ">
+            and DATE_FORMAT(woa.update_time,'%Y-%m-%d') <![CDATA[>=]]> #{updateStartDate}
+        </if>
+        <if test="updateEndDate != null ">
+            and DATE_FORMAT(woa.update_time,'%Y-%m-%d') <![CDATA[<=]]> #{updateEndDate}
+        </if>
+        <if test="workOrderNo != null  and workOrderNo != ''"> and woa.work_order_no = #{workOrderNo}</if>
+        <if test="policyNo != null  and policyNo != ''"> and woa.policy_no = #{policyNo}</if>
+        <if test="policyItemNo != null  and policyItemNo != ''"> and woa.policy_item_no = #{policyItemNo}</if>
+        <if test="holderName != null  and holderName != ''"> and woa.holder_name = #{holderName}</if>
+        <if test="insuredName != null  and insuredName != ''"> and woa.insured_name = #{insuredName}</if>
+        <if test="idNumber != null  and idNumber != ''"> and pi.id_number = #{idNumber}</if>
+        <if test="mobilePhone != null  and mobilePhone != ''"> and pi.mobile_phone = #{mobilePhone}</if>
+        <if test="organCode != null  and organCode != ''"> and woa.organ_code = #{organCode}</if>
+        <if test="appointmentStartDate != null ">
+            and DATE_FORMAT(adi.prop10,'%Y-%m-%d') <![CDATA[>=]]> #{appointmentStartDate}
+        </if>
+        <if test="appointmentEndDate != null ">
+            and DATE_FORMAT(adi.prop10,'%Y-%m-%d') <![CDATA[<=]]> #{appointmentEndDate}
+        </if>
+        <if test="priorityLevel != null  and priorityLevel != ''"> and adi.priority_level = #{priorityLevel}</if>
+        <if test="vipFlag != null  and vipFlag != ''"> and woa.vip_flag = #{vipFlag}</if>
+        <if test="status != null  and status != ''"> and woa.status = #{status}</if>
+    </select>
+
+    <!--根据工单号查询是待处理的数据-->
     <select id="selectSendByVoById1" parameterType="String" resultMap="AcceptResult">
         <include refid="selectSendVo"/>
         where 1=1 and not exists (SELECT 1 FROM quality_inspection_accept qia WHERE qia.work_order_no=woa.work_order_no and qia.status!='03')
-        and woa.status ='02'
+       /* and woa.status ='01'*/
         and woa.work_order_no=#{workOrderNo}
     </select>
 
-    <!--可质检工单根据工单号查询非处理中的最新数据-->
+    <!--工单根据工单号查询所有状态的数据-->
     <select id="selectSendByVoById2" parameterType="String" resultMap="AcceptResult">
         <include refid="selectSendVo"/>
         where 1=1 and not exists (SELECT 1 FROM quality_inspection_accept qia WHERE qia.work_order_no=woa.work_order_no and qia.status!='03')
-        and woa.status !='02'
         and woa.work_order_no=#{workOrderNo}
     </select>
 
@@ -141,12 +210,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="endDate" column="end_date"/>
         <result property="itemType" column="item_type"/>
         <result property="updatedBy" column="updated_by"/>
-        <result property="updatedTime" column="updated_time"/>
+        <result property="updatedTime" column="created_time"/>
         <result property="result" column="result"/>
         <result property="inspectionId" column="inspection_id"/>
         <result property="businessType" column="business_type"/>
         <result property="policyNo" column="policy_no"/>
         <result property="policyItemNo" column="policy_item_no"/>
+        <result property="num" column="num"/>
     </resultMap>
 
     <!--质检查询页面-->
@@ -159,6 +229,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         woa.policy_item_no,
         qia.updated_by,
         qia.updated_time,
+        qia.created_time,
         qia.result,
         woa.organ_code,
         woa.end_date,
@@ -174,12 +245,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                 and DATE_FORMAT(woa.end_date,'%Y-%m-%d') <![CDATA[<=]]> #{endCaseEndDate}
             </if>
             <if test="endDate != null and endDate != ''"> and woa.end_date = #{endDate}</if>
-            <if test="updatedTime != null and updatedTime != ''"> and qia.updated_time = #{updatedTime}</if>
+            <if test="updatedTime != null and updatedTime != ''"> and qia.created_time = #{updatedTime}</if>
             <if test="inspectionStartDate != null ">
-                and DATE_FORMAT(qia.updated_time,'%Y-%m-%d') <![CDATA[>=]]> #{inspectionStartDate}
+                and DATE_FORMAT(qia.created_time,'%Y-%m-%d') <![CDATA[>=]]> #{inspectionStartDate}
             </if>
             <if test="inspectionEndDate != null ">
-                and DATE_FORMAT(qia.updated_time,'%Y-%m-%d') <![CDATA[<=]]> #{inspectionEndDate}
+                and DATE_FORMAT(qia.created_time,'%Y-%m-%d') <![CDATA[<=]]> #{inspectionEndDate}
             </if>
             <if test="organCode != null and organCode != ''"> and woa.organ_code = #{organCode}</if>
             <if test="updatedBy != null and updatedBy != ''"> and qia.updated_by = #{updatedBy}</if>
@@ -188,7 +259,393 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="result != null and result != ''"> and qia.result = #{result}</if>
         </where>
     </select>
+    <select id="selectQualityVo2" parameterType="com.paic.ehis.cs.domain.dto.QualityDTO" resultMap="QualityResult">
+        SELECT DISTINCT
+        count(*),
+        qia.updated_by
+        FROM
+        quality_inspection_accept qia left join work_order_accept woa on qia.work_order_no=woa.work_order_no
+        left join accept_detail_info adi on woa.work_order_no=adi.work_order_no
+        <where>
+            <if test="endCaseStartDate != null ">
+                and DATE_FORMAT(woa.end_date,'%Y-%m-%d') <![CDATA[>=]]> #{endCaseStartDate}
+            </if>
+            <if test="endCaseEndDate != null ">
+                and DATE_FORMAT(woa.end_date,'%Y-%m-%d') <![CDATA[<=]]> #{endCaseEndDate}
+            </if>
+            <if test="endDate != null and endDate != ''"> and woa.end_date = #{endDate}</if>
+            <if test="updatedTime != null and updatedTime != ''"> and qia.created_time = #{updatedTime}</if>
+            <if test="inspectionStartDate != null ">
+                and DATE_FORMAT(qia.created_time,'%Y-%m-%d') <![CDATA[>=]]> #{inspectionStartDate}
+            </if>
+            <if test="inspectionEndDate != null ">
+                and DATE_FORMAT(qia.created_time,'%Y-%m-%d') <![CDATA[<=]]> #{inspectionEndDate}
+            </if>
+            <if test="organCode != null and organCode != ''"> and woa.organ_code = #{organCode}</if>
+            <if test="updatedBy != null and updatedBy != ''"> and qia.updated_by = #{updatedBy}</if>
+            <if test="itemCode != null and itemCode != ''"> and adi.item_code = #{itemCode}</if>
+            <if test="status != null and status != ''"> and qia.status = #{status}</if>
+            <if test="result != null and result != ''"> and qia.result = #{result}</if>
+        </where>
+        GROUP BY qia.updated_by
+    </select>
 
+    <resultMap type="com.paic.ehis.cs.domain.vo.ComplaintQualityInspectionVO" id="QualityComResult">
+        <result property="workOrderNo" column="work_order_no"/>
+        <result property="organCode" column="organ_code"/>
+        <result property="modifyBy" column="modify_by"/>
+        <result property="endDate" column="end_date"/>
+        <result property="status" column="status"/>
+        <result property="result" column="result"/>
+        <result property="qwe02" column="qwe02"/>
+        <result property="asd02" column="asd02"/>
+        <result property="asd02" column="asd02"/>
+        <result property="qwe10" column="qwe10"/>
+        <result property="asd10" column="asd10"/>
+        <result property="qwe04" column="qwe04"/>
+        <result property="asd04" column="asd04"/>
+        <result property="qwe14" column="qwe14"/>
+        <result property="asd14" column="asd14"/>
+        <result property="qwe05" column="qwe05"/>
+        <result property="asd05" column="asd05"/>
+        <result property="qwe11" column="qwe11"/>
+        <result property="asd11" column="asd11"/>
+        <result property="qwe15" column="qwe15"/>
+        <result property="asd15" column="asd15"/>
+        <result property="qwe08" column="qwe08"/>
+        <result property="asd08" column="asd08"/>
+        <result property="qwe16" column="qwe16"/>
+        <result property="asd16" column="asd16"/>
+        <result property="qwe13" column="qwe13"/>
+        <result property="asd13" column="asd13"/>
+        <result property="qwe20" column="qwe20"/>
+        <result property="asd20" column="asd20"/>
+        <result property="qwe01" column="qwe01"/>
+        <result property="qwe03" column="qwe03"/>
+        <result property="asd03" column="asd03"/>
+        <result property="qwe17" column="qwe17"/>
+        <result property="asd17" column="asd17"/>
+        <result property="qwe09" column="qwe09"/>
+        <result property="asd09" column="asd09"/>
+        <result property="qwe06" column="qwe06"/>
+        <result property="asd06" column="asd06"/>
+        <result property="qwe07" column="qwe07"/>
+        <result property="asd07" column="asd07"/>
+        <result property="qwe12" column="qwe12"/>
+        <result property="asd12" column="asd12"/>
+        <result property="qwe18" column="qwe18"/>
+        <result property="asd18" column="asd18"/>
+        <result property="qwe19" column="qwe19"/>
+        <result property="asd19" column="asd19"/>
+        <result property="appealFlag" column="appeal_flag"/>
+        <result property="appealReason" column="appeal_reason"/>
+        <result property="ccl1" column="ccl1"/>
+        <result property="ccl2" column="ccl2"/>
+        <result property="flag" column="flag"/>
+        <result property="handleProp5" column="handle_prop5"/>
+        <result property="handleProp1" column="handle_prop1"/>
+        <result property="handleProp6" column="handle_prop6"/>
+        <result property="rlevel1" column="rlevel1"/>
+        <result property="rlevel2" column="rlevel2"/>
+        <result property="rlevel3" column="rlevel3"/>
+        <result property="handleProp11" column="handle_prop11"/>
+        <result property="handleProp12" column="handle_prop12"/>
+
+        <result property="handleProp14" column="handle_prop14"/>
+        <result property="handleProp15" column="handle_prop15"/>
+        <result property="handleProp16" column="handle_prop16"/>
+        <result property="handleProp17" column="handle_prop17"/>
+        <result property="handleProp30" column="handle_prop30"/>
+        <result property="remark" column="remark"/>
+        <result property="handleProp2" column="handle_prop2"/>
+        <result property="handleProp19" column="handle_prop19"/>
+        <result property="handleProp20" column="handle_prop20"/>
+        <result property="score" column="score"/>
+
+        <result property="way" column="way"/>
+    </resultMap>
+    <!--投诉质检清单-->
+    <select id="selectQualityVoCom" parameterType="com.paic.ehis.cs.domain.dto.QualityDTO" resultMap="QualityComResult">
+select qih.work_order_no,
+        adi.organ_code,
+				woa.modify_by,
+				woa.end_date,
+				qia.status,
+				qia.result,
+(case when (SUM( CASE WHEN qii.item_key = "02" THEN qii.value ELSE 0 END ))='01'then '是' else '否' end) "qwe02",
+SUM( CASE WHEN qii.item_key = "02" THEN qii.item_remark ELSE null END ) "asd02",
+
+(case when (SUM( CASE WHEN qii.item_key = "10" THEN qii.value ELSE 0 END ))='01'then '是' else '否' end) "qwe10",
+SUM( CASE WHEN qii.item_key = "10" THEN qii.item_remark ELSE null END ) "asd10",
+
+(case when (SUM( CASE WHEN qii.item_key = "04" THEN qii.value ELSE 0 END ))='01'then '是' else '否' end) "qwe04",
+SUM( CASE WHEN qii.item_key = "04" THEN qii.item_remark ELSE null END ) "asd04",
+
+(case when (SUM( CASE WHEN qii.item_key = "14" THEN qii.value ELSE 0 END ))='01'then '是' else '否' end) "qwe14",
+SUM( CASE WHEN qii.item_key = "14" THEN qii.item_remark ELSE null END ) "asd14",
+
+(case when (SUM( CASE WHEN qii.item_key = "05" THEN qii.value ELSE 0 END ))='01'then '是' else '否' end) "qwe05",
+SUM( CASE WHEN qii.item_key = "05" THEN qii.item_remark ELSE null END ) "asd05",
+
+(case when (SUM( CASE WHEN qii.item_key = "11" THEN qii.value ELSE 0 END ))='01'then '是' else '否' end) "qwe11",
+SUM( CASE WHEN qii.item_key = "11" THEN qii.item_remark ELSE null END ) "asd11",
+
+(case when (SUM( CASE WHEN qii.item_key = "15" THEN qii.value ELSE 0 END ))='01'then '是' else '否' end) "qwe15",
+SUM( CASE WHEN qii.item_key = "15" THEN qii.item_remark ELSE null END ) "asd15",
+
+(case when (SUM( CASE WHEN qii.item_key = "08" THEN qii.value ELSE 0 END ))='01'then '是' else '否' end) "qwe08",
+SUM( CASE WHEN qii.item_key = "08" THEN qii.item_remark ELSE null END ) "asd08",
+
+(case when (SUM( CASE WHEN qii.item_key = "16" THEN qii.value ELSE 0 END ))='01'then '是' else '否' end) "qwe16",
+SUM( CASE WHEN qii.item_key = "16" THEN qii.item_remark ELSE null END ) "asd16",
+
+(case when (SUM( CASE WHEN qii.item_key = "13" THEN qii.value ELSE 0 END ))='01'then '是' else '否' end) "qwe13",
+SUM( CASE WHEN qii.item_key = "13" THEN qii.item_remark ELSE null END ) "asd13",
+
+(case when (SUM( CASE WHEN qii.item_key = "20" THEN qii.value ELSE 0 END ))='01'then '是' else '否' end) "qwe20",
+SUM( CASE WHEN qii.item_key = "20" THEN qii.item_remark ELSE null END ) "asd20",
+
+(case when (SUM( CASE WHEN qii.item_key = "01" THEN qii.value ELSE 0 END ))='01'then '是' else '否' end) "qwe01",
+SUM( CASE WHEN qii.item_key = "01" THEN qii.item_remark ELSE null END ) "asd01",
+
+(case when (SUM( CASE WHEN qii.item_key = "03" THEN qii.value ELSE 0 END ))='01'then '是' else '否' end) "qwe03",
+SUM( CASE WHEN qii.item_key = "03" THEN qii.item_remark ELSE null END ) "asd03",
+
+(case when (SUM( CASE WHEN qii.item_key = "17" THEN qii.value ELSE 0 END ))='01'then '是' else '否' end) "qwe17",
+SUM( CASE WHEN qii.item_key = "17" THEN qii.item_remark ELSE null END ) "asd17",
+
+(case when (SUM( CASE WHEN qii.item_key = "09" THEN qii.value ELSE 0 END ))='01'then '是' else '否' end) "qwe09",
+SUM( CASE WHEN qii.item_key = "09" THEN qii.item_remark ELSE null END ) "asd09",
+
+(case when (SUM( CASE WHEN qii.item_key = "06" THEN qii.value ELSE 0 END ))='01'then '是' else '否' end) "qwe06",
+SUM( CASE WHEN qii.item_key = "06" THEN qii.item_remark ELSE null END ) "asd06",
+
+(case when (SUM( CASE WHEN qii.item_key = "07" THEN qii.value ELSE 0 END ))='01'then '是' else '否' end) "qwe07",
+SUM( CASE WHEN qii.item_key = "07" THEN qii.item_remark ELSE null END ) "asd07",
+
+(case when (SUM( CASE WHEN qii.item_key = "12" THEN qii.value ELSE 0 END ))='01'then '是' else '否' end) "qwe12",
+SUM( CASE WHEN qii.item_key = "12" THEN qii.item_remark ELSE null END ) "asd12",
+
+(case when (SUM( CASE WHEN qii.item_key = "18" THEN qii.value ELSE 0 END ))='01'then '是' else '否' end) "qwe18",
+SUM( CASE WHEN qii.item_key = "18" THEN qii.item_remark ELSE null END ) "asd18",
+
+(case when (SUM( CASE WHEN qii.item_key = "19" THEN qii.value ELSE 0 END ))='01'then '是' else '否' end) "qwe19",
+SUM( CASE WHEN qii.item_key = "19" THEN qii.item_remark ELSE null END ) "asd19",
+qih.appeal_flag,
+qih.appeal_reason,
+(select cd.code_name from code_dict cd where cd.code_type='cs_classify_level1' and cd.code=qii.item_key) "ccl1",
+(select cd.code_name from code_dict cd where cd.code_type='cs_classify_level2' and cd.code=qii.item_key) "ccl2",
+whi.flag,
+whi.handle_prop5,
+whi.handle_prop1,
+whi.handle_prop6,
+(select cd.code_name from code_dict cd where cd.code_type='cs_reason_level1' and cd.code=qii.item_key) "rlevel1",
+(select cd.code_name from code_dict cd where cd.code_type='cs_reason_level2' and cd.code=qii.item_key) "rlevel2",
+(select cd.code_name from code_dict cd where cd.code_type='cs_reason_level3' and cd.code=qii.item_key) "rlevel3",
+whi.handle_prop11,
+whi.handle_prop12,
+whi.handle_prop1,
+whi.handle_prop14,
+whi.handle_prop15,
+whi.handle_prop16,
+whi.handle_prop17,
+whi.handle_prop30,
+whi.remark,
+whi.handle_prop2,
+whi.handle_prop19,
+whi.handle_prop20,
+qih.score,
+qia.created_by,
+CASE WHEN qia.created_by like'SYSTEM%' THEN "自动抽检" else "手动抽检" end as way
+from quality_inspection_handle qih,quality_inspection_item qii,work_order_accept  woa, quality_inspection_accept qia ,accept_detail_info adi,work_handle_info whi,code_dict cdd
+/*where qih.inspection_handler_id=qii.inspection_handler_id and qih.work_order_no=woa.work_order_no and qia.inspection_id=qih.inspection_id and qih.work_order_no=adi.work_order_no
+and whi.`status`='Y'
+and qii.`status`='Y' and woa.business_type='03'
+and cdd.code_type='cs_inspection_class_complaint'*/
+        <where>
+        1=1 and
+            qih.inspection_handler_id=qii.inspection_handler_id and qih.work_order_no=woa.work_order_no and qia.inspection_id=qih.inspection_id and qih.work_order_no=adi.work_order_no
+            and whi.`status`='Y'
+            and qii.`status`='Y' and woa.business_type='03'
+            and cdd.code_type='cs_inspection_class_complaint'
+            <if test="endCaseStartDate != null and endCaseStartDate != ''">
+                and woa.end_date &gt; DATE_FORMAT(#{endCaseStartDate},'%Y-%m-%d')
+            </if>
+            <if test="endCaseEndDate != null and endCaseEndDate != ''">
+                and woa.end_date &lt; DATE_FORMAT(#{endCaseEndDate},'%Y-%m-%d')
+            </if>
+
+            <!--<if test="endCaseStartDate != null ">
+                and DATE_FORMAT(woa.end_date,'%Y-%m-%d') <![CDATA[>=]]> #{endCaseStartDate}
+            </if>
+            <if test="endCaseEndDate != null ">
+                and DATE_FORMAT(woa.end_date,'%Y-%m-%d') <![CDATA[<=]]> #{endCaseEndDate}
+            </if>-->
+            <if test="endDate != null  and endDate != ''"> and woa.end_date = #{endDate}</if>
+            <if test="updatedTime != null and updatedTime != ''"> and qia.created_time = #{updatedTime}</if>
+            <if test="inspectionStartDate != null and inspectionStartDate != ''">
+                and qia.created_time &gt;  #{inspectionStartDate}
+            </if>
+            <if test="inspectionEndDate != null and inspectionEndDate != ''">
+                and qia.created_time &lt; #{inspectionEndDate}
+            </if>
+            <if test="organCode != null and organCode != ''"> and woa.organ_code = #{organCode}</if>
+            <if test="updatedBy != null and updatedBy != ''"> and qia.updated_by = #{updatedBy}</if>
+            <if test="itemCode != null and itemCode != ''"> and adi.item_code = #{itemCode}</if>
+            <if test="status != null and status != ''"> and qia.status = #{status}</if>
+            <if test="result != null and result != ''"> and qia.result = #{result}</if>
+        </where>
+        GROUP BY qih.work_order_no
+    </select>
+
+    <resultMap type="com.paic.ehis.cs.domain.vo.InformationNeedsQuality" id="InformationNeedsQuality">
+        <result property="inspectionId" column="inspection_id"/>
+        <result property="workOrderNo" column="work_order_no"/>
+        <result property="policyNo" column="policy_no"/>
+        <result property="policyItemNo" column="policy_item_no"/>
+        <result property="acceptBy" column="accept_by"/>
+        <result property="cupdatedBy" column="cupdated_by"/>
+        <result property="zupdatedBy" column="zupdated_by"/>
+        <result property="status" column="status"/>
+        <result property="acceptTime" column="accept_time"/>
+        <result property="clickTime" column="click_time"/>
+        <result property="ccreatedTime" column="ccreated_time"/>
+        <result property="zcreatedTime" column="zcreated_time"/>
+        <result property="zxc21" column="zxc21"/>
+        <result property="zxc22" column="zxc22"/>
+        <result property="zxc23" column="zxc23"/>
+        <result property="zxc24" column="zxc24"/>
+        <result property="zxc25" column="zxc25"/>
+        <result property="zxc26" column="zxc26"/>
+        <result property="zxc27" column="zxc27"/>
+        <result property="appealFlag" column="appeal_flag"/>
+        <result property="appealReason" column="appeal_reason"/>
+        <result property="result" column="result"/>
+        <result property="center" column="center"/>
+        <result property="itemCode" column="item_code"/>
+        <result property="organCode" column="organ_code"/>
+        <result property="activationNum" column="activation_num"/>
+    </resultMap>
+    <!--信息需求质检清单-->
+    <select id="selectQualityVoComInformation" parameterType="com.paic.ehis.cs.domain.dto.QualityDTO" resultMap="InformationNeedsQuality">
+select qia.inspection_id,
+        qia.work_order_no,
+				woa.policy_no,
+				woa.policy_item_no,
+				woa.accept_by,
+
+				woa.update_by cupdate_by,
+				qia.updated_by zupdated_by,
+				qia.status,
+				woa.accept_time,
+				woa.click_time,
+				qia.created_time ccreated_time,
+
+				qia.created_time zcreated_time,
+				(case when (SUM( CASE WHEN qii.item_key = "21" THEN qii.value ELSE 0 END ))='01'then '是' else '否' end) "zxc21",
+				(case when (SUM( CASE WHEN qii.item_key = "22" THEN qii.value ELSE 0 END ))='01'then '是' else '否' end) "zxc22",
+				(case when (SUM( CASE WHEN qii.item_key = "23" THEN qii.value ELSE 0 END ))='01'then '是' else '否' end) "zxc23",
+				(case when (SUM( CASE WHEN qii.item_key = "24" THEN qii.value ELSE 0 END ))='01'then '是' else '否' end) "zxc24",
+				(case when (SUM( CASE WHEN qii.item_key = "25" THEN qii.value ELSE 0 END ))='01'then '是' else '否' end) "zxc25",
+				(case when (SUM( CASE WHEN qii.item_key = "26" THEN qii.value ELSE 0 END ))='01'then '是' else '否' end) "zxc26",
+				(case when (SUM( CASE WHEN qii.item_key = "27" THEN qii.value ELSE 0 END ))='01'then '是' else '否' end) "zxc27",
+				qih.appeal_flag,
+				qih.appeal_reason,
+				qia.result,
+
+				"电话中心处理" center,
+				adi.item_code,
+
+				adi.organ_code,
+				woa.activation_num
+from quality_inspection_handle qih,quality_inspection_item qii,work_order_accept woa,quality_inspection_accept qia ,accept_detail_info adi,work_handle_info whi,code_dict cdd
+/*where qih.inspection_handler_id=qii.inspection_handler_id and qih.work_order_no=woa.work_order_no and qia.inspection_id=qih.inspection_id and -- qih
+qih.work_order_no=adi.work_order_no
+and whi.`status`='Y'
+and qii.`status`='Y' and woa.business_type='03'
+and cdd.code_type='cs_inspection_item_demand'*/
+
+        <where>
+            1=1 and
+            qih.inspection_handler_id=qii.inspection_handler_id and qih.work_order_no=woa.work_order_no and qia.inspection_id=qih.inspection_id and
+            qih.work_order_no=adi.work_order_no
+            and whi.`status`='Y'
+            and qii.`status`='Y' and woa.business_type='03'
+            and cdd.code_type='cs_inspection_item_demand'
+            <if test="endCaseStartDate != null and endCaseStartDate != ''">
+                and woa.end_date &gt; #{endCaseStartDate}
+            </if>
+            <if test="endCaseEndDate != null and endCaseEndDate != ''">
+                and woa.end_date &lt; #{endCaseEndDate}
+            </if>
+            <if test="endDate != null "> and woa.end_date = #{endDate}</if>
+            <if test="updatedTime != null and updatedTime != ''"> and qia.created_time = #{updatedTime}</if>
+            <if test="inspectionStartDate != null and inspectionStartDate != ''">
+                and qia.created_time &gt;  #{inspectionStartDate}
+            </if>
+            <if test="inspectionEndDate != null and inspectionEndDate != ''">
+                and qia.created_time &lt; #{inspectionEndDate}
+            </if>
+            <if test="organCode != null and organCode != ''"> and woa.organ_code = #{organCode}</if>
+            <if test="updatedBy != null and updatedBy != ''"> and qia.updated_by = #{updatedBy}</if>
+            <if test="itemCode != null and itemCode != ''"> and adi.item_code = #{itemCode}</if>
+            <if test="status != null and status != ''"> and qia.status = #{status}</if>
+            <if test="result != null and result != ''"> and qia.result = #{result}</if>
+        </where>
+        GROUP BY qih.work_order_no
+    </select>
+    <resultMap type="com.paic.ehis.cs.domain.vo.ComplaintErrorRateVO" id="ComplaintErrorRateVO">
+        <result property="closingTime" column="closing_time"/>
+        <result property="organCode" column="organ_code"/>
+        <result property="updatedBy" column="updated_by"/>
+        <result property="samplingQuantity" column="sampling_quantity"/>
+        <result property="errorsNumber" column="errors_number"/>
+        <result property="errorsRate" column="errors_rate"/>
+    </resultMap>
+    <select id="selectError" parameterType="com.paic.ehis.cs.domain.dto.QualityDTO" resultMap="ComplaintErrorRateVO">
+select
+null closing_time,
+"上海分公司本部" adi.organ_code ,
+qia.updated_by,
+null sampling_quantity,
+null errors_number,
+null errors_rate
+from quality_inspection_handle qih,quality_inspection_item qii,work_order_accept  woa, quality_inspection_accept qia ,
+accept_detail_info adi,work_handle_info whi,code_dict cdd
+where qih.inspection_handler_id=qii.inspection_handler_id and qih.work_order_no=woa.work_order_no and qia.inspection_id=qih.inspection_id and
+qih.work_order_no=adi.work_order_no
+and whi.`status`='Y'
+and qii.`status`='Y' and woa.business_type in("01","03")
+and cdd.code_type in("cs_inspection_item_demand","cs_inspection_class_complaint")
+        <where>
+        1=1 and
+            qih.inspection_handler_id=qii.inspection_handler_id and qih.work_order_no=woa.work_order_no and qia.inspection_id=qih.inspection_id and -- qih
+            qih.work_order_no=adi.work_order_no
+            and whi.`status`='Y'
+            and qii.`status`='Y' and woa.business_type in("01","03")
+            and cdd.code_type in("cs_inspection_item_demand","cs_inspection_class_complaint")
+            <if test="endCaseStartDate != null ">
+                and woa.end_date &gt; #{endCaseStartDate}
+            </if>
+            <if test="endCaseEndDate != null and endCaseEndDate != ''">
+                and woa.end_date &lt; #{endCaseEndDate}
+            </if>
+            <if test="endDate != null "> and woa.end_date = #{endDate}</if>
+            <if test="updatedTime != null and updatedTime != ''"> and qia.created_time = #{updatedTime}</if>
+            <if test="inspectionStartDate != null and inspectionStartDate != ''">
+                and qia.created_time &gt;  #{inspectionStartDate}
+            </if>
+            <if test="inspectionEndDate != null and inspectionEndDate != ''">
+                and qia.created_time &lt; #{inspectionEndDate}
+            </if>
+            <if test="organCode != null and organCode != ''"> and woa.organ_code = #{organCode}</if>
+            <if test="updatedBy != null and updatedBy != ''"> and qia.updated_by = #{updatedBy}</if>
+            <if test="itemCode != null and itemCode != ''"> and adi.item_code = #{itemCode}</if>
+            <if test="status != null and status != ''"> and qia.status = #{status}</if>
+            <if test="result != null and result != ''"> and qia.result = #{result}</if>
+        </where>
+GROUP BY qia.updated_by
+    </select>
     <select id="selectAcceptByVo" parameterType="com.paic.ehis.cs.domain.dto.WorkOrderQueryDTO" resultMap="AcceptResult">
         <include refid="selectAcceptVo"/>
         where 1=1 and (qihh.status is null or qihh.status not in ('01','03'))
@@ -243,10 +700,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             left join work_order_accept a on a.work_order_no = c.work_order_no
         where 1=1 and c.status = '02' and d.status ='01' and a.update_by=#{updatedBy}
             <if test="firstEndCaseStartTime != null and firstEndCaseStartTime != ''">
-                and a.end_date <![CDATA[>=]]> #{firstEndCaseStartTime}
+                and DATE_FORMAT(a.end_date,'%Y-%m-%d') <![CDATA[>=]]> #{firstEndCaseStartTime}
             </if>
             <if test="firstEndCaseEndTime != null and firstEndCaseEndTime != ''">
-                and a.end_date <![CDATA[<=]]> #{firstEndCaseEndTime}
+                and DATE_FORMAT(a.end_date,'%Y-%m-%d') <![CDATA[<=]]> #{firstEndCaseEndTime}
             </if>
             <if test="workOrderNo != null and workOrderNo != ''">
                 and c.work_order_no = #{workOrderNo}
@@ -293,9 +750,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </if>
     </update>
 
+    <!--信息需求按周抽检规则：已结案的案件未被质检过和未被激活过（修改过）-->
     <select id="getWorkOrderCountByUserId" parameterType="com.paic.ehis.cs.domain.dto.WorkOrderQueryDTO" resultMap="AcceptResult">
-        select woa.update_by,count(*) as count,GROUP_CONCAT(work_order_no) as work_order_nos from work_order_accept woa where 1=1
-        <if test="updatedBy != null and updatedBy != ''"> and woa.updated_by = #{updatedBy}</if>
+        SELECT
+        woa.update_by,
+        count( * ) AS count,
+        GROUP_CONCAT( work_order_no ) AS work_order_nos
+        FROM
+        work_order_accept woa
+        WHERE
+        1 = 1
+        AND woa.work_order_no not IN ( SELECT work_order_no FROM quality_inspection_accept qia WHERE woa.work_order_no=qia.work_order_no )
+        and woa.status='04' and woa.activation_num='0'
+        and woa.business_type='01'
+        <if test="updateBy != null and updateBy != ''"> and woa.update_by = #{updateBy}</if>
         <if test="status != null and status != ''"> and woa.status = #{status}</if>
         <if test="workOrderNo != null and workOrderNo != ''"> and woa.work_order_no = #{workOrderNo}</if>
         <if test="endCaseStartTime != null ">
@@ -304,6 +772,88 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <if test="endCaseEndTime != null ">
             and DATE_FORMAT(woa.end_date,'%Y-%m-%d') <![CDATA[<=]]> #{endCaseEndTime}
         </if>
-        group by woa.update_by;
+        GROUP BY
+        woa.update_by
     </select>
+
+
+    <!--信息需求按月抽检规则：已结案的案件案件首次被激活（修改过一次），并且案件不在质检中或质检结果为合格的案件-->
+    <select id="getWorkOrderCountByUserIdMonth" parameterType="com.paic.ehis.cs.domain.dto.WorkOrderQueryDTO" resultMap="AcceptResult">
+        SELECT
+        woa.update_by,
+        count( * ) AS count,
+        GROUP_CONCAT( work_order_no ) AS work_order_nos
+        FROM
+        work_order_accept woa
+        WHERE
+        1 = 1
+        AND woa.work_order_no IN ( SELECT work_order_no FROM quality_inspection_accept WHERE  (STATUS = '03' AND result = '02') or status='01' )
+        and woa.activation_num='1'
+        and woa.status='04'
+        and woa.business_type='01'
+        <if test="updateBy != null and updateBy != ''">and woa.update_by = #{updateBy}</if>
+        <if test="status != null and status != ''"> and woa.status = #{status}</if>
+        <if test="workOrderNo != null and workOrderNo != ''"> and woa.work_order_no = #{workOrderNo}</if>
+        <if test="endCaseStartTime != null ">
+            and DATE_FORMAT(woa.end_date,'%Y-%m-%d') <![CDATA[>=]]> #{endCaseStartTime}
+        </if>
+        <if test="endCaseEndTime != null ">
+            and DATE_FORMAT(woa.end_date,'%Y-%m-%d') <![CDATA[<=]]> #{endCaseEndTime}
+        </if>
+        GROUP BY
+        woa.update_by
+    </select>
+
+    <!--预约12点批处理-->
+    <select id="selectInvalidAcceptDetailInfo" resultMap="AcceptResult">
+        SELECT
+            woa.work_order_no,
+            woa.business_type,
+            woa.STATUS,
+            adi.prop14
+        FROM
+            work_order_accept woa
+                LEFT JOIN accept_detail_info adi ON woa.work_order_no = adi.work_order_no
+                LEFT JOIN person_info pi ON woa.insured_no = pi.person_id
+                LEFT JOIN quality_inspection_accept qia ON woa.work_order_no = qia.work_order_no
+        WHERE
+            1 = 1 and woa.business_type='02' and woa.status='03'
+        <if test="updateBy != null and updateBy != ''">and woa.update_by = #{updateBy}</if>
+        <if test="status != null and status != ''"> and woa.status = #{status}</if>
+        <if test="workOrderNo != null and workOrderNo != ''"> and woa.work_order_no = #{workOrderNo}</if>
+        <if test="appointmentStartDate1 != null and workOrderNo != ''">and adi.prop14= #{appointmentStartDate1} </if>
+    </select>
+
+    <!--投诉每周一凌晨四点批处理-->
+    <select id="selectInvalidQiaMondayFour" resultMap="AcceptResult">
+        SELECT
+            woa.update_by,
+            count( * ) AS count,
+	GROUP_CONCAT( woa.work_order_no ) AS work_order_nos
+        FROM
+            work_order_accept woa
+            LEFT JOIN accept_detail_info adi ON woa.work_order_no = adi.work_order_no
+            LEFT JOIN person_info pi ON woa.insured_no = pi.person_id
+        WHERE
+            1 = 1
+          AND woa.STATUS NOT IN ( '01', '02' )
+          AND woa.business_type IN ( '03' )
+          AND NOT EXISTS ( SELECT 1 FROM quality_inspection_accept qia WHERE woa.work_order_no = qia.work_order_no )
+          AND adi.item_code NOT IN ( 'B00034' )
+        <if test="updateBy != null and updateBy != ''">and woa.update_by = #{updateBy}</if>
+        <if test="status != null and status != ''"> and woa.status = #{status}</if>
+        <if test="workOrderNo != null and workOrderNo != ''"> and woa.work_order_no = #{workOrderNo}</if>
+        <if test="endCaseStartTime != null ">
+            and DATE_FORMAT(woa.end_date,'%Y-%m-%d') <![CDATA[>=]]> #{endCaseStartTime}
+        </if>
+        <if test="endCaseEndTime != null ">
+            and DATE_FORMAT(woa.end_date,'%Y-%m-%d') <![CDATA[<=]]> #{endCaseEndTime}
+        </if>
+        GROUP BY
+            woa.update_by
+    </select>
+
+
+
+
 </mapper>

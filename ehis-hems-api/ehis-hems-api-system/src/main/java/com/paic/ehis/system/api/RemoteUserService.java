@@ -3,6 +3,8 @@ package com.paic.ehis.system.api;
 import com.paic.ehis.common.core.constant.ServiceNameConstants;
 import com.paic.ehis.common.core.domain.R;
 import com.paic.ehis.common.core.web.domain.AjaxResult;
+import com.paic.ehis.common.core.web.page.TableDataInfo;
+import com.paic.ehis.system.api.domain.dto.MenuIdDTO;
 import com.paic.ehis.system.api.factory.RemoteUserFallbackFactory;
 import com.paic.ehis.system.api.model.LoginUser;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -46,4 +48,12 @@ public interface RemoteUserService
      */
     @GetMapping("/user/getUserInfo")
     public AjaxResult userInfo();
+
+    /**
+     * 根据菜单ID获取用户集合
+     * @param menuIdDTO
+     * @return
+     */
+    @PostMapping("/user/getUsersByMenuId")
+    public TableDataInfo getUsersByMenuId(@RequestBody MenuIdDTO menuIdDTO);
 }

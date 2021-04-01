@@ -81,6 +81,17 @@ public class ClaimCaseCalController extends BaseController
         return AjaxResult.success(claimCaseCalService.selectClaimCaseCalInformation(rptNo));
     }
 
+    /***
+     * 申诉案件根据 申诉的报案号，查询上一个报案信息
+     * @param rptNo
+     * @return
+     * auth: hjw
+     */
+    @GetMapping(value = "/preClaimInfo/{rptNo}")
+    public AjaxResult getPreClaimInfo(@PathVariable("rptNo") String rptNo)
+    {
+        return AjaxResult.success(claimCaseCalService.selectPreCalConclusionByRptNo(rptNo));
+    }
     /**
      * 新增案件赔付信息
      */

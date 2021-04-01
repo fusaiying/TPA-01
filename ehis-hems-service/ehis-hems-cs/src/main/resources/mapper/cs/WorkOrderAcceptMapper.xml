@@ -29,14 +29,42 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="createTime"    column="create_time"    />
         <result property="updateBy"    column="update_by"    />
         <result property="updateTime"    column="update_time"    />
+        <result property="activationNum"    column="activation_num"    />
+    </resultMap>
+
+    <resultMap type="com.paic.ehis.cs.domain.vo.ComplaintDealVo" id="ComplaintDealVoResult">
+        <result property="workOrderNo"    column="work_order_no"    />
+        <result property="level1"    column="handle_prop3"    />
+        <result property="level2"    column="handle_prop4"    />
+        <result property="pieceworkFlag"    column="flag"    />
+        <result property="complaintStatus"    column="handle_prop5"    />
+        <result property="complaintTenable"    column="handle_prop1"    />
+        <result property="faseReason"    column="handle_prop6"    />
+        <result property="repeatedComplaint"    column="handle_prop7"    />
+        <result property="reason1"    column="handle_prop8"    />
+        <result property="reason2"    column="handle_prop9"    />
+        <result property="reason3"    column="handle_prop10"    />
+        <result property="complaintLink"    column="handle_prop11"    />
+        <result property="complaintQuestion"    column="handle_prop12"    />
+        <result property="outsideState"    column="handle_prop13"    />
+        <result property="riskType"    column="handle_prop14"    />
+        <result property="marketChannel"    column="handle_prop15"    />
+        <result property="complaintCategory"    column="handle_prop16"    />
+        <result property="rootDepartment"    column="handle_prop17"    />
+        <result property="actionCause"    column="handle_prop30"    />
+        <result property="treatmentProgress"    column="handle_prop18"    />
+        <result property="treatmentResult"    column="remark"    />
+        <result property="customerFeedback"    column="handle_prop2"    />
+        <result property="rootImprovement"    column="handle_prop19"    />
+        <result property="actPromptly"    column="handle_prop20"    />
     </resultMap>
 
     <sql id="selectWorkOrderAcceptVo">
-        select work_order_no, business_type, policy_no, policy_item_no, risk_code, insured_no, insured_name, holder_no, holder_name, accept_by, accept_time, modify_by, modify_time, vip_flag, organ_code, status, end_date, click_time, hang_flag, hang_reason, create_by, create_time, update_by, update_time from work_order_accept
+        select work_order_no, activation_num,business_type, policy_no, policy_item_no, risk_code, insured_no, insured_name, holder_no, holder_name, accept_by, accept_time, modify_by, modify_time, vip_flag, organ_code, status, end_date, click_time, hang_flag, hang_reason, create_by, create_time, update_by, update_time from work_order_accept
     </sql>
 
 
-    <select id="selectWorkOrderAcceptList" parameterType="WorkOrderAccept" resultMap="WorkOrderAcceptResult">
+    <select id="selectWorkOrderAcceptList" parameterType="com.paic.ehis.cs.domain.WorkOrderAccept" resultMap="WorkOrderAcceptResult">
         <include refid="selectWorkOrderAcceptVo"/>
         <where>
             <if test="businessType != null  and businessType != ''"> and business_type = #{businessType}</if>
@@ -65,6 +93,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectWorkOrderAcceptVo"/>
         where work_order_no = #{workOrderNo}
     </select>
+    <!--实时查询案件操作人和状态-->
+    <select id="selectWorkOrderAcceptById1" parameterType="String" resultMap="WorkOrderAcceptResult">
+        select * from work_order_accept
+        where  work_order_no = #{workOrderNo}
+    </select>
 
     <select id="selectProcessingTimeById" parameterType="String" resultType="java.lang.String">
         select TIMESTAMPDIFF(HOUR,create_time,click_time) from work_order_accept where work_order_no = #{workOrderNo}
@@ -90,6 +123,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="organCode != null">organ_code,</if>
             <if test="status != null and status != ''">status,</if>
             <if test="endDate != null">end_date,</if>
+            <if test="lastEndDate != null">last_end_date,</if>
             <if test="clickTime != null">click_time,</if>
             <if test="hangFlag != null">hang_flag,</if>
             <if test="hangReason != null">hang_reason,</if>
@@ -97,6 +131,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null">create_time,</if>
             <if test="updateBy != null and updateBy != ''">update_by,</if>
             <if test="updateTime != null">update_time,</if>
+            <if test="otherNo != null">other_no,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="workOrderNo != null">#{workOrderNo},</if>
@@ -116,6 +151,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="organCode != null">#{organCode},</if>
             <if test="status != null and status != ''">#{status},</if>
             <if test="endDate != null">#{endDate},</if>
+            <if test="lastEndDate != null">#{lastEndDate},</if>
             <if test="clickTime != null">#{clickTime},</if>
             <if test="hangFlag != null">#{hangFlag},</if>
             <if test="hangReason != null">#{hangReason},</if>
@@ -123,6 +159,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null">#{createTime},</if>
             <if test="updateBy != null and updateBy != ''">#{updateBy},</if>
             <if test="updateTime != null">#{updateTime},</if>
+            <if test="otherNo != null">#{otherNo},</if>
         </trim>
     </insert>
 
@@ -145,12 +182,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="organCode != null">organ_code = #{organCode},</if>
             <if test="status != null and status != ''">status = #{status},</if>
             <if test="endDate != null">end_date = #{endDate},</if>
+            <if test="lastEndDate != null">last_end_date = #{lastEndDate},</if>
             <if test="clickTime != null">click_time = #{clickTime},</if>
             <if test="hangFlag != null">hang_flag = #{hangFlag},</if>
             <if test="hangReason != null">hang_reason = #{hangReason},</if>
             <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
             <if test="createTime != null">create_time = #{createTime},</if>
             <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="activationNum != null">activation_num = #{activationNum},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
         </trim>
         where work_order_no = #{workOrderNo}
@@ -187,10 +226,103 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             where work_order_no=#{workOrderNo}
     </select>
 
+    <select id="getWorkOrderAcceptByOtherNo" parameterType="com.paic.ehis.cs.domain.WorkOrderAccept" resultMap="WorkOrderAcceptResult">
+        <include refid="selectWorkOrderAcceptVo"/>
+        where other_no = #{otherNo}
+        <if test="businessType != null and businessType != ''">and business_type = #{businessType}</if>
+    </select>
+
     <update id="updateClickTime"  parameterType="com.paic.ehis.cs.domain.WorkOrderAccept">
         update work_order_accept
         set click_time = #{clickTime} , update_by=#{updateBy} , update_time = #{updateTime}
         where  work_order_no = #{workOrderNo} and ifnull(click_time,'')= ''
     </update>
 
+    <delete id="deleteAcceptDetailInfoMany" parameterType="String">
+        update work_order_accept  set status='04' where work_order_no in
+        <foreach item="workOrderNo" collection="array" open="(" separator="," close=")">
+            #{workOrderNo}
+        </foreach>
+    </delete>
+
+    <select id="selectServiceProcess" parameterType="String" resultMap="ComplaintDealVoResult">
+        SELECT
+            woa.work_order_no,
+            whi.handle_prop3,
+            whi.handle_prop4,
+            whi.flag,
+            whi.handle_prop5,
+            whi.handle_prop1,
+            whi.handle_prop6,
+            whi.handle_prop7,
+            whi.handle_prop8,
+            whi.handle_prop9,
+            whi.handle_prop10,
+            whi.handle_prop11,
+            whi.handle_prop12,
+            whi.handle_prop13,
+            whi.handle_prop14,
+            whi.handle_prop15,
+            whi.handle_prop16,
+            whi.handle_prop17,
+            whi.handle_prop30,
+            whi.handle_prop18,
+            whi.remark,
+            whi.handle_prop2,
+            whi.handle_prop19,
+            whi.handle_prop20
+        FROM
+            work_order_accept woa
+                LEFT JOIN accept_detail_info adi ON woa.work_order_no = adi.work_order_no
+                LEFT JOIN person_info pi ON woa.insured_no = pi.person_id
+                LEFT JOIN quality_inspection_accept qia ON woa.work_order_no = qia.work_order_no
+                LEFT JOIN work_handle_info whi ON woa.work_order_no = whi.work_order_no
+        WHERE
+            1 = 1
+          AND woa.STATUS = '04'
+          AND woa.business_type = '03'
+          and woa.work_order_no=#{workOrderNo}
+    </select>
+
+    <select id="selectServiceProcess1" parameterType="String" resultMap="ComplaintDealVoResult">
+        SELECT
+            woa.work_order_no,
+            whi.handle_prop3,
+            whi.handle_prop4,
+            whi.flag,
+            whi.handle_prop5,
+            whi.handle_prop1,
+            whi.handle_prop6,
+            whi.handle_prop7,
+            whi.handle_prop8,
+            whi.handle_prop9,
+            whi.handle_prop10,
+            whi.handle_prop11,
+            whi.handle_prop12,
+            whi.handle_prop13,
+            whi.handle_prop14,
+            whi.handle_prop15,
+            whi.handle_prop16,
+            whi.handle_prop17,
+            whi.handle_prop30,
+            whi.handle_prop18,
+            whi.remark,
+            whi.handle_prop2,
+            whi.handle_prop19,
+            whi.handle_prop20
+        FROM
+            work_order_accept woa
+                LEFT JOIN accept_detail_info adi ON woa.work_order_no = adi.work_order_no
+                LEFT JOIN person_info pi ON woa.insured_no = pi.person_id
+                LEFT JOIN quality_inspection_accept qia ON woa.work_order_no = qia.work_order_no
+                LEFT JOIN work_handle_info whi ON woa.work_order_no = whi.work_order_no
+        WHERE
+            1 = 1
+          and woa.work_order_no=#{workOrderNo}
+    </select>
+
+
+    <select id="getGYSerial" parameterType="String" resultType="Integer">
+        select max(SUBSTR(work_order_no,18)+0) from accept_detail_info where work_order_no like concat('%',#{workOrderNo},'%')
+    </select>
 </mapper>

@@ -139,8 +139,8 @@ export function getProductServiceList(data) {
 export function getManualInfoList(data) {
   return request({
     url: '/product/info/getManualInfoList',
-    method: 'get',
-    params: data
+    method: 'post',
+    data: data
 
   })
 }
@@ -224,9 +224,9 @@ export function selectProductSupplier(data) {
 /**
  * 审核日志查询
  */
-export function selectCheckLog(data) {
+export function selectLogList(data) {
   return request({
-    url: 'product/info/selectCheckLog',
+    url: 'product/info/selectLogList',
     method: 'post',
     data
   })

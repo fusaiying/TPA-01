@@ -26,31 +26,29 @@
                  label-position="right" size="mini"  :disabled="status === 'show' && (node==='sport' || node==='calculateReview')">
           <el-row>
             <el-col :span="8">
-              <span class="info_span_col to_right">账单金额：</span><span class="info_span">{{ conclusionInfo.sumBillAmount }} {{ conclusionInfo.sumBillAmount == ''  ? '' : billCurency }}</span>
+              <span class="info_span_col to_right">账单金额：</span> <span class="info_span">{{ conclusionInfo.sumBillAmount }} {{ conclusionInfo.sumBillAmount == ''  ? '' : billCurency }}</span>
             </el-col>
             <el-col :span="8">
-              <span class="info_span_col to_right">折扣金额：</span><span class="info_span money_class">{{ conclusionInfo.sumHosDiscountAmount }} {{ conclusionInfo.sumHosDiscountAmount == ''  ? '' : billCurency}}</span>
+              <span class="info_span_col to_right">折扣金额：</span> <span class="info_span money_class">{{ conclusionInfo.sumHosDiscountAmount }} {{ conclusionInfo.sumHosDiscountAmount == ''  ? '' : billCurency}}</span>
             </el-col>
             <el-col :span="8">
-              <span class="info_span_col to_right">赔付金额：</span><span class="info_span money_class">{{ conclusionInfo.calAmount }} {{ conclusionInfo.calAmount == '' || conclusionInfo.calAmount == null  ? '' : 'CNY' }}</span>
+              <span class="info_span_col to_right">赔付金额：</span> <span class="info_span money_class">{{ conclusionInfo.calAmount }} {{ conclusionInfo.calAmount == '' || conclusionInfo.calAmount == null  ? '' : 'CNY' }}</span>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="8">
-              <span class="info_span_col to_right">拒赔金额 ：</span><span class="info_span money_class">{{ conclusionInfo.refusedAmount }} {{ conclusionInfo.refusedAmount == '' || conclusionInfo.refusedAmount == null ? '' : 'CNY' }}</span>
+              <span class="info_span_col to_right">拒赔金额 ：</span> <span class="info_span money_class">{{ conclusionInfo.refusedAmount }} {{ conclusionInfo.refusedAmount == '' || conclusionInfo.refusedAmount == null ? '' : 'CNY' }}</span>
             </el-col>
             <el-col :span="8">
-              <span class="info_span_col to_right">追讨金额：</span><span class="info_span money_class">{{ conclusionInfo.debtAmount}} {{ conclusionInfo.debtAmount == '' || conclusionInfo.debtAmount == null ? '' : 'CNY' }}</span>
+              <span class="info_span_col to_right">追讨金额：</span> <span class="info_span money_class">{{ conclusionInfo.debtAmount}} {{ conclusionInfo.debtAmount == '' || conclusionInfo.debtAmount == null ? '' : 'CNY' }}</span>
             </el-col>
             <el-col :span="8" v-if="appealCase">
-              <span class="info_span_col to_right">本次支付差额：</span><span class="info_span money_class">{{ conclusionInfo.paymentDifference }} {{ conclusionInfo.paymentDifference == '' || conclusionInfo.paymentDifference == null  ? '' : 'CNY' }}</span>
+              <span class="info_span_col to_right">本次支付差额：</span> <span class="info_span money_class">{{ conclusionInfo.paymentDifference }} {{ conclusionInfo.paymentDifference == '' || conclusionInfo.paymentDifference == null  ? '' : billCurency }}</span>
             </el-col>
           </el-row>
 
-
           <el-row>
             <el-col :span="8">
-            <!--  <span class="info_span_col to_right">账单币种：</span>-->
               <el-form-item label="账单币种：" prop="billCurrency">
                 <el-select  size="mini" v-model="conclusionForm.billCurrency" class= "el-select item-width el-select--mini" placeholder="请选择" @change="billCurrencyChange">
                   <el-option  v-for="dict in currencys" :key="dict.dictValue"  :label="dict.dictValue+' - '+dict.dictLabel"  :value="dict.dictValue" />
@@ -58,10 +56,10 @@
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <span class="info_span_col to_right">汇率：</span><span class="info_span money_class">{{ conclusionInfo.exchangeRate}}</span>
+              <span class="info_span_col to_right">汇率：</span> <span class="info_span money_class">{{ conclusionInfo.exchangeRate}}</span>
             </el-col>
-            <el-col :span="8">
-              <span class="info_span_col to_right">外币给付金额：</span><span class="info_span money_class">{{ conclusionInfo.payAmountForeign}}</span>
+            <el-col :span="8" v-if="billCurency !== 'CNY'">
+              <span class="info_span_col to_right">外币给付金额：</span> <span class="info_span money_class">{{ conclusionInfo.payAmountForeign}}</span>
             </el-col>
           </el-row>
 
@@ -322,7 +320,7 @@
     },
     data() {
       const checkRefusedReason = (rule, value, callback) => {
-        if(this.conclusionForm.payConclusion != '' && '05' == this.conclusionForm.payConclusion) {
+        if(this.conclusionInfo.refusedAmount > 0) {
           if (!value) {
             callback(new Error("拒赔原因必填"));// XXXXXXXXXXXX
           } else {
@@ -370,6 +368,8 @@
           isAppeal:'', //是否是申诉案件
           insuredNo:'', // 被保人客户号
           payConclusion:'', //赔付结论
+          prePayStatus:'', // 原案件支付状态
+          caseFlag:'',
 
         },
         conclusionForm:{
@@ -540,10 +540,6 @@
 
                 }
               }
-              console.log("********")
-              console.log(res)
-              console.log("***************888")
-
             }
           });
         }
@@ -645,8 +641,10 @@
                 billCurrency:this.conclusionForm.billCurrency,
                 payConclusion:this.conclusionForm.payConclusion,
                 refusedReason:this.conclusionForm.refusedReason,
+                payAmountForeign:this.conclusionInfo.payAmountForeign,
                 remark:this.conclusionForm.remark,
                 claimCheck:this.conclusionForm.claimCheck,
+                debtAmount:this.conclusionInfo.debtAmount
                 // calAmount:'0',
                 // payAmount:this.conclusionInfo.payAmount,
                 // refusedAmount:this.conclusionInfo.refusedAmount,
@@ -681,9 +679,15 @@
         if(this.rptNo == '') {
           return false;
         }
-
-        if(this.conclusionInfo.payConclusion == '' || this.conclusionInfo.payConclusion == null){
-          this.$message.info('请先保存再进行审核！')
+        if(this.appealCase) {
+          if(this.conclusionInfo.prePayStatus === '05') {
+            this.$message.warning('该案件存在退票，支付成功后才可申诉！')
+            return false;
+          }
+        }
+          //
+        if(this.conclusionInfo.caseFlag !== '01'){
+          this.$message.warning('请先保存再进行审核！')
           return false;
         }
         //币种一致
@@ -744,9 +748,10 @@
             insuredNo: this.conclusionInfo.insuredNo,
             debtAmount:this.conclusionInfo.debtAmount,
           };
-          addRecoveryInfo(params).then(res => {
-            console.log(res);
-          });
+          // 追讨记录在后台生成
+          // addRecoveryInfo(params).then(res => {
+          //   console.log(res);
+          // });
         }
         const params = {
           rptNo : this.rptNo,
@@ -754,6 +759,8 @@
           isAppeal: this.conclusionInfo.isAppeal,
           payAmount:this.conclusionInfo.calAmount,
           refusedAmount:this.conclusionInfo.refusedAmount,
+          debtAmount:this.conclusionInfo.debtAmount,
+          paymentDifference:this.conclusionInfo.paymentDifference,
         };
         checkBillAndPolicyDate(this.rptNo).then(res=>{
           if (res!=null && res.code==200){
@@ -942,7 +949,7 @@
             if(this.conclusionInfo.claimCheck != '' && this.conclusionInfo.claimCheck != null) {
               this.conclusionForm.claimCheck = this.conclusionInfo.claimCheck; // 核赔依据
             }
-            if(res.data.isAppeal == '01') {
+            if(res.data.isAppeal == '02') {
               this.appealCase = true;
             }
           }
@@ -1037,8 +1044,19 @@
       //抽检完毕
       caseCheckOver() {
         let data = {
-          rptNo: this.fixInfo.rptNo
+          rptNo: this.fixInfo.rptNo,
+          debtAmount:this.conclusionInfo.debtAmount,
+          paymentDifference:this.conclusionInfo.paymentDifference,
+          isAppeal:this.conclusionInfo.isAppeal,
         }
+
+        if(this.appealCase) {
+          if(this.conclusionInfo.prePayStatus === '05') {
+            this.$message.warning('该案件存在退票，支付成功后才可申诉！')
+            return false;
+          }
+        }
+
         editCaseCheck(data).then(res => {
           if (res != null && res.code === 200) {
             this.$message({

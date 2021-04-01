@@ -4,7 +4,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.paic.ehis.cs.mapper.EditDetailMapper">
     
-    <resultMap type="EditDetail" id="EditDetailResult">
+    <resultMap type="com.paic.ehis.cs.domain.EditDetail" id="EditDetailResult">
         <result property="detailId"    column="detail_id"    />
         <result property="editId"    column="edit_id"    />
         <result property="keyDictType"    column="key_dict_type"    />
@@ -28,7 +28,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select detail_id, edit_id, key_dict_type, item_name, item_key, old_value, now_value, value_dict_type, order_no, status, created_by, created_time, updated_by, updated_time from edit_detail
     </sql>
 
-    <select id="selectEditDetailList" parameterType="EditDetail" resultMap="EditDetailResult">
+    <select id="selectEditDetailList" parameterType="com.paic.ehis.cs.domain.EditDetail" resultMap="EditDetailResult">
         <include refid="selectEditDetailVo"/>
         <where>  
             <if test="editId != null  and editId != ''"> and edit_id = #{editId}</if>
@@ -58,7 +58,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	i.edit_reason,
 	d.old_value,
 	d.now_value,
-	d.item_key
+	d.item_key,
+	d.value_dict_type
 FROM
 	edit_info i,
 	edit_detail d,
@@ -69,7 +70,7 @@ WHERE
 	AND i.work_order_id=#{workOrderNo} and f.sub_id=#{subId}
     </select>
         
-    <insert id="insertEditDetail" parameterType="EditDetail">
+    <insert id="insertEditDetail" parameterType="com.paic.ehis.cs.domain.EditDetail">
         insert into edit_detail
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="detailId != null">detail_id,</if>
@@ -105,7 +106,7 @@ WHERE
          </trim>
     </insert>
 
-    <update id="updateEditDetail" parameterType="EditDetail">
+    <update id="updateEditDetail" parameterType="com.paic.ehis.cs.domain.EditDetail">
         update edit_detail
         <trim prefix="SET" suffixOverrides=",">
             <if test="editId != null and editId != ''">edit_id = #{editId},</if>

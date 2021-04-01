@@ -44,6 +44,16 @@ export function complaintDealSubmit(data) {
   })
 }
 
+//-----------------------------------------处里页面的
+//根因改善处理页面
+export function gyDealSubmit(data) {
+  return request({
+    url: '/cs/complaint/gyHandling',
+    method: 'put',
+    data: data
+  })
+}
+
 
 //-------------------------------------取消页面
 //取消提交
@@ -148,6 +158,14 @@ export function transferInfo(query) {
     url: '/cs/by/list',
     method: 'get',
     params: query
+  })
+}
+
+// 查询投诉处理信息
+export function selectServiceProcess(workOrderNo) {
+  return request({
+    url: '/cs/spotCheck/getAttachmentList/selectServiceProcess/'+workOrderNo,
+    method: 'get',
   })
 }
 

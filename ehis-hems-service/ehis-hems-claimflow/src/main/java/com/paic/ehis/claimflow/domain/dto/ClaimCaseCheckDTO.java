@@ -54,4 +54,8 @@ public class ClaimCaseCheckDTO extends BaseEntity {
     /** 追讨金额 */
     @Excel(name = "追讨金额")
     private BigDecimal debtAmount;
+
+    /**本次支付差额*/
+    private BigDecimal paymentDifference;
+
 }

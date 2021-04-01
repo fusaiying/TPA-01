@@ -1,6 +1,7 @@
 package com.paic.ehis.claimflow.mapper;
 
 import com.paic.ehis.claimflow.domain.ClaimCaseBillDetail;
+import com.paic.ehis.claimflow.domain.vo.GCCClaimBillDetail;
 import com.paic.ehis.system.api.domain.dto.ClaimCaseBillDetailDTO;
 import org.apache.ibatis.annotations.Param;
 
@@ -84,4 +85,19 @@ public interface ClaimCaseBillDetailMapper
      * @return
      */
     public int updateClaimCaseBillDetailByBillId(Long billId);
+
+    /**
+     * 修改案件账单费用项明细
+     *
+     * @param claimCaseBillDetail 案件账单费用项明细
+     * @return 结果
+     */
+    public int updateClaimCaseBillDetailByBillIdOne(ClaimCaseBillDetail claimCaseBillDetail);
+
+    /**
+     * 客服模块提供GCC接口，根据账单序号获取账单明细信息
+     * @param billId
+     * @return
+     */
+    public List<GCCClaimBillDetail> selectGCCClaimBillDetailById(String billId);
 }

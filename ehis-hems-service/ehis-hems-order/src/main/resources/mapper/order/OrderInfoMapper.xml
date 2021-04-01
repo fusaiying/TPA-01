@@ -55,6 +55,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="millisecond"    column="millisecond"    />
         <result property="detailInfo"    column="detailInfo"    />
         <result property="nodeStatus"    column="node_status"    />
+        <result property="settleType"    column="settle_type"    />
     </resultMap>
 
 
@@ -500,7 +501,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
     <select id="getContractInfo"  resultMap="ContractInfosResult">
-        select supplier_code as supplierCode, name as contactName ,phone as phone ,mobile as mobile from base_contacts where status ='Y'
+        /*select supplier_code as supplierCode, name as contactName ,phone as phone ,mobile as mobile from base_contacts where status ='Y'*/
+        select supplier_code as supplierCode, contact_name as contactName ,phone as phone  from order_info where status ='Y'
     </select>
 
     <select id="getProductInfo"  resultMap="ProductInfoResult">
@@ -554,7 +556,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                     supplier_code,
                     service_code
             )-->
-            SELECT
+            <!--SELECT
                 psi.supplier_code AS supplierCode,
                 bsi.chname AS supplierName
             FROM
@@ -563,8 +565,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             AND bsi.status = 'Y'
             WHERE
                 psi.service_code = #{serviceCode}
-            <!--AND psi.product_code = #{productCode}-->
-            AND psi.status = 'Y'
+            &lt;!&ndash;AND psi.product_code = #{productCode}&ndash;&gt;
+            AND psi.status = 'Y'-->
+        SELECT distinct
+        p.supplier_code AS supplierCode,
+        o.supplier_name AS supplierName
+        FROM
+        product_supplier_info p
+        LEFT JOIN order_info o ON o.supplier_code = p.supplier_code
+        where  p.service_code = #{serviceCode}
+        and p.status = 'Y' and o.status = 'Y'
     </select>
 
     <update id="cancalOrder">

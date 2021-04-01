@@ -199,6 +199,7 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
         workHandleInfo.setWorkOrderNo(serviceProcessingVo.getWorkOrderNo());
         workHandleInfo.setCreatedBy(SecurityUtils.getUsername());
         WorkHandleInfo workHandleInfo1=workHandleInfoMapper.selectCreatedBy(workHandleInfo);
+        WorkOrderAccept workOrderAccept1=workOrderAcceptMapper.selectWorkOrderAcceptById(serviceProcessingVo.getWorkOrderNo());
         if (workHandleInfo1==null) {
             //生成轨迹表
             FlowLog flowLog=new FlowLog();
@@ -219,10 +220,10 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
             flowLog.setWorkOrderNo(serviceProcessingVo.getWorkOrderNo());
             if(serviceProcessingVo.getBusinessProcess().equals("01")){
                 flowLog.setOperateCode("05");
-                flowLog.setStatus("03");
+                flowLog.setLinkCode("03");
             }else  if (serviceProcessingVo.getBusinessProcess().equals("02")){
                 flowLog.setOperateCode("14");
-                flowLog.setStatus("02");
+                flowLog.setLinkCode("02");
             }
             flowLogMapper.insertFlowLog(flowLog);
             //if(serviceProcessingVo.getSign().equals("01")){
@@ -240,7 +241,10 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
             }else  if (serviceProcessingVo.getBusinessProcess().equals("02")){
                 workOrderAccept.setStatus("02");
             }
-            workOrderAccept.setEndDate(DateUtils.parseDate(DateUtils.getTime()));
+            if (workOrderAccept1.getEndDate()==null){
+                workOrderAccept.setEndDate(DateUtils.parseDate(DateUtils.getTime()));
+            }
+            workOrderAccept.setLastEndDate(DateUtils.parseDate(DateUtils.getTime()));
             workOrderAccept.setUpdateBy(SecurityUtils.getUsername());
             workOrderAcceptMapper.updateWorkOrderAccept(workOrderAccept);
             //无本人操作历史   则增加一条新数据
@@ -287,16 +291,19 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
             flowLog.setWorkOrderNo(serviceProcessingVo.getWorkOrderNo());
             if(serviceProcessingVo.getBusinessProcess().equals("01")){
                 flowLog.setOperateCode("05");
-                flowLog.setStatus("03");
+                flowLog.setLinkCode("03");
             }else  if (serviceProcessingVo.getBusinessProcess().equals("02")){
                 flowLog.setOperateCode("14");
-                flowLog.setStatus("02");
+                flowLog.setLinkCode("02");
             }
             flowLogMapper.insertFlowLog(flowLog);
             //修改主表状态为已处理
             WorkOrderAccept workOrderAccept=new WorkOrderAccept();
             workOrderAccept.setWorkOrderNo(serviceProcessingVo.getWorkOrderNo());
-            workOrderAccept.setEndDate(DateUtils.parseDate(DateUtils.getTime()));
+            if (workOrderAccept1.getEndDate()==null){
+                workOrderAccept.setEndDate(DateUtils.parseDate(DateUtils.getTime()));
+            }
+            workOrderAccept.setLastEndDate(DateUtils.parseDate(DateUtils.getTime()));
             workOrderAccept.setUpdateBy(SecurityUtils.getUsername());
             if(serviceProcessingVo.getBusinessProcess().equals("01")){
                 workOrderAccept.setStatus("04");/*已完成*/
@@ -549,6 +556,8 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
         workHandleInfo.setWorkOrderNo(reservationDealVo.getWorkOrderNo());
         workHandleInfo.setCreatedBy(SecurityUtils.getUsername());
         WorkHandleInfo workHandleInfo1=workHandleInfoMapper.selectCreatedBy(workHandleInfo);
+        WorkOrderAccept workOrderAcceptA=workOrderAcceptMapper.selectWorkOrderAcceptById(reservationDealVo.getWorkOrderNo());
+
         if (workHandleInfo1==null) {
             //将所有状态置为N
             workHandleInfo.setWorkOrderNo(reservationDealVo.getWorkOrderNo());
@@ -556,6 +565,10 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
             //修改主表状态为已处理
             WorkOrderAccept workOrderAccept=new WorkOrderAccept();
             workOrderAccept.setWorkOrderNo(reservationDealVo.getWorkOrderNo());
+            if (workOrderAcceptA.getEndDate()==null){
+                workOrderAccept.setEndDate(DateUtils.parseDate(DateUtils.getTime()));
+            }
+            workOrderAccept.setLastEndDate(DateUtils.parseDate(DateUtils.getTime()));
             if(reservationDealVo.getBusinessProcess().equals("01")){
                 workOrderAccept.setStatus("03");
             }else  if (reservationDealVo.getBusinessProcess().equals("02")){
@@ -577,10 +590,10 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
             flowLog.setWorkOrderNo(reservationDealVo.getWorkOrderNo());
             if(reservationDealVo.getBusinessProcess().equals("01")){
                 flowLog.setOperateCode("05");
-                flowLog.setStatus("03");
+                flowLog.setLinkCode("03");
             }else  if (reservationDealVo.getBusinessProcess().equals("02")){
                 flowLog.setOperateCode("14");
-                flowLog.setStatus("02");
+                flowLog.setLinkCode("02");
             }
             flowLogMapper.insertFlowLog(flowLog);
 
@@ -614,6 +627,10 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
             //修改主表状态为已处理
             WorkOrderAccept workOrderAccept=new WorkOrderAccept();
             workOrderAccept.setWorkOrderNo(reservationDealVo.getWorkOrderNo());
+            if (workOrderAcceptA.getEndDate()==null){
+                workOrderAccept.setEndDate(DateUtils.parseDate(DateUtils.getTime()));
+            }
+            workOrderAccept.setLastEndDate(DateUtils.parseDate(DateUtils.getTime()));
             if(reservationDealVo.getBusinessProcess().equals("01")){
                 workOrderAccept.setStatus("03");
             }else  if (reservationDealVo.getBusinessProcess().equals("02")){
@@ -623,7 +640,7 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
             //生成轨迹表
             FlowLog flowLog=new FlowLog();
             flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id",20,20));
-            flowLog.setStatus("03");
+            flowLog.setLinkCode("03");
             flowLog.setMakeBy(SecurityUtils.getUsername());
             flowLog.setOpinion(reservationDealVo.getRemark());
             //没有um帐号
@@ -635,10 +652,10 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
             flowLog.setWorkOrderNo(reservationDealVo.getWorkOrderNo());
             if(reservationDealVo.getBusinessProcess().equals("01")){
                 flowLog.setOperateCode("05");
-                flowLog.setStatus("03");
+                flowLog.setLinkCode("03");
             }else  if (reservationDealVo.getBusinessProcess().equals("02")){
                 flowLog.setOperateCode("14");
-                flowLog.setStatus("02");
+                flowLog.setLinkCode("02");
             }
             flowLogMapper.insertFlowLog(flowLog);
 

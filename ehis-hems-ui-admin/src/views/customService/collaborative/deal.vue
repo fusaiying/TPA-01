@@ -351,9 +351,9 @@
           highlight-current-row
           tooltip-effect="dark"
           style=" width: 100%;">
-          <el-table-column align="center" width="140" prop="status" label="状态" show-overflow-tooltip>
-            <template slot-scope="scope" v-if="scope.row.status">
-              <span>{{ selectDictLabel(cs_order_state, scope.row.status) }}</span>
+          <el-table-column align="center" width="140" prop="linkCode" label="状态" show-overflow-tooltip>
+            <template slot-scope="scope" v-if="scope.row.linkCode">
+              <span>{{ selectDictLabel(cs_link_code, scope.row.linkCode) }}</span>
             </template>
           </el-table-column>
           <el-table-column align="center" prop="operateCode" label="操作" show-overflow-tooltip>
@@ -477,7 +477,7 @@
         <up-load ref="upload"></up-load>
         <co-organizer ref="coOrganizer"></co-organizer>
         <el-button type="primary" size="mini" @click="temporary">暂存</el-button>
-        <el-button type="primary" size="mini" @click="transfer" >协办</el-button>
+        <el-button type="primary" size="mini" @click="coOrganizer" >协办</el-button>
         <el-button type="primary" size="mini" @click="urge" >催办</el-button>
         <el-button type="primary" size="mini" @click="coCancel" >撤销</el-button>
       </div>
@@ -519,7 +519,7 @@ let dictss = [
   {dictType: 'cs_service_item'},
   {dictType: 'cs_business_type'},
   {dictType: 'cs_attachment_type'},
-  {dictType: 'cs_order_state'},
+  {dictType: 'cs_link_code'},
   {dictType: 'cs_action_type'},
 ]
 export default {
@@ -658,7 +658,7 @@ export default {
       totalCount: 0,
       changeSerchData: {},
       dictList: [],
-      cs_order_state: [],//状态
+      cs_link_code: [],//状态
       cs_action_type: [],//操作类型
       cs_channel: [],
       cs_priority: [],
@@ -733,8 +733,8 @@ export default {
     this.cs_attachment_type = this.dictList.find(item => {
       return item.dictType === 'cs_attachment_type'
     }).dictDate
-    this.cs_order_state = this.dictList.find(item => {
-      return item.dictType === 'cs_order_state'
+    this.cs_link_code = this.dictList.find(item => {
+      return item.dictType === 'cs_link_code'
     }).dictDate
     this.cs_action_type = this.dictList.find(item => {
       return item.dictType === 'cs_action_type'
@@ -812,12 +812,13 @@ export default {
     },
     //转办
     transfer() {
-      this.$refs.transfer.dynamicValidateForm.workOrderNo = this.queryParams.workOrderNo
+      this.$refs.transfer.dynamicValidateForm.workOrderNo = this.queryParams.workOrderNo;
       this.$refs.transfer.open()
     },
     //协办
     coOrganizer() {
-      this.$refs.coOrganizer.open();
+      this.$refs.coOrganizer.dynamicValidateForm.workOrderNo = this.queryParams.workOrderNo;
+      this.$refs.coOrganizer.open(this.queryParams.workOrderNo);
     },
     //超链接用
     modifyDetails(s) {

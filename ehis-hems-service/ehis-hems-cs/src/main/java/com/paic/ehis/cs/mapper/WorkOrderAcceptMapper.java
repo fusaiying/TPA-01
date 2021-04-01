@@ -2,6 +2,7 @@ package com.paic.ehis.cs.mapper;
 
 import com.paic.ehis.cs.domain.WorkOrderAccept;
 import com.paic.ehis.cs.domain.vo.ComplaintAcceptVo;
+import com.paic.ehis.cs.domain.vo.ComplaintDealVo;
 
 import java.util.List;
 
@@ -21,6 +22,9 @@ public interface WorkOrderAcceptMapper
      * @return 工单申请信息 
      */
     public WorkOrderAccept selectWorkOrderAcceptById(String workOrderNo);
+
+    //实时查询案件操作人和状态
+    public WorkOrderAccept selectWorkOrderAcceptById1(String workOrderNo);
 
     /**
      * 计算处理时长
@@ -99,4 +103,22 @@ public interface WorkOrderAcceptMapper
      * @return 结果
      */
     public int updateClickTime(WorkOrderAccept workOrderAccept);
+
+    //根据工单号批量修改预约案件的状态为已完成
+    public int deleteAcceptDetailInfoMany(String[] workOrderNoMany);
+
+    public ComplaintDealVo selectServiceProcess(String workOrderNo);
+
+    public ComplaintDealVo selectServiceProcess1(String workOrderNo);
+
+
+    /**
+     * 根据外部受理号去的工单信息
+     * @param workOrderAccept
+     * @return
+     */
+    public List<WorkOrderAccept> getWorkOrderAcceptByOtherNo(WorkOrderAccept workOrderAccept);
+
+    //根因改善用  获取投诉对应的根因改善最大流水号
+    public int getGYSerial(String workOrderNo);
 }

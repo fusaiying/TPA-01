@@ -24,6 +24,9 @@ public class ClaimCaseForeignPayInfoVO implements Serializable {
     /** 批次号 */
     private String batchNo;
 
+    /** 是否申诉案件(01=正常，02=申诉) */
+    private String isAppeal;
+
     //  对公支付接口所需数据——flint
     /** 被保人客户号 */
     private String insuredNo;
@@ -40,22 +43,13 @@ public class ClaimCaseForeignPayInfoVO implements Serializable {
     /** 分单号 */
     private List<String> policyItemNo;
 
-    /** 姓名 */
-    @Excel(name = "姓名")
-    private String name;
-
-    /** 案件状态 */
-    @Excel(name = "案件状态")
-    private String caseStatus;
-
-    /** 理赔金额 */
-    @Excel(name = "理赔金额")
-    private BigDecimal payAmount;
-
     /** 就诊日期 */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Excel(name = "就诊日期", width = 30, dateFormat = "yyyy-MM-dd")
     private Date treatmentDate;
+    /** 姓名 */
+    @Excel(name = "姓名")
+    private String name;
 
     /** 出单公司 */
     @Excel(name = "出单公司")
@@ -77,6 +71,10 @@ public class ClaimCaseForeignPayInfoVO implements Serializable {
     @Excel(name = "自付额")
     private BigDecimal copay;
 
+    /** 理赔金额 */
+    @Excel(name = "理赔金额")
+    private BigDecimal payAmount;
+
     /** 追讨金额 */
     @Excel(name = "追讨金额")
     private BigDecimal debtAmount;
@@ -93,8 +91,12 @@ public class ClaimCaseForeignPayInfoVO implements Serializable {
     @Excel(name = "借款金额")
     private BigDecimal borrowAmount;
 
+    /** 案件状态 */
+    @Excel(name = "案件状态",readConverterExp = "00=挂起,01=交单复核,02=交单退回,03=交单失败,04=交单完成,05=受理,30=问题件,97=撤件可申诉,98=撤件,06=录入,07=审核,31=协谈,32=调查,08=抽检,99=结案")
+    private String caseStatus;
+
     /** 支付状态 */
-    @Excel(name = "支付状态 01-可支付 02-支付中 03-已支付 04-转账失败 05-退票")
+    @Excel(name = "支付状态",readConverterExp = "01=可支付,02=支付中,03=已支付,04=转账失败,05=退票")
     private String payStatus;
 
     /** 理算-账单币种 */
@@ -105,5 +107,6 @@ public class ClaimCaseForeignPayInfoVO implements Serializable {
 
     /** 案件性质（01-TPA案件、02-核心案件） */
     private String caseProp;
+    private Integer flag2;
 
 }

@@ -113,4 +113,8 @@ public class WorkOrderQueryDTO extends BaseEntity
     /** 质检结果 */
     private String result;
 
+    /** 批处理预约筛选日期  */
+    @JsonFormat(pattern = "yyyy-MM-dd ")
+    private String appointmentStartDate1;
+
 }

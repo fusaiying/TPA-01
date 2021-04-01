@@ -48,7 +48,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="处理日期：" prop="HandlerTime">
+            <el-form-item label="处理日期：" prop="handlerTime">
               <el-date-picker
                 v-model="sendForm.handlerTime"
                 class="item-width"
@@ -359,6 +359,7 @@ import moment from 'moment'
 import {demandListAndPublicPool,demandListAndPersonalPool,demandObtain,demandObtainMany} from '@/api/customService/demand'
 import secondPhone from "../common/modul/secondPhone";
 import {selectCallAgain} from '@/api/customService/demand'
+import {updateClickTime} from "@/api/customService/reservation";
 
 let dictss = [
   {dictType: 'cs_demand_item'},
@@ -564,15 +565,37 @@ export default {
 
     //处理按钮
     dealButton(s){
-      this.$router.push({
-        path: '/customService/deal',
-        query:{
-          workOrderNo:s.workOrderNo,
-          policyNo:s.policyNo,
-          policyItemNo:s.policyItemNo,
-          status:s.status
+      let queryParams = JSON.parse(JSON.stringify(this.sendForm));
+      queryParams.workOrderNo = s.workOrderNo;
+      updateClickTime(queryParams).then(res => {
+        if (res != null && res.code === 200) {
+          //数据保存成功  跳转页面
+          this.$router.push({
+            path: '/customService/deal',
+            query: {
+              workOrderNo: s.workOrderNo,
+              policyNo: s.policyNo,
+              policyItemNo: s.policyItemNo,
+              status: s.status
+            }
+          })
+        }else{
+          //数据保存成功  跳转页面
+          this.$router.push({
+            path: '/customService/deal',
+            query: {
+              workOrderNo: s.workOrderNo,
+              policyNo: s.policyNo,
+              policyItemNo: s.policyItemNo,
+              status: s.status
+            }
+          })
         }
+      }).catch(res => {
+        console.log('error submit!!');
       })
+
+
     },
     // 多选框选中数据
     handleSelectionChange(selection) {

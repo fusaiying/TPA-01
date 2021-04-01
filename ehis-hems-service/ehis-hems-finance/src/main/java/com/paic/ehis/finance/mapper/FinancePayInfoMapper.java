@@ -75,4 +75,6 @@ public interface FinancePayInfoMapper
      */
     public List<TransferfailedVo> selectTransferfailedList(TransferfailedDTO transferfailedDTO);
 
+    public int deleteFinanceTransferfailedList(String batchNo);
+
 }

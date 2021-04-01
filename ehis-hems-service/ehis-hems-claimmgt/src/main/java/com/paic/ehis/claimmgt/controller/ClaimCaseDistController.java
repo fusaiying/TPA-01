@@ -1,7 +1,10 @@
 package com.paic.ehis.claimmgt.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.paic.ehis.claimmgt.domain.ClaimCaseDist;
+import com.paic.ehis.claimmgt.domain.ClaimUserRole;
 import com.paic.ehis.claimmgt.service.IClaimCaseDistService;
+import com.paic.ehis.common.core.utils.StringUtils;
 import com.paic.ehis.common.core.utils.poi.ExcelUtil;
 import com.paic.ehis.common.core.web.controller.BaseController;
 import com.paic.ehis.common.core.web.domain.AjaxResult;
@@ -9,11 +12,16 @@ import com.paic.ehis.common.core.web.page.TableDataInfo;
 import com.paic.ehis.common.log.annotation.Log;
 import com.paic.ehis.common.log.enums.BusinessType;
 import com.paic.ehis.common.security.annotation.PreAuthorize;
+import com.paic.ehis.system.api.RemoteUserService;
+import com.paic.ehis.system.api.domain.ClaimCaseBillInfo;
+import com.paic.ehis.system.api.domain.dto.MenuIdDTO;
+import com.paic.ehis.system.api.domain.dto.RoleUserInfoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -29,107 +37,119 @@ public class ClaimCaseDistController extends BaseController
     @Autowired
     private IClaimCaseDistService claimCaseDistService;
 
+    @Autowired
+    private RemoteUserService remoteUserService;
+
     /**
      * 查询案件分配规则列表
      */
     //@PreAuthorize("@ss.hasPermi('system:dist:list')")
-    @GetMapping("/list")
-    public TableDataInfo list(ClaimCaseDist claimCaseDist)
+    @PostMapping("/selectClaimCaseDist")
+    public TableDataInfo selectClaimCaseDist(@RequestBody ClaimUserRole claimUserRole)
     {
-        startPage();
-        List<ClaimCaseDist> list = claimCaseDistService.selectClaimCaseDistList(claimCaseDist);
-        return getDataTable(list);
+        MenuIdDTO menuIdDTO = new MenuIdDTO();
+        menuIdDTO.setMenuId(Long.valueOf(claimUserRole.getMappingValue()));
+        menuIdDTO.setPageNum(claimUserRole.getPageNum());
+        menuIdDTO.setPageSize(claimUserRole.getPageSize());
+        TableDataInfo tableDataInfo = remoteUserService.getUsersByMenuId(menuIdDTO);
+
+        Object data = tableDataInfo.getRows();
+        List<RoleUserInfoDTO> roleUserInfoDTOList = new ArrayList<>();
+        if(data != null){
+            String jsonRoleUserInfoDTOListStr = JSON.toJSONString(data);
+            roleUserInfoDTOList = JSON.parseArray(jsonRoleUserInfoDTOListStr,RoleUserInfoDTO.class);
+        }
+
+        List<ClaimUserRole> claimUserRoleList = claimCaseDistService.selectClaimUserRole(claimUserRole);
+        if(StringUtils.isEmpty(claimUserRoleList) || claimUserRoleList.size() > 1){
+            return getDataTableErr("角色信息查询错误！");
+        }
+        claimUserRole = claimUserRoleList.get(0);
+
+        List<RoleUserInfoDTO> termRoleUserInfoDTOList = new ArrayList<>();
+        for (RoleUserInfoDTO roleUserInfoDTO:roleUserInfoDTOList) {
+            roleUserInfoDTO.setRoleCode(claimUserRole.getRoleCode());
+
+            ClaimCaseDist claimCaseDist = new ClaimCaseDist();
+            claimCaseDist.setRoleCode(claimUserRole.getRoleCode());
+            claimCaseDist.setUserName(roleUserInfoDTO.getUserName());
+            claimCaseDist.setUserOrganCode(roleUserInfoDTO.getOrangeCode());
+            List<ClaimCaseDist> claimCaseDistList = claimCaseDistService.getClaimCaseDistInfo(claimCaseDist);
+            //存在则获取，因只会存在一条数据所以获取第一条
+            if(StringUtils.isNotEmpty(claimCaseDistList)){
+                ClaimCaseDist vo = claimCaseDistList.get(0);
+                roleUserInfoDTO.setDistId(vo.getDistId());
+                roleUserInfoDTO.setDistId(vo.getDistId());
+                roleUserInfoDTO.setStatus(vo.getStatus());
+                roleUserInfoDTO.setRate(vo.getRate());
+                roleUserInfoDTO.setStatus(vo.getStatus());
+                roleUserInfoDTO.setIsEqually(claimUserRole.getIsEqually());
+            }
+            termRoleUserInfoDTOList.add(roleUserInfoDTO);
+        }
+        tableDataInfo.setRows(termRoleUserInfoDTOList);
+
+        return tableDataInfo;
     }
 
     /**
-     * 导出案件分配规则列表
+     * 查询理赔角色信息
+     * @param claimUserRole
+     * @return
      */
-    //@PreAuthorize("@ss.hasPermi('system:dist:export')")
-    @Log(title = "案件分配规则", businessType = BusinessType.EXPORT)
-    @PostMapping("/export")
-    public void export(HttpServletResponse response, ClaimCaseDist claimCaseDist) throws IOException
-    {
-        List<ClaimCaseDist> list = claimCaseDistService.selectClaimCaseDistList(claimCaseDist);
-        ExcelUtil<ClaimCaseDist> util = new ExcelUtil<ClaimCaseDist>(ClaimCaseDist.class);
-        util.exportExcel(response, list, "dist");
+    @PostMapping("/selectClaimUserRoleInfo")
+    public AjaxResult selectClaimUserRoleInfo(@RequestBody ClaimUserRole claimUserRole){
+        return AjaxResult.success(claimCaseDistService.selectClaimUserRole(claimUserRole));
     }
 
     /**
-     * 获取案件分配规则详细信息
-     */
-    //@PreAuthorize("@ss.hasPermi('system:dist:query')")
-    @GetMapping(value = "/{distId}")
-    public AjaxResult getInfo(@PathVariable("distId") Long distId)
-    {
-        return AjaxResult.success(claimCaseDistService.selectClaimCaseDistById(distId));
-    }
-
-    /**
-     * 新增案件分配规则
-     */
-    //@PreAuthorize("@ss.hasPermi('system:dist:add')")
-    @Log(title = "案件分配规则", businessType = BusinessType.INSERT)
-    @PostMapping
-    public AjaxResult add(@RequestBody ClaimCaseDist claimCaseDist)
-    {
-        return toAjax(claimCaseDistService.insertClaimCaseDist(claimCaseDist));
-    }
-
-    /**
-     * 修改案件分配规则
-     */
-    //@PreAuthorize("@ss.hasPermi('system:dist:edit')")
-    @Log(title = "案件分配规则", businessType = BusinessType.UPDATE)
-    @PutMapping
-    public AjaxResult edit(@RequestBody ClaimCaseDist claimCaseDist)
-    {
-        return toAjax(claimCaseDistService.updateClaimCaseDist(claimCaseDist));
-    }
-
-    /**
-     * 删除案件分配规则
-     */
-    //@PreAuthorize("@ss.hasPermi('system:dist:remove')")
-    @Log(title = "案件分配规则", businessType = BusinessType.DELETE)
-    @DeleteMapping("/{distIds}")
-    public AjaxResult remove(@PathVariable Long[] distIds)
-    {
-        return toAjax(claimCaseDistService.deleteClaimCaseDistByIds(distIds));
-    }
-
-    /**
-     * 一件均分
-     */
-    //@PreAuthorize("@ss.hasPermi('system:dist:edit')")
-    @Log(title = "案件分配规则", businessType = BusinessType.UPDATE)
-    @PutMapping("updateClaimCaseAverage")
-    public AjaxResult updateClaimCaseAverage(@RequestBody ClaimCaseDist claimCaseDist)
-    {
-        return toAjax(claimCaseDistService.updateClaimCaseAverage(claimCaseDist));
-    }
-
-    /**
-     * 案件分配规则编辑超链接
+     * 编辑分配规则
      * @param claimCaseDist
      * @return
      */
-    //@PreAuthorize("@ss.hasPermi('system:dist:edit')")
-    @Log(title = "案件分配规则", businessType = BusinessType.UPDATE)
-    @PutMapping("updateClaimCaseDistOne")
-    public AjaxResult updateClaimCaseDistOne (@RequestBody ClaimCaseDist claimCaseDist)
-    {
-        return toAjax(claimCaseDistService.updateClaimCaseDistOne(claimCaseDist));
+    @PostMapping("/editClaimCaseDist")
+    public AjaxResult editClaimCaseDist(@RequestBody ClaimCaseDist claimCaseDist){
+        try{
+            claimCaseDistService.editClaimCaseDist(claimCaseDist);
+        }catch (Exception e){
+            return AjaxResult.error("操作失败，原因：{}",e.getMessage());
+        }
+
+        return AjaxResult.success();
     }
 
     /**
-     * 查询案件分配规则列表
+     * 编辑理赔角色
+     * @param claimUserRole
+     * @return
      */
-    //@PreAuthorize("@ss.hasPermi('system:dist:list')")
-    @GetMapping("/selectClaimCaseDist")
-    public TableDataInfo selectClaimCaseDist(ClaimCaseDist claimCaseDist)
-    {
-        startPage();
-        List<ClaimCaseDist> list = claimCaseDistService.selectClaimCaseDist(claimCaseDist);
-        return getDataTable(list);
+    @PostMapping("/editClaimUserRole")
+    public AjaxResult editClaimUserRole(@RequestBody ClaimUserRole claimUserRole){
+        try{
+            claimCaseDistService.editClaimUserRole(claimUserRole);
+        }catch (Exception e){
+            return AjaxResult.error("操作失败，原因：{}",e.getMessage());
+        }
+
+        return AjaxResult.success();
+    }
+
+    /**
+     * 获取理赔案件操作人
+     * @param operation 流程节点
+     * @param roleCode 角色编码
+     * @param organCode 机构编码
+     * @return
+     */
+    @GetMapping("/getClaimCaseOperator")
+    public AjaxResult getClaimCaseOperator(@RequestParam("operation") String operation,@RequestParam("roleCode") String roleCode,@RequestParam("organCode") String organCode){
+        String userName = "";
+        try{
+            userName = claimCaseDistService.getClaimCaseOperator(operation,roleCode,organCode);
+        }catch (Exception e){
+            return AjaxResult.error("获取理赔案件操作人失败，原因："+e.getMessage());
+        }
+
+        return AjaxResult.success("查询成功",userName);
     }
 }

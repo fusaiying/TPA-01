@@ -3,7 +3,7 @@
     <el-card class="box-card" style="margin-top: 10px;">
       <span style="color: blue">客户基本信息</span>
       <el-divider/>
-      <el-form ref="sendForm" :model="sendForm" style="padding-bottom: 30px;" label-width="100px"
+      <el-form ref="sendForm" :model="sendForm" style="padding-bottom: 30px;" label-width="170px"
                label-position="right" size="mini">
         <el-row>
           <!--clearable是清楚输入框内容 readly、只读不可以编辑 ；不可以共存-->
@@ -197,7 +197,7 @@
 
 
     <el-card class="box-card" style="margin-top: 10px;">
-      <el-form ref="ruleForm" :model="ruleForm" :rules="rules" style="padding-bottom: 30px;" label-width="200px"
+      <el-form ref="ruleForm" :model="ruleForm" :rules="rules" style="padding-bottom: 30px;" label-width="170px"
                :disabled="isDisabled"
                label-position="right" size="mini">
 
@@ -229,8 +229,8 @@
         </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="来电人姓名：" prop="callName">
-              <el-input v-model="ruleForm.callName" class="item-width" readonly size="mini" placeholder="请输入"/>
+            <el-form-item label="来电人姓名：" prop="callPerson.name">
+              <el-input v-model="ruleForm.callPerson.name" class="item-width" readonly size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -238,11 +238,11 @@
               <el-input v-model="ruleForm.callPerson.mobilePhone" class="item-width" readonly size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
-          <el-col :span="8">
+          <!--<el-col :span="8">
             <el-form-item label="传真：" prop="fax">
               <el-input v-model="ruleForm.fax" class="item-width" readonly size="mini" placeholder="请输入"/>
             </el-form-item>
-          </el-col>
+          </el-col>-->
         </el-row>
         <el-row>
           <el-col :span="8">
@@ -279,23 +279,23 @@
           </el-col>
           <el-col :span="8">
             <el-form-item style="white-space: nowrap" label="联系人电话：" prop="contactsPerson.mobilePhone">
-              <el-input v-model="sendForm.contactsPerson.mobilePhone" class="item-width" readonly size="mini" placeholder="请输入"/>
+              <el-input v-model="ruleForm.contactsPerson.mobilePhone" class="item-width" readonly size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
-          <el-col :span="8">
+          <!--<el-col :span="8">
             <el-form-item style="white-space: nowrap" label="联系人家庭电话：" prop="contactsPerson.homePhone">
               <el-input v-model="ruleForm.contactsPerson.homePhone" class="item-width" size="mini"
                         placeholder="请输入"/>
             </el-form-item>
-          </el-col>
+          </el-col>-->
         </el-row>
 
         <el-row>
-          <el-col :span="8">
+          <!--<el-col :span="8">
             <el-form-item style="white-space: nowrap" label="联系人办公电话：" prop="contactsPerson.workPhone">
               <el-input v-model="ruleForm.contactsPerson.workPhone" class="item-width" readonly size="mini" placeholder="请输入"/>
             </el-form-item>
-          </el-col>
+          </el-col>-->
           <el-col :span="8">
             <el-form-item label="E-MAIL：" prop="email">
               <el-input v-model="ruleForm.email" class="item-width" size="mini" placeholder="请输入"/>
@@ -313,12 +313,24 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="预约日期：" prop="appointmentDate">
-              <el-input v-model="ruleForm.appointmentDate" class="item-width" readonly size="mini" placeholder="请输入"/>
+              <el-date-picker class="item-width"
+                              v-model="ruleForm.appointmentDate"
+                              type="date"
+                              placeholder="选择日期时间"
+                              value-format="yyyy-MM-dd">
+              </el-date-picker>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="预约时间：" prop="complaintTime">
-              <el-input v-model="ruleForm.complaintTime" class="item-width" readonly size="mini" placeholder="请输入"/>
+            <el-form-item label="预约时间："  style="white-space: nowrap" prop="complaintTimes">
+              <el-time-picker class="item-width"
+                              is-range
+                              v-model="ruleForm.complaintTimes"
+                              range-separator="-"
+                              start-placeholder="开始时间"
+                              end-placeholder="结束时间"
+                              value-format="HH:mm:ss">
+              </el-time-picker>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -366,17 +378,21 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="本次疾病/症状起病时间：" prop="symptomTimes">
-              <el-input v-model="ruleForm.symptomTimes" class="item-width" readonly size="mini" placeholder="请输入"/>
+            <el-form-item label="本次疾病/症状起病时间：" prop="a">
+              <el-input v-model="ruleForm.a" style="width: 90px" clearable size="mini" placeholder="请输入"maxlength="4"/>
+              <el-select v-model="ruleForm.b" style="width: 90px" placeholder="请选择"  >
+                <el-option v-for="item in cs_time_unit" :key="item.dictValue" :label="item.dictLabel"
+                           :value="item.dictValue"/>
+              </el-select>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="8">
+          <!--<el-col :span="8">
             <el-form-item label="类似疾病症状最早发生时间：" prop="earliestTime">
               <el-input v-model="ruleForm.earliestTime" class="item-width" readonly size="mini" placeholder="请输入"/>
             </el-form-item>
-          </el-col>
+          </el-col>-->
           <el-col :span="8">
             <el-form-item label="疾病名称：" prop="disease">
               <el-input v-model="ruleForm.disease" class="item-width" readonly size="mini" placeholder="请输入"/>
@@ -432,8 +448,8 @@
           tooltip-effect="dark"
           style=" width: 100%;">
           <el-table-column align="center" width="140" prop="status" label="状态" show-overflow-tooltip>
-            <template slot-scope="scope" v-if="scope.row.status">
-              <span>{{ selectDictLabel(cs_order_state, scope.row.status) }}</span>
+            <template slot-scope="scope" v-if="scope.row.linkCode">
+              <span>{{ selectDictLabel(cs_link_code, scope.row.linkCode) }}</span>
             </template>
           </el-table-column>
           <el-table-column align="center" prop="operateCode" label="操作" show-overflow-tooltip>
@@ -472,7 +488,7 @@
 
 
     <el-card>
-      <el-form ref="submitForm" :model="ruleForm" :rules="rules" style="padding-bottom: 30px;" label-width="130px"
+      <el-form ref="submitForm" :model="ruleForm" :rules="rules" style="padding-bottom: 30px;" label-width="170px"
                label-position="right" size="mini">
         <span style="color: blue">服务处理</span>
         <el-divider/>
@@ -506,14 +522,16 @@
 </template>
 
 <script>
+
   import moment from 'moment'
   import {FlowLogSearch,HMSSearch} from '@/api/customService/demand'
-  import {demandListAndPublicPool,demandListAndPersonalPool,dealReservationSubmit} from '@/api/customService/reservation'
+  import {demandListAndPublicPool,demandListAndPersonalPool,dealReservationSubmit,getPersonalPool} from '@/api/customService/reservation'
 
   import transfer from "../common/modul/transfer";
   import upLoad from "../common/modul/upload";
   import coOrganizer from "../common/modul/coOrganizer";
   import modifyDetails from "../common/modul/modifyDetails";
+  import {policyInfoData} from "@/api/customService/common";
 
   let dictss = [
     {dictType: 'cs_channel'},
@@ -532,6 +550,8 @@
     {dictType: 'cs_service_item'},
     {dictType: 'cs_action_type'},
     {dictType: 'cs_order_state'},
+    {dictType: 'cs_link_code'},
+
   ]
   export default {
     components: { transfer ,
@@ -559,6 +579,8 @@
         cs_organization:[],
         cs_order_state:[],
         cs_whether_flag: [],
+        cs_time_unit: [],
+        cs_link_code: [],
         //流转用
         flowLogData:[],
         flowLogCount: 0,
@@ -683,6 +705,7 @@
       this.queryParams.policyItemNo=this.$route.query.policyItemNo;
       this.queryParams.status=this.$route.query.status;
       //window.aaa = this;
+      this.searchSendFormInfo()
       this.searchHandle()
       this.searchFlowLog()
       this.searchHCS()
@@ -717,6 +740,16 @@
       this.cs_organization = this.dictList.find(item => {
         return item.dictType === 'cs_organization'
       }).dictDate
+      this.cs_order_state = this.dictList.find(item => {
+        return item.dictType === 'cs_order_state'
+      }).dictDate
+      this.cs_time_unit = this.dictList.find(item => {
+        return item.dictType === 'cs_time_unit'
+      }).dictDate
+      this.cs_link_code = this.dictList.find(item => {
+        return item.dictType === 'cs_link_code'
+      }).dictDate
+
     },
     methods: {
       //超链接用
@@ -796,8 +829,26 @@
           }
         })
       },
-      //反显信息需求
-      searchHandle() {
+      //客户信息加载
+      searchSendFormInfo() {
+        let query = {
+          policyNo: this.queryParams.policyNo,
+          policyItemNo: this.queryParams.policyItemNo,
+        }
+        if(this.queryParams.policyNo != null && this.queryParams.policyNo !=""){
+          policyInfoData(query).then(res => {
+            if (res != null && res.code === 200) {
+              if (res.data != null) {
+                this.sendForm = res.data;
+              }
+            }
+          }).catch(res => {
+
+          })
+        }
+      },
+      //客户基本信息
+  /*    searchHandle() {
         let query=this.queryParams
        // console.log("query",query)
         demandListAndPersonalPool(query).then(res => {
@@ -815,7 +866,9 @@
         }).catch(res => {
 
         })
-      },
+      },*/
+
+
       //上传附件
       upload(){ this.$refs.upload.open();},
       //下载
@@ -824,7 +877,7 @@
       //转办
       transfer(){ this.$refs.transfer.open();},
       //协办
-      coOrganizer(){ this.$refs.coOrganizer.open();},
+      coOrganizer(){ this.$refs.coOrganizer.open(this.queryParams.workOrderNo);},
       resetForm() {
         this.$refs.sendForm.resetFields()
       },
@@ -832,45 +885,32 @@
       handleSelectionChange(val) {
         this.dataonLineListSelections = val
       },
-      //反显信息需求
+
+      //服务受理信息查询
       searchHandle() {
           let workOrderNo = this.queryParams
           console.log("workOrderNo", workOrderNo)
-          demandListAndPersonalPool(workOrderNo).then(res => {
-              console.log('共公池', res.rows)
+        getPersonalPool(workOrderNo).then(res => {
+
               if (res != null && res.code === 200) {
-                  this.sendForm = res.rows[0]
-                  this.totalCount = res.total
+                  this.ruleForm = res.data
+                if (this.ruleForm.symptomTimes != null && this.ruleForm.symptomTimes != '') {
+                  let arr=this.ruleForm.symptomTimes.split('-');
+                  this.$set(this.ruleForm, `a`, arr[0]);
+                  this.$set(this.ruleForm, `b`, arr[1]);
+                }
+                if(this.ruleForm.complaintTime != null && this.ruleForm.complaintTime !=''){
+                  //预约时间反显
+                  let timeArr=this.ruleForm.complaintTime.split('-');
+                  this.$set(this.ruleForm, `complaintTimes`, timeArr);
+                }
+/*                  this.totalCount = res.total
                   console.log('response', res.total)
                   if (res.rows.length <= 0) {
                       return this.$message.warning(
                           "未查询到数据！"
                       )
-                  }
-              }
-          }).catch(res => {
-
-          })
-      },
-      //反显信息需求
-      searchHandle() {
-          let workOrderNo = this.queryParams
-          console.log("workOrderNo", workOrderNo)
-          demandListAndPublicPool(workOrderNo).then(res => {
-              console.log('个人池', res.rows)
-              if (res != null && res.code === 200) {
-                  this.ruleForm = res.rows[0]
-                  // console.log("res.rows[0]" , res.rows[0])
-                  // this.ruleForm.callRelationBy = res.rows[0].callRelationBy.toString();
-
-
-                  this.totalCount = res.total
-                  console.log('response', res.total)
-                  if (res.rows.length <= 0) {
-                      return this.$message.warning(
-                          "未查询到数据！"
-                      )
-                  }
+                  }*/
               }
           }).catch(res => {
 
@@ -882,10 +922,9 @@
           workOrderNo.businessType = "02"
           complainSearchServer(workOrderNo).then(res => {
               if (res != null && res.code === 200) {
-                  console.log("预约页面server反显数据", res.data)
-
+                  console.log("预约页面server反显数据", res.data);
                   this.submitForm = res.data;
-                  console.log(this.submitForm, "85848541484848")
+                  console.log(this.submitForm, "85848541484848");
                   if (res.rows.length <= 0) {
                       return this.$message.warning(
                           "未查询到数据！"

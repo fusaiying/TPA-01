@@ -49,13 +49,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="prop23"    column="prop23"    />
         <result property="prop24"    column="prop24"    />
         <result property="prop25"    column="prop25"    />
+        <result property="prop26"    column="prop26"    />
+        <result property="prop27"    column="prop27"    />
+        <result property="prop28"    column="prop28"    />
+        <result property="prop29"    column="prop29"    />
+        <result property="prop30"    column="prop30"    />
+        <result property="prop31"    column="prop31"    />
     </resultMap>
 
     <sql id="selectAcceptDetailInfoVo">
-        select work_order_no, channel_code, item_code, call_person_id, call_relation_by, priority_level, contacts_person_id, contacts_relation_by, call_center_id, email, organ_code, content, complaint_person_id, status, create_by, create_time, update_by, update_time, prop0, prop1, prop2, prop3, prop4, prop5, prop6, prop7, prop8, prop9, prop10, prop11, prop12, prop13, prop14, prop15, prop16, prop17, prop18, prop19, prop20, prop21, prop22, prop23, prop24, prop25 from accept_detail_info
+        select work_order_no, channel_code, item_code, call_person_id, call_relation_by, priority_level, contacts_person_id, contacts_relation_by, call_center_id, email, organ_code, content, complaint_person_id, status, create_by, create_time, update_by, update_time, prop0, prop1, prop2, prop3, prop4, prop5, prop6, prop7, prop8, prop9, prop10, prop11, prop12, prop13, prop14, prop15, prop16, prop17, prop18, prop19, prop20, prop21, prop22, prop23, prop24, prop25,prop26,prop27,prop28,prop29,prop30,prop31 from accept_detail_info
     </sql>
 
-    <select id="selectAcceptDetailInfoList" parameterType="AcceptDetailInfo" resultMap="AcceptDetailInfoResult">
+    <select id="selectAcceptDetailInfoList" parameterType="com.paic.ehis.cs.domain.AcceptDetailInfo" resultMap="AcceptDetailInfoResult">
         <include refid="selectAcceptDetailInfoVo"/>
         <where>  
             <if test="channelCode != null  and channelCode != ''"> and channel_code = #{channelCode}</if>
@@ -167,6 +173,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="prop23 != null">prop23,</if>
             <if test="prop24 != null">prop24,</if>
             <if test="prop25 != null">prop25,</if>
+            <if test="prop26 != null">prop26,</if>
+            <if test="prop27 != null">prop27,</if>
+            <if test="prop28 != null">prop28,</if>
+            <if test="prop29 != null">prop29,</if>
+            <if test="prop30 != null">prop30,</if>
+            <if test="prop31 != null">prop31,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="workOrderNo != null">#{workOrderNo},</if>
@@ -213,10 +225,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="prop23 != null">#{prop23},</if>
             <if test="prop24 != null">#{prop24},</if>
             <if test="prop25 != null">#{prop25},</if>
+            <if test="prop26 != null">#{prop26},</if>
+            <if test="prop27 != null">#{prop27},</if>
+            <if test="prop28 != null">#{prop28},</if>
+            <if test="prop29 != null">#{prop29},</if>
+            <if test="prop30 != null">#{prop30},</if>
+            <if test="prop31 != null">#{prop31},</if>
          </trim>
     </insert>
 
-    <update id="updateAcceptDetailInfo" parameterType="AcceptDetailInfo">
+    <update id="updateAcceptDetailInfo" parameterType="com.paic.ehis.cs.domain.AcceptDetailInfo">
         update accept_detail_info
         <trim prefix="SET" suffixOverrides=",">
             <if test="channelCode != null">channel_code = #{channelCode},</if>
@@ -262,6 +280,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="prop23 != null">prop23 = #{prop23},</if>
             <if test="prop24 != null">prop24 = #{prop24},</if>
             <if test="prop25 != null">prop25 = #{prop25},</if>
+            <if test="prop26 != null">prop26 = #{prop26},</if>
+            <if test="prop27 != null">prop26 = #{prop27},</if>
+            <if test="prop28 != null">prop26 = #{prop28},</if>
+            <if test="prop29 != null">prop26 = #{prop29},</if>
+            <if test="prop30 != null">prop26 = #{prop30},</if>
+            <if test="prop31 != null">prop31 = #{prop31},</if>
         </trim>
         where work_order_no = #{workOrderNo}
     </update>
@@ -276,5 +300,5 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{workOrderNo}
         </foreach>
     </delete>
-    
+
 </mapper>

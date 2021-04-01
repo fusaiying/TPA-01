@@ -63,6 +63,22 @@
       </el-form>
     </el-card>
 
+    <!--申诉公共池 start-->
+    <el-card class="box-card" style="margin-top: 10px;">
+      <div slot="header" class="clearfix">
+        <span>申诉公共池</span>
+      </div>
+      <publicTable @initAppealData="initAppealData" :claimTypes="claimTypes" :deliverySource="deliverySource"  :table-data="publicTableData"/>
+      <pagination
+        v-show="publicTotal>0"
+        :total="publicTotal"
+        :page.sync="publicPageInfo.pageNum"
+        :limit.sync="publicPageInfo.pageSize"
+        @pagination="initPublicData"
+      />
+    </el-card>
+    <!--申诉公共池 end -->
+
     <!-- 申诉工作池  start  -->
     <el-card class="box-card" style="margin-top: 10px;">
       <div slot="header" class="clearfix">
@@ -103,18 +119,17 @@
 </template>
 
 <script>
-
+import publicTable from '../components/publicTable'
 import appealTable from '../components/appealTable'
 import deal from '../components/deal'
 import { appealList } from '@/api/appeal/api'
-
-import moment from "moment";
 
 let dictss = [{dictType: 'delivery_source'},{dictType: 'claimType'} , {dictType: 'claim_status'},{dictType: 'case_pay_status'}]
 
 export default {
   dicts: ['delivery_source'],
   components: {
+    publicTable,
     appealTable,
     deal
   },
@@ -129,10 +144,16 @@ export default {
         updateBy: '',
       },
       activeName: '03',
+      publicTableData:[],
       pendingTableData: [],
       completedTableData: [],
+      publicTotal: 0,
       pendingTotal: 0,
       completedTotal: 0,
+      publicPageInfo: {
+        pageNum: 1,
+        pageSize: 10
+      },
       pendPageInfo: {
         pageNum: 1,
         pageSize: 10
@@ -172,15 +193,16 @@ export default {
 
   },
   created() {
+    this.initPublicData();
     this.getPendingData();
     this.getProcessedData();
   },
   watch: {
     totalChange: function(newVal, oldVal) {
       if (newVal.pendingTotal === 0 && newVal.completedTotal > 0) {
-        this.activeName = '04'
+      //  this.activeName = '03'
       } else {
-        this.activeName = '03'
+      //  this.activeName = '04'
       }
     }
   },
@@ -204,17 +226,62 @@ export default {
     },
     searchHandle() {
 
-      this.pendPageInfo.pageNum = 1;
-      this.pendPageInfo.pageSize = 10;
-      this.completePageInfo.pageNum = 1;
-      this.completePageInfo.pageSize = 10;
-
+      // this.pendPageInfo.pageNum = 1;
+      // this.pendPageInfo.pageSize = 10;
+      // this.completePageInfo.pageNum = 1;
+      // this.completePageInfo.pageSize = 10;
+      //
+      // this.getPendingData();
+      // this.getProcessedData();
+      this.publicPageInfo.pageNum = 1;
+       this.publicPageInfo.pageSize = 10;
+      this.initPublicData();
+      this.searchBtn = true;
+      if (this.activeName === '03') {
+        this.pendPageInfo.pageNum = 1;
+         this.pendPageInfo.pageSize = 10;
+        this.getPendingData()
+      } else {
+        this.completePageInfo.pageNum = 1;
+         this.completePageInfo.pageSize = 10;
+        this.getProcessedData()
+      }
+    },
+    initAppealData(){
+      this.initPublicData();
       this.getPendingData();
       this.getProcessedData();
     },
-    initAppealData(){
-      this.getPendingData();
-      this.getProcessedData();
+    initPublicData(){
+      this.searchLoad = true;
+      let startTime = "";
+      let endTime = "";
+      let operateDate = this.formSearch.operateDate;
+      if('' !== operateDate && null != operateDate) {
+        startTime = operateDate[0];
+        endTime = operateDate[1]  +" 23:59:59";
+      }
+      const params = {};
+      params.pageNum = this.pendPageInfo.pageNum;
+      params.pageSize = this.pendPageInfo.pageSize;
+      params.appealRptNo = this.formSearch.rptNo;
+      params.source = this.formSearch.source;
+      params.idNo = this.formSearch.idNo;
+      params.name = this.formSearch.name;
+      params.createStartTime = startTime;
+      params.createEndTime = endTime;
+      params.auditor = this.formSearch.updateBy;
+      params.appealStatus = '02';
+      params.pubTaskPool = 'Y';
+
+      appealList(params).then(res => {
+        if (res.code == '200') {
+          this.publicTotal = res.total;
+          this.publicTableData = res.rows;
+        }
+        this.searchLoad = false
+      });
+      this.searchLoad = false
     },
     // 查询处理中
     getPendingData() {
@@ -237,11 +304,17 @@ export default {
       params.createEndTime = endTime;
       params.auditor = this.formSearch.updateBy;
       params.appealStatus = '02';
+      params.pageType = '03';
 
       appealList(params).then(res => {
         if (res.code == '200') {
           this.pendingTotal = res.total;
           this.pendingTableData = res.rows;
+          // if (this.pendingTotal === 0 && this.searchBtn){
+          //   return this.$message.warning(
+          //     "未查询到数据！"
+          //   )
+          // }
         }
         this.searchLoad = false
       });
@@ -267,16 +340,22 @@ export default {
       params.createEndTime = endTime;
       params.auditor = this.formSearch.updateBy;
       params.appealStatus = '03';
+      params.pageType = '04';
       appealList(params).then(res => {
         if (res.code == '200') {
           this.completedTotal = res.total;
           this.completedTableData = res.rows;
+          // if (this.completedTotal === 0 && this.searchBtn){
+          //   return this.$message.warning(
+          //     "未查询到数据！"
+          //   )
+          // }
         }
       })
     },
 
     handleClick() {
-      if (this.activeName === '01') {
+      if (this.activeName === '03') {
         this.getPendingData()
       } else {
         this.getProcessedData()

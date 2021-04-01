@@ -226,6 +226,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         AND t2.status = 'Y'
         AND t4.status = 'Y'
         AND t5.status = 'Y'
+        AND not EXISTS (select 1 from claim_case_appeal_task task where t.new_rpt_no = task.appeal_rpt_no and task.appeal_status = '03')
+        <if test="createBy != null  and createBy != ''"> and t.create_by = #{createBy}</if>
+        <if test="updateBy != null  and updateBy != ''"> and t.update_by = #{updateBy}</if>
         <if test="appealStatus != null  and appealStatus != ''"> and t.appeal_status = #{appealStatus}</if>
         <if test="appealRptNo != null  and appealRptNo != ''"> and t.appeal_rpt_no = #{appealRptNo}</if>
         <if test="source != null  and source != ''"> and t2.source = #{source}</if>
@@ -234,6 +237,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <if test="auditor != null  and auditor != ''"> and instr(t6.update_by, #{auditor}) > 0</if>
         <if test="pageType != null  and pageType != '' and pageType == '01'"> and t.appeal_status in ('01','04')</if>
         <if test="pageType != null  and pageType != '' and pageType == '02'"> and t.appeal_status in ('02','03')</if>
+        <if test="applyOperator != null  and applyOperator != '' "> and t.apply_operator = #{applyOperator}</if>
+        <if test="pubTaskPool != null  and pubTaskPool != '' and pubTaskPool == 'Y'.toString()"> and length(ifnull(t.apply_operator,'')) = 0</if>
         <if test="createStartTime != null and createStartTime != ''">
             <![CDATA[AND t.update_time >= #{createStartTime} ]]>
         </if>
@@ -252,11 +257,780 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
     <delete id="clearClaimTableData" parameterType="com.paic.ehis.claimmgt.domain.ClaimCaseAppealTask">
-        call clearClaimTableDataProcedure(#{newRptNo})
+        DELETE t1,  t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15
+			    FROM claim_case t1
+            LEFT JOIN claim_case_accept t2              ON t1.rpt_no = t2.rpt_no
+            LEFT JOIN claim_case_apply_type t3          ON t1.rpt_no = t3.rpt_no
+            LEFT JOIN claim_case_bill t4                ON t1.rpt_no = t4.rpt_no
+            LEFT JOIN claim_case_cal_bill t5            ON t1.rpt_no = t5.rpt_no
+            LEFT JOIN claim_case_bill_detail t6         ON t1.rpt_no = t6.rpt_no
+            LEFT JOIN claim_case_bill_diagnosis t7      ON t1.rpt_no = t7.rpt_no
+            LEFT JOIN claim_case_insured t8             ON t1.rpt_no = t8.rpt_no
+            LEFT JOIN claim_case_payee t9               ON t1.rpt_no = t9.rpt_no
+            LEFT JOIN claim_case_register t10           ON t1.rpt_no = t10.rpt_no
+            LEFT JOIN claim_case_remark t11             ON t1.rpt_no = t11.rpt_no
+            LEFT JOIN claim_case_policy t12             ON t1.rpt_no = t12.rpt_no
+            LEFT JOIN claim_case_record t13             ON t1.rpt_no = t13.rpt_no
+            LEFT JOIN claim_case_investigation t14      ON t1.rpt_no = t14.rpt_no
+            LEFT JOIN claim_case_investigate_detail t15 ON t1.rpt_no = t15.rpt_no
+            WHERE t1.rpt_no = #{newRptNo}
     </delete>
 
-    <insert id="insertClaimTableData" parameterType="com.paic.ehis.claimmgt.domain.ClaimCaseAppealTask">
-        call claimTableDataProcedure(#{newRptNo}, #{appealRptNo})
+<!--    <insert id="insertClaimTableData" parameterType="com.paic.ehis.claimmgt.domain.ClaimCaseAppealTask">-->
+<!--        call claimTableDataProcedure(#{newRptNo}, #{appealRptNo})-->
+<!--    </insert>-->
+
+    <insert id="insertClaimCaseCp" parameterType="com.paic.ehis.claimmgt.domain.ClaimCaseAppealTask">
+        INSERT INTO claim_case (
+            `rpt_no`,
+            `batch_no`,
+            `filing_no`,
+            `case_status`,
+            `pullout_type`,
+            `pullout_reason`,
+            `pullout_describe`,
+            `end_case_time`,
+            `is_appeal`,
+            `pay_status`,
+            `is_finance_back`,
+            `status`,
+            `create_by`,
+            `create_time`,
+            `update_by`,
+            `update_time`,
+            case_prop
+        ) (
+            SELECT
+                #{newRptNo},
+                `batch_no`,
+                `filing_no`,
+                '07',
+                `pullout_type`,
+                `pullout_reason`,
+                `pullout_describe`,
+                `end_case_time`,
+                '02',
+                null,
+                `is_finance_back`,
+                `status`,
+                `create_by`,
+                `create_time`,
+                (select create_by from claim_case_record where rpt_no = #{appealRptNo} and status = 'Y'  ANd operation = '07' ORDER BY CREATE_TIME DESC limit 1),
+                `update_time`,
+                case_prop
+            FROM claim_case WHERE 	rpt_no = #{appealRptNo} AND STATUS = 'Y'
+        )
+    </insert>
+
+    <insert id="insertClaimCaseAcceptCp" parameterType="com.paic.ehis.claimmgt.domain.ClaimCaseAppealTask">
+        INSERT INTO `claim_case_accept` (
+            `rpt_no`,
+            `claim_amount`,
+            `acc_date`,
+            `acc_type`,
+            `curr_situation`,
+            `first_ser_illness_date`,
+            `death_date`,
+            `disability_date`,
+            `pre_auth_flag`,
+            `pre_auth_item`,
+            `pre_auth_no`,
+            `material_complete_date`,
+            `receipt_date`,
+            `pri_reason`,
+            `acc_province`,
+            `acc_city`,
+            `acc_district`,
+            `acc_address`,
+            `acc_describe`,
+            `status`,
+            `create_by`,
+            `create_time`,
+            `update_by`,
+            `update_time`,
+            `customer_application_date`
+        ) (
+            SELECT
+                #{newRptNo},
+                `claim_amount`,
+                `acc_date`,
+                `acc_type`,
+                `curr_situation`,
+                `first_ser_illness_date`,
+                `death_date`,
+                `disability_date`,
+                `pre_auth_flag`,
+                `pre_auth_item`,
+                `pre_auth_no`,
+                `material_complete_date`,
+                `receipt_date`,
+                `pri_reason`,
+                `acc_province`,
+                `acc_city`,
+                `acc_district`,
+                `acc_address`,
+                `acc_describe`,
+                `status`,
+                `create_by`,
+                `create_time`,
+                `update_by`,
+                `update_time`,
+                `customer_application_date`
+            FROM claim_case_accept WHERE rpt_no = #{appealRptNo} AND STATUS = 'Y'
+        )
+    </insert>
+
+    <insert id="insertClaimCaseApplyTypeCp" parameterType="com.paic.ehis.claimmgt.domain.ClaimCaseAppealTask">
+        INSERT INTO `claim_case_apply_type` (
+            `rpt_no`,
+            `apply_type`,
+            `status`,
+            `create_by`,
+            `create_time`,
+            `update_by`,
+            `update_time`
+        ) (
+            SELECT
+                #{newRptNo},
+                `apply_type`,
+                `status`,
+                `create_by`,
+                `create_time`,
+                `update_by`,
+                `update_time`
+            FROM claim_case_apply_type WHERE rpt_no = #{appealRptNo} AND STATUS = 'Y'
+        )
+    </insert>
+
+    <insert id="insertClaimCaseBillCp" parameterType="com.paic.ehis.claimmgt.domain.ClaimCaseAppealTask">
+        INSERT INTO `claim_case_bill` (
+            `rpt_no`,
+            `hospital_code`,
+            `department`,
+            `is_des_hospital`,
+            `acc_type`,
+            `bill_currency`,
+            `bill_amount`,
+            `vis_number`,
+            `treatment_type`,
+            `treatment_start_date`,
+            `treatment_end_date`,
+            `treatment_Days`,
+            `invoice_no`,
+            `bill_no`,
+            `bill_type`,
+            `ss_advance_payment`,
+            `tp_advance_payment`,
+            `is_share_ap`,
+            `trans_serial_no`,
+            `trans_Serial_copay`,
+            `copay`,
+            `is_share_copay`,
+            `hos_discount_amount`,
+            `is_share_dis_amount`,
+            `self_amount`,
+            `part_self_amount`,
+            `unable_amount`,
+            `clinical_diagnosis`,
+            `status`,
+            `create_by`,
+            `create_time`,
+            `update_by`,
+            `update_time`
+        )(
+            SELECT
+                #{newRptNo},
+                `hospital_code`,
+                `department`,
+                `is_des_hospital`,
+                `acc_type`,
+                `bill_currency`,
+                `bill_amount`,
+                `vis_number`,
+                `treatment_type`,
+                `treatment_start_date`,
+                `treatment_end_date`,
+                `treatment_Days`,
+                `invoice_no`,
+                `bill_no`,
+                `bill_type`,
+                `ss_advance_payment`,
+                `tp_advance_payment`,
+                `is_share_ap`,
+                `trans_serial_no`,
+                `trans_Serial_copay`,
+                `copay`,
+                `is_share_copay`,
+                `hos_discount_amount`,
+                `is_share_dis_amount`,
+                `self_amount`,
+                `part_self_amount`,
+                `unable_amount`,
+                `clinical_diagnosis`,
+                `status`,
+                `create_by`,
+                `create_time`,
+                `bill_id`,
+                `update_time`
+            FROM claim_case_bill WHERE rpt_no = #{appealRptNo} AND STATUS = 'Y'
+        )
+    </insert>
+
+    <insert id="insertClaimCaseCalBillCp" parameterType="com.paic.ehis.claimmgt.domain.ClaimCaseAppealTask">
+        INSERT INTO `claim_case_cal_bill` (
+            `rpt_no`,
+            `bill_id`,
+            `cal_amount`,
+            `pay_amount`,
+            `refused_amount`,
+            `dedu_used`,
+            `pay_conclusion`,
+            `remark`,
+            `status`,
+            `create_by`,
+            `create_time`,
+            `update_by`,
+            `update_time`
+        )	(
+            select
+                #{newRptNo},
+                `bill_id`,
+                `cal_amount`,
+                `pay_amount`,
+                `refused_amount`,
+                `dedu_used`,
+                `pay_conclusion`,
+                `remark`,
+                `status`,
+                `create_by`,
+                `create_time`,
+                `update_by`,
+                `update_time`
+            from  claim_case_cal_bill where rpt_no = #{appealRptNo} and status = 'Y'
+        )
+    </insert>
+
+    <insert id="insertClaimCaseBillDetailCp" parameterType="com.paic.ehis.claimmgt.domain.ClaimCaseAppealTask">
+        INSERT INTO `claim_case_bill_detail` (
+            `bill_id`,
+            `rpt_no`,
+            `fee_item_code`,
+            `fee_item_name`,
+            `bill_detail_amount`,
+            `self_amount`,
+            `part_self_amount`,
+            `advance_payment`,
+            `bill_detail_copay`,
+            `hos_discount_amount`,
+            `unable_amount`,
+            `vis_number`,
+            `remark`,
+            `status`,
+            `create_by`,
+            `create_time`,
+            `update_by`,
+            `update_time`
+        )	(
+            SELECT
+                bill_id,
+                #{newRptNo},
+                `fee_item_code`,
+                `fee_item_name`,
+                `bill_detail_amount`,
+                `self_amount`,
+                `part_self_amount`,
+                `advance_payment`,
+                `bill_detail_copay`,
+                `hos_discount_amount`,
+                `unable_amount`,
+                `vis_number`,
+                `remark`,
+                `status`,
+                `create_by`,
+                `create_time`,
+                `update_by`,
+                `update_time`
+            FROM claim_case_bill_detail WHERE rpt_no = #{appealRptNo} and status = 'Y'
+        )
+    </insert>
+
+    <insert id="insertClaimCaseBillDiagnosisCp" parameterType="com.paic.ehis.claimmgt.domain.ClaimCaseAppealTask">
+        INSERT INTO `claim_case_bill_diagnosis` (
+            `rpt_no`,
+            `bill_id`,
+            `icd_code`,
+            `dig_type`,
+            `dig_order`,
+            `status`,
+            `create_by`,
+            `create_time`,
+            `update_by`,
+            `update_time`
+        )(
+            SELECT
+                #{newRptNo},
+                `bill_id`,
+                `icd_code`,
+                `dig_type`,
+                `dig_order`,
+                `status`,
+                `create_by`,
+                `create_time`,
+                `update_by`,
+                `update_time`
+            FROM claim_case_bill_diagnosis WHERE rpt_no = #{appealRptNo} and status = 'Y'
+        )
+    </insert>
+
+    <insert id="insertClaimCaseInsuredCp" parameterType="com.paic.ehis.claimmgt.domain.ClaimCaseAppealTask">
+        INSERT INTO `claim_case_insured` (
+            `rpt_no`,
+            `insured_no`,
+            `name`,
+            `sex`,
+            `id_type`,
+            `id_no`,
+            `birthday`,
+            `occupation`,
+            `nationality`,
+            `id_start_date`,
+            `id_end_date`,
+            `mobile`,
+            `email`,
+            `phone`,
+            `province`,
+            `city`,
+            `district`,
+            `address`,
+            `status`,
+            `create_by`,
+            `create_time`,
+            `update_by`,
+            `update_time`
+        )	(
+            SELECT
+                #{newRptNo},
+                `insured_no`,
+                `name`,
+                `sex`,
+                `id_type`,
+                `id_no`,
+                `birthday`,
+                `occupation`,
+                `nationality`,
+                `id_start_date`,
+                `id_end_date`,
+                `mobile`,
+                `email`,
+                `phone`,
+                `province`,
+                `city`,
+                `district`,
+                `address`,
+                `status`,
+                `create_by`,
+                `create_time`,
+                `update_by`,
+                `update_time`
+            FROM claim_case_insured WHERE rpt_no = #{appealRptNo} and status = 'Y'
+        )
+    </insert>
+
+    <insert id="insertClaimCasePayeeCp" parameterType="com.paic.ehis.claimmgt.domain.ClaimCaseAppealTask">
+        INSERT INTO `claim_case_payee` (
+            `rpt_no`,
+            `pay_mode`,
+            `relation_ins`,
+            `payee_name`,
+            `payee_sex`,
+            `payee_id_type`,
+            `payee_id_no`,
+            `payee_occupation`,
+            `payee_nationality`,
+            `id_end_date`,
+            `payee_mobile`,
+            `payee_bank`,
+            `acc_attribute`,
+            `acc_no`,
+            `payee_ratio`,
+            `province`,
+            `city`,
+            `district`,
+            `address`,
+            `status`,
+            `create_by`,
+            `create_time`,
+            `update_by`,
+            `update_time`,
+            `currency`
+        )(
+            SELECT
+                #{newRptNo},
+                `pay_mode`,
+                `relation_ins`,
+                `payee_name`,
+                `payee_sex`,
+                `payee_id_type`,
+                `payee_id_no`,
+                `payee_occupation`,
+                `payee_nationality`,
+                `id_end_date`,
+                `payee_mobile`,
+                `payee_bank`,
+                `acc_attribute`,
+                `acc_no`,
+                `payee_ratio`,
+                `province`,
+                `city`,
+                `district`,
+                `address`,
+                `status`,
+                `create_by`,
+                `create_time`,
+                `update_by`,
+                `update_time`,
+                `currency`
+            FROM claim_case_payee WHERE rpt_no = #{appealRptNo} and status = 'Y'
+        )
+    </insert>
+
+    <insert id="insertClaimCaseRegisterCp" parameterType="com.paic.ehis.claimmgt.domain.ClaimCaseAppealTask">
+        INSERT INTO `claim_case_register` (
+            `rpt_no`,
+            `relation_ins`,
+            `rgt_name`,
+            `rgt_sex`,
+            `rgt_id_type`,
+            `rgt_id_no`,
+            `rgt_birthday`,
+            `rgt_mobile`,
+            `rgt_email`,
+            `rgt_phone`,
+            `rgt_province`,
+            `rgt_city`,
+            `rgt_district`,
+            `rgt_address`,
+            `status`,
+            `create_by`,
+            `create_time`,
+            `update_by`,
+            `update_time`
+        )(
+            select
+                #{newRptNo},
+                `relation_ins`,
+                `rgt_name`,
+                `rgt_sex`,
+                `rgt_id_type`,
+                `rgt_id_no`,
+                `rgt_birthday`,
+                `rgt_mobile`,
+                `rgt_email`,
+                `rgt_phone`,
+                `rgt_province`,
+                `rgt_city`,
+                `rgt_district`,
+                `rgt_address`,
+                `status`,
+                `create_by`,
+                `create_time`,
+                `update_by`,
+                `update_time`
+            from claim_case_register where rpt_no = #{appealRptNo} and status = 'Y'
+        )
+    </insert>
+
+    <insert id="insertClaimCasRemarkeCp" parameterType="com.paic.ehis.claimmgt.domain.ClaimCaseAppealTask">
+        INSERT INTO `claim_case_remark` (
+            `rpt_no`,
+            `remark_type`,
+            `remark`,
+            `station`,
+            `status`,
+            `create_by`,
+            `create_time`,
+            `update_by`,
+            `update_time`
+        ) (
+            select
+                #{newRptNo},
+                `remark_type`,
+                `remark`,
+                `station`,
+                `status`,
+                `create_by`,
+                `create_time`,
+                `update_by`,
+                `update_time`
+            from claim_case_remark where rpt_no = #{appealRptNo} and status = 'Y'
+        )
+    </insert>
+
+    <insert id="insertClaimCasTypeRemarkeCp" parameterType="com.paic.ehis.claimmgt.domain.ClaimCaseAppealTask">
+        INSERT INTO `claim_case_remark` (
+            `rpt_no`,
+            `remark_type`,
+            `remark`,
+            `station`,
+            `status`,
+            `create_by`,
+            `create_time`,
+            `update_by`,
+            `update_time`
+        )
+        VALUES
+        (
+            #{newRptNo},
+            '02',
+            '',
+            '08',
+            'Y',
+            (select create_by from claim_case_appeal_record where operation = '02' and status = 'Y' and task_id = (select max(task_id) from claim_case_appeal_task  where status = 'Y' and appeal_rpt_no = #{appealRptNo})),
+            (select create_time from claim_case_appeal_record where operation = '02' and status = 'Y' and task_id = (select max(task_id) from claim_case_appeal_task  where status = 'Y' and appeal_rpt_no = #{appealRptNo})),
+            '',
+            now()
+        )
+    </insert>
+
+    <insert id="insertClaimCasePolicyCp" parameterType="com.paic.ehis.claimmgt.domain.ClaimCaseAppealTask">
+        INSERT INTO `claim_case_policy` (
+            `rpt_no`,
+            `policy_no`,
+            `policy_item_no`,
+            `insured_no`,
+            `name`,
+            `app_name`,
+            `valid_start_date`,
+            `valid_end_date`,
+            `policy_risk_type`,
+            `policy_status`,
+            `special_agreement`,
+            `company_code`,
+            `company_name`,
+            `policy_manage_com`,
+            `policy_type`,
+            `plan_code`,
+            `org_policy_no`,
+            `org_policy_item_no`,
+            `ss_flag`,
+            `status`,
+            `create_by`,
+            `create_time`,
+            `update_by`,
+            `update_time`
+        ) (
+            select
+                #{newRptNo},
+                `policy_no`,
+                `policy_item_no`,
+                `insured_no`,
+                `name`,
+                `app_name`,
+                `valid_start_date`,
+                `valid_end_date`,
+                `policy_risk_type`,
+                `policy_status`,
+                `special_agreement`,
+                `company_code`,
+                `company_name`,
+                `policy_manage_com`,
+                `policy_type`,
+                `plan_code`,
+                `org_policy_no`,
+                `org_policy_item_no`,
+                `ss_flag`,
+                `status`,
+                `create_by`,
+                `create_time`,
+                `update_by`,
+                `update_time`
+            from claim_case_policy where rpt_no = #{appealRptNo} and status = 'Y'
+        )
+    </insert>
+
+    <insert id="insertClaimCaseRecordCp" parameterType="com.paic.ehis.claimmgt.domain.ClaimCaseAppealTask">
+        INSERT INTO `claim_case_record` (
+            `rpt_no`,
+            `operation`,
+            `operator`,
+            `history_flag`,
+            `org_record_id`,
+            `status`,
+            `create_by`,
+            `create_time`,
+            `update_by`,
+            `update_time`
+        ) (
+            select
+                #{newRptNo},
+                `operation`,
+                `operator`,
+                case operation when '07' then 'N' else 'Y' END history_flag,
+                `org_record_id`,
+                `status`,
+                `create_by`,
+                now(),
+                `update_by`,
+                now()
+            from claim_case_record where rpt_no = #{appealRptNo} and status = 'Y' AND operation in ('00','04','05','32')
+        )
+    </insert>
+
+    <insert id="insertClaimCaseC06RecordCp" parameterType="com.paic.ehis.claimmgt.domain.ClaimCaseAppealTask">
+        INSERT INTO `claim_case_record` (
+            `rpt_no`,
+            `operation`,
+            `operator`,
+            `history_flag`,
+            `org_record_id`,
+            `status`,
+            `create_by`,
+            `create_time`,
+            `update_by`,
+            `update_time`
+        ) (
+            select
+                #{newRptNo},
+                `operation`,
+                (select create_by from claim_case_appeal_record where operation ='01' and task_id = (select max(task_id) from claim_case_appeal_task where appeal_rpt_no = #{appealRptNo})),
+                'Y',
+                `org_record_id`,
+                `status`,
+                (select create_by from claim_case_appeal_record where operation ='01' and task_id = (select max(task_id) from claim_case_appeal_task where appeal_rpt_no = #{appealRptNo})),
+                now(),
+                (select create_by from claim_case_appeal_record where operation ='01' and task_id = (select max(task_id) from claim_case_appeal_task where appeal_rpt_no = #{appealRptNo})),
+                now()
+            from claim_case_record where record_id = (SELECT MAX(record_id) from claim_case_record where rpt_no = #{appealRptNo} and status = 'Y' AND operation = '06')
+        )
+    </insert>
+
+    <insert id="insertClaimCaseRecordCpAutid" parameterType="com.paic.ehis.claimmgt.domain.ClaimCaseAppealTask">
+        INSERT INTO `claim_case_record` (
+            `rpt_no`,
+            `operation`,
+            `operator`,
+            `history_flag`,
+            `org_record_id`,
+            `status`,
+            `create_by`,
+            `create_time`,
+            `update_by`,
+            `update_time`
+        ) (
+            select
+                #{newRptNo},
+                `operation`,
+                `operator`,
+                case operation when '07' then 'N' else 'Y' END history_flag,
+                `org_record_id`,
+                `status`,
+                `create_by`,
+                now(),
+                `update_by`,
+                now()
+            from claim_case_record where record_id = (SELECT MAX(record_id) from claim_case_record where rpt_no = #{appealRptNo} and status = 'Y' AND operation = '07')
+        )
+    </insert>
+
+    <insert id="insertClaimCaseInvestigateDetailCp" parameterType="com.paic.ehis.claimmgt.domain.ClaimCaseAppealTask">
+        INSERT INTO `claim_case_investigate_detail` (
+            `rpt_no`,
+            `inv_detail_type`,
+            `inv_detail_status`,
+            `inv_detail_cause`,
+            `inv_detail_people`,
+            `inv_detail_time`,
+            `inv_detail_item`,
+            `inv_detail_nature`,
+            `inv_detail_gist`,
+            `inv_detail_face`,
+            `conclusion`,
+            `inv_detail_num`,
+            `inv_detail_replenish`,
+            `inv_detail_survey`,
+            `inv_detail_scan`,
+            `inv_detail_proof`,
+            `inv_detail_after_time`,
+            `inv_detail_organ`,
+            `inv_detail_after_people`,
+            `inv_detail_argument`,
+            `inv_detail_result_argument`,
+            `status`,
+            `create_by`,
+            `create_time`,
+            `update_by`,
+            `update_time`
+        )
+
+            (
+                select
+                    #{newRptNo},
+                    `inv_detail_type`,
+                    `inv_detail_status`,
+                    `inv_detail_cause`,
+                    `inv_detail_people`,
+                    `inv_detail_time`,
+                    `inv_detail_item`,
+                    `inv_detail_nature`,
+                    `inv_detail_gist`,
+                    `inv_detail_face`,
+                    `conclusion`,
+                    `inv_detail_num`,
+                    `inv_detail_replenish`,
+                    `inv_detail_survey`,
+                    `inv_detail_scan`,
+                    `inv_detail_proof`,
+                    `inv_detail_after_time`,
+                    `inv_detail_organ`,
+                    `inv_detail_after_people`,
+                    `inv_detail_argument`,
+                    `inv_detail_result_argument`,
+                    `status`,
+                    `create_by`,
+                    `create_time`,
+                    `update_by`,
+                    `update_time`
+                from claim_case_investigate_detail where rpt_no = #{appealRptNo} and status = 'Y'
+            )
+    </insert>
+
+    <insert id="insertclaimCaseInvestigationCp" parameterType="com.paic.ehis.claimmgt.domain.ClaimCaseAppealTask">
+        INSERT INTO `claim_case_investigation` (
+            `inv_no` ,
+            `rpt_no`,
+            `inv_type`,
+            `inv_reason`,
+            `inv_organ_code`,
+            `organ_code`,
+            `policy_no`,
+            `inv_view`,
+            `inv_date`,
+            `is_history`,
+            `status`,
+            `create_by`,
+            `create_time`,
+            `update_by`,
+            `update_time`
+        )
+            (
+                select
+                    CONCAT('CP',`inv_no`),
+                    #{newRptNo},
+                    `inv_type`,
+                    `inv_reason`,
+                    `inv_organ_code`,
+                    `organ_code`,
+                    `policy_no`,
+                    `inv_view`,
+                    `inv_date`,
+                    `is_history`,
+                    `status`,
+                    `create_by`,
+                    `create_time`,
+                    `update_by`,
+                    `update_time`
+                from claim_case_investigation  where rpt_no = #{appealRptNo} and status = 'Y'
+            )
     </insert>
 
 

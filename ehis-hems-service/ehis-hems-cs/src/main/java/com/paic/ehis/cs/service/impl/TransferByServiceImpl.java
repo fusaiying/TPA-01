@@ -123,7 +123,8 @@ public class TransferByServiceImpl implements ITransferByService
         flowLog.setWorkOrderNo(demandAcceptVo.getWorkOrderNo());
         flowLog.setMakeTime(DateUtils.parseDate(DateUtils.getTime()));
         flowLog.setMakeBy(SecurityUtils.getUsername());
-        flowLog.setStatus(workOrderAccept.getStatus());
+        flowLog.setLinkCode(workOrderAccept.getStatus());
+        flowLog.setToReason(demandAcceptVo.getReason());
         flowLog.setOperateCode("10");
         flowLog.setCreatedBy(SecurityUtils.getUsername());
         flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));

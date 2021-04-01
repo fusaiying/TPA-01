@@ -133,7 +133,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectBaseIssuingCompanyRiskList" parameterType="com.paic.ehis.base.domain.BaseIssuingcompanyRule" resultMap="ClaimProductResult">
         SELECT DISTINCT
-        biri.company_code,
         biri.risk_code,
         cp.risk_name
         FROM

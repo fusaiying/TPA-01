@@ -22,97 +22,22 @@ public class ClaimCaseDist extends BaseEntity
     /** 分配规则ID */
     private Long distId;
 
-    /** 用户 */
-    @Excel(name = "用户")
-    private Long userId;
-
-    /** 角色 */
-    @Excel(name = "角色")
-    private Long roleId;
     /** 用户名称 */
+    @Excel(name = "用户")
     private String userName;
-    /** 是否均分 */
-    @Excel(name = "是否均分")
-    private String isEqually;
+
+    /** 用户所属机构 */
+    private String userOrganCode;
+
+    /** 角色编码 */
+    @Excel(name = "角色编码")
+    private String roleCode;
 
     /** 分配比例 */
     @Excel(name = "分配比例")
     private BigDecimal rate;
-    /**角色名*/
-    private String roleName;
 
     /** 数据状态（Y-有效，N-无效） */
     @Excel(name = "数据状态", readConverterExp = "Y=-有效，N-无效")
     private String status;
-
-    public void setDistId(Long distId) 
-    {
-        this.distId = distId;
-    }
-
-    public Long getDistId() 
-    {
-        return distId;
-    }
-    public void setUserId(Long userId) 
-    {
-        this.userId = userId;
-    }
-
-    public Long getUserId() 
-    {
-        return userId;
-    }
-    public void setRoleId(Long roleId) 
-    {
-        this.roleId = roleId;
-    }
-
-    public Long getRoleId() 
-    {
-        return roleId;
-    }
-    public void setIsEqually(String isEqually) 
-    {
-        this.isEqually = isEqually;
-    }
-
-    public String getIsEqually() 
-    {
-        return isEqually;
-    }
-    public void setRate(BigDecimal rate) 
-    {
-        this.rate = rate;
-    }
-
-    public BigDecimal getRate() 
-    {
-        return rate;
-    }
-    public void setStatus(String status) 
-    {
-        this.status = status;
-    }
-
-    public String getStatus() 
-    {
-        return status;
-    }
-
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("distId", getDistId())
-            .append("userId", getUserId())
-            .append("roleId", getRoleId())
-            .append("isEqually", getIsEqually())
-            .append("rate", getRate())
-            .append("status", getStatus())
-            .append("createBy", getCreateBy())
-            .append("createTime", getCreateTime())
-            .append("updateBy", getUpdateBy())
-            .append("updateTime", getUpdateTime())
-            .toString();
-    }
 }

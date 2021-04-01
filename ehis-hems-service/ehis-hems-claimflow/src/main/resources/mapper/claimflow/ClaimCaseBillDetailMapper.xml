@@ -127,13 +127,13 @@
             <if test="feeItemCode != null and feeItemCode != ''">fee_item_code = #{feeItemCode},</if>
             <if test="feeItemName != null and feeItemName != ''">fee_item_name = #{feeItemName},</if>
             <if test="billDetailAmount != null">bill_detail_amount = #{billDetailAmount},</if>
-            <if test="selfAmount != null">self_amount = #{selfAmount},</if>
-            <if test="partSelfAmount != null">part_self_amount = #{partSelfAmount},</if>
+            self_amount = #{selfAmount},
+            part_self_amount = #{partSelfAmount},
             <if test="advancePayment != null">advance_payment = #{advancePayment},</if>
             <if test="billDetailCopay != null">bill_detail_copay = #{billDetailCopay},</if>
             <if test="hosDiscountAmount != null">hos_discount_amount = #{hosDiscountAmount},</if>
-            <if test="unableAmount != null">unable_amount = #{unableAmount},</if>
-            <if test="visNumber != null">vis_number = #{visNumber},</if>
+            unable_amount = #{unableAmount},
+            vis_number = #{visNumber},
             <if test="remark != null">remark = #{remark},</if>
             <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
             <if test="createTime != null">create_time = #{createTime},</if>
@@ -159,8 +159,50 @@
         where bill_id=#{billId} and status='Y'
     </select>
 
+    <resultMap id="GCCClaimBillDetailMap" type="com.paic.ehis.claimflow.domain.vo.GCCClaimBillDetail">
+        <result property="feeType" column="fee_item_code"/>
+        <result property="feeName" column="fee_item_name"/>
+        <result property="billAmt" column="bill_detail_amount"/>
+        <result property="allownAmt" column="self_amount"/>
+        <result property="subownAmt" column="part_self_amount"/>
+        <result property="ownAmt" column="unable_amount"/>
+        <result property="preAmt" column="advance_payment"/>
+        <result property="costComment" column="remark"/>
+    </resultMap>
+    <select id="selectGCCClaimBillDetailById" parameterType="String"
+            resultMap="GCCClaimBillDetailMap">
+        select fee_item_code, fee_item_name, bill_detail_amount,
+               self_amount, part_self_amount, unable_amount,advance_payment,remark
+        from claim_case_bill_detail
+        where bill_id=#{billId} and status='Y'
+    </select>
+
     <update id="updateClaimCaseBillDetailByBillId" parameterType="long">
         update claim_case_bill_detail set status='N' where bill_id=#{billId} and status='Y'
     </update>
 
+    <update id="updateClaimCaseBillDetailByBillIdOne" parameterType="ClaimCaseBillDetail">
+        update claim_case_bill_detail
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="billId != null">bill_id = #{billId},</if>
+            <if test="rptNo != null and rptNo != ''">rpt_no = #{rptNo},</if>
+            <if test="feeItemCode != null and feeItemCode != ''">fee_item_code = #{feeItemCode},</if>
+            <if test="feeItemName != null and feeItemName != ''">fee_item_name = #{feeItemName},</if>
+            <if test="billDetailAmount != null">bill_detail_amount = #{billDetailAmount},</if>
+            self_amount = #{selfAmount},
+            part_self_amount = #{partSelfAmount},
+            <if test="advancePayment != null">advance_payment = #{advancePayment},</if>
+            <if test="billDetailCopay != null">bill_detail_copay = #{billDetailCopay},</if>
+            <if test="hosDiscountAmount != null">hos_discount_amount = #{hosDiscountAmount},</if>
+            unable_amount = #{unableAmount},
+            vis_number = #{visNumber},
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="status != null">status = #{status},</if>
+        </trim>
+        where detail_id = #{detailId}
+    </update>
 </mapper>

@@ -22,45 +22,69 @@
           <el-table-column align="center" prop="companyName" label="出单公司" show-overflow-tooltip/>
           <el-table-column align="center" prop="billAmount" label="账单金额" show-overflow-tooltip>
             <template slot-scope="scope">
-              <span>{{scope.row.billAmount}} {{scope.row.currency}}</span>
+              <span v-if="scope.row.caseStatus!='98'">{{scope.row.billAmount}} {{scope.row.currency}}</span>
+              <span v-else>{{scope.row.billAmount}}</span>
             </template>
           </el-table-column>
           <el-table-column align="center" prop="discountedAmount" label="折后金额" show-overflow-tooltip>
             <template slot-scope="scope">
-              <span>{{scope.row.discountedAmount}} {{scope.row.currency}}</span>
+              <span v-if="scope.row.caseStatus!='98'">{{scope.row.discountedAmount}} {{scope.row.currency}}</span>
+              <span v-else>{{scope.row.discountedAmount}}</span>
             </template>
           </el-table-column>
           <el-table-column align="center" prop="advancePayment" label="先期给付" show-overflow-tooltip>
             <template slot-scope="scope">
-              <span>{{scope.row.advancePayment}} {{scope.row.currency}}</span>
+              <span v-if="scope.row.caseStatus!='98'">{{scope.row.advancePayment}} {{scope.row.currency}}</span>
+              <span v-else>{{scope.row.advancePayment}}</span>
             </template>
           </el-table-column>
           <el-table-column align="center" prop="copay" label="自付额" show-overflow-tooltip>
             <template slot-scope="scope">
-              <span>{{scope.row.copay}} {{scope.row.currency}}</span>
+              <span v-if="scope.row.caseStatus!='98'">{{scope.row.copay}} {{scope.row.currency}}</span>
+              <span v-else>{{scope.row.copay}}</span>
             </template>
           </el-table-column>
-          <el-table-column align="center" prop="payAmount" label="理赔金额" show-overflow-tooltip>
+          <el-table-column key="77" v-if="querys.status === 'public'" align="center" prop="payAmount" label="理赔金额" show-overflow-tooltip>
             <template slot-scope="scope">
-              <span>{{scope.row.payAmount}} {{scope.row.currency}}</span>
+              <span v-if="scope.row.caseStatus!='98'">{{scope.row.payAmount}} {{scope.row.currency}}</span>
+              <span v-else>{{scope.row.payAmount}}</span>
             </template>
           </el-table-column>
-          <el-table-column align="center" prop="debtAmount" label="追讨金额" show-overflow-tooltip>
+          <el-table-column key="78" v-if="querys.status === 'publicForeign'" align="center" prop="payAmount" label="理赔金额" show-overflow-tooltip>
             <template slot-scope="scope">
-              <span>{{scope.row.debtAmount}} {{scope.row.currency}}</span>
+              <span v-if="scope.row.caseStatus!='98'">{{scope.row.payAmount}} CNY</span>
+              <span v-else>{{scope.row.payAmount}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column key="79" v-if="querys.status === 'public'" align="center" prop="debtAmount" label="追讨金额" show-overflow-tooltip>
+            <template slot-scope="scope">
+              <span v-if="scope.row.caseStatus!='98'">{{scope.row.debtAmount}} {{scope.row.currency}}</span>
+              <span v-else>{{scope.row.debtAmount}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column key="80" v-if="querys.status === 'publicForeign'" align="center" prop="debtAmount" label="追讨金额" show-overflow-tooltip>
+            <template slot-scope="scope">
+              <span v-if="scope.row.caseStatus!='98'">{{scope.row.debtAmount}} CNY</span>
+              <span v-else>{{scope.row.debtAmount}}</span>
             </template>
           </el-table-column>
           <el-table-column key="1" v-if="querys.status === 'publicForeign'" align="center" prop="exchangeRate"
-                           label="汇率" show-overflow-tooltip/>
+                           label="汇率" show-overflow-tooltip>
+            <template slot-scope="scope">
+              <span >{{getNewData(scope.row.exchangeRate)}}</span>
+            </template>
+          </el-table-column>
           <el-table-column key="2" v-if="querys.status === 'publicForeign'" align="center" prop="payAmountForeign"
                            label="外币支付金额" width="110" show-overflow-tooltip>
             <template slot-scope="scope">
-              <span>{{scope.row.payAmountForeign}} {{scope.row.currency}}</span>
+              <span v-if="scope.row.caseStatus!='98'">{{scope.row.payAmountForeign}} {{scope.row.currency}}</span>
+              <span v-else>{{scope.row.payAmountForeign}}</span>
             </template>
           </el-table-column>
           <el-table-column align="center" prop="borrowAmount" label="借款金额" show-overflow-tooltip>
             <template slot-scope="scope">
-              <span>{{scope.row.borrowAmount}} {{scope.row.currency}}</span>
+              <span v-if="scope.row.caseStatus!='98'">{{scope.row.borrowAmount}} {{scope.row.currency}}</span>
+              <span v-else>{{scope.row.borrowAmount}}</span>
             </template>
           </el-table-column>
           <el-table-column align="center" prop="caseStatus" label="案件状态" show-overflow-tooltip>
@@ -88,12 +112,22 @@
                 <span class="size">{{ baseForm.currency }}</span>
               </el-form-item>
             </el-col>
-            <el-col :span="8">
+            <el-col v-if="querys.status==='publicForeign'"  :span="8">
+              <el-form-item label="支付总金额：" prop="payAmount">
+                <span class="size">{{ baseForm.payAmount }} CNY</span>
+              </el-form-item>
+            </el-col>
+            <el-col  v-if="querys.status==='public'" :span="8">
               <el-form-item label="支付总金额：" prop="payAmount">
                 <span class="size">{{ baseForm.payAmount }} {{baseForm.currency}}</span>
               </el-form-item>
             </el-col>
-            <el-col :span="8">
+            <el-col v-if="querys.status==='publicForeign'"  :span="8">
+              <el-form-item label="理赔总金额：" prop="calAmount">
+                <span class="size">{{ baseForm.calAmount }} CNY</span>
+              </el-form-item>
+            </el-col>
+            <el-col  v-if="querys.status==='public'" :span="8">
               <el-form-item label="理赔总金额：" prop="calAmount">
                 <span class="size">{{ baseForm.calAmount }} {{baseForm.currency}}</span>
               </el-form-item>
@@ -332,8 +366,9 @@
                       "批次下案件币种不统一，请核实！"
                     )
                   }
+                  this.search()
                 })
-                this.search()
+
               }).catch(() => {
                 this.$message({
                   type: 'info',
@@ -343,6 +378,7 @@
             } else {
               let data = {
                 batchNo: this.querys.batchNo,
+                organCode: this.organCode,
                 caseInfoList: this.tableData,
                 payment: this.baseForm
               }
@@ -365,38 +401,44 @@
                     "批次下案件币种不统一，请核实！"
                   )
                 }
+                this.search()
               })
-              this.search()
             }
           }
         })
       },
       backspace(row) {//回退
-        if (row.caseStatus === '97' || row.caseStatus === '98' || row.payStatus === '02' || row.payStatus === '03' ||
-          row.caseStatus === '05' || row.caseStatus === '06' || row.caseStatus === '07') {
+        if (row.caseProp == '02') {
           return this.$message.warning(
-            " 当前案件不允许进行回退，请核实！"
+            " 核心案件不允许进行回退，请核实！"
           )
         } else {
-          rollback(row.rptNo).then(res => {
-            if (res != null && res.code === 200) {
-              this.$message({
-                message: '回退成功！',
-                type: 'success',
-                center: true,
-                showClose: true
-              })
-            } else {
-              this.$message({
-                message: '回退失败',
-                type: 'error',
-                center: true,
-                showClose: true
-              })
-            }
-          })
-          this.search()
+          if ((row.caseStatus != '08' && row.caseStatus != '99') || row.payStatus === '02' || row.payStatus === '03') {
+            return this.$message.warning(
+              " 当前案件不允许进行回退，请核实！"
+            )
+          } else {
+            rollback(row.rptNo).then(res => {
+              if (res != null && res.code === 200) {
+                this.$message({
+                  message: '回退成功！',
+                  type: 'success',
+                  center: true,
+                  showClose: true
+                })
+              } else {
+                this.$message({
+                  message: '回退失败',
+                  type: 'error',
+                  center: true,
+                  showClose: true
+                })
+              }
+              this.search()
+            })
+          }
         }
+
       },
       caseBorrow() {//案件借款
         if (this.baseForm.claimFlag === '01') {//非全陪
@@ -433,9 +475,13 @@
                   return this.$message.warning(
                     "批次下案件币种不统一，请核实！"
                   )
+                } else if (res != null && res.data === 4) {
+                  return this.$message.warning(
+                    "不存在可以借款的案件！"
+                  )
                 }
+                this.search()
               })
-              this.search()
             }).catch(() => {
               this.$message({
                 type: 'info',
@@ -465,16 +511,17 @@
                   "批次下案件币种不统一，请核实！"
                 )
               }
+              this.search()
             })
-            this.search()
+
           }
         }
 
 
       },
       listExport() {
-        let data={
-          batchNo:this.querys.batchNo
+        let data = {
+          batchNo: this.querys.batchNo
         }
         if (this.querys.status === 'public') {
           this.isListExport = true
@@ -488,7 +535,7 @@
           })
         } else if (this.querys.status === 'publicForeign') {
           this.isListExport = true
-          this.download('finance/pay/exportForeign',data, `caseMessageForeign_${new Date().getTime()}.xlsx`).catch(res => {
+          this.download('finance/pay/exportForeign', data, `caseMessageForeign_${new Date().getTime()}.xlsx`).catch(res => {
             this.$message({
               message: res,
               type: 'error',
@@ -512,6 +559,13 @@
             return ''
           }
         }
+      },
+      getNewData(value) {
+        if (value=='' || value==null || value==undefined){
+          value=0
+        }
+        let tempVal = parseFloat(value).toFixed(2)
+        return tempVal
       }
     }
   }

@@ -1,8 +1,11 @@
 package com.paic.ehis.claimflow.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.paic.ehis.claimflow.constant.ClaimOperationConstant;
+import com.paic.ehis.claimflow.constant.ClaimRoleConstant;
 import com.paic.ehis.claimflow.domain.*;
 import com.paic.ehis.claimflow.domain.dto.*;
 import com.paic.ehis.claimflow.domain.vo.*;
@@ -20,7 +23,11 @@ import com.paic.ehis.common.core.utils.sql.SqlUtil;
 import com.paic.ehis.common.core.web.domain.AjaxResult;
 import com.paic.ehis.common.core.web.page.TableDataInfo;
 import com.paic.ehis.system.api.PolicyAndRiskService;
+import com.paic.ehis.system.api.RemoteClaimMgtService;
+import com.paic.ehis.system.api.RemoteFinancialServicce;
+import com.paic.ehis.system.api.domain.ClaimCaseCalculateInfo;
 import com.paic.ehis.system.api.domain.ClaimCasePolicy;
+import com.paic.ehis.system.api.domain.FinanceBorrowInfo;
 import com.paic.ehis.system.api.domain.PolicyAndRiskRelation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -92,6 +99,12 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
 
     @Autowired
     private ClaimCaseDebtMapper claimCaseDebtMapper;
+
+    @Autowired
+    private RemoteFinancialServicce remoteFinancialServicce;
+
+    @Autowired
+    private RemoteClaimMgtService remoteClaimMgtService;
 
 
     /**
@@ -202,6 +215,17 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
      */
     @Override
     public int updateClaimCase(ClaimCase claimCase) {
+        if(ClaimOperationConstant.ClaimReview.equals(claimCase.getCaseStatus())){
+            //获取下一环节处理人
+            AjaxResult nextUserNameAR = remoteClaimMgtService.getClaimCaseOperator(ClaimOperationConstant.ClaimReview, ClaimRoleConstant.ClaimReview,"");
+            Object data = nextUserNameAR.get(AjaxResult.DATA_TAG);
+            if(data != null){
+                String jsonCaseInfoStr = JSON.toJSONString(data);
+                String nextUserName = JSON.parseObject(jsonCaseInfoStr, String.class);
+                claimCase.setUpdateBy(nextUserName);
+            }
+        }
+
         claimCase.setUpdateTime(DateUtils.getNowDate());
         return claimCaseMapper.updateClaimCase(claimCase);
     }
@@ -334,33 +358,47 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
                 claimCaseShuntClass.getClaimCase().setCaseProp("01");
                 claimCaseShuntClass.setCaseStypeFind("01");
 
-                //走TPA流程
-
                 //判断是否为审核岗退回受理
                 // 通过查询报案号为本报案号,数据状态为"Y",是否为历史节点："N",流程节点为："07"审核的上一流程节点ID；
                 ClaimCaseRecord claimCaseRecord = new ClaimCaseRecord();
                 claimCaseRecord.setRptNo(claimCase.getRptNo());
                 claimCaseRecord.setStatus("Y");
                 //claimCaseRecord.setHistoryFlag("N");
-                claimCaseRecord.setOperation("06");
+                claimCaseRecord.setOperation("06");//03-录入
                 List<ClaimCaseRecord> claimCaseRecords = claimCaseRecordMapper.selectClaimCaseRecordList(claimCaseRecord);
                 ClaimCaseRecord claimCaseRecord1 = new ClaimCaseRecord();
+                String nextUserName = SecurityUtils.getUsername();
                 if (null == claimCaseRecords || claimCaseRecords.size() == 0) {
                     //为空的情况
                     //第一次处理-案件状态05->06
-                    claimCase.setCaseStatus("06");//案件信息-录入
-                    claimCaseRecord1.setOperation("06");//案件操作记录-录入
+                    claimCase.setCaseStatus("06");//03-录入
+                    claimCaseRecord1.setOperation("06");//案件操作记录-录入03
 
-                    //将原有的
+                    //获取下一环节处理人
+                    AjaxResult nextUserNameAR = remoteClaimMgtService.getClaimCaseOperator(ClaimOperationConstant.BillEntry, ClaimRoleConstant.BillEntry,"");
+                    Object data = nextUserNameAR.get(AjaxResult.DATA_TAG);
+                    if(data != null){
+                        String jsonCaseInfoStr = JSON.toJSONString(data);
+                        nextUserName = JSON.parseObject(jsonCaseInfoStr, String.class);
+                    }
                 } else {
                     //不为空的情况
                     //第二次处理-案件状态05->07
-                    claimCase.setCaseStatus("07");//案件信息-审核
-                    claimCaseRecord1.setOperation("07");//案件操作记录-审核
+                    ClaimCaseRecord claimCaseRecord2 = new ClaimCaseRecord();
+                    claimCaseRecord2.setRptNo(claimCase.getRptNo());
+                    claimCaseRecord2.setStatus("Y");
+                    claimCaseRecord2.setOperation("07");
+                    //claimCaseRecord2.setHistoryFlag("Y");
+                    List<ClaimCaseRecord> claimCaseRecords1 = claimCaseRecordMapper.selectClaimCaseRecordList(claimCaseRecord2);
+                    nextUserName =claimCaseRecords1.get(0).getOperator();
+                    claimCase.setCaseStatus("07");//案件信息-审核04
+                    claimCaseRecord1.setOperation("07");//案件操作记录-审核04
                 }
                 claimCase.setStatus("Y");
-                claimCase.setUpdateBy(SecurityUtils.getUsername());
+
+                claimCase.setUpdateBy(nextUserName);
                 claimCase.setUpdateTime(DateUtils.getNowDate());
+                claimCase.setCaseProp("01");
                 claimCaseMapper.updateClaimCase(claimCase);//完成案件信息改变
 
                 //修改受理信息的材料齐全日期：
@@ -402,6 +440,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
             }
         } else if (caseProp == "02") {
 //转去核心健康险
+            //改变案件信息：CaseProp=02
         }
 
         return claimCaseShuntClass;
@@ -476,14 +515,26 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
     @Override
     public int updateCaseAndRecordInfoCancel(ClaimCase claimCase) {
         ClaimCaseRecord claimCaseRecord1 = new ClaimCaseRecord();
+        ClaimCaseCal claimCaseCal = new ClaimCaseCal();
 
         String pulloutType = claimCase.getPulloutType();
         if (pulloutType.equals("01")) {//撤件97
             claimCase.setCaseStatus("98");
             claimCaseRecord1.setOperation("98");
+            claimCaseCal.setRptNo(claimCase.getRptNo());
+            claimCaseCal.setStatus("N");
+            claimCaseCal.setUpdateBy(SecurityUtils.getUsername());
+            claimCaseCal.setUpdateTime(DateUtils.getNowDate());
+            int i = claimCaseCalMapper.updateClaimCaseCalByRptNo(claimCaseCal);
         } else if (pulloutType.equals("02")) {//撤件可申诉98
             claimCase.setCaseStatus("97");
             claimCaseRecord1.setOperation("97");
+            claimCaseCal.setRptNo(claimCase.getRptNo());
+            claimCaseCal.setCalAmount(new BigDecimal("0.00"));
+            claimCaseCal.setDebtAmount(new BigDecimal("0.00"));
+            claimCaseCal.setUpdateBy(SecurityUtils.getUsername());
+            claimCaseCal.setUpdateTime(DateUtils.getNowDate());
+            int i = claimCaseCalMapper.updateClaimCaseCalByRptNo(claimCaseCal);
         }
         claimCase.setStatus("Y");
         claimCase.setUpdateBy(SecurityUtils.getUsername());
@@ -1177,6 +1228,102 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         record.setCreateTime(DateUtils.getNowDate());
         claimCaseRecordMapper.insertClaimCaseRecord(record);
 
+        ClaimCaseCal claimCaseCal = claimCaseCalMapper.selectClaimCaseCalByRptNo(claimCase.getRptNo());
+        /***
+         * modify by : houjiawei
+         * time:2021-03-31
+         * 普通案件追讨金额处理
+         */
+        if (claimCaseCal.getDebtAmount().compareTo(new BigDecimal(String.valueOf(0))) != 0){
+            if (null != claimCase.getIsAppeal() && "01".equals(claimCase.getIsAppeal())){
+                ClaimCaseDebt claimCaseDebt = claimCaseDebtMapper.selectClaimCaseDebtByRptNo(claimCase.getRptNo());
+                if (StringUtils.isNotNull(claimCaseDebt)) {
+                    claimCaseDebt.setRptNo(claimCase.getRptNo());
+                    claimCaseDebt.setDebtAmount(claimCaseCal.getDebtAmount());
+                    claimCaseDebt.setUpdateBy(SecurityUtils.getUsername());
+                    claimCaseDebt.setUpdateTime(DateUtils.getNowDate());
+                    claimCaseDebtMapper.updateClaimCaseDebt(claimCaseDebt);
+                } else {
+                    ClaimCaseDebt caseDebt = new ClaimCaseDebt();
+                    caseDebt.setRptNo(claimCase.getRptNo());
+                    caseDebt.setDebtAmount(claimCaseCal.getDebtAmount());
+                    List<ClaimCaseInsured> claimCaseInsureds = claimCaseInsuredMapper.selectClaimCaseInsuredById(claimCase.getRptNo());
+                    caseDebt.setInsuredNo(claimCaseInsureds.get(0).getInsuredNo());
+                    caseDebt.setStatus("Y");
+                    caseDebt.setCreateBy(SecurityUtils.getUsername());
+                    caseDebt.setCreateTime(DateUtils.getNowDate());
+                    caseDebt.setUpdateBy(SecurityUtils.getUsername());
+                    caseDebt.setUpdateTime(DateUtils.getNowDate());
+                    claimCaseDebtMapper.insertClaimCaseDebt(caseDebt);
+                }
+            }
+        }
+        /***
+         * modify by : houjiawei
+         * time:2021-03-31
+         * 申诉案件追讨金额处理
+         *
+         * 需求变更， 取消
+         *
+         * 申诉案件如果更新了追讨, 即使原案件没有追讨（追讨为0，申诉案件申诉后有追讨，也是要放在原案件上
+         * 更新原案件追讨金额为最新案件的追讨金额 ，那么最新案件的追讨金额更新为0
+         */
+//        if (null != claimCase.getIsAppeal() && "02".equals(claimCase.getIsAppeal()) && claimCaseCal.getDebtAmount() != null) {
+//            CalConclusionVo calConclusionVo = claimCaseCalMapper.selectPreCalConclusionByRptNo(claimCase.getRptNo());
+//            ClaimCaseDebt claimCaseDebt = claimCaseDebtMapper.selectClaimCaseDebtByRptNo(calConclusionVo.getRptNo());
+//            if(null != claimCaseDebt) {
+//                claimCaseDebt.setDebtAmount(calConclusionVo.getDebtAmount());
+//                claimCaseDebt.setUpdateBy(SecurityUtils.getUsername());
+//                claimCaseDebt.setUpdateTime(DateUtils.getNowDate());
+//                claimCaseDebtMapper.updateClaimCaseDebt(claimCaseDebt);
+//
+//            }
+//            //更新原案件追讨
+//            claimCaseCal.setRptNo(calConclusionVo.getRptNo());
+//            claimCaseCalMapper.updateClaimCaseCalByRptNo(claimCaseCal);
+//
+//            //最新案件的追讨金额更新为0
+//            claimCaseCal.setDebtAmount(new BigDecimal(0));
+//            claimCaseCalMapper.updateClaimCaseCalByRptNo(claimCaseCal);
+//        }
+
+        // 判断结案时是否存在未支付借款
+        // 判断结案时，是否有支付状态，没有置成可支付状态；有，判断借款金额和支付金额是否一致，一致支付状态不改，不一致改成可支付状态
+        // 支付状态为“未支付”，把借款表数据消掉；支付状态为“支付中/支付完成/..”，判断借款金额和支付金额是否一致
+        ClaimCase aCase = claimCaseMapper.selectClaimCaseById(claimCase.getRptNo());
+        if (StringUtils.isNotEmpty(aCase.getPayStatus())){
+            if ("01".equals(aCase.getPayStatus())){
+                // 借款表数据置为无效
+                int row = remoteFinancialServicce.deleteBorrow(claimCase.getRptNo());
+            } else {
+                // 查询理算表里金额
+                ClaimCaseCal caseCal = claimCaseCalMapper.selectClaimCaseCalByRptNo(aCase.getRptNo());
+                // 查询借款表里金额
+                FinanceBorrowInfo borrowInfo = remoteFinancialServicce.selectBorrowInfo(aCase.getRptNo());
+                if (null != borrowInfo && caseCal.getPayAmount().compareTo(borrowInfo.getBorrowAmount()) != 0 ){
+                    // 借款表数据更新成支付数据
+                    FinanceBorrowInfo financeBorrowInfo = new FinanceBorrowInfo();
+                    financeBorrowInfo.setRptNo(aCase.getRptNo());
+                    financeBorrowInfo.setBorrowAmount(caseCal.getPayAmount());
+                    financeBorrowInfo.setUpdateBy(SecurityUtils.getUsername());
+                    financeBorrowInfo.setUpdateTime(DateUtils.getNowDate());
+                    remoteFinancialServicce.updateBorrowInfo(financeBorrowInfo);
+                    // 支付状态
+                    claimCase.setPayStatus("01");
+                }
+            }
+
+        } else {
+            claimCase.setPayStatus("01");
+        }
+        /****
+         * modify by : houjiawei
+         * time : 2021-3-30
+         * 如果是申诉案件 且 本次支付差额 为 0 ，则 支付状态为 03 已支付
+         */
+        if(null != claimCase.getIsAppeal() && claimCase.getIsAppeal().equals("02") && (claimCase.getPaymentDifference().compareTo(BigDecimal.ZERO)==0)) {
+            claimCase.setPayStatus("03");
+        }
         return claimCaseMapper.updateClaimCaseNew(claimCase);
     }
 
@@ -1436,25 +1583,128 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         claimCaseRecordMapper.insertClaimCaseRecord(caseRecord);
 
         if (ClaimStatus.CASECIOSE.getCode().equals(claimCaseCheckDTO1.getCaseStatus())) {
-            ClaimCase claimCase = new ClaimCase();
+            ClaimCase claimCase = claimCaseMapper.selectClaimCaseById(claimCaseCheckDTO.getRptNo());
             claimCase.setCaseStatus(claimCaseCheckDTO1.getCaseStatus());
             claimCase.setUpdateBy(SecurityUtils.getUsername());
             claimCase.setUpdateTime(DateUtils.getNowDate());
             claimCase.setEndCaseTime(DateUtils.getNowDate());
             claimCase.setRptNo(claimCaseCheckDTO.getRptNo());
 
+            //追讨生成
+            /***
+             /***
+             * modify by : houjiawei
+             * time:2021-03-31
+             * 普通案件追讨金额处理
+             */
             if (claimCaseCheckDTO.getDebtAmount().compareTo(new BigDecimal(String.valueOf(0))) != 0){
-                ClaimCaseDebt claimCaseDebt = new ClaimCaseDebt();
-                claimCaseDebt.setStatus("Y");
-                claimCaseDebt.setCreateBy(SecurityUtils.getUsername());
-                claimCaseDebt.setCreateTime(DateUtils.getNowDate());
-                claimCaseDebt.setUpdateBy(SecurityUtils.getUsername());
-                claimCaseDebt.setUpdateTime(DateUtils.getNowDate());
-                return claimCaseDebtMapper.insertClaimCaseDebt(claimCaseDebt);
+                if (null != claimCase.getIsAppeal() && "01".equals(claimCase.getIsAppeal())){
+                    ClaimCaseDebt claimCaseDebt = claimCaseDebtMapper.selectClaimCaseDebtByRptNo(claimCaseCheckDTO.getRptNo());
+                    if (StringUtils.isNotNull(claimCaseDebt)) {
+                        claimCaseDebt.setRptNo(claimCaseCheckDTO.getRptNo());
+                        claimCaseDebt.setDebtAmount(claimCaseCheckDTO.getDebtAmount());
+                        claimCaseDebt.setUpdateBy(SecurityUtils.getUsername());
+                        claimCaseDebt.setUpdateTime(DateUtils.getNowDate());
+                        claimCaseDebtMapper.updateClaimCaseDebt(claimCaseDebt);
+                    } else {
+                        ClaimCaseDebt caseDebt = new ClaimCaseDebt();
+                        caseDebt.setRptNo(claimCaseCheckDTO.getRptNo());
+                        caseDebt.setDebtAmount(claimCaseCheckDTO.getDebtAmount());
+                        List<ClaimCaseInsured> claimCaseInsureds = claimCaseInsuredMapper.selectClaimCaseInsuredById(claimCaseCheckDTO.getRptNo());
+                        caseDebt.setInsuredNo(claimCaseInsureds.get(0).getInsuredNo());
+                        caseDebt.setStatus("Y");
+                        caseDebt.setCreateBy(SecurityUtils.getUsername());
+                        caseDebt.setCreateTime(DateUtils.getNowDate());
+                        caseDebt.setUpdateBy(SecurityUtils.getUsername());
+                        caseDebt.setUpdateTime(DateUtils.getNowDate());
+                        claimCaseDebtMapper.insertClaimCaseDebt(caseDebt);
+                    }
+                }
+            }
+
+            /***
+             * modify by : houjiawei
+             * time:2021-03-31
+             * 申诉案件追讨金额处理
+             *
+             * 需求变更  ，取消
+             *
+             * 申诉案件如果更新了追讨, 即使原案件没有追讨（追讨为0，申诉案件申诉后有追讨，也是要放在原案件上
+             * 更新原案件追讨金额为最新案件的追讨金额 ，那么最新案件的追讨金额更新为0
+             */
+//            if (null != claimCase.getIsAppeal() && "02".equals(claimCase.getIsAppeal()) && claimCaseCheckDTO.getDebtAmount() != null) {
+//                CalConclusionVo calConclusionVo = claimCaseCalMapper.selectPreCalConclusionByRptNo(claimCaseCheckDTO.getRptNo());
+//                ClaimCaseDebt claimCaseDebt = claimCaseDebtMapper.selectClaimCaseDebtByRptNo(calConclusionVo.getRptNo());
+//                if(null != claimCaseDebt) {
+//                    claimCaseDebt.setDebtAmount(calConclusionVo.getDebtAmount());
+//                    claimCaseDebt.setUpdateBy(SecurityUtils.getUsername());
+//                    claimCaseDebt.setUpdateTime(DateUtils.getNowDate());
+//                    claimCaseDebtMapper.updateClaimCaseDebt(claimCaseDebt);
+//                }
+//                ClaimCaseCal cal = new ClaimCaseCal();
+//                cal.setUpdateBy(SecurityUtils.getUsername());
+//                cal.setUpdateTime(DateUtils.getNowDate());
+//                cal.setDebtAmount(claimCaseCheckDTO.getDebtAmount());
+//                //更新原案件追讨
+//                cal.setRptNo(calConclusionVo.getRptNo());
+//                claimCaseCalMapper.updateClaimCaseCalByRptNo(cal);
+//
+//                //新案件的追讨金额更新为0
+//                cal.setDebtAmount(new BigDecimal(0));
+//                cal.setRptNo(claimCaseCheckDTO.getRptNo());
+//                claimCaseCalMapper.updateClaimCaseCalByRptNo(cal);
+//            }
+
+            // 判断结案时是否存在未支付借款
+            // 判断结案时，是否有支付状态，没有置成可支付状态；有，判断借款金额和支付金额是否一致，一致支付状态不改，不一致改成可支付状态
+            // 支付状态为“未支付”，把借款表数据消掉；支付状态为“支付中/支付完成/..”，判断借款金额和支付金额是否一致
+            ClaimCase aCase = claimCaseMapper.selectClaimCaseById(claimCase.getRptNo());
+            if (StringUtils.isNotEmpty(aCase.getPayStatus())){
+                if ("01".equals(aCase.getPayStatus())){
+                    // 借款表数据置为无效
+                    int row = remoteFinancialServicce.deleteBorrow(claimCase.getRptNo());
+                } else {
+                    // 查询理算表里金额
+                    ClaimCaseCal caseCal = claimCaseCalMapper.selectClaimCaseCalByRptNo(aCase.getRptNo());
+                    // 查询借款表里金额
+                    FinanceBorrowInfo borrowInfo = remoteFinancialServicce.selectBorrowInfo(aCase.getRptNo());
+                    if (null != borrowInfo && caseCal.getPayAmount().compareTo(borrowInfo.getBorrowAmount()) != 0 ){
+                        // 借款表数据更新成支付数据  不需要
+//                        FinanceBorrowInfo financeBorrowInfo = new FinanceBorrowInfo();
+//                        financeBorrowInfo.setRptNo(aCase.getRptNo());
+//                        financeBorrowInfo.setBorrowAmount(caseCal.getPayAmount());
+//                        financeBorrowInfo.setUpdateBy(SecurityUtils.getUsername());
+//                        financeBorrowInfo.setUpdateTime(DateUtils.getNowDate());
+//                        remoteFinancialServicce.updateBorrowInfo(financeBorrowInfo);
+                        // 支付状态
+                        claimCase.setPayStatus("01");
+                    }
+                }
+
+            } else {
+                claimCase.setPayStatus("01");
+            }
+            /****
+             * modify by : houjiawei
+             * time : 2021-3-30
+             * 如果是申诉案件 且 本次支付差额 为 0 ，则 支付状态为 03 已支付
+             */
+            if(null != claimCaseCheckDTO.getCaseType() && claimCaseCheckDTO.getCaseType().equals("02") && (claimCaseCheckDTO.getPaymentDifference().compareTo(BigDecimal.ZERO)==0)) {
+                claimCase.setPayStatus("03");
             }
             return claimCaseMapper.updateClaimCaseNew(claimCase);
         }
-        claimCaseCheckDTO1.setUpdateBy(SecurityUtils.getUsername());
+
+        //获取下一环节处理人
+        AjaxResult nextUserNameAR = remoteClaimMgtService.getClaimCaseOperator(ClaimOperationConstant.RandomInspection, ClaimRoleConstant.ProblemPiece,"");
+        Object data = nextUserNameAR.get(AjaxResult.DATA_TAG);
+        String nextUserName = "";
+        if(data != null){
+            String jsonCaseInfoStr = JSON.toJSONString(data);
+            nextUserName = JSON.parseObject(jsonCaseInfoStr, String.class);
+        }
+
+        claimCaseCheckDTO1.setUpdateBy(nextUserName);
         claimCaseCheckDTO1.setUpdateTime(DateUtils.getNowDate());
         return claimCaseMapper.updateClaimCaseCheck(claimCaseCheckDTO1);
     }

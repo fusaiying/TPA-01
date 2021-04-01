@@ -9,6 +9,7 @@ import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.system.api.domain.SysDept;
 import com.paic.ehis.system.api.domain.SysRole;
 import com.paic.ehis.system.api.domain.SysUser;
+import com.paic.ehis.system.api.domain.dto.RoleUserInfoDTO;
 import com.paic.ehis.system.domain.SysOrganInfo;
 import com.paic.ehis.system.domain.SysPost;
 import com.paic.ehis.system.domain.SysUserPost;
@@ -96,6 +97,16 @@ public class SysUserServiceImpl implements ISysUserService
         List<SysUser> sysUserList = userMapper.selectUserListByOrganCode(organCodeList);
 
         return sysUserList;
+    }
+
+    /**
+     * 根据角色获取用户清单
+     * @param menuId
+     * @return
+     */
+    @Override
+    public List<RoleUserInfoDTO> getUsersByMenuId(Long menuId) {
+        return userMapper.getUsersByMenuId(menuId);
     }
 
 

@@ -106,4 +106,6 @@ public interface IQualityInspectionHandleService
 
 
     public int insertHandleInfo(QualityInspectionDTO qualityInspectionDTO);
+
+    public int insertHandleInfo1(QualityInspectionDTO qualityInspectionDTO);
 }

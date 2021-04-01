@@ -107,4 +107,6 @@ public interface BaseProviderDepMapper {
      * @return 结果
      */
     public int deleteBaseProviderDepByCode(String iproviderCode);
+
+    public List<String> selectDeptById(String providercode);
 }

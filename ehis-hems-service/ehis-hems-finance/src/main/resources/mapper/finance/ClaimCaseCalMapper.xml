@@ -37,4 +37,41 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="rptNo != null  and rptNo != ''"> and rpt_no = #{rptNo}</if>
     </select>
 
+    <select id="selectClaimCaseCalAmountByBatchNo" parameterType="String" resultType="com.paic.ehis.finance.domain.vo.ClaimCasePaymentVO">
+
+
+        SELECT
+        IFNULL( SUM( c.cal_amount ), 0 ) cal_amount
+        FROM
+        (SELECT
+        IFNULL( SUM( ccc.cal_amount ), 0 ) cal_amount
+        FROM
+        claim_case cc
+        LEFT JOIN claim_case_cal ccc ON cc.rpt_no = ccc.rpt_no
+        AND ccc.STATUS = 'Y'
+        WHERE
+        cc.batch_no = #{batchNo}
+        AND NOT EXISTS ( SELECT 1 FROM claim_case_appeal_task cat WHERE cc.rpt_no = cat.appeal_rpt_no AND cat.appeal_status = '03' AND cat.STATUS = 'Y' )
+        AND cc.STATUS = 'Y'
+        AND cc.case_prop = '01'
+        UNION ALL
+        SELECT
+        cast(
+        IFNULL( sum( d.cal_amount ), 0 ) AS DECIMAL ( 16, 2 )) cal_amount
+        FROM
+        claim_case cc
+        LEFT JOIN (
+        select * from (select aa.*,SUBSTRING_INDEX(aa.rpt_no,'-',1) as t, SUBSTRING_INDEX(aa.rpt_no,'-',-1) as tt  from claim_case_cal_core aa) a
+        where (
+        select count(*) from
+        ( select aa.*,SUBSTRING_INDEX(aa.rpt_no,'-',1) as t, SUBSTRING_INDEX(aa.rpt_no,'-',-1) as tt  from claim_case_cal_core aa ) b
+        where b.t=a.t and b.tt > a.tt) &lt; 1
+        ) d ON d.rpt_no = cc.rpt_no
+        WHERE
+        cc.STATUS = 'Y'
+        AND cc.case_prop = '02'
+        AND cc.batch_no = #{batchNo}
+        ) c
+    </select>
+
 </mapper>

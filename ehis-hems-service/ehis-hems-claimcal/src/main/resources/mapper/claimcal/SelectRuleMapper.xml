@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.claimcal.mapper.SelectRuleInfoMapper">
+
+    <resultMap id="ruleResultMap" type="com.paic.ehis.claimcal.domain.ClaimRuleInfo">
+
+        <id property="ruleNo" column="rule_no" />
+
+        <result property="ruleNo"    column="rule_no"    />
+        <result property="planCode"    column="plan_code"    />
+        <result property="riskCode"    column="risk_code"    />
+        <result property="ruleElement"    column="rule_element"    />
+        <result property="elementValue"    column="element_value"    />
+        <result property="elementUnit"    column="element_unit"    />
+        <result property="cumulativeMode"    column="cumulative_mode"    />
+
+
+
+        <collection property="relationInfoList" javaType="ArrayList" ofType="com.paic.ehis.claimcal.domain.ClaimRuleConstraint" resultMap="ConstraintDOResultMap" />
+    </resultMap>
+    <resultMap id="ConstraintDOResultMap" type="com.paic.ehis.claimcal.domain.ClaimRuleConstraint">
+        <id property="constraintNo" column="relation_no" />
+
+        <result property="constraintNo"    column="constraint_no"    />
+        <result property="ruleNo"    column="rule_no"    />
+        <result property="constraintType"    column="constraint_type"    />
+        <result property="value1"    column="value1"    />
+        <result property="value2"    column="value2"    />
+        <result property="constraintUnit"    column="constraint_unit"    />
+
+    </resultMap>
+    <select id="selectFeeitemCodeRuleList" resultMap="ruleResultMap" parameterType="java.lang.String">
+        SELECT rule.rule_no, rule.plan_code, rule.risk_code, rule.rule_element, rule.element_value, rule.element_unit, rule.cumulative_mode,
+        cons.constraint_no, cons.rule_no, cons.constraint_type, cons.value1, cons.value2, cons.constraint_unit
+        FROM claim_rule rule INNER JOIN claim_rule_relation relation ON rule.rule_no = relation.rule_no
+        INNER JOIN claim_rule_constraint cons ON rule.rule_no = cons.rule_no
+        WHERE rule.status = 'Y' AND rule.rule_element = #{ruleElement} AND rule.element_unit = #{elementUnit}
+        AND rule.risk_code = #{riskCode} AND rule.plan_code = #{planCode}
+        AND relation.duty_code = #{dutyCode} AND relation.duty_detail_code = #{dutyDetailCode} AND relation.feeitem_code = #{feeitemCode}
+    </select>
+
+    <select id="selectDetailCodeRuleList" resultMap="ruleResultMap" parameterType="java.lang.String">
+        SELECT rule.rule_no, rule.plan_code, rule.risk_code, rule.rule_element, rule.element_value, rule.element_unit, rule.cumulative_mode,
+        cons.constraint_no, cons.rule_no, cons.constraint_type, cons.value1, cons.value2, cons.constraint_unit
+        FROM claim_rule rule INNER JOIN claim_rule_relation relation ON rule.rule_no = relation.rule_no
+        INNER JOIN claim_rule_constraint cons ON rule.rule_no = cons.rule_no
+        WHERE rule.status = 'Y' AND rule.rule_element = #{ruleElement} AND rule.element_unit = #{elementUnit}
+        AND rule.risk_code = #{riskCode} AND rule.plan_code = #{planCode}
+        AND relation.duty_code = #{dutyCode} AND relation.duty_detail_code = #{dutyDetailCode} AND relation.feeitem_code is null
+    </select>
+
+    <select id="selectDutyCodeRuleList" resultMap="ruleResultMap" parameterType="java.lang.String">
+        SELECT rule.rule_no, rule.plan_code, rule.risk_code, rule.rule_element, rule.element_value, rule.element_unit, rule.cumulative_mode,
+        cons.constraint_no, cons.rule_no, cons.constraint_type, cons.value1, cons.value2, cons.constraint_unit
+        FROM claim_rule rule INNER JOIN claim_rule_relation relation ON rule.rule_no = relation.rule_no
+        INNER JOIN claim_rule_constraint cons ON rule.rule_no = cons.rule_no
+        WHERE rule.status = 'Y' AND rule.rule_element = #{ruleElement} AND rule.element_unit = #{elementUnit}
+        AND rule.risk_code = #{riskCode} AND rule.plan_code = #{planCode}
+        AND relation.duty_code = #{dutyCode} AND relation.duty_detail_code is null AND relation.feeitem_code is null
+    </select>
+
+    <select id="selectPlanCodeRuleList" resultMap="ruleResultMap" parameterType="java.lang.String">
+        SELECT rule.rule_no, rule.plan_code, rule.risk_code, rule.rule_element, rule.element_value, rule.element_unit, rule.cumulative_mode,
+        cons.constraint_no, cons.rule_no, cons.constraint_type, cons.value1, cons.value2, cons.constraint_unit
+        FROM claim_rule rule INNER JOIN claim_rule_relation relation ON rule.rule_no = relation.rule_no
+        INNER JOIN claim_rule_constraint cons ON rule.rule_no = cons.rule_no
+        WHERE rule.status = 'Y' AND rule.rule_element = #{ruleElement} AND rule.element_unit = #{elementUnit}
+        AND rule.risk_code = #{riskCode} AND rule.plan_code = #{planCode}
+        AND relation.duty_code is null AND relation.duty_detail_code is null AND relation.feeitem_code is null
+    </select>
+
+</mapper>

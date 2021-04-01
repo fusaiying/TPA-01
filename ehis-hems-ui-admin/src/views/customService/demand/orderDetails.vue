@@ -185,7 +185,7 @@
       </el-form>
 
     </el-card>
-
+<!-- 信息需求页面-->
     <el-card class="box-card" style="margin-top: 10px;">
       <el-form style="padding-bottom: 30px;" label-width="180px"
                label-position="right" size="mini" :disabled="true">
@@ -349,8 +349,8 @@
           tooltip-effect="dark"
           style=" width: 100%;">
           <el-table-column align="center" width="140" prop="status" label="状态" show-overflow-tooltip>
-            <template slot-scope="scope" v-if="scope.row.status">
-              <span>{{ selectDictLabel(cs_order_state, scope.row.status) }}</span>
+            <template slot-scope="scope" v-if="scope.row.linkCode">
+              <span>{{ selectDictLabel(cs_link_code, scope.row.linkCode) }}</span>
             </template>
           </el-table-column>
           <el-table-column align="center" prop="operateCode" label="操作" show-overflow-tooltip>
@@ -421,6 +421,7 @@ import moment from 'moment'
 import {
   demandListAndPublicPool,
   demandListAndPersonalPool,
+  PersonalPool,
   FlowLogSearch,
   orderDetailSearch
 } from '@/api/customService/demand'
@@ -442,6 +443,8 @@ let dictss = [
   {dictType: 'cs_action_type'},
   {dictType: 'rgtSex'},
   {dictType: 'card_type'},
+  {dictType: 'cs_link_code'},
+
 ]
 
 export default {
@@ -534,6 +537,7 @@ export default {
       cs_organization: [],
       cs_order_state: [],//状态
       cs_action_type: [],//操作类型
+      cs_link_code: [],
       attachmentInfoData: [],
       rgtSex: [],//
       card_type: [],//
@@ -548,7 +552,7 @@ export default {
     this.queryParams.status = this.$route.query.status;
     this.search.workOrderNo = this.$route.query.workOrderNo;
     if (this.$route.query.flag!=null && this.$route.query.flag!=''){
-      this.flag = this.$route.query.flag;
+      this.flag = true;
     }
     this.searchHandle()
     this.searchFlowLog()
@@ -600,6 +604,9 @@ export default {
     this.cs_handle_state = this.dictList.find(item => {
       return item.dictType === 'cs_handle_state'
     }).dictDate
+    this.cs_link_code = this.dictList.find(item => {
+      return item.dictType === 'cs_link_code'
+    }).dictDate
   },
 
   methods: {
@@ -612,7 +619,9 @@ export default {
       if(this.queryParams.policyNo != null && this.queryParams.policyNo !=""){
         policyInfoData(query).then(res => {
           if (res != null && res.code === 200) {
-            this.baseInfo = res.data;
+            if (res.data != null) {
+              this.baseInfo = res.data;
+            }
           }
         }).catch(res => {
 
@@ -640,60 +649,32 @@ export default {
       this.$refs.modifyDetails.open();
       ;
     },
-    //反显信息需求
+    //信息需求查询
     searchHandle() {
-      if (this.queryParams.status == "01") {
-        console.log("status值", this.queryParams.status)
-        const query = this.queryParams
-        demandListAndPublicPool(query).then(res => {
-          if (res != null && res.code === 200) {
-            if (res.rows.length>0){
-              let workPoolData = res.rows[0];
-              let editInfo = {
-                editReason: "",
-                editRemark: ""
-              };
-              workPoolData.editInfo = editInfo;
-              workPoolData.officeCountry = "";
-              workPoolData.officeNumber = "";
-              workPoolData.officeQuhao = "";
-              workPoolData.officeSecondNumber = "";
-              this.workPoolData = workPoolData;
-            }
-
+      const query = this.queryParams
+      PersonalPool(query).then(res => {
+        if (res != null && res.code === 200) {
+          if (res.data!=null && res.data!=''){
+            let workPoolData = res.data;
+            let editInfo = {
+              editReason: "",
+              editRemark: ""
+            };
+            workPoolData.editInfo = editInfo;
+            workPoolData.officeCountry = "";
+            workPoolData.officeNumber = "";
+            workPoolData.officeQuhao = "";
+            workPoolData.officeSecondNumber = "";
+            this.workPoolData = workPoolData;
           }
-        }).catch(res => {
-          return this.$message.error(
-            "信息需求受理数据加载异常！"
-          )
-        })
-      } else {
-        let query = this.queryParams
-        demandListAndPersonalPool(query).then(res => {
-          if (res != null && res.code === 200) {
-            if (res.rows.length>0){
-              let workPoolData = res.rows[0];
-              let editInfo = {
-                editReason: "",
-                editRemark: ""
-              };
-              workPoolData.editInfo = editInfo
-              workPoolData.officeCountry = ""
-              workPoolData.officeNumber = ""
-              workPoolData.officeQuhao = ""
-              workPoolData.officeSecondNumber = ""
-              this.workPoolData = workPoolData;
-            }
 
-            console.log(this.workPoolData);
-          }
-        }).catch(res => {
-          return this.$message.error(
-            "信息需求受理数据加载异常！"
-          );
-        })
+        }
+      }).catch(res => {
+        return this.$message.error(
+          "信息需求受理数据加载异常！"
+        )
+      })
 
-      }
     },
     //查询轨迹表
     searchFlowLog() {

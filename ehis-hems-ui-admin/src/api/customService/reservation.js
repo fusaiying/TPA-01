@@ -16,6 +16,14 @@ export function demandListAndPersonalPool(query) {
     params: query
   })
 }
+//#个人预约修改页面反显
+export function getPersonalPool(query) {
+  return request({
+    url: '/cs/reservation/internal/PersonalPool',
+    method: 'get',
+    params: query
+  })
+}
 
 
 //#预约页面点击处理按钮存储数据
@@ -140,7 +148,14 @@ export function addInsert(data) {
     data: data
   })
 }
-
+//# 获取医院信息
+export function getHospitalInfo(data) {
+  return request({
+    url: '/cs/reservation/internal/selectHospital',
+    method: 'post',
+    data:data
+  })
+}
 
 
 

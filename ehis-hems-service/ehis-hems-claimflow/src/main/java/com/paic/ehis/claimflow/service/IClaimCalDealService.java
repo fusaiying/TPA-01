@@ -2,6 +2,8 @@ package com.paic.ehis.claimflow.service;
 
 import com.paic.ehis.system.api.domain.ClaimCaseBillInfo;
 import com.paic.ehis.system.api.domain.ClaimCaseCalInfo;
+import com.paic.ehis.system.api.domain.ClaimCaseCalculateInfo;
+import com.paic.ehis.system.api.domain.dto.ClaimCaseCalItemDTO;
 import com.paic.ehis.system.api.domain.dto.ClaimCasePolicyDTO;
 
 import java.util.List;
@@ -15,11 +17,11 @@ public interface IClaimCalDealService {
     int clear(String rptNo);
 
     /**
-     * 根据案件号查询账单信息
+     * 根据案件号查询案件信息
      * @param rptNo
      * @return
      */
-    List<ClaimCaseBillInfo> selectClaimCaseBillInfo(String rptNo);
+    ClaimCaseCalculateInfo selectClaimCaseInfo(String rptNo);
 
     /**
      * 根据报案号查询案件保单信息
@@ -30,8 +32,15 @@ public interface IClaimCalDealService {
 
     /**
      * 保存理算信息
-     * @param claimCaseCalInfo
+     * @param claimCaseCalculateInfo
      * @return
      */
-    int save(ClaimCaseCalInfo claimCaseCalInfo);
+    int save(ClaimCaseCalculateInfo claimCaseCalculateInfo);
+
+    /**
+     * 查询使用值信息
+     * @param claimCaseCalItemDTO
+     * @return
+     */
+    List<ClaimCaseCalItemDTO> getCaInfo(ClaimCaseCalItemDTO claimCaseCalItemDTO);
 }

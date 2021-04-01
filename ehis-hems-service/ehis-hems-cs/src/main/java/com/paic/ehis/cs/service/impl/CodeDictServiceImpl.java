@@ -28,10 +28,10 @@ public class CodeDictServiceImpl implements ICodeDictService
 
 
     /**
-     * 查询业务码 
-     * 
+     * 查询业务码
+     *
      * @param codeType 业务码 ID
-     * @return 业务码 
+     * @return 业务码
      */
     @Override
     public CodeDict selectCodeDictById(String codeType)
@@ -137,20 +137,33 @@ public class CodeDictServiceImpl implements ICodeDictService
 
     @Override
     public List<CodeDictVo> selectCodeEnumVo(CodeDictDTO codeEnumDTO) {
+        codeEnumDTO.setInsuranceSourceType("cs_insurance_source");
         codeEnumDTO.setComplaintBusinessType("cs_complaint_business_item");
         return codeDictMapper.selectCodeDictVoList(codeEnumDTO);
     }
 
     /**
      * 查询业务码 列表
-     * 
+     *
      * @param codeDict 业务码
-     * @return 业务码 
+     * @return 业务码
      */
     @Override
     public List<CodeDict> selectCodeDictList(CodeDict codeDict)
     {
         return codeDictMapper.selectCodeDictList(codeDict);
+    }
+
+    /**
+     * 查询业务码 列表
+     *
+     * @param codeDict 业务码
+     * @return 业务码
+     */
+    @Override
+    public List<CodeDict> selectCodeDictList2(CodeDict codeDict)
+    {
+        return codeDictMapper.selectCodeDictList2(codeDict);
     }
 
     @Override
@@ -172,9 +185,9 @@ public class CodeDictServiceImpl implements ICodeDictService
     }
 
     /**
-     * 修改业务码 
-     * 
-     * @param codeDict 业务码 
+     * 修改业务码
+     *
+     * @param codeDict 业务码
      * @return 结果
      */
     @Override
@@ -184,8 +197,8 @@ public class CodeDictServiceImpl implements ICodeDictService
     }
 
     /**
-     * 批量删除业务码 
-     * 
+     * 批量删除业务码
+     *
      * @param codeTypes 需要删除的业务码 ID
      * @return 结果
      */
@@ -197,7 +210,7 @@ public class CodeDictServiceImpl implements ICodeDictService
 
     /**
      * 删除业务码 信息
-     * 
+     *
      * @param codeType 业务码 ID
      * @return 结果
      */

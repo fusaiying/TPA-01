@@ -1,6 +1,8 @@
 package com.paic.ehis.cs.mapper;
 
 import java.util.List;
+import java.util.Map;
+
 import com.paic.ehis.cs.domain.QualityInspectionHandle;
 import com.paic.ehis.cs.domain.dto.HandleProcessInfoDTO;
 import com.paic.ehis.cs.domain.dto.QualityInspectionDTO;
@@ -22,6 +24,8 @@ public interface QualityInspectionHandleMapper
      * @return 质检处理 
      */
     public QualityInspectionHandle selectQualityInspectionHandleById(String inspectionId);
+
+    public QualityInspectionHandle selectQualityInspectionHandleById1(String workOrderNo);
 
     /**
      * 查询质检处理 列表
@@ -74,5 +78,6 @@ public interface QualityInspectionHandleMapper
     public List<QualityInspectionItemVo> getQualityHandleItemInfo(QualityInspectionDTO qualityInspectionDTO);
 
     public int insertHandleInfo(QualityInspectionDTO qualityInspectionDTO);
+
     public int updateHandleInfoById(QualityInspectionDTO qualityInspectionDTO);
 }

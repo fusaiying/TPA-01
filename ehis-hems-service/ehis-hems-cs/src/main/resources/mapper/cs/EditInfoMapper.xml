@@ -4,7 +4,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.paic.ehis.cs.mapper.EditInfoMapper">
     
-    <resultMap type="EditInfo" id="EditInfoResult">
+    <resultMap type="com.paic.ehis.cs.domain.EditInfo" id="EditInfoResult">
         <result property="editId"    column="edit_id"    />
         <result property="workOrderId"    column="work_order_id"    />
         <result property="otherId"    column="other_id"    />
@@ -22,7 +22,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select edit_id, work_order_id, other_id, other_type, edit_reason, edit_remark, status, created_by, created_time, updated_by, updated_time from edit_info
     </sql>
 
-    <select id="selectEditInfoList" parameterType="EditInfo" resultMap="EditInfoResult">
+    <select id="selectEditInfoList" parameterType="com.paic.ehis.cs.domain.EditInfo" resultMap="EditInfoResult">
         <include refid="selectEditInfoVo"/>
         <where>  
             <if test="workOrderId != null  and workOrderId != ''"> and work_order_id = #{workOrderId}</if>
@@ -43,7 +43,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where edit_id = #{editId}
     </select>
         
-    <insert id="insertEditInfo" parameterType="EditInfo">
+    <insert id="insertEditInfo" parameterType="com.paic.ehis.cs.domain.EditInfo">
         insert into edit_info
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="editId != null">edit_id,</if>
@@ -73,7 +73,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
     </insert>
 
-    <update id="updateEditInfo" parameterType="EditInfo">
+    <update id="updateEditInfo" parameterType="com.paic.ehis.cs.domain.EditInfo">
         update edit_info
         <trim prefix="SET" suffixOverrides=",">
             <if test="workOrderId != null and workOrderId != ''">work_order_id = #{workOrderId},</if>

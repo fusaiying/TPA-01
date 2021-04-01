@@ -46,4 +46,19 @@ public class ServiceNameConstants
      * 工单处理
      */
     public static final String ORDER_SERVICE = "ehis-hems-order";
+
+    /**
+     * 客服模块的serviceid
+     */
+    public static final String CS_SERVICE = "ehis-hems-cs";
+
+    /**
+     * 财务模块的serviceid
+     */
+    public static final String FINANCE_SERVICE = "ehis-hems-finance";
+
+    /**
+     * 理赔管理的serviceid
+     */
+    public static final String CLAIM_MGT_SERVICE = "ehis-hems-claimmgt";
 }

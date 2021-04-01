@@ -149,7 +149,7 @@
             size="mini"
             type="success"
             icon="el-icon-search"
-            @click="searchHandle"
+            @click="getTableData"
           >查询
           </el-button>
           <el-button size="mini" type="primary" @click="resetForm">重置</el-button>
@@ -196,6 +196,7 @@ export default {
   data() {
     return {
       caseNumber: false,//查询条件（报案号）是否显示
+      defaultData : true,
       // 查询参数
       acceptQueryForm: {
         itemCode: "",//服务信息
@@ -204,7 +205,9 @@ export default {
         updateBy: "",//处理人
         acceptorTime:[],//受理时间数组
         appointmentTime:[],//预约时间数组
+        insuredIdNumber:'',
         handlerTime:[],//处理时间数组
+        complaintTime:[],//预约时间
         workOrderNo: "",//工单编号
         policyNo: "",//保单号
         policyItemNo: "",//分单号
@@ -271,6 +274,16 @@ export default {
   methods: {
     resetForm() {
       this.$refs.acceptQueryForm.resetFields()
+      this.acceptQueryForm.handlerTime=[]
+      this.acceptQueryForm.insuredIdNumber=''
+      this.acceptQueryForm.complaintTime=[]
+    },
+    //查询
+    getTableData() {
+        this.defaultData = false;
+        this.queryParams.pageNum = 1;
+        this.queryParams.pageSize = 10;
+        this.searchHandle();
     },
     searchHandle() {
       let query = {
@@ -309,6 +322,17 @@ export default {
       if (this.acceptQueryForm.complaintTime) {
         query.appointmentStartDate = this.acceptQueryForm.complaintTime[0]
         query.appointmentEndDate = this.acceptQueryForm.complaintTime[1]
+      }
+
+      let startTime = '';
+      let endTime = '';
+      if(this.defaultData) {
+
+          startTime = moment().subtract('month', 1).format('YYYY-MM-DD') + ' ' + '00:00:00'
+          endTime = moment(new Date().getTime()).format('YYYY-MM-DD') + ' ' + '23:59:59'
+
+          query.acceptStartDate = startTime;
+          query.acceptEndDate = endTime;
       }
 
       selectWorkOrder(query).then(res => {

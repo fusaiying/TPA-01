@@ -57,8 +57,9 @@ public class ClaimCaseCalBillController extends BaseController
     @GetMapping("/infoList")
     public TableDataInfo informationList(ClaimCaseCalBill claimCaseCalBill)
     {
-        List<CaseCalBillVo> list = claimCaseCalBillService.selectCaseCalInformationList(claimCaseCalBill);
-        return getDataTable(list);
+
+         List<CaseCalBillVo> list = claimCaseCalBillService.selectCaseCalInformationList(claimCaseCalBill);
+         return getDataTable(list);
     }
 
     /**

@@ -10,6 +10,7 @@ import com.paic.ehis.cs.domain.vo.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * 质检受理服务 IQualityInspectionAcceptService
@@ -18,18 +19,27 @@ import java.util.Map;
 public interface IQualityInspectionAcceptService
 {
     /**
-     * 发起质检工作池
+     * 工单查询工作池
      * @param workOrderQueryDTO
      * @return
      */
     public List<AcceptVo> selectSendPoolData(WorkOrderQueryDTO workOrderQueryDTO);
 
     /**
+     * 发起质检工作池
+     */
+    public List<AcceptVo> selectSendPoolDataTwo(WorkOrderQueryDTO workOrderQueryDTO);
+
+
+    /**
      * 工单获取
      */
     public AcceptVo updateSendByVoById(String workOrderNo);
 
-
+    /**
+     * 工单修改
+     */
+    public AcceptVo updateSendByVoByIdById1(String workOrderNo);
 
     /**
      * 质检工作池
@@ -75,6 +85,7 @@ public interface IQualityInspectionAcceptService
      */
     List<QualityAcceptVo> selectQualityVo(QualityDTO qualityDTO);
 
+    List<QualityAcceptVo> selectQualityVo2(QualityDTO qualityDTO);
 //    /**
 //     * 根据条件查询工单附件列表
 //     * @param workOrderQueryDTO
@@ -82,8 +93,26 @@ public interface IQualityInspectionAcceptService
 //     */
 //    public List<AttachmentInfo> getAttachmentList(WorkOrderQueryDTO workOrderQueryDTO);
 
-    //批处理
-    List<AcceptVo> batchAcceptVo(String invalidDateStar);
+    //信息需求一周批处理
+    List<AcceptVo> batchAcceptVo(String invalidDateStar, Map<String,String> param);
+
+    //信息需求一个月批处理
+    List<AcceptVo> batchAcceptVomonth(String invalidDateStar, Map<String,String> param);
+
     List<QualityInspectionHandleVo> selectQualityFlagVO(QualityInspectionDTO qualityInspectionDTO);
 
+    //预约12点批处理
+    List<AcceptVo> invalidAcceptDetailInfo(String invalidDateStr);
+
+    //投诉每周一凌晨四点批处理
+    List<AcceptVo> selectInvalidQiaMondayFour(String invalidDateStar, Map<String,String> param);
+
+    //投诉质检清单
+    List<ComplaintQualityInspectionVO> selectQualityVoCom(QualityDTO qualityDTO);
+
+    //信息需求质检清单
+    List<InformationNeedsQuality> selectQualityVoComInformation(QualityDTO qualityDTO);
+
+    //投诉/信息差错率统计
+    List<ComplaintErrorRateVO> exportOneError(QualityDTO qualityDTO);
 }

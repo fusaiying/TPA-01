@@ -12,12 +12,9 @@ import com.paic.ehis.cs.domain.vo.CollaborativeFromVO;
 import com.paic.ehis.cs.domain.vo.ComplaintDealVo;
 import com.paic.ehis.cs.domain.vo.DemandAcceptVo;
 import com.paic.ehis.cs.domain.vo.UmCode;
-import com.paic.ehis.cs.mapper.FieldMapMapper;
-import com.paic.ehis.cs.mapper.FlowLogMapper;
-import com.paic.ehis.cs.mapper.WorkHandleInfoMapper;
+import com.paic.ehis.cs.mapper.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.paic.ehis.cs.mapper.CollaborativeFromMapper;
 import com.paic.ehis.cs.domain.CollaborativeFrom;
 import com.paic.ehis.cs.service.ICollaborativeFromService;
 
@@ -32,6 +29,8 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
 {
     @Autowired
     private CollaborativeFromMapper collaborativeFromMapper;
+    @Autowired
+    private DemandAcceptVoMapper demandAcceptVoMapper;
     @Autowired
     private FlowLogMapper flowLogMapper;
     @Autowired
@@ -49,6 +48,19 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
     public CollaborativeFrom selectCollaborativeFromById(Long collaborativeId)
     {
         return collaborativeFromMapper.selectCollaborativeFromById(collaborativeId);
+    }
+
+    /**
+     * 查询协办信息
+     *
+     * @param workOrderNo 协办信息 ID
+     * @return 协办信息
+     */
+    @Override
+    public List<CollaborativeFrom> selectCollaborativeFromByWorkId(String workOrderNo)
+    {
+        List<CollaborativeFrom> tCollaborativeFromList = collaborativeFromMapper.selectCollaborativeFromByWorkId(workOrderNo);
+        return tCollaborativeFromList;
     }
 
     /**
@@ -147,18 +159,22 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
             collaborativeFrom.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
             collaborativeFrom.setUpdatedBy(SecurityUtils.getUsername());
             collaborativeFrom.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
-             collaborativeFromMapper.insertCollaborativeFrom(collaborativeFrom);
+            collaborativeFromMapper.insertCollaborativeFrom(collaborativeFrom);
         }
+
+        //查询工单详情信息  获取工单状态
+        DemandAcceptVo tDmandAcceptVo = demandAcceptVoMapper.selectDemandAcceptVoById(demandAcceptVo.getWorkOrderNo());
 
         //新增 发起协办流程节点信息
         FlowLog flowLog=new FlowLog();
         flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id",20,20));
-        flowLog.setLinkCode("04");//状态置为已协办
+        flowLog.setLinkCode(tDmandAcceptVo.getStatus());//状态置为已协办
         flowLog.setOperateCode("15");//节点为发起协办
         flowLog.setMakeBy(SecurityUtils.getUsername());
         flowLog.setMakeTime(DateUtils.parseDate(DateUtils.getTime()));
         //没有um帐号
         flowLog.setUmNum(SecurityUtils.getUsername());
+        flowLog.setToReason(demandAcceptVo.getSolicitOpinion());
         flowLog.setCreatedBy(SecurityUtils.getUsername());
         flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         flowLog.setUpdatedBy(SecurityUtils.getUsername());
@@ -174,21 +190,6 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
      */
     @Override
     public int insertConsultationDemand(DemandAcceptVo demandAcceptVo) {
-        FlowLog flowLog=new FlowLog();
-        flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id",20,20));
-        flowLog.setLinkCode("04");//状态置为已协办
-        flowLog.setOperateCode("11");//节点为协办
-        flowLog.setMakeBy(SecurityUtils.getUsername());
-        flowLog.setMakeTime(DateUtils.parseDate(DateUtils.getTime()));
-        //没有um帐号
-        flowLog.setUmNum(SecurityUtils.getUsername());
-        flowLog.setCreatedBy(SecurityUtils.getUsername());
-        flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
-        flowLog.setUpdatedBy(SecurityUtils.getUsername());
-        flowLog.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
-        flowLog.setWorkOrderNo(demandAcceptVo.getWorkOrderNo());
-        flowLogMapper.insertFlowLog(flowLog);
-
         //征求意见处理完毕后  将协办表中状态改为02   增加处理意见
         CollaborativeFrom collaborativeFrom=new CollaborativeFrom();
         collaborativeFrom.setStatus("02");
@@ -213,7 +214,9 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
             if(!tCollaborativeFromList.get(i).getCollaborativeId().equals(demandAcceptVo.getCollaborativeId())){
                 CollaborativeFrom uptCollaborativeFrom = new CollaborativeFrom();
                 uptCollaborativeFrom.setStatus("02");
-                uptCollaborativeFrom.setHandleState("02");
+                //uptCollaborativeFrom.setHandleState("02");
+                collaborativeFrom.setOpinion(demandAcceptVo.getOpinion());
+                collaborativeFrom.setSolicitOpinion(demandAcceptVo.getSolicitOpinion());
                 uptCollaborativeFrom.setWorkOrderNo(demandAcceptVo.getWorkOrderNo());
                 uptCollaborativeFrom.setCollaborativeId(tCollaborativeFromList.get(i).getCollaborativeId());
                 uptCollaborativeFrom.setUpdatedBy(SecurityUtils.getUsername());
@@ -221,6 +224,25 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
                 collaborativeFromMapper.updateConsultationDemand(uptCollaborativeFrom);
             }
         }
+
+        //查询工单详情信息  获取工单状态
+        DemandAcceptVo tDmandAcceptVo = demandAcceptVoMapper.selectDemandAcceptVoById(demandAcceptVo.getWorkOrderNo());
+
+        FlowLog flowLog=new FlowLog();
+        flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id",20,20));
+        flowLog.setLinkCode(tDmandAcceptVo.getStatus());//状态置为已协办
+        flowLog.setOperateCode("11");//节点为协办
+        flowLog.setOpinion(demandAcceptVo.getOpinion());
+        flowLog.setMakeBy(SecurityUtils.getUsername());
+        flowLog.setMakeTime(DateUtils.parseDate(DateUtils.getTime()));
+        //没有um帐号
+        flowLog.setUmNum(SecurityUtils.getUsername());
+        flowLog.setCreatedBy(SecurityUtils.getUsername());
+        flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+        flowLog.setUpdatedBy(SecurityUtils.getUsername());
+        flowLog.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+        flowLog.setWorkOrderNo(demandAcceptVo.getWorkOrderNo());
+        flowLogMapper.insertFlowLog(flowLog);
 
         return a;
     }
@@ -232,21 +254,6 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
 
     @Override
     public int insertConsultationDemandOne(ComplaintDealVo complaintDealVo) {
-        //轨迹表插入数据
-        FlowLog flowLog=new FlowLog();
-        flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id",20,20));
-        flowLog.setLinkCode("06");
-        flowLog.setMakeBy(SecurityUtils.getUsername());
-        //没有um帐号
-        flowLog.setUmNum(SecurityUtils.getUsername());
-        flowLog.setCreatedBy(SecurityUtils.getUsername());
-        flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
-        flowLog.setUpdatedBy(SecurityUtils.getUsername());
-        flowLog.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
-        flowLog.setWorkOrderNo(complaintDealVo.getWorkOrderNo());
-        flowLogMapper.insertFlowLog(flowLog);
-
-
         //征求意见处理完毕后  将协办表中状态改为02   增加投诉不成立理由 投诉是否成立  处理方案  处理依据
         CollaborativeFrom collaborativeFrom=new CollaborativeFrom();
         collaborativeFrom.setStatus("02");
@@ -272,14 +279,38 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
             if(!tCollaborativeFromList.get(i).getCollaborativeId().equals(complaintDealVo.getCollaborativeId())){
                 CollaborativeFrom uptCollaborativeFrom = new CollaborativeFrom();
                 uptCollaborativeFrom.setStatus("02");
-                uptCollaborativeFrom.setHandleState("02");
+                //uptCollaborativeFrom.setHandleState("02");
                 uptCollaborativeFrom.setWorkOrderNo(complaintDealVo.getWorkOrderNo());
                 uptCollaborativeFrom.setCollaborativeId(tCollaborativeFromList.get(i).getCollaborativeId());
+                collaborativeFrom.setValidFlag(complaintDealVo.getValidFlag());
+                collaborativeFrom.setNonReason(complaintDealVo.getNonReason());
+                collaborativeFrom.setTreatmentBasis(complaintDealVo.getTreatmentBasis());
+                collaborativeFrom.setTreatmentPlan(complaintDealVo.getTreatmentPlan());
                 uptCollaborativeFrom.setUpdatedBy(SecurityUtils.getUsername());
                 uptCollaborativeFrom.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
                 collaborativeFromMapper.updateConsultationDemand(uptCollaborativeFrom);
             }
         }
+
+        //查询工单详情信息  获取工单状态
+        DemandAcceptVo tDmandAcceptVo = demandAcceptVoMapper.selectDemandAcceptVoById(complaintDealVo.getWorkOrderNo());
+
+        //轨迹表插入数据
+        FlowLog flowLog=new FlowLog();
+        flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id",20,20));
+        flowLog.setLinkCode(tDmandAcceptVo.getStatus());
+        flowLog.setOperateCode("11");
+        flowLog.setOpinion(collaborativeFrom.getOpinion());
+        flowLog.setMakeBy(SecurityUtils.getUsername());
+        //没有um帐号
+        flowLog.setUmNum(SecurityUtils.getUsername());
+        flowLog.setMakeTime(DateUtils.parseDate(DateUtils.getTime()));
+        flowLog.setCreatedBy(SecurityUtils.getUsername());
+        flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+        flowLog.setUpdatedBy(SecurityUtils.getUsername());
+        flowLog.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+        flowLog.setWorkOrderNo(complaintDealVo.getWorkOrderNo());
+        flowLogMapper.insertFlowLog(flowLog);
 
         return a;
     }
@@ -291,11 +322,15 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
      */
     @Override
     public int updateCollaborativeStatus(CollaborativeFrom collaborativeFrom) {
+
+        //查询工单详情信息  获取工单状态
+        DemandAcceptVo tDmandAcceptVo = demandAcceptVoMapper.selectDemandAcceptVoById(collaborativeFrom.getWorkOrderNo());
+
        // collaborativeFrom.getWorkOrderNo();
         //新增撤销协办节点信息
         FlowLog flowLog=new FlowLog();
         flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id",20,20));
-        flowLog.setLinkCode("04");//状态置为已协办
+        flowLog.setLinkCode(tDmandAcceptVo.getStatus());//状态置为已协办
         flowLog.setOperateCode("16");//节点为撤销协办
         flowLog.setMakeBy(SecurityUtils.getUsername());
         flowLog.setMakeTime(DateUtils.parseDate(DateUtils.getTime()));

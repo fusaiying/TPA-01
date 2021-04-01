@@ -3,7 +3,7 @@
     <el-card class="box-card" style="margin-top: 10px;">
       <span style="color: blue">客户基本信息</span>
       <el-divider></el-divider>
-      <el-form ref="sendForm" :model="sendForm" style="padding-bottom: 30px;" label-width="150px"
+      <el-form ref="sendForm" :model="sendForm" style="padding-bottom: 30px;" label-width="170px"
                label-position="right" size="mini">
         <el-row>
           <!--clearable是清楚输入框内容 readly、只读不可以编辑 ；不可以共存-->
@@ -189,7 +189,7 @@
 
     </el-card>
     <el-card class="box-card" style="margin-top: 10px;">
-      <el-form ref="workPoolData" :rules="rules" :model="workPoolData"  style="padding-bottom: 30px;" label-width="200px"
+      <el-form ref="workPoolData" :rules="rules" :model="workPoolData"  style="padding-bottom: 30px;" label-width="170px"
                label-position="right" size="mini">
 
         <span style="color: blue">口腔责任直接结算-服务受理信息</span>
@@ -265,7 +265,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="医院工作来电：" prop="hospitalWorkCall">
-              <el-input v-model="workPoolData.hospitalWorkCall" class="item-width"  size="mini" />
+              <el-input v-model="workPoolData.hospitalWorkCall" class="item-width" maxlength="20"  size="mini" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -386,19 +386,48 @@
         </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="预约时间："  style="white-space: nowrap" prop="complaintTime">
+            <el-form-item label="预约日期："  style="white-space: nowrap" prop="appointmentDate">
               <el-date-picker class="item-width"
-                v-model="workPoolData.complaintTime"
-                type="datetime"
-                placeholder="选择日期时间">
+                v-model="workPoolData.appointmentDate"
+                type="date"
+                placeholder="选择日期时间"
+                value-format="yyyy-MM-dd">
               </el-date-picker>
             </el-form-item>
           </el-col>
-
+          <el-col :span="8">
+            <el-form-item label="预约时间："  style="white-space: nowrap" prop="complaintTimes">
+              <el-time-picker class="item-width"
+                              is-range
+                              v-model="workPoolData.complaintTimes"
+                              range-separator="-"
+                              start-placeholder="开始时间"
+                              end-placeholder="结束时间"
+                              value-format="HH:mm:ss">
+              </el-time-picker>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="医院地址：" prop="hospitalAddress">
+              <el-input v-model="workPoolData.hospitalAddress" class="item-width" clearable size="mini" placeholder="请输入"/>
+            </el-form-item>
+          </el-col>
         </el-row>
 
         <el-row>
-          <el-col :span="3">
+          <el-col :span="8">
+            <el-form-item label="预约医院：" style="white-space: nowrap;" :inline="true" prop="province">
+              <el-cascader
+                v-model="region"
+                :options="regions"
+                class="item-width"
+                placeholder="请选择"
+                :props="{ checkStrictly: true }"
+                @change="handleChange"
+                clearable/>
+            </el-form-item>
+          </el-col>
+         <!-- <el-col :span="3">
             <el-form-item label="预约医院：" style="white-space: nowrap;" :inline="true" prop="province">
               省份：<el-input v-model="workPoolData.province" style="width: 100px"  />
             </el-form-item>
@@ -407,17 +436,27 @@
             <el-form-item style="white-space: nowrap;" :inline="true" prop="city" >
               城市：<el-input v-model="workPoolData.city" style="width: 100px" />
             </el-form-item>
-          </el-col>
+          </el-col>-->
 
           <el-col :span="8">
             <el-form-item label="医疗机构：" prop="medicalInstitution">
-                <el-input v-model="workPoolData.medicalInstitution" size="mini" class="item-width2"/>
-                <el-button type="primary" @click="searchHandle" disabled>详细信息</el-button>
+                <!--<el-input v-model="workPoolData.medicalInstitution" size="mini" class="item-width2"/>
+                <el-button type="primary" @click="searchHandle">详细信息</el-button>-->
+              <el-col :span="16">
+                <!--  <el-input v-model="workPoolData.medicalInstitution" input-w clearable size="mini" placeholder="请输入"/>-->
+                <el-input v-model="workPoolData.hospitalName" input-w clearable size="mini" disabled/>
+              </el-col>
+              <el-button type="primary" @click="openHospitalDialog">查询</el-button>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="科室：" prop="department">
-              <el-input v-model="workPoolData.department" class="item-width"  size="mini" />
+<!--              <el-input v-model="workPoolData.department" class="item-width"  size="mini" />-->
+              <el-select v-if="departmentOption.length>0" v-model="workPoolData.department" class="item-width" placeholder="请选择">
+                <el-option v-for="item in departmentOption" :key="item" :label="item"
+                           :value="item"/>
+              </el-select>
+              <el-input v-else v-model="workPoolData.department" class="item-width" clearable size="mini" maxlength="20" placeholder="请输入"/>
             </el-form-item>
           </el-col>
 
@@ -493,7 +532,12 @@
         </el-row>
         <el-row>
           <el-form-item label="业务内容：" prop="content">
-            <el-input v-model="workPoolData.content" class="width-full"  size="mini" />
+            <el-input
+              type="textarea"
+              :rows="3"
+              maxlength="2000"
+              v-model="workPoolData.content">
+            </el-input>
           </el-form-item>
         </el-row>
 
@@ -513,8 +557,8 @@
           tooltip-effect="dark"
           style=" width: 100%;">
           <el-table-column align="center" prop="status" label="状态" show-overflow-tooltip>
-            <template slot-scope="scope" v-if="scope.row.status">
-              <span>{{ selectDictLabel(cs_order_state, scope.row.status) }}</span>
+            <template slot-scope="scope" v-if="scope.row.linkCode">
+              <span>{{ selectDictLabel(cs_link_code, scope.row.linkCode) }}</span>
             </template>
           </el-table-column>
           <el-table-column align="center" prop="operateCode" label="操作" show-overflow-tooltip>
@@ -610,6 +654,8 @@
       <el-button  type="primary" size="mini" @click="submit">保存</el-button>
       <el-button  type="primary"size="mini" @click="hiddenShow">关闭</el-button>
       </div>
+      <hospital :value="hospitalDialog" @closeHospital="closeHospital" :queryData="queryData"
+                @getPropData="getPropData"/>
     </el-card>
 
 
@@ -621,10 +667,18 @@
 
 <script>
   import moment from 'moment'
+  import Hospital from "../hospital/hospital";
   import {FlowLogSearch} from '@/api/customService/demand'
   import modifyDetails from "../common/modul/modifyDetails";
-  import {demandListAndPublicPool,demandListAndPersonalPool,modifyReservationSubmit} from '@/api/customService/reservation'
-
+  import {
+    demandListAndPublicPool,
+    demandListAndPersonalPool,
+    modifyReservationSubmit,
+    getPersonalPool
+  } from '@/api/customService/reservation'
+  import {getAddress} from "@/api/baseInfo/medicalManage";
+  import {getHospitalInfo} from '@/api/customService/reservation'
+  import {policyInfoData} from "@/api/customService/common";
   let dictss = [
     {dictType: 'cs_identity'},
     {dictType: 'cs_sex'},
@@ -634,7 +688,7 @@
     {dictType: 'cs_priority'},
     {dictType: 'cs_channel'},
     {dictType: 'cs_whether_flag'},
-    {dictType: 'cs_order_state'},
+    {dictType: 'cs_link_code'},
     {dictType: 'cs_action_type'},
     {dictType: 'cs_consultation_type'},
     {dictType: 'cs_relation'},
@@ -642,7 +696,7 @@
   ]
   export default {
     components: {
-      modifyDetails,
+      modifyDetails,Hospital
     },
     filters: {
       changeDate: function (value) {
@@ -653,9 +707,9 @@
     },
     data() {
       const checkComplaintTime= (rule, value, callback) => {
-        let tDate = new Date();
+        let tDate = moment(new Date()).format('yyyy-MM-DD');
         if(tDate > value){
-          callback(new Error("预约时间不能早于当前日期"));
+          callback(new Error("预约日期不能早于当前日期"));
         }else{
           callback();
         }
@@ -688,6 +742,13 @@
       };
 
       return {
+        queryData:{
+          region:[],
+          hospitalName:''
+        },
+        region:[],
+        regions:[],
+        hospitalDialog:false,
         workPoolDataFlag:false,
         ruleFormFlag:false,
         cs_relation:[],//关系
@@ -698,7 +759,7 @@
         cs_organization:[],//机构
         cs_handle_state:[],// 状态：
         cs_channel:[],
-        cs_order_state:[],
+        cs_link_code:[],
         cs_action_type:[],
         cs_consultation_type:[],
         cs_whether_flag:[],
@@ -706,6 +767,7 @@
         dictList: [],
         //流转用
         flowLogData:[],
+        departmentOption:[],
         flowLogCount: 0,
         //服务项目
         workPoolData: {
@@ -713,9 +775,11 @@
             name:"",
           },
           medicalInstitution:"",
+          hospitalName:"",
           callRelationBy:"",
           workOrderNo:"",
           hospitalWorkCall:"",
+          hospitalAddress:"",
           channelCode:"",
           callCenterId:"",
           priorityLevel:"",
@@ -751,14 +815,21 @@
           editReason:"",
           editRemark:"",
 
-          complaintPerson:{
-            name:"",
-          }
         },
         totalCount: 0,
-        //需要填入数据的部分
         ruleForm:{
-
+          workOrderNo:"",
+          businessProcess:"",
+          remark:"",
+          customerFeedback:"",
+          closeType:"",
+          costsIncurred:"",
+          callPerson : {
+            mobilePhone:'',
+          },
+          contactsPerson :{
+            name:'',
+          }
         },
         // 表单校验
         // 表单校验根据Form 组件提供了表单验证的功能，只需要通过 rules 属性传入约定的验证规则，并将 Form-Item 的 prop 属性设置为需校验的字段名即可
@@ -891,8 +962,11 @@
             {required: true, message: "医疗机构不能为空", trigger: ["blur","change"]}
           ],
           appointmentDate: [
-            {required: true, message: "预约时间不能为空", trigger: ["blur","change"]},
+            {required: true, message: "预约日期不能为空", trigger: ["blur","change"]},
             {required: true, validator: checkComplaintTime, trigger: "blur"}
+          ],
+          complaintTimes: [
+            {required: true, message: "预约时间不能为空", trigger: ["blur","change"]}
           ],
           province: [
             {required: true, message: "预约医院不能为空", trigger: ["blur","change"]}
@@ -911,13 +985,6 @@
           ],
           organCode: [
             {required: true, message: "出单机构不能为空", trigger: ["blur","change"]}
-          ],
-          hospitalWorkCall: [
-            {required: false,
-              message: "医院电话格式不正确",
-              pattern: /^[1][3|4|5|6|7|8|9][0-9]{9}$/,
-              trigger: ["blur","change"]
-            }
           ],
           'email': [
             {required: true, message: "Email不能为空", trigger: "blur"},
@@ -994,8 +1061,8 @@
       this.cs_action_type = this.dictList.find(item => {
         return item.dictType === 'cs_action_type'
       }).dictDate
-      this.cs_order_state = this.dictList.find(item => {
-        return item.dictType === 'cs_order_state'
+      this.cs_link_code = this.dictList.find(item => {
+        return item.dictType === 'cs_link_code'
       }).dictDate
       this.cs_communication_language = this.dictList.find(item => {
         return item.dictType === 'cs_communication_language'
@@ -1027,8 +1094,29 @@
       this.cs_time_unit = this.dictList.find(item => {
         return item.dictType === 'cs_time_unit'
       }).dictDate
+      // 地址下拉选
+      this.getAddressData()
     },
     methods: {
+      //客户信息加载
+      searchSendFormInfo() {
+        let query = {
+          policyNo: this.queryParams.policyNo,
+          policyItemNo: this.queryParams.policyItemNo,
+        }
+        if(this.queryParams.policyNo != null && this.queryParams.policyNo !=""){
+          policyInfoData(query).then(res => {
+            if (res != null && res.code === 200) {
+              if (res.data != null) {
+                this.sendForm = res.data;
+              }
+            }
+          }).catch(res => {
+
+          })
+        }
+      },
+
       //超链接用
       modifyDetails(s){
         this.$refs.modifyDetails.queryParams.subId=s.subId,
@@ -1047,7 +1135,7 @@
         if (this.workPoolDataFlag&&this.ruleFormFlag) {
           this.workPoolData.workOrderNo=this.$route.query.workOrderNo;
           this.workPoolData.symptomTimes=this.workPoolData.a+'-'+this.workPoolData.b;
-          //this.ruleForm.symptomTimes=this.ruleForm.a+'-'+this.ruleForm.b;
+          this.workPoolData.complaintTime = this.workPoolData.complaintTimes[0]+'-'+this.workPoolData.complaintTimes[1];
           let send=this.workPoolData
           modifyReservationSubmit(send).then(res => {
             if (res != null && res.code === 200) {
@@ -1069,21 +1157,86 @@
       },
       //反显信息需求
       searchHandle: function () {
-        if (this.queryParams.status == "01") {
+        let workOrderNo = this.queryParams
+        console.log("workOrderNo", workOrderNo)
+        getPersonalPool(workOrderNo).then(res => {
+          if (res != null && res.code === 200) {
+            this.workPoolData = res.data
+           // console.log(this.ruleForm)
+            if (this.workPoolData.symptomTimes != null && this.workPoolData.symptomTimes != '') {
+              let arr=this.workPoolData.symptomTimes.split('-');
+              this.$set(this.workPoolData, `a`, arr[0]);
+              this.$set(this.workPoolData, `b`, arr[1]);
+            }
+            if(this.workPoolData.complaintTime != null && this.workPoolData.complaintTime !=''){
+              //预约时间反显
+              let timeArr=this.workPoolData.complaintTime.split('-');
+              this.$set(this.workPoolData, `complaintTimes`, timeArr);
+            }
+            let queryData={
+              hospitalCode:this.workPoolData.medicalInstitution,
+              hospitalName:this.workPoolData.hospitalName,
+              province:this.workPoolData.province,
+              city:this.workPoolData.city,
+            }
+            if (this.workPoolData.medicalInstitution!='9999'){
+              getHospitalInfo (queryData).then(res => {
+                if (res != null && res !== '' && res.rows.length>0) {
+                  if (res.rows[0].deptList && res.rows[0].deptList.length>0){
+                    this.departmentOption=res.rows[0].deptList
+                  }else {
+                    this.departmentOption=[]
+                  }
+                }
+              })
+            }else {
+              this.departmentOption=[]
+            }
+            this.region.push(this.workPoolData.province)
+            this.region.push(this.workPoolData.city)
+          }
+        }).catch(res => {
+
+        })
+
+
+/*        if (this.queryParams.status == "01") {
           let query = this.queryParams
           demandListAndPublicPool(query).then(res => {
             if (res != null && res.code === 200) {
-              this.workPoolData = res.rows[0]
-              this.totalCount = res.total
+              this.workPoolData = res.rows[0];
+              this.totalCount = res.total;
               if (this.workPoolData.symptomTimes != null && this.workPoolData.symptomTimes != '') {
-                let arr=this.workPoolData.symptomTimes.split('-')
-                console.log(arr)
-                /*this.ruleForm.a=arr[0];
-                this.ruleForm.b=arr[1];*/
+                let arr=this.workPoolData.symptomTimes.split('-');
                 this.$set(this.workPoolData, `a`, arr[0]);
                 this.$set(this.workPoolData, `b`, arr[1]);
               }
-
+              if(this.workPoolData.complaintTime != null && this.workPoolData.complaintTime !=''){
+                //预约时间反显
+                let timeArr=this.workPoolData.complaintTime.split('-');
+                this.$set(this.workPoolData, `complaintTimes`, timeArr);
+              }
+              let queryData={
+                hospitalCode:res.rows[0].medicalInstitution,
+                hospitalName:res.rows[0].hospitalName,
+                province:res.rows[0].province,
+                city:res.rows[0].city,
+              }
+              if (res.rows[0].medicalInstitution!='9999'){
+                getHospitalInfo (queryData).then(res => {
+                  if (res != null && res !== '') {
+                    if (res.rows[0].deptList && res.rows[0].deptList.length>0){
+                      this.departmentOption=res.rows[0].deptList
+                    }else {
+                      this.departmentOption=[]
+                    }
+                  }
+                })
+              }else {
+                this.departmentOption=[]
+              }
+              this.region.push(this.workPoolData.province)
+              this.region.push(this.workPoolData.city)
               if (res.rows.length <= 0) {
                 return this.$message.warning(
                   "未查询到数据！"
@@ -1103,11 +1256,33 @@
               if (this.workPoolData.symptomTimes != null && this.workPoolData.symptomTimes != '') {
                 let arr=this.workPoolData.symptomTimes.split('-')
                 console.log(arr)
-                /*this.ruleForm.a=arr[0]
-                this.ruleForm.b=arr[1]*/
+                /!*this.ruleForm.a=arr[0]
+                this.ruleForm.b=arr[1]*!/
                 this.$set(this.workPoolData, `a`, arr[0]);
                 this.$set(this.workPoolData, `b`, arr[1]);
               }
+              this.region.push(this.workPoolData.province)
+              this.region.push(this.workPoolData.city)
+              let queryData={
+                hospitalCode:res.rows[0].medicalInstitution,
+                hospitalName:res.rows[0].hospitalName,
+                province:res.rows[0].province,
+                city:res.rows[0].city,
+              }
+            if (res.rows[0].medicalInstitution!='9999'){
+              getHospitalInfo (queryData).then(res => {
+                if (res != null && res !== '') {
+                  if (res.rows[0].deptList && res.rows[0].deptList.length>0){
+                    this.departmentOption=res.rows[0].deptList
+                  }else {
+                    this.departmentOption=[]
+                  }
+                }
+              })
+            }else {
+              this.departmentOption=[]
+            }
+
               if (res.rows.length <= 0) {
                 return this.$message.warning(
                   "未查询到数据！"
@@ -1118,7 +1293,7 @@
 
           })
 
-        }
+        }*/
       },
       //查询轨迹表
       searchFlowLog() {
@@ -1149,13 +1324,45 @@
         // 返回上级路由并关闭当前路由
         this.$store.state.tagsView.visitedViews.splice(this.$store.state.tagsView.visitedViews.findIndex(item => item.path === this.$route.path), 1)
         this.$router.push(this.$store.state.tagsView.visitedViews[this.$store.state.tagsView.visitedViews.length - 1].path)
-
-
       },
-
-
-
-
+      openHospitalDialog() {
+        if (this.region.length<1){
+          return this.$message.warning(
+            "请先选择预约医院省市！"
+          )
+        }else {
+          this.queryData={
+            region:this.region,
+            hospitalName:this.workPoolData.hospitalName
+          }
+          this.hospitalDialog = true
+        }
+      },
+      handleChange(){
+        this.workPoolData.province = this.region[0]
+        this.workPoolData.city = this.region[1]
+      },
+      closeHospital() {
+        this.hospitalDialog = false
+      },
+      // 地址下拉选
+      getAddressData() {
+        getAddress().then(response => {
+          this.regions = response
+        }).catch(error => {
+        })
+      },
+      getPropData(val) {
+        if (val.deptList && val.deptList.length>0){
+          this.departmentOption=val.deptList
+        }else {
+          this.departmentOption=[]
+        }
+        this.workPoolData.medicalInstitution=val.hospitalCode
+        this.workPoolData.hospitalName=val.hospitalName
+        this.workPoolData.hospitalWorkCall=val.consultPhone
+        this.workPoolData.hospitalAddress=val.address
+      },
     }
   }
 </script>

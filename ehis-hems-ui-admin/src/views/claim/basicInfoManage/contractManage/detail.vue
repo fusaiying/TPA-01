@@ -58,6 +58,9 @@
             <span class="info_span to_right">合约编码：</span><span class="info_span">{{ providerContractInfo.contractNo }}</span>
           </el-col>
           <el-col :span="8">
+            <span class="info_span to_right">机构类别：</span><span class="info_span">{{ getServiceTypeNameByValue(providerContractInfo.providerType) }}</span>
+          </el-col>
+          <el-col :span="8">
             <span class="info_span to_right">状态：</span><span class="info_span">{{ getStatuTypeNameByValue(providerContractInfo.bussinessStatus) }}</span>
           </el-col>
           <el-col :span="8">
@@ -117,7 +120,7 @@
             <span class="info_span to_right">特殊费折扣信息：</span><span class="info_span">{{ providerContractInfo.specialDiscount }}</span>
           </el-col>
           <el-col :span="8">
-            <span class="info_span to_right">折扣除外项目：</span><span class="info_span">{{ providerContractInfo.project }}</span>
+            <span class="info_span to_right el-col-8">折扣除外项目：</span><span class="info_span el-col-8">{{ providerContractInfo.project }}</span>
           </el-col>
           <el-col :span="8">
           <span class="info_span to_right">合作单位：</span><span class="info_span">{{ getCooperativeUnitNameByValue(providerContractInfo.cooperativeUnit) }}</span>
@@ -133,7 +136,7 @@
             <span class="info_span to_right">合约终止原因：</span><span class="info_span">{{ providerContractInfo.reason }}</span>
           </el-col>
           <el-col :span="8">
-            <span class="info_span to_right">联系人：</span><span class="info_span">{{ providerContractInfo.liaison }}</span>
+            <span class="info_span to_right el-col-8">联系人：</span><span class="info_span el-col-8">{{ providerContractInfo.liaison }}</span>
           </el-col>
 
           <el-col :span="8">
@@ -149,7 +152,7 @@
             <span class="info_span to_right">办公电话：</span><span class="info_span">{{ providerContractInfo.tel }}</span>
           </el-col>
           <el-col :span="8">
-            <span class="info_span to_right">电子邮件：</span><span class="info_span">{{ providerContractInfo.email }}</span>
+            <span class="info_span to_right el-col-8">电子邮件：</span><span class="info_span el-col-8">{{ providerContractInfo.email }}</span>
           </el-col>
           <el-col :span="8">
             <span class="info_span to_right">最后维护人：</span><span class="info_span">{{ providerContractInfo.updateBy }}</span>
@@ -378,6 +381,7 @@
         contractLimitTypes: [],
         contractTypes:[],
         statusSlects:[],
+        servicetype: [],
         supplierInfoSelects:[],
         cooperativeUnitSelects:[],
         serviceInfoSelects:[],
@@ -421,6 +425,9 @@
       this.getDicts("state").then(response => {
         this.statusSlects = response.data;
       });
+       this.getDicts("service_type").then(response => {
+         this.servicetype = response.data;
+       });
 
       if (this.flag == '01') {
         //供应商合约
@@ -491,6 +498,9 @@
       getStatuTypeNameByValue(value){
         return this.selectDictLabel(this.statusSlects, value)
       },
+        getServiceTypeNameByValue(value){
+          return this.selectDictLabel(this.servicetype, value)
+        },
       getTypeNameByValue(value){
         return this.selectDictLabel(this.onceTypes, value)
       },
@@ -561,6 +571,11 @@
             } else {
               this.providerContractInfo = detailData;
               // straightT
+
+              getSupplierContractDetail(this.providerContractInfo.connectedContract).then(response => {
+                this.providerContractInfo.connectedContract = response.data.contractName;
+              })
+
               let straightStr = '';
               if(detailData.straight != '') {
                 let straightData =detailData.straight.split(",");
@@ -572,6 +587,8 @@
                 }
                 this.providerContractInfo.straight = (straightStr.substring(1));
               }
+
+
             }
           }
         }).catch(error => {

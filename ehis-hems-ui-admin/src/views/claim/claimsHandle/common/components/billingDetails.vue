@@ -730,6 +730,11 @@
             callback();
           }
         } else {
+          let sum = 0
+          for (let i = 0; i < this.costForm.costData.length; i++) {
+            sum = sum + parseInt(this.getZero(this.costForm.costData[i].visNumber))
+          }
+          this.baseForm.visNumber = sum + ''
           callback();
         }
       }

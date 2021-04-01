@@ -5,7 +5,7 @@
                label-position="right" size="mini">
         <el-row>
           <el-col :span="8">
-            <el-form-item label="结案日期：" prop="endCaseTime">
+            <el-form-item label="结案日期：" prop="endCaseDate">
               <el-date-picker
                 v-model="inspectionQueryForm.endCaseDate"
                 style="width:220px;"
@@ -19,7 +19,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="质检日期：" prop="inspectionTime">
+            <el-form-item label="质检日期：" prop="inspectionDate">
               <el-date-picker
                 v-model="inspectionQueryForm.inspectionDate"
                 style="width:220px;"
@@ -68,7 +68,7 @@
 
         <el-row>
           <el-col :span="8">
-            <el-form-item label="质检结果：" prop="inspectionResult">
+            <el-form-item label="质检结果：" prop="result">
               <el-select v-model="inspectionQueryForm.result" class="item-width" placeholder="请选择">
                 <el-option v-for="item in inspection_resultOptions" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
@@ -96,10 +96,17 @@
     <el-card class="box-card" style="margin-top: 10px;">
       <div slot="header" class="clearfix">
         <span>查询结果（{{ totalCount }}）</span>
-        <el-row gutter="20" style="float: right">
-          <el-button type="primary" size="mini" @click="sendMany">质检详情清单导出</el-button>
+        <span style="float: right;">
+          <el-dropdown @command="sendMany" style="padding-right: 10px">
+            <el-button type="primary" size="mini">质检详情清单导出<i class="el-icon-arrow-down el-icon--right"/></el-button>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item command="01">信息需求</el-dropdown-item>
+              <el-dropdown-item command="03">投诉</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+
           <el-button type="primary" size="mini" @click="sendMany1">质检差错清单导出</el-button>
-        </el-row>
+        </span>
         <el-divider/>
         <el-table
           :header-cell-style="{color:'black',background:'#f8f8ff'}"
@@ -112,13 +119,17 @@
           <el-table-column type="selection" align="center" content="全选"/>
           <el-table-column align="center" width="140" prop="workOrderNo" label="工单号" show-overflow-toolti>
             <template slot-scope="scope">
-              <el-button size="mini" type="text" @click="dealButton(scope.row)">{{scope.row.workOrderNo}}</el-button>
+              <el-button size="mini" type="text" @click="dealButton(scope.row)">{{ scope.row.workOrderNo }}</el-button>
             </template>
           </el-table-column>
-          <el-table-column align="center" prop="organCode" label="出单机构" show-overflow-tooltip/>
+          <el-table-column align="center" prop="organCode" label="出单机构" show-overflow-tooltip>
+            <template slot-scope="scope">
+              <span>{{ selectDictLabel(organizationOptions, scope.row.organCode) }}</span>
+            </template>
+          </el-table-column>
           <el-table-column align="center" prop="itemCode" label="服务项目" show-overflow-tooltip>
             <template slot-scope="scope">
-              <span>{{selectDictLabel(service_itemOptions, scope.row.itemCode)}}</span>
+              <span>{{ selectDictLabel(service_itemOptions, scope.row.itemCode) }}</span>
             </template>
           </el-table-column>
           <el-table-column align="center" prop="endDate" label="结案日期" show-overflow-tooltip>
@@ -134,12 +145,12 @@
           <el-table-column prop="updatedBy" align="center" label="质检人" show-overflow-tooltip/>
           <el-table-column prop="updatedTime" align="center" label="质检日期" show-overflow-tooltip>
             <template slot-scope="scope">
-              <span>{{ scope.row.updateTime | changeDate }}</span>
+              <span>{{ parseTime(scope.row.updatedTime, '{y}-{m}-{d}') }}</span>
             </template>
           </el-table-column>
           <el-table-column align="center" prop="result" label="质检结果" show-overflow-tooltip>
             <template slot-scope="scope">
-              <span>{{selectDictLabel(inspection_resultOptions, scope.row.result)}}</span>
+              <span>{{ selectDictLabel(inspection_resultOptions, scope.row.result) }}</span>
             </template>
           </el-table-column>
         </el-table>
@@ -162,9 +173,9 @@ import moment from 'moment'
 import {selectQualityVo} from '@/api/customService/spotCheck'
 
 let dictss = [{dictType: 'cs_organization'}
-  ,{dictType: 'cs_service_item'}
-  ,{dictType: 'cs_inspection_state'}
-  ,{dictType: 'cs_inspection_result'}
+  , {dictType: 'cs_service_item'}
+  , {dictType: 'cs_inspection_state'}
+  , {dictType: 'cs_inspection_result'}
 ]
 export default {
   components: {},
@@ -181,13 +192,13 @@ export default {
       caseNumber: false,//查询条件（报案号）是否显示
       // 查询参数
       inspectionQueryForm: {
-        endCaseDate: undefined,
-        inspectionDate: undefined,
-        organCode: undefined,
-        updatedBy: undefined,
-        itemCode: undefined,
-        status: undefined,
-        result: undefined
+        endCaseDate: [],
+        inspectionDate: [],
+        organCode: '',
+        updatedBy: '',
+        itemCode: '',
+        status: '',
+        result: ''
       },
       confirmationQueryForm: {
         firstEndCaseTime: undefined,
@@ -206,7 +217,7 @@ export default {
       finishPageSize: 10,
       changeSerchData: {},
       dictList: [],
-      organizationOptions:[],
+      organizationOptions: [],
       service_itemOptions: [],
       inspection_statusOptions: [],
       inspection_resultOptions: [],
@@ -231,13 +242,13 @@ export default {
     this.inspection_resultOptions = this.dictList.find(item => {
       return item.dictType === 'cs_inspection_result'
     }).dictDate
-   // this.searchHandle()
+    // this.searchHandle()
   },
   methods: {
     resetForm() {
-      this.inspectionQueryForm.endCaseDate=[]
-      this.inspectionQueryForm.inspectionDate=[]
-      this.inspectionQueryForm.result=''
+      this.inspectionQueryForm.endCaseDate = []
+      this.inspectionQueryForm.inspectionDate = []
+      this.inspectionQueryForm.result = ''
       this.$refs.inspectionQueryForm.resetFields()
     },
     searchHandle() {
@@ -247,6 +258,7 @@ export default {
 
         endCaseStartDate: undefined,
         endCaseEndDate: undefined,
+        endCaseupdateTime: undefined,
         inspectionStartDate: undefined,
         inspectionEndDate: undefined,
         organCode: this.inspectionQueryForm.organCode,
@@ -279,18 +291,18 @@ export default {
       })
     },
     //处理按钮
-    dealButton(row){
+    dealButton(row) {
       let data = encodeURI(
         JSON.stringify({
           workOrderNo: row.workOrderNo, //批次号
           inspectionId: row.inspectionId, //批次号
           businessType: row.businessType,
           inspectionHandlerId: row.inspectionHandlerId,
-          node:'mistake',//质检工作池
-          status:'show'
+          node: 'mistake',//质检工作池
+          status: 'show'
         })
       )
-      console.info("handleOne:"+data)
+      console.info("handleOne:" + data)
       this.$router.push({
         path: '/workOrder/inspectionHandle',
         query: {
@@ -303,27 +315,77 @@ export default {
     handleSelectionChange(selection) {
       this.ids = selection.map(item => item.workOrderNo);
 
-    }, sendMany(){
+    },
+    //质检详情清单导出
+    sendMany(query) {
       const params = {
-        endCaseStartTime: undefined,
-        endCaseEndTime: undefined,
-        inspectionStartTime: undefined,
-        inspectionEndTime: undefined,
-        organCode: this.inspectionQueryForm.organization,
-        inspectionName: this.inspectionQueryForm.inspectionName,
-        serviceItemCode: this.inspectionQueryForm.serviceItem,
-        inspectionStatus: this.inspectionQueryForm.inspectionStatus,
-        inspectionResult: this.inspectionQueryForm.inspectionResult
-      };
-      this.download('cs/spotCheck/internal/selectWorkOrder/exportOne', params, `质检查询_${new Date().getTime()}.xlsx`);
-    }, sendMany1(){
+        endCaseStartDate: '',
+        endCaseEndDate: '',
+        inspectionStartDate: '',
+        inspectionEndDate: '',
+        organCode: '',
+        updatedBy: '',
+        itemCode: '',
+        status: '',
+        result: ''
+      }
+      if (this.inspectionQueryForm.endCaseDate != null && this.inspectionQueryForm.endCaseDate != '') {
+        if (this.inspectionQueryForm.endCaseDate.length > 0) {
+          params.endCaseStartDate = this.inspectionQueryForm.endCaseDate[0]
+          params.endCaseEndDate = this.inspectionQueryForm.endCaseDate[1]
+        }
+      }
+      if (this.inspectionQueryForm.inspectionDate != null && this.inspectionQueryForm.inspectionDate != '') {
+        if (this.inspectionQueryForm.inspectionDate.length > 0) {
+          params.inspectionStartDate = this.inspectionQueryForm.inspectionDate[0]
+          params.inspectionEndDate = this.inspectionQueryForm.inspectionDate[1]
+        }
+      }
+      params.organCode = this.inspectionQueryForm.organCode
+      params.updatedBy = this.inspectionQueryForm.updatedBy
+      params.itemCode = this.inspectionQueryForm.itemCode
+      params.status = this.inspectionQueryForm.status
+      params.result = this.inspectionQueryForm.result
+      if (query == '01') {
+        //调用信息需求质检详情导出的接口
+        this.download('cs/spotCheck/internal/selectWorkOrder/exportOneInformation', {...params}, `质检查询_${new Date().getTime()}.xlsx`)
+      } else if (query == '03') {
+        this.download('cs/spotCheck/internal/selectWorkOrder/exportOne', {...params}, `质检查询_${new Date().getTime()}.xlsx`)
+      }
+      /*
+            this.download('cs/spotCheck/internal/selectWorkOrder/exportOne', params, `质检查询_${new Date().getTime()}.xlsx`);*/
+    },
+    //质检差错清单导出
+    sendMany1() {
       const params = {
-        firstEndCaseStartTime: undefined,
-        firstEndCaseEndTime: undefined,
-        workOrderNo :this.confirmationQueryForm.workOrderNo,
-        serviceItemCode: this.confirmationQueryForm.serviceItem,
-      };
-      this.download('cs/spotCheck/internal/selectWorkOrder/exportTwo', params, `质检差错_${new Date().getTime()}.xlsx`);
+        endCaseStartDate: '',
+        endCaseEndDate: '',
+        inspectionStartDate: '',
+        inspectionEndDate: '',
+        organCode: '',
+        updatedBy: '',
+        itemCode: '',
+        status: '',
+        result: ''
+      }
+      if (this.inspectionQueryForm.endCaseDate != null && this.inspectionQueryForm.endCaseDate != '') {
+        if (this.inspectionQueryForm.endCaseDate.length > 0) {
+          params.endCaseStartDate = this.inspectionQueryForm.endCaseDate[0]
+          params.endCaseEndDate = this.inspectionQueryForm.endCaseDate[1]
+        }
+      }
+      if (this.inspectionQueryForm.inspectionDate != null && this.inspectionQueryForm.inspectionDate != '') {
+        if (this.inspectionQueryForm.inspectionDate.length > 0) {
+          params.inspectionStartDate = this.inspectionQueryForm.inspectionDate[0]
+          params.inspectionEndDate = this.inspectionQueryForm.inspectionDate[1]
+        }
+      }
+      params.organCode = this.inspectionQueryForm.organCode
+      params.updatedBy = this.inspectionQueryForm.updatedBy
+      params.itemCode = this.inspectionQueryForm.itemCode
+      params.status = this.inspectionQueryForm.status
+      params.result = this.inspectionQueryForm.result
+      this.download('cs/spotCheck/internal/selectWorkOrder/exportOneError', {...params}, `质检差错_${new Date().getTime()}.xlsx`);
     },
     send() {
 

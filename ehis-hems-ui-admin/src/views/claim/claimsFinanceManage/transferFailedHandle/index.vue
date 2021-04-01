@@ -59,7 +59,7 @@
           <el-table-column align="center" label="操作" fixed="right">
             <template slot-scope="scope">
               <el-button size="mini" type="text" @click="renewal">更新</el-button>
-              <el-button size="mini" type="text" @click="">支付</el-button>
+              <el-button size="mini" type="text" @click="paymentHandle(scope.row)">支付</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -76,7 +76,7 @@
 </template>
 
 <script>
-  import {transferFailedList} from '@/api/claim/corporatePay'
+  import {transferFailedList,deleteFinance} from '@/api/claim/corporatePay'
   let dictss = [{dictType: 'claim_material'}]
   export default {
     data() {
@@ -117,6 +117,16 @@
       }).catch(res=>{})
     },
     methods: {
+      //支付
+      paymentHandle(row){
+        deleteFinance(row.batchNo).then(res =>{
+          if(res != null && res.code === 200){
+            this.search()
+          }
+        })
+
+      },
+
       resetForm() {
         this.$refs.searchForm.resetFields()
         this.payDate= []

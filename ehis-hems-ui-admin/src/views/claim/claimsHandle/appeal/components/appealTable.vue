@@ -12,8 +12,8 @@
         <el-button width="160" size="small" type="text" @click="viewHandle(scope.row,'show')">{{ scope.row.appealRptNo }}</el-button>
       </template>
     </el-table-column>
-    <el-table-column :formatter="getDeliverySourceName" align="center" prop="caseStatus"  label="交单来源" show-overflow-tooltip/>
-    <el-table-column align="center" prop="name" label="被保人姓名" show-overflow-tooltip/>
+    <el-table-column :formatter="getDeliverySourceName"  align="center" min-width="100" prop="caseStatus"  label="交单来源" show-overflow-tooltip/>
+    <el-table-column align="center" min-width="100" prop="name" label="被保人姓名" show-overflow-tooltip/>
     <el-table-column align="center" prop="idNo" label="证件号码" show-overflow-tooltip/>
     <el-table-column align="center" prop="claimType" :formatter="getClaimTypeName"  label="理赔类型" show-overflow-tooltip/>
     <el-table-column align="center" prop="companyName" label="出单公司" show-overflow-tooltip/>
@@ -26,7 +26,16 @@
         <span>{{ scope.row.updateTime | changeDate}}</span>
       </template>
     </el-table-column>
-    <el-table-column align="center" prop="updateBy" label="操作人" show-overflow-tooltip/>
+    <el-table-column align="center" prop="updateBy" label="操作人" show-overflow-tooltip>
+      <template  slot-scope="scope">
+        <template v-if="status === '02'">
+          <span>{{ scope.row.createBy}}</span>
+        </template>
+        <template  v-else slot-scope="scope">
+          <span>{{ scope.row.updateBy}}</span>
+        </template>
+      </template>
+    </el-table-column>
     <el-table-column min-width="150" align="center"  v-if="status === '02' || status === '04'" prop="newRptNo" label="修正理赔号" show-overflow-tooltip>
       <template slot-scope="scope">
         <span>{{ scope.row.newRptNo}}</span>

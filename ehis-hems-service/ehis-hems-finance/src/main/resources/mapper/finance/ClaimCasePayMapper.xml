@@ -18,6 +18,8 @@
         <result property="debtAmount"    column="debt_amount"    />
         <result property="borrowAmount"    column="borrow_amount"    />
         <result property="payStatus"    column="pay_status"    />
+        <result property="isAppeal"    column="is_appeal"    />
+        <result property="caseProp"    column="case_prop"    />
     </resultMap>
     <resultMap type="com.paic.ehis.finance.domain.vo.ClaimCaseForeignPayInfoVO" id="ForeignPayResult">
         <result property="rptNo"    column="rpt_no"    />
@@ -37,24 +39,31 @@
         <result property="exchangeRate" column="exchange_rate"/>
         <result property="payAmountForeign" column="pay_amount_foreign"/>
         <result property="billCurrency" column="bill_currency"/>
+        <result property="caseProp"    column="case_prop"    />
+        <result property="isAppeal"    column="is_appeal"    />
+        <result property="flag"    column="flag"    />
+        <result property="flag2"    column="flag2"    />
     </resultMap>
 
     <select id="selectPayInfoList" parameterType="string" resultMap="PayResult">
                  select * from (
 			SELECT
             a.rpt_no,
+            a.batch_no,
             min( b.treatment_start_date ) treatment_date,
             c.insured_no,
             c.name,
-            sum( b.bill_amount ) bill_amount,
+            sum(  ifNUll(b.bill_amount,0) ) bill_amount,
             (sum( ifNUll(b.bill_amount,0) ) - sum( ifNUll(b.hos_discount_amount,0) )) discounted_amount,
-            sum( ifNUll(b.tp_advance_payment + b.ss_advance_payment,0) ) advance_payment,
+            sum( ifNUll(b.tp_advance_payment,0) + ifNUll(b.ss_advance_payment,0) ) advance_payment,
             sum( ifNUll(b.copay,0)) copay,
             ifNUll(d.cal_amount,0) pay_amount,
             ifNUll(d.debt_amount,0) debt_amount,
             a.case_status,
             a.pay_status,
-            a.case_prop
+            a.case_prop,
+            a.is_appeal,
+            d.bill_currency currency
         FROM
             claim_case a
             LEFT JOIN claim_case_bill b ON a.rpt_no = b.rpt_no  AND b.`status` = 'Y'
@@ -68,10 +77,12 @@
             c.`name`,
             d.cal_amount,
             d.debt_amount,
-            c.insured_no
+            c.insured_no,
+            d.bill_currency
 				union
 		SELECT
             a.rpt_no,
+            a.batch_no,
             d.treatment_start_date treatment_date,
             c.insured_no,
             c.name,
@@ -83,7 +94,9 @@
             ifNUll(c.fee_amount,0) debt_amount,
             a.case_status,
             a.pay_status,
-            a.case_prop
+            a.case_prop,
+            a.is_appeal,
+            d.bill_currency currency
         FROM
             claim_case a
             LEFT JOIN claim_case_cal_core_policy c ON a.rpt_no = c.rpt_no  AND c.`status` = 'Y' and c.amount_type='04'
@@ -100,11 +113,12 @@
          select * from (
 		 SELECT
             a.rpt_no,
+            a.batch_no,
             min( b.treatment_start_date ) treatment_date,
             c.`name`,
             sum( ifNUll(b.bill_amount,0) ) bill_amount,
             (sum( ifNUll(b.bill_amount,0) ) - sum( ifNUll(b.hos_discount_amount,0) )) discounted_amount,
-            sum( ifNUll(b.tp_advance_payment + b.ss_advance_payment,0) ) advance_payment,
+            sum( ifNUll(b.tp_advance_payment,0) + ifNUll(b.ss_advance_payment,0) ) advance_payment,
             sum( ifNUll(b.copay,0) ) copay,
             ifNUll(d.cal_amount,0) pay_amount,
             ifNUll(d.debt_amount,0) debt_amount,
@@ -113,12 +127,23 @@
             a.case_status,
             a.pay_status,
             a.case_prop,
-			d.bill_currency
+            a.is_appeal,
+			d.bill_currency currency,
+				(case when d.bill_currency=cb.currency then 'Y' ELSE 'N' END) as flag,
+			(SELECT COUNT(*) from(
+SELECT
+  cb.batch_no,ccc.bill_currency
+from claim_case cc left join claim_batch cb on cb.batch_no=cc.batch_no left join claim_case_cal ccc on ccc.rpt_no=cc.rpt_no
+where 1=1
+and cb.batch_no=#{batchNo}
+and cc.case_status not in ('05','98','06')
+GROUP BY cb.batch_no,ccc.bill_currency ) d) as flag2
         FROM
             claim_case a
             LEFT JOIN claim_case_bill b ON a.rpt_no = b.rpt_no AND b.`status` = 'Y'
             LEFT JOIN claim_case_insured c ON a.rpt_no = c.rpt_no AND c.`status` = 'Y'
             LEFT JOIN claim_case_cal d ON a.rpt_no = d.rpt_no AND d.`status` = 'Y'
+            LEFT JOIN claim_batch cb on a.batch_no= cb.batch_no AND cb.`status` = 'Y'
         WHERE
             a.batch_no = #{batchNo}
             AND a.STATUS = 'Y' and a.case_prop='01'
@@ -133,6 +158,7 @@
 				union
 		SELECT
             a.rpt_no,
+            a.batch_no,
             d.treatment_start_date treatment_date,
             c.name,
             d.bill_amount bill_amount,
@@ -146,11 +172,22 @@
             a.case_status,
             a.pay_status,
             a.case_prop,
-			d.bill_currency
+            a.is_appeal,
+			d.bill_currency currency,
+			(case when d.bill_currency=cb.currency then 'Y' ELSE 'N' END) as flag,
+			(SELECT COUNT(*) from(
+SELECT
+  cb.batch_no,ccc.bill_currency
+from claim_case cc left join claim_batch cb on cb.batch_no=cc.batch_no left join claim_case_cal_core ccc on ccc.rpt_no=cc.rpt_no
+where 1=1
+and cb.batch_no=#{batchNo}
+and cc.case_status not in ('05','98','06')
+GROUP BY cb.batch_no,ccc.bill_currency ) d) as flag2
         FROM
             claim_case a
             LEFT JOIN claim_case_cal_core_policy c ON a.rpt_no = c.rpt_no  AND c.`status` = 'Y' and c.amount_type='04'
             LEFT JOIN claim_case_cal_core d ON a.rpt_no = d.rpt_no  AND d.`status` = 'Y'
+            LEFT JOIN claim_batch cb on a.batch_no= cb.batch_no AND cb.`status` = 'Y'
         WHERE
             a.batch_no =#{batchNo}
             AND a.STATUS = 'Y' and a.case_prop='02'

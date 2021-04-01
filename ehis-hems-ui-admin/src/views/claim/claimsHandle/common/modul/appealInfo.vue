@@ -19,13 +19,13 @@
         <el-row>
           <el-col :span="20" :xs="24">
             <el-form-item label="申诉类型：" prop="appealType">
-              <el-select v-model="appealForm.appealType" class="item-width" size="mini" placeholder="申诉类型">
+              <el-select disabled="disabled" v-model="appealForm.appealType" class="item-width" size="mini" placeholder="申诉类型">
                 <el-option v-for="dict in appealTypes" :key="dict.dictValue" :label="dict.dictLabel"  :value="dict.dictValue" />
               </el-select>
             </el-form-item>
 
             <el-form-item label="发起人：" prop="applyOperator">
-              <el-input v-model="appealForm.applyOperator" class="item-width" size="mini" placeholder="发起人"/>
+              <el-input disabled="disabled" v-model="appealForm.applyOperator" class="item-width" size="mini" placeholder="发起人"/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -33,13 +33,13 @@
         <el-row>
           <el-col :span="20" :xs="24">
             <el-form-item label="申诉原因：" prop="appealReason">
-              <el-select v-model="appealForm.appealReason" class="item-width" size="mini" placeholder="申诉原因">
+              <el-select disabled="disabled" v-model="appealForm.appealReason" class="item-width" size="mini" placeholder="申诉原因">
                 <el-option v-for="dict in appealReasons" :key="dict.dictValue" :label="dict.dictLabel"  :value="dict.dictValue" />
               </el-select>
             </el-form-item>
 
             <el-form-item label="" prop="appealSubReason">
-              <el-select v-model="appealForm.appealSubReason"  size="mini" placeholder="申诉原因">
+              <el-select disabled="disabled" v-model="appealForm.appealSubReason"  size="mini" placeholder="申诉原因">
                 <el-option v-for="dict in appealSubReasons" :key="dict.dictValue" :label="dict.dictLabel"  :value="dict.dictValue" />
               </el-select>
             </el-form-item>
@@ -49,9 +49,8 @@
         <el-row>
           <el-col :span="20">
             <el-form-item label="申诉意见说明：" prop="appealRemark">
-              <el-input style="min-width: 520px" col="2" type="textarea" row="4" maxlength="1000"
-                        v-model="appealForm.appealRemark" clearable size="mini"
-                        placeholder=""/>
+              <el-input disabled="disabled" style="min-width: 520px" col="2" type="textarea" row="4" maxlength="1000"
+                        v-model="appealForm.appealRemark" clearable size="mini" placeholder=""/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -59,19 +58,16 @@
     </el-card>
 
     <el-card class="box-card" style="margin-top: 5px">
-      <el-form ref="appealForm2" :inline="true" :model="appealForm2"
-               style="padding-bottom: 30px;margin-top:20px;margin-left: 5%" label-width="130px" label-position="right"
-               size="mini">
+      <el-form ref="appealForm2" :inline="true" :model="appealForm2" style="padding-bottom: 30px;margin-top:20px;margin-left: 5%" label-width="130px" label-position="right"  size="mini">
         <el-row>
           <el-col :span="20" :xs="24">
             <el-form-item label="初审决定：" prop="isAgree">
-              <el-select v-model="appealForm2.isAgree" class="item-width" size="mini" placeholder="初审决定">
+              <el-select disabled="disabled" v-model="appealForm2.isAgree" class="item-width" size="mini" placeholder="初审决定">
                 <el-option v-for="dict in isAgrees" :key="dict.dictValue" :label="dict.dictLabel"  :value="dict.dictValue" />
               </el-select>
             </el-form-item>
-
             <el-form-item label="初审人：" prop="auditor" key="op2">
-              <el-input v-model="appealForm2.auditor" class="item-width" size="mini" placeholder="初审人"/>
+              <el-input disabled="disabled" v-model="appealForm2.auditor" class="item-width" size="mini" placeholder="初审人"/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -79,9 +75,7 @@
         <el-row>
           <el-col :span="20">
             <el-form-item label="处理意见：" prop="conclusionRemark" key = "remark2">
-              <el-input style="min-width: 520px" col="2" type="textarea" row="4" maxlength="1000"
-                        v-model="appealForm2.conclusionRemark" clearable size="mini"
-                        placeholder=""/>
+              <el-input disabled="disabled" style="min-width: 520px" col="2" type="textarea" row="4" maxlength="1000"  v-model="appealForm2.conclusionRemark" clearable size="mini" placeholder=""/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -107,7 +101,6 @@ let dictss = [{dictType: 'appeal_type'}, {dictType: 'appeal_reason'}, {dictType:
       fixInfo: function (newValue) {
         this.rptNo = newValue.rptNo;
         if(this.rptNo !== '') {
-          this.rptNo = this.rptNo.split("-")[0];
           this.getDetail();
         }
       },
@@ -161,7 +154,7 @@ let dictss = [{dictType: 'appeal_type'}, {dictType: 'appeal_reason'}, {dictType:
     methods: {
       getDetail() {
         const params = {
-          appealRptNo:this.rptNo,
+          newRptNo:this.rptNo,
         };
         getAppealInfo(params).then(response => {
           if(response.code === 200 && response.data) {

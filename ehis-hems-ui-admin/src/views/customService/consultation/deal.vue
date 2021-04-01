@@ -194,7 +194,7 @@
 
 
     <el-card class="box-card" style="margin-top: 10px;">
-      <el-form ref="ruleForm" :model="ruleForm" style="padding-bottom: 30px;" label-width="160px" disabled="true"
+      <el-form ref="ruleForm" :model="ruleForm" style="padding-bottom: 30px;" label-width="160px" :disabled="true"
                label-position="right" size="mini">
         <span
           style="color: blue">{{
@@ -345,8 +345,8 @@
           tooltip-effect="dark"
           style=" width: 100%;">
           <el-table-column align="center" width="140" prop="status" label="状态" show-overflow-tooltip>
-            <template slot-scope="scope" v-if="scope.row.status">
-              <span>{{ selectDictLabel(cs_order_state, scope.row.status) }}</span>
+            <template slot-scope="scope" v-if="scope.row.linkCode">
+              <span>{{ selectDictLabel(cs_link_code, scope.row.linkCode) }}</span>
             </template>
           </el-table-column>
           <el-table-column align="center" prop="operateCode" label="操作" show-overflow-tooltip>
@@ -363,7 +363,7 @@
           </el-table-column>
           <el-table-column prop="remarks" align="center" label="说明" show-overflow-tooltip>
             <template slot-scope="scope">
-              <el-link v-if="scope.row.operateCode=='01'" style="font-size:12px" type="primary"
+              <el-link v-if="scope.row.operateCode=='03'" style="font-size:12px" type="primary"
                        @click="modifyDetails(scope.row)">修改说明
               </el-link>
             </template>
@@ -460,7 +460,7 @@ let dictss = [
   {dictType: 'cs_service_item'},
   {dictType: 'cs_business_type'},
   {dictType: 'cs_attachment_type'},
-  {dictType: 'cs_order_state'},
+  {dictType: 'cs_link_code'},
   {dictType: 'cs_action_type'},
 ]
 export default {
@@ -508,6 +508,7 @@ export default {
       workPoolData: {
         contactsPerson: {
           homePhone1: [],
+          linePhone1:[]
         },
         callPerson: {},
 
@@ -542,7 +543,7 @@ export default {
       totalCount: 0,
       changeSerchData: {},
       dictList: [],
-      cs_order_state: [],//状态
+      cs_link_code: [],//状态
       cs_action_type: [],//操作类型
       cs_channel: [],
       cs_priority: [],
@@ -619,8 +620,8 @@ export default {
     this.cs_attachment_type = this.dictList.find(item => {
       return item.dictType === 'cs_attachment_type'
     }).dictDate
-    this.cs_order_state = this.dictList.find(item => {
-      return item.dictType === 'cs_order_state'
+    this.cs_link_code = this.dictList.find(item => {
+      return item.dictType === 'cs_link_code'
     }).dictDate
     this.cs_action_type = this.dictList.find(item => {
       return item.dictType === 'cs_action_type'
@@ -652,7 +653,7 @@ export default {
     },
     //协办
     coOrganizer() {
-      this.$refs.coOrganizer.open();
+      this.$refs.coOrganizer.open(this.queryParams.workOrderNo);
     },
     //超链接用
     modifyDetails(s) {

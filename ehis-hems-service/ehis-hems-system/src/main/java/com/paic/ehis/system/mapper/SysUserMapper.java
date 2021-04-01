@@ -3,6 +3,7 @@ package com.paic.ehis.system.mapper;
 import com.alibaba.fastjson.JSONObject;
 import com.paic.ehis.system.api.domain.SysDept;
 import com.paic.ehis.system.api.domain.SysUser;
+import com.paic.ehis.system.api.domain.dto.RoleUserInfoDTO;
 import com.paic.ehis.system.domain.dto.SysUserDTO;
 import com.paic.ehis.system.domain.vo.UserVo;
 import org.apache.ibatis.annotations.Param;
@@ -133,4 +134,11 @@ public interface SysUserMapper
 
     /** 任务改派查询改派操作人 */
     List<UserVo> selectSysUser(SysUserDTO sysUserDTO);
+
+    /**
+     * 根据角色查询用户集合
+     * @param menuId
+     * @return
+     */
+    List<RoleUserInfoDTO> getUsersByMenuId(Long menuId);
 }

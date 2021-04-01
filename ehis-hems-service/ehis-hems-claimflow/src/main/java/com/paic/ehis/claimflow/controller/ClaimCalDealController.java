@@ -3,6 +3,8 @@ package com.paic.ehis.claimflow.controller;
 import com.paic.ehis.claimflow.service.IClaimCalDealService;
 import com.paic.ehis.common.core.web.domain.AjaxResult;
 import com.paic.ehis.system.api.domain.ClaimCaseCalInfo;
+import com.paic.ehis.system.api.domain.ClaimCaseCalculateInfo;
+import com.paic.ehis.system.api.domain.dto.ClaimCaseCalItemDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,10 +24,10 @@ public class ClaimCalDealController {
         return AjaxResult.success();
     }
 
-    @GetMapping("/getBillInfo/{rptNo}")
-    public AjaxResult getBillInfo(@PathVariable("rptNo") String rptNo)
+    @GetMapping("/getCaseInfo/{rptNo}")
+    public AjaxResult getCaseInfo(@PathVariable("rptNo") String rptNo)
     {
-        return AjaxResult.success(iClaimCalDealService.selectClaimCaseBillInfo(rptNo));
+        return AjaxResult.success(iClaimCalDealService.selectClaimCaseInfo(rptNo));
     }
 
     @GetMapping("/getCasePolicyInfo/{rptNo}")
@@ -35,8 +37,15 @@ public class ClaimCalDealController {
     }
 
     @PostMapping("/saveCaseCalInfo")
-    public AjaxResult saveCaseCalInfo(@RequestBody ClaimCaseCalInfo claimCaseCalInfo){
-        iClaimCalDealService.save(claimCaseCalInfo);
+    public AjaxResult saveCaseCalInfo(@RequestBody ClaimCaseCalculateInfo claimCaseCalculateInfo){
+        iClaimCalDealService.save(claimCaseCalculateInfo);
+
+        return AjaxResult.success();
+    }
+
+    @PostMapping("/getUsedValue")
+    public AjaxResult getCaInfo(@RequestBody ClaimCaseCalItemDTO claimCaseCalItemDTO){
+        iClaimCalDealService.getCaInfo(claimCaseCalItemDTO);
 
         return AjaxResult.success();
     }

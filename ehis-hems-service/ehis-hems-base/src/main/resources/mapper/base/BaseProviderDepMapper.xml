@@ -209,6 +209,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectBaseProviderDepVoNew"/>
         where provider_code = #{providerCode} and status = 'Y' and update_flag = '0'
     </select>
+    <select id="selectDeptById" resultType="java.lang.String" parameterType="String">
+        select first_dept as dept,provider_code from base_provider_dep bpd where bpd.provider_code = #{providerCode}
+        union
+        select second_dept as dept,provider_code from base_provider_dep bpd where bpd.provider_code = #{providerCode}
+    </select>
 
     <delete id="deleteBaseProviderDepByCode" parameterType="String">
         delete from base_provider_dep_bak where provider_code = #{providerCode}

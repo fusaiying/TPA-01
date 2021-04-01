@@ -41,6 +41,8 @@ export default {
   data() {
     return {
       gatherSearchLoad:true,
+     // loading:true,
+      radio:false,
     }
   },
   methods: {

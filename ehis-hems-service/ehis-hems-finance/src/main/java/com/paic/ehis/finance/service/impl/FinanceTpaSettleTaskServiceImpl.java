@@ -322,11 +322,14 @@ public class FinanceTpaSettleTaskServiceImpl implements IFinanceTpaSettleTaskSer
     public List<TpaSettleInfo> selectFinanceTpaSettleTaskViewDetail(FinanceTpaSettleTask financeTpaSettleTask) {
 
         List<TpaSettleInfo> tpaSettleInfos = financeTpaSettleTaskMapper.selectFinanceTpaSettleTaskViewDetail(financeTpaSettleTask);
+        List<FinanceTpaSettleTask> financeTpaSettleTasks = financeTpaSettleTaskMapper.selectFinanceTpaSettleTaskList(financeTpaSettleTask);
         for (TpaSettleInfo tpaSettleInfo : tpaSettleInfos) {
             PolicyAndRiskRelation policyRiskRelation = new PolicyAndRiskRelation();
             policyRiskRelation.setStatus(ClaimStatus.DATAYES.getCode());
             policyRiskRelation.setRiskCode(tpaSettleInfo.getRiskCode());
             policyRiskRelation.setRiskCode(tpaSettleInfo.getCompanyCode());
+            policyRiskRelation.setEndTime(financeTpaSettleTasks.get(0).getSettleEndDate());
+            policyRiskRelation.setStartTime(financeTpaSettleTasks.get(0).getSettleStartDate());
             CompanyRiskPolicyInfo policyInfo = policyAndRiskService.selectCompanyRiskPolicyInfo(policyRiskRelation);
             tpaSettleInfo.setSumPerm(policyInfo.getSumPerm());
 

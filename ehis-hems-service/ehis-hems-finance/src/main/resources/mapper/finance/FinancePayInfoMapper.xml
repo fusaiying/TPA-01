@@ -200,6 +200,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
 
+    <delete id="deleteFinanceTransferfailedList" parameterType="String">
+        update finance_pay_info  set pay_status='02'  where batch_no = #{batchNo}
+    </delete>
+
     <select id="selectFinancePayInfoByBatchNo" parameterType="String" resultMap="FinancePayInfoResult">
         <include refid="selectFinancePayInfoVo"/>
        where batch_no=#{batchNo} and status='Y'   ORDER BY create_time desc limit 1

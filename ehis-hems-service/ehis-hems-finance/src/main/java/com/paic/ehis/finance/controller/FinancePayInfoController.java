@@ -110,6 +110,18 @@ public class FinancePayInfoController extends BaseController
     }
 
     /**
+     * 置转账失败数据为无效
+     *
+     * @param batchNo
+     * @return
+     */
+    @DeleteMapping("/deleteFinance/{batchNo}")
+    public AjaxResult deleteFinanceTransferfailedList(@PathVariable String batchNo){
+        return toAjax(financePayInfoService.deleteFinanceTransferfailedList(batchNo));
+    }
+
+
+    /**
      * 置借款数据为无效
      *
      * @param rptNo

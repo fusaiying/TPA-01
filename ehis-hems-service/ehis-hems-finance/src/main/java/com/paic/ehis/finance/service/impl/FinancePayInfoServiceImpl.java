@@ -153,6 +153,19 @@ public class FinancePayInfoServiceImpl implements IFinancePayInfoService
         return transferfailedVos1;
     }
 
+
+
+    /**
+     * 删除转账失败信息
+     *
+     */
+    @Override
+    public int deleteFinanceTransferfailedList(String batchNo)
+    {
+        return financePayInfoMapper.deleteFinanceTransferfailedList(batchNo);
+    }
+
+
     /**
      * 置借款数据为无效
      *

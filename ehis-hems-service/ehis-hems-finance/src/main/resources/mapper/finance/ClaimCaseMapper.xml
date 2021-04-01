@@ -46,6 +46,7 @@
             <if test="isFinanceBack != null  and isFinanceBack != ''"> and is_finance_back = #{isFinanceBack}</if>
             <if test="status != null  and status != ''"> and status = #{status}</if>
         </where>
+        AND case_status!='97'
     </select>
 
     <select id="selectClaimCaseById" parameterType="String" resultMap="ClaimCaseResult">

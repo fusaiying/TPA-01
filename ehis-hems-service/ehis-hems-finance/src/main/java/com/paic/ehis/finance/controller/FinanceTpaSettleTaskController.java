@@ -1,6 +1,7 @@
 package com.paic.ehis.finance.controller;
 
 
+import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.poi.ExcelUtils;
 import com.paic.ehis.common.core.web.controller.BaseController;
 import com.paic.ehis.common.core.web.domain.AjaxResult;
@@ -123,10 +124,10 @@ public class FinanceTpaSettleTaskController extends BaseController
                     rowData.add(tpaSettleInfos.get(i).getTotalPeople());
                 }
                 if ("02".equals(tpaSettleInfos.get(0).getSettlementType())){
-                    rowData.add(tpaSettleInfos.get(i).getSumPerm());
+                    rowData.add(String.valueOf(tpaSettleInfos.get(i).getSumPerm()));
                 }
-                rowData.add(tpaSettleInfos.get(i).getSettlementValue());
-                rowData.add(tpaSettleInfos.get(i).getServiceSettleAmount());
+                rowData.add(String.valueOf(tpaSettleInfos.get(i).getSettlementValue()));
+                rowData.add(String.valueOf(tpaSettleInfos.get(i).getServiceSettleAmount()));
                 rowData.add(tpaSettleInfos.get(i).getRemark());
                 data1.add(rowData);
             }
@@ -149,12 +150,12 @@ public class FinanceTpaSettleTaskController extends BaseController
                 rowData.add(detailInfos.get(i).getAppName());
                 rowData.add(detailInfos.get(i).getName());
                 rowData.add(detailInfos.get(i).getRiskName());
-                rowData.add(detailInfos.get(i).getValidStartDate());
+                rowData.add(DateUtils.parseDate(detailInfos.get(i).getValidStartDate()));
                 if ("02".equals(tpaSettleInfos.get(0).getSettlementType())) {
-                    rowData.add(detailInfos.get(i).getPremiumRatio());
-                    rowData.add(detailInfos.get(i).getPrem());
+                    rowData.add(String.valueOf(detailInfos.get(i).getPremiumRatio()));
+                    rowData.add(String.valueOf(detailInfos.get(i).getPrem()));
                 }
-                rowData.add(detailInfos.get(i).getServiceAmount());
+                rowData.add(String.valueOf(detailInfos.get(i).getServiceAmount()));
                 rowData.add(detailInfos.get(i).getRemark());
                 data2.add(rowData);
             }

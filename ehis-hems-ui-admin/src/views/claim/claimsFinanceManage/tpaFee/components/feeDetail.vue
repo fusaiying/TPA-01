@@ -71,9 +71,10 @@
 
 <script>
 
+ import {getUserInfo} from '@/api/claim/standingBookSearch'
+
   import moment from 'moment'
   import {taskViewDetail, initiateTask,updateConfirm} from '@/api/tpaFee/api'
-  import {childData} from "@/api/invoice/api";
 
   export default {
   props: {
@@ -134,7 +135,7 @@
       claimTypes:[],
       providerInfoSelects:[],
       fixInfoDetail:{},
-
+      organCode:'',
     }
   },
   mounted(){
@@ -148,12 +149,21 @@
     });
   },
   created() {
-    //this.initData();
+    this.getLogInfo();
   },
   computed: {
 
   },
   methods: {
+    getLogInfo() {
+      getUserInfo().then(response => {
+        if (response.code === 200 && response.data) {
+          this.organCode = response.data.organCode;
+        }
+      }).catch(error => {
+        console.log(error);
+      });
+    },
     getYesOrNoName(value){
       return this.selectDictLabel(this.ysOrNo, value)
     },
@@ -196,6 +206,8 @@
       params.settleTaskNo = this.fixInfoDetail.rowData.settleTaskNo;
       params.companyCode = this.fixInfoDetail.rowData.companyCode;
       params.settleEndDate = this.fixInfoDetail.rowData.settleEndDate;
+      params.riskCode = this.fixInfoDetail.rowData.riskCode;
+      params.deptCode = this.organCode ;
       initiateTask(params).then(res => {
         if (res.code == '200') {
           this.totalNum = res.total;
@@ -216,7 +228,7 @@
     exportData(){
       const params = {};
       params.settleTaskNo = this.fixInfoDetail.rowData.settleTaskNo;
-
+      params.deptCode = this.organCode ;
       let type = this.fixInfoDetail.type ;
       if(type == "launch") {
         params.settlementType = this.fixInfoDetail.rowData.settlementType;

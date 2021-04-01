@@ -61,6 +61,7 @@
               <el-input v-model="form.serviceName"
                         class="item-width"
                         clearable
+                        maxlength="50"
                         size="mini"
                         placeholder="请输入"/>
             </el-form-item>
@@ -70,6 +71,7 @@
               <el-input v-model="form.alias"
                         class="item-width"
                         clearable
+                        maxlength="50"
                         size="mini"
                         placeholder="请输入"/>
             </el-form-item>
@@ -80,6 +82,7 @@
                         class="item-width"
                         clearable
                         size="mini"
+                        maxlength="50"
                         placeholder="请输入"/>
             </el-form-item>
           </el-col>
@@ -89,6 +92,7 @@
                         class="item-width"
                         clearable
                         size="mini"
+                        maxlength="8"
                         placeholder="请输入"/>
             </el-form-item>
           </el-col>
@@ -115,6 +119,7 @@
               <el-input
                 type="textarea"
                 :rows="3"
+                maxlength="2000"
                 placeholder="请输入内容"
                 v-model="form.clause">
               </el-input>

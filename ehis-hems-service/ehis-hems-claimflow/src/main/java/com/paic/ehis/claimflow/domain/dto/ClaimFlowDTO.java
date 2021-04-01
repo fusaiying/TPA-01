@@ -24,4 +24,16 @@ public class ClaimFlowDTO extends BaseEntity
     private int pageNum;
     /** 每页显示记录数 */
     private int pageSize;
+
+
+    //报案号
+    private String docuno;
+    //寿险客户号
+    private String customerNo;
+    //分单号
+    private String certno;
+    //保单号
+    private String polno;
+    //账单序号
+    private String seqno;
 }

@@ -132,7 +132,7 @@ SELECT a.policy_manage_com,a.policy_no,a.insured_no,b.birthday,b.occupation FROM
         prr.risk_code,
         prr.risk_name,
         (select count(policy_item_no) from policy_info a where a.policy_no=info.policy_no)totalPeople,
-        (select sum(prem) from policy_info b left join policy_risk_relation r on r.policy_no=b.policy_no where r.risk_code=prr.risk_code)sumPrem
+        (select sum(ifnull(prem,0)) from policy_info b left join policy_risk_relation r on r.policy_no=b.policy_no where r.risk_code=prr.risk_code)sumPrem
         FROM
         policy_risk_relation prr
         LEFT JOIN policy_info info ON info.policy_no = prr.policy_no

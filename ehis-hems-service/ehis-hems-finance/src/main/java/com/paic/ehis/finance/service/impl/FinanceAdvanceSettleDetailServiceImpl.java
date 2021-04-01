@@ -80,7 +80,12 @@ public class FinanceAdvanceSettleDetailServiceImpl implements IFinanceAdvanceSet
                 BeanUtils.copyProperties(financeAdvanceSettleVO, financeAdvanceSettleVO1);
                 String batchNo = financeAdvanceSettleVO.getBatchNo();
                 String sumPayAmount = financeAdvanceSettleDetailMapper.selectDiscountAmount(batchNo);//计算该案件下的任务总金额
-                financeAdvanceSettleVO1.setSumPayAmount(new BigDecimal(sumPayAmount));
+                if(null!=sumPayAmount) {
+                    financeAdvanceSettleVO1.setSumPayAmount(new BigDecimal(sumPayAmount));
+                }
+                else {
+                    financeAdvanceSettleVO1.setSumPayAmount(new BigDecimal("0"));
+                }
                 financeAdvanceSettleVOS1.add(financeAdvanceSettleVO1);
             }
         }
@@ -303,7 +308,12 @@ public class FinanceAdvanceSettleDetailServiceImpl implements IFinanceAdvanceSet
             BeanUtils.copyProperties(financeAdvanceSettleVO, financeAdvanceSettleVO1);
             String batchNo=financeAdvanceSettleVO.getBatchNo();
             String sumPayAmount=financeAdvanceSettleDetailMapper.selectDiscountAmount(batchNo);//计算该案件下的任务总金额
-            financeAdvanceSettleVO1.setSumPayAmount(new BigDecimal(sumPayAmount));
+            if(null!=sumPayAmount) {
+                financeAdvanceSettleVO1.setSumPayAmount(new BigDecimal(sumPayAmount));
+            }
+            else {
+              financeAdvanceSettleVO1.setSumPayAmount(new BigDecimal("0"));
+            }
             financeAdvanceSettleVOS1.add(financeAdvanceSettleVO1);
         }
     return financeAdvanceSettleVOS;

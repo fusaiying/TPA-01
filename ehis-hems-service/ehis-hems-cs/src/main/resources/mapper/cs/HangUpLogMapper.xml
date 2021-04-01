@@ -48,8 +48,7 @@
     </select>
 
     <sql id="selectHangUpLogVoTwo">
-        select work_order_no, hang_state, hang_reason, up_time, unhang_reason, down_time, ifnull(sum(times),0) as times,
-        status,created_by, created_time, updated_by, updated_time
+        select  ifnull(sum(times),0) as times
         from hang_up_log
     </sql>
 

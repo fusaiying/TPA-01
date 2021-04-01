@@ -740,13 +740,13 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
         HangUpLog hangUpLog = hangUpLogMapper.selectHangUpLogByIdTwo(acceptDTO.getWorkOrderNo());
         BigDecimal a = hangUpLog.getTimes();
 
-        int ss = 1000;
-        int mi = ss * 60;
-        int hh = mi * 60;
-        int dd = hh * 24;
+        long ss = 1000;
+        long mi = ss * 60;
+        long hh = mi * 60;
+        long dd = hh * 24;
         Date date1 = workOrderAccept.getCreateTime();
         Date date2 = DateUtils.getNowDate();
-        long timeAll = (date2.getTime() - date1.getTime()) / hh - a.intValue();
+        long timeAll = (date2.getTime() - date1.getTime()) / hh - a.longValue();
 
         BigDecimal handleTime= new BigDecimal(timeAll);
 

@@ -72,7 +72,7 @@ public class FinanceAdvanceSettleDetailServiceImpl implements IFinanceAdvanceSet
         FinanceSettleRecord financeSettleRecord = new FinanceSettleRecord();
         PolicyAndRiskRelation policyAndRiskRelation = new PolicyAndRiskRelation();
         Date earliestDay=new Date();
-        String username = SecurityUtils.getUsername();
+        //String username = SecurityUtils.getUsername();
         ObjectMapper objectMapper = new ObjectMapper();
         SysUser info = objectMapper.convertValue(userService.userInfo().get("data"), SysUser.class);
         // 获取当前用户所属机构

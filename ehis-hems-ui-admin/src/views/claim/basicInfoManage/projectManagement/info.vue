@@ -115,6 +115,7 @@
               <el-input
                 type="textarea"
                 :rows="3"
+                maxlength="2000"
                 placeholder="请输入内容"
                 v-model="form.clause">
               </el-input>

@@ -323,9 +323,12 @@ public class FinanceTpaSettleTaskServiceImpl implements IFinanceTpaSettleTaskSer
 
         List<TpaSettleInfo> tpaSettleInfos = financeTpaSettleTaskMapper.selectFinanceTpaSettleTaskViewDetail(financeTpaSettleTask);
         for (TpaSettleInfo tpaSettleInfo : tpaSettleInfos) {
-            if ("01".equals(tpaSettleInfo.getSettlementType())){
-
-            }
+            PolicyAndRiskRelation policyRiskRelation = new PolicyAndRiskRelation();
+            policyRiskRelation.setStatus(ClaimStatus.DATAYES.getCode());
+            policyRiskRelation.setRiskCode(tpaSettleInfo.getRiskCode());
+            policyRiskRelation.setRiskCode(tpaSettleInfo.getCompanyCode());
+            CompanyRiskPolicyInfo policyInfo = policyAndRiskService.selectCompanyRiskPolicyInfo(policyRiskRelation);
+            tpaSettleInfo.setSumPerm(policyInfo.getSumPerm());
             List<TpaSettleDetailInfo> detailInfos = tpaSettleInfo.getDetailInfos();
             for (TpaSettleDetailInfo detailInfo : detailInfos) {
                 PolicyAndRiskRelation policyAndRiskRelation = new PolicyAndRiskRelation();
@@ -335,6 +338,10 @@ public class FinanceTpaSettleTaskServiceImpl implements IFinanceTpaSettleTaskSer
                 CompanyRiskPolicyInfo companyRiskPolicyInfo = policyAndRiskService.selectPolicyInfoListByPolicyNo(policyAndRiskRelation);
                 detailInfo.setInsuredNo(companyRiskPolicyInfo.getInsuredNo());
                 detailInfo.setName(companyRiskPolicyInfo.getName());
+                detailInfo.setPrem(companyRiskPolicyInfo.getPrem());
+                if ("02".equals(tpaSettleInfo.getSettlementType())) {
+                    detailInfo.setPremiumRatio(tpaSettleInfo.getSettlementValue().divide(new BigDecimal(100), 2, BigDecimal.ROUND_HALF_DOWN));
+                }
                 detailInfo.setValidStartDate(companyRiskPolicyInfo.getValidStartDate());
                 detailInfo.setAppName(companyRiskPolicyInfo.getAppName());
             }

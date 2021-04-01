@@ -2194,7 +2194,10 @@
               obj = this.providerInfoSelects.find((item) => {
                 return item.dictValue == this.providerForm.providerCode;
               });
-              let proObjName = obj.dictLabel;
+              let proObjName = "";
+              if(obj){
+                proObjName = obj.dictLabel;
+              }
               let baseSupplierContract = {
                 flag: '02',
                 providerName: proObjName,

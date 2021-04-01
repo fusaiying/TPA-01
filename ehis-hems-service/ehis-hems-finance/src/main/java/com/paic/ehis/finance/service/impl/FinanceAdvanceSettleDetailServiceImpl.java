@@ -66,24 +66,31 @@ public class FinanceAdvanceSettleDetailServiceImpl implements IFinanceAdvanceSet
      */
     @Override
     public List<FinanceAdvanceSettleVO> InitiateAdvancePaymentTask(FinanceAdvanceSettleDTO financeAdvanceSettleDTO) {
-        ArrayList<FinanceAdvanceSettleVO> financeAdvanceSettleVOS = new ArrayList<>();
+        FinanceAdvanceSettleDTO financeAdvanceSettleDTO1=new FinanceAdvanceSettleDTO();
+        Date settleEndDate=financeAdvanceSettleDTO.getSettleEndDate();//页面录入结算止期
+        String companyCode=financeAdvanceSettleDTO.getCompanyCode();
+        Date settleStartDate=financeAdvanceSettleDetailMapper.selectLastendDate(companyCode);//根据出单公司查询最新的结算止期
+        financeAdvanceSettleDTO1.setSettleEndDate(settleEndDate);
+        financeAdvanceSettleDTO1.setSettleStartDate(settleStartDate);
+        List<FinanceAdvanceSettleVO>  financeAdvanceSettleVOS=financeAdvanceSettleDetailMapper.selectFinanceAdvanceSettleVOList(financeAdvanceSettleDTO1);
+        List<FinanceAdvanceSettleVO> financeAdvanceSettleVOS1=new ArrayList<>();
+        if(StringUtils.isNotNull(financeAdvanceSettleVOS)) {
+            for (FinanceAdvanceSettleVO financeAdvanceSettleVO : financeAdvanceSettleVOS) {
+                FinanceAdvanceSettleVO financeAdvanceSettleVO1 = new FinanceAdvanceSettleVO();
+                BeanUtils.copyProperties(financeAdvanceSettleVO, financeAdvanceSettleVO1);
+                String batchNo = financeAdvanceSettleVO.getBatchNo();
+                String sumPayAmount = financeAdvanceSettleDetailMapper.selectDiscountAmount(batchNo);//计算该案件下的任务总金额
+                financeAdvanceSettleVO1.setSumPayAmount(new BigDecimal(sumPayAmount));
+                financeAdvanceSettleVOS1.add(financeAdvanceSettleVO1);
+            }
+        }
         FinanceAdvanceSettleVO financeAdvanceSettleVO = new FinanceAdvanceSettleVO();
         //垫付款服务费及明细的新增
         FinanceAdvanceSettleTask financeAdvanceSettleTask = new FinanceAdvanceSettleTask();
         FinanceAdvanceSettleDetail financeAdvanceSettleDetail = new FinanceAdvanceSettleDetail();
         FinanceSettleRecord financeSettleRecord = new FinanceSettleRecord();
-        PolicyAndRiskRelation policyAndRiskRelation = new PolicyAndRiskRelation();
-        Date earliestDay=new Date();
-        //String username = SecurityUtils.getUsername();
-        ObjectMapper objectMapper = new ObjectMapper();
-
         Object data = userService.userInfo().get("data");
-
         JSONObject jsonObject = JSON.parseObject(JSON.toJSONString(data));
-       // jsonObject.remove("admin");
-        // 转换SysUser 失败
-       // SysUser info = objectMapper.convertValue(data, SysUser.class);
-        // 获取当前用户所属机构
         String organCode = "";
         String userName = "";
         if (null != jsonObject && jsonObject.containsKey("organCode")) {
@@ -121,38 +128,8 @@ public class FinanceAdvanceSettleDetailServiceImpl implements IFinanceAdvanceSet
         financeSettleRecord.setUpdateBy(userName);
         financeSettleRecord.setUpdateTime(DateUtils.getNowDate());
 
-        policyAndRiskRelation.setCompanyCode(financeAdvanceSettleDTO.getCompanyCode());
-      //  String taskNo = "AS" + PubFun.createMySqlMaxNoUseCache("finance_advance_settle_detail", 10, 10);
         if (StringUtils.isNotNull(financeAdvanceSettleDTO.getSettleTaskNo())) {
-            List<FinanceAdvanceSettleDetail> financeAdvanceSettleDetails = financeAdvanceSettleDetailMapper.selectFinanceAdvanceSettleDetailList(financeAdvanceSettleDetail);
             //设值 结算表的结算起期
-            if (StringUtils.isNotEmpty(financeAdvanceSettleDetails)) {
-                FinanceAdvanceSettleTask advanceSettleTask = new FinanceAdvanceSettleTask();
-                advanceSettleTask.setSettleTaskNo(financeAdvanceSettleDetails.get(0).getSettleTaskNo());
-                List<FinanceAdvanceSettleTask> financeAdvanceSettleTasks = financeAdvanceSettleTaskMapper.selectFinanceAdvanceSettleTaskList(financeAdvanceSettleTask);
-                financeAdvanceSettleTask.setSettleStartDate(financeAdvanceSettleTasks.get(0).getSettleEndDate());
-            }
-            List<BaseIssuingcompanyRule> baseIssuingRules = baseIssuingcompanyRiskrelaMapper.selectCompanyRiskAdvance(financeAdvanceSettleDTO);
-            for (BaseIssuingcompanyRule baseIssuingRule : baseIssuingRules) {
-                //通过险种、保单关联得到对应的保单数据
-                policyAndRiskRelation.setRiskCode(baseIssuingRule.getRiskcode());
-                policyAndRiskRelation.setStartTime(financeAdvanceSettleTask.getSettleStartDate());
-                policyAndRiskRelation.setEndTime(financeAdvanceSettleTask.getSettleEndDate());
-                policyAndRiskRelation.setCompanyCode(financeAdvanceSettleTask.getCompanyCode());
-                TableDataInfo relationCompanyList = policyAndRiskService.getRelationCompanyList(policyAndRiskRelation);//查询出单公司险种保单详情
-                CompanyRiskPolicyInfo companyRiskPolicy = null;
-                for(Object row : relationCompanyList.getRows()){
-                    companyRiskPolicy = objectMapper.convertValue(row, CompanyRiskPolicyInfo.class);
-                    BeanUtils.copyProperties(companyRiskPolicy, financeAdvanceSettleDetail);
-                    //financeAdvanceSettleDetail.setSettleTaskNo(taskNo);
-                    //String name=companyRiskPolicy.getName();
-                    //financeAdvanceSettleVO.setName(name);//被保人姓名赋值
-                    earliestDay=companyRiskPolicy.getValidStartDate().before(earliestDay)?companyRiskPolicy.getValidStartDate():earliestDay;//获取结算起期
-                }
-            }
-            if (StringUtils.isNotNull(financeAdvanceSettleTask.getSettleStartDate())) {
-                financeAdvanceSettleTask.setSettleStartDate(earliestDay);
-            }
             financeAdvanceSettleDetailMapper.updateFinanceAdvanceSettleDetail(financeAdvanceSettleDetail);
             financeAdvanceSettleTaskMapper.updateFinanceAdvanceSettleTask(financeAdvanceSettleTask);
             financeSettleRecordMapper.insertFinanceSettleRecord(financeSettleRecord);
@@ -170,7 +147,7 @@ public class FinanceAdvanceSettleDetailServiceImpl implements IFinanceAdvanceSet
             financeSettleRecordMapper.insertFinanceSettleRecord(financeSettleRecord);
             financeAdvanceSettleVOS.add(financeAdvanceSettleVO);
         }
-        return financeAdvanceSettleVOS;
+        return financeAdvanceSettleVOS1;
     }
 
     /*导入垫付款清单*/
@@ -319,7 +296,17 @@ public class FinanceAdvanceSettleDetailServiceImpl implements IFinanceAdvanceSet
      */
     @Override
     public List<FinanceAdvanceSettleVO> selectFinanceAdvanceSettleVOList(FinanceAdvanceSettleDTO financeAdvanceSettleDTO) {
-        return financeAdvanceSettleDetailMapper.selectFinanceAdvanceSettleVOList(financeAdvanceSettleDTO);
+        List<FinanceAdvanceSettleVO>  financeAdvanceSettleVOS=financeAdvanceSettleDetailMapper.selectFinanceAdvanceSettleVOList(financeAdvanceSettleDTO);
+        List<FinanceAdvanceSettleVO> financeAdvanceSettleVOS1=new ArrayList<>();
+        for(FinanceAdvanceSettleVO financeAdvanceSettleVO:financeAdvanceSettleVOS) {
+            FinanceAdvanceSettleVO financeAdvanceSettleVO1 = new FinanceAdvanceSettleVO();
+            BeanUtils.copyProperties(financeAdvanceSettleVO, financeAdvanceSettleVO1);
+            String batchNo=financeAdvanceSettleVO.getBatchNo();
+            String sumPayAmount=financeAdvanceSettleDetailMapper.selectDiscountAmount(batchNo);//计算该案件下的任务总金额
+            financeAdvanceSettleVO1.setSumPayAmount(new BigDecimal(sumPayAmount));
+            financeAdvanceSettleVOS1.add(financeAdvanceSettleVO1);
+        }
+    return financeAdvanceSettleVOS;
     }
 
     /**

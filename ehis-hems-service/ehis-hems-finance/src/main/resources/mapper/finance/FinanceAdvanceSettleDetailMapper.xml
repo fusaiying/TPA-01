@@ -175,54 +175,40 @@
             resultMap="FinanceAdvanceSettleVOResult">
         SELECT
         a.settle_task_no,
+        d.batch_no,
         a.company_code,
-        d.company_name,
         c.batch_total,
         b.sum_pay_amount,
         a.create_time,
         a.settle_status,
         a.settle_end_date,
-        a.col_date,
-        e.receipt_company_name,
-        e.receipt_amount,
-        e.receipt_date,
-        e.remark as credit_remark,
-        e.create_by as credit_create_by
+        a.col_date
         FROM
-        finance_advance_settle_task a,
-        finance_pay_info b,
-        claim_batch c,
-        base_issuingcompany d,
-        finance_collection_info e,
-        finance_receipt_col f,
-        finance_advance_settle_detail h
+        finance_advance_settle_task a
+        LEFT JOIN finance_advance_settle_detail d ON a.settle_task_no = d.settle_task_no
+        AND d.STATUS = 'Y'
+        LEFT JOIN finance_pay_info b ON b.batch_no = d.batch_no
+        AND b.STATUS = 'Y'
+        LEFT JOIN claim_batch c on d.batch_no = c.batch_no
+        AND c.STATUS = 'Y'
         <where>
-            <if test="settleTaskNo != null  and settleTaskNo != ''">and settle_task_no = #{settleTaskNo}</if>
-            <if test="settleEndDate != null ">and settle_end_date = #{settleEndDate}</if>
-            <if test="settleStartDate != null ">and settle_start_date = #{settleStartDate}</if>
+            <if test="settleTaskNo != null  and settleTaskNo != ''">and a.settle_task_no = #{settleTaskNo}</if>
+            <if test="settleStartDate != null ">
+                and DATE_FORMAT(a.settle_end_date,'%Y-%m-%d') <![CDATA[>=]]> #{settleStartDate}
+            </if>
+            <if test="settleEndDate != null ">
+                and DATE_FORMAT(a.settle_end_date,'%Y-%m-%d') <![CDATA[<=]]> #{settleEndDate}
+            </if>
             <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">and a.create_time
                 between #{startDate} and DATE_ADD(#{endDate},INTERVAL 1 DAY)
             </if>
-            <if test="settleStatus != null  and settleStatus != ''">and settle_status = #{settleStatus}</if>
-            <if test="batchTotal != null  and batchTotal != ''">and batch_total = #{batchTotal}</if>
+            <if test="settleStatus != null  and settleStatus != ''">and a.settle_status = #{settleStatus}</if>
+            <if test="batchTotal != null  and batchTotal != ''">and c.batch_total = #{batchTotal}</if>
             <if test="companyCode != null  and companyCode != ''">and d.company_code = #{companyCode}</if>
-            <if test="companyName != null  and companyName != ''">and d.company_name = #{companyName}</if>
+            <!--<if test="companyName != null  and companyName != ''">and d.company_name = #{companyName}</if>-->
             <if test="pageType != null  and pageType == '01'">and a.settle_Status in ('01','02')</if>
             <if test="pageType != null  and pageType == '03'">and a.settle_Status in ('02','03')</if>
-            AND h.settle_task_no = a.settle_task_no
-            AND c.batch_no = h.batch_no
-            AND d.company_code = a.company_code
-            AND b.batch_no = c.batch_no
-            AND e.receipt_no = f.receipt_no
-            AND a.dept_code = b.dept_code
-            AND a.dept_code = f.dept_code
-            AND a.STATUS = 'Y'
-            AND b.STATUS = 'Y'
-            AND c.STATUS = 'Y'
-            AND d.STATUS = 'Y'
-            AND e.STATUS = 'Y'
-            AND f.STATUS = 'Y'
-            AND h.STATUS = 'Y'
+            and a.STATUS = 'Y'
         </where>
     </select>
 
@@ -271,14 +257,33 @@
           AND g.STATUS = 'Y'
           AND h.STATUS = 'Y'
     </select>
-
-
+    <select id="selectLastendDate" resultType="java.util.Date">
+        SELECT settle_end_date
+        FROM finance_advance_settle_task
+        WHERE status = 'Y'
+        and company_code = {companyCode}
+        ORDER BY create_time DESC LIMIT 1
+    </select>
     <!--计算折后金额结算金额默认为折后金额-->
     <select id="selectDiscountAmount" resultType="String">
         SELECT sum(claim_case_bill.bill_amount) - sum(claim_case_bill.hos_discount_amount) AS hos_discount_amount
         FROM claim_case_bill
         where rpt_no = #{rptNo}
           AND claim_case_bill.status = "Y"
+    </select>
+
+    <!--计算任务总金额-->
+    <select id="selectTotalAmount" resultType="String">
+        SELECT
+            sum( claim_case_bill.bill_amount ) - sum( claim_case_bill.hos_discount_amount ) AS hos_discount_amount ,claim_case_bill.rpt_no,claim_case.batch_no
+        FROM
+            claim_case_bill,
+            claim_case
+        WHERE
+            claim_case.batch_no = {batchNo}
+          AND claim_case.rpt_no = claim_case_bill.rpt_no
+          AND claim_case_bill.STATUS = "Y"
+          and claim_case,status='Y'
     </select>
 
     <!--计算账单总金额-->

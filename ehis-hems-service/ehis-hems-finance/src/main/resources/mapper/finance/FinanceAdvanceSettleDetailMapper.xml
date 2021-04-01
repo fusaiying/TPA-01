@@ -177,6 +177,7 @@
         a.settle_task_no,
         d.batch_no,
         a.company_code,
+        e.company_name,
         c.batch_total,
         b.sum_pay_amount,
         a.create_time,
@@ -191,6 +192,8 @@
         AND b.STATUS = 'Y'
         LEFT JOIN claim_batch c on d.batch_no = c.batch_no
         AND c.STATUS = 'Y'
+        left join base_issuingcompany e on a.company_code=e.company_code
+        AND e.STATUS = 'Y'
         <where>
             <if test="settleTaskNo != null  and settleTaskNo != ''">and a.settle_task_no = #{settleTaskNo}</if>
             <if test="settleStartDate != null ">
@@ -205,7 +208,7 @@
             <if test="settleStatus != null  and settleStatus != ''">and a.settle_status = #{settleStatus}</if>
             <if test="batchTotal != null  and batchTotal != ''">and c.batch_total = #{batchTotal}</if>
             <if test="companyCode != null  and companyCode != ''">and d.company_code = #{companyCode}</if>
-            <!--<if test="companyName != null  and companyName != ''">and d.company_name = #{companyName}</if>-->
+            <if test="companyName != null  and companyName != ''">and e.company_name = #{companyName}</if>
             <if test="pageType != null  and pageType == '01'">and a.settle_Status in ('01','02')</if>
             <if test="pageType != null  and pageType == '03'">and a.settle_Status in ('02','03')</if>
             and a.STATUS = 'Y'

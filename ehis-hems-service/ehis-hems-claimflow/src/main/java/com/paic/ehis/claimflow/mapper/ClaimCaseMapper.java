@@ -7,6 +7,7 @@ import com.paic.ehis.claimflow.domain.dto.*;
 import com.paic.ehis.claimflow.domain.vo.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 案件信息 Mapper接口
@@ -222,4 +223,8 @@ public interface ClaimCaseMapper
      *根据报案号校验就诊日期（账单治疗起止日期）是否在保单有效期范围内
      */
     public List<BillAndPolicyDate> selectBillAndPolicyDateByRptNo(String rtpNo);
+
+    public List<GCCClaimListVo> queryClaimListToGCC(ClaimFlowDTO claimFlowDTO);
+
+    public List<GCCClaimInfo> queryClaimInfosToGCC(Map paramMap);
 }

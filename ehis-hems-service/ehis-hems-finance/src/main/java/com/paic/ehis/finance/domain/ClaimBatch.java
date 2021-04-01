@@ -133,12 +133,25 @@ public class ClaimBatch extends BaseEntity {
      */
     @Excel(name = "保单号")
     private String contno;
+    /**
+     * 01非全陪 02全陪
+     */
+    @Excel(name = "是否仅结算理赔责任")
+    private String claimFlag;
 
     /**
      * 状态（Y-有效，N-无效）
      */
     @Excel(name = "状态", readConverterExp = "Y=有效,N=无效")
     private String status;
+
+    public String getClaimFlag() {
+        return claimFlag;
+    }
+
+    public void setClaimFlag(String claimFlag) {
+        this.claimFlag = claimFlag;
+    }
 
     public String getBatchno() {
         return batchno;

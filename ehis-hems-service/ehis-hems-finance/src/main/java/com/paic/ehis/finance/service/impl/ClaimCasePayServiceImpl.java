@@ -203,7 +203,10 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService {
                 }
             } else {
                 if (!"98".equals(payInfo.getCaseStatus())) {
-                    if (!"01".equals(payInfo.getPayStatus()) && ("01".equals(claimBatch1.getClaimtype()) && !"97".equals(payInfo.getCaseStatus()))) {
+                    if (!"01".equals(payInfo.getPayStatus()) && ("01".equals(claimBatch1.getClaimFlag()) && !"97".equals(payInfo.getCaseStatus()))) {
+                        payFlag1 = "false";
+                    }
+                    if ("02".equals(claimBatch1.getClaimFlag()) && "97".equals(payInfo.getCaseStatus()) && !"01".equals(payInfo.getPayStatus())){
                         payFlag1 = "false";
                     }
                 }
@@ -782,7 +785,7 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService {
                 }
             } else {
                 if (!"98".equals(payInfo.getCaseStatus())) {
-                    if (!"01".equals(payInfo.getPayStatus()) && ("01".equals(claimBatch1.getClaimtype()) && !"97".equals(payInfo.getCaseStatus()))) {
+                    if (!"01".equals(payInfo.getPayStatus()) && ("01".equals(claimBatch1.getClaimFlag()) && !"97".equals(payInfo.getCaseStatus()))) {
                         payFlag1 = "false";
                     }
                 }

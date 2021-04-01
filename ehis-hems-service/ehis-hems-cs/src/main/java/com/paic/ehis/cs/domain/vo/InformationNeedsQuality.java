@@ -89,4 +89,8 @@ public class InformationNeedsQuality {
 
     @Excel(name = "激活次数")
     private String activationNum;
+
+
+
+
 }

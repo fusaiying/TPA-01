@@ -82,6 +82,8 @@ SELECT a.policy_manage_com,a.policy_no,a.insured_no,b.birthday,b.occupation FROM
         <result property="companyCode"    column="company_code"    />
         <result property="riskName"    column="risk_name"    />
         <result property="riskCode"    column="risk_code"    />
+        <result property="sumPerm"    column="sumPerm"    />
+        <result property="totalPeople"    column="totalPeople"    />
         <result property="policyManageCom"    column="policy_manage_com"    />
     </resultMap>
     <select id="selectPolicyInfoListByPolicyNo" parameterType="com.paic.ehis.system.api.domain.PolicyAndRiskRelation" resultMap="CompanyRiskPolicyMap">
@@ -100,7 +102,7 @@ SELECT a.policy_manage_com,a.policy_no,a.insured_no,b.birthday,b.occupation FROM
         prr.risk_code,
         prr.risk_name,
         count(info.policy_item_no)totalPeople,
-        sum(prem)
+        sum(prem)sumPrem
         FROM
         policy_risk_relation prr
         LEFT JOIN policy_info info ON info.policy_no = prr.policy_no and info.status='Y'
@@ -111,7 +113,6 @@ SELECT a.policy_manage_com,a.policy_no,a.insured_no,b.birthday,b.occupation FROM
             <if test="startTime != null  and startTime != null"> and info.valid_start_date &gt;= #{startTime}  </if>
             and info.valid_start_date &lt;= #{endTime}
             and prr.status = 'Y'
-            and  (pi.settle_flag is null or info.settle_flag ='Y')
         </where>
         group by
         prr.risk_code,
@@ -137,7 +138,9 @@ SELECT a.policy_manage_com,a.policy_no,a.insured_no,b.birthday,b.occupation FROM
         <where>
             <if test="riskCode != null  and riskCode != ''"> and risk_code = #{riskCode}</if>
             <if test="companyCode != null  and companyCode != ''"> and company_code = #{companyCode}</if>
-            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="startTime != null  and startTime != null"> and info.valid_start_date &gt;= #{startTime}  </if>
+            and info.valid_start_date &lt;= #{endTime}
+            and prr.status = 'Y'
         </where>
     </select>
 

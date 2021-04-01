@@ -329,6 +329,7 @@ public class FinanceTpaSettleTaskServiceImpl implements IFinanceTpaSettleTaskSer
             policyRiskRelation.setRiskCode(tpaSettleInfo.getCompanyCode());
             CompanyRiskPolicyInfo policyInfo = policyAndRiskService.selectCompanyRiskPolicyInfo(policyRiskRelation);
             tpaSettleInfo.setSumPerm(policyInfo.getSumPerm());
+
             List<TpaSettleDetailInfo> detailInfos = tpaSettleInfo.getDetailInfos();
             for (TpaSettleDetailInfo detailInfo : detailInfos) {
                 PolicyAndRiskRelation policyAndRiskRelation = new PolicyAndRiskRelation();

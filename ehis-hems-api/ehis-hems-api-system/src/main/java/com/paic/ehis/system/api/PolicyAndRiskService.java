@@ -69,10 +69,10 @@ public interface PolicyAndRiskService {
         public CompanyRiskPolicyInfo selectPolicyInfoListByPolicyNo(@RequestBody PolicyAndRiskRelation policyAndRiskRelation);
 
         /*跨服务 根据出单公司险种查询 险种层级数据 */
-        @PostMapping("/companyRiskInfo")
+        @PostMapping("/info/companyRiskInfo")
         public CompanyRiskPolicyInfo selectCompanyRiskInfo(@RequestBody PolicyAndRiskRelation policyAndRiskRelation);
 
         /* 跨服务 根据出单公司险种查询 保单层级数据 */
-        @PostMapping("/companyRiskPolicyInfo")
+        @PostMapping("/info/companyRiskPolicyInfo")
         public CompanyRiskPolicyInfo selectCompanyRiskPolicyInfo(@RequestBody PolicyAndRiskRelation policyAndRiskRelation);
 }

@@ -80,6 +80,7 @@
                         class="item-width"
                         clearable
                         size="mini"
+                        maxlength="50"
                         placeholder="请输入"/>
             </el-form-item>
           </el-col>
@@ -89,6 +90,7 @@
                         class="item-width"
                         clearable
                         size="mini"
+                        maxlength="8"
                         placeholder="请输入"/>
             </el-form-item>
           </el-col>

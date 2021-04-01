@@ -216,8 +216,8 @@ public class ProductInfoController extends BaseController
      * 查询服务手册列表
      */
     //@PreAuthorize("@ss.hasPermi('system:info:list')")
-    @GetMapping("/getManualInfoList")
-    public TableDataInfo getManualInfoList(BaseManualInfo baseManualInfo)
+    @PostMapping("/getManualInfoList")
+    public TableDataInfo getManualInfoList(@RequestBody BaseManualInfo baseManualInfo)
     {
         return getProviderInfoService.getlist(baseManualInfo);
     }

@@ -1306,4 +1306,9 @@ WHERE
         </foreach>
         AND STATUS = 'Y'
     </update>
+
+    <select id ="selectMaxCode" resultType="String" >
+       select max(CAST(provider_code AS UNSIGNED)) from base_provider_info_bak where STATUS = 'Y'
+    </select>
 </mapper>
+

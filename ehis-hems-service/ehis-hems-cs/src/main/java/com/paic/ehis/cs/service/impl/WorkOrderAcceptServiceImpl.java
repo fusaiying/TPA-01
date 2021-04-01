@@ -7,10 +7,7 @@ import com.paic.ehis.common.core.utils.PubFun;
 import com.paic.ehis.common.core.utils.StringUtils;
 import com.paic.ehis.cs.domain.*;
 import com.paic.ehis.cs.domain.vo.*;
-import com.paic.ehis.cs.mapper.AcceptDetailInfoMapper;
-import com.paic.ehis.cs.mapper.FlowLogMapper;
-import com.paic.ehis.cs.mapper.PersonInfoMapper;
-import com.paic.ehis.cs.mapper.WorkOrderAcceptMapper;
+import com.paic.ehis.cs.mapper.*;
 import com.paic.ehis.cs.service.IReservationAcceptVoService;
 import com.paic.ehis.cs.service.IWorkOrderAcceptService;
 import com.paic.ehis.cs.utils.CodeEnum;
@@ -18,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 
@@ -40,6 +39,8 @@ public class WorkOrderAcceptServiceImpl implements IWorkOrderAcceptService
     private FlowLogMapper flowLogMapper;
     @Autowired
     private IReservationAcceptVoService iReservationAcceptVoService;
+    @Autowired
+    private HangUpLogMapper HangUpLogMapper;
 
 //    ######################################################################## 外部受理接口 ########################################################################
 
@@ -516,11 +517,58 @@ public class WorkOrderAcceptServiceImpl implements IWorkOrderAcceptService
      */
     @Override
     public int updateHangReason(ComplaintAcceptVo complaintAcceptVo) {
+        HangUpLog hangUpLog = new HangUpLog();
+
         WorkOrderAccept workOrderAccept=new WorkOrderAccept();
         workOrderAccept.setWorkOrderNo(complaintAcceptVo.getWorkOrderNo());
         workOrderAccept.setHangReason(complaintAcceptVo.getHangReason());
-        workOrderAccept.setHangFlag(complaintAcceptVo.getHangFlag());
+        workOrderAccept.setHangFlag(complaintAcceptVo.getHangFlag());//01挂起 02解挂
+
+        if (complaintAcceptVo.getHangFlag().equals("01")){
+
+            hangUpLog.setWorkOrderNo(complaintAcceptVo.getWorkOrderNo());
+            hangUpLog.setHangState("01");//01挂起 02解挂
+            hangUpLog.setHangReason(complaintAcceptVo.getHangReason());
+            hangUpLog.setUpTime(DateUtils.getNowDate());
+            hangUpLog.setStatus("Y"); //Y-有效；N-无效
+            hangUpLog.setCreatedBy(SecurityUtils.getUsername());
+            hangUpLog.setCreatedTime(DateUtils.getNowDate());
+            hangUpLog.setUpdatedBy(SecurityUtils.getUsername());
+            hangUpLog.setUpdatedTime(DateUtils.getNowDate());
+
+            HangUpLogMapper.insertHangUpLog(hangUpLog);
+        }
+
+        if (complaintAcceptVo.getHangFlag().equals("02")){
+
+            HangUpLog hangUpLog1 = HangUpLogMapper.selectHangUpLogById(complaintAcceptVo.getWorkOrderNo());
+            Date date1 = hangUpLog1.getUpTime();
+            Date date2 = DateUtils.getNowDate();
+
+            int ss = 1000;
+            int mi = ss * 60;
+            int hh = mi * 60;
+            int dd = hh * 24;
+
+            long time = (date2.getTime() - date1.getTime()) / hh;
+            BigDecimal times = new BigDecimal(time);
+
+            hangUpLog.setWorkOrderNo(complaintAcceptVo.getWorkOrderNo());
+            hangUpLog.setHangState("02");//01挂起 02解挂
+            hangUpLog.setHangReason(complaintAcceptVo.getHangReason());
+            hangUpLog.setDownTime(DateUtils.getNowDate());
+            hangUpLog.setTimes(times);
+            hangUpLog.setStatus("N"); //Y-有效；N-无效
+            hangUpLog.setUpdatedBy(SecurityUtils.getUsername());
+            hangUpLog.setUpdatedTime(DateUtils.getNowDate());
+
+            HangUpLogMapper.updateHangUpLog(hangUpLog);
+        }
+
+
+
         return workOrderAcceptMapper.updateHangReason(complaintAcceptVo);
+
     }
     /**
      * 查询工单是否挂起

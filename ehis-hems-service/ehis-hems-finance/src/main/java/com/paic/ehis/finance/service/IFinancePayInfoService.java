@@ -68,6 +68,8 @@ public interface IFinancePayInfoService
      */
     public List<TransferfailedVo> selectTransferfailedList(TransferfailedDTO transferfailedDTO);
 
+    public int deleteFinanceTransferfailedList(String batchNo);
+
     /**
      * 置借款数据无效
      *

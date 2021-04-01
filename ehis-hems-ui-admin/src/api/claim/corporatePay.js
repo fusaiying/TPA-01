@@ -9,6 +9,14 @@ export function transferFailedList(data) {
     data:data
   })
 }
+// 转账失败支付接口
+export function deleteFinance(data) {
+  return request({
+    url: 'finance/payInfo/deleteFinance/'+data,
+    method: 'delete',
+  })
+}
+
 
 // 对公支付初始化查询
 export function initList(data) {

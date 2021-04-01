@@ -217,7 +217,7 @@ public class ProductInfoController extends BaseController
      */
     //@PreAuthorize("@ss.hasPermi('system:info:list')")
     @PostMapping("/getManualInfoList")
-    public TableDataInfo getManualInfoList(BaseManualInfo baseManualInfo)
+    public TableDataInfo getManualInfoList(@RequestBody BaseManualInfo baseManualInfo)
     {
         return getProviderInfoService.getlist(baseManualInfo);
     }

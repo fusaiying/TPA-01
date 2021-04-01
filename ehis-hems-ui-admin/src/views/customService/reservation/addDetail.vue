@@ -688,7 +688,7 @@ export default {
           {
             required: true,
             message: "目前只支持中国大陆的手机号码",
-            pattern: /^1[34578]\d{9}$/,//可以写正则表达式呦呦呦,
+            pattern: /^1[34578]\d{9}$/,
             trigger: "blur"
           },
         ],

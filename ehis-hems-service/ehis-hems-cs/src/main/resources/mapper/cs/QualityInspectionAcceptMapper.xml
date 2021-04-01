@@ -468,19 +468,19 @@ and cdd.code_type='cs_inspection_class_complaint'*/
             and whi.`status`='Y'
             and qii.`status`='Y' and woa.business_type='03'
             and cdd.code_type='cs_inspection_class_complaint'
-            <!--<if test="endCaseStartDate != null and endCaseStartDate != ''">
-                and woa.end_date &gt; #{endCaseStartDate}
+            <if test="endCaseStartDate != null and endCaseStartDate != ''">
+                and woa.end_date &gt; DATE_FORMAT(#{endCaseStartDate},'%Y-%m-%d')
             </if>
             <if test="endCaseEndDate != null and endCaseEndDate != ''">
-                and woa.end_date &lt; #{endCaseEndDate}
-            </if>-->
+                and woa.end_date &lt; DATE_FORMAT(#{endCaseEndDate},'%Y-%m-%d')
+            </if>
 
-            <if test="endCaseStartDate != null ">
+            <!--<if test="endCaseStartDate != null ">
                 and DATE_FORMAT(woa.end_date,'%Y-%m-%d') <![CDATA[>=]]> #{endCaseStartDate}
             </if>
             <if test="endCaseEndDate != null ">
                 and DATE_FORMAT(woa.end_date,'%Y-%m-%d') <![CDATA[<=]]> #{endCaseEndDate}
-            </if>
+            </if>-->
             <if test="endDate != null  and endDate != ''"> and woa.end_date = #{endDate}</if>
             <if test="updatedTime != null and updatedTime != ''"> and qia.created_time = #{updatedTime}</if>
             <if test="inspectionStartDate != null and inspectionStartDate != ''">
@@ -852,4 +852,8 @@ GROUP BY qia.updated_by
         GROUP BY
             woa.update_by
     </select>
+
+
+
+
 </mapper>

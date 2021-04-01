@@ -395,9 +395,18 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
         return acceptVo;
     }
 
+    /**
+     *
+     * @param qualityDTO
+     * @return
+     */
     @Override
     public List<QualityAcceptVo> selectQualityVo(QualityDTO qualityDTO) {
         return qualityInspectionAcceptMapper.selectQualityVo(qualityDTO);
+    }
+    @Override
+    public List<QualityAcceptVo> selectQualityVo2(QualityDTO qualityDTO) {
+        return qualityInspectionAcceptMapper.selectQualityVo2(qualityDTO);
     }
 
     @Override
@@ -870,6 +879,36 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
             }
         }
         return list;
+    }
+
+    /**
+     * 投诉质检清单
+     * @param qualityDTO
+     * @return
+     */
+    @Override
+    public List<ComplaintQualityInspectionVO> selectQualityVoCom(QualityDTO qualityDTO) {
+        return qualityInspectionAcceptMapper.selectQualityVoCom(qualityDTO);
+    }
+
+    /**
+     * 信息需求质检清单
+     * @param qualityDTO
+     * @return
+     */
+    @Override
+    public List<InformationNeedsQuality> selectQualityVoComInformation(QualityDTO qualityDTO) {
+        return qualityInspectionAcceptMapper.selectQualityVoComInformation(qualityDTO);
+    }
+
+    /**
+     * 投诉/信息差错率统计
+     * @param qualityDTO
+     * @return
+     */
+    @Override
+    public List<ComplaintErrorRateVO> exportOneError(QualityDTO qualityDTO) {
+        return qualityInspectionAcceptMapper.selectError(qualityDTO);
     }
 
 }

@@ -242,7 +242,7 @@ public class ExcelUtils<T> {
      * @return 结果
      * @throws IOException
      */
-    public void exportExcel(HttpServletResponse response, SXSSFWorkbook workbook,
+    public void exportExcel(HttpServletResponse response, Workbook workbook,
                             String[] sheetTitle, List<String[]> headers, List<List<String>> result1,List<List<String>> result2) throws IOException {
         int[] sheetNum=new int[]{0,1};
         OutputStream outputStream = null;
@@ -281,7 +281,7 @@ public class ExcelUtils<T> {
      *
      * @return 结果
      */
-    public void exportExcel(SXSSFWorkbook workbook, int sheetNum, String sheetTitle, String[] headers, List<List<String>> result1) throws IOException {
+    public void exportExcel(Workbook workbook, int sheetNum, String sheetTitle, String[] headers, List<List<String>> result1) throws IOException {
 
         // 生成一个表格
         Sheet sheet = workbook.createSheet();

@@ -48,6 +48,7 @@ public interface QualityInspectionAcceptMapper {
      * @return
      */
      public List<QualityAcceptVo> selectQualityVo(QualityDTO qualityDTO);
+     public List<QualityAcceptVo> selectQualityVo2(QualityDTO qualityDTO);
 
      List<QualityInspectionHandleVo> selectQualityFlagVO(QualityInspectionDTO qualityInspectionDTO);
     /**
@@ -83,4 +84,24 @@ public interface QualityInspectionAcceptMapper {
 
     public List<AcceptVo> selectInvalidQiaMondayFour(WorkOrderQueryDTO workOrderQueryDTO);
 
+    /**
+     * 投诉质检清单导出
+     * @param qualityDTO
+     * @return
+     */
+    public List<ComplaintQualityInspectionVO> selectQualityVoCom(QualityDTO qualityDTO);
+
+    /**
+     * 信息需求质检清单
+     * @param qualityDTO
+     * @return
+     */
+    public List<InformationNeedsQuality> selectQualityVoComInformation(QualityDTO qualityDTO);
+
+    /**
+     * 投诉/信息差错率统计
+     * @param qualityDTO
+     * @return
+     */
+    public List<ComplaintErrorRateVO> selectError(QualityDTO qualityDTO);
 }

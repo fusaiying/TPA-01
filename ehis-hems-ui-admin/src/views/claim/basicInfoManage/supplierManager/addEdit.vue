@@ -97,32 +97,32 @@
                style="padding-bottom: 30px;" label-position="right" label-width="135px" size="small">
         <el-col :span="8">
           <el-form-item prop="companyTitle" label="开票名称：">
-            <el-input v-model="receiptForm.companyTitle" :placeholder="placeType2" class="item-width" clearable/>
+            <el-input v-model="receiptForm.companyTitle" :placeholder="placeType2" maxlength="200" class="item-width" clearable/>
           </el-form-item>
         </el-col>
         <el-col :span="8">
           <el-form-item prop="accNum" label="账号：">
-            <el-input v-model="receiptForm.accNum" class="item-width" :placeholder="placeType2" clearable/>
+            <el-input v-model="receiptForm.accNum" class="item-width" maxlength="20" :placeholder="placeType2" clearable/>
           </el-form-item>
         </el-col>
         <el-col :span="8">
           <el-form-item prop="address" label="地址：">
-            <el-input v-model="receiptForm.address" :placeholder="placeType2" class="item-width" clearable/>
+            <el-input v-model="receiptForm.address" :placeholder="placeType2" maxlength="200" class="item-width" clearable/>
           </el-form-item>
         </el-col>
         <el-col :span="8">
           <el-form-item prop="billInfo" label="开票信息：">
-            <el-input v-model="receiptForm.billInfo" class="item-width" :placeholder="placeType2" clearable/>
+            <el-input v-model="receiptForm.billInfo" class="item-width" maxlength="100" :placeholder="placeType2" clearable/>
           </el-form-item>
         </el-col>
         <el-col :span="8">
           <el-form-item prop="dutynum" label="纳税人识别号：">
-            <el-input v-model="receiptForm.dutynum" :placeholder="placeType2" class="item-width" clearable/>
+            <el-input v-model="receiptForm.dutynum" :placeholder="placeType2" maxlength="100" class="item-width" clearable/>
           </el-form-item>
         </el-col>
         <el-col :span="8">
           <el-form-item prop="phone" label="电话：">
-            <el-input v-model="receiptForm.phone" class="item-width" :placeholder="placeType2" clearable/>
+            <el-input v-model="receiptForm.phone" class="item-width" maxlength="20" :placeholder="placeType2" clearable/>
           </el-form-item>
         </el-col>
       </el-form>

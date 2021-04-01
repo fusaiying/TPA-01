@@ -168,7 +168,6 @@ public class QualityInspectionHandleServiceImpl implements IQualityInspectionHan
     public int insertHandleInfo(HandleDTO handleDTO) {
         iDemandAcceptVoService.insertServiceInfo(handleDTO.getDemandAcceptVo());
         iComplaintAcceptVoService.updateComplaintAcceptVoProcess(handleDTO.getComplaintAcceptVo());//受理信息
-        iComplaintAcceptVoService.updateComplaintAcceptVoProcessYW(handleDTO.getComplaintDealVo());//服务处理信息
         iAttachmentInfoService.insertAttachmentInfo(handleDTO.getAttachmentInfo());
         iQualityInspectionItemService.insertItem(handleDTO.getQualityVo());
         return 1;
@@ -333,7 +332,7 @@ public class QualityInspectionHandleServiceImpl implements IQualityInspectionHan
                 iComplaintAcceptVoService.updateComplaintAcceptVoProcess(complaintAcceptVo);
                 ComplaintDealVo complaintDealVo= qualityInspectionDTO.getComplaintDealVo();
                 complaintDealVo.setWorkOrderNo(qualityInspectionDTO.getWorkOrderNo());
-                iComplaintAcceptVoService.updateComplaintAcceptVoProcessYW(complaintDealVo);
+                iComplaintAcceptVoService.complaintHandling(complaintDealVo);
             }
             qualityInspectionHandleMapper.updateHandleInfoById(qualityInspectionDTO);
         }else {

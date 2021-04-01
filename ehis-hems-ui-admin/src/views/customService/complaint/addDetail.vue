@@ -420,7 +420,7 @@
         <up-load  :dialogVisable="dialogVisable"></up-load>
         <el-table
           :header-cell-style="{color:'black',background:'#f8f8ff'}"
-          :data="workPoolData"
+          :data="HCSPoolData"
           size="small"
           highlight-current-row
           tooltip-effect="dark"
@@ -512,6 +512,7 @@
             identity:"",
 
           },
+          HCSPoolData: [],
           workOrderNo:"",
           complaintTime:"",
           priorityLevel:"",//优先级

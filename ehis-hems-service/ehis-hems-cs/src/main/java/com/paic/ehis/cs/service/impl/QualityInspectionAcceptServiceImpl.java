@@ -624,7 +624,8 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
                         System.out.println(ran);
                         String workOrderNo = ran; //只取一条工单
                         WorkOrderAccept workOrderAccept = workOrderAcceptMapper.selectWorkOrderAcceptById(workOrderNo);
-                        if (workOrderAccept.getActivationNum().equals("1")) {//说明此案件被激活一次
+                        int activationnum=workOrderAccept.getActivationNum();
+                        if (activationnum == 1) {//说明此案件被激活一次
                          //   Map<String, String> param = null;
                             FlowLog flowLog = null;
                             QualityInspectionAccept qualityInspectionAccept = null;
@@ -671,7 +672,8 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
                         workOrderQueryDTO.setWorkOrderNo(ran);
                         String workOrderNo = ran;
                         WorkOrderAccept workOrderAccept = workOrderAcceptMapper.selectWorkOrderAcceptById(workOrderNo);
-                        if (workOrderAccept.getActivationNum().equals("1")) {//说明此案件被激活一次
+                        int activationnum=workOrderAccept.getActivationNum();
+                        if (activationnum == 1) {//说明此案件被激活一次
                            // Map<String, String> param = null;
                             FlowLog flowLog = null;
                             QualityInspectionAccept qualityInspectionAccept = null;

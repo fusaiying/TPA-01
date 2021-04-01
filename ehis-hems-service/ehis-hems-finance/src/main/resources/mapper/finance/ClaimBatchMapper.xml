@@ -29,11 +29,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="createBy"    column="create_by"    />
         <result property="createTime"    column="create_time"    />
         <result property="updateBy"    column="update_by"    />
+        <result property="claimFlag"    column="claim_flag"    />
         <result property="updateTime"    column="update_time"    />
     </resultMap>
 
     <sql id="selectClaimBatchVo">
-        select batch_no, source, hospital_code, claim_type, submit_date, caseload, batch_total, organ_code, currency, cont_type, bill_recevie_flag, pri_reason, remark, batch_status, express_number, receive_date, send_by, speccase_type, issuing_unit, cont_no, status, create_by, create_time, update_by, update_time from claim_batch
+        select batch_no, source, hospital_code, claim_type, submit_date, caseload, batch_total, organ_code, currency, cont_type, bill_recevie_flag, pri_reason, remark, batch_status, express_number, receive_date, send_by, speccase_type, issuing_unit, cont_no, status,claim_flag, create_by, create_time, update_by, update_time from claim_batch
     </sql>
 
     <select id="selectClaimBatchById" parameterType="String" resultMap="ClaimBatchResult">

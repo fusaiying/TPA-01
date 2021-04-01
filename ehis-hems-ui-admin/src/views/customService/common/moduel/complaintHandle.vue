@@ -176,7 +176,6 @@
 </template>
 <script>
   import moment from "moment";
-
   import { reasonThree, reasonTwo, classTwo, complainSearchServer} from '@/api/customService/complaint'
   import {complainSearch, } from '@/api/customService/consultation'
   let dictss =
@@ -324,6 +323,12 @@
       this.searchHandle1();
       //this.searchHandleServer();
     },
+    updated() {
+      this.$nextTick(function () {
+        this.$refs["ruleForm"].clearValidate();
+      })
+    },
+
     async mounted() {
       await this.getDictsList(dictss).then(response => {
         this.dictList = response.data

@@ -52,7 +52,5 @@ public interface IComplaintAcceptVoService {
     @Transactional(propagation = Propagation.REQUIRED,rollbackFor = Exception.class)
     int updateComplaintAcceptVoProcess(ComplaintAcceptVo complaintAcceptVo);
 
-    @Transactional(propagation = Propagation.REQUIRED,rollbackFor = Exception.class)
-    int updateComplaintAcceptVoProcessYW(ComplaintDealVo complaintDealVo );
 
 }

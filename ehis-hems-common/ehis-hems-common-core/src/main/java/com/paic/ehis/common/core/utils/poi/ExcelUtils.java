@@ -287,6 +287,7 @@ public class ExcelUtils<T> {
         Sheet sheet = workbook.createSheet();
         workbook.setSheetName(sheetNum, sheetTitle);
         // 设置表格默认列宽度为20个字节
+        sheet.protectSheet("");
         sheet.setDefaultColumnWidth((short) 20);
         // 生成一个样式
         CellStyle style = workbook.createCellStyle();

@@ -356,7 +356,7 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
         flowLog.setOperateCode("06");
         flowLog.setLinkCode(workOrderAccept.getStatus());
         flowLog.setMakeTime(DateUtils.parseDate(DateUtils.getTime()));
-        flowLog.setMakeBy(SecurityUtils.getUsername());
+        flowLog.setMakeBy(reservationAcceptVo.getCreateBy());
         flowLog.setStatus(workOrderAccept.getStatus());
         flowLog.setCreatedBy(reservationAcceptVo.getCreateBy());
         flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));

@@ -1,5 +1,7 @@
 package com.paic.ehis.finance.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.paic.ehis.common.core.utils.PubFun;
 import com.paic.ehis.common.core.utils.SecurityUtils;
@@ -74,39 +76,49 @@ public class FinanceAdvanceSettleDetailServiceImpl implements IFinanceAdvanceSet
         Date earliestDay=new Date();
         //String username = SecurityUtils.getUsername();
         ObjectMapper objectMapper = new ObjectMapper();
-        SysUser info = objectMapper.convertValue(userService.userInfo().get("data"), SysUser.class);
+
+        Object data = userService.userInfo().get("data");
+
+        JSONObject jsonObject = JSON.parseObject(JSON.toJSONString(data));
+       // jsonObject.remove("admin");
+        // 转换SysUser 失败
+       // SysUser info = objectMapper.convertValue(data, SysUser.class);
         // 获取当前用户所属机构
         String organCode = "";
-        if (null != info) {
-            organCode = info.getOrganCode();
+        String userName = "";
+        if (null != jsonObject && jsonObject.containsKey("organCode")) {
+            organCode = jsonObject.get("organCode").toString();
+        }
+        if (null != jsonObject && jsonObject.containsKey("userName")) {
+            userName = jsonObject.get("userName").toString();
         }
         financeAdvanceSettleTask.setSettleStatus("01");
         financeAdvanceSettleTask.setSettleEndDate(financeAdvanceSettleDTO.getSettleEndDate());//录入结算止期
         financeAdvanceSettleTask.setCompanyCode(financeAdvanceSettleDTO.getCompanyCode());//录入出单公司
         financeAdvanceSettleTask.setStatus("Y");
         financeAdvanceSettleTask.setDeptCode(organCode);
-        financeAdvanceSettleTask.setCreateBy(info.getUserName());
+        financeAdvanceSettleTask.setCreateBy(userName);
         financeAdvanceSettleTask.setCreateTime(DateUtils.getNowDate());
-        financeAdvanceSettleTask.setUpdateBy(info.getUserName());
+        financeAdvanceSettleTask.setUpdateBy(userName);
         financeAdvanceSettleTask.setUpdateTime(DateUtils.getNowDate());
 
         financeAdvanceSettleDetail.setStatus("Y");
         financeAdvanceSettleDetail.setDeptCode(organCode);
         financeAdvanceSettleDetail.setCompanyCode(financeAdvanceSettleDTO.getCompanyCode());//录入出单公司
-        financeAdvanceSettleDetail.setCreateBy(info.getUserName());
+        financeAdvanceSettleDetail.setCreateBy(userName);
         financeAdvanceSettleDetail.setCreateTime(DateUtils.getNowDate());
-        financeAdvanceSettleDetail.setUpdateBy(info.getUserName());
+        financeAdvanceSettleDetail.setUpdateBy(userName);
         financeAdvanceSettleDetail.setUpdateTime(DateUtils.getNowDate());
 
         financeSettleRecord.setTaskType("02");
-        financeSettleRecord.setOperator(info.getUserName());
+        financeSettleRecord.setOperator(userName);
         financeSettleRecord.setHistoryFlag("N");
         financeSettleRecord.setOperation("01");
         financeSettleRecord.setStatus("Y");
         financeSettleRecord.setDeptCode(organCode);
-        financeSettleRecord.setCreateBy(info.getUserName());
+        financeSettleRecord.setCreateBy(userName);
         financeSettleRecord.setCreateTime(DateUtils.getNowDate());
-        financeSettleRecord.setUpdateBy(info.getUserName());
+        financeSettleRecord.setUpdateBy(userName);
         financeSettleRecord.setUpdateTime(DateUtils.getNowDate());
 
         policyAndRiskRelation.setCompanyCode(financeAdvanceSettleDTO.getCompanyCode());

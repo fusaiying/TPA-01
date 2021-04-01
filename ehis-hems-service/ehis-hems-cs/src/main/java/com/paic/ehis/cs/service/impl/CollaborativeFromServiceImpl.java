@@ -232,7 +232,7 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
         flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id",20,20));
         flowLog.setLinkCode(tDmandAcceptVo.getStatus());//状态置为已协办
         flowLog.setOperateCode("11");//节点为协办
-        flowLog.setOpinion(demandAcceptVo.getSolicitOpinion());
+        flowLog.setOpinion(demandAcceptVo.getOpinion());
         flowLog.setMakeBy(SecurityUtils.getUsername());
         flowLog.setMakeTime(DateUtils.parseDate(DateUtils.getTime()));
         //没有um帐号
@@ -300,6 +300,7 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
         flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id",20,20));
         flowLog.setLinkCode(tDmandAcceptVo.getStatus());
         flowLog.setOperateCode("11");
+        flowLog.setOpinion(collaborativeFrom.getOpinion());
         flowLog.setMakeBy(SecurityUtils.getUsername());
         //没有um帐号
         flowLog.setUmNum(SecurityUtils.getUsername());

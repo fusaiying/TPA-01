@@ -31,12 +31,19 @@ public class DataSaveServiceImpl implements DataSaveService {
     @Override
     public boolean calculateDataSave(ClaimCaseCalculateInfo claimCaseCalculateInfo) {
 
+        BigDecimal caseCalAmount = BigDecimal.ZERO;
+        BigDecimal caseRefusedAmount = BigDecimal.ZERO;
+
         List<ClaimCaseBillInfo> billInfoList = claimCaseCalculateInfo.getClaimCaseBillInfoList();
         for (ClaimCaseBillInfo billInfo : billInfoList) {
 
             String hospitalCode = billInfo.getHospitalCode();
             String department = billInfo.getDepartment();
             Date treatmentStartDate = billInfo.getTreatmentStartDate();
+
+            BigDecimal billCalAmount = BigDecimal.ZERO;
+            BigDecimal billRefusedAmount = BigDecimal.ZERO;
+            BigDecimal billDeduUsed = BigDecimal.ZERO;
 
             List<ClaimCaseBillDetailInfo> detailInfoList = billInfo.getClaimCaseBillDetailInfoList();
             for (ClaimCaseBillDetailInfo detailInfo : detailInfoList) {
@@ -53,12 +60,22 @@ public class DataSaveServiceImpl implements DataSaveService {
 
 
                 //准备claim_case_cal_item
+                billCalAmount = billCalAmount.add(detailInfo.getCalAmount());
+                billRefusedAmount = billRefusedAmount.add(detailInfo.getRefusedAmount());
+                billDeduUsed = billDeduUsed.add(detailInfo.getDeduUsed());
             }
 
             //准备claim_case_cal_bill
+            billInfo.setCalAmount(billCalAmount);
+            billInfo.setRefusedAmount(billRefusedAmount);
+            billInfo.setDeduUsed(billDeduUsed);
 
+            caseCalAmount = caseCalAmount.add(billCalAmount);
+            caseRefusedAmount = caseRefusedAmount.add(billRefusedAmount);
         }
 
+        claimCaseCalculateInfo.setCalAmount(caseCalAmount);
+        claimCaseCalculateInfo.setRefusedAmount(caseRefusedAmount);
         //准备claim_case_cal
         //准备claim_case_cal_used
         //准备claim_case_cal_rule

@@ -55,6 +55,8 @@ public class PayableServiceImpl implements PayableService {
                 calAmount = calAmount.multiply(exchangeRate.getParities()); //乘以汇率
 
                 detailInfo.setCalAmount(calAmount);
+                detailInfo.setRefusedAmount(BigDecimal.ZERO);
+                detailInfo.setDeduUsed(BigDecimal.ZERO);
             }
         }
 

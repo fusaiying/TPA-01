@@ -91,7 +91,7 @@ public class CopayServiceImpl implements CopayService {
                 }
                 if(!"".equals(copayDutyRuleNo)){detailInfo = calculateCommonService.addRuleUsed(detailInfo,copayDutyRuleNo,dutyRatio,dutyRatio); }
 
-                BigDecimal ratio = detailRatio.multiply(dutyRatio);
+                BigDecimal ratio = detailRatio.multiply(dutyRatio).divide(BigDecimal.valueOf(100)).divide(BigDecimal.valueOf(100));
                 calAmount = calAmount.multiply(ratio);
 
 

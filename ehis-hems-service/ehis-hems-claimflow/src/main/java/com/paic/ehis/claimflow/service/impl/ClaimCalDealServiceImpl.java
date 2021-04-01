@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -35,6 +36,9 @@ public class ClaimCalDealServiceImpl implements IClaimCalDealService {
 
     @Autowired
     private ClaimCaseInsuredMapper claimCaseInsuredMapper;
+
+    @Autowired
+    private ClaimProductDutyDetailMapper claimProductDutyDetailMapper;
 
     @Autowired
     private ClaimCasePolicyMapper claimCasePolicyMapper;
@@ -129,6 +133,23 @@ public class ClaimCalDealServiceImpl implements IClaimCalDealService {
             List<ClaimCaseBillDetail> claimCaseBillDetails = claimCaseBillDetailMapper.selectClaimCaseBillDetailByBillId(claimCaseBill.getBillId());
             for (ClaimCaseBillDetail claimCaseBillDetail : claimCaseBillDetails) {
                 ClaimCaseBillDetailInfo claimCaseBillDetailInfo = new ClaimCaseBillDetailInfo();
+                if (insuredList.size()>0) {
+                    ClaimCaseInsured claimCaseInsured = insuredList.get(0);
+                    BeanUtils.copyProperties(claimCaseInsured,claimCaseBillDetailInfo);
+                }
+                if (claimCasePolicies.size()>0) {
+                    ClaimCasePolicy claimCasePolicy = claimCasePolicies.get(0);
+                    BeanUtils.copyProperties(claimCasePolicy,claimCaseBillDetailInfo);
+                }
+
+                ClaimProductDutyDetail dutyDetailQuery = new ClaimProductDutyDetail();
+                dutyDetailQuery.setRiskCode(claimCaseBillDetailInfo.getRiskCode());
+                dutyDetailQuery.setPlanCode(claimCaseBillDetailInfo.getPlanCode());
+                List<ClaimProductDutyDetail> dutyDetailList = claimProductDutyDetailMapper.selectClaimProductDutyDetailList(dutyDetailQuery);
+                if (dutyDetailList.size()>0) {
+                    ClaimProductDutyDetail dutyDetail = dutyDetailList.get(0);
+                    BeanUtils.copyProperties(dutyDetail,claimCaseBillDetailInfo);
+                }
                 BeanUtils.copyProperties(claimCaseBillDetail,claimCaseBillDetailInfo);
 
                 claimCaseBillDetailInfoList.add(claimCaseBillDetailInfo);
@@ -179,10 +200,10 @@ public class ClaimCalDealServiceImpl implements IClaimCalDealService {
         ClaimCaseCal claimCaseCal = new ClaimCaseCal();
         claimCaseCal.setRptNo(claimCaseCalculateInfo.getRptNo());
         claimCaseCal.setCalAmount(claimCaseCalculateInfo.getCalAmount());
-        //claimCaseCal.setBillCurrency(claimCaseCalculateInfo.getBillCurrency());
+        claimCaseCal.setBillCurrency("CNY");
         claimCaseCal.setPayAmount(claimCaseCalculateInfo.getCalAmount());
         claimCaseCal.setRefusedAmount(claimCaseCalculateInfo.getRefusedAmount());
-        //claimCaseCal.setDebtAmount(claimCaseCalculateInfo.getDebtAmount());
+        claimCaseCal.setDebtAmount(BigDecimal.ZERO);
         //claimCaseCal.setExchangeRate(claimCaseCalculateInfo.getExchangeRate());
         //claimCaseCal.setPayAmountForeign(claimCaseCalculateInfo.getPayAmountForeign());
         claimCaseCal.setStatus("Y");
@@ -236,19 +257,21 @@ public class ClaimCalDealServiceImpl implements IClaimCalDealService {
                 i = i + claimCaseCalItemMapper.insertClaimCaseCalItem(claimCaseCalItem);
 
                 List<ClaimCaseRuleInfo> claimCaseRuleInfoList = detailInfo.getClaimCaseRuleInfoList();
-                for (ClaimCaseRuleInfo ruleInfo : claimCaseRuleInfoList) {
-                    ClaimCaseCalRule claimCaseCalRule = new ClaimCaseCalRule();
-                    claimCaseCalRule.setRptNo(ruleInfo.getRptNo());
-                    claimCaseCalRule.setRuleNo(ruleInfo.getRuleNo());
-                    claimCaseCalRule.setUsedValue(ruleInfo.getUsedValue());
-                    claimCaseCalRule.setSurplusValue(ruleInfo.getSurplusValue());
-                    claimCaseCalRule.setStatus("Y");
-                    claimCaseCalRule.setCreateBy(SecurityUtils.getUsername());
-                    claimCaseCalRule.setCreateTime(DateUtils.getNowDate());
-                    claimCaseCalRule.setUpdateBy(SecurityUtils.getUsername());
-                    claimCaseCalRule.setUpdateTime(DateUtils.getNowDate());
+                if (claimCaseRuleInfoList!=null && claimCaseRuleInfoList.size()>0) {
+                    for (ClaimCaseRuleInfo ruleInfo : claimCaseRuleInfoList) {
+                        ClaimCaseCalRule claimCaseCalRule = new ClaimCaseCalRule();
+                        claimCaseCalRule.setRptNo(ruleInfo.getRptNo());
+                        claimCaseCalRule.setRuleNo(ruleInfo.getRuleNo());
+                        claimCaseCalRule.setUsedValue(ruleInfo.getUsedValue());
+                        claimCaseCalRule.setSurplusValue(ruleInfo.getSurplusValue());
+                        claimCaseCalRule.setStatus("Y");
+                        claimCaseCalRule.setCreateBy(SecurityUtils.getUsername());
+                        claimCaseCalRule.setCreateTime(DateUtils.getNowDate());
+                        claimCaseCalRule.setUpdateBy(SecurityUtils.getUsername());
+                        claimCaseCalRule.setUpdateTime(DateUtils.getNowDate());
 
-                    i = i + claimCaseCalRuleMapper.insertClaimCaseCalRule(claimCaseCalRule);
+                        i = i + claimCaseCalRuleMapper.insertClaimCaseCalRule(claimCaseCalRule);
+                    }
                 }
             }
         }

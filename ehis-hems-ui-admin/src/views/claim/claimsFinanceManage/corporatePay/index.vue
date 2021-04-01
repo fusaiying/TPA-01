@@ -129,7 +129,7 @@
           :total="totalCount"
           :page.sync="queryParams.pageNum"
           :limit.sync="queryParams.pageSize"
-          @pagination="search('tab')"
+          @pagination="searchTable"
         />
       </div>
     </el-card>
@@ -175,6 +175,7 @@
         hospitalOptions: [],
         sys_yes_noOptions: [],
         hospitals: [],
+        searchNum:1
       }
     },
     async mounted() {
@@ -236,6 +237,23 @@
       })
     },
     methods: {
+      searchTable(){
+        if (this.searchNum==2){
+          search('tab')
+        }else {
+          let query = {
+            pageNum: this.queryParams.pageNum,
+            pageSize: this.queryParams.pageSize,
+            organCode: this.organCode
+          }
+          initList(query).then(res => {
+            if (res != null && res.code === 200) {
+              this.tableData = res.rows
+              this.totalCount = res.total
+            }
+          })
+        }
+      },
       resetForm() {
         this.queryOrganCode = this.searchForm.organCode
         this.$refs.searchForm.resetFields()
@@ -259,7 +277,7 @@
           this.searchForm.pageNum = 1
           this.searchForm.pageSize = 10
         }
-
+        this.searchNum=2
         list(this.searchForm).then(res => {
           if (res != null && res.code === 200) {
             this.tableData = res.rows

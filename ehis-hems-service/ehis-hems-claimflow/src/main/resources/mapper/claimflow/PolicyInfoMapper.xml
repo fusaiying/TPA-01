@@ -126,7 +126,12 @@ SELECT a.policy_manage_com,a.policy_no,a.insured_no,b.birthday,b.occupation FROM
 
     <select id="selectCompanyRiskPolicyInfo" parameterType="com.paic.ehis.system.api.domain.PolicyAndRiskRelation" resultMap="CompanyRiskPolicyMap">
         SELECT DISTINCT
-        info.policy_no,info.policy_item_no,insured_no,name,app_name,valid_start_date,
+        info.policy_no,
+        info.policy_item_no,
+        insured_no,
+        name,
+        app_name,
+        valid_start_date,
         info.company_name,
         info.company_code,
         prr.risk_code,
@@ -140,7 +145,7 @@ SELECT a.policy_manage_com,a.policy_no,a.insured_no,b.birthday,b.occupation FROM
             <if test="riskCode != null  and riskCode != ''"> and risk_code = #{riskCode}</if>
             <if test="companyCode != null  and companyCode != ''"> and company_code = #{companyCode}</if>
             <if test="startTime != null  and startTime != null"> and info.valid_start_date &gt;= #{startTime}  </if>
-            and info.valid_start_date &lt;= #{endTime}
+            <if test="endTime != null  and endTime != null">and info.valid_start_date &lt;= #{endTime}</if>
             and prr.status = 'Y'
         </where>
     </select>

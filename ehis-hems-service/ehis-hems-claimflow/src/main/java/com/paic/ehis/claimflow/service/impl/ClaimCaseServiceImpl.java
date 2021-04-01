@@ -1331,10 +1331,15 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         /****
          * modify by : houjiawei
          * time : 2021-3-30
-         * 如果是申诉案件 且 本次支付差额 为 0 ，则 支付状态为 03 已支付
+         * 如果是申诉案件 且 本次支付差额 为 0 ，则 支付状态为 03 已支付 否则 01
          */
-        if(null != claimCase.getIsAppeal() && claimCase.getIsAppeal().equals("02") && (claimCase.getPaymentDifference().compareTo(BigDecimal.ZERO)==0)) {
-            claimCase.setPayStatus("03");
+        if(null != claimCase.getIsAppeal() && claimCase.getIsAppeal().equals("02")) {
+            if((claimCase.getPaymentDifference().compareTo(BigDecimal.ZERO)==0)) {
+                claimCase.setPayStatus("03");
+            } else {
+                claimCase.setPayStatus("01");
+            }
+
         }
         return claimCaseMapper.updateClaimCaseNew(claimCase);
     }
@@ -1710,10 +1715,14 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
             /****
              * modify by : houjiawei
              * time : 2021-3-30
-             * 如果是申诉案件 且 本次支付差额 为 0 ，则 支付状态为 03 已支付
+             * 如果是申诉案件 且 本次支付差额 为 0 ，则 支付状态为 03 已支付 否则 01
              */
-            if(null != claimCaseCheckDTO.getCaseType() && claimCaseCheckDTO.getCaseType().equals("02") && (claimCaseCheckDTO.getPaymentDifference().compareTo(BigDecimal.ZERO)==0)) {
-                claimCase.setPayStatus("03");
+            if(null != claimCaseCheckDTO.getCaseType() && claimCaseCheckDTO.getCaseType().equals("02")) {
+                if(claimCaseCheckDTO.getPaymentDifference().compareTo(BigDecimal.ZERO)==0) {
+                    claimCase.setPayStatus("03");
+                } else {
+                    claimCase.setPayStatus("01");
+                }
             }
             return claimCaseMapper.updateClaimCaseNew(claimCase);
         }

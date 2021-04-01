@@ -159,6 +159,24 @@
         where bill_id=#{billId} and status='Y'
     </select>
 
+    <resultMap id="GCCClaimBillDetailMap" type="com.paic.ehis.claimflow.domain.vo.GCCClaimBillDetail">
+        <result property="feeType" column="fee_item_code"/>
+        <result property="feeName" column="fee_item_name"/>
+        <result property="billAmt" column="bill_detail_amount"/>
+        <result property="allownAmt" column="self_amount"/>
+        <result property="subownAmt" column="part_self_amount"/>
+        <result property="ownAmt" column="unable_amount"/>
+        <result property="preAmt" column="advance_payment"/>
+        <result property="costComment" column="remark"/>
+    </resultMap>
+    <select id="selectGCCClaimBillDetailById" parameterType="String"
+            resultMap="GCCClaimBillDetailMap">
+        select fee_item_code, fee_item_name, bill_detail_amount,
+               self_amount, part_self_amount, unable_amount,advance_payment,remark
+        from claim_case_bill_detail
+        where bill_id=#{billId} and status='Y'
+    </select>
+
     <update id="updateClaimCaseBillDetailByBillId" parameterType="long">
         update claim_case_bill_detail set status='N' where bill_id=#{billId} and status='Y'
     </update>

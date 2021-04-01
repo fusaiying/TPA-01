@@ -60,24 +60,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="billType"    column="bill_type"    />
     </resultMap>
 
-    <resultMap type="com.paic.ehis.claimflow.domain.ClaimBill" id="ClaimBillResult">
-        <result property="billAmt"    column="bill_amount"    />
-        <result property="reasonableAmt"    column="reasonable_amt"    />
-        <result property="ownAmt"    column="self_amount"    />
-        <result property="subownAmt"    column="part_self_amount"    />
-        <result property="totalImmoAmt"    column="unable_amount"    />
-        <result property="preAmt"    column="pre_amt"    />
-        <result property="seqno"    column="bill_id"    />
-        <result property="billno"    column="bill_no"    />
-        <result property="treatDate"    column="treatment_start_date"    />
-        <result property="therapyType"    column="treatment_type"    />
-        <result property="hospitalName"    column="hospital_code"    />
-        <result property="diseaseDessc"    column="clinical_diagnosis"    />
-    </resultMap>
+<!--    <resultMap type="com.paic.ehis.claimflow.domain.ClaimBill" id="ClaimBillResult">-->
+<!--        <result property="billAmt"    column="bill_amount"    />-->
+<!--        <result property="reasonableAmt"    column="reasonable_amt"    />-->
+<!--        <result property="ownAmt"    column="self_amount"    />-->
+<!--        <result property="subownAmt"    column="part_self_amount"    />-->
+<!--        <result property="totalImmoAmt"    column="unable_amount"    />-->
+<!--        <result property="preAmt"    column="pre_amt"    />-->
+<!--        <result property="seqno"    column="bill_id"    />-->
+<!--        <result property="billno"    column="bill_no"    />-->
+<!--        <result property="treatDate"    column="treatment_start_date"    />-->
+<!--        <result property="therapyType"    column="treatment_type"    />-->
+<!--        <result property="hospitalName"    column="hospital_code"    />-->
+<!--        <result property="diseaseDessc"    column="clinical_diagnosis"    />-->
+<!--    </resultMap>-->
 
-    <resultMap type="com.paic.ehis.claimflow.domain.Claim" id="ClaimResult">
-        <result property="paidAmt"    column="hos_discount_amount"    />
-    </resultMap>
+<!--    <resultMap type="com.paic.ehis.claimflow.domain.Claim" id="ClaimResult">-->
+<!--        <result property="paidAmt"    column="hos_discount_amount"    />-->
+<!--    </resultMap>-->
 
     <sql id="selectClaimCaseBillVo">
         SELECT
@@ -121,35 +121,35 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             claim_case_bill
     </sql>
 
-    <select id="selectClaimBillList" parameterType="String" resultMap="ClaimBillResult">
-    SELECT
-	bill_amount,
-	bill_amount - unable_amount reasonable_amt,
-	self_amount,
-	part_self_amount,
-	unable_amount,
-	ss_advance_payment+tp_advance_payment+is_share_ap pre_amt,
-	bill_id,
-	bill_no,
-	treatment_start_date,
-	treatment_type,
-	hospital_code,
-	clinical_diagnosis
-FROM
-	claim_case_bill
-	WHERE status='Y' and rpt_no=#{rptNo}
-    </select>
+<!--    <select id="selectClaimBillList" parameterType="String" resultMap="ClaimBillResult">-->
+<!--    SELECT-->
+<!--	bill_amount,-->
+<!--	bill_amount - unable_amount reasonable_amt,-->
+<!--	self_amount,-->
+<!--	part_self_amount,-->
+<!--	unable_amount,-->
+<!--	ss_advance_payment+tp_advance_payment+is_share_ap pre_amt,-->
+<!--	bill_id,-->
+<!--	bill_no,-->
+<!--	treatment_start_date,-->
+<!--	treatment_type,-->
+<!--	hospital_code,-->
+<!--	clinical_diagnosis-->
+<!--FROM-->
+<!--	claim_case_bill-->
+<!--	WHERE status='Y' and rpt_no=#{rptNo}-->
+<!--    </select>-->
 
-    <select id="selectPaidAmt" resultType="String" resultMap="ClaimResult">
-    SELECT
-        sum( claim_case_bill.bill_amount ) - sum( claim_case_bill.hos_discount_amount ) AS hos_discount_amount
-    FROM
-        claim_case_bill
-    where
-        rpt_no=#{rptNo}
-    AND
-        claim_case_bill.status="Y"
-</select>
+<!--    <select id="selectPaidAmt" resultType="String" resultMap="ClaimResult">-->
+<!--    SELECT-->
+<!--        sum( claim_case_bill.bill_amount ) - sum( claim_case_bill.hos_discount_amount ) AS hos_discount_amount-->
+<!--    FROM-->
+<!--        claim_case_bill-->
+<!--    where-->
+<!--        rpt_no=#{rptNo}-->
+<!--    AND-->
+<!--        claim_case_bill.status="Y"-->
+<!--</select>-->
 
     <select id="selectClaimCaseBillList" parameterType="ClaimCaseBill" resultMap="ClaimCaseBillResult">
         <include refid="selectClaimCaseBillVo"/>
@@ -339,6 +339,37 @@ FROM
         <include refid="selectClaimCaseBillVo"/>
         where rpt_no=#{rptNo} and status='Y'
         ORDER BY treatment_start_date limit 1
+    </select>
+    <resultMap id="gCCClaimBillMap" type="com.paic.ehis.claimflow.domain.vo.GCCClaimBill">
+        <result property="billAmt" column="bill_amount"/>
+        <result property="reasonableAmt" column="able_amount"/>
+        <result property="ownAmt" column="self_amount"/>
+        <result property="subownAmt" column="part_self_amount"/>
+        <result property="totalImmoAmt" column="unable_amount"/>
+        <result property="preAmt" column="advance_payment"/>
+        <result property="seqno" column="bill_id"/>
+        <result property="billno" column="bill_no"/>
+        <result property="treaDate" column="treatment_start_date"/>
+        <result property="therapyType" column="bill_type"/>
+        <result property="hospitalName" column="hospital_name"/>
+        <result property="diseaseDesc" column="clinical_diagnosis"/>
+
+    </resultMap>
+    <select id="queryClaimAcceptListToGCC" parameterType="String" resultMap="gCCClaimBillMap">
+        select ccb.bill_amount,
+            (ccb.bill_amount-IFNULL(ccb.hos_discount_amount,0)-IFNULL(ccb.self_amount,0)-IFNULL(ccb.part_self_amount,0)-IFNULL(ccb.ss_advance_payment,0)-IFNULL(ccb.tp_advance_payment,0)-IFNULL(ccb.unable_amount,0)) as able_amount,
+            ccb.self_amount,
+            ccb.part_self_amount,
+            ccb.unable_amount,
+            (IFNULL(ccb.ss_advance_payment,0)+IFNULL(ccb.tp_advance_payment,0)) as advance_payment,
+            ccb.bill_id,
+            ccb.bill_no,
+            ccb.treatment_start_date,
+            ccb.bill_type,
+            ccb.hospital_code,
+            (select distinct chname1 from base_provider_info where provider_code=ccb.hospital_code and status='Y') as hospital_name,
+            ccb.clinical_diagnosis
+        from claim_case_bill ccb where ccb.rpt_no= #{docuno} and ccb.status='Y'
     </select>
 
 </mapper>

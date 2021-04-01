@@ -55,7 +55,7 @@ public class CompanyRiskPolicyInfo implements Serializable {
     private BigDecimal prem;
 
     /** 总保费 */
-    private BigDecimal sumPerm;
+    private BigDecimal sumPerm;//sumPrem
 
     /* 承保机构 */
     private String policyManageCom;

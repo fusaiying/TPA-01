@@ -82,6 +82,7 @@ SELECT a.policy_manage_com,a.policy_no,a.insured_no,b.birthday,b.occupation FROM
         <result property="companyCode"    column="company_code"    />
         <result property="riskName"    column="risk_name"    />
         <result property="riskCode"    column="risk_code"    />
+        <result property="prem"    column="prem"    />
         <result property="sumPerm"    column="sumPerm"    />
         <result property="totalPeople"    column="totalPeople"    />
         <result property="policyManageCom"    column="policy_manage_com"    />
@@ -102,7 +103,7 @@ SELECT a.policy_manage_com,a.policy_no,a.insured_no,b.birthday,b.occupation FROM
         prr.risk_code,
         prr.risk_name,
         count(info.policy_item_no)totalPeople,
-        sum(prem)sumPrem
+        sum(prem)sumPerm
         FROM
         policy_risk_relation prr
         LEFT JOIN policy_info info ON info.policy_no = prr.policy_no and info.status='Y'

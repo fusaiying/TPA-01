@@ -69,7 +69,7 @@ public class InformationNeedsQuality {
     @Excel(name = "是否有其他错误")
     private String zxc27;
 
-    @Excel(name = "是否申诉")
+    @Excel(name = "是否申诉",readConverterExp = "01=是,02=否")
     private String appealFlag;
 
     @Excel(name = "申述理由")

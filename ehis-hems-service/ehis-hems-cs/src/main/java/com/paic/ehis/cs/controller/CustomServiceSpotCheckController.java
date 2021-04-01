@@ -485,21 +485,6 @@ public class CustomServiceSpotCheckController extends BaseController {
         qualityInspectionDTO.setCreatedTime(DateUtils.getNowDate());
         qualityInspectionDTO.setUpdatedBy(SecurityUtils.getUsername());
         qualityInspectionDTO.setUpdatedTime(DateUtils.getNowDate());
-        return toAjax(qualityInspectionHandleService.insertHandleInfo(qualityInspectionDTO));
-    }
-
-    /**
-     * 质检差错修改数据保存
-     * @param qualityInspectionDTO
-     * @return
-     */
-    @Transactional
-    @PostMapping("/internal/insetQualityHandleInfo/Wrong")
-    public AjaxResult insertHandleInfo1(@RequestBody QualityInspectionDTO qualityInspectionDTO){
-        qualityInspectionDTO.setCreatedBy(SecurityUtils.getUsername());
-        qualityInspectionDTO.setCreatedTime(DateUtils.getNowDate());
-        qualityInspectionDTO.setUpdatedBy(SecurityUtils.getUsername());
-        qualityInspectionDTO.setUpdatedTime(DateUtils.getNowDate());
         return toAjax(qualityInspectionHandleService.insertHandleInfo1(qualityInspectionDTO));
     }
 

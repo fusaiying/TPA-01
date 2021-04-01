@@ -33,6 +33,12 @@ public interface IPolicyInfoService
      */
     public CompanyRiskPolicyInfo selectPolicyInfoListByPolicyNo(PolicyAndRiskRelation policyAndRiskRelation);
 
+    /* 根据出单公司险种查询 险种层级数据 */
+    public CompanyRiskPolicyInfo selectCompanyRiskInfo(PolicyAndRiskRelation policyAndRiskRelation);
+
+    /* 根据出单公司险种查询 分单层级数据 */
+    public CompanyRiskPolicyInfo selectCompanyRiskPolicyInfo(PolicyAndRiskRelation policyAndRiskRelation);
+
     /**
      * 查询保单信息列表
      *

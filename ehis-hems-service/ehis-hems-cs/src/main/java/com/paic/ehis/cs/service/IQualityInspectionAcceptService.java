@@ -85,6 +85,7 @@ public interface IQualityInspectionAcceptService
      */
     List<QualityAcceptVo> selectQualityVo(QualityDTO qualityDTO);
 
+    List<QualityAcceptVo> selectQualityVo2(QualityDTO qualityDTO);
 //    /**
 //     * 根据条件查询工单附件列表
 //     * @param workOrderQueryDTO
@@ -106,4 +107,12 @@ public interface IQualityInspectionAcceptService
     //投诉每周一凌晨四点批处理
     List<AcceptVo> selectInvalidQiaMondayFour(String invalidDateStar, Map<String,String> param);
 
+    //投诉质检清单
+    List<ComplaintQualityInspectionVO> selectQualityVoCom(QualityDTO qualityDTO);
+
+    //信息需求质检清单
+    List<InformationNeedsQuality> selectQualityVoComInformation(QualityDTO qualityDTO);
+
+    //投诉/信息差错率统计
+    List<ComplaintErrorRateVO> exportOneError(QualityDTO qualityDTO);
 }

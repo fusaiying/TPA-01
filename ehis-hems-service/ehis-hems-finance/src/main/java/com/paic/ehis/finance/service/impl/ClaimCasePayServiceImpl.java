@@ -73,10 +73,6 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService {
         if (null != organCode) {
             deptId = organCode;
         }
-
-        //获取查询数据  判断是后是第一次支付优先飘红显示
-        ClaimCasePayDTO claimCasePayDTO = new ClaimCasePayDTO();
-        claimCasePayDTO.setOrganCode(deptId);
         List<Map<String, Object>> initList = claimBatchMapper.selectPayBatchInit(deptId);
         BaseProviderSettle baseProviderSettle = new BaseProviderSettle();
         for (Map<String, Object> map : initList) {
@@ -101,6 +97,11 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService {
                     map.put("flag", "Y");//正常显示
                 }
 
+            }
+            //判断是否支付过 支付过就不飘红
+            FinancePayInfo batchNo = financePayInfoMapper.selectFinancePayInfoByBatchNo(map.get("batchNo").toString());
+            if (StringUtils.isNotNull(batchNo)){
+                map.put("flag", "Y");//正常显示
             }
             if (R.FAIL == result.getCode()) {
                 throw new BaseException(result.getMsg());
@@ -154,6 +155,11 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService {
                 }
 
 
+            }
+            //判断是否支付过 支付过就不飘红
+            FinancePayInfo batchNo = financePayInfoMapper.selectFinancePayInfoByBatchNo(map.get("batchNo").toString());
+            if (StringUtils.isNotNull(batchNo)){
+                map.put("flag", "Y");//正常显示
             }
             if (R.FAIL == result.getCode()) {
                 throw new BaseException(result.getMsg());
@@ -508,6 +514,7 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService {
                     financePayDetailInfo.setCreateBy(username);
                     financePayDetailInfo.setCreateTime(DateUtils.getNowDate());
                     financePayDetailInfo.setDeptCode(claimCasePayVO.getOrganCode());
+                    financePayDetailInfo.setPayAmountForeign(caseInfo.getPayAmountForeign());
                     financePayDetailInfoMapper.insertFinancePayDetailInfo(financePayDetailInfo);
                     // 修改案件信息支付状态为‘支付中’
                     ClaimCase claimCase = new ClaimCase();
@@ -655,6 +662,11 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService {
                 }
 
             }
+            //判断是否支付过 支付过就不飘红
+            FinancePayInfo batchNo = financePayInfoMapper.selectFinancePayInfoByBatchNo(map.get("batchNo").toString());
+            if (StringUtils.isNotNull(batchNo)){
+                map.put("flag", "Y");//正常显示
+            }
             if (R.FAIL == result.getCode()) {
                 throw new BaseException(result.getMsg());
             }
@@ -702,6 +714,11 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService {
                     map.put("flag", "Y");//正常显示
                 }
 
+            }
+            //判断是否支付过 支付过就不飘红
+            FinancePayInfo batchNo = financePayInfoMapper.selectFinancePayInfoByBatchNo(map.get("batchNo").toString());
+            if (StringUtils.isNotNull(batchNo)){
+                map.put("flag", "Y");//正常显示
             }
             if (R.FAIL == result.getCode()) {
                 throw new BaseException(result.getMsg());

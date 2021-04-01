@@ -14,7 +14,9 @@ import com.paic.ehis.finance.domain.TpaSettleDetailInfo;
 import com.paic.ehis.finance.domain.TpaSettleInfo;
 import com.paic.ehis.finance.domain.dto.TpaSettleDTO;
 import com.paic.ehis.finance.service.IFinanceTpaSettleTaskService;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -157,7 +159,8 @@ public class FinanceTpaSettleTaskController extends BaseController
                 data2.add(rowData);
             }
             ExcelUtils eeu = new ExcelUtils();
-            SXSSFWorkbook workbook = new SXSSFWorkbook();
+//            SXSSFWorkbook workbook = new SXSSFWorkbook();
+            Workbook workbook = new XSSFWorkbook();
             String[] sheetTitle = new String[]{"TPA服务费结算信息","TPA服务费结算明细信息"};
             eeu.exportExcel(response,workbook,sheetTitle, strings, data1,data2);
         } catch (Exception e) {

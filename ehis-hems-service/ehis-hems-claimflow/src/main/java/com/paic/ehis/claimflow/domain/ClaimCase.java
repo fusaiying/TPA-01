@@ -127,6 +127,8 @@ public class ClaimCase extends BaseEntity {
      */
     private BigDecimal paymentDifference;
 
+    /** 案件标识 */
+    private String caseFlag;
 
     public BigDecimal getPaymentDifference() {
         return paymentDifference;
@@ -134,6 +136,14 @@ public class ClaimCase extends BaseEntity {
 
     public void setPaymentDifference(BigDecimal paymentDifference) {
         this.paymentDifference = paymentDifference;
+    }
+
+    public String getCaseFlag() {
+        return caseFlag;
+    }
+
+    public void setCaseFlag(String caseFlag) {
+        this.caseFlag = caseFlag;
     }
 
     public String getClaimType() {

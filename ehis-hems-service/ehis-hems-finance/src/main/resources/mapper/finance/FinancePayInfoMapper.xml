@@ -177,12 +177,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         fpi.pay_status,
         fpi.pay_date,
         fpi.pay_fail_date,
-        frc.receipt_no,
+        fpi.trade_serial,
         fpi.pay_fail_reason
         FROM
         finance_pay_info fpi
         LEFT JOIN claim_case cc ON fpi.batch_no = cc.batch_no AND cc.STATUS = 'Y'
-        LEFT JOIN finance_receipt_col frc ON fpi.dept_code = frc.dept_code AND frc.STATUS = 'Y'
        <where>
             <if test="batchNo != null  and batchNo != ''"> and fpi.batch_no = #{batchNo}</if>
             <if test="payStartDate != null and payEndDate != null"> and fpi.pay_date between #{payStartDate} and DATE_ADD(#{payEndDate},INTERVAL 1 DAY)</if>
@@ -195,7 +194,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
            fpi.pay_status,
            fpi.pay_date,
            fpi.pay_fail_date,
-           frc.receipt_no,
+           fpi.trade_serial,
            fpi.pay_fail_reason
        </where>
     </select>

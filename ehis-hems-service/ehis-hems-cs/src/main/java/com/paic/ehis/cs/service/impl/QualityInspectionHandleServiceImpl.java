@@ -330,10 +330,10 @@ public class QualityInspectionHandleServiceImpl implements IQualityInspectionHan
             if(CodeEnum.BUSINESS_TYPE_03.getCode().equals(qualityInspectionDTO.getBusinessType()) && "01".equals(qualityInspectionDTO.getAppealFlag())){
                 ComplaintAcceptVo complaintAcceptVo=qualityInspectionDTO.getComplaintAcceptVo();
                 complaintAcceptVo.setWorkOrderNo(qualityInspectionDTO.getWorkOrderNo());
-                iComplaintAcceptVoService.updateComplaintAcceptVoProcess(complaintAcceptVo);
+                iComplaintAcceptVoService.updateComplaintAcceptVo(complaintAcceptVo);
                 ComplaintDealVo complaintDealVo= qualityInspectionDTO.getComplaintDealVo();
                 complaintDealVo.setWorkOrderNo(qualityInspectionDTO.getWorkOrderNo());
-                iComplaintAcceptVoService.updateComplaintAcceptVoProcessYW(complaintDealVo);
+                iComplaintAcceptVoService.complaintHandling(complaintDealVo);
             }
             qualityInspectionHandleMapper.updateHandleInfoById(qualityInspectionDTO);
         }else {
@@ -420,7 +420,7 @@ public class QualityInspectionHandleServiceImpl implements IQualityInspectionHan
         flowLog.setUpdatedTime(DateUtils.getNowDate());
         flowLog.setWorkOrderNo(id);
         //操作后主流程状态
-        flowLog.setLinkCode(param.get("linkCode"));
+        flowLog.setLinkCode(param.get("status"));
         flowLog.setOperateCode(param.get("operateCode"));
         flowLogList.add(flowLog);
 

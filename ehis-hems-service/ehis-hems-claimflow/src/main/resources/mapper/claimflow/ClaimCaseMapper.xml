@@ -292,6 +292,7 @@
             <if test="createTime != null">create_time = #{createTime},</if>
             <if test="updateBy != null">update_by = #{updateBy},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="caseFlag != null and caseFlag != ''">case_flag = #{caseFlag},</if>
         </trim>
         where rpt_no = #{rptNo} and status = 'Y'
     </update>

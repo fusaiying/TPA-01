@@ -15,12 +15,15 @@ import com.paic.ehis.cs.domain.dto.*;
 import com.paic.ehis.cs.domain.vo.*;
 import com.paic.ehis.cs.service.*;
 import com.paic.ehis.cs.utils.CodeEnum;
+import org.apache.poi.hpsf.Decimal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -312,20 +315,95 @@ public class CustomServiceSpotCheckController extends BaseController {
         util.exportExcel(response, list, "WorkOrder");
     }
 
-    //************************************************
-        /*
-        质检查询清单导出
-         */
-    @Log(title = "质检查询清单导出", businessType = BusinessType.EXPORT)
+    /**
+     * 投诉质检清单导出
+     * @param response
+     * @param qualityDTO
+     * @throws IOException
+     */
+    @Log(title = "投诉质检清单导出", businessType = BusinessType.EXPORT)
     @PostMapping("/internal/selectWorkOrder/exportOne")
     public void exportOne(HttpServletResponse response, QualityDTO qualityDTO) throws IOException
     {
-        List<QualityAcceptVo> list = qualityInspectionAcceptService.selectQualityVo(qualityDTO);
-        ExcelUtil<QualityAcceptVo> util = new ExcelUtil<QualityAcceptVo>(QualityAcceptVo.class);
+        List<ComplaintQualityInspectionVO> list = qualityInspectionAcceptService.selectQualityVoCom(qualityDTO);
+        ExcelUtil<ComplaintQualityInspectionVO> util = new ExcelUtil<ComplaintQualityInspectionVO>(ComplaintQualityInspectionVO.class);
         util.exportExcel(response, list, "WorkOrderOne");
     }
 
-    //************************************************
+    /**
+     * 信息需求质检清单导出
+     * @param response
+     * @param qualityDTO
+     * @throws IOException
+     */
+    @Log(title = "信息需求质检清单导出", businessType = BusinessType.EXPORT)
+    @PostMapping("/internal/selectWorkOrder/exportOneInformation")
+    public void exportOneInformation(HttpServletResponse response, QualityDTO qualityDTO) throws IOException
+    {
+        List<InformationNeedsQuality> list = qualityInspectionAcceptService.selectQualityVoComInformation(qualityDTO);
+        ExcelUtil<InformationNeedsQuality> util = new ExcelUtil<InformationNeedsQuality>(InformationNeedsQuality.class);
+        util.exportExcel(response, list, "WorkOrderOne");
+    }
+
+    @GetMapping("/internal/selectQualityVo2")
+    public TableDataInfo selectQualityVo2(QualityDTO qualityDTO)
+    {
+        startPage();
+        List<QualityAcceptVo> list = qualityInspectionAcceptService.selectQualityVo2(qualityDTO);
+        return getDataTable(list);
+    }
+    /**
+     * 投诉/信息差错率统计导出
+     * @param response
+     * @param qualityDTO
+     * @throws IOException
+     */
+    @Log(title = "投诉/信息差错率统计导出", businessType = BusinessType.EXPORT)
+    @PostMapping("/internal/selectWorkOrder/exportOneError")
+    public void exportOneError(HttpServletResponse response, QualityDTO qualityDTO) throws IOException
+    {
+        //先进行查询//查到人和总数
+        List<QualityAcceptVo> qualityAcceptVos = qualityInspectionAcceptService.selectQualityVo2(qualityDTO);
+        //遍历
+        for (QualityAcceptVo qualityAcceptVo : qualityAcceptVos) {
+            String modifyBy = qualityAcceptVo.getModifyBy();
+            QualityDTO qualityDTO1 = new QualityDTO();
+            qualityDTO1.setEndCaseStartDate();
+            qualityDTO1.setEndCaseEndDate();
+            qualityDTO1.setModifyBy();
+            //不合格
+            qualityDTO1.setResult("02");
+            List<QualityAcceptVo> qualityAcceptVo1 = qualityInspectionAcceptService.selectQualityVo2(qualityDTO1);
+                for (QualityAcceptVo qualityAcceptVo2 : qualityAcceptVo1) {
+                    (qualityAcceptVo2.getModifyBy()).equals(qualityAcceptVo.getModifyBy());
+                     //取20
+                    String num1 = qualityAcceptVo2.getNum();
+                    //取40
+                    String num2 = qualityAcceptVo.getNum();
+                    //计算
+                    Double number1 = Double.valueOf(num1);
+                    Double number2 = Double.valueOf(num2);
+                    Double i = number2 / number1;
+                    //获取格式化对象
+                    NumberFormat nt = NumberFormat.getPercentInstance();
+                    //设置百分数精确度2即保留两位小数
+                    nt.setMinimumFractionDigits(2);
+                    //最后格式化
+                    nt.format(i);
+                    String res = i.toString();
+
+                    //放进对象里
+                    qualityDTO.setNum1(num1);
+                    qualityDTO.setNum2(num2);
+                    qualityDTO.setRes(res);
+                }
+        }
+        List<ComplaintErrorRateVO> list1 = qualityInspectionAcceptService.exportOneError(qualityDTO);
+        ExcelUtil<ComplaintErrorRateVO> util = new ExcelUtil<ComplaintErrorRateVO>(ComplaintErrorRateVO.class);
+        util.exportExcel(response, list1, "WorkOrderOne");
+    }
+
+
         /*
         质检差错清单导出
          */
@@ -416,7 +494,7 @@ public class CustomServiceSpotCheckController extends BaseController {
      * @return
      */
     @Transactional
-    @PostMapping("/internal/insetQualityHandleInfo1")
+    @PostMapping("/internal/insetQualityHandleInfo/Wrong")
     public AjaxResult insertHandleInfo1(@RequestBody QualityInspectionDTO qualityInspectionDTO){
         qualityInspectionDTO.setCreatedBy(SecurityUtils.getUsername());
         qualityInspectionDTO.setCreatedTime(DateUtils.getNowDate());
@@ -425,16 +503,6 @@ public class CustomServiceSpotCheckController extends BaseController {
         return toAjax(qualityInspectionHandleService.insertHandleInfo1(qualityInspectionDTO));
     }
 
-    /**
-     * 质检差错修改数据保存
-     * @param handleDTO
-     * @return
-     */
-    @Transactional
-    @PostMapping("/internal/insetQualityHandleInfo/handleDTO")
-    public AjaxResult insertHandleInfo(@RequestBody HandleDTO handleDTO){
-        return toAjax(qualityInspectionHandleService.insertHandleInfo(handleDTO));
-    }
 
 
     //信息需求抽检批处理

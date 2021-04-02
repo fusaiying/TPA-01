@@ -268,7 +268,7 @@ public class ClaimCaseCalBillServiceImpl implements IClaimCaseCalBillService
              */
             /** start */
             ClaimCaseCal nowClaimCaseCal = claimCaseCalMapper.selectClaimCaseCalByRptNo(rptNo);
-            if(rptNo.indexOf("-") > 0 && (nowClaimCaseCal.getCreateTime() == nowClaimCaseCal.getUpdateTime())) {
+            if(rptNo.indexOf("-") > 0 && (nowClaimCaseCal.getCreateTime().getTime() == nowClaimCaseCal.getUpdateTime().getTime())) {
                 // 需要判断，是否申诉案件；若是 计算 本次支付差额
                 CalConclusionVo precalConclusionVo = claimCaseCalMapper.selectPreCalConclusionByRptNo(rptNo);
                 if(precalConclusionVo != null) {
@@ -315,8 +315,8 @@ public class ClaimCaseCalBillServiceImpl implements IClaimCaseCalBillService
                 if(nowClaimCaseCal.getBillCurrency().equals("CNY")) {
                     claimCaseCal.setPayAmount(calConclusionVo.getPaymentDifference());
                 }  else {
-                    BigDecimal exchangeRateValue = nowClaimCaseCal.getExchangeRate() == null ? new BigDecimal(1) : nowClaimCaseCal.getExchangeRate();
-                    claimCaseCal.setPayAmount(payAmountForeign.divide(exchangeRateValue,2));
+                    //BigDecimal exchangeRateValue = nowClaimCaseCal.getExchangeRate() == null ? new BigDecimal(1) : nowClaimCaseCal.getExchangeRate();
+                    claimCaseCal.setPayAmount(claimCaseCal.getPayAmountForeign());
                     claimCaseCal.setPayAmountForeign(nowPayAmount);
                 }
             }

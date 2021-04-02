@@ -171,7 +171,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         SELECT
         fpi.pay_batch_no,
         sum( fpi.sum_pay_amount ) AS sum_pay_amount,
-        fpi.batch_no,
         fpi.payee_bank,
         fpi.acc_no,
         fpi.acc_name,
@@ -202,7 +201,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 
     <delete id="deleteFinanceTransferfailedList" parameterType="String">
-        update finance_pay_info  set pay_status='02'  where batch_no = #{batchNo}
+        update finance_pay_info  set pay_status='02'  where pay_batch_no = #{batchNo}
     </delete>
 
     <select id="selectFinancePayInfoByBatchNo" parameterType="String" resultMap="FinancePayInfoResult">

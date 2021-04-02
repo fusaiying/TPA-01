@@ -1310,7 +1310,6 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
         tSpecialMap.put("itemCode", "itemCode");
         tSpecialMap.put("complaintTime", "complaintTime");
         tSpecialMap.put("callPersonId", "callPersonId");
-        tSpecialMap.put("callPersonId", "callPersonId");
         tSpecialMap.put("linePhone1", "linePhone1");
         tSpecialMap.put("homePhone1", "homePhone1");
         tSpecialMap.put("workPhone1", "workPhone1");

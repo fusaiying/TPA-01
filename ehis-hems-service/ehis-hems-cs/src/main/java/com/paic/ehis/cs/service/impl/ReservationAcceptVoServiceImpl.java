@@ -357,7 +357,7 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
         flowLog.setLinkCode(workOrderAccept.getStatus());
         flowLog.setMakeTime(DateUtils.parseDate(DateUtils.getTime()));
         flowLog.setMakeBy(reservationAcceptVo.getCreateBy());
-        flowLog.setStatus(workOrderAccept.getStatus());
+        flowLog.setLinkCode(workOrderAccept.getStatus());
         flowLog.setCreatedBy(reservationAcceptVo.getCreateBy());
         flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         flowLog.setUpdatedBy(reservationAcceptVo.getUpdateBy());
@@ -367,6 +367,7 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
 
 
 
+    //预约修改提交按钮
     @Transactional(propagation = Propagation.REQUIRED,rollbackFor = Exception.class)
     @Override
     public int updateReservationAcceptVo(ReservationAcceptVo reservationAcceptVo) {
@@ -397,14 +398,18 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
 
         //工单表修改
         WorkOrderAccept workOrderAccept=workOrderAcceptMapper.selectWorkOrderAcceptById(workOrderNo);
+
+
+        flowLog.setLinkCode(workOrderAccept.getStatus());
+
         workOrderAccept.setOrganCode(reservationAcceptVo.getOrganCode());
         workOrderAccept.setUpdateBy(SecurityUtils.getUsername());
         workOrderAccept.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
         workOrderAccept.setActivationNum(workOrderAccept.getActivationNum()+1);
-        if (flowLog.getLinkCode().equals("03")){
+        //已处理案件修改后到个人池
+        if ("03".equals(workOrderAccept.getStatus())){
             workOrderAccept.setStatus("02");
         }
-        workOrderAcceptMapper.updateWorkOrderAccept(workOrderAccept);
 
         AcceptDetailInfo acceptDetailInfo=acceptDetailInfoMapper.selectAcceptDetailInfoById(workOrderNo);
         acceptDetailInfo.setUpdateBy(SecurityUtils.getUsername());
@@ -713,7 +718,6 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
         flowLog.setMakeTime(DateUtils.parseDate(DateUtils.getTime()));
         flowLog.setMakeBy(SecurityUtils.getUsername());
         flowLog.setOperateCode("03");
-        flowLog.setStatus(workOrderAccept.getStatus());
         flowLog.setSubId(editId);
         flowLog.setWorkOrderNo(reservationAcceptVo.getWorkOrderNo());
         flowLog.setCreatedBy(SecurityUtils.getUsername());
@@ -726,7 +730,9 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
             hcsModificationMapper.updateHcsStauts(reservationAcceptVo.getAlterId());
         }
 
-        return  flowLogMapper.insertFlowLog(flowLog);
+        flowLogMapper.insertFlowLog(flowLog);
+
+        return workOrderAcceptMapper.updateWorkOrderAccept(workOrderAccept);
     }
 
 

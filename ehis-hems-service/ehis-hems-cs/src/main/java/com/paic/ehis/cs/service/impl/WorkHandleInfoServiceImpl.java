@@ -580,6 +580,7 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
             flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id",20,20));
             flowLog.setLinkCode("03");
             flowLog.setMakeBy(SecurityUtils.getUsername());
+            flowLog.setMakeTime(DateUtils.parseDate(DateUtils.getTime()));
             flowLog.setOpinion(reservationDealVo.getRemark());
             //没有um帐号
             flowLog.setUmNum(SecurityUtils.getUsername());
@@ -642,6 +643,7 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
             flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id",20,20));
             flowLog.setLinkCode("03");
             flowLog.setMakeBy(SecurityUtils.getUsername());
+            flowLog.setMakeTime(DateUtils.parseDate(DateUtils.getTime()));
             flowLog.setOpinion(reservationDealVo.getRemark());
             //没有um帐号
             flowLog.setUmNum(SecurityUtils.getUsername());

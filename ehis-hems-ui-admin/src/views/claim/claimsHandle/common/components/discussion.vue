@@ -644,7 +644,8 @@
                 payAmountForeign:this.conclusionInfo.payAmountForeign,
                 remark:this.conclusionForm.remark,
                 claimCheck:this.conclusionForm.claimCheck,
-                debtAmount:this.conclusionInfo.debtAmount
+                debtAmount:this.conclusionInfo.debtAmount,
+                paymentDifference:this.conclusionInfo.paymentDifference
                 // calAmount:'0',
                 // payAmount:this.conclusionInfo.payAmount,
                 // refusedAmount:this.conclusionInfo.refusedAmount,

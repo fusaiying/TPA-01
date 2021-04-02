@@ -355,23 +355,23 @@ public class FinanceTpaSettleTaskServiceImpl implements IFinanceTpaSettleTaskSer
             policyRiskRelation.setStatus(ClaimStatus.DATAYES.getCode());
             policyRiskRelation.setRiskCode(tpaSettleInfo.getRiskCode());
             policyRiskRelation.setCompanyCode(tpaSettleInfo.getCompanyCode());
-            policyRiskRelation.setEndTime(financeTpaSettleTasks.get(0).getSettleEndDate());
-            policyRiskRelation.setStartTime(financeTpaSettleTasks.get(0).getSettleStartDate());
+            policyRiskRelation.setEndTime(DateUtils.parseDate(financeTpaSettleTasks.get(0).getSettleEndDate()));
+            policyRiskRelation.setStartTime(DateUtils.parseDate(financeTpaSettleTasks.get(0).getSettleStartDate()));
             CompanyRiskPolicyInfo policyInfo = policyAndRiskService.selectCompanyRiskInfo(policyRiskRelation);
             tpaSettleInfo.setSumPerm(policyInfo.getSumPerm());
 
             List<TpaSettleDetailInfo> detailInfos = tpaSettleInfo.getDetailInfos();
             for (TpaSettleDetailInfo detailInfo : detailInfos) {
-                PolicyAndRiskRelation policyAndRiskRelation = new PolicyAndRiskRelation();
-                policyAndRiskRelation.setPolicyNo(detailInfo.getPolicyNo());
-                policyAndRiskRelation.setPolicyItemNo(detailInfo.getPolicyItemNo());
-                policyAndRiskRelation.setStatus(ClaimStatus.DATAYES.getCode());
-                CompanyRiskPolicyInfo companyRiskPolicyInfo = policyAndRiskService.selectPolicyInfoListByPolicyNo(policyAndRiskRelation);
+                /*PolicyAndRiskRelation policyAndRiskRelation = new PolicyAndRiskRelation();
+                policyAndRiskRelation.setCompanyCode(detailInfo.getPolicyNo());
+                policyAndRiskRelation.setCompanyCode(detailInfo.getPolicyItemNo());
+                policyAndRiskRelation.setStatus(ClaimStatus.DATAYES.getCode());*/
+                CompanyRiskPolicyInfo companyRiskPolicyInfo = policyAndRiskService.selectPolicyInfoListByPolicyNo(policyRiskRelation);
                 detailInfo.setInsuredNo(companyRiskPolicyInfo.getInsuredNo());
                 detailInfo.setName(companyRiskPolicyInfo.getName());
-                detailInfo.setPrem(companyRiskPolicyInfo.getPrem());
                 if ("02".equals(tpaSettleInfo.getSettlementType())) {
                     detailInfo.setPremiumRatio(tpaSettleInfo.getSettlementValue());
+                    detailInfo.setPrem(companyRiskPolicyInfo.getPrem());
                 }
                 detailInfo.setValidStartDate(companyRiskPolicyInfo.getValidStartDate());
                 detailInfo.setAppName(companyRiskPolicyInfo.getAppName());

@@ -940,7 +940,14 @@
             {required: true, message: "联系人姓名不能为空", trigger: ["blur","change"]}
           ],
           'contactsPerson.mobilePhone': [
-            {required: true, message: "联系人电话不能为空", trigger: ["blur","change"]}
+            {required: true, message: "联系人电话不能为空", trigger: ["blur","change"]},
+            {
+              required: true,
+              message: "目前只支持中国大陆的手机号码",
+              pattern: /^1[34578]\d{9}$/,
+              trigger: "blur"
+            },
+
           ],
           'contactsPerson.sex': [
             {required: true, message: "联系人性别不能为空", trigger: ["blur","change"]}

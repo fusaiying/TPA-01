@@ -140,7 +140,7 @@
         </el-col>
         <el-col :span="8">
           <el-form-item label="根因改善：" prop="rootImprovement">
-            <el-input v-model="form.rootImprovement" class="item-width" clearable size="mini" placeholder="请输入"/>
+            <el-input v-model="form.rootImprovement" disabled class="item-width" clearable size="mini" placeholder="请输入"/>
           </el-form-item>
         </el-col>
         <el-col :span="8">

@@ -3,9 +3,9 @@ package com.paic.ehis.claimflow.service.impl;
 import com.paic.ehis.claimflow.domain.*;
 import com.paic.ehis.claimflow.mapper.*;
 import com.paic.ehis.claimflow.service.IClaimCalDealService;
-import com.paic.ehis.common.core.annotation.Excel;
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.SecurityUtils;
+import com.paic.ehis.common.core.utils.StringUtils;
 import com.paic.ehis.system.api.domain.*;
 import com.paic.ehis.system.api.domain.ClaimCasePolicy;
 import com.paic.ehis.system.api.domain.dto.*;
@@ -142,14 +142,19 @@ public class ClaimCalDealServiceImpl implements IClaimCalDealService {
                     BeanUtils.copyProperties(claimCasePolicy,claimCaseBillDetailInfo);
                 }
 
-                ClaimProductDutyDetail dutyDetailQuery = new ClaimProductDutyDetail();
-                dutyDetailQuery.setRiskCode(claimCaseBillDetailInfo.getRiskCode());
-                dutyDetailQuery.setPlanCode(claimCaseBillDetailInfo.getPlanCode());
-                List<ClaimProductDutyDetail> dutyDetailList = claimProductDutyDetailMapper.selectClaimProductDutyDetailList(dutyDetailQuery);
-                if (dutyDetailList.size()>0) {
-                    ClaimProductDutyDetail dutyDetail = dutyDetailList.get(0);
-                    BeanUtils.copyProperties(dutyDetail,claimCaseBillDetailInfo);
+                if (StringUtils.isEmpty(claimCaseBillDetailInfo.getDutyCode()) || StringUtils.isEmpty(claimCaseBillDetailInfo.getDutyDetailCode())) {
+                    //未指定责任或明细时 匹配责任和明细
+                    ClaimProductDutyDetail dutyDetailQuery = new ClaimProductDutyDetail();
+                    dutyDetailQuery.setRiskCode(claimCaseBillDetailInfo.getRiskCode());
+                    dutyDetailQuery.setPlanCode(claimCaseBillDetailInfo.getPlanCode());
+                    // todo 增加 申请原因编码 治疗类型 出险类型 的条件
+                    List<ClaimProductDutyDetail> dutyDetailList = claimProductDutyDetailMapper.selectClaimProductDutyDetailList(dutyDetailQuery);
+                    if (dutyDetailList.size()>0) {
+                        ClaimProductDutyDetail dutyDetail = dutyDetailList.get(0);
+                        BeanUtils.copyProperties(dutyDetail,claimCaseBillDetailInfo);
+                    }
                 }
+
                 BeanUtils.copyProperties(claimCaseBillDetail,claimCaseBillDetailInfo);
 
                 claimCaseBillDetailInfoList.add(claimCaseBillDetailInfo);
@@ -200,12 +205,12 @@ public class ClaimCalDealServiceImpl implements IClaimCalDealService {
         ClaimCaseCal claimCaseCal = new ClaimCaseCal();
         claimCaseCal.setRptNo(claimCaseCalculateInfo.getRptNo());
         claimCaseCal.setCalAmount(claimCaseCalculateInfo.getCalAmount());
-        claimCaseCal.setBillCurrency("CNY");
         claimCaseCal.setPayAmount(claimCaseCalculateInfo.getCalAmount());
         claimCaseCal.setRefusedAmount(claimCaseCalculateInfo.getRefusedAmount());
         claimCaseCal.setDebtAmount(BigDecimal.ZERO);
-        //claimCaseCal.setExchangeRate(claimCaseCalculateInfo.getExchangeRate());
-        //claimCaseCal.setPayAmountForeign(claimCaseCalculateInfo.getPayAmountForeign());
+        claimCaseCal.setBillCurrency(claimCaseCalculateInfo.getClaimCaseBillInfoList().get(0).getBillCurrency());
+        claimCaseCal.setExchangeRate(claimCaseCalculateInfo.getExchangeRate());
+        claimCaseCal.setPayAmountForeign(claimCaseCalculateInfo.getCalAmount().divide(claimCaseCalculateInfo.getExchangeRate()).setScale(2,BigDecimal.ROUND_HALF_UP));
         claimCaseCal.setStatus("Y");
         claimCaseCal.setCreateBy(SecurityUtils.getUsername());
         claimCaseCal.setCreateTime(DateUtils.getNowDate());

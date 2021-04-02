@@ -58,8 +58,8 @@ public class PayableServiceImpl implements PayableService {
                 detailInfo.setRefusedAmount(BigDecimal.ZERO);
                 detailInfo.setDeduUsed(BigDecimal.ZERO);
             }
+            claimCaseCalculateInfo.setExchangeRate(exchangeRate.getParities());
         }
-
 
         return claimCaseCalculateInfo;
     }

@@ -96,7 +96,7 @@ public class CopayServiceImpl implements CopayService {
 
 
                 detailInfo.setCalAmount(calAmount);
-                detailInfo.setPayRate(ratio);
+                detailInfo.setPayRate(ratio.multiply(BigDecimal.valueOf(100)));
             }
         }
 

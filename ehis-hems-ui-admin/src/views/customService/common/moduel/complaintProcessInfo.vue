@@ -152,8 +152,10 @@
       //调用接口获取数据 changeValue
       getQualityHandleInfo(query).then(res => {
         if (res != null && res.code == '200') {
-          this.tableData.appeal[0].appealFlag = res.data.appealFlag
-          this.tableData.appeal[0].appealReason = res.data.appealReason
+          if (this.params.node!='mistake'){
+            this.tableData.appeal[0].appealFlag = res.data.appealFlag
+            this.tableData.appeal[0].appealReason = res.data.appealReason
+          }
           this.tableData.inspectionId = res.data.inspectionId
           this.tableData.score = res.data.score
           this.tableData.items = res.data.items

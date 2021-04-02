@@ -45,7 +45,7 @@
         </el-col>
         <el-col :span="8">
           <el-form-item label="联系人地址：" prop="address">
-            <el-input v-model="acceptForm.contactsPerson.address" class="item-width" size="mini"/>
+            <el-input v-model="acceptForm.contactsPerson.address" maxlength="2000" class="item-width" size="mini"/>
           </el-form-item>
         </el-col>
         <el-col :span="8">
@@ -65,7 +65,7 @@
         </el-col>
         <el-col :span="8">
           <el-form-item label="来电号码：" prop="mobilePhone1">
-            <el-input v-model="acceptForm.callPerson.mobilePhone" class="item-width" size="mini"/>
+            <el-input v-model="acceptForm.callPerson.mobilePhone" maxlength="15"  class="item-width" size="mini"/>
           </el-form-item>
         </el-col>
         <el-col :span="8">
@@ -118,38 +118,60 @@
         </el-col>-->
       </el-row>
       <el-row>
-        <el-col :span="16">
-          <el-form-item label="家庭电话：" style="white-space: nowrap" prop="phone">
-            国家区号+
-            <el-input v-model="acceptForm.contactsPerson.homePhone1[0]" class="item-width" clearable
-                      style="width: 75px"/>
+        <el-col :span="3">
+          <el-form-item label="家庭电话：" style="white-space: nowrap;" :inline="true" prop="contactsPerson.homePhone1[0]">
+            国家区号:+
+            <el-input v-model="acceptForm.contactsPerson.homePhone1[0]" class="item-width" style="width: 60px" maxlength="50"/>
+          </el-form-item>
+        </el-col>
+        <el-col :span="4">
+          <el-form-item style="white-space: nowrap;" :inline="true" prop="contactsPerson.homePhone1[1]">
             区号
-            <el-input v-model="acceptForm.contactsPerson.homePhone1[1]" class="item-width" clearable size="mini"
-                      style="width: 75px" maxlength="50"/>
+            <el-input v-model="acceptForm.contactsPerson.homePhone1[1]" class="item-width" size="mini" style="width: 145px"
+                      maxlength="50"/>
+          </el-form-item>
+        </el-col>
+        <el-col :span="4">
+          <el-form-item style="white-space: nowrap;" :inline="true" prop="contactsPerson.homePhone1[2]">
             号码
-            <el-input v-model="acceptForm.contactsPerson.homePhone1[2]" class="item-width" clearable size="mini"
-                      style="width: 120px" maxlength="50"/>
+            <el-input v-model="acceptForm.contactsPerson.homePhone1[2]" class="item-width" size="mini" style="width: 145px"
+                      maxlength="50"/>
+          </el-form-item>
+        </el-col>
+        <el-col :span="4">
+          <el-form-item style="white-space: nowrap;" :inline="true" prop="contactsPerson.homePhone1[3]">
             分机号
-            <el-input v-model="acceptForm.contactsPerson.homePhone1[3]" class="item-width" clearable size="mini"
-                      style="width: 75px" maxlength="50"/>
+            <el-input v-model="acceptForm.contactsPerson.homePhone1[3]" class="item-width" size="mini" style="width: 145px"
+                      maxlength="4"/>
           </el-form-item>
         </el-col>
       </el-row>
       <el-row>
-        <el-col :span="16">
-          <el-form-item label="办公电话：" style="white-space: nowrap" prop="phone">
-            国家区号+
-            <el-input v-model="acceptForm.contactsPerson.workPhone1[0]" class="item-width" clearable
-                      style="width: 75px"/>
+        <el-col :span="3">
+          <el-form-item label="办公电话：" style="white-space: nowrap;" :inline="true" prop="contactsPerson.workPhone1[0]">
+            国家区号:+
+            <el-input v-model="acceptForm.contactsPerson.workPhone1[0]" class="item-width" style="width: 60px" maxlength="50"/>
+          </el-form-item>
+        </el-col>
+        <el-col :span="4">
+          <el-form-item style="white-space: nowrap;" :inline="true" prop="contactsPerson.workPhone1[1]">
             区号
-            <el-input v-model="acceptForm.contactsPerson.workPhone1[1]" class="item-width" clearable size="mini"
-                      style="width: 75px" maxlength="50"/>
+            <el-input v-model="acceptForm.contactsPerson.workPhone1[1]" class="item-width" size="mini" style="width: 145px"
+                      maxlength="50"/>
+          </el-form-item>
+        </el-col>
+        <el-col :span="4">
+          <el-form-item style="white-space: nowrap;" :inline="true" prop="contactsPerson.workPhone1[2]">
             号码
-            <el-input v-model="acceptForm.contactsPerson.workPhone1[2]" class="item-width" clearable size="mini"
-                      style="width: 120px" maxlength="50"/>
+            <el-input v-model="acceptForm.contactsPerson.workPhone1[2]" class="item-width" size="mini" style="width: 145px"
+                      maxlength="50"/>
+          </el-form-item>
+        </el-col>
+        <el-col :span="4">
+          <el-form-item style="white-space: nowrap;" :inline="true" prop="contactsPerson.workPhone1[3]">
             分机号
-            <el-input v-model="acceptForm.contactsPerson.workPhone1[3]" class="item-width" clearable size="mini"
-                      style="width: 75px" maxlength="50"/>
+            <el-input v-model="acceptForm.contactsPerson.workPhone1[3]" class="item-width" size="mini" style="width: 145px"
+                      maxlength="4"/>
           </el-form-item>
         </el-col>
       </el-row>
@@ -182,6 +204,7 @@
           <el-input
             type="textarea"
             :rows="2"
+            maxlength="2000"
             v-model="acceptForm.content">
           </el-input>
         </el-form-item>
@@ -191,6 +214,7 @@
 
 </template>
 <script>
+  import {validEmail, validPhone} from '@/utils/validate'
   let dictss = [{dictType: 'cs_service_item'}
     , {dictType: 'cs_channel'}
     , {dictType: 'cs_priority'}
@@ -223,19 +247,19 @@
         this.acceptData = newValue
         console.info("newValue");
         console.info(newValue);
-        this.acceptForm.channelCode = newValue.channelCode
-        this.acceptForm.insuredPersonId = newValue.insuredPersonId
-        this.acceptForm.email = newValue.email
-        this.acceptForm.persuasionFlag = newValue.persuasionFlag
-        this.acceptForm.callCenterId = newValue.callCenterId
-        this.acceptForm.workOrderNo = newValue.workOrderNo
-        this.acceptForm.serviceItem = newValue.serviceItem
-        this.acceptForm.businessService = newValue.businessService
-        this.acceptForm.callRelationBy = newValue.callRelationBy
-        this.acceptForm.priorityLevel = newValue.priorityLevel
-        this.acceptForm.contactsRelationBy = newValue.contactsRelationBy
-        this.acceptForm.content = newValue.content
-        this.acceptForm.organCode = newValue.organCode
+        this.acceptForm.channelCode = newValue.channelCode;
+        this.acceptForm.insuredPersonId = newValue.insuredPersonId;
+        this.acceptForm.email = newValue.email;
+        this.$set(this.acceptForm,'persuasionFlag',newValue.persuasionFlag);
+        this.acceptForm.callCenterId = newValue.callCenterId;
+        this.acceptForm.workOrderNo = newValue.workOrderNo;
+        this.acceptForm.serviceItem = newValue.serviceItem;
+        this.acceptForm.businessService = newValue.businessService;
+        this.acceptForm.callRelationBy = newValue.callRelationBy;
+        this.acceptForm.priorityLevel = newValue.priorityLevel;
+        this.acceptForm.contactsRelationBy = newValue.contactsRelationBy;
+        this.acceptForm.content = newValue.content;
+        this.acceptForm.organCode = newValue.organCode;
         if (newValue.contactsPerson.homePhone1 == null) {
           newValue.contactsPerson.homePhone1 = ['', '', '', '']
         }
@@ -267,16 +291,56 @@
       }
       const checkMobilePhone1= (rule, value, callback) => {
         if (this.acceptForm.callPerson && this.acceptForm.callPerson.mobilePhone!='' && this.acceptForm.callPerson.mobilePhone!=null && this.acceptForm.callPerson.mobilePhone!=undefined) {
-          callback()
+          let str = this.acceptForm.callPerson.mobilePhone.replace(/\s/g, "")
+          if (!validPhone(str)) {
+            if (!/^\d+$/.test(str)) {
+              callback(new Error('目前只支持录入数字'))
+            } else {
+              callback()
+            }
+          } else {
+            callback()
+          }
         } else {
           callback(new Error('来电号码不能为空'))
         }
       }
       const checkMobilePhone2= (rule, value, callback) => {
         if (this.acceptForm.contactsPerson && this.acceptForm.contactsPerson.mobilePhone!='' && this.acceptForm.contactsPerson.mobilePhone!=null && this.acceptForm.contactsPerson.mobilePhone!=undefined) {
-          callback()
+          let str = this.acceptForm.contactsPerson.mobilePhone.replace(/\s/g, "")
+          if (!validPhone(str)) {
+            if (!/\d{3}-\d{8}|\d{4}-\d{7,8}/.test(str)) {
+              callback(new Error('电话号码格式不合法，请检查'))
+            } else {
+              callback()
+            }
+          } else {
+            callback()
+          }
         } else {
-          callback(new Error('联系人移动电话'))
+          callback()
+        }
+      }
+      const validateEmail = (rule, value, callback) => {
+        if ( this.acceptForm.email!='' && this.acceptForm.email!=null && this.acceptForm.email!=undefined) {
+          if (!validEmail(this.acceptForm.email)) {
+            callback(new Error('邮箱格式不合法，请检查'))
+          } else {
+            callback()
+          }
+        } else {
+          callback()
+        }
+      }
+      const checkPhone1 = (rule, value, callback) => {
+        if ( this.acceptForm.email!='' && this.acceptForm.email!=null && this.acceptForm.email!=undefined) {
+          if (!validEmail(this.acceptForm.email)) {
+            callback(new Error('邮箱格式不合法，请检查'))
+          } else {
+            callback()
+          }
+        } else {
+          callback()
         }
       }
       return {
@@ -294,6 +358,7 @@
         acceptData: {},
         divTitle: '',
         acceptForm: {
+          email:'',
           businessService: undefined,
           insuredPersonId: undefined,
           workOrderNo: undefined,
@@ -322,9 +387,68 @@
           name1:{validator: checkName1, required: true, trigger: ['blur']},
           name2: {validator: checkName2, required: true, trigger: ['blur']},
           mobilePhone1: {validator: checkMobilePhone1, required: true, trigger: ['blur']},
-          //mobilePhone2: {validator: checkMobilePhone2, required: true, trigger: ['blur']},
+          mobilePhone2: {validator: checkMobilePhone2, trigger: ['blur']},
+          email: {validator: validateEmail, trigger: ['blur']},
+        /*  phone1: {validator: checkPhone1, trigger: ['blur']},
+          phone2: {validator: checkPhone2, trigger: ['blur']},*/
           organCode: [{required: true, message: '出单机构不能为空', trigger: 'change'}],
-          content: [{required: true, message: '投诉内容不能为空', trigger: 'blur'}]
+          content: [{required: true, message: '投诉内容不能为空', trigger: 'blur'}],
+          'contactsPerson.homePhone1[0]': [
+            {required: false,
+              message: "国家区号只能录入数字",
+              pattern: /^\d*$/,
+              trigger: ['change','blur']
+            }
+          ],
+          'contactsPerson.homePhone1[1]': [
+            {required: false,
+              message: "区号只能录入数字",
+              pattern: /^\d*$/,
+              trigger: ['change','blur']
+            }
+          ],
+          'contactsPerson.homePhone1[2]': [
+            {required: false,
+              message: "号码只能录入数字",
+              pattern: /^\d*$/,
+              trigger: ['change','blur']
+            }
+          ],
+          'contactsPerson.homePhone1[3]': [
+            {required: false,
+              message: "分机号只能录入数字",
+              pattern: /^\d*$/,
+              trigger: ['change','blur']
+            }
+          ],
+          'contactsPerson.workPhone1[0]': [
+            {required: false,
+              message: "国家区号只能录入数字",
+              pattern: /^\d*$/,
+              trigger: ['change','blur']
+            }
+          ],
+          'contactsPerson.workPhone1[1]': [
+            {required: false,
+              message: "区号只能录入数字",
+              pattern: /^\d*$/,
+              trigger: ['change','blur']
+            }
+          ],
+          'contactsPerson.workPhone1[2]': [
+            {required: false,
+              message: "号码只能录入数字",
+              pattern: /^\d*$/,
+              trigger: ['change','blur']
+            }
+          ],
+          'contactsPerson.workPhone1[3]': [
+            {required: false,
+              message: "分机号只能录入数字",
+              pattern: /^\d*$/,
+              trigger: ['change','blur']
+            }
+          ],
         }
       }
     },

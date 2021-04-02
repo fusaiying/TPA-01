@@ -3,6 +3,8 @@ package com.paic.ehis.finance.service.impl;
 import com.paic.ehis.common.core.domain.R;
 import com.paic.ehis.common.core.exception.BaseException;
 import com.paic.ehis.common.core.utils.DateUtils;
+import com.paic.ehis.common.core.utils.SecurityUtils;
+import com.paic.ehis.common.core.utils.StringUtils;
 import com.paic.ehis.system.api.domain.FinanceBorrowInfo;
 import com.paic.ehis.finance.mapper.FinanceBorrowInfoMapper;
 import com.paic.ehis.system.api.GetProviderInfoService;
@@ -129,7 +131,9 @@ public class FinancePayInfoServiceImpl implements IFinancePayInfoService
                 ClaimBatch claimBatch = claimBatchMapper.selectClaimBatchById(batchNo);
                 //调接口所需的对象
                 BaseProviderInfo baseProviderInfo = new BaseProviderInfo();
-                baseProviderInfo.setProviderCode(claimBatch.getHospitalcode());
+                if(StringUtils.isNotNull(claimBatch)) {
+                    baseProviderInfo.setProviderCode(claimBatch.getHospitalcode());
+                }
                 //调用医院接口
                 R<List<BaseProviderInfo>>  result =  getProviderInfoService.selectOrgInfo(baseProviderInfo);
 

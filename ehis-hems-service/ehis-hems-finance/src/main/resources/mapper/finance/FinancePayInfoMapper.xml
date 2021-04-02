@@ -187,7 +187,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="payStartDate != null and payEndDate != null"> and fpi.pay_date between #{payStartDate} and DATE_ADD(#{payEndDate},INTERVAL 1 DAY)</if>
             and fpi.status='Y'  	AND ( fpi.pay_status = '04' OR fpi.pay_status = '05' )
            GROUP BY
-           fpi.batch_no,
+           fpi.pay_batch_no,
            fpi.payee_bank,
            fpi.acc_no,
            fpi.acc_name,
@@ -201,7 +201,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 
     <delete id="deleteFinanceTransferfailedList" parameterType="String">
-        update finance_pay_info  set pay_status='02'  where batch_no = #{batchNo}
+        update finance_pay_info  set pay_status='02'  where pay_batch_no = #{batchNo}
     </delete>
 
     <select id="selectFinancePayInfoByBatchNo" parameterType="String" resultMap="FinancePayInfoResult">

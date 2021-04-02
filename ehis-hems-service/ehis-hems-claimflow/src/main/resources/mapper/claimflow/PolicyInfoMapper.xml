@@ -111,9 +111,10 @@ SELECT a.policy_manage_com,a.policy_no,a.insured_no,b.birthday,b.occupation FROM
             <if test="riskCode != null  and riskCode != ''"> and prr.risk_code = #{riskCode}</if>
             <if test="companyCode != null  and companyCode != ''"> and info.company_code = #{companyCode}</if>
             <if test="status != null  and status != ''"> and prr.status = #{status}</if>
-            <if test="startTime != null  and startTime != null"> and info.valid_start_date &gt;= #{startTime}</if>
-            <if test="endTime != null  and endTime != null"> and info.valid_start_date &lt;= #{endTime}</if>
+            <if test="startTime != null  and startTime != ''"> and info.valid_start_date &gt;= #{startTime}</if>
+            <if test="endTime != null  and endTime != ''"> and info.valid_start_date &lt;= #{endTime}</if>
             and prr.status = 'Y'
+            and (info.settle_flag = 'Y' or is null)
         </where>
         group by
         prr.risk_code,

@@ -54,13 +54,6 @@ public class FinanceAdvanceSettleDetailServiceImpl implements IFinanceAdvanceSet
     @Autowired
     private RemoteUserService userService;
 
-    @Autowired
-    private BaseIssuingcompanyRiskrelaMapper baseIssuingcompanyRiskrelaMapper;
-
-    @Autowired
-    private PolicyAndRiskService policyAndRiskService;
-
-
     /**
      * 发起垫付款任务
      */
@@ -68,10 +61,12 @@ public class FinanceAdvanceSettleDetailServiceImpl implements IFinanceAdvanceSet
     public List<FinanceAdvanceSettleVO> InitiateAdvancePaymentTask(FinanceAdvanceSettleDTO financeAdvanceSettleDTO) {
         FinanceAdvanceSettleDTO financeAdvanceSettleDTO1=new FinanceAdvanceSettleDTO();
         Date settleEndDate=financeAdvanceSettleDTO.getSettleEndDate();//页面录入结算止期
-        String companyCode=financeAdvanceSettleDTO.getCompanyCode();
-        Date settleStartDate=financeAdvanceSettleDetailMapper.selectLastendDate(companyCode);//根据出单公司查询最新的结算止期
-        financeAdvanceSettleDTO1.setSettleEndDate(settleEndDate);
+        String companyName=financeAdvanceSettleDTO.getCompanyName();
+
+        Date settleStartDate=financeAdvanceSettleDetailMapper.selectLastendDate(companyName);//根据出单公司查询最新的结算止期
+
         financeAdvanceSettleDTO1.setSettleStartDate(settleStartDate);
+        financeAdvanceSettleDTO1.setSettleEndDate(settleEndDate);
         List<FinanceAdvanceSettleVO>  financeAdvanceSettleVOS=financeAdvanceSettleDetailMapper.selectFinanceAdvanceSettleVOList(financeAdvanceSettleDTO1);
         List<FinanceAdvanceSettleVO> financeAdvanceSettleVOS1=new ArrayList<>();
         if(StringUtils.isNotNull(financeAdvanceSettleVOS)) {
@@ -87,9 +82,6 @@ public class FinanceAdvanceSettleDetailServiceImpl implements IFinanceAdvanceSet
                     financeAdvanceSettleVO1.setSumPayAmount(new BigDecimal("0"));
                 }
                 financeAdvanceSettleVOS1.add(financeAdvanceSettleVO1);
-            }
-        }
-        FinanceAdvanceSettleVO financeAdvanceSettleVO = new FinanceAdvanceSettleVO();
         //垫付款服务费及明细的新增
         FinanceAdvanceSettleTask financeAdvanceSettleTask = new FinanceAdvanceSettleTask();
         FinanceAdvanceSettleDetail financeAdvanceSettleDetail = new FinanceAdvanceSettleDetail();
@@ -104,7 +96,9 @@ public class FinanceAdvanceSettleDetailServiceImpl implements IFinanceAdvanceSet
         if (null != jsonObject && jsonObject.containsKey("userName")) {
             userName = jsonObject.get("userName").toString();
         }
+        String taskNo = "AS" + PubFun.createMySqlMaxNoUseCache("finance_advance_settle_detail", 10, 10);
         financeAdvanceSettleTask.setSettleStatus("01");
+        financeAdvanceSettleTask.setSettleTaskNo(taskNo);
         financeAdvanceSettleTask.setSettleEndDate(financeAdvanceSettleDTO.getSettleEndDate());//录入结算止期
         financeAdvanceSettleTask.setCompanyCode(financeAdvanceSettleDTO.getCompanyCode());//录入出单公司
         financeAdvanceSettleTask.setStatus("Y");
@@ -115,6 +109,7 @@ public class FinanceAdvanceSettleDetailServiceImpl implements IFinanceAdvanceSet
         financeAdvanceSettleTask.setUpdateTime(DateUtils.getNowDate());
 
         financeAdvanceSettleDetail.setStatus("Y");
+        financeAdvanceSettleDetail.setSettleTaskNo(taskNo);
         financeAdvanceSettleDetail.setDeptCode(organCode);
         financeAdvanceSettleDetail.setCompanyCode(financeAdvanceSettleDTO.getCompanyCode());//录入出单公司
         financeAdvanceSettleDetail.setCreateBy(userName);
@@ -122,6 +117,10 @@ public class FinanceAdvanceSettleDetailServiceImpl implements IFinanceAdvanceSet
         financeAdvanceSettleDetail.setUpdateBy(userName);
         financeAdvanceSettleDetail.setUpdateTime(DateUtils.getNowDate());
 
+        String recordId=PubFun.createMySqlMaxNoUseCache("rf", 10, 10);
+        Long recordDd= Long.valueOf(recordId);
+        financeSettleRecord.setRecordId(recordDd);
+        financeSettleRecord.setSettleTaskNo(taskNo);
         financeSettleRecord.setTaskType("02");
         financeSettleRecord.setOperator(userName);
         financeSettleRecord.setHistoryFlag("N");
@@ -133,7 +132,7 @@ public class FinanceAdvanceSettleDetailServiceImpl implements IFinanceAdvanceSet
         financeSettleRecord.setUpdateBy(userName);
         financeSettleRecord.setUpdateTime(DateUtils.getNowDate());
 
-        if (StringUtils.isNotNull(financeAdvanceSettleDTO.getSettleTaskNo())) {
+        if (StringUtils.isNotNull(financeAdvanceSettleVO.getSettleTaskNo())) {
             //设值 结算表的结算起期
             financeAdvanceSettleDetailMapper.updateFinanceAdvanceSettleDetail(financeAdvanceSettleDetail);
             financeAdvanceSettleTaskMapper.updateFinanceAdvanceSettleTask(financeAdvanceSettleTask);
@@ -150,8 +149,9 @@ public class FinanceAdvanceSettleDetailServiceImpl implements IFinanceAdvanceSet
             financeAdvanceSettleDetailMapper.updateFinanceAdvanceSettleDetail(financeAdvanceSettleDetail);
             financeAdvanceSettleTaskMapper.updateFinanceAdvanceSettleTask(financeAdvanceSettleTask);
             financeSettleRecordMapper.insertFinanceSettleRecord(financeSettleRecord);
-            financeAdvanceSettleVOS.add(financeAdvanceSettleVO);
         }
+    }
+}
         return financeAdvanceSettleVOS1;
     }
 
@@ -326,17 +326,26 @@ public class FinanceAdvanceSettleDetailServiceImpl implements IFinanceAdvanceSet
     public List<FinanceAdvanceSettleVO> selectFinanceAdvanceSettleVOInfo(String settleTaskNo) {
         List<FinanceAdvanceSettleVO> financeAdvanceSettleVO = financeAdvanceSettleDetailMapper.selectFinanceAdvanceSettleVOInfo(settleTaskNo);
         List<FinanceAdvanceSettleVO> financeAdvanceSettleVOS = new ArrayList<>();
-        for (FinanceAdvanceSettleVO financeAdvanceSettleVO1 : financeAdvanceSettleVO) {
-            /*获取折后金额，根据报案号获取折后金额*/
-            String discountamount = financeAdvanceSettleDetailMapper.selectDiscountAmount(financeAdvanceSettleVO1.getRptNo());
-            /*获取账单总金额*/
-            String billAmount = financeAdvanceSettleDetailMapper.selectBillAmount(financeAdvanceSettleVO1.getRptNo());
-            FinanceAdvanceSettleVO financeAdvanceSettleVO2 = new FinanceAdvanceSettleVO();
-            BeanUtils.copyProperties(financeAdvanceSettleVO1, financeAdvanceSettleVO2);
-            financeAdvanceSettleVO2.setBillAmount(new BigDecimal(billAmount));   //赋值给账单总金额
-            financeAdvanceSettleVO2.setDiscountedAmount(new BigDecimal(discountamount)); //给折后金额赋值
-            financeAdvanceSettleVO2.setAdvanceAmount(new BigDecimal(discountamount));  //结算金额默认为折后金额
-            financeAdvanceSettleVOS.add(financeAdvanceSettleVO2);
+        if (StringUtils.isNotEmpty(financeAdvanceSettleVO)) {
+            for (FinanceAdvanceSettleVO financeAdvanceSettleVO1 : financeAdvanceSettleVO) {
+                if (StringUtils.isNotNull(financeAdvanceSettleVO1)) {
+                    /*获取折后金额，根据报案号获取折后金额*/
+                    String discountamount = financeAdvanceSettleDetailMapper.selectDiscountAmount(financeAdvanceSettleVO1.getRptNo());
+                    /*获取账单总金额*/
+                    String billAmount = financeAdvanceSettleDetailMapper.selectBillAmount(financeAdvanceSettleVO1.getRptNo());
+                    FinanceAdvanceSettleVO financeAdvanceSettleVO2 = new FinanceAdvanceSettleVO();
+                    BeanUtils.copyProperties(financeAdvanceSettleVO1, financeAdvanceSettleVO2);
+                    if (StringUtils.isNotEmpty(discountamount)) {
+                        financeAdvanceSettleVO2.setDiscountedAmount(new BigDecimal(discountamount)); //给折后金额赋值
+                        financeAdvanceSettleVO2.setAdvanceAmount(new BigDecimal(discountamount));  //结算金额默认为折后金额
+                    }
+                    if (StringUtils.isNotEmpty(billAmount)) {
+                        financeAdvanceSettleVO2.setBillAmount(new BigDecimal(billAmount));   //赋值给账单总金额
+
+                    }
+                    financeAdvanceSettleVOS.add(financeAdvanceSettleVO2);
+                }
+            }
         }
         return financeAdvanceSettleVOS;
     }

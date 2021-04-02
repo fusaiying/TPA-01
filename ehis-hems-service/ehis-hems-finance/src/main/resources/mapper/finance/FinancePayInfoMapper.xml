@@ -201,7 +201,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 
     <delete id="deleteFinanceTransferfailedList" parameterType="String">
-        update finance_pay_info  set pay_status='02'  where batch_no = #{batchNo}
+        update finance_pay_info  set pay_status='02'  where pay_batch_no = #{batchNo}
     </delete>
 
     <select id="selectFinancePayInfoByBatchNo" parameterType="String" resultMap="FinancePayInfoResult">

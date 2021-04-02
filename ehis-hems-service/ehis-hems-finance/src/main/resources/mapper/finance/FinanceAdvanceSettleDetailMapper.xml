@@ -217,49 +217,36 @@
 
     <!--查询列表详情信息-->
     <select id="selectFinanceAdvanceSettleVOInfo" parameterType="String" resultMap="FinanceAdvanceSettleVOResult">
-        SELECT b.batch_no,
-               c.rpt_no,
-               d.insured_no,
-               d.NAME,
-               e.hospital_code,
-               e.treatment_start_date,
-               e.bill_no,
-               e.invoice_no,
-               c.case_status,
-               f.pay_conclusion,
-               g.submit_date,
-               c.end_case_time,
-               g.source,
-               f.pay_amount,
-               b.pay_date,
-               a.remark
-        FROM finance_advance_settle_task a,
-             finance_pay_info b,
-             claim_case c,
-             claim_case_insured d,
-             claim_case_bill e,
-             claim_case_cal f,
-             claim_batch g,
-             finance_advance_settle_detail h
-        WHERE a.settle_task_no = #{settleTaskNo}
-          AND c.rpt_no = d.rpt_no
-          AND c.rpt_no = e.rpt_no
-          AND c.rpt_no = f.rpt_no
-          AND c.rpt_no = h.rpt_no
-          AND g.batch_no = b.batch_no
-          AND g.batch_no = c.batch_no
-          AND g.batch_no = h.batch_no
-          AND b.dept_code = a.dept_code
-          AND h.settle_task_no = a.settle_task_no
-          AND a.STATUS = 'Y'
-          AND b.STATUS = 'Y'
-          AND c.STATUS = 'Y'
-          AND d.STATUS = 'Y'
-          AND e.STATUS = 'Y'
-          AND f.STATUS = 'Y'
-          AND g.STATUS = 'Y'
-          AND h.STATUS = 'Y'
+        SELECT
+            fasd.batch_no,
+            fasd.rpt_no,
+            cci.insured_no,
+            cci.name,
+            ccb.hospital_code,
+            ccb.treatment_start_date,
+            ccb.bill_no,
+            ccb.invoice_no,
+            cc.case_status,
+            ccc.pay_conclusion,
+            cb.submit_date,
+            cc.end_case_time,
+            cb.source,
+            ccc.pay_amount,
+            fpi.pay_date,
+            fask.remark
+        FROM
+            finance_advance_settle_task fask
+                LEFT JOIN finance_advance_settle_detail fasd ON fask.settle_task_no = fasd.settle_task_no  and fasd.status='Y'
+                LEFT JOIN	claim_batch cb on fasd.batch_no=cb.batch_no and cb.status='Y'
+                LEFT JOIN	finance_pay_info fpi on fasd.batch_no=fpi.batch_no and fpi.status='Y'
+                LEFT JOIN   claim_case cc on fasd.rpt_no=cc.rpt_no and cc.status='Y'
+                LEFT JOIN   claim_case_insured cci on fasd.rpt_no=cci.rpt_no and cci.status='Y'
+                LEFT JOIN   claim_case_bill ccb on fasd.rpt_no=ccb.rpt_no  and ccb.status='Y'
+                LEFT JOIN   claim_case_cal ccc on fasd.rpt_no=ccc.rpt_no  and ccc.status='Y'
+        where 1=1 and fask.status='Y' and fask.settle_task_no=#{settleTaskNo}
     </select>
+
+    <!--取结算该出单公司下最新的结算止期-->
     <select id="selectLastendDate" resultType="java.util.Date">
         SELECT settle_end_date
         FROM finance_advance_settle_task
@@ -267,6 +254,7 @@
         and company_code = {companyCode}
         ORDER BY create_time DESC LIMIT 1
     </select>
+
     <!--计算折后金额结算金额默认为折后金额-->
     <select id="selectDiscountAmount" resultType="String">
         SELECT sum(claim_case_bill.bill_amount) - sum(claim_case_bill.hos_discount_amount) AS hos_discount_amount
@@ -291,10 +279,10 @@
 
     <!--计算账单总金额-->
     <select id="selectBillAmount" resultType="String">
-        select sum(claim_case_cal.pay_amount)
-        FROM claim_case_cal
+        select sum(claim_case_bill.bill_amount)
+        FROM claim_case_bill
         where rpt_no = #{rptNo}
-          AND claim_case_cal.status = "Y"
+          AND claim_case_bill.status = "Y"
     </select>
 
     <!--删除按钮修改状态为无效-->

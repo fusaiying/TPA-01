@@ -70,8 +70,10 @@ public class FinanceAdvanceSettleDetailServiceImpl implements IFinanceAdvanceSet
         Date settleEndDate=financeAdvanceSettleDTO.getSettleEndDate();//页面录入结算止期
         String companyCode=financeAdvanceSettleDTO.getCompanyCode();
         Date settleStartDate=financeAdvanceSettleDetailMapper.selectLastendDate(companyCode);//根据出单公司查询最新的结算止期
-        financeAdvanceSettleDTO1.setSettleEndDate(settleEndDate);
+        if(null!=settleStartDate){
         financeAdvanceSettleDTO1.setSettleStartDate(settleStartDate);
+        }
+        financeAdvanceSettleDTO1.setSettleEndDate(settleEndDate);
         List<FinanceAdvanceSettleVO>  financeAdvanceSettleVOS=financeAdvanceSettleDetailMapper.selectFinanceAdvanceSettleVOList(financeAdvanceSettleDTO1);
         List<FinanceAdvanceSettleVO> financeAdvanceSettleVOS1=new ArrayList<>();
         if(StringUtils.isNotNull(financeAdvanceSettleVOS)) {
@@ -326,17 +328,23 @@ public class FinanceAdvanceSettleDetailServiceImpl implements IFinanceAdvanceSet
     public List<FinanceAdvanceSettleVO> selectFinanceAdvanceSettleVOInfo(String settleTaskNo) {
         List<FinanceAdvanceSettleVO> financeAdvanceSettleVO = financeAdvanceSettleDetailMapper.selectFinanceAdvanceSettleVOInfo(settleTaskNo);
         List<FinanceAdvanceSettleVO> financeAdvanceSettleVOS = new ArrayList<>();
-        for (FinanceAdvanceSettleVO financeAdvanceSettleVO1 : financeAdvanceSettleVO) {
-            /*获取折后金额，根据报案号获取折后金额*/
-            String discountamount = financeAdvanceSettleDetailMapper.selectDiscountAmount(financeAdvanceSettleVO1.getRptNo());
-            /*获取账单总金额*/
-            String billAmount = financeAdvanceSettleDetailMapper.selectBillAmount(financeAdvanceSettleVO1.getRptNo());
-            FinanceAdvanceSettleVO financeAdvanceSettleVO2 = new FinanceAdvanceSettleVO();
-            BeanUtils.copyProperties(financeAdvanceSettleVO1, financeAdvanceSettleVO2);
-            financeAdvanceSettleVO2.setBillAmount(new BigDecimal(billAmount));   //赋值给账单总金额
-            financeAdvanceSettleVO2.setDiscountedAmount(new BigDecimal(discountamount)); //给折后金额赋值
-            financeAdvanceSettleVO2.setAdvanceAmount(new BigDecimal(discountamount));  //结算金额默认为折后金额
-            financeAdvanceSettleVOS.add(financeAdvanceSettleVO2);
+        if (StringUtils.isNotEmpty(financeAdvanceSettleVO)) {
+            for (FinanceAdvanceSettleVO financeAdvanceSettleVO1 : financeAdvanceSettleVO) {
+                /*获取折后金额，根据报案号获取折后金额*/
+                String discountamount = financeAdvanceSettleDetailMapper.selectDiscountAmount(financeAdvanceSettleVO1.getRptNo());
+                /*获取账单总金额*/
+                String billAmount = financeAdvanceSettleDetailMapper.selectBillAmount(financeAdvanceSettleVO1.getRptNo());
+                FinanceAdvanceSettleVO financeAdvanceSettleVO2 = new FinanceAdvanceSettleVO();
+                BeanUtils.copyProperties(financeAdvanceSettleVO1, financeAdvanceSettleVO2);
+                if (StringUtils.isNotEmpty(discountamount)) {
+                    financeAdvanceSettleVO2.setDiscountedAmount(new BigDecimal(discountamount)); //给折后金额赋值
+                    financeAdvanceSettleVO2.setAdvanceAmount(new BigDecimal(discountamount));  //结算金额默认为折后金额
+                }
+                if (StringUtils.isNotEmpty(billAmount)) {
+                    financeAdvanceSettleVO2.setBillAmount(new BigDecimal(billAmount));   //赋值给账单总金额
+                }
+                financeAdvanceSettleVOS.add(financeAdvanceSettleVO2);
+            }
         }
         return financeAdvanceSettleVOS;
     }

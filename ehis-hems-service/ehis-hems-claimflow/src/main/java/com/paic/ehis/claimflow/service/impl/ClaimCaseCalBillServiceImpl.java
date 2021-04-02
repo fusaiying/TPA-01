@@ -243,10 +243,12 @@ public class ClaimCaseCalBillServiceImpl implements IClaimCaseCalBillService
             BigDecimal billAmount1 = calConclusionVo.getSumBillAmount();
             BigDecimal discountAmount1 = calConclusionVo.getSumHosDiscountAmount();// 折扣金额
 
+            BigDecimal voRate = calConclusionVo.getExchangeRate();
+            voRate = voRate == null ? exchangeRate.getParities() : voRate;
             //01-非全赔
             if("01".equals(claimFlag)) {
                 if(payAmount1 != null) {
-                    BigDecimal payAmountForeign = payAmount1.divide(exchangeRate.getParities(),20,BigDecimal.ROUND_HALF_UP);
+                    BigDecimal payAmountForeign = payAmount1.divide(voRate,20,BigDecimal.ROUND_HALF_UP);
                     claimCaseCal.setPayAmountForeign(payAmountForeign);
                 }
             }
@@ -254,7 +256,7 @@ public class ClaimCaseCalBillServiceImpl implements IClaimCaseCalBillService
             if("02".equals(claimFlag)) {
                 if(billAmount1 != null && discountAmount1 != null) {
                     BigDecimal subtractVal = billAmount1.subtract(discountAmount1);
-                    BigDecimal payAmountForeign = subtractVal.divide(exchangeRate.getParities(),20,BigDecimal.ROUND_HALF_UP);
+                    BigDecimal payAmountForeign = subtractVal.divide(voRate,20,BigDecimal.ROUND_HALF_UP);
                     claimCaseCal.setPayAmountForeign(payAmountForeign);
                 }
             }

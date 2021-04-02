@@ -1304,6 +1304,11 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
         tSpecialMap.put("changeTime", "changeTime");
         tSpecialMap.put("remarkTime", "remarkTime");
         tSpecialMap.put("oldmodifyBy", "oldmodifyBy");
+        tSpecialMap.put("contactsPersonId", "contactsPersonId");
+        tSpecialMap.put("complaintPersonId", "complaintPersonId");
+        tSpecialMap.put("itemCode", "itemCode");
+        tSpecialMap.put("complaintTime", "complaintTime");
+        tSpecialMap.put("callPersonId", "callPersonId");
 
         List<String> keyList = new ArrayList<>();
         Iterator<String> iter = map1.keySet().iterator();

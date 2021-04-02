@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -362,20 +363,22 @@ public class CustomServiceSpotCheckController extends BaseController {
     @PostMapping("/internal/selectWorkOrder/exportOneError")
     public void exportOneError(HttpServletResponse response, QualityDTO qualityDTO) throws IOException
     {
+        List<ComplaintErrorRateVO> list=new ArrayList<>();
         //先进行查询//查到人和总数
         List<QualityAcceptVo> qualityAcceptVos = qualityInspectionAcceptService.selectQualityVo2(qualityDTO);
         //遍历
         for (QualityAcceptVo qualityAcceptVo : qualityAcceptVos) {
-            String modifyBy = qualityAcceptVo.getModifyBy();
+            String updatedBy = qualityAcceptVo.getUpdatedBy();
             QualityDTO qualityDTO1 = new QualityDTO();
-            qualityDTO1.setEndCaseStartDate();
-            qualityDTO1.setEndCaseEndDate();
-            qualityDTO1.setModifyBy();
+            qualityDTO1.setEndCaseStartDate(qualityDTO.getEndCaseStartDate());
+            qualityDTO1.setEndCaseEndDate(qualityDTO.getEndCaseEndDate());
+            qualityDTO1.setUpdatedBy(updatedBy);
             //不合格
             qualityDTO1.setResult("02");
             List<QualityAcceptVo> qualityAcceptVo1 = qualityInspectionAcceptService.selectQualityVo2(qualityDTO1);
                 for (QualityAcceptVo qualityAcceptVo2 : qualityAcceptVo1) {
-                    (qualityAcceptVo2.getModifyBy()).equals(qualityAcceptVo.getModifyBy());
+                    if((qualityAcceptVo2.getUpdatedBy()).equals(qualityAcceptVo.getUpdatedBy())){
+
                      //取20
                     String num1 = qualityAcceptVo2.getNum();
                     //取40
@@ -391,16 +394,28 @@ public class CustomServiceSpotCheckController extends BaseController {
                     //最后格式化
                     nt.format(i);
                     String res = i.toString();
-
                     //放进对象里
                     qualityDTO.setNum1(num1);
                     qualityDTO.setNum2(num2);
                     qualityDTO.setRes(res);
+
+                    ComplaintErrorRateVO complaintErrorRateVO = new ComplaintErrorRateVO();
+                        String endCaseEndDate = qualityDTO.getEndCaseEndDate();
+                        String endCaseStartDate = qualityDTO.getEndCaseStartDate();
+                        String closingTime=endCaseEndDate +" - "+ endCaseStartDate;
+                        complaintErrorRateVO.setClosingTime(closingTime);
+                        complaintErrorRateVO.setSamplingQuantity(num2);
+                        complaintErrorRateVO.setErrorsNumber(num1);
+                        complaintErrorRateVO.setErrorsRate(res);
+                        list.add(complaintErrorRateVO);
+                    }else {
+                        System.out.println("啊啊啊啊啊");
+                    }
                 }
         }
-        List<ComplaintErrorRateVO> list1 = qualityInspectionAcceptService.exportOneError(qualityDTO);
+        //List<ComplaintErrorRateVO> list1 = qualityInspectionAcceptService.exportOneError(qualityDTO);
         ExcelUtil<ComplaintErrorRateVO> util = new ExcelUtil<ComplaintErrorRateVO>(ComplaintErrorRateVO.class);
-        util.exportExcel(response, list1, "WorkOrderOne");
+        util.exportExcel(response, list, "WorkOrderOne");
     }
 
 

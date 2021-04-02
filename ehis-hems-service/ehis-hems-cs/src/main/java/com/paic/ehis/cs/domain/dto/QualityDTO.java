@@ -157,7 +157,7 @@ public class QualityDTO {
     public void setEndCaseStartDate() {
     }
 
-    public void setModifyBy() {
+    public void setModifyBy(String modifyBy) {
     }
 
     public void setEndCaseEndDate() {

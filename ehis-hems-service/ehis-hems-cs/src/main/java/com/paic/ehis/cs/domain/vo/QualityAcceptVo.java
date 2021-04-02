@@ -52,6 +52,14 @@ public class QualityAcceptVo {
     @Excel(name = "质检结果",readConverterExp = "01=合格,02=不合格")
     private String result;
 
+    public String getNum() {
+        return num;
+    }
+
+    public void setNum(String num) {
+        this.num = num;
+    }
+
     private String num;
 
 

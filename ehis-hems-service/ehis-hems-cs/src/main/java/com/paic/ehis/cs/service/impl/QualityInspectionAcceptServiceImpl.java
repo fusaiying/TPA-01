@@ -888,6 +888,14 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
      */
     @Override
     public List<ComplaintQualityInspectionVO> selectQualityVoCom(QualityDTO qualityDTO) {
+
+        /*List<QualityAcceptVo1> qualityAcceptVos = qualityInspectionAcceptMapper.selectQualityVo11(qualityDTO);
+        for (QualityAcceptVo1 qualityAcceptVo : qualityAcceptVos) {
+            System.out.println(qualityAcceptVo);
+            String inspectionId = qualityAcceptVo.getInspectionId();
+            System.out.println(inspectionId);
+            List<QualityInspectionHandleVo1> a1=qualityInspectionAcceptMapper.selectQualityVo12(String inspectionId);
+        }*/
         return qualityInspectionAcceptMapper.selectQualityVoCom(qualityDTO);
     }
 

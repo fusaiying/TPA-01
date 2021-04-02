@@ -96,6 +96,7 @@ public class CustomServiceDemandController extends BaseController {
         return AjaxResult.success(demandAcceptVo);
     }
 
+    //预约待处理池获取
     //    @PreAuthorize("@ss.hasPermi('system:customService::huoqu')")
     @Log(title = "获取 ", businessType = BusinessType.UPDATE)
     @PutMapping("/obtain")
@@ -111,6 +112,7 @@ public class CustomServiceDemandController extends BaseController {
     }
 
 
+    //预约新增详细页面
     //    @PreAuthorize("@ss.hasPermi('system:customService::edit')")
     @Log(title = "增加 ", businessType = BusinessType.INSERT)
     @PutMapping("/serviceAdd")

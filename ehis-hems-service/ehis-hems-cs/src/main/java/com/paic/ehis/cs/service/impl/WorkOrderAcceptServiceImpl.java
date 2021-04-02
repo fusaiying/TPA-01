@@ -142,7 +142,8 @@ public class WorkOrderAcceptServiceImpl implements IWorkOrderAcceptService
         flowLog.setWorkOrderNo(businessData.getApplicationCaseNo());
         flowLog.setLinkCode(CodeEnum.ORDER_STATE_01.getCode());
         flowLog.setOperateCode(CodeEnum.OPERATE_CODE_01.getCode());
-        flowLog.setStatus(CodeEnum.ORDER_STATE_01.getCode());
+//        flowLog.setStatus(CodeEnum.ORDER_STATE_01.getCode());
+        flowLog.setMakeBy(businessData.getAccepter());
         flowLog.setMakeTime(DateUtils.getNowDate());
         flowLog.setCreatedBy(businessData.getAccepter());
         flowLog.setUpdatedBy(businessData.getAccepter());
@@ -436,7 +437,7 @@ public class WorkOrderAcceptServiceImpl implements IWorkOrderAcceptService
     public WorkOrderAccept selectWorkOrderAcceptById2(String workOrderNo) {
         WorkOrderAccept workOrderAccept = workOrderAcceptMapper.selectWorkOrderAcceptById1(workOrderNo);
         String updateBy = SecurityUtils.getUsername();
-        if (workOrderAccept.getStatus().equals("04") || workOrderAccept.getStatus().equals("05")){
+        if (workOrderAccept.getStatus().equals("04") || workOrderAccept.getStatus().equals("05") || workOrderAccept.getStatus().equals("03")){
             workOrderAccept.setFlag1("2");
         }else if (null != workOrderAccept.getUpdateBy()) {
             if (workOrderAccept.getUpdateBy().equals(updateBy)) {//当前案件操作人非自己查询后按钮

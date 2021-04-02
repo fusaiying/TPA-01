@@ -178,7 +178,7 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
     }
 
     /**
-     * 个人预约修改页面
+     * 个人预约修改页面反显
      * @param workOrderNo
      * @return
      */
@@ -401,7 +401,7 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
         workOrderAccept.setUpdateBy(SecurityUtils.getUsername());
         workOrderAccept.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
         workOrderAccept.setActivationNum(workOrderAccept.getActivationNum()+1);
-        if (workOrderAccept.getStatus().equals("05")){
+        if (flowLog.getLinkCode().equals("03")){
             workOrderAccept.setStatus("02");
         }
         workOrderAcceptMapper.updateWorkOrderAccept(workOrderAccept);

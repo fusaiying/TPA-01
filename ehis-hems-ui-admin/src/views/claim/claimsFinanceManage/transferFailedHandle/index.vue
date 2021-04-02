@@ -121,6 +121,12 @@
       paymentHandle(row){
         deleteFinance(row.batchNo).then(res =>{
           if(res != null && res.code === 200){
+            this.$message({
+              message: '支付成功！',
+              type: 'success',
+              center: true,
+              showClose: true
+            })
             this.search()
           }
         })

@@ -309,7 +309,8 @@ public class ClaimCaseCalServiceImpl implements IClaimCaseCalService
                         if(nowClaimCaseCal.getBillCurrency().equals("CNY")) {
                             claimCaseCal.setPayAmount(payAmount.subtract(prePayAmount));
                         }  else {
-                            claimCaseCal.setPayAmount(payAmountForeign);
+                            BigDecimal exchangeRate = nowClaimCaseCal.getExchangeRate() == null ? new BigDecimal(1) : nowClaimCaseCal.getExchangeRate();
+                            claimCaseCal.setPayAmount(payAmountForeign.divide(exchangeRate,2));
                             claimCaseCal.setPayAmountForeign(payAmount);
                         }
                     }

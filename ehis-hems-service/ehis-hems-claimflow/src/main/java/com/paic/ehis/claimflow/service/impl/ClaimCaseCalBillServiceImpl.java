@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -260,6 +261,54 @@ public class ClaimCaseCalBillServiceImpl implements IClaimCaseCalBillService
                     claimCaseCal.setPayAmountForeign(subtractVal);
                 }
             }
+
+            /**
+             * modify by  :  hjw   如果是申诉案件 ， 需要更新 payMount字段值为 本次支付差额
+             * time:2021-06-29
+             */
+            /** start */
+            if(rptNo.indexOf("-") > 0 ) {
+                // 需要判断，是否申诉案件；若是 计算 本次支付差额
+                CalConclusionVo precalConclusionVo = claimCaseCalMapper.selectPreCalConclusionByRptNo(rptNo);
+                if(precalConclusionVo != null) {
+                    precalConclusionVo = claimCaseCalMapper.selectClaimCaseCalInformation(precalConclusionVo.getRptNo());
+                }
+                /***
+                 * 折后金额等于全部账单的（账单金额-折扣金额）之和
+                 *
+                 * 本次支付差额
+                 * 1、当前案件为申诉案件时显示该字段；
+                 * 2、本次支付差额（人民币）=本次赔付金额（非全赔）/折后金额（全赔）-申诉原案件赔付金额/折后金额；
+                 * 3、本次支付差额（外币）=本次外币给付金额-申诉原案件外币给付金额；
+                 * 4、若本次支付差额为负值则显示负号，代表需要收费
+                 * 5、显示格式为金额+币种
+                 */
+                BigDecimal defaultValue = new BigDecimal(0);
+                BigDecimal prePayAmount = precalConclusionVo.getCalAmount() == null ?  defaultValue : precalConclusionVo.getCalAmount(); // 原案件 赔付金额
+                BigDecimal preSumBillAmount = precalConclusionVo.getSumBillAmount() == null ? defaultValue : precalConclusionVo.getSumBillAmount(); //原案件 账单金额
+                BigDecimal preDiscountAmount = precalConclusionVo.getSumHosDiscountAmount() == null ? defaultValue : precalConclusionVo.getSumHosDiscountAmount();//原案件 折扣金额
+
+                String billCurrency = calConclusionVo.getBillCurrency();  // 账单币种
+                BigDecimal payAmount = calConclusionVo.getCalAmount() == null ? defaultValue : calConclusionVo.getCalAmount(); // 赔付金额
+                BigDecimal sumBillAmount = calConclusionVo.getSumBillAmount() == null ? defaultValue : calConclusionVo.getSumBillAmount(); // 账单金额
+                BigDecimal discountAmount = calConclusionVo.getSumHosDiscountAmount() == null ? defaultValue : calConclusionVo.getSumHosDiscountAmount();// 折扣金额
+
+                if (billCurrency.equalsIgnoreCase("CNY")) {
+                    // 全赔付
+                    if (claimFlag.equals("01")) {
+                        calConclusionVo.setPaymentDifference(payAmount.subtract(prePayAmount));
+                    }
+                    if (claimFlag.equals("02")) {
+                        BigDecimal subtract = sumBillAmount.subtract(discountAmount); // 本次 折后金额
+                        BigDecimal subtract1 = preSumBillAmount.subtract(preDiscountAmount); // 原案件 折后金额
+                        calConclusionVo.setPaymentDifference(subtract.subtract(subtract1));
+                    }
+                } else {
+                    //本次支付差额（外币）=本次外币给付金额-申诉原案件外币给付金额；
+                    calConclusionVo.setPaymentDifference(calConclusionVo.getPayAmountForeign().subtract(precalConclusionVo.getPayAmountForeign()));
+                }
+            }
+            /** end */
         }
         /***
          * end

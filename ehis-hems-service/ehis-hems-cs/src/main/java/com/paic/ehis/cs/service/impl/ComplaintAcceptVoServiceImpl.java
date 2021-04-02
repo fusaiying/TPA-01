@@ -1129,14 +1129,13 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
             VoUtils voUtils = new VoUtils<DemandAcceptVo>();
             complaintAcceptVo1 = (ComplaintAcceptVo) voUtils.fromVoToVo(complaintAcceptVo1, map, acceptDetailInfo1);
         }
-        String callPersonId = complaintAcceptVo.getCallPersonId();
+        String callPersonId = complaintAcceptVo1.getCallPersonId();
         if (StringUtils.isEmpty(callPersonId) && complaintAcceptVo.getCallPerson() != null) {
             callPersonId = complaintAcceptVo.getCallPerson().getPersonId();
         }
         PersonInfo callPerson1 = personInfoMapper.selectPersonInfoById(callPersonId);
-        PersonInfo callPerson = new PersonInfo();
-        if (callPerson1 != null) {
-            BeanUtils.copyProperties(callPerson1, callPerson);
+        PersonInfo callPerson = complaintAcceptVo.getCallPerson();
+        if (callPerson != null) {
             //插入来电人
             callPerson.setPersonId(callPersonId);
             callPerson.setName(complaintAcceptVo.getCallPerson().getName());
@@ -1146,14 +1145,13 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
             personInfoMapper.updatePersonInfo(callPerson);
         }
 
-        String contactsPersonId = complaintAcceptVo.getContactsPersonId();
+        String contactsPersonId = complaintAcceptVo1.getContactsPersonId();
         if (StringUtils.isEmpty(contactsPersonId) && complaintAcceptVo.getContactsPerson() != null) {
             contactsPersonId = complaintAcceptVo.getContactsPerson().getPersonId();
         }
         PersonInfo contactsPerson1 = personInfoMapper.selectPersonInfoById(contactsPersonId);
-        PersonInfo contactsPerson = new PersonInfo();
-        if (contactsPerson1 != null) {
-            BeanUtils.copyProperties(contactsPerson1, contactsPerson);
+        PersonInfo contactsPerson = complaintAcceptVo.getContactsPerson();
+        if (contactsPerson != null) {
             //插入联系人
             contactsPerson.setPersonId(contactsPersonId);
             contactsPerson.setSex(complaintAcceptVo.getContactsPerson().getSex());
@@ -1197,15 +1195,14 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
             personInfoMapper.updatePersonInfo(contactsPerson);
         }
 
-        String complaintPersonId = complaintAcceptVo.getComplaintPersonId();
+        String complaintPersonId = complaintAcceptVo1.getComplaintPersonId();
         if (StringUtils.isEmpty(complaintPersonId) && complaintAcceptVo.getComplaintPerson() != null) {
             complaintPersonId = complaintAcceptVo.getComplaintPerson().getPersonId();
         }
         PersonInfo complaintPerson1 = personInfoMapper.selectPersonInfoById(complaintPersonId);
         //数据库对象
-        PersonInfo complaintPerson = new PersonInfo();
-        if (complaintPerson1 != null) {
-            BeanUtils.copyProperties(complaintPerson1, complaintPerson);
+        PersonInfo complaintPerson = complaintAcceptVo1.getComplaintPerson();
+        if (complaintPerson != null) {
             //插入投诉人
             complaintPerson.setPersonId(complaintPersonId);
             complaintPerson.setSex(complaintAcceptVo.getComplaintPerson().getSex());
@@ -1362,7 +1359,7 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
             }
         }
 
-//联系人
+        //联系人
         Map map3 = JSONObject.parseObject(JSONObject.toJSONString(callPerson1), Map.class);
         Map map4 = JSONObject.parseObject(JSONObject.toJSONString(callPerson), Map.class);
         Iterator<String> iter5 = map3.keySet().iterator();

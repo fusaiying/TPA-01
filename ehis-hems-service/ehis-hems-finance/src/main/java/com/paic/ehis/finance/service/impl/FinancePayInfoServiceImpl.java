@@ -147,9 +147,9 @@ public class FinancePayInfoServiceImpl implements IFinancePayInfoService
                     BaseProviderInfo hospital = baseProviderList.get(0);
                     TransferfailedVo transferfailedVo=new TransferfailedVo();
                     BeanUtils.copyProperties(transferfailedVo1,transferfailedVo);
-                    transferfailedVo.setPayeeBank(hospital.getAccountName());//开户行
-                    transferfailedVo.setAccName(hospital.getBankName());//账户名
-                    transferfailedVo.setAccNo(hospital.getBankCode());//账户号
+                    transferfailedVo.setPayeeBank(hospital.getBankName());//开户行
+                    transferfailedVo.setAccName(hospital.getAccountName());//账户名
+                    transferfailedVo.setAccNo(hospital.getAccountNo());//账号
                     transferfailedVos1.add(transferfailedVo);
                 }
 

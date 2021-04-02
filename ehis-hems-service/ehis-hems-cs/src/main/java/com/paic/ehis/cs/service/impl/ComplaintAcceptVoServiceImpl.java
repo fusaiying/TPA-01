@@ -1473,18 +1473,14 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
                 editDetailMapper.insertEditDetail(editDetail);
             }
         }
-        if (complaintAcceptVo.getEditInfo() != null) {
-            EditInfo editInfo = new EditInfo();
-            editInfo.setEditId(editId);
-            editInfo.setWorkOrderId(workOrderNo);
-            editInfo.setCreatedBy(SecurityUtils.getUsername());
-            editInfo.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
-            editInfo.setUpdatedBy(SecurityUtils.getUsername());
-            editInfo.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
-            editInfo.setEditRemark(complaintAcceptVo.getEditInfo().getEditRemark());
-            editInfo.setEditReason(complaintAcceptVo.getEditInfo().getEditReason());
-            editInfoMapper.insertEditInfo(editInfo);
-        }
+        EditInfo editInfo = new EditInfo();
+        editInfo.setEditId(editId);
+        editInfo.setWorkOrderId(workOrderNo);
+        editInfo.setCreatedBy(SecurityUtils.getUsername());
+        editInfo.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+        editInfo.setUpdatedBy(SecurityUtils.getUsername());
+        editInfo.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+        editInfoMapper.insertEditInfo(editInfo);
         //投诉已完成的修改  修改服务处理信息
         if(StringUtils.isNotEmpty(complaintAcceptVo.getFlag())){
             this.complaintHandling(complaintAcceptVo.getComplaintDealVo());

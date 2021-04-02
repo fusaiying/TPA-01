@@ -176,6 +176,11 @@ public class FinanceAdvanceSettleDetailServiceImpl implements IFinanceAdvanceSet
                     String taskNo = "AS" + PubFun.createMySqlMaxNoUseCache("finance_advance_settle_detail", 10, 10);
                     financeAdvanceSettleDetail.setSettleTaskNo(taskNo);
                     financeAdvanceSettleTask.setSettleStatus("01");
+                    financeAdvanceSettleDetail.setSettleTaskNo(taskNo);
+                    Long taskId = Long.valueOf(PubFun.createMySqlMaxNoUseCache("finance_advance_settle_task", 10, 10));
+                    Long detailId= Long.valueOf(PubFun.createMySqlMaxNoUseCache("finance_advance_settle_detail", 10, 10));
+                    financeAdvanceSettleTask.setTaskId(taskId);
+                    financeAdvanceSettleDetail.setDetailId(detailId);
                     financeAdvanceSettleDetail.setAdvanceAmount(financeAdvanceSettleVO.getAdvanceAmount());//修改金额
                     financeAdvanceSettleDetail.setRemark(financeAdvanceSettleVO.getRemark());//修改状态
                     financeAdvanceSettleTaskMapper.updateFinanceAdvanceSettleTask(financeAdvanceSettleTask);
@@ -196,6 +201,10 @@ public class FinanceAdvanceSettleDetailServiceImpl implements IFinanceAdvanceSet
                             financeAdvanceSettleTask.setSettleStatus("01");//设置为待确认状态
                             financeAdvanceSettleDetail.setStatus("Y");
                             financeAdvanceSettleTask.setStatus("Y");
+                            Long taskId = Long.valueOf(PubFun.createMySqlMaxNoUseCache("finance_advance_settle_task", 10, 10));
+                            Long detailId= Long.valueOf(PubFun.createMySqlMaxNoUseCache("finance_advance_settle_detail", 10, 10));
+                            financeAdvanceSettleTask.setTaskId(taskId);
+                            financeAdvanceSettleDetail.setDetailId(detailId);
                             financeAdvanceSettleDetail.setAdvanceAmount(financeAdvanceSettleVO.getAdvanceAmount());//修改金额
                             financeAdvanceSettleDetail.setRemark(financeAdvanceSettleVO.getRemark());//修改状态
                             financeAdvanceSettleTaskMapper.updateFinanceAdvanceSettleTask(financeAdvanceSettleTask);//单个修改
@@ -213,6 +222,10 @@ public class FinanceAdvanceSettleDetailServiceImpl implements IFinanceAdvanceSet
                             financeAdvanceSettleTask.setSettleStatus("01");
                             financeAdvanceSettleDetail.setStatus("Y");
                             financeAdvanceSettleTask.setStatus("Y");
+                            Long taskId = Long.valueOf(PubFun.createMySqlMaxNoUseCache("finance_advance_settle_task", 10, 10));
+                            Long detailId= Long.valueOf(PubFun.createMySqlMaxNoUseCache("finance_advance_settle_detail", 10, 10));
+                            financeAdvanceSettleTask.setTaskId(taskId);
+                            financeAdvanceSettleDetail.setDetailId(detailId);
                             financeAdvanceSettleDetail.setAdvanceAmount(financeAdvanceSettleVO.getAdvanceAmount());//修改金额
                             financeAdvanceSettleDetail.setRemark(financeAdvanceSettleVO.getRemark());//修改状态
                             financeAdvanceSettleTaskMapper.updateFinanceAdvanceSettleTask(financeAdvanceSettleTask);

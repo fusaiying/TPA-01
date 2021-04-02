@@ -1271,10 +1271,10 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
          */
 
         if (null != claimCase.getIsAppeal() && "02".equals(claimCase.getIsAppeal()) && claimCaseCal.getDebtAmount() != null) {
-            CalConclusionVo calConclusionVo = claimCaseCalMapper.selectPreCalConclusionByRptNo(claimCase.getRptNo());
+            //CalConclusionVo calConclusionVo = claimCaseCalMapper.selectPreCalConclusionByRptNo(claimCase.getRptNo());
             ClaimCaseDebt claimCaseDebt = claimCaseDebtMapper.selectClaimCaseDebtByRptNo(claimCase.getRptNo().split("-")[0]);
             if (null != claimCaseDebt) {
-                claimCaseDebt.setDebtAmount(calConclusionVo.getDebtAmount());
+                claimCaseDebt.setDebtAmount(claimCaseCal.getDebtAmount());
                 claimCaseDebt.setUpdateBy(SecurityUtils.getUsername());
                 claimCaseDebt.setUpdateTime(DateUtils.getNowDate());
                 claimCaseDebtMapper.updateClaimCaseDebt(claimCaseDebt);
@@ -1653,10 +1653,10 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
              */
 
               if (null != claimCase.getIsAppeal() && "02".equals(claimCase.getIsAppeal()) && claimCaseCheckDTO.getDebtAmount() != null) {
-                CalConclusionVo calConclusionVo = claimCaseCalMapper.selectPreCalConclusionByRptNo(claimCaseCheckDTO.getRptNo());
+               // CalConclusionVo calConclusionVo = claimCaseCalMapper.selectPreCalConclusionByRptNo(claimCaseCheckDTO.getRptNo());
                 ClaimCaseDebt claimCaseDebt = claimCaseDebtMapper.selectClaimCaseDebtByRptNo(claimCaseCheckDTO.getRptNo().split("-")[0]);
                     if(null != claimCaseDebt) {
-                        claimCaseDebt.setDebtAmount(calConclusionVo.getDebtAmount());
+                        claimCaseDebt.setDebtAmount(claimCaseCheckDTO.getDebtAmount());
                         claimCaseDebt.setUpdateBy(SecurityUtils.getUsername());
                         claimCaseDebt.setUpdateTime(DateUtils.getNowDate());
                         claimCaseDebtMapper.updateClaimCaseDebt(claimCaseDebt);

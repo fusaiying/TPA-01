@@ -139,8 +139,8 @@ export function getProductServiceList(data) {
 export function getManualInfoList(data) {
   return request({
     url: '/product/info/getManualInfoList',
-    method: 'post',
-    data: data
+    method: 'get',
+    params: data
 
   })
 }

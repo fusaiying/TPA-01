@@ -55,7 +55,7 @@ public class ClaimCaseDebtController extends BaseController
     public void export(HttpServletResponse response, DebtInfoDTO debtInfoDTO) throws IOException
     {
         if ("0".equals(debtInfoDTO.getFlag())){
-            List<DebtInfoVO> list = claimCaseDebtService.selectDebtInitList();
+            List<DebtInfoVO> list = claimCaseDebtService.selectDebtInitList(debtInfoDTO);
             ExcelUtil<DebtInfoVO> util = new ExcelUtil<DebtInfoVO>(DebtInfoVO.class);
             util.exportExcel(response, list, "debt");
         } else {
@@ -122,7 +122,7 @@ public class ClaimCaseDebtController extends BaseController
         // 初始化或者查询条件为空
         if ("0".equals(debtInfoDTO.getFlag()) || ("1".equals(debtInfoDTO.getFlag()) && null==debtInfoDTO.getRptNo() && null==debtInfoDTO.getPolicyNo() && null==debtInfoDTO.getHospitalCode() && null==debtInfoDTO.getInsuredName()
                 && null==debtInfoDTO.getIdNo() && null==debtInfoDTO.getStartDate() && null==debtInfoDTO.getWhiteStatus() && null==debtInfoDTO.getPolicyItemNo())){
-            list = claimCaseDebtService.selectDebtInitList();
+            list = claimCaseDebtService.selectDebtInitList(debtInfoDTO);
         } else {
             list = claimCaseDebtService.selectDebtList(debtInfoDTO);
         }

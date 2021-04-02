@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.paic.ehis.common.core.web.domain.BaseEntity;
 import lombok.Data;
 
-import java.io.Serializable;
 import java.util.Date;
 
 @Data

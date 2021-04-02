@@ -258,10 +258,6 @@ public class ClaimCaseCalServiceImpl implements IClaimCaseCalService
     @Override
     public CalConclusionVo updateClaimCaseCal(ClaimCaseCal claimCaseCal) {
 
-        /**
-         * modify by  :  hjw   更新数据可能多于一条， 还有无效数据也更新了
-         */
-        CalConclusionVo reult = null;
 //        SyncExchangeRate exchangeRate = new SyncExchangeRate();
 //        ClaimCaseCal caseCal = claimCaseCalMapper.selectClaimCaseCalByRptNo(claimCaseCal.getRptNo());
 //        String currency="CNY";
@@ -285,6 +281,7 @@ public class ClaimCaseCalServiceImpl implements IClaimCaseCalService
 //            if (i > 0){
 //                reult = claimCaseCalMapper.selectClaimCaseCalInformation(claimCaseCal.getRptNo());
 //            }
+        CalConclusionVo reult = null;
             try {
                 /**
                  * modify by  :  hjw   如果是申诉案件 ， 需要更新 payMount字段值为 本次支付差额

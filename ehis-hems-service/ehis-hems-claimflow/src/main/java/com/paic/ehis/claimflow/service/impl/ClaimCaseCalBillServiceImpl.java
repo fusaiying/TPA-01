@@ -313,7 +313,7 @@ public class ClaimCaseCalBillServiceImpl implements IClaimCaseCalBillService
                 BigDecimal nowPayAmount = nowClaimCaseCal.getPayAmount() == null ? defaultValue : nowClaimCaseCal.getPayAmount();
                 BigDecimal payAmountForeign = nowClaimCaseCal.getPayAmountForeign() == null ? defaultValue : nowClaimCaseCal.getPayAmountForeign();
                 if(nowClaimCaseCal.getBillCurrency().equals("CNY")) {
-                    claimCaseCal.setPayAmount(payAmount.subtract(prePayAmount));
+                    claimCaseCal.setPayAmount(calConclusionVo.getPaymentDifference());
                 }  else {
                     BigDecimal exchangeRateValue = nowClaimCaseCal.getExchangeRate() == null ? new BigDecimal(1) : nowClaimCaseCal.getExchangeRate();
                     claimCaseCal.setPayAmount(payAmountForeign.divide(exchangeRateValue,2));

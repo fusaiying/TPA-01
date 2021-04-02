@@ -1,5 +1,6 @@
 package com.paic.ehis.cs.domain;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -115,6 +116,9 @@ public class WorkOrderAccept extends BaseEntity
     private Integer activationNum;
     /**外部受理案件号*/
     private String otherNo;
+
+    /**处理时效 */
+    private BigDecimal handleTime;
 
     private String flag;
 

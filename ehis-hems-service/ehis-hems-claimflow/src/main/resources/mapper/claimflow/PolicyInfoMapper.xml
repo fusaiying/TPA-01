@@ -40,7 +40,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 
     <sql id="selectPolicyInfoVo">
-        select policy_no, policy_item_no, insured_no, name, app_name,valid_start_date, valid_end_date, policy_risk_type, policy_status, special_agreement, company_code, company_name, policy_manage_com, policy_type, plan_code, org_policy_no, org_policy_item_no, ss_flag, status, create_by, create_time, update_by, update_time from policy_info
+        select policy_no, policy_item_no, insured_no, name, app_name,valid_start_date, valid_end_date, prem,policy_risk_type, policy_status, special_agreement, company_code, company_name, policy_manage_com, policy_type, plan_code, org_policy_no, org_policy_item_no, ss_flag, status, create_by, create_time, update_by, update_time from policy_info
     </sql>
 
     <select id="selectCustomerInfoMap" parameterType="String" resultMap="CustomerInfoMapResult">
@@ -82,6 +82,9 @@ SELECT a.policy_manage_com,a.policy_no,a.insured_no,b.birthday,b.occupation FROM
         <result property="companyCode"    column="company_code"    />
         <result property="riskName"    column="risk_name"    />
         <result property="riskCode"    column="risk_code"    />
+        <result property="prem"    column="prem"    />
+        <result property="sumPerm"    column="sumPerm"    />
+        <result property="totalPeople"    column="totalPeople"    />
         <result property="policyManageCom"    column="policy_manage_com"    />
     </resultMap>
     <select id="selectPolicyInfoListByPolicyNo" parameterType="com.paic.ehis.system.api.domain.PolicyAndRiskRelation" resultMap="CompanyRiskPolicyMap">
@@ -100,7 +103,7 @@ SELECT a.policy_manage_com,a.policy_no,a.insured_no,b.birthday,b.occupation FROM
         prr.risk_code,
         prr.risk_name,
         count(info.policy_item_no)totalPeople,
-        sum(prem)
+        sum(prem)sumPerm
         FROM
         policy_risk_relation prr
         LEFT JOIN policy_info info ON info.policy_no = prr.policy_no and info.status='Y'
@@ -108,10 +111,10 @@ SELECT a.policy_manage_com,a.policy_no,a.insured_no,b.birthday,b.occupation FROM
             <if test="riskCode != null  and riskCode != ''"> and prr.risk_code = #{riskCode}</if>
             <if test="companyCode != null  and companyCode != ''"> and info.company_code = #{companyCode}</if>
             <if test="status != null  and status != ''"> and prr.status = #{status}</if>
-            <if test="startTime != null  and startTime != null"> and info.valid_start_date &gt;= #{startTime}  </if>
-            and info.valid_start_date &lt;= #{endTime}
+            <if test="startTime != null  and startTime != ''"> and info.valid_start_date &gt;= #{startTime}</if>
+            <if test="endTime != null  and endTime != ''"> and info.valid_start_date &lt;= #{endTime}</if>
             and prr.status = 'Y'
-            and  (pi.settle_flag is null or info.settle_flag ='Y')
+            and (info.settle_flag = 'Y' or is null)
         </where>
         group by
         prr.risk_code,
@@ -124,20 +127,27 @@ SELECT a.policy_manage_com,a.policy_no,a.insured_no,b.birthday,b.occupation FROM
 
     <select id="selectCompanyRiskPolicyInfo" parameterType="com.paic.ehis.system.api.domain.PolicyAndRiskRelation" resultMap="CompanyRiskPolicyMap">
         SELECT DISTINCT
-        info.policy_no,info.policy_item_no,insured_no,name,app_name,valid_start_date,
+        info.policy_no,
+        info.policy_item_no,
+        insured_no,
+        name,
+        app_name,
+        valid_start_date,
         info.company_name,
         info.company_code,
         prr.risk_code,
         prr.risk_name,
         (select count(policy_item_no) from policy_info a where a.policy_no=info.policy_no)totalPeople,
-        (select sum(prem) from policy_info b left join policy_risk_relation r on r.policy_no=b.policy_no where r.risk_code=prr.risk_code)sumPrem
+        (select sum(ifnull(prem,0)) from policy_info b left join policy_risk_relation r on r.policy_no=b.policy_no where r.risk_code=prr.risk_code)sumPerm
         FROM
         policy_risk_relation prr
         LEFT JOIN policy_info info ON info.policy_no = prr.policy_no
         <where>
             <if test="riskCode != null  and riskCode != ''"> and risk_code = #{riskCode}</if>
             <if test="companyCode != null  and companyCode != ''"> and company_code = #{companyCode}</if>
-            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="startTime != null  and startTime != null"> and info.valid_start_date &gt;= #{startTime}  </if>
+            <if test="endTime != null  and endTime != null">and info.valid_start_date &lt;= #{endTime}</if>
+            and prr.status = 'Y'
         </where>
     </select>
 
@@ -288,7 +298,7 @@ SELECT a.policy_manage_com,a.policy_no,a.insured_no,b.birthday,b.occupation FROM
 
     <select id="selectDutyList" parameterType="String" resultMap="DutyVo">
         select DISTINCT
-            cpdd.plan_code,cpdd.duty_detail_name,cpdd.duty_detail_code,cpdd.apply_reason,c.duty_code,c.risk_code,c.risk_name,
+            cpd.plan_code,cpdd.duty_detail_name,cpdd.duty_detail_code,cpdd.apply_reason,c.duty_code,c.risk_code,c.risk_name,
             c.duty_name
         from claim_product_duty_detail cpdd
                  inner join (select prr.risk_name,cp.risk_code,cpd.duty_name,cpd.duty_code
@@ -296,7 +306,8 @@ SELECT a.policy_manage_com,a.policy_no,a.insured_no,b.birthday,b.occupation FROM
                                       inner join policy_risk_relation prr on prr.risk_name=cp.risk_name
                                       inner join claim_product_duty  cpd on cpd.risk_code=prr.risk_code) c
                             on c.duty_code=cpdd.duty_code
-                 inner join policy_info pi on pi.plan_code=cpdd.plan_code
+                    inner join  claim_product_duty cpd on  cpdd.duty_code=cpd.duty_code
+                 inner join policy_info pi on pi.plan_code=cpd.plan_code
         where c.risk_name = #{riskName}  and pi.insured_no=#{insuredNo}
     </select>
     

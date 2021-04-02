@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 
@@ -45,6 +46,8 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
     private EditInfoMapper editInfoMapper;
     @Autowired
     private HcsModificationMapper hcsModificationMapper;
+    @Autowired
+    private HangUpLogMapper hangUpLogMapper;
 
     @Override
     public List<ReservationAcceptVo> selectReservationAcceptVoList(AcceptDTO acceptDTO) {
@@ -175,7 +178,7 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
     }
 
     /**
-     * 个人预约修改页面
+     * 个人预约修改页面反显
      * @param workOrderNo
      * @return
      */
@@ -353,8 +356,8 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
         flowLog.setOperateCode("06");
         flowLog.setLinkCode(workOrderAccept.getStatus());
         flowLog.setMakeTime(DateUtils.parseDate(DateUtils.getTime()));
-        flowLog.setMakeBy(SecurityUtils.getUsername());
-        flowLog.setStatus(workOrderAccept.getStatus());
+        flowLog.setMakeBy(reservationAcceptVo.getCreateBy());
+        flowLog.setLinkCode(workOrderAccept.getStatus());
         flowLog.setCreatedBy(reservationAcceptVo.getCreateBy());
         flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         flowLog.setUpdatedBy(reservationAcceptVo.getUpdateBy());
@@ -364,6 +367,7 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
 
 
 
+    //预约修改提交按钮
     @Transactional(propagation = Propagation.REQUIRED,rollbackFor = Exception.class)
     @Override
     public int updateReservationAcceptVo(ReservationAcceptVo reservationAcceptVo) {
@@ -394,14 +398,18 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
 
         //工单表修改
         WorkOrderAccept workOrderAccept=workOrderAcceptMapper.selectWorkOrderAcceptById(workOrderNo);
+
+
+        flowLog.setLinkCode(workOrderAccept.getStatus());
+
         workOrderAccept.setOrganCode(reservationAcceptVo.getOrganCode());
         workOrderAccept.setUpdateBy(SecurityUtils.getUsername());
         workOrderAccept.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
         workOrderAccept.setActivationNum(workOrderAccept.getActivationNum()+1);
-        if (workOrderAccept.getStatus().equals("05")){
+        //已处理案件修改后到个人池
+        if ("03".equals(workOrderAccept.getStatus()) || "05".equals(workOrderAccept.getStatus())){
             workOrderAccept.setStatus("02");
         }
-        workOrderAcceptMapper.updateWorkOrderAccept(workOrderAccept);
 
         AcceptDetailInfo acceptDetailInfo=acceptDetailInfoMapper.selectAcceptDetailInfoById(workOrderNo);
         acceptDetailInfo.setUpdateBy(SecurityUtils.getUsername());
@@ -710,7 +718,6 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
         flowLog.setMakeTime(DateUtils.parseDate(DateUtils.getTime()));
         flowLog.setMakeBy(SecurityUtils.getUsername());
         flowLog.setOperateCode("03");
-        flowLog.setStatus(workOrderAccept.getStatus());
         flowLog.setSubId(editId);
         flowLog.setWorkOrderNo(reservationAcceptVo.getWorkOrderNo());
         flowLog.setCreatedBy(SecurityUtils.getUsername());
@@ -723,7 +730,9 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
             hcsModificationMapper.updateHcsStauts(reservationAcceptVo.getAlterId());
         }
 
-        return  flowLogMapper.insertFlowLog(flowLog);
+        flowLogMapper.insertFlowLog(flowLog);
+
+        return workOrderAcceptMapper.updateWorkOrderAccept(workOrderAccept);
     }
 
 
@@ -733,9 +742,26 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
     public int updateClickTime(AcceptDTO acceptDTO){
         //更新处理时间
         WorkOrderAccept workOrderAccept=workOrderAcceptMapper.selectWorkOrderAcceptById(acceptDTO.getWorkOrderNo());
+
+        HangUpLog hangUpLog = hangUpLogMapper.selectHangUpLogByIdTwo(acceptDTO.getWorkOrderNo());
+        BigDecimal a = hangUpLog.getTimes();
+
+        long ss = 1000;
+        long mi = ss * 60;
+        long hh = mi * 60;
+        long dd = hh * 24;
+        Date date1 = workOrderAccept.getCreateTime();
+        Date date2 = DateUtils.getNowDate();
+        long timeAll = (date2.getTime() - date1.getTime()) / hh - a.longValue();
+
+        BigDecimal handleTime= new BigDecimal(timeAll);
+
+        workOrderAccept.setHandleTime(handleTime);
+
         workOrderAccept.setClickTime(DateUtils.parseDate(DateUtils.getTime()));
         workOrderAccept.setUpdateBy(SecurityUtils.getUsername());
         workOrderAccept.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
+
         return workOrderAcceptMapper.updateClickTime(workOrderAccept);
     }
 

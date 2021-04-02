@@ -19,7 +19,7 @@ public class FinanceAdvanceSettleDTO extends BaseEntity {
     @Excel(name = "结算止期", width = 30, dateFormat = "yyyy-MM-dd")
     private Date settleEndDate;
 
-    /*上一次结算止期*/
+    /*结算止期*/
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Excel(name = "结算止期", width = 30, dateFormat = "yyyy-MM-dd")
     private Date settleStartDate;
@@ -52,6 +52,8 @@ public class FinanceAdvanceSettleDTO extends BaseEntity {
 
     /** 结束日期 */
     private String endDate;
+
+    private String status;
 
 
 }

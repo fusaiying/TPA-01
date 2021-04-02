@@ -61,7 +61,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select serial_no, bussiness_status, contract_no, contract_name, contract_type, servcom_no, provider_code, provider_name, contractterm_type, sign_date, cvali_date, end_date, expiry_date, contractadvance, email, contract_party_a, contract_party_b, connected_contract, contract_party_c, deposit, cooperative_unit, straight, flag, contract_control_flag, treatment_discount, examine_discount, bed_discount, allowance, special_discount, costs, project, discountinfo, average_cost, type, advicenum, average_cost_except, contractsort, remark, reason, phone, tel, box_ridge_code, status, create_by, create_time, update_by, update_time,renew_flag,liaison,provider_Type from base_supplier_contract
     </sql>
 
-    <select id="selectBaseSupplierContractList" parameterType="BaseSupplierContract" resultMap="BaseSupplierContractResult">
+    <select id="selectBaseSupplierContractList" parameterType="com.paic.ehis.base.domain.BaseSupplierContract" resultMap="BaseSupplierContractResult">
         <include refid="selectBaseSupplierContractVo"/>
         <where>
             <if test="serialNo !=null and serialNo != ''"> and serial_no = #{serialNo}</if>
@@ -83,7 +83,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="contractPartyC != null  and contractPartyC != ''"> and contract_party_c = #{contractPartyC}</if>
             <if test="deposit != null "> and deposit = #{deposit}</if>
             <if test="cooperativeUnit != null  and cooperativeUnit != ''"> and cooperative_unit = #{cooperativeUnit}</if>
-            <if test="straight != null  and straight != ''"> and straight = #{straight}</if>
+            <if test="straight != null "> and straight = #{straight}</if>
             <if test="flag != null  and flag != ''"> and flag = #{flag}</if>
             <if test="contractControlFlag != null  and contractControlFlag != ''"> and contract_control_flag = #{contractControlFlag}</if>
             <if test="treatmentDiscount != null  and treatmentDiscount != ''"> and treatment_discount = #{treatmentDiscount}</if>
@@ -130,26 +130,26 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
  <!--若供应商下已签订合约，合约列表中供应商对应的合约编码、合约名称、合约起止日期均有值，
     且当供应商下存在多条合约信息时仅显示该供应商下合约终止日期最晚的一条合约信息（即供应商下创建时间最晚的一条合约信息）-->
-    <select id="selectBaseSupplierLast" parameterType="BaseSupplierContract" resultMap="BaseSupplierContractResult">
+    <select id="selectBaseSupplierLast" parameterType="com.paic.ehis.base.domain.BaseSupplierContract" resultMap="BaseSupplierContractResult">
         select *from base_supplier_contract order by end_date desc limit 0,1;
     </select>
 
     <!--供应商合约管理主查询页面需默认显示截止当前时间合约签约时间在三个月内且合约状态为“有效”的数据-->
-    <select id="selectBaseSupplierMonth" parameterType="BaseSupplierContract" resultMap="BaseSupplierContractResult">
+    <select id="selectBaseSupplierMonth" parameterType="com.paic.ehis.base.domain.BaseSupplierContract" resultMap="BaseSupplierContractResult">
     select * from base_supplier_contract where (cvali_date between  #{dBefore} and  #{dNow}) and bussiness_status="01" order by cvali_date desc
     </select>
 
     <!--根据服务机构id查询合约信息-->
-    <select id="selectBaseproviderCode" parameterType="BaseSupplierContract" resultMap="BaseSupplierContractResult">
+    <select id="selectBaseproviderCode" parameterType="com.paic.ehis.base.domain.BaseSupplierContract" resultMap="BaseSupplierContractResult">
         select  * from base_supplier_contract where provider_code=#{providerCode}
     </select>
 
     <!--根据服务机构id查询合约备份信息-->
-    <select id="selectSupplierContractByCode" parameterType="BaseSupplierContract" resultMap="BaseSupplierContractResult">
+    <select id="selectSupplierContractByCode" parameterType="com.paic.ehis.base.domain.BaseSupplierContract" resultMap="BaseSupplierContractResult">
         select  * from base_supplier_contract_bak where provider_code=#{providerCode}
     </select>
 
-    <insert id="insertBaseSupplierContract" parameterType="BaseSupplierContract">
+    <insert id="insertBaseSupplierContract" parameterType="com.paic.ehis.base.domain.BaseSupplierContract">
         insert into base_supplier_contract
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="serialNo != null">serial_no,</if>
@@ -173,7 +173,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="contractPartyC != null and contractPartyC != ''">contract_party_c,</if>
             <if test="deposit != null">deposit,</if>
             <if test="cooperativeUnit != null and cooperativeUnit != ''">cooperative_unit,</if>
-            <if test="straight != null and straight != ''">straight,</if>
+            <if test="straight != null">straight,</if>
             <if test="flag != null">flag,</if>
             <if test="contractControlFlag != null and contractControlFlag != ''">contract_control_flag,</if>
             <if test="treatmentDiscount != null">treatment_discount,</if>
@@ -211,7 +211,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="contractType != null">#{contractType},</if>
             <if test="servcomNo != null">#{servcomNo},</if>
             <if test="providerCode != null and providerCode != ''">#{providerCode},</if>
-            <if test="providerCode != null and providerCode != ''">(select DISTINCT concat(t.chname1, IFNULL(CONCAT(' - ',t.enname1),'')) from base_provider_info t where t.provider_code = #{providerCode} and status = 'Y'),</if>
+            <if test="providerCode != null and providerCode != ''">(select DISTINCT concat(t.provider_code, ' - ', t.chname1) from base_provider_info t where t.provider_code = #{providerCode} and status = 'Y'),</if>
             <if test="contracttermType != null">#{contracttermType},</if>
             <if test="signDate != null">#{signDate},</if>
             <if test="cvaliDate != null">#{cvaliDate},</if>
@@ -225,7 +225,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="contractPartyC != null and contractPartyC != ''">#{contractPartyC},</if>
             <if test="deposit != null">#{deposit},</if>
             <if test="cooperativeUnit != null and cooperativeUnit != ''">#{cooperativeUnit},</if>
-            <if test="straight != null and straight != ''">#{straight},</if>
+            <if test="straight != null ">#{straight},</if>
             <if test="flag != null">#{flag},</if>
             <if test="contractControlFlag != null and contractControlFlag != ''">#{contractControlFlag},</if>
             <if test="treatmentDiscount != null">#{treatmentDiscount},</if>
@@ -261,7 +261,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         delete from base_supplier_contract where provider_code=#{providerCode}
     </update>
 
-    <update id="updateBaseSupplierContract" parameterType="BaseSupplierContract">
+    <update id="updateBaseSupplierContract" parameterType="com.paic.ehis.base.domain.BaseSupplierContract">
         update base_supplier_contract
         <trim prefix="SET" suffixOverrides=",">
             <if test="serialNo !=null and serialNo != ''">serial_no = #{serialNo},</if>
@@ -271,7 +271,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="contractType != null">contract_type = #{contractType},</if>
             <if test="servcomNo != null">servcom_no = #{servcomNo},</if>
             <if test="providerCode != null and providerCode != ''">provider_code = #{providerCode},</if>
-            <if test="providerCode != null and providerCode != ''">provider_name = (select DISTINCT concat(t.chname1, IFNULL(CONCAT(' - ',t.enname1),'')) from base_provider_info t where t.provider_code =#{providerCode} and status = 'Y'),</if>
+            <if test="providerCode != null and providerCode != ''">provider_name = (select DISTINCT concat(t.provider_code, ' - ',t.chname1) from base_provider_info t where t.provider_code =#{providerCode} and status = 'Y'),</if>
             <if test="contracttermType != null">contractterm_type = #{contracttermType},</if>
             <if test="signDate != null">sign_date = #{signDate},</if>
             <if test="cvaliDate != null">cvali_date = #{cvaliDate},</if>
@@ -285,7 +285,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="contractPartyC != null ">contract_party_c = #{contractPartyC},</if>
             <if test="deposit != null">deposit = #{deposit},</if>
             <if test="cooperativeUnit != null and cooperativeUnit != ''">cooperative_unit = #{cooperativeUnit},</if>
-            <if test="straight != null and straight != ''">straight = #{straight},</if>
+            <if test="straight != null">straight = #{straight},</if>
             <if test="flag != null">flag = #{flag},</if>
             <if test="contractControlFlag != null">contract_control_flag = #{contractControlFlag},</if>
             <if test="treatmentDiscount != null">treatment_discount = #{treatmentDiscount},</if>

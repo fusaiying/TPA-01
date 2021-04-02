@@ -388,9 +388,9 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService {
         // 案件状态为撤件98、撤件可申诉97，或支付状态为支付中02、已支付03则阻断提示：“当前案件不允许进行回退，请核实”
         String caseStatus = claimCase.getCaseStatus();
         String isAppeal = claimCase.getIsAppeal();
-        if ("97".equals(caseStatus) || "98".equals(caseStatus) || "02".equals(isAppeal) || "03".equals(isAppeal)) {
+       /* if ("98".equals(caseStatus) || "02".equals(isAppeal) || "03".equals(isAppeal)) {
             return AjaxResult.error("当前案件不允许进行回退，请核实");
-        }
+        }*/
         // TODO:区分是TPA还是核心案件
         // 核心案件：case状态改为“推送核心”，支付状态置为空，“是否财务回退”字段置为“Y”
         // 获取上一次理算操作人

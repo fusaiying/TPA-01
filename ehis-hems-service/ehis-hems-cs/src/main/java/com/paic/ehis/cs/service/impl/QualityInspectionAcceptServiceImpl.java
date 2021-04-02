@@ -251,6 +251,8 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
             flowLog.setCreatedTime(DateUtils.getNowDate());
             flowLog.setUpdatedBy(String.valueOf(SecurityUtils.getUsername()));
             flowLog.setUpdatedTime(DateUtils.getNowDate());
+            flowLog.setMakeBy(String.valueOf(SecurityUtils.getUsername()));
+            flowLog.setMakeTime(DateUtils.getNowDate());
             flowLog.setWorkOrderNo(ids[i]);
             //操作前流程轨迹状态
             flowLog.setLinkCode("04");
@@ -294,6 +296,8 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
             flowLog.setCreatedTime(DateUtils.getNowDate());
             flowLog.setUpdatedBy(String.valueOf(SecurityUtils.getUsername()));
             flowLog.setUpdatedTime(DateUtils.getNowDate());
+            flowLog.setMakeBy(String.valueOf(SecurityUtils.getUsername()));
+            flowLog.setMakeTime(DateUtils.getNowDate());
             flowLog.setWorkOrderNo(ids[i]);
 //            flowLog.setSubId(ids[i]);
 
@@ -480,6 +484,8 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
                             flowLog.setCreatedTime(DateUtils.getNowDate());
                             flowLog.setUpdatedBy("SYSTEM_WEEK");
                             flowLog.setUpdatedTime(DateUtils.getNowDate());
+                            flowLog.setMakeBy("SYSTEM_WEEK");
+                            flowLog.setMakeTime(DateUtils.getNowDate());
                             flowLog.setWorkOrderNo(workOrderNo);
                             flowLog.setLinkCode(param.get("linkCode"));
                             flowLog.setOperateCode(param.get("operateCode"));
@@ -527,6 +533,8 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
                                 flowLog.setCreatedTime(DateUtils.getNowDate());
                                 flowLog.setUpdatedBy("SYSTEM_WEEK");
                                 flowLog.setUpdatedTime(DateUtils.getNowDate());
+                                flowLog.setMakeBy("SYSTEM_WEEK");
+                                flowLog.setMakeTime(DateUtils.getNowDate());
                                 flowLog.setWorkOrderNo(workOrderNo);
                                 flowLog.setLinkCode(param.get("linkCode"));
                                 flowLog.setOperateCode(param.get("operateCode"));

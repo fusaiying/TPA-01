@@ -50,8 +50,14 @@ public class FinanceAdvanceSettleVO implements Serializable {
      * 结算止期
      */
     @JsonFormat(pattern = "yyyy-MM-dd")
-    // @Excel(name = "结算止期", width = 30, dateFormat = "yyyy-MM-dd")
+    //@Excel(name = "结算止期", width = 30, dateFormat = "yyyy-MM-dd")
     private Date settleEndDate;
+
+    /*结算止期*/
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    //@Excel(name = "结算止期", width = 30, dateFormat = "yyyy-MM-dd")
+    private Date settleStartDate;
+
 
     /**
      * 核销日期

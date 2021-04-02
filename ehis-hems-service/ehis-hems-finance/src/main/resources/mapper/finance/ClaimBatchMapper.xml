@@ -297,7 +297,7 @@ WHERE
     claim_case b,
     (
 
-  select cc.batch_no,sum(ccc.cal_amount) cal_amount,sum(ccc.total_bill_amount) total_bill_amount
+  select cc.batch_no,sum(ccc.cal_amount) cal_amount,sum(ccc.total_bill_amount_foreign) total_bill_amount
   from claim_case cc  left join  claim_case_cal ccc on ccc.rpt_no=cc.rpt_no
   where cc.case_prop='01' and ccc.STATUS = 'Y' AND cc.STATUS = 'Y'
   group by cc.batch_no
@@ -343,7 +343,7 @@ FROM
     claim_case b,
     (
 
-        select cc.batch_no ,sum(ccc.cal_amount) cal_amount,sum(ccc.total_bill_amount) total_bill_amount
+        select cc.batch_no ,sum(ccc.cal_amount) cal_amount,sum(ccc.total_bill_amount_foreign) total_bill_amount
         from  claim_case cc  left join  claim_case_cal ccc on ccc.rpt_no=cc.rpt_no
         where cc.case_prop='01' and ccc.STATUS = 'Y' AND cc.STATUS = 'Y'
         group by cc.batch_no
@@ -392,7 +392,7 @@ FROM
      claim_case b,
     (
 
-        select cc.batch_no ,sum(ccc.cal_amount) cal_amount,sum(ccc.total_bill_amount) total_bill_amount
+        select cc.batch_no ,sum(ccc.cal_amount) cal_amount,sum(ccc.total_bill_amount_foreign) total_bill_amount
         from  claim_case cc  left join  claim_case_cal ccc on ccc.rpt_no=cc.rpt_no
         where cc.case_prop='01' and ccc.STATUS = 'Y' AND cc.STATUS = 'Y'
         group by cc.batch_no

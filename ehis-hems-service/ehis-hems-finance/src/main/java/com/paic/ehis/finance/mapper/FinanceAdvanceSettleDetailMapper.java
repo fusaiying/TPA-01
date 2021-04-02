@@ -6,6 +6,7 @@ import com.paic.ehis.finance.domain.dto.FinanceAdvanceSettleDTO;
 import com.paic.ehis.finance.domain.vo.FinanceAdvanceSettleVO;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -83,6 +84,16 @@ public interface FinanceAdvanceSettleDetailMapper {
      * 计算折后金额结算金额默认为折后金额
      */
     public String selectDiscountAmount(String rptNo);
+
+    /**
+     * 计算任务总金额
+     */
+    public String selectTotalAmount(String batchNo);
+
+    /**
+    *  根据出单公司编码查询最新得结算止期
+    */
+    public Date selectLastendDate(String companyName);
 
     /**
      * 计算账单总金额

@@ -91,6 +91,7 @@ public class CustomServiceReservationController extends BaseController {
 
     }
 
+    //预约修改提交按钮
 //    @PreAuthorize("@ss.hasPermi('system:customService::edit')")
     @Log(title = "修改 ", businessType = BusinessType.UPDATE)
     @PutMapping("/updateReservationAcceptVo")

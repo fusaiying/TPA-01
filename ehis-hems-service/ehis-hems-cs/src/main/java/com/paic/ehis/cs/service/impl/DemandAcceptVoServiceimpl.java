@@ -295,6 +295,7 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         return count;
     }
 
+    //预约新增详细
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     @Override
     public int insertServiceInfo(DemandAcceptVo demandAcceptVo) {

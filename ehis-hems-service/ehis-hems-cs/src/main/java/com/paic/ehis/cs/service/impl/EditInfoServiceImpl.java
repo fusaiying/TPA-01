@@ -119,19 +119,22 @@ public class EditInfoServiceImpl implements IEditInfoService
     @Override
     public int cancelSubmit(DemandAcceptVo demandAcceptVo) {
 
-        EditInfo editInfo=new EditInfo();
-        //随机生成流水号
-        editInfo.setEditId(PubFun.createMySqlMaxNoUseCache("cs_edit_id",10,8));
-        editInfo.setWorkOrderId(demandAcceptVo.getWorkOrderNo());
-        editInfo.setStatus("05");//05 取消状态
-        editInfo.setCreatedBy(SecurityUtils.getUsername());
-        editInfo.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
-        editInfo.setUpdatedBy(SecurityUtils.getUsername());
-        editInfo.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
-        editInfo.setEditReason(demandAcceptVo.getEditReason());
-        editInfo.setEditRemark(demandAcceptVo.getEditRemark());
-        editInfoMapper.insertEditInfo(editInfo);
+//        EditInfo editInfo=new EditInfo();
+//        //随机生成流水号
+//        editInfo.setEditId(PubFun.createMySqlMaxNoUseCache("cs_edit_id",10,8));
+//        editInfo.setWorkOrderId(demandAcceptVo.getWorkOrderNo());
+//        editInfo.setStatus("05");//05 取消状态
+//        editInfo.setCreatedBy(SecurityUtils.getUsername());
+//        editInfo.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+//        editInfo.setUpdatedBy(SecurityUtils.getUsername());
+//        editInfo.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+//        editInfo.setEditReason(demandAcceptVo.getEditReason());
+//        editInfo.setEditRemark(demandAcceptVo.getEditRemark());
+//        editInfoMapper.insertEditInfo(editInfo);
 
+
+        //工单表修改
+        WorkOrderAccept workOrderAccept = workOrderAcceptMapper.selectWorkOrderAcceptById(demandAcceptVo.getWorkOrderNo());
 
         //轨迹表生成数据
         FlowLog flowLog=new FlowLog();
@@ -141,13 +144,18 @@ public class EditInfoServiceImpl implements IEditInfoService
         flowLog.setMakeTime(DateUtils.parseDate(DateUtils.getTime()));
         //没有um帐号
         flowLog.setUmNum(SecurityUtils.getUsername());
-        flowLog.setLinkCode("05");
-        flowLog.setOperateCode("02");
+        flowLog.setLinkCode(workOrderAccept.getStatus());
+        flowLog.setOperateCode("04");
         flowLog.setCreatedBy(SecurityUtils.getUsername());
         flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         flowLog.setUpdatedBy(SecurityUtils.getUsername());
         flowLog.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
         flowLogMapper.insertFlowLog(flowLog);
+
+        workOrderAccept.setUpdateBy(SecurityUtils.getUsername());
+        workOrderAccept.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
+        workOrderAccept.setStatus("05");//取消状态
+        workOrderAcceptMapper.updateWorkOrderAccept(workOrderAccept);
 
         demandAcceptVo.setStatus("05");
         return demandAcceptVoMapper.updateCancelStatus(demandAcceptVo.getWorkOrderNo());
@@ -158,19 +166,21 @@ public class EditInfoServiceImpl implements IEditInfoService
     @Override
     public int orderCancelSubmit(ReservationAcceptVo reservationAcceptVo) {
 
-        EditInfo editInfo=new EditInfo();
-        //随机生成流水号
-        editInfo.setEditId(PubFun.createMySqlMaxNoUseCache("cs_edit_id",10,8));
-        editInfo.setWorkOrderId(reservationAcceptVo.getWorkOrderNo());
-        editInfo.setStatus("05");//05 取消状态
-        editInfo.setCreatedBy(SecurityUtils.getUsername());
-        editInfo.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
-        editInfo.setUpdatedBy(SecurityUtils.getUsername());
-        editInfo.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
-        editInfo.setEditReason(reservationAcceptVo.getEditReason());
-        editInfo.setEditRemark(reservationAcceptVo.getEditRemark());
-        editInfoMapper.insertEditInfo(editInfo);
+//        EditInfo editInfo=new EditInfo();
+//        //随机生成流水号
+//        editInfo.setEditId(PubFun.createMySqlMaxNoUseCache("cs_edit_id",10,8));
+//        editInfo.setWorkOrderId(reservationAcceptVo.getWorkOrderNo());
+//        editInfo.setStatus("05");//05 取消状态
+//        editInfo.setCreatedBy(SecurityUtils.getUsername());
+//        editInfo.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+//        editInfo.setUpdatedBy(SecurityUtils.getUsername());
+//        editInfo.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+//        editInfo.setEditReason(reservationAcceptVo.getEditReason());
+//        editInfo.setEditRemark(reservationAcceptVo.getEditRemark());
+//        editInfoMapper.insertEditInfo(editInfo);
 
+        //工单表修改
+        WorkOrderAccept workOrderAccept = workOrderAcceptMapper.selectWorkOrderAcceptById(reservationAcceptVo.getWorkOrderNo());
         //轨迹表生成数据
         FlowLog flowLog=new FlowLog();
         flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id",20,20));
@@ -178,14 +188,19 @@ public class EditInfoServiceImpl implements IEditInfoService
         flowLog.setMakeTime(DateUtils.parseDate(DateUtils.getTime()));
         //没有um帐号
         flowLog.setUmNum(SecurityUtils.getUsername());
-        flowLog.setLinkCode("05");
-        flowLog.setOperateCode("03");
+        flowLog.setLinkCode(workOrderAccept.getStatus());
+        flowLog.setOperateCode("04");
         flowLog.setCreatedBy(SecurityUtils.getUsername());
         flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         flowLog.setUpdatedBy(SecurityUtils.getUsername());
         flowLog.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
         flowLog.setWorkOrderNo(reservationAcceptVo.getWorkOrderNo());
         flowLogMapper.insertFlowLog(flowLog);
+
+        workOrderAccept.setUpdateBy(SecurityUtils.getUsername());
+        workOrderAccept.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
+        workOrderAccept.setStatus("05");//取消状态
+        workOrderAcceptMapper.updateWorkOrderAccept(workOrderAccept);
 
         reservationAcceptVo.setStatus("05");
         return reservationAcceptVoMapper.updateOrderCancelStatus(reservationAcceptVo.getWorkOrderNo());
@@ -200,33 +215,28 @@ public class EditInfoServiceImpl implements IEditInfoService
     @Override
     public int reservedCancelSubmit(ComplaintAcceptVo complaintAcceptVo) {
         //取消原因  取消说明
-        EditInfo editInfo=new EditInfo();
-        //随机生成流水号
-        editInfo.setEditId(PubFun.createMySqlMaxNoUseCache("cs_edit_id",10,8));
-        editInfo.setWorkOrderId(complaintAcceptVo.getWorkOrderNo());
-        editInfo.setStatus("05");//05 取消状态
-        editInfo.setCreatedBy(SecurityUtils.getUsername());
-        editInfo.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
-        editInfo.setUpdatedBy(SecurityUtils.getUsername());
-        editInfo.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
-        editInfo.setEditReason(complaintAcceptVo.getEditReason());
-        editInfo.setEditRemark(complaintAcceptVo.getEditRemark());
-        editInfoMapper.insertEditInfo(editInfo);
+//        EditInfo editInfo=new EditInfo();
+//        //随机生成流水号
+//        editInfo.setEditId(PubFun.createMySqlMaxNoUseCache("cs_edit_id",10,8));
+//        editInfo.setWorkOrderId(complaintAcceptVo.getWorkOrderNo());
+//        editInfo.setStatus("05");//05 取消状态
+//        editInfo.setCreatedBy(SecurityUtils.getUsername());
+//        editInfo.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+//        editInfo.setUpdatedBy(SecurityUtils.getUsername());
+//        editInfo.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+//        editInfo.setEditReason(complaintAcceptVo.getEditReason());
+//        editInfo.setEditRemark(complaintAcceptVo.getEditRemark());
+//        editInfoMapper.insertEditInfo(editInfo);
 
         //工单表修改
         WorkOrderAccept workOrderAccept = workOrderAcceptMapper.selectWorkOrderAcceptById(complaintAcceptVo.getWorkOrderNo());
-        workOrderAccept.setUpdateBy(SecurityUtils.getUsername());
-        workOrderAccept.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
-        workOrderAccept.setStatus("05");//取消状态
-        workOrderAcceptMapper.updateWorkOrderAccept(workOrderAccept);
-
 
         //轨迹表生成数据
         FlowLog flowLog=new FlowLog();
         flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id",20,20));
         flowLog.setWorkOrderNo(complaintAcceptVo.getWorkOrderNo());
-        flowLog.setLinkCode("05");//05 取消状态
-        flowLog.setOperateCode("03");
+        flowLog.setLinkCode(workOrderAccept.getStatus());
+        flowLog.setOperateCode("04");
         flowLog.setMakeBy(SecurityUtils.getUsername());
         flowLog.setMakeTime(DateUtils.parseDate(DateUtils.getTime()));
         //没有um帐号
@@ -237,6 +247,11 @@ public class EditInfoServiceImpl implements IEditInfoService
         flowLog.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
 
         flowLogMapper.insertFlowLog(flowLog);
+
+        workOrderAccept.setUpdateBy(SecurityUtils.getUsername());
+        workOrderAccept.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
+        workOrderAccept.setStatus("05");//取消状态
+        workOrderAcceptMapper.updateWorkOrderAccept(workOrderAccept);
 
         //将主表状态改为已取消
         complaintAcceptVo.setStatus("05");

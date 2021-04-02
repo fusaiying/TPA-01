@@ -59,7 +59,7 @@
               <span class="info_span_col to_right">汇率：</span> <span class="info_span money_class">{{ conclusionInfo.exchangeRate}}</span>
             </el-col>
             <el-col :span="8" v-if="billCurency !== 'CNY'">
-              <span class="info_span_col to_right">外币给付金额：</span> <span class="info_span money_class">{{ conclusionInfo.payAmountForeign}}</span>
+              <span class="info_span_col to_right">外币给付金额：</span> <span class="info_span money_class">{{ conclusionInfo.payAmountForeign}} {{billCurency}}</span>
             </el-col>
           </el-row>
 
@@ -644,7 +644,8 @@
                 payAmountForeign:this.conclusionInfo.payAmountForeign,
                 remark:this.conclusionForm.remark,
                 claimCheck:this.conclusionForm.claimCheck,
-                debtAmount:this.conclusionInfo.debtAmount
+                debtAmount:this.conclusionInfo.debtAmount,
+                paymentDifference:this.conclusionInfo.paymentDifference
                 // calAmount:'0',
                 // payAmount:this.conclusionInfo.payAmount,
                 // refusedAmount:this.conclusionInfo.refusedAmount,

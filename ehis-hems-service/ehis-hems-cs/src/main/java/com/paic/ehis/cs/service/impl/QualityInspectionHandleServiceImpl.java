@@ -302,6 +302,8 @@ public class QualityInspectionHandleServiceImpl implements IQualityInspectionHan
         flowLog.setCreatedTime(DateUtils.getNowDate());
         flowLog.setUpdatedBy(String.valueOf(SecurityUtils.getUsername()));
         flowLog.setUpdatedTime(DateUtils.getNowDate());
+        flowLog.setMakeTime(DateUtils.getNowDate());
+        flowLog.setMakeBy(String.valueOf(SecurityUtils.getUsername()));
         flowLog.setWorkOrderNo(id);
         //操作后主流程状态
         //flowLog.setStatus(param.get("status"));
@@ -417,6 +419,8 @@ public class QualityInspectionHandleServiceImpl implements IQualityInspectionHan
         flowLog.setCreatedTime(DateUtils.getNowDate());
         flowLog.setUpdatedBy(String.valueOf(SecurityUtils.getUsername()));
         flowLog.setUpdatedTime(DateUtils.getNowDate());
+        flowLog.setMakeTime(DateUtils.getNowDate());
+        flowLog.setMakeBy(SecurityUtils.getUsername());
         flowLog.setWorkOrderNo(id);
         //操作后主流程状态
         flowLog.setLinkCode(param.get("linkCode"));

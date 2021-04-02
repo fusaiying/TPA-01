@@ -201,7 +201,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
     <select id="selectDutyList" parameterType="String" resultMap="DutyVo">
-        select  cpdd.plan_code,cpdd.duty_detail_name,cpdd.duty_detail_code,cpdd.apply_reason,c.duty_code,c.risk_code,c.risk_name,
+        select  cpd.plan_code,cpdd.duty_detail_name,cpdd.duty_detail_code,cpdd.apply_reason,c.duty_code,c.risk_code,c.risk_name,
                 c.duty_name
         from claim_product_duty_detail cpdd
                  inner join (select prr.risk_name,cp.risk_code,cpd.duty_name,cpd.duty_code
@@ -209,8 +209,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                                       inner join policy_risk_relation prr on prr.risk_name=cp.risk_name
                                       inner join claim_product_duty  cpd on cpd.risk_code=prr.risk_code) c
                             on c.duty_code=cpdd.duty_code
-                 left join policy_info pi on pi.plan_code=cpdd.plan_code
-        where risk_name = #{riskName}  and   pi.plan_code=cpdd.plan_code
+                  inner join claim_product_duty cpd on cpdd.duty_code=cpd.duty_code
+                 left join policy_info pi on pi.plan_code=cpd.plan_code
+        where risk_name = #{riskName}  and   pi.plan_code=cpd.plan_code
     </select>
     
 </mapper>

@@ -162,7 +162,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="payStatus"    column="pay_status"    />
         <result property="payDate"    column="pay_date"    />
         <result property="payFailDate"    column="pay_fail_date"    />
-        <result property="tradeSerial"    column="trade_serial"    />
+        <result property="receiptNo"    column="trade_serial"    />
         <result property="payFailReason"    column="pay_fail_reason"    />
         <result property="deptCode"    column="dept_code"    />
     </resultMap>
@@ -170,7 +170,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectTransferfailedList" parameterType="com.paic.ehis.finance.domain.dto.TransferfailedDTO" resultMap="TransferfailedVoResult">
         SELECT
         fpi.batch_no,
-        sum( fpi.sum_pay_amount ) AS sum_pay_amount,
+        fpi.sum_pay_amount,
         fpi.payee_bank,
         fpi.acc_no,
         fpi.acc_name,
@@ -181,24 +181,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         fpi.pay_fail_reason
         FROM
         finance_pay_info fpi
-        LEFT JOIN claim_case cc ON fpi.batch_no = cc.batch_no AND cc.STATUS = 'Y'
        <where>
             <if test="batchNo != null  and batchNo != ''"> and fpi.batch_no = #{batchNo}</if>
             <if test="payStartDate != null and payEndDate != null"> and fpi.pay_date between #{payStartDate} and DATE_ADD(#{payEndDate},INTERVAL 1 DAY)</if>
             and fpi.status='Y'  	AND ( fpi.pay_status = '04' OR fpi.pay_status = '05' )
-           GROUP BY
-           fpi.batch_no,
-           fpi.payee_bank,
-           fpi.acc_no,
-           fpi.acc_name,
-           fpi.pay_status,
-           fpi.pay_date,
-           fpi.pay_fail_date,
-           fpi.trade_serial,
-           fpi.pay_fail_reason
        </where>
     </select>
 
+
+    <delete id="deleteFinanceTransferfailedList" parameterType="String">
+        update finance_pay_info  set pay_status='02'  where pay_batch_no = #{batchNo}
+    </delete>
 
     <select id="selectFinancePayInfoByBatchNo" parameterType="String" resultMap="FinancePayInfoResult">
         <include refid="selectFinancePayInfoVo"/>

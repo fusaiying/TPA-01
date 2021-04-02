@@ -29,7 +29,7 @@ public class TransferfailedVo implements Serializable {
     private String accName;
 
     /** 开户行编码 */
-    @Excel(name = "开户行编码")
+    @Excel(name = "银行名称")
     private String payeeBank;
 
     /** 转账金额 */
@@ -52,7 +52,7 @@ public class TransferfailedVo implements Serializable {
 
     /** 收据号 */
     @Excel(name = "收据号")
-    private String tradeSerial;
+    private String receiptNo;
 
     /** 转账失败原因 */
     @Excel(name = "转账失败原因")

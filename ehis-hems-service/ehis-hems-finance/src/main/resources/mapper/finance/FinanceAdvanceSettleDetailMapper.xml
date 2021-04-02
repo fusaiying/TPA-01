@@ -175,103 +175,92 @@
             resultMap="FinanceAdvanceSettleVOResult">
         SELECT
         a.settle_task_no,
+        d.batch_no,
         a.company_code,
-        d.company_name,
+        e.company_name,
         c.batch_total,
         b.sum_pay_amount,
         a.create_time,
         a.settle_status,
         a.settle_end_date,
-        a.col_date,
-        e.receipt_company_name,
-        e.receipt_amount,
-        e.receipt_date,
-        e.remark as credit_remark,
-        e.create_by as credit_create_by
+        a.col_date
         FROM
-        finance_advance_settle_task a,
-        finance_pay_info b,
-        claim_batch c,
-        base_issuingcompany d,
-        finance_collection_info e,
-        finance_receipt_col f,
-        finance_advance_settle_detail h
+        finance_advance_settle_task a
+        LEFT JOIN finance_advance_settle_detail d ON a.settle_task_no = d.settle_task_no
+        AND d.STATUS = 'Y'
+        LEFT JOIN finance_pay_info b ON b.batch_no = d.batch_no
+        AND b.STATUS = 'Y'
+        LEFT JOIN claim_batch c on d.batch_no = c.batch_no
+        AND c.STATUS = 'Y'
+        left join base_issuingcompany e on a.company_code=e.company_code
+        AND e.STATUS = 'Y'
         <where>
-            <if test="settleTaskNo != null  and settleTaskNo != ''">and settle_task_no = #{settleTaskNo}</if>
-            <if test="settleEndDate != null ">and settle_end_date = #{settleEndDate}</if>
-            <if test="settleStartDate != null ">and settle_start_date = #{settleStartDate}</if>
+            <if test="settleTaskNo != null  and settleTaskNo != ''">and a.settle_task_no = #{settleTaskNo}</if>
+            <if test="settleStartDate != null ">
+                and DATE_FORMAT(a.settle_end_date,'%Y-%m-%d') <![CDATA[>=]]> #{settleStartDate}
+            </if>
+            <if test="settleEndDate != null ">
+                and DATE_FORMAT(a.settle_end_date,'%Y-%m-%d') <![CDATA[<=]]> #{settleEndDate}
+            </if>
             <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">and a.create_time
                 between #{startDate} and DATE_ADD(#{endDate},INTERVAL 1 DAY)
             </if>
-            <if test="settleStatus != null  and settleStatus != ''">and settle_status = #{settleStatus}</if>
-            <if test="batchTotal != null  and batchTotal != ''">and batch_total = #{batchTotal}</if>
-            <if test="companyCode != null  and companyCode != ''">and d.company_code = #{companyCode}</if>
-            <if test="companyName != null  and companyName != ''">and d.company_name = #{companyName}</if>
+            <if test="settleStatus != null  and settleStatus != ''">and a.settle_status = #{settleStatus}</if>
+            <if test="batchTotal != null  and batchTotal != ''">and c.batch_total = #{batchTotal}</if>
+            <if test="companyCode != null  and companyCode != ''">and a.company_code = #{companyCode}</if>
+            <if test="companyName != null  and companyName != ''">and e.company_name = #{companyName}</if>
             <if test="pageType != null  and pageType == '01'">and a.settle_Status in ('01','02')</if>
             <if test="pageType != null  and pageType == '03'">and a.settle_Status in ('02','03')</if>
-            AND h.settle_task_no = a.settle_task_no
-            AND c.batch_no = h.batch_no
-            AND d.company_code = a.company_code
-            AND b.batch_no = c.batch_no
-            AND e.receipt_no = f.receipt_no
-            AND a.dept_code = b.dept_code
-            AND a.dept_code = f.dept_code
-            AND a.STATUS = 'Y'
-            AND b.STATUS = 'Y'
-            AND c.STATUS = 'Y'
-            AND d.STATUS = 'Y'
-            AND e.STATUS = 'Y'
-            AND f.STATUS = 'Y'
-            AND h.STATUS = 'Y'
+            and a.STATUS = 'Y'
         </where>
     </select>
 
     <!--查询列表详情信息-->
     <select id="selectFinanceAdvanceSettleVOInfo" parameterType="String" resultMap="FinanceAdvanceSettleVOResult">
-        SELECT b.batch_no,
-               c.rpt_no,
-               d.insured_no,
-               d.NAME,
-               e.hospital_code,
-               e.treatment_start_date,
-               e.bill_no,
-               e.invoice_no,
-               c.case_status,
-               f.pay_conclusion,
-               g.submit_date,
-               c.end_case_time,
-               g.source,
-               f.pay_amount,
-               b.pay_date,
-               a.remark
-        FROM finance_advance_settle_task a,
-             finance_pay_info b,
-             claim_case c,
-             claim_case_insured d,
-             claim_case_bill e,
-             claim_case_cal f,
-             claim_batch g,
-             finance_advance_settle_detail h
-        WHERE a.settle_task_no = #{settleTaskNo}
-          AND c.rpt_no = d.rpt_no
-          AND c.rpt_no = e.rpt_no
-          AND c.rpt_no = f.rpt_no
-          AND c.rpt_no = h.rpt_no
-          AND g.batch_no = b.batch_no
-          AND g.batch_no = c.batch_no
-          AND g.batch_no = h.batch_no
-          AND b.dept_code = a.dept_code
-          AND h.settle_task_no = a.settle_task_no
-          AND a.STATUS = 'Y'
-          AND b.STATUS = 'Y'
-          AND c.STATUS = 'Y'
-          AND d.STATUS = 'Y'
-          AND e.STATUS = 'Y'
-          AND f.STATUS = 'Y'
-          AND g.STATUS = 'Y'
-          AND h.STATUS = 'Y'
+        SELECT
+            fasd.batch_no,
+            fasd.rpt_no,
+            cci.insured_no,
+            cci.name,
+            ccb.hospital_code,
+            ccb.treatment_start_date,
+            ccb.bill_no,
+            ccb.invoice_no,
+            cc.case_status,
+            ccc.pay_conclusion,
+            cb.submit_date,
+            cc.end_case_time,
+            cb.source,
+            ccc.pay_amount,
+            fpi.pay_date,
+            fask.remark
+        FROM
+            finance_advance_settle_task fask
+                LEFT JOIN finance_advance_settle_detail fasd ON fask.settle_task_no = fasd.settle_task_no  and fasd.status='Y'
+                LEFT JOIN	claim_batch cb on fasd.batch_no=cb.batch_no and cb.status='Y'
+                LEFT JOIN	finance_pay_info fpi on fasd.batch_no=fpi.batch_no and fpi.status='Y'
+                LEFT JOIN   claim_case cc on fasd.rpt_no=cc.rpt_no and cc.status='Y'
+                LEFT JOIN   claim_case_insured cci on fasd.rpt_no=cci.rpt_no and cci.status='Y'
+                LEFT JOIN   claim_case_bill ccb on fasd.rpt_no=ccb.rpt_no  and ccb.status='Y'
+                LEFT JOIN   claim_case_cal ccc on fasd.rpt_no=ccc.rpt_no  and ccc.status='Y'
+        where 1=1 and fask.status='Y' and fask.settle_task_no=#{settleTaskNo}
     </select>
 
+    <!--取结算该出单公司下最新的结算止期-->
+    <select id="selectLastendDate" resultType="java.util.Date">
+        SELECT
+            a.settle_end_date
+        FROM
+            finance_advance_settle_task a
+                LEFT JOIN base_issuingcompany e ON a.company_code = e.company_code
+                AND e.STATUS = 'Y'
+        WHERE
+            a.STATUS = 'Y'
+          AND e.company_name = #{companyName}
+        ORDER BY
+            settle_end_date DESC
+            LIMIT 1
+    </select>
 
     <!--计算折后金额结算金额默认为折后金额-->
     <select id="selectDiscountAmount" resultType="String">
@@ -281,12 +270,26 @@
           AND claim_case_bill.status = "Y"
     </select>
 
+    <!--计算任务总金额-->
+    <select id="selectTotalAmount" resultType="String">
+        SELECT
+            sum( claim_case_bill.bill_amount ) - sum( claim_case_bill.hos_discount_amount ) AS hos_discount_amount ,claim_case_bill.rpt_no,claim_case.batch_no
+        FROM
+            claim_case_bill,
+            claim_case
+        WHERE
+            claim_case.batch_no = {batchNo}
+          AND claim_case.rpt_no = claim_case_bill.rpt_no
+          AND claim_case_bill.STATUS = "Y"
+          and claim_case,status='Y'
+    </select>
+
     <!--计算账单总金额-->
     <select id="selectBillAmount" resultType="String">
-        select sum(claim_case_cal.pay_amount)
-        FROM claim_case_cal
+        select sum(claim_case_bill.bill_amount)
+        FROM claim_case_bill
         where rpt_no = #{rptNo}
-          AND claim_case_cal.status = "Y"
+          AND claim_case_bill.status = "Y"
     </select>
 
     <!--删除按钮修改状态为无效-->

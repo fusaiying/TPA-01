@@ -399,7 +399,7 @@
         select detail.duty_detail_code, detail.duty_detail_name,
         detail.plan_code,detail.duty_code
         from claim_product_duty_detail detail
-        where detail.duty_code = #{duty_code} and detail.plan_code = #{plan_code}
+        where detail.duty_code = #{duty_code}
     </select>
     <resultMap id="detailMap" type="ClaimProductDutyDetailVO">
         <id property="value" column="duty_detail_code"/>

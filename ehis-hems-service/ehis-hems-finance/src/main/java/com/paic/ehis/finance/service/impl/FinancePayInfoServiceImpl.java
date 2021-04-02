@@ -3,6 +3,8 @@ package com.paic.ehis.finance.service.impl;
 import com.paic.ehis.common.core.domain.R;
 import com.paic.ehis.common.core.exception.BaseException;
 import com.paic.ehis.common.core.utils.DateUtils;
+import com.paic.ehis.common.core.utils.SecurityUtils;
+import com.paic.ehis.common.core.utils.StringUtils;
 import com.paic.ehis.system.api.domain.FinanceBorrowInfo;
 import com.paic.ehis.finance.mapper.FinanceBorrowInfoMapper;
 import com.paic.ehis.system.api.GetProviderInfoService;
@@ -129,7 +131,9 @@ public class FinancePayInfoServiceImpl implements IFinancePayInfoService
                 ClaimBatch claimBatch = claimBatchMapper.selectClaimBatchById(batchNo);
                 //调接口所需的对象
                 BaseProviderInfo baseProviderInfo = new BaseProviderInfo();
-                baseProviderInfo.setProviderCode(claimBatch.getHospitalcode());
+                if(StringUtils.isNotNull(claimBatch)) {
+                    baseProviderInfo.setProviderCode(claimBatch.getHospitalcode());
+                }
                 //调用医院接口
                 R<List<BaseProviderInfo>>  result =  getProviderInfoService.selectOrgInfo(baseProviderInfo);
 
@@ -143,15 +147,28 @@ public class FinancePayInfoServiceImpl implements IFinancePayInfoService
                     BaseProviderInfo hospital = baseProviderList.get(0);
                     TransferfailedVo transferfailedVo=new TransferfailedVo();
                     BeanUtils.copyProperties(transferfailedVo1,transferfailedVo);
-                    transferfailedVo.setPayeeBank(hospital.getAccountName());//开户行
-                    transferfailedVo.setAccName(hospital.getBankName());//账户名
-                    transferfailedVo.setAccNo(hospital.getBankCode());//账户号
+                    transferfailedVo.setPayeeBank(hospital.getBankName());//开户行
+                    transferfailedVo.setAccName(hospital.getAccountName());//账户名
+                    transferfailedVo.setAccNo(hospital.getAccountNo());//账号
                     transferfailedVos1.add(transferfailedVo);
                 }
 
             }
         return transferfailedVos1;
     }
+
+
+
+    /**
+     * 删除转账失败信息
+     *
+     */
+    @Override
+    public int deleteFinanceTransferfailedList(String batchNo)
+    {
+        return financePayInfoMapper.deleteFinanceTransferfailedList(batchNo);
+    }
+
 
     /**
      * 置借款数据为无效

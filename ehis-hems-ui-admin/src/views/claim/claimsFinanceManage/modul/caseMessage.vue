@@ -413,7 +413,7 @@
             " 核心案件不允许进行回退，请核实！"
           )
         } else {
-          if ((row.caseStatus != '08' && row.caseStatus != '99') || row.payStatus === '02' || row.payStatus === '03') {
+          if ((row.caseStatus != '08' && row.caseStatus != '99' && row.caseStatus != '97' ) || row.payStatus === '02' || row.payStatus === '03') {
             return this.$message.warning(
               " 当前案件不允许进行回退，请核实！"
             )

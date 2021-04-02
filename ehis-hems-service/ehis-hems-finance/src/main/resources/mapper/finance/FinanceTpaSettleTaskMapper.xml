@@ -69,6 +69,7 @@
             <if test="status != null  and status != ''"> and status = #{status}</if>
             <if test="deptCode != null  and deptCode != ''"> and dept_code = #{deptCode}</if>
         </where>
+        order by settle_end_date desc
     </select>
 
     <select id="selectFinanceTpaSettleTaskViewDetail" parameterType="FinanceTpaSettleTask" resultMap="TpaSettleTaskViewDetailResult">

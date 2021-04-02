@@ -121,7 +121,7 @@
           <el-table-column align="center" prop="treatmentEndDate" label="就诊日期" show-overflow-tooltip/>
           <el-table-column align="center" prop="appntName" label="投保人" show-overflow-tooltip/>
           <el-table-column align="center" prop="contNo" label="保单号" show-overflow-tooltip/>
-          <el-table-column align="center" prop="debtAmount" label="追讨金额CNY" width="100" show-overflow-tooltip/>
+          <el-table-column align="center" prop="debtAmount" :formatter="getDebtAmount" label="追讨金额CNY" width="100" show-overflow-tooltip/>
           <el-table-column align="center" prop="colAmount" label="收款金额" show-overflow-tooltip/>
           <el-table-column align="center" prop="residualAmount" label="剩余欠款CNY" width="100" show-overflow-tooltip/>
           <el-table-column align="center" prop="endCaseTime" label="结案日期" show-overflow-tooltip/>
@@ -403,6 +403,13 @@
             data
           }
         })
+      },
+      getDebtAmount(row, col){
+        if(row.debtAmount < 0) {
+          return 0;
+        } else {
+          return row.debtAmount;
+        }
       }
     }
   }

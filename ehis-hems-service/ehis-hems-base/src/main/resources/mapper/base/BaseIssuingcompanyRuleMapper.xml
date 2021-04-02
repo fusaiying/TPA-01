@@ -140,7 +140,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         LEFT JOIN claim_product cp ON cp.risk_code = biri.risk_code
         AND cp.STATUS = 'Y'
         <where>
-            <if test="companycode != null  and companycode != ''"> and company_code = #{companycode}</if>
+            <if test="companycode != null  and companycode != ''"> and biri.company_code = #{companycode}</if>
             <if test="status != null  and status != ''"> and biri.status = #{status}</if>
         </where>
     </select>

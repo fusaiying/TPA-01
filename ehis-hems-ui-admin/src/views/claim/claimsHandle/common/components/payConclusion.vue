@@ -38,7 +38,7 @@
           <span class="info_span_col to_right">汇率：</span><span class="info_span money_class">{{ conclusionInfo.exchangeRate}}</span>
         </el-col>
         <el-col :span="8" v-if="conclusionInfo.billCurrency !== 'CNY'">
-          <span class="info_span_col to_right">外币给付金额：</span> <span class="info_span money_class">{{ conclusionInfo.payAmountForeign}}</span>
+          <span class="info_span_col to_right">外币给付金额：</span> <span class="info_span money_class">{{ conclusionInfo.payAmountForeign}} {{conclusionInfo.billCurrency}}</span>
         </el-col>
       </el-row>
 

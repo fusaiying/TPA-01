@@ -40,7 +40,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 
     <sql id="selectPolicyInfoVo">
-        select policy_no, policy_item_no, insured_no, name, app_name,valid_start_date, valid_end_date, policy_risk_type, policy_status, special_agreement, company_code, company_name, policy_manage_com, policy_type, plan_code, org_policy_no, org_policy_item_no, ss_flag, status, create_by, create_time, update_by, update_time from policy_info
+        select policy_no, policy_item_no, insured_no, name, app_name,valid_start_date, valid_end_date, prem,policy_risk_type, policy_status, special_agreement, company_code, company_name, policy_manage_com, policy_type, plan_code, org_policy_no, org_policy_item_no, ss_flag, status, create_by, create_time, update_by, update_time from policy_info
     </sql>
 
     <select id="selectCustomerInfoMap" parameterType="String" resultMap="CustomerInfoMapResult">

@@ -295,7 +295,7 @@ public class ClaimCaseCalServiceImpl implements IClaimCaseCalService
                 String username = SecurityUtils.getUsername();
                 Date nowDate = DateUtils.getNowDate();
                 if(rptNo.indexOf("-") > 0 && claimCaseCal.getPaymentDifference() != null) {
-                    claimCaseCal.setPayAmount(claimCaseCal.getPaymentDifference());
+                    //claimCaseCal.setPayAmount(claimCaseCal.getPaymentDifference());
 //                    ClaimCaseCal nowClaimCaseCal = claimCaseCalMapper.selectClaimCaseCalByRptNo(rptNo);
 //                    CalConclusionVo precalConclusionVo = claimCaseCalMapper.selectPreCalConclusionByRptNo(rptNo);
 //                    if(null != precalConclusionVo) {

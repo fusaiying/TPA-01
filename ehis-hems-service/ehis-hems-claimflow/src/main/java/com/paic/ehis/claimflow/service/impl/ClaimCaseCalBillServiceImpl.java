@@ -266,7 +266,7 @@ public class ClaimCaseCalBillServiceImpl implements IClaimCaseCalBillService
             claimCaseCal.setCalAmount(new BigDecimal(String.valueOf(0.00)));
         }
         claimCaseCal.setRefusedAmount(billTotalAmount.subtract(totalDiscountAmount).subtract(claimCaseCal.getCalAmount()));
-        claimCaseCal.setExchangeRate(exchangeRate.getParities());
+        //claimCaseCal.setExchangeRate(exchangeRate.getParities());
         claimCaseCalMapper.updateClaimCaseCal(claimCaseCal);
         return claimCaseCalBillMapper.bulkUpdateClaimCaseCalBill(claimCaseCalBills);
     }

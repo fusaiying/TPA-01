@@ -358,6 +358,7 @@
         acceptData: {},
         divTitle: '',
         acceptForm: {
+          email:'',
           businessService: undefined,
           insuredPersonId: undefined,
           workOrderNo: undefined,

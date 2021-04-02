@@ -32,6 +32,8 @@ public class ClaimCaseCalculateInfo {
     private Date birthday;
     private int age;
 
+    private BigDecimal exchangeRate;
+
     private BigDecimal calAmount;
     private BigDecimal refusedAmount;
     private BigDecimal deduUsed;

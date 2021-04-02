@@ -54,13 +54,6 @@ public class FinanceAdvanceSettleDetailServiceImpl implements IFinanceAdvanceSet
     @Autowired
     private RemoteUserService userService;
 
-    @Autowired
-    private BaseIssuingcompanyRiskrelaMapper baseIssuingcompanyRiskrelaMapper;
-
-    @Autowired
-    private PolicyAndRiskService policyAndRiskService;
-
-
     /**
      * 发起垫付款任务
      */
@@ -68,9 +61,9 @@ public class FinanceAdvanceSettleDetailServiceImpl implements IFinanceAdvanceSet
     public List<FinanceAdvanceSettleVO> InitiateAdvancePaymentTask(FinanceAdvanceSettleDTO financeAdvanceSettleDTO) {
         FinanceAdvanceSettleDTO financeAdvanceSettleDTO1=new FinanceAdvanceSettleDTO();
         Date settleEndDate=financeAdvanceSettleDTO.getSettleEndDate();//页面录入结算止期
-        String companyCode=financeAdvanceSettleDTO.getCompanyCode();
+        String companyName=financeAdvanceSettleDTO.getCompanyName();
 
-        Date settleStartDate=financeAdvanceSettleDetailMapper.selectLastendDate(companyCode);//根据出单公司查询最新的结算止期
+        Date settleStartDate=financeAdvanceSettleDetailMapper.selectLastendDate(companyName);//根据出单公司查询最新的结算止期
 
         financeAdvanceSettleDTO1.setSettleStartDate(settleStartDate);
         financeAdvanceSettleDTO1.setSettleEndDate(settleEndDate);

@@ -93,7 +93,7 @@ public interface FinanceAdvanceSettleDetailMapper {
     /**
     *  根据出单公司编码查询最新得结算止期
     */
-    public Date selectLastendDate(String companyCode);
+    public Date selectLastendDate(String companyName);
 
     /**
      * 计算账单总金额

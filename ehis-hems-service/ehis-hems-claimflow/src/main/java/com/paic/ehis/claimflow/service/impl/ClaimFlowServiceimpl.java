@@ -38,14 +38,14 @@ public class ClaimFlowServiceimpl implements IClaimFlowService {
 
     @Override
     public List<GCCPolicyListVo> queryPolicyListToGCC(ClaimFlowDTO claimFlowDTO) {
-//        List<GCCPolicyListVo> gccPolicyListVos ;//= policyInfoMapper.queryPolicyListToGCC(claimFlowDTO);
+        List<GCCPolicyListVo> gccPolicyListVos = policyInfoMapper.queryPolicyListToGCC(claimFlowDTO);
+
         return null;
     }
 
     @Override
     public GCCPolicyInfoVo queryPolicyInfoToGCC(ClaimFlowDTO claimFlowDTO) {
-//        return policyInfoMapper.queryPolicyInfoToGCC(claimFlowDTO);
-        return null;
+        return policyInfoMapper.queryPolicyInfoToGCC(claimFlowDTO);
     }
 
     @Override

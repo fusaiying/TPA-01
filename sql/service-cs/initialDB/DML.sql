@@ -62,8 +62,6 @@ INSERT INTO `sn-cs`.field_map (source_name,type_code,field_order,source_filed_na
 ('ReservationAcceptVo','预约',18,'hospitalWorkCall','医院电话','accept_detail_info','prop15','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00',1)
 ,('ReservationAcceptVo','预约',19,'earliestTime','类似疾病症状最早发生时间','accept_detail_info','prop19','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00',1)
 ,('ReservationAcceptVo','预约',20,'firstFlag','是否首次就诊','accept_detail_info','prop20','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00',1)
-,('ReservationAcceptVo','预约',21,'clinicDate','就诊日期','accept_detail_info','prop21','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00',1)
-,('ReservationAcceptVo','预约',22,'clinicTime','就诊时间','accept_detail_info','prop22','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00',1)
 ,('ReservationAcceptVo','预约',23,'province','就诊医院省','accept_detail_info','prop23','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00',1)
 ,('ReservationAcceptVo','预约',24,'city','就诊医院市','accept_detail_info','prop24','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00',1)
 ,('ReservationAcceptVo','预约',25,'settlementFlag','是否申请直结','accept_detail_info','prop25','','admin','2021-01-22 18:00:00','admin','2021-01-22 18:00:00',1)

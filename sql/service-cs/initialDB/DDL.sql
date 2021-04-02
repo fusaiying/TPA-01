@@ -417,3 +417,20 @@ CREATE TABLE `work_order_accept` (
 `last_end_date` datetime DEFAULT NULL COMMENT '最后结案日期 最后一次结案日期',
 PRIMARY KEY (`work_order_no`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='工单申请信息表 '
+
+CREATE TABLE hang_up_log(
+hang_up_id BIGINT NOT NULL AUTO_INCREMENT  COMMENT '挂起流水号' ,
+work_order_no VARCHAR(32)    COMMENT '工单号' ,
+hang_state VARCHAR(32)    COMMENT '挂起状态' ,
+hang_reason VARCHAR(32)    COMMENT '挂起原因' ,
+up_time DATETIME NOT NULL   COMMENT '挂起时间' ,
+unhang_reason VARCHAR(32)    COMMENT '解挂原因' ,
+down_time DATETIME    COMMENT '解挂时间' ,
+times DECIMAL(10,2)    COMMENT '挂到解时长' ,
+status VARCHAR(2)    COMMENT '数据状态 Y-有效；N-无效' ,
+created_by VARCHAR(32) NOT NULL   COMMENT '创建人' ,
+created_time DATETIME NOT NULL   COMMENT '创建时间' ,
+updated_by VARCHAR(32)    COMMENT '更新人' ,
+updated_time DATETIME    COMMENT '更新时间' ,
+PRIMARY KEY (hang_up_id)
+) COMMENT = '挂起解挂记录表 挂起解挂记录表';

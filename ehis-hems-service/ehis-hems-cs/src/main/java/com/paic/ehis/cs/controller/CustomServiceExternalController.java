@@ -345,11 +345,11 @@ public class CustomServiceExternalController extends BaseController {
         JSONArray jArray = new JSONArray();
         jArray.add(requestMap);
         String params = jArray.toString();
-        logger.info("理赔信息查询接口请求获取到参数: {}", params);
+        logger.info("保单列表查询接口请求获取到参数: {}", params);
         //请求体获取
         RequestWrapper requestWrapper = new RequestWrapper(request);
         String body = requestWrapper.getBody();
-        logger.info("理赔信息查询接口请求获取到Body内容:{}", body);
+        logger.info("保单列表查询接口请求获取到Body内容:{}", body);
         if (StringUtils.isEmpty(body)) {
             return AjaxResult.error("请求体内容不能为空");
         }
@@ -357,19 +357,19 @@ public class CustomServiceExternalController extends BaseController {
         ClaimFlowDTO businessData=null;
         try {
             JSONObject jsonObject = JSONObject.parseObject(body);
-            String certno = jsonObject.getString("certno");
-            if (StringUtils.isEmpty(certno)) {
-                return AjaxResult.error("分单号不能为空");
+            String customerNo = jsonObject.getString("customerNo");
+            if (StringUtils.isEmpty(customerNo)) {
+                return AjaxResult.error("客户号不能为空");
             }
             //转换成业务入参对象
             businessData =JSONObject.toJavaObject(jsonObject, ClaimFlowDTO.class);
         } catch (Exception e) {
-            logger.error("理赔信息查询接口，处理请请求体异常:{}", e.getMessage());
+            logger.error("保单列表查询接口，处理请请求体异常:{}", e.getMessage());
             return AjaxResult.error("请求体内容不合法");
         }
 
         try {
-            return claimFlowService.queryClaimListToGCC(businessData);
+            return claimFlowService.queryPolicyList(businessData);
         }catch (Exception e){
             logger.error("服务器内部处理异常:{}", e.getMessage());
             return AjaxResult.error("服务器内部处理异常,请联系运维人员");
@@ -403,7 +403,7 @@ public class CustomServiceExternalController extends BaseController {
             JSONObject jsonObject = JSONObject.parseObject(body);
             String policyNo = jsonObject.getString("policyNo");
             if (StringUtils.isEmpty(policyNo)) {
-                return AjaxResult.error("分单号不能为空");
+                return AjaxResult.error("保单号不能为空");
             }
             //转换成业务入参对象
             businessData =JSONObject.toJavaObject(jsonObject, ClaimFlowDTO.class);
@@ -413,7 +413,7 @@ public class CustomServiceExternalController extends BaseController {
         }
 
         try {
-            return claimFlowService.queryPolicyInfoToGCC(businessData);
+            return claimFlowService.queryPolicyInfo(businessData);
         }catch (Exception e){
             logger.error("服务器内部处理异常:{}", e.getMessage());
             return AjaxResult.error("服务器内部处理异常,请联系运维人员");
@@ -432,11 +432,11 @@ public class CustomServiceExternalController extends BaseController {
         JSONArray jArray = new JSONArray();
         jArray.add(requestMap);
         String params = jArray.toString();
-        logger.info("理赔信息查询接口请求获取到参数: {}", params);
+        logger.info("分单责任信息查询接口请求获取到参数: {}", params);
         //请求体获取
         RequestWrapper requestWrapper = new RequestWrapper(request);
         String body = requestWrapper.getBody();
-        logger.info("理赔信息查询接口请求获取到Body内容:{}", body);
+        logger.info("分单责任信息查询接口请求获取到Body内容:{}", body);
         if (StringUtils.isEmpty(body)) {
             return AjaxResult.error("请求体内容不能为空");
         }
@@ -451,17 +451,18 @@ public class CustomServiceExternalController extends BaseController {
             //转换成业务入参对象
             businessData =JSONObject.toJavaObject(jsonObject, ClaimFlowDTO.class);
         } catch (Exception e) {
-            logger.error("理赔信息查询接口，处理请请求体异常:{}", e.getMessage());
+            logger.error("分单责任信息查询接口，处理请请求体异常:{}", e.getMessage());
             return AjaxResult.error("请求体内容不合法");
         }
 
         try {
-            return claimFlowService.queryClaimListToGCC(businessData);
+            return claimFlowService.queryDutyInfo(businessData);
         }catch (Exception e){
             logger.error("服务器内部处理异常:{}", e.getMessage());
             return AjaxResult.error("服务器内部处理异常,请联系运维人员");
         }
     }
+
     /**
      * 理赔信息查询
      * @param request

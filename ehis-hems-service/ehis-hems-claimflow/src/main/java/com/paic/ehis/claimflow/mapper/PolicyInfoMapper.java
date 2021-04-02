@@ -6,9 +6,7 @@ import com.paic.ehis.claimflow.domain.PolicyInfo;
 import com.paic.ehis.claimflow.domain.dto.ClaimFlowDTO;
 import com.paic.ehis.claimflow.domain.dto.PolicyDTO;
 import com.paic.ehis.claimflow.domain.interfaceclass.InsuredNoAndName;
-import com.paic.ehis.claimflow.domain.vo.DutyVo;
-import com.paic.ehis.claimflow.domain.vo.PolicyListVo;
-import com.paic.ehis.claimflow.domain.vo.PolicyVo;
+import com.paic.ehis.claimflow.domain.vo.*;
 import com.paic.ehis.system.api.domain.CompanyRiskPolicyInfo;
 import com.paic.ehis.system.api.domain.PolicyAndRiskRelation;
 import org.apache.ibatis.annotations.Mapper;
@@ -102,6 +100,19 @@ public interface PolicyInfoMapper
 
     List<PolicyInfo> selectPolicyInfoListByinsuredNo(InsuredNoAndName claimCaseShuntClass);
 
-    List<PolicyListVo> selectPolicyList(ClaimFlowDTO claimFlowDTO);
+    public List<PolicyListVo> selectPolicyList(ClaimFlowDTO claimFlowDTO);
+
+    public List<GCCPolicyListVo> queryPolicyListToGCC(ClaimFlowDTO claimFlowDTO);
+
+    public List<GCCPreAuthorization> selectPreAuthorizationByRisk(String riskCode);
+
+    public List<GCCHealthServiceWaitPeriod> queryRiskWaitPeriodToGCC();
+
+
+    public GCCPolicyInfoVo queryPolicyInfoToGCC(ClaimFlowDTO claimFlowDTO);
+
+    public GCCPolicyCertInfoVo queryDutyInfoToGCC(ClaimFlowDTO claimFlowDTO);
+
+
 
 }

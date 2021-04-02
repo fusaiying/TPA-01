@@ -55,8 +55,7 @@ public class ClaimFlowController extends BaseController {
     @PostMapping("/queryPolicyList")
     public AjaxResult queryPolicyList(@RequestBody ClaimFlowDTO claimFlowDTO){
         logger.info("提供GCC保单列表接口入参：{}",claimFlowDTO);
-//        return AjaxResult.success(claimFlowService.queryPolicyListToGCC(claimFlowDTO));
-        return null;
+        return AjaxResult.success(claimFlowService.queryPolicyListToGCC(claimFlowDTO));
     }
 
     /**
@@ -67,8 +66,7 @@ public class ClaimFlowController extends BaseController {
     @PostMapping("/queryPolicyInfo")
     public AjaxResult queryPolicyInfo(@RequestBody ClaimFlowDTO claimFlowDTO){
         logger.info("提供GCC保单信息资料接口入参：{}",claimFlowDTO);
-//        return AjaxResult.success(claimFlowService.queryPolicyInfoToGCC(claimFlowDTO));
-        return null;
+        return AjaxResult.success(claimFlowService.queryPolicyInfoToGCC(claimFlowDTO));
     }
 
     /**
@@ -79,9 +77,10 @@ public class ClaimFlowController extends BaseController {
     @PostMapping("/queryDutyInfo")
     public AjaxResult queryDutyInfo(@RequestBody ClaimFlowDTO claimFlowDTO){
         logger.info("提供GCC分单责任查询接口入参：{}",claimFlowDTO);
-//        return AjaxResult.success(claimFlowService.queryDutyInfoToGCC(claimFlowDTO));
-        return null;
+        return AjaxResult.success(claimFlowService.queryDutyInfoToGCC(claimFlowDTO));
     }
+
+
     /***********************************************   理赔类  ***************************************************/
     /**
      * 客服模块：提供GCC理赔信息查询接口

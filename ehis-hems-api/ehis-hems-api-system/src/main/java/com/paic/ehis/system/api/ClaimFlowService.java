@@ -34,13 +34,29 @@ public interface ClaimFlowService {
     @PostMapping(value = "/external_claimflow/getPolicyInfo")
     public AjaxResult getPolicyInfoBy(@RequestBody ClaimFlowDTO claimFlowDTO);
 
-
-    @PostMapping(value = "/external_claimflow/getPolicyInfo")
-    public AjaxResult queryClaimList(@RequestBody ClaimFlowDTO claimFlowDTO);
-
-
+    /**
+     * 提供GCC保单列表
+     * @param claimFlowDTO
+     * @return
+     */
+    @PostMapping(value = "/external_claimflow/queryPolicyList")
+    public AjaxResult queryPolicyList(@RequestBody ClaimFlowDTO claimFlowDTO);
+    /**
+     * 提供GCC保单列表
+     * @param claimFlowDTO
+     * @return
+     */
     @PostMapping(value = "/external_claimflow/queryPolicyInfo")
-    public AjaxResult queryPolicyInfoToGCC(ClaimFlowDTO claimFlowDTO);
+    public AjaxResult queryPolicyInfo(ClaimFlowDTO claimFlowDTO);
+
+    /**
+     * 提供GCC保单列表
+     * @param claimFlowDTO
+     * @return
+     */
+    @PostMapping(value = "/external_claimflow/queryDutyInfo")
+    public AjaxResult queryDutyInfo(ClaimFlowDTO claimFlowDTO);
+
 
     @PostMapping(value = "/external_claimflow/queryClaimList")
     public AjaxResult queryClaimListToGCC(ClaimFlowDTO claimFlowDTO);

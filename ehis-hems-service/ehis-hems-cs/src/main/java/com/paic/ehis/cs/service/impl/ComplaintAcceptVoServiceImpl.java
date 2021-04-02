@@ -1201,7 +1201,7 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
         }
         PersonInfo complaintPerson1 = personInfoMapper.selectPersonInfoById(complaintPersonId);
         //数据库对象
-        PersonInfo complaintPerson = complaintAcceptVo1.getComplaintPerson();
+        PersonInfo complaintPerson = complaintAcceptVo.getComplaintPerson();
         if (complaintPerson != null) {
             //插入投诉人
             complaintPerson.setPersonId(complaintPersonId);

@@ -3,6 +3,7 @@ package com.paic.ehis.claimflow.service.impl;
 
 import com.paic.ehis.claimflow.domain.*;
 import com.paic.ehis.claimflow.domain.dto.BillDetailDTO;
+import com.paic.ehis.claimflow.domain.vo.CalConclusionVo;
 import com.paic.ehis.claimflow.domain.vo.CaseCalBillItemVo;
 import com.paic.ehis.claimflow.domain.vo.CaseCalBillVo;
 import com.paic.ehis.claimflow.mapper.*;
@@ -147,6 +148,8 @@ public class ClaimCaseCalBillServiceImpl implements IClaimCaseCalBillService
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     @Override
     public int billDetailsSave(BillDetailDTO billDetailDTO) {
+
+        String rptNo = billDetailDTO.getBillDetailList().get(0).getRptNo();
         int size=0;
         String claimFlag = "";
         BigDecimal billTotalAmount=new BigDecimal(String.valueOf(0.00));
@@ -154,8 +157,8 @@ public class ClaimCaseCalBillServiceImpl implements IClaimCaseCalBillService
         BigDecimal totalSelfAmount=new BigDecimal(String.valueOf(0.00));
         ArrayList<ClaimCaseCalBill> claimCaseCalBills = new ArrayList<>();
         ArrayList<ClaimCaseCalItem> claimCaseCalItems = new ArrayList<>();
-        ClaimCaseCal claimCaseCal =claimCaseCalMapper.selectClaimCaseCalByRptNo(billDetailDTO.getBillDetailList().get(0).getRptNo());
-        claimCaseCal.setRptNo(billDetailDTO.getBillDetailList().get(0).getRptNo());
+        ClaimCaseCal claimCaseCal =claimCaseCalMapper.selectClaimCaseCalByRptNo(rptNo);
+        claimCaseCal.setRptNo(rptNo);
         claimCaseCal.setUpdateBy(SecurityUtils.getUsername());
         claimCaseCal.setUpdateTime(DateUtils.getNowDate());
         BigDecimal pay = new BigDecimal(String.valueOf(0));
@@ -194,7 +197,7 @@ public class ClaimCaseCalBillServiceImpl implements IClaimCaseCalBillService
             claimCaseCalItemMapper.bulkUpdateClaimCaseCalItem(claimCaseCalItems);
         }
         //判断是否全赔医院
-        ClaimCase claimCase = claimCaseMapper.selectClaimCaseById(billDetailDTO.getBillDetailList().get(0).getRptNo());
+        ClaimCase claimCase = claimCaseMapper.selectClaimCaseById(rptNo);
         ClaimBatch claimBatch = claimBatchMapper.selectClaimBatchById(claimCase.getBatchNo());
         BaseProviderSettle baseProviderSettle = new BaseProviderSettle();
         baseProviderSettle.setProviderCode(claimBatch.getHospitalcode());
@@ -217,7 +220,7 @@ public class ClaimCaseCalBillServiceImpl implements IClaimCaseCalBillService
             claimCaseCal.setPayAmount(pay);
             claimCaseCal.setDebtAmount(new BigDecimal(String.valueOf(0.00)));
             //外币给付金额   1、非全赔医院：根据账单币种及汇率对赔付金额进行汇率转换
-            claimCaseCal.setPayAmountForeign(claimCaseCal.getCalAmount().divide(exchangeRate.getParities(),2,BigDecimal.ROUND_HALF_DOWN));
+           // claimCaseCal.setPayAmountForeign(claimCaseCal.getCalAmount().divide(exchangeRate.getParities(),2,BigDecimal.ROUND_HALF_DOWN));
         }
         if ("02".equals(claimFlag)){//全赔医院
             claimCaseCal.setCalAmount(pay);
@@ -225,8 +228,40 @@ public class ClaimCaseCalBillServiceImpl implements IClaimCaseCalBillService
             claimCaseCal.setDebtAmount(billTotalAmount.subtract(totalDiscountAmount).subtract(totalSelfAmount).subtract(claimCaseCal.getCalAmount()));
             claimCaseCal.setPayAmount(billTotalAmount.subtract(totalDiscountAmount));
             //外币给付金额   2、全赔医院：根据账单币种及汇率对折后金额进行汇率转换
-            claimCaseCal.setPayAmountForeign((billTotalAmount.subtract(totalDiscountAmount)).divide(exchangeRate.getParities(),2,BigDecimal.ROUND_HALF_DOWN));
+           // claimCaseCal.setPayAmountForeign((billTotalAmount.subtract(totalDiscountAmount)).divide(exchangeRate.getParities(),2,BigDecimal.ROUND_HALF_DOWN));
         }
+
+        /***
+         * modify by: houjiawei
+         * time: 2021-04-02
+         *计算 外币给付金额
+         * start
+        */
+        CalConclusionVo calConclusionVo = claimCaseCalMapper.selectClaimCaseCalInformation(rptNo);
+        if(null != calConclusionVo) {
+            BigDecimal payAmount1 = calConclusionVo.getPayAmount();
+            BigDecimal billAmount1 = calConclusionVo.getSumBillAmount();
+            BigDecimal discountAmount1 = calConclusionVo.getSumHosDiscountAmount();// 折扣金额
+
+            //01-非全赔
+            if("01".equals(claimFlag)) {
+                if(payAmount1 != null) {
+                    BigDecimal payAmountForeign = payAmount1.divide(exchangeRate.getParities(),20,BigDecimal.ROUND_HALF_UP);
+                    claimCaseCal.setPayAmountForeign(payAmountForeign);
+                }
+            }
+           // 02-全赔
+            if("02".equals(claimFlag)) {
+                if(billAmount1 != null && discountAmount1 != null) {
+                    BigDecimal subtractVal = billAmount1.subtract(discountAmount1);
+                    BigDecimal payAmountForeign = subtractVal.divide(exchangeRate.getParities(),20,BigDecimal.ROUND_HALF_UP);
+                    claimCaseCal.setPayAmountForeign(payAmountForeign);
+                }
+            }
+        }
+        /***
+         * end
+         */
         if (size==billDetailDTO.getBillDetailList().size()){//存在拒赔结论时，赔付金额为0，
             claimCaseCal.setCalAmount(new BigDecimal(String.valueOf(0.00)));
         }

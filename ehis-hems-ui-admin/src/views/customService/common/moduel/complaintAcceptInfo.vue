@@ -223,19 +223,19 @@
         this.acceptData = newValue
         console.info("newValue");
         console.info(newValue);
-        this.acceptForm.channelCode = newValue.channelCode
-        this.acceptForm.insuredPersonId = newValue.insuredPersonId
-        this.acceptForm.email = newValue.email
-        this.acceptForm.persuasionFlag = newValue.persuasionFlag
-        this.acceptForm.callCenterId = newValue.callCenterId
-        this.acceptForm.workOrderNo = newValue.workOrderNo
-        this.acceptForm.serviceItem = newValue.serviceItem
-        this.acceptForm.businessService = newValue.businessService
-        this.acceptForm.callRelationBy = newValue.callRelationBy
-        this.acceptForm.priorityLevel = newValue.priorityLevel
-        this.acceptForm.contactsRelationBy = newValue.contactsRelationBy
-        this.acceptForm.content = newValue.content
-        this.acceptForm.organCode = newValue.organCode
+        this.acceptForm.channelCode = newValue.channelCode;
+        this.acceptForm.insuredPersonId = newValue.insuredPersonId;
+        this.acceptForm.email = newValue.email;
+        this.$set(this.acceptForm,'persuasionFlag',newValue.persuasionFlag);
+        this.acceptForm.callCenterId = newValue.callCenterId;
+        this.acceptForm.workOrderNo = newValue.workOrderNo;
+        this.acceptForm.serviceItem = newValue.serviceItem;
+        this.acceptForm.businessService = newValue.businessService;
+        this.acceptForm.callRelationBy = newValue.callRelationBy;
+        this.acceptForm.priorityLevel = newValue.priorityLevel;
+        this.acceptForm.contactsRelationBy = newValue.contactsRelationBy;
+        this.acceptForm.content = newValue.content;
+        this.acceptForm.organCode = newValue.organCode;
         if (newValue.contactsPerson.homePhone1 == null) {
           newValue.contactsPerson.homePhone1 = ['', '', '', '']
         }

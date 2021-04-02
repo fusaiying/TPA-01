@@ -207,7 +207,7 @@
             </if>
             <if test="settleStatus != null  and settleStatus != ''">and a.settle_status = #{settleStatus}</if>
             <if test="batchTotal != null  and batchTotal != ''">and c.batch_total = #{batchTotal}</if>
-            <if test="companyCode != null  and companyCode != ''">and d.company_code = #{companyCode}</if>
+            <if test="companyCode != null  and companyCode != ''">and a.company_code = #{companyCode}</if>
             <if test="companyName != null  and companyName != ''">and e.company_name = #{companyName}</if>
             <if test="pageType != null  and pageType == '01'">and a.settle_Status in ('01','02')</if>
             <if test="pageType != null  and pageType == '03'">and a.settle_Status in ('02','03')</if>
@@ -252,7 +252,7 @@
         FROM finance_advance_settle_task
         WHERE status = 'Y'
         and company_code = {companyCode}
-        ORDER BY create_time DESC LIMIT 1
+        ORDER BY settle_end_date DESC LIMIT 1
     </select>
 
     <!--计算折后金额结算金额默认为折后金额-->

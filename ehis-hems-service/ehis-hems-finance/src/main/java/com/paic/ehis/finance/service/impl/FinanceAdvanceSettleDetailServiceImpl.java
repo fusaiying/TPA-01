@@ -82,9 +82,6 @@ public class FinanceAdvanceSettleDetailServiceImpl implements IFinanceAdvanceSet
                     financeAdvanceSettleVO1.setSumPayAmount(new BigDecimal("0"));
                 }
                 financeAdvanceSettleVOS1.add(financeAdvanceSettleVO1);
-            }
-        }
-       // FinanceAdvanceSettleVO financeAdvanceSettleVO = new FinanceAdvanceSettleVO();
         //垫付款服务费及明细的新增
         FinanceAdvanceSettleTask financeAdvanceSettleTask = new FinanceAdvanceSettleTask();
         FinanceAdvanceSettleDetail financeAdvanceSettleDetail = new FinanceAdvanceSettleDetail();
@@ -99,7 +96,9 @@ public class FinanceAdvanceSettleDetailServiceImpl implements IFinanceAdvanceSet
         if (null != jsonObject && jsonObject.containsKey("userName")) {
             userName = jsonObject.get("userName").toString();
         }
+        String taskNo = "AS" + PubFun.createMySqlMaxNoUseCache("finance_advance_settle_detail", 10, 10);
         financeAdvanceSettleTask.setSettleStatus("01");
+        financeAdvanceSettleTask.setSettleTaskNo(taskNo);
         financeAdvanceSettleTask.setSettleEndDate(financeAdvanceSettleDTO.getSettleEndDate());//录入结算止期
         financeAdvanceSettleTask.setCompanyCode(financeAdvanceSettleDTO.getCompanyCode());//录入出单公司
         financeAdvanceSettleTask.setStatus("Y");
@@ -110,6 +109,7 @@ public class FinanceAdvanceSettleDetailServiceImpl implements IFinanceAdvanceSet
         financeAdvanceSettleTask.setUpdateTime(DateUtils.getNowDate());
 
         financeAdvanceSettleDetail.setStatus("Y");
+        financeAdvanceSettleDetail.setSettleTaskNo(taskNo);
         financeAdvanceSettleDetail.setDeptCode(organCode);
         financeAdvanceSettleDetail.setCompanyCode(financeAdvanceSettleDTO.getCompanyCode());//录入出单公司
         financeAdvanceSettleDetail.setCreateBy(userName);
@@ -117,6 +117,10 @@ public class FinanceAdvanceSettleDetailServiceImpl implements IFinanceAdvanceSet
         financeAdvanceSettleDetail.setUpdateBy(userName);
         financeAdvanceSettleDetail.setUpdateTime(DateUtils.getNowDate());
 
+        String recordId=PubFun.createMySqlMaxNoUseCache("rf", 10, 10);
+        Long recordDd= Long.valueOf(recordId);
+        financeSettleRecord.setRecordId(recordDd);
+        financeSettleRecord.setSettleTaskNo(taskNo);
         financeSettleRecord.setTaskType("02");
         financeSettleRecord.setOperator(userName);
         financeSettleRecord.setHistoryFlag("N");
@@ -128,7 +132,7 @@ public class FinanceAdvanceSettleDetailServiceImpl implements IFinanceAdvanceSet
         financeSettleRecord.setUpdateBy(userName);
         financeSettleRecord.setUpdateTime(DateUtils.getNowDate());
 
-        if (StringUtils.isNotNull(financeAdvanceSettleDTO.getSettleTaskNo())) {
+        if (StringUtils.isNotNull(financeAdvanceSettleVO.getSettleTaskNo())) {
             //设值 结算表的结算起期
             financeAdvanceSettleDetailMapper.updateFinanceAdvanceSettleDetail(financeAdvanceSettleDetail);
             financeAdvanceSettleTaskMapper.updateFinanceAdvanceSettleTask(financeAdvanceSettleTask);
@@ -145,8 +149,9 @@ public class FinanceAdvanceSettleDetailServiceImpl implements IFinanceAdvanceSet
             financeAdvanceSettleDetailMapper.updateFinanceAdvanceSettleDetail(financeAdvanceSettleDetail);
             financeAdvanceSettleTaskMapper.updateFinanceAdvanceSettleTask(financeAdvanceSettleTask);
             financeSettleRecordMapper.insertFinanceSettleRecord(financeSettleRecord);
-          //  financeAdvanceSettleVOS.add(financeAdvanceSettleVO);
         }
+    }
+}
         return financeAdvanceSettleVOS1;
     }
 

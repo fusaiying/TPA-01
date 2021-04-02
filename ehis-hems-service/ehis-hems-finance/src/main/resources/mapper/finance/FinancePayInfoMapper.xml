@@ -171,6 +171,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         SELECT
         fpi.pay_batch_no,
         sum( fpi.sum_pay_amount ) AS sum_pay_amount,
+        fpi.batch_no,
         fpi.payee_bank,
         fpi.acc_no,
         fpi.acc_name,

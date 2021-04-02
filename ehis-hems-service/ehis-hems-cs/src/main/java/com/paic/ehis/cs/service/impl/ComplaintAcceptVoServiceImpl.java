@@ -1291,6 +1291,7 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
         tDictType.put("accidentFlag", "cs_whether_flag");
         tDictType.put("identity", "cs_identity");
         tDictType.put("symptomTimes", "cs_time_unit");
+        tDictType.put("persuasionFlag", "cs_whether_flagOptions");
 
         Map<String, String> tSpecialMap = new HashMap<String, String>();
         tSpecialMap.put("updateBy", "updateBy");
@@ -1309,6 +1310,10 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
         tSpecialMap.put("itemCode", "itemCode");
         tSpecialMap.put("complaintTime", "complaintTime");
         tSpecialMap.put("callPersonId", "callPersonId");
+        tSpecialMap.put("callPersonId", "callPersonId");
+        tSpecialMap.put("linePhone1", "linePhone1");
+        tSpecialMap.put("homePhone1", "homePhone1");
+        tSpecialMap.put("workPhone1", "workPhone1");
 
         List<String> keyList = new ArrayList<>();
         Iterator<String> iter = map1.keySet().iterator();

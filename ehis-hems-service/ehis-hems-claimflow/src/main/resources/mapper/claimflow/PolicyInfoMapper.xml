@@ -408,7 +408,6 @@ SELECT a.policy_manage_com,a.policy_no,a.insured_no,b.birthday,b.occupation FROM
         <result property="threeClassHospitalRate" column="threeClassHospitalRate"/>
         <result property="fourClassHospitalRate" column="fourClassHospitalRate"/>
         <result property="mainPlanCoverageLevel" column="plan_code"/>
-        <result property="preAuthorizationList" column="preAuthorizationList"/>
         <result property="isRenewal" column="isRenewal"/>
         <result property="appType" column="policy_type"/>
         <result property="matuDate" column="valid_end_date"/>
@@ -423,9 +422,9 @@ SELECT a.policy_manage_com,a.policy_no,a.insured_no,b.birthday,b.occupation FROM
         <result property="certStsName" column="policy_status"/>
         <result property="planCode" column="planCode"/>
         <result property="twoClassHospitalRate" column="twoClassHospitalRate"/>
-        <collection property="healthServiceWaitPeriodList"
-                    ofType="com.paic.ehis.claimflow.domain.vo.GCCHealthServiceWaitPeriod"
-        select="com.paic.ehis.claimflow.mapper."/>
+<!--        <collection property="healthServiceWaitPeriodList"-->
+<!--                    ofType="com.paic.ehis.claimflow.domain.vo.GCCHealthServiceWaitPeriod"-->
+<!--        select="com.paic.ehis.claimflow.mapper."/>-->
         <collection property="preAuthorizationList"
                     ofType="com.paic.ehis.claimflow.domain.vo.GCCPreAuthorization"
                     column="risk_code"

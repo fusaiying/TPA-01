@@ -363,8 +363,8 @@ public class FinanceTpaSettleTaskServiceImpl implements IFinanceTpaSettleTaskSer
             List<TpaSettleDetailInfo> detailInfos = tpaSettleInfo.getDetailInfos();
             for (TpaSettleDetailInfo detailInfo : detailInfos) {
                 PolicyAndRiskRelation policyAndRiskRelation = new PolicyAndRiskRelation();
-                policyAndRiskRelation.setCompanyCode(detailInfo.getPolicyNo());
-                policyAndRiskRelation.setCompanyCode(detailInfo.getPolicyItemNo());
+                policyAndRiskRelation.setPolicyNo(detailInfo.getPolicyNo());
+                policyAndRiskRelation.setPolicyItemNo(detailInfo.getPolicyItemNo());
                 policyAndRiskRelation.setStatus(ClaimStatus.DATAYES.getCode());
                 CompanyRiskPolicyInfo companyRiskPolicyInfo = policyAndRiskService.selectPolicyInfoListByPolicyNo(policyAndRiskRelation);
                 detailInfo.setInsuredNo(companyRiskPolicyInfo.getInsuredNo());

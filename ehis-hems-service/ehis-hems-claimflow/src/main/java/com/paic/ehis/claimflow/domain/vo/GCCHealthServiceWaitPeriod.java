@@ -18,4 +18,6 @@ public class GCCHealthServiceWaitPeriod implements Serializable {
     private String waitPeriodTypeCode;
 
     private String serviceItemCode;
+
+    private String serviceItemName;
 }

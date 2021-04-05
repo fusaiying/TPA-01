@@ -7,6 +7,7 @@ import lombok.Data;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Data
 public class GCCPolicyListVo implements Serializable {
@@ -46,7 +47,7 @@ public class GCCPolicyListVo implements Serializable {
     //主险险种档次（个险）
     private String mainPlanCoverageLevel;
     //预授权信息
-    private List<Object> preAuthorizationList;
+    private List<GCCPreAuthorization> preAuthorizationList;
     //是否续保
     private String isRenewal;
     //投保类型
@@ -70,7 +71,7 @@ public class GCCPolicyListVo implements Serializable {
     //保益失效日
     private String benMatuDate;
     //可预约服务状态：待解析
-    private String healthServiceInfoMap;
+    private Map<String,String> healthServiceInfoMap;
     //被保险人姓名
     private String insName;
     //

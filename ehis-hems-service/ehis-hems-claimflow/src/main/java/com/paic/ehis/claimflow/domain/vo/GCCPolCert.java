@@ -7,10 +7,7 @@ import java.io.Serializable;
 @Data
 public class GCCPolCert implements Serializable {
     private static final long serialVersionUID = 1L;
-    /**
-     * 承保机构名称
-     */
-    private String regionCodeName;
+
     /**
      * 客户号
      */

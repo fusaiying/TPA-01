@@ -14,4 +14,8 @@ public class GCCCustomerInfo implements Serializable {
     private String customerNo;
     //年龄
     private String age;
+    //分单号
+    private String certno;
+    //被保人姓名
+    private String insName;
 }

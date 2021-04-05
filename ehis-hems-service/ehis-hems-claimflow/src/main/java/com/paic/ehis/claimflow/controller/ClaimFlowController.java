@@ -1,6 +1,7 @@
 package com.paic.ehis.claimflow.controller;
 
 import com.paic.ehis.claimflow.domain.dto.ClaimFlowDTO;
+import com.paic.ehis.claimflow.domain.vo.GCCPolicyListVo;
 import com.paic.ehis.claimflow.domain.vo.PolicyListVo;
 import com.paic.ehis.claimflow.service.IClaimFlowService;
 import com.paic.ehis.common.core.web.controller.BaseController;
@@ -55,7 +56,8 @@ public class ClaimFlowController extends BaseController {
     @PostMapping("/queryPolicyList")
     public AjaxResult queryPolicyList(@RequestBody ClaimFlowDTO claimFlowDTO){
         logger.info("提供GCC保单列表接口入参：{}",claimFlowDTO);
-        return AjaxResult.success(claimFlowService.queryPolicyListToGCC(claimFlowDTO));
+        List<GCCPolicyListVo> list=claimFlowService.queryPolicyListToGCC(claimFlowDTO);
+        return AjaxResult.success(list);
     }
 
     /**
@@ -80,6 +82,17 @@ public class ClaimFlowController extends BaseController {
         return AjaxResult.success(claimFlowService.queryDutyInfoToGCC(claimFlowDTO));
     }
 
+
+    /**
+     * 客服模块：通过GCC服务信息查询接口
+     * @param claimFlowDTO
+     * @return
+     */
+    @PostMapping("/queryHealthServiceInfo")
+    public AjaxResult queryHealthServiceInfo(@RequestBody ClaimFlowDTO claimFlowDTO){
+        logger.info("提供GCC服务信息查询接口入参：{}",claimFlowDTO);
+        return AjaxResult.success(claimFlowService.queryHealthServiceToGCC(claimFlowDTO));
+    }
 
     /***********************************************   理赔类  ***************************************************/
     /**

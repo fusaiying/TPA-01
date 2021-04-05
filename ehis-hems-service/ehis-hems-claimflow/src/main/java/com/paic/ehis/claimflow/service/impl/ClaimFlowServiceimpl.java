@@ -10,6 +10,7 @@ import com.paic.ehis.claimflow.service.IClaimFlowService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -39,8 +40,7 @@ public class ClaimFlowServiceimpl implements IClaimFlowService {
     @Override
     public List<GCCPolicyListVo> queryPolicyListToGCC(ClaimFlowDTO claimFlowDTO) {
         List<GCCPolicyListVo> gccPolicyListVos = policyInfoMapper.queryPolicyListToGCC(claimFlowDTO);
-
-        return null;
+        return gccPolicyListVos!=null ? gccPolicyListVos: new ArrayList<>();
     }
 
     @Override
@@ -55,8 +55,15 @@ public class ClaimFlowServiceimpl implements IClaimFlowService {
     }
 
     @Override
+    public GCCHealthServiceInfoVo queryHealthServiceToGCC(ClaimFlowDTO claimFlowDTO) {
+//        return policyInfoMapper.queryHealthServiceToGCC(claimFlowDTO);
+        return null;
+    }
+
+    @Override
     public List<GCCClaimListVo> queryClaimListToGCC(ClaimFlowDTO claimFlowDTO) {
-        return ClaimCaseMapper.queryClaimListToGCC(claimFlowDTO);
+        List<GCCClaimListVo> gccClaimListVos = ClaimCaseMapper.queryClaimListToGCC(claimFlowDTO);
+        return gccClaimListVos!=null ? gccClaimListVos : new ArrayList<>();
     }
     @Override
     public GCCClaimAcceptVo queryClaimAcceptListToGCC(ClaimFlowDTO claimFlowDTO) {
@@ -70,6 +77,7 @@ public class ClaimFlowServiceimpl implements IClaimFlowService {
 
     @Override
     public List<GCCClaimBillDetail> queryClaimBillDetailToGCC(ClaimFlowDTO claimFlowDTO) {
-        return claimCaseBillDetailMapper.selectGCCClaimBillDetailById(claimFlowDTO.getSeqno());
+        List<GCCClaimBillDetail> gccClaimBillDetails = claimCaseBillDetailMapper.selectGCCClaimBillDetailById(claimFlowDTO.getSeqno());
+        return gccClaimBillDetails!=null ? gccClaimBillDetails : new ArrayList<>();
     }
 }

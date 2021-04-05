@@ -102,16 +102,46 @@ public interface PolicyInfoMapper
 
     public List<PolicyListVo> selectPolicyList(ClaimFlowDTO claimFlowDTO);
 
+    /**
+     * 提供GCC保单列表
+     * @param claimFlowDTO
+     * @return
+     */
     public List<GCCPolicyListVo> queryPolicyListToGCC(ClaimFlowDTO claimFlowDTO);
 
+    /**
+     * GCC保单预授权信息
+     * @param riskCode
+     * @return
+     */
     public List<GCCPreAuthorization> selectPreAuthorizationByRisk(String riskCode);
 
-    public List<GCCHealthServiceWaitPeriod> queryRiskWaitPeriodToGCC();
+    /**
+     * GCC等待期信息提取
+     * @return
+     */
+    public List<GCCHealthServiceWaitPeriod> queryRiskWaitPeriodToGCC(String riskCode);
 
-
+    /**
+     * GCC保单资料信息接口
+     * @param claimFlowDTO
+     * @return
+     */
     public GCCPolicyInfoVo queryPolicyInfoToGCC(ClaimFlowDTO claimFlowDTO);
 
+    /**
+     * GCC分单责任信息
+     * @param claimFlowDTO
+     * @return
+     */
     public GCCPolicyCertInfoVo queryDutyInfoToGCC(ClaimFlowDTO claimFlowDTO);
+
+    /**
+     * GCC服务信息
+     * @param claimFlowDTO
+     * @return
+     */
+    public GCCHealthServiceInfoVo queryHealthServiceToGCC(ClaimFlowDTO claimFlowDTO);
 
 
 

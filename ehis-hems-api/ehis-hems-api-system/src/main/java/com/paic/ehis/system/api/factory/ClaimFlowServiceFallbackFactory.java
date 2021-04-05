@@ -46,6 +46,11 @@ public class ClaimFlowServiceFallbackFactory implements FallbackFactory<ClaimFlo
             }
 
             @Override
+            public AjaxResult queryHealthService(ClaimFlowDTO claimFlowDTO) {
+                return null;
+            }
+
+            @Override
             public AjaxResult queryClaimListToGCC(ClaimFlowDTO claimFlowDTO) {
                 return null;
             }

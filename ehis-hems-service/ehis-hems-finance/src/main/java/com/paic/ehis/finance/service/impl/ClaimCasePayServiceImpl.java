@@ -931,6 +931,10 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService {
         // 封装支付总金额、理赔总金额、外币支付总金额
         claimCasePaymentVO.setPayAmount(payAmount);
         claimCasePaymentVO.setCalAmount(calAmount);
+        ClaimCasePaymentVO claimCasePaymentVO1 = claimCaseCalMapper.selectClaimCaseCalAmountByBatchNo(batchNo);
+        if (StringUtils.isNotNull(claimCasePaymentVO1)){
+            claimCasePaymentVO.setCalAmount(claimCasePaymentVO1.getCalAmount());
+        }
         if (payAmount.compareTo(new BigDecimal("0.00")) <= 0) {
             payFlag = "false";
         }

@@ -85,6 +85,7 @@ SELECT a.policy_manage_com,a.policy_no,a.insured_no,b.birthday,b.occupation FROM
         <result property="prem"    column="prem"    />
         <result property="sumPerm"    column="sumPerm"    />
         <result property="totalPeople"    column="totalPeople"    />
+        <result property="bestStartDate"    column="bestStartDate"    />
         <result property="policyManageCom"    column="policy_manage_com"    />
     </resultMap>
     <select id="selectPolicyInfoListByPolicyNo" parameterType="com.paic.ehis.system.api.domain.PolicyAndRiskRelation" resultMap="CompanyRiskPolicyMap">
@@ -103,7 +104,25 @@ SELECT a.policy_manage_com,a.policy_no,a.insured_no,b.birthday,b.occupation FROM
         prr.risk_code,
         prr.risk_name,
         count(info.policy_item_no)totalPeople,
-        sum(prem)sumPerm
+        sum(prem)sumPerm,
+        (SELECT DISTINCT
+        valid_start_date
+        FROM
+        policy_risk_relation prr
+        LEFT JOIN (
+        SELECT
+        policy_no,
+        valid_start_date ,
+        company_code,
+        status
+        FROM
+        policy_info a
+        WHERE
+        a.policy_id = ( SELECT aa.policy_id FROM policy_info aa WHERE a.policy_no = aa.policy_no ORDER BY aa.valid_start_date DESC LIMIT 1 )
+        ) time ON time.policy_no = prr.policy_no
+        AND time.STATUS = 'Y'
+        where company_code = #{companyCode} and risk_code = #{riskCode}
+        )bestStartDate
         FROM
         policy_risk_relation prr
         LEFT JOIN policy_info info ON info.policy_no = prr.policy_no and info.status='Y'

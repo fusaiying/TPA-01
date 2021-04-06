@@ -113,7 +113,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <where>
             <if test="companyCode != null">and bir.company_code = #{companyCode}</if>
             <if test="status != null  and status != ''"> and bir.status = #{status}</if>
-            <if test="settlementType  != null  and settlementType != ''"> and bir.settlement_type  = #{settlementType}</if>
+            <if test="settlementType  != null  and settlementType != ''"> and rule.settlement_type  = #{settlementType}</if>
         </where>
     </select>
 

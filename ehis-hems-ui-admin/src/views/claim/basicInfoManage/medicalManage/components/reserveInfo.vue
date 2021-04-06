@@ -14,7 +14,7 @@
         <el-col :span="8">
           <el-form-item label="预约电话：" prop="appointmentCall">
             <el-input v-model="reserveInfoForm.appointmentCall" class="item-width" clearable maxlength="30"
-                      placeholder="请输入"/>
+                     placeholder="请输入"/>
           </el-form-item>
         </el-col>
         <el-col :span="8">
@@ -39,7 +39,7 @@
                 <el-input v-model="reserveInfoForm.hospitalizeDay" class="item-width" clearable @input="change"
                           :disabled="hospitalizedayInputShow"
                           placeholder="请输入" style="width: 150px"/>
-                天
+
 
               </el-checkbox>
               <el-checkbox label="02">
@@ -47,7 +47,7 @@
                 <el-input v-model="reserveInfoForm.outpatientDay" class="item-width" clearable @input="change"
                           :disabled="outpatientdayInputShow"
                           placeholder="请输入" style="width: 150px"/>
-                天
+
 
               </el-checkbox>
             </el-checkbox-group>
@@ -150,74 +150,94 @@
       <el-row>
         <el-col :span="16">
           <el-form-item label="门诊时间：" prop="consultingHours">
+            <div style="margin-top: -19px">
+              <div>
+                <el-form-item style="margin-bottom: 0px; display: inline-flex !important;" :inline="true" prop="workstarttime">
+                  <span>周一至周五</span>
+                  <el-time-picker
+                    v-model="reserveInfoForm.workstarttime"
+                    format='HH:mm'
+                    value-format="HH:mm"
+                    @change="changeWorkTime"
+                    style="padding-left: 5px; width: 150px"
+                    class="el-date-editor item-width el-input el-input--mini el-input--prefix el-input--suffix el-date-editor--date redItem"
+                  >
+                  </el-time-picker>
+                </el-form-item>
+                <el-form-item style="margin-bottom:0px;display: inline-flex !important;" :inline="true" prop="workendtime">
+                  <el-time-picker
+                    v-model="reserveInfoForm.workendtime"
+                    format='HH:mm'
+                    @change="changeWorkTime"
+                    value-format="HH:mm"
+                    style="padding-left: 5px; width: 150px"
+                  >
+                  </el-time-picker>
+                </el-form-item>
+                <el-form-item style="margin-bottom:0px;display: inline-flex !important;" :inline="true" prop="workremark">
+                  <el-input v-model="reserveInfoForm.workremark" class="item-width" clearable
+                            style="padding-left: 10px;width: 350px"
+                            placeholder="请输入"/>
+                </el-form-item>
+              </div>
 
-            <span>周一至周五</span>
-            <el-time-picker
-              v-model="reserveInfoForm.workstarttime"
-              format='HH:mm'
-              value-format="HH:mm"
-              style="padding-left: 5px; width: 150px"
-            >
+              <div>
+                <el-form-item style="margin-bottom:0px; display: inline-flex !important;" :inline="true" prop="saturdaystarttime">
+                  <span style="padding-left: 40px">周六</span>
+                  <el-time-picker
+                    v-model="reserveInfoForm.saturdaystarttime"
+                    format='HH:mm'
+                    value-format="HH:mm"
+                    @change="changeSaturdayTime"
+                    style="padding-left: 5px; width: 150px"
+                  >
+                  </el-time-picker>
+                </el-form-item>
+                <el-form-item style="margin-bottom:0px; display: inline-flex !important;" :inline="true" prop="saturdayendtime">
+                  <el-time-picker
+                    v-model="reserveInfoForm.saturdayendtime"
+                    format='HH:mm'
+                    @change="changeSaturdayTime"
+                    value-format="HH:mm"
+                    style="padding-left: 5px; width: 150px"
+                  >
+                  </el-time-picker>
+                </el-form-item>
+                <el-form-item style="margin-bottom:0px; display: inline-flex !important;" :inline="true" prop="saturdayremark">
+                  <el-input v-model="reserveInfoForm.saturdayremark" class="item-width" clearable
+                            style="padding-left: 10px;width: 350px"
+                            placeholder="请输入"/>
+                </el-form-item>
+              </div>
 
-            </el-time-picker>
-
-
-            <el-time-picker
-              v-model="reserveInfoForm.workendtime"
-              format='HH:mm'
-              value-format="HH:mm"
-              style="padding-left: 5px; width: 150px"
-            >
-            </el-time-picker>
-
-
-            <el-input v-model="reserveInfoForm.workremark" class="item-width" clearable
-                      style="padding-left: 10px;width: 350px"
-                      placeholder="请输入"/>
-
-
-            <div style="padding-top: 5px">
-              <span style="padding-left: 40px">周六</span>
-              <el-time-picker
-                v-model="reserveInfoForm.saturdaystarttime"
-                format='HH:mm'
-                value-format="HH:mm"
-                style="padding-left: 5px; width: 150px"
-              >
-              </el-time-picker>
-              <el-time-picker
-                v-model="reserveInfoForm.saturdayendtime"
-                format='HH:mm'
-                value-format="HH:mm"
-                style="padding-left: 5px; width: 150px"
-              >
-              </el-time-picker>
-
-              <el-input v-model="reserveInfoForm.saturdayremark" class="item-width" clearable
-                        style="padding-left: 10px;width: 350px"
-                        placeholder="请输入"/>
-            </div>
-            <div style="padding-top: 5px">
-              <span style="padding-left: 40px">周日</span>
-              <el-time-picker
-                v-model="reserveInfoForm.sundaystarttime"
-                format='HH:mm'
-                value-format="HH:mm"
-                style="padding-left: 5px; width: 150px"
-              >
-              </el-time-picker>
-              <el-time-picker
-                v-model="reserveInfoForm.sundayendtime"
-                format='HH:mm'
-                value-format="HH:mm"
-                style="padding-left: 5px; width: 150px"
-              >
-              </el-time-picker>
-
-
-              <el-input v-model="reserveInfoForm.sundayremark" class="item-width" clearable
-                        style="padding-left: 10px;width: 350px"
-                        placeholder="请输入"/>
+              <div>
+                <el-form-item style="margin-bottom:0px;display: inline-flex !important;" :inline="true" prop="sundaystarttime">
+                  <span style="padding-left: 40px">周日</span>
+                  <el-time-picker
+                    v-model="reserveInfoForm.sundaystarttime"
+                    format='HH:mm'
+                    value-format="HH:mm"
+                    style="padding-left: 5px; width: 150px"
+                    @change="changeSundayTime"
+                  >
+                  </el-time-picker>
+                </el-form-item>
+                <el-form-item style="margin-bottom:0px;display: inline-flex !important;" :inline="true" prop="sundayendtime">
+                  <el-time-picker
+                    v-model="reserveInfoForm.sundayendtime"
+                    format='HH:mm'
+                    value-format="HH:mm"
+                    style="padding-left: 5px; width: 150px"
+                    @change="changeSundayTime"
+                  >
+                  </el-time-picker>
+                </el-form-item>
+                <el-form-item style="margin-bottom:0px;display: inline-flex !important;" :inline="true" prop="sundayremark">
+                  <el-input v-model="reserveInfoForm.sundayremark" class="item-width" clearable
+                            style="padding-left: 10px;width: 350px"
+                            placeholder="请输入"/>
+                </el-form-item>
+              </div>
 
             </div>
           </el-form-item>
@@ -247,50 +267,64 @@
       <el-row>
         <el-col :span="16">
           <el-form-item label="急诊时间：" prop="emergencyTime">
-            <span style="padding-left:5px"> 24h急诊</span>
-            <el-time-picker
-              v-model="reserveInfoForm.emergencycallstarttime"
-              format='HH:mm'
-              value-format="HH:mm"
-              style="padding-left: 5px; width: 150px"
-            >
-            </el-time-picker>
-            <el-time-picker
-              v-model="reserveInfoForm.emergencycallendtime"
-              format='HH:mm'
-              value-format="HH:mm"
-              style="padding-left: 5px; width: 150px"
-            >
-            </el-time-picker>
+            <div style="margin-top: -19px">
+              <el-form-item style="margin-bottom:0px;display: inline-flex !important;" :inline="true" prop="emergencycallstarttime">
+                <span style="padding-left:16px"> 24h急诊</span>
+                <el-time-picker
+                  v-model="reserveInfoForm.emergencycallstarttime"
+                  format='HH:mm'
+                  value-format="HH:mm"
+                  @change="changeEmergencycallTime"
+                  style="padding-left: 5px; width: 150px"
+                >
+                </el-time-picker>
+              </el-form-item>
+              <el-form-item style="margin-bottom:0px;display: inline-flex !important;" :inline="true" prop="emergencycallendtime">
+                <el-time-picker
+                  v-model="reserveInfoForm.emergencycallendtime"
+                  format='HH:mm'
+                  value-format="HH:mm"
+                  @change="changeEmergencycallTime"
+                  style="padding-left: 5px; width: 150px"
+                >
+                </el-time-picker>
+              </el-form-item>
 
+              <el-form-item style="margin-bottom:0px;display: inline-flex !important;" :inline="true" prop="emergencycallremark">
+                <el-input ref="hospitalname" v-model="reserveInfoForm.emergencycallremark" class="item-width" clearable
+                          style="padding-left: 10px;width: 350px"
+                          placeholder="请输入"/>
+              </el-form-item>
+              <div style="padding-top: 5px">
+                <el-form-item style="margin-bottom:0px;display: inline-flex !important;" :inline="true" prop="nightemergencystarttime">
+                  <span style="padding-left:11px">夜间急诊</span>
+                  <el-time-picker
+                    v-model="reserveInfoForm.nightemergencystarttime"
+                    format='HH:mm'
+                    value-format="HH:mm"
+                    style="padding-left: 5px; width: 150px"
+                    @change="changeNightEmergencycallTime"
+                  >
+                  </el-time-picker>
+                </el-form-item>
+                <el-form-item style="margin-bottom:0px;display: inline-flex !important;" :inline="true" prop="nightemergencyendtime">
+                  <el-time-picker
+                    v-model="reserveInfoForm.nightemergencyendtime"
+                    format='HH:mm'
+                    value-format="HH:mm"
+                    style="padding-left: 5px; width: 150px"
+                    @change="changeNightEmergencycallTime"
+                  >
+                  </el-time-picker>
+                </el-form-item>
+                <el-form-item style="margin-bottom:0px;display: inline-flex !important;" :inline="true" prop="nightemergencyremark">
+                  <el-input ref="hospitalname" v-model="reserveInfoForm.nightemergencyremark" class="item-width"
+                            clearable style="padding-left: 10px;width: 350px"
+                            placeholder="请输入"/>
+                </el-form-item>
 
-            <el-input ref="hospitalname" v-model="reserveInfoForm.emergencycallremark" class="item-width" clearable
-                      style="padding-left: 10px;width: 350px"
-                      placeholder="请输入"/>
-            <div style="padding-top: 5px">
-              <span>夜间急诊</span>
-
-              <el-time-picker
-                v-model="reserveInfoForm.nightemergencystarttime"
-                format='HH:mm'
-                value-format="HH:mm"
-                style="padding-left: 5px; width: 150px"
-              >
-              </el-time-picker>
-              <el-time-picker
-                v-model="reserveInfoForm.nightemergencyendtime"
-                format='HH:mm'
-                value-format="HH:mm"
-                style="padding-left: 5px; width: 150px"
-              >
-              </el-time-picker>
-
-
-              <el-input ref="hospitalname" v-model="reserveInfoForm.nightemergencyremark" class="item-width"
-                        clearable style="padding-left: 10px;width: 350px"
-                        placeholder="请输入"/>
+              </div>
             </div>
-
           </el-form-item>
         </el-col>
         <el-col :span="8">
@@ -421,6 +455,88 @@ export default {
   },
 
   data() {
+    const checkWorkstarttime = (rules, value, callback) => {
+      if ((this.reserveInfoForm.workstarttime && this.reserveInfoForm.workendtime)||((this.reserveInfoForm.workstarttime==''||this.reserveInfoForm.workstarttime==null) && (this.reserveInfoForm.workendtime==''||this.reserveInfoForm.workendtime==null))) {
+        callback()
+      } else {
+        callback(new Error('开始与截止时间需同时存在'))
+      }
+    }
+    const checkWorkendtime = (rules, value, callback) => {
+      if ((this.reserveInfoForm.workstarttime && this.reserveInfoForm.workendtime)||((this.reserveInfoForm.workstarttime==''||this.reserveInfoForm.workstarttime==null) && (this.reserveInfoForm.workendtime==''||this.reserveInfoForm.workendtime==null))) {
+        callback()
+      } else {
+        callback(new Error('开始与截止时间需同时存在'))
+      }
+    }
+
+    const checkSaturdaystarttime = (rules, value, callback) => {
+      if ((this.reserveInfoForm.saturdaystarttime && this.reserveInfoForm.saturdayendtime)||((this.reserveInfoForm.saturdaystarttime==''||this.reserveInfoForm.saturdaystarttime==null) && (this.reserveInfoForm.saturdayendtime==''||this.reserveInfoForm.saturdayendtime==null))) {
+        callback()
+      } else {
+        callback(new Error('开始与截止时间需同时存在'))
+      }
+    }
+
+    const checkSaturdayendtime = (rules, value, callback) => {
+      if ((this.reserveInfoForm.saturdaystarttime && this.reserveInfoForm.saturdayendtime)||((this.reserveInfoForm.saturdaystarttime==''||this.reserveInfoForm.saturdaystarttime==null) && (this.reserveInfoForm.saturdayendtime==''||this.reserveInfoForm.saturdayendtime==null))) {
+        callback()
+      } else {
+        callback(new Error('开始与截止时间需同时存在'))
+      }
+    }
+
+
+    const checkSundaystarttime = (rules, value, callback) => {
+      if ((this.reserveInfoForm.sundaystarttime && this.reserveInfoForm.sundayendtime)||((this.reserveInfoForm.sundaystarttime==''||this.reserveInfoForm.sundaystarttime==null) && (this.reserveInfoForm.sundayendtime==''||this.reserveInfoForm.sundayendtime==null))) {
+        callback()
+      } else {
+        callback(new Error('开始与截止时间需同时存在'))
+      }
+    }
+
+    const checkSundayendtime = (rules, value, callback) => {
+      if ((this.reserveInfoForm.sundaystarttime && this.reserveInfoForm.sundayendtime)||((this.reserveInfoForm.sundaystarttime==''||this.reserveInfoForm.sundaystarttime==null) && (this.reserveInfoForm.sundayendtime==''||this.reserveInfoForm.sundayendtime==null))) {
+        callback()
+      } else {
+        callback(new Error('开始与截止时间需同时存在'))
+      }
+    }
+    const checkEmergencycallstarttime = (rules, value, callback) => {
+      if ((this.reserveInfoForm.emergencycallstarttime && this.reserveInfoForm.emergencycallendtime)||((this.reserveInfoForm.emergencycallstarttime==''||this.reserveInfoForm.emergencycallstarttime==null) && (this.reserveInfoForm.emergencycallendtime==''||this.reserveInfoForm.emergencycallendtime==null))) {
+        callback()
+      } else {
+        callback(new Error('开始与截止时间需同时存在'))
+      }
+    }
+
+    const checkEmergencycallendtime = (rules, value, callback) => {
+      if ((this.reserveInfoForm.emergencycallstarttime && this.reserveInfoForm.emergencycallendtime)||((this.reserveInfoForm.emergencycallstarttime==''||this.reserveInfoForm.emergencycallstarttime==null) && (this.reserveInfoForm.emergencycallendtime==''||this.reserveInfoForm.emergencycallendtime==null))) {
+        callback()
+      } else {
+        callback(new Error('开始与截止时间需同时存在'))
+      }
+    }
+
+    const checkNightemergencystarttime = (rules, value, callback) => {
+      if ((this.reserveInfoForm.nightemergencystarttime && this.reserveInfoForm.nightemergencyendtime)||((this.reserveInfoForm.nightemergencystarttime==''||this.reserveInfoForm.nightemergencystarttime==null) && (this.reserveInfoForm.nightemergencyendtime==''||this.reserveInfoForm.nightemergencyendtime==null))) {
+        callback()
+      } else {
+        callback(new Error('开始与截止时间需同时存在'))
+      }
+    }
+    const checkNightemergencyendtime = (rules, value, callback) => {
+      if ((this.reserveInfoForm.nightemergencystarttime && this.reserveInfoForm.nightemergencyendtime)||((this.reserveInfoForm.nightemergencystarttime==''||this.reserveInfoForm.nightemergencystarttime==null) && (this.reserveInfoForm.nightemergencyendtime==''||this.reserveInfoForm.nightemergencyendtime==null))) {
+        callback()
+      } else {
+        callback(new Error('开始与截止时间需同时存在'))
+      }
+    }
+
+
+
+
+
     const checkSendWay = (rules, value, callback) => {
       if (!this.reserveInfoForm.inviteflag && !this.reserveInfoForm.fastmailflag) {
         callback(new Error('体检报告寄送方式不能为空'))
@@ -513,6 +629,18 @@ export default {
         callback()
       }
     }
+    const checkPayment = (rules, value, callback) => {
+      if (this.isNetHospFlag) {
+        if (!this.reserveInfoForm.payment) {
+          callback(new Error('不能为空！'))
+        } else {
+          callback()
+        }
+      } else {
+        callback()
+      }
+    }
+
     const checkOutpatientearly = (rules, value, callback) => {
       if (this.isNetHospFlag) {
         if (this.reserveInfoForm.outpatientearly.length <= 0) {
@@ -541,6 +669,18 @@ export default {
         appointreminders: [{validator: checkAppointreminders, trigger: 'blur'}],
         outpatientearly: [{validator: checkOutpatientearly, trigger: 'change'}],
         straightknotflag: [{validator: checkStraightknotflag, trigger: 'change'}],
+        payment: [{validator: checkPayment, trigger: 'change'}],
+        vipappointment: [{required: true, message: '不能为空！', trigger: 'change'}],
+        workstarttime:[{validator: checkWorkstarttime, trigger: 'change'}],
+        workendtime:[{validator: checkWorkendtime, trigger: 'change'}],
+        saturdaystarttime:[{validator: checkSaturdaystarttime, trigger: 'change'}],
+        saturdayendtime:[{validator: checkSaturdayendtime, trigger: 'change'}],
+        sundaystarttime:[{validator: checkSundaystarttime, trigger: 'change'}],
+        sundayendtime:[{validator: checkSundayendtime, trigger: 'change'}],
+        emergencycallstarttime:[{validator: checkEmergencycallstarttime, trigger: 'change'}],
+        emergencycallendtime:[{validator: checkEmergencycallendtime, trigger: 'change'}],
+        nightemergencystarttime:[{validator: checkNightemergencystarttime, trigger: 'change'}],
+        nightemergencyendtime:[{validator: checkNightemergencyendtime, trigger: 'change'}]
 
       },
       medicalTypeData: [],
@@ -578,6 +718,33 @@ export default {
 
 
   methods: {
+    //门诊时间周一至周五时间改变,校验
+    changeWorkTime(){
+      this.$refs.reserveInfoForm.validateField(['workstarttime','workendtime']);
+    },
+
+    //门诊时间周六改变,校验
+    changeSaturdayTime(){
+      this.$refs.reserveInfoForm.validateField(['saturdaystarttime','saturdayendtime']);
+    },
+
+    //门诊时间周末改变,校验
+    changeSundayTime(){
+      this.$refs.reserveInfoForm.validateField(['sundayendtime','sundaystarttime']);
+    },
+
+    //急诊时间24h急诊改变,校验
+    changeEmergencycallTime(){
+      this.$refs.reserveInfoForm.validateField(['emergencycallstarttime','emergencycallendtime']);
+    },
+
+    //急诊时间夜间急诊改变,校验
+    changeNightEmergencycallTime(){
+      this.$refs.reserveInfoForm.validateField(['nightemergencystarttime','nightemergencyendtime']);
+    },
+
+
+
     // 调用查询维护的方法
     getNewtworktype() {
       let query = {

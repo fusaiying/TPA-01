@@ -145,7 +145,6 @@
                                  :key="item.dictValue"/>
                     </el-select>
                     <!--选择专科时  显示出来-->
-
                     <el-select v-show="typeShow" v-model="baseForm.type2" class="item-width" placeholder="请选择" clearable
                                style="width: 120px"   @change="resetType2Info"
                                multiple>
@@ -195,13 +194,13 @@
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="理赔医院名称：" prop="claimHospitalName">
-                    <el-input v-model="baseForm.claimHospitalName" class="item-width" clearable size="mini"
+                    <el-input v-model="baseForm.claimHospitalName" class="item-width" clearable size="mini" maxlength="50"
                               placeholder="请输入"/>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="床位数：" prop="beds">
-                    <el-input v-model="baseForm.beds" class="item-width" clearable size="mini" placeholder="请输入" />
+                    <el-input v-model="baseForm.beds" class="item-width" clearable size="mini" placeholder="请输入" maxlength="5"/>
                   </el-form-item>
                 </el-col>
                 <el-col>
@@ -304,7 +303,7 @@
               <el-row>
                 <el-form-item style="margin-right: 20px;" label="机构简介：" prop="introduction">
                   <el-input type="textarea" v-model="baseForm.introduction" clearable size="mini" placeholder="请输入"
-                            maxlength="500"/>
+                            maxlength="2000"/>
                 </el-form-item>
               </el-row>
               <el-row>
@@ -671,16 +670,16 @@ export default {
 
     }
     const checkBeds = (rules, value, callback) => {
-      let reg= /^(\d+|\d+\.)$/
+      let reg= /^[1-9]\d*$/
       if (this.baseForm.inhosptial == '01') {
         if (!this.baseForm.beds) {
           callback(new Error('床位数不能为空！'))
         }
         else {
           if (value < 0) {
-            callback(new Error("只能输入数字"));
+            callback(new Error("只能输入正整数"));
           } else if (!reg.test(value)) {
-            callback(new Error("只能输入数字"));
+            callback(new Error("只能输入正整数"));
           } else {
             callback();
           }
@@ -688,9 +687,9 @@ export default {
       } else {
         if(this.baseForm.beds) {
           if (value < 0) {
-            callback(new Error("只能输入数字"));
+            callback(new Error("只能输入正整数"));
           } else if (!reg.test(value)) {
-            callback(new Error("只能输入数字"));
+            callback(new Error("只能输入正整数"));
           } else {
             callback();
           }
@@ -712,6 +711,19 @@ export default {
         callback()
       }
     }
+    const checkType= (rules, value, callback) => {
+      if (this.baseForm.type == '03') {
+        if (this.baseForm.type2==undefined || this.baseForm.type2==null ||  this.baseForm.type2=='' ||  this.baseForm.type2.length==0 ) {
+          callback(new Error('综专科类型为专科时,专科子类型必填！'))
+        }
+        else{
+          callback()
+        }
+      } else {
+        callback()
+      }
+    }
+
 
     return {
       initBussinessStatus: '',
@@ -987,6 +999,7 @@ export default {
         enremarks: undefined,
       },
       baseFormRules: {
+        type:[{validator: checkType, trigger: 'change'}],
         latitude:[{validator: checkLatitude, trigger: 'blur'}],
         longitude:[{validator: checkLongitude, trigger: 'blur'}],
         claimHospitalName: [{required:true,validator: checkClaimHospitalName, trigger: ['blur','change']}],

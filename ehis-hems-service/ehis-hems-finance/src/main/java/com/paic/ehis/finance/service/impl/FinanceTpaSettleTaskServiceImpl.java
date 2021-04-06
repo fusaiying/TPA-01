@@ -174,6 +174,13 @@ public class FinanceTpaSettleTaskServiceImpl implements IFinanceTpaSettleTaskSer
                 
                 financeTpaSettleTask.setSettlementType(baseIssuingRule.getSettlementtype());
                 CompanyRiskPolicyInfo companyRiskPolicyInfo = policyAndRiskService.selectCompanyRiskInfo(policyAndRiskRelation);
+
+                if (StringUtils.isNotEmpty(relationCompanyList.getRows())) {
+                    for (Object row : relationCompanyList.getRows()) {
+                        companyRiskPolicy = objectMapper.convertValue(row, CompanyRiskPolicyInfo.class);
+
+                    }
+                }
             }*/
 
             tpaSettleDetail.setCompanyCode(tpaSettleDTO.getCompanyCode());

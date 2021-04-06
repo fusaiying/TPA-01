@@ -121,7 +121,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectValidStartDateList" parameterType="PolicyAndRiskRelation" resultMap="PolicyRiskRelationResult">
         SELECT DISTINCT
-        prr.policy_no,
         prr.risk_code,
         time.company_code,
         time.bestStartDate

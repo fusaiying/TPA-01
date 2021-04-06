@@ -378,26 +378,27 @@ public class CustomServiceSpotCheckController extends BaseController {
             List<QualityAcceptVo> qualityAcceptVo1 = qualityInspectionAcceptService.selectQualityVo2(qualityDTO1);
                 for (QualityAcceptVo qualityAcceptVo2 : qualityAcceptVo1) {
                     if((qualityAcceptVo2.getUpdatedBy()).equals(qualityAcceptVo.getUpdatedBy())){
+                        //取40
+                        String num2 = qualityAcceptVo.getNum();
+                         //取20
+                        String num1 = qualityAcceptVo2.getNum();
 
-                     //取20
-                    String num1 = qualityAcceptVo2.getNum();
-                    //取40
-                    String num2 = qualityAcceptVo.getNum();
-                    //计算
-                    Double number1 = Double.valueOf(num1);
-                    Double number2 = Double.valueOf(num2);
-                    Double i = number2 / number1;
-                    //获取格式化对象
-                    NumberFormat nt = NumberFormat.getPercentInstance();
-                    //设置百分数精确度2即保留两位小数
-                    nt.setMinimumFractionDigits(2);
-                    //最后格式化
-                    nt.format(i);
-                    String res = i.toString();
-                    //放进对象里
-                    qualityDTO.setNum1(num1);
-                    qualityDTO.setNum2(num2);
-                    qualityDTO.setRes(res);
+                         //计算
+                        Double number2 = Double.valueOf(num2);
+                        Double number1 = Double.valueOf(num1);
+
+                        Double i = number1 / number2;
+                        //获取格式化对象
+                        NumberFormat nt = NumberFormat.getPercentInstance();
+                        //设置百分数精确度2即保留4位小数
+                        nt.setMinimumFractionDigits(2);
+                        //最后格式化
+                        String res = nt.format(i);
+
+                        //放进对象里
+                        qualityDTO.setNum1(num1);
+                        qualityDTO.setNum2(num2);
+                        qualityDTO.setRes(res);
 
                     ComplaintErrorRateVO complaintErrorRateVO = new ComplaintErrorRateVO();
                         String endCaseEndDate = qualityDTO.getEndCaseEndDate();
@@ -405,11 +406,13 @@ public class CustomServiceSpotCheckController extends BaseController {
                         String closingTime=endCaseEndDate +" - "+ endCaseStartDate;
                         complaintErrorRateVO.setClosingTime(closingTime);
                         complaintErrorRateVO.setSamplingQuantity(num2);
+                        complaintErrorRateVO.setOrganCode("上海分公司本部");
+                        complaintErrorRateVO.setUpdatedBy((qualityAcceptVo2.getUpdatedBy()));
                         complaintErrorRateVO.setErrorsNumber(num1);
                         complaintErrorRateVO.setErrorsRate(res);
                         list.add(complaintErrorRateVO);
                     }else {
-                        System.out.println("啊啊啊啊啊");
+                        System.out.println("此时间段内暂无数据");
                     }
                 }
         }

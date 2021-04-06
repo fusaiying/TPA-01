@@ -279,18 +279,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         LEFT JOIN accept_detail_info adi ON woa.work_order_no = adi.work_order_no
         <where>
         1=1
-            <if test="endCaseStartDate != null endCaseStartDate != ''">
+            <if test="endCaseStartDate != null and endCaseStartDate != ''">
                 and woa.end_date <![CDATA[>=]]> DATE_FORMAT(#{endCaseStartDate},'%Y-%m-%d')
             </if>
-            <if test="endCaseEndDate != null endCaseEndDate != ''">
+            <if test="endCaseEndDate != null and endCaseEndDate != ''">
                 and woa.end_date <![CDATA[<=]]> DATE_FORMAT(#{endCaseEndDate},'%Y-%m-%d')
             </if>
             <if test="endDate != null and endDate != ''"> and woa.end_date = #{endDate}</if>
             <if test="updatedTime != null and updatedTime != ''"> and qia.created_time = #{updatedTime}</if>
-            <if test="inspectionStartDate != null inspectionStartDate != ''">
+            <if test="inspectionStartDate != null and inspectionStartDate != ''">
                 and qia.created_time <![CDATA[>=]]> DATE_FORMAT(#{inspectionStartDate},'%Y-%m-%d')
             </if>
-            <if test="inspectionEndDate != null inspectionEndDate != ''">
+            <if test="inspectionEndDate != null and inspectionEndDate != ''">
                 and qia.created_time <![CDATA[<=]]> DATE_FORMAT(#{inspectionEndDate},'%Y-%m-%d')
             </if>
             <if test="organCode != null and organCode != ''"> and woa.organ_code = #{organCode}</if>

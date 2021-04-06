@@ -936,12 +936,6 @@ GROUP BY qia.updated_by
         </where>
     </select>
 
-    <resultMap type="com.paic.ehis.cs.domain.vo.QualityInspectionHandleVo1" id="QualityInspectionHandleVo1">
-        <result property="score" column="score"/>
-    </resultMap>
-    <select id="selectQualityVo12" parameterType="String" resultMap="QualityInspectionHandleVo1">
-	SELECT score from quality_inspection_handle where  inspection_id=#{inspectionId} ORDER BY updated_time desc limit 1
-    </select>
 
 
 

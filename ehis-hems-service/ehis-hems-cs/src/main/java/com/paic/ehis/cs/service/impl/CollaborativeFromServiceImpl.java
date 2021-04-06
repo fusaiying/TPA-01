@@ -47,7 +47,10 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
     @Override
     public CollaborativeFrom selectCollaborativeFromById(Long collaborativeId)
     {
-        return collaborativeFromMapper.selectCollaborativeFromById(collaborativeId);
+        CollaborativeFrom collaborativeFrom = collaborativeFromMapper.selectCollaborativeFromById(collaborativeId);
+        if (!collaborativeFrom.getUmCode().equals(SecurityUtils.getUsername())){
+            collaborativeFrom.setFlag("1");
+        } return collaborativeFrom;
     }
 
     /**

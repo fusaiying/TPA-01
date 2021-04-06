@@ -211,7 +211,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectCollaborativeFromByWorkId" parameterType="string" resultMap="CollaborativeFromResult">
         <include refid="selectCollaborativeFromVo"/>
-        where work_order_no = #{workOrderNo}
+        where work_order_no = #{workOrderNo} and status != '03'
     </select>
         
         <insert id="insertCollaborativeFrom" parameterType="com.paic.ehis.cs.domain.CollaborativeFrom" useGeneratedKeys="true" keyProperty="collaborativeId">

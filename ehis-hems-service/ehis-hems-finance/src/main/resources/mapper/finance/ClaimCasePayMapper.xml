@@ -117,7 +117,7 @@
             min( b.treatment_start_date ) treatment_date,
             c.`name`,
             sum( ifNUll(b.bill_amount,0) ) bill_amount,
-            (sum( ifNUll(b.bill_amount,0) ) - sum( ifNUll(b.hos_discount_amount,0) )) discounted_amount,
+            d.pay_amount discounted_amount,
             sum( ifNUll(b.tp_advance_payment,0) + ifNUll(b.ss_advance_payment,0) ) advance_payment,
             sum( ifNUll(b.copay,0) ) copay,
             ifNUll(d.cal_amount,0) pay_amount,
@@ -154,15 +154,16 @@ GROUP BY cb.batch_no,ccc.bill_currency ) d) as flag2
             d.debt_amount,
             d.exchange_rate,
             d.pay_amount_foreign,
-			      d.bill_currency
-				union
+			d.bill_currency,
+			d.pay_amount
+	union
 		SELECT
             a.rpt_no,
             a.batch_no,
             d.treatment_start_date treatment_date,
             c.name,
             d.bill_amount bill_amount,
-            (ifNUll(d.bill_amount,0)  - ifNUll(d.hos_discount_amount,0) ) discounted_amount,
+            d.pay_amount discounted_amount,
             ifNUll(d.tp_advance_payment +d.ss_advance_payment,0)  advance_payment,
             ifNUll(d.copay,0) copay,
             ifNUll(d.cal_amount,0) pay_amount,

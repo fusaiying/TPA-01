@@ -187,18 +187,28 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         finance_pay_info fpi
         <where>
             <if test="batchNo != null  and batchNo != ''"> and fpi.batch_no = #{batchNo}</if>
-            <if test="payStartDate != null and payEndDate != null"> and fpi.pay_date between #{payStartDate} and DATE_ADD(#{payEndDate},INTERVAL 1 DAY)</if>
+            <if test="payStartDate != null ">
+                and DATE_FORMAT(fpi.pay_date,'%Y-%m-%d') <![CDATA[>=]]> #{payStartDate}
+            </if>
+            <if test="payEndDate != null ">
+                and DATE_FORMAT(fpi.pay_date,'%Y-%m-%d') <![CDATA[<=]]> #{payEndDate}
+            </if>
             and fpi.status='Y'  	AND ( fpi.pay_status = '04' OR fpi.pay_status = '05' )
        </where>
     </select>
 
 
     <delete id="deleteFinanceTransferfailedList" parameterType="String">
-        update finance_pay_info  set pay_status='02'  where pay_batch_no = #{batchNo}
+        update finance_pay_info  set pay_status='02'  where batch_no = #{batchNo}
     </delete>
 
     <select id="selectFinancePayInfoByBatchNo" parameterType="String" resultMap="FinancePayInfoResult">
         <include refid="selectFinancePayInfoVo"/>
        where batch_no=#{batchNo} and status='Y'   ORDER BY create_time desc limit 1
+    </select>
+
+    <select id="selectFinancePayInfoBatchNo" parameterType="String" resultMap="FinancePayInfoResult">
+        <include refid="selectFinancePayInfoVo"/>
+        where batch_no=#{batchNo} and status='Y'
     </select>
 </mapper>

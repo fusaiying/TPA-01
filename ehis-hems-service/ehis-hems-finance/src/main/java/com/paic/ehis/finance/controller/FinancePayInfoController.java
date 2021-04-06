@@ -110,6 +110,15 @@ public class FinancePayInfoController extends BaseController
     }
 
     /**
+     * 更新转账失败信息列表
+     */
+    @GetMapping("/updateTransferFailedList/{batchNo}")
+    public AjaxResult updateTransferFailedInfo(@PathVariable String batchNo)
+    {
+        return AjaxResult.success(financePayInfoService.updateTransferFailedInfo(batchNo));
+    }
+
+    /**
      * 置转账失败数据为无效
      *
      * @param batchNo

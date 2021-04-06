@@ -33,8 +33,18 @@ public class TransferfailedVo implements Serializable {
     private String payeeBank;
 
     /** 转账金额 */
-    @Excel(name = "转账金额")
+    @Excel(name = "转账人名币金额")
     private BigDecimal sumPayAmount;
+
+    //转账金额
+    private String transferAmount;
+
+    /** 转账金额 */
+    @Excel(name = "转账外币金额")
+    private BigDecimal sumPayAmountForeign;
+
+    //账单币种
+    private String payCurrency;
 
     /** 支付状态 (01-待支付、02-支付中、03-支付成功、04-支付失败、05-退票) */
     @Excel(name = "支付状态 (01-待支付、02-支付中、03-支付成功、04-支付失败、05-退票)")

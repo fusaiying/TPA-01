@@ -20,7 +20,6 @@ public class ClaimCalDealController {
     public AjaxResult clear(@PathVariable("rptNo") String rptNo)
     {
         iClaimCalDealService.clear(rptNo);
-
         return AjaxResult.success();
     }
 

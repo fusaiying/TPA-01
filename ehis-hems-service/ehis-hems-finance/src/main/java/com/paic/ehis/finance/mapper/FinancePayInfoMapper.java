@@ -77,4 +77,6 @@ public interface FinancePayInfoMapper
 
     public int deleteFinanceTransferfailedList(String batchNo);
 
+    public FinancePayInfo selectFinancePayInfoBatchNo(String batchNo);
+
 }

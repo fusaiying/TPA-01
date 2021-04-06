@@ -16,6 +16,7 @@ import com.paic.ehis.finance.domain.vo.TransferfailedVo;
 import com.paic.ehis.finance.mapper.ClaimBatchMapper;
 import com.paic.ehis.finance.mapper.FinancePayInfoMapper;
 import com.paic.ehis.finance.service.IFinancePayInfoService;
+import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -127,30 +128,7 @@ public class FinancePayInfoServiceImpl implements IFinancePayInfoService
             List<TransferfailedVo> transferfailedVos = financePayInfoMapper.selectTransferfailedList(transferfailedDTO);
             List<TransferfailedVo> transferfailedVos1=new ArrayList<>();
             for(TransferfailedVo transferfailedVo1:transferfailedVos) {
-                /*根据批次号查询医院信息*/
-                String batchNo=transferfailedVo1.getBatchNo();
-                ClaimBatch claimBatch = claimBatchMapper.selectClaimBatchById(batchNo);
-                //调接口所需的对象
-                BaseProviderInfo baseProviderInfo = new BaseProviderInfo();
-                if(StringUtils.isNotNull(claimBatch)) {
-                    baseProviderInfo.setProviderCode(claimBatch.getHospitalcode());
-                }
-                //调用医院接口
-                R<List<BaseProviderInfo>>  result =  getProviderInfoService.selectOrgInfo(baseProviderInfo);
-
-                if (R.FAIL == result.getCode())
-                {
-                    throw new BaseException(result.getMsg());
-                }
-                List<BaseProviderInfo> baseProviderList = result.getData();
                 TransferfailedVo transferfailedVo=new TransferfailedVo();
-                if(null != baseProviderList && !baseProviderList.isEmpty()) {
-                    BaseProviderInfo hospital = baseProviderList.get(0);
-                    BeanUtils.copyProperties(transferfailedVo1,transferfailedVo);
-                    transferfailedVo.setPayeeBank(hospital.getBankName());//开户行
-                    transferfailedVo.setAccName(hospital.getAccountName());//账户名
-                    transferfailedVo.setAccNo(hospital.getAccountNo());//账号
-                }
                 if(StringUtils.isNotEmpty(transferfailedVo1.getPayCurrency()) && transferfailedVo1.getPayCurrency().equals("CNY")){
                     if(null!=transferfailedVo1.getSumPayAmount()){
                         BigDecimal sumPayAmount= transferfailedVo1.getSumPayAmount();
@@ -166,6 +144,54 @@ public class FinancePayInfoServiceImpl implements IFinancePayInfoService
             }
         return transferfailedVos1;
     }
+
+    /**
+     * 更新转账失败处理工作池
+     */
+    @Override
+    public TransferfailedVo updateTransferFailedInfo(String batchNo) {
+            FinancePayInfo financePayInfo=financePayInfoMapper.selectFinancePayInfoBatchNo(batchNo);
+            TransferfailedVo transferfailedVo=new TransferfailedVo();
+            /*根据批次号查询医院信息*/
+            ClaimBatch claimBatch = claimBatchMapper.selectClaimBatchById(batchNo);
+            //调接口所需的对象
+            BaseProviderInfo baseProviderInfo = new BaseProviderInfo();
+            if(StringUtils.isNotNull(claimBatch)) {
+                baseProviderInfo.setProviderCode(claimBatch.getHospitalcode());
+            }
+            //调用医院接口
+            R<List<BaseProviderInfo>>  result =  getProviderInfoService.selectOrgInfo(baseProviderInfo);
+            if (R.FAIL == result.getCode())
+            {
+                throw new BaseException(result.getMsg());
+            }
+            List<BaseProviderInfo> baseProviderList = result.getData();
+            if(null != baseProviderList && !baseProviderList.isEmpty()) {
+                BaseProviderInfo hospital = baseProviderList.get(0);
+                BeanUtils.copyProperties(financePayInfo,transferfailedVo);
+                transferfailedVo.setPayeeBank(hospital.getBankName());//开户行
+                transferfailedVo.setAccName(hospital.getAccountName());//账户名
+                transferfailedVo.setAccNo(hospital.getAccountNo());//账号
+
+                financePayInfo.setPayeeBank(hospital.getBankName());
+                financePayInfo.setAccName(hospital.getAccountName());
+                financePayInfo.setAccNo(hospital.getAccountName());
+                financePayInfoMapper.updateFinancePayInfo(financePayInfo);
+            }
+            if(StringUtils.isNotEmpty(financePayInfo.getPayCurrency()) && financePayInfo.getPayCurrency().equals("CNY")){
+                if(null!=financePayInfo.getSumPayAmount()){
+                    BigDecimal sumPayAmount= financePayInfo.getSumPayAmount();
+                    transferfailedVo.setSumPayAmount(sumPayAmount);
+                }
+            }else if (StringUtils.isNotEmpty(financePayInfo.getPayCurrency()) && !financePayInfo.getPayCurrency().equals("CNY")){
+                if(null!=financePayInfo.getSumPayAmountForeign()){
+                    BigDecimal sumPayAmount= financePayInfo.getSumPayAmountForeign();
+                    transferfailedVo.setSumPayAmount(sumPayAmount);
+                }
+            }
+        return transferfailedVo;
+    }
+
 
 
 

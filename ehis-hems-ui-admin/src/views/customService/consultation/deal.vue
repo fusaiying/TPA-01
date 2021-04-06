@@ -427,8 +427,8 @@
       <modify-details ref="modifyDetails"></modify-details>
       <div style="text-align: right; margin-right: 1px;">
         <co-organizer ref="coOrganizer"></co-organizer>
-        <el-button type="primary" size="mini" @click="coOrganizer" :disabled="collaborativeFrom.status == '02'">协办</el-button>
-        <el-button type="primary" size="mini" @click="submit" :disabled="collaborativeFrom.status == '02'">提交</el-button>
+        <el-button type="primary" size="mini" @click="coOrganizer" :disabled="collaborativeFrom.status == '02' || collaborativeFrom.flag=='1'">协办</el-button>
+        <el-button type="primary" size="mini" @click="submit" :disabled="collaborativeFrom.status == '02' || collaborativeFrom.flag=='1'">提交</el-button>
         <el-button type="primary" size="mini" @click="close">关闭</el-button>
       </div>
     </el-card>
@@ -520,6 +520,7 @@ export default {
         handleState: "",
         status: "",
         opinion: "",
+        flag: ""
       },
       caseNumber: false,//查询条件（报案号）是否显示
       // 查询参数

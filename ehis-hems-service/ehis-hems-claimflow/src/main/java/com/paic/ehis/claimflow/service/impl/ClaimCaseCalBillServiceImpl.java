@@ -219,10 +219,10 @@ public class ClaimCaseCalBillServiceImpl implements IClaimCaseCalBillService
             exchangeRate.setParities(new BigDecimal(1));
         }
         if ("01".equals(claimFlag)){//非全赔,如果是全赔，默认是账单总金额不变，且cal表账单总金额字段未加
+            claimCaseCal.setCalAmount(pay);
             if(index < 0 ) {
-                claimCaseCal.setCalAmount(pay);
+                claimCaseCal.setPayAmount(pay);
             }
-            claimCaseCal.setPayAmount(pay);
             claimCaseCal.setDebtAmount(new BigDecimal(String.valueOf(0.00)));
             //外币给付金额   1、非全赔医院：根据账单币种及汇率对赔付金额进行汇率转换
            // claimCaseCal.setPayAmountForeign(claimCaseCal.getCalAmount().divide(exchangeRate.getParities(),2,BigDecimal.ROUND_HALF_DOWN));

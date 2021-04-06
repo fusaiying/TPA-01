@@ -128,8 +128,8 @@ public class ClaimCaseDebtServiceImpl implements IClaimCaseDebtService
      * @return
      */
     @Override
-    public List<DebtInfoVO> selectDebtInitList() {
-        List<DebtInfoVO> debtInfoList = claimCaseDebtMapper.selectDebtInitList();
+    public List<DebtInfoVO> selectDebtInitList(DebtInfoDTO debtInfoDTO) {
+        List<DebtInfoVO> debtInfoList = claimCaseDebtMapper.selectDebtInitList(debtInfoDTO);
         for (DebtInfoVO debtInfo : debtInfoList){
             ClaimCasePolicy policy = new ClaimCasePolicy();
             policy.setRptNo(debtInfo.getRptNo());

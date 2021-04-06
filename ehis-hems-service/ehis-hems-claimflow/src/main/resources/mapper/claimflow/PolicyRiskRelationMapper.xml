@@ -209,5 +209,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         from policy_risk_relation
         where policy_no = #{policyNo} and status='Y'
     </select>
+    <resultMap id="GCCPlanMap" type="com.paic.ehis.claimflow.domain.vo.GCCPlan">
+        <result property="certno" column="policy_no"/>
+        <result property="planCode" column="risk_code"/>
+        <result property="planName" column="risk_name"/>
+    </resultMap>
+    <select id="selectRiskList" resultMap="GCCPlanMap">
+        select  risk_name,risk_code,policy_no
+        from policy_risk_relation
+        where policy_no = #{policyNo} and status='Y'
+    </select>
 
 </mapper>

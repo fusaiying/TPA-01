@@ -31,12 +31,22 @@ public class ClaimFlowServiceFallbackFactory implements FallbackFactory<ClaimFlo
             }
 
             @Override
-            public AjaxResult queryClaimList(ClaimFlowDTO claimFlowDTO) {
+            public AjaxResult queryPolicyList(ClaimFlowDTO claimFlowDTO) {
                 return null;
             }
 
             @Override
-            public AjaxResult queryPolicyInfoToGCC(ClaimFlowDTO claimFlowDTO) {
+            public AjaxResult queryPolicyInfo(ClaimFlowDTO claimFlowDTO) {
+                return null;
+            }
+
+            @Override
+            public AjaxResult queryDutyInfo(ClaimFlowDTO claimFlowDTO) {
+                return null;
+            }
+
+            @Override
+            public AjaxResult queryHealthService(ClaimFlowDTO claimFlowDTO) {
                 return null;
             }
 

@@ -14,7 +14,7 @@ public class GCCPlan implements Serializable {
     private String planName;
     //被保人姓名
     private String insName;
-    //险种特别约定
+    //险种特别约定 没有
     private String planSpecialDesc;
     //险种代码
     private String planCode;

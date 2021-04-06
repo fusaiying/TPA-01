@@ -258,10 +258,6 @@ public class ClaimCaseCalServiceImpl implements IClaimCaseCalService
     @Override
     public CalConclusionVo updateClaimCaseCal(ClaimCaseCal claimCaseCal) {
 
-        /**
-         * modify by  :  hjw   更新数据可能多于一条， 还有无效数据也更新了
-         */
-        CalConclusionVo reult = null;
 //        SyncExchangeRate exchangeRate = new SyncExchangeRate();
 //        ClaimCaseCal caseCal = claimCaseCalMapper.selectClaimCaseCalByRptNo(claimCaseCal.getRptNo());
 //        String currency="CNY";
@@ -285,6 +281,7 @@ public class ClaimCaseCalServiceImpl implements IClaimCaseCalService
 //            if (i > 0){
 //                reult = claimCaseCalMapper.selectClaimCaseCalInformation(claimCaseCal.getRptNo());
 //            }
+        CalConclusionVo reult = null;
             try {
                 /**
                  * modify by  :  hjw   如果是申诉案件 ， 需要更新 payMount字段值为 本次支付差额
@@ -294,28 +291,28 @@ public class ClaimCaseCalServiceImpl implements IClaimCaseCalService
                 String rptNo = claimCaseCal.getRptNo();
                 String username = SecurityUtils.getUsername();
                 Date nowDate = DateUtils.getNowDate();
-                if(rptNo.indexOf("-") > 0 && claimCaseCal.getPaymentDifference() != null) {
-                    claimCaseCal.setPayAmount(claimCaseCal.getPaymentDifference());
-                    ClaimCaseCal nowClaimCaseCal = claimCaseCalMapper.selectClaimCaseCalByRptNo(rptNo);
-                    CalConclusionVo precalConclusionVo = claimCaseCalMapper.selectPreCalConclusionByRptNo(rptNo);
-                    if(null != precalConclusionVo) {
-                        BigDecimal defaultValue = new BigDecimal(0);
-                        ClaimCaseCal preClaimCaseCal = claimCaseCalMapper.selectClaimCaseCalByRptNo(precalConclusionVo.getRptNo());
-                        BigDecimal payAmount = nowClaimCaseCal.getPayAmount() == null ? defaultValue : nowClaimCaseCal.getPayAmount();
-                        BigDecimal payAmountForeign = nowClaimCaseCal.getPayAmountForeign() == null ? defaultValue : nowClaimCaseCal.getPayAmountForeign();
-                        BigDecimal prePayAmount = preClaimCaseCal.getPayAmount() == null ? defaultValue : preClaimCaseCal.getPayAmount();
-
-                        // 如果RMB，直接更新payAmount 为支付差额 否则  payAmouont 和  payAmountForeign 互换
-                        if(nowClaimCaseCal.getBillCurrency().equals("CNY")) {
-                            claimCaseCal.setPayAmount(payAmount.subtract(prePayAmount));
-                        }  else {
-                            BigDecimal exchangeRate = nowClaimCaseCal.getExchangeRate() == null ? new BigDecimal(1) : nowClaimCaseCal.getExchangeRate();
-                            claimCaseCal.setPayAmount(payAmountForeign.divide(exchangeRate,2));
-                            claimCaseCal.setPayAmountForeign(payAmount);
-                        }
-                    }
-                }
-                /** end */
+//                if(rptNo.indexOf("-") > 0 && claimCaseCal.getPaymentDifference() != null) {
+//                    claimCaseCal.setPayAmount(claimCaseCal.getPaymentDifference());
+//                    ClaimCaseCal nowClaimCaseCal = claimCaseCalMapper.selectClaimCaseCalByRptNo(rptNo);
+//                    CalConclusionVo precalConclusionVo = claimCaseCalMapper.selectPreCalConclusionByRptNo(rptNo);
+//                    if(null != precalConclusionVo) {
+//                        BigDecimal defaultValue = new BigDecimal(0);
+//                        ClaimCaseCal preClaimCaseCal = claimCaseCalMapper.selectClaimCaseCalByRptNo(precalConclusionVo.getRptNo());
+//                        BigDecimal payAmount = nowClaimCaseCal.getPayAmount() == null ? defaultValue : nowClaimCaseCal.getPayAmount();
+//                        BigDecimal payAmountForeign = nowClaimCaseCal.getPayAmountForeign() == null ? defaultValue : nowClaimCaseCal.getPayAmountForeign();
+//                        BigDecimal prePayAmount = preClaimCaseCal.getPayAmount() == null ? defaultValue : preClaimCaseCal.getPayAmount();
+//
+//                        // 如果RMB，直接更新payAmount 为支付差额 否则  payAmouont 和  payAmountForeign 互换
+//                        if(nowClaimCaseCal.getBillCurrency().equals("CNY")) {
+//                            claimCaseCal.setPayAmount(payAmount.subtract(prePayAmount));
+//                        }  else {
+//                            BigDecimal exchangeRate = nowClaimCaseCal.getExchangeRate() == null ? new BigDecimal(1) : nowClaimCaseCal.getExchangeRate();
+//                            claimCaseCal.setPayAmount(payAmountForeign.divide(exchangeRate,2));
+//                            claimCaseCal.setPayAmountForeign(payAmount);
+//                        }
+//                    }
+//                }
+//                /** end */
                 claimCaseCal.setUpdateBy(username);
                 claimCaseCal.setUpdateTime(nowDate);
                 int i = claimCaseCalMapper.updateClaimCaseCalByRptNo(claimCaseCal);

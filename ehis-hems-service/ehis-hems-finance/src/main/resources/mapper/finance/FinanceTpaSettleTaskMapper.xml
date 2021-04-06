@@ -83,7 +83,7 @@
         task.service_settle_amount,
         rule.settlement_value,
         rule.settlement_type,
-        ( SELECT count( * ) FROM finance_tpa_settle_detail a where a.settle_task_no=task.settle_task_no and a.risk_code=detail.risk_code) totalPeople
+        ( select count(policy_item_no) from finance_tpa_settle_detail where settle_task_no= #{settleTaskNo}) totalPeople
         FROM
         finance_tpa_settle_detail detail
         LEFT JOIN finance_tpa_settle_task task ON task.settle_task_no = detail.settle_task_no

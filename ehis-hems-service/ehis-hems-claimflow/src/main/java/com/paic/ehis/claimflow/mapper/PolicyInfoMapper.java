@@ -6,9 +6,7 @@ import com.paic.ehis.claimflow.domain.PolicyInfo;
 import com.paic.ehis.claimflow.domain.dto.ClaimFlowDTO;
 import com.paic.ehis.claimflow.domain.dto.PolicyDTO;
 import com.paic.ehis.claimflow.domain.interfaceclass.InsuredNoAndName;
-import com.paic.ehis.claimflow.domain.vo.DutyVo;
-import com.paic.ehis.claimflow.domain.vo.PolicyListVo;
-import com.paic.ehis.claimflow.domain.vo.PolicyVo;
+import com.paic.ehis.claimflow.domain.vo.*;
 import com.paic.ehis.system.api.domain.CompanyRiskPolicyInfo;
 import com.paic.ehis.system.api.domain.PolicyAndRiskRelation;
 import org.apache.ibatis.annotations.Mapper;
@@ -102,6 +100,49 @@ public interface PolicyInfoMapper
 
     List<PolicyInfo> selectPolicyInfoListByinsuredNo(InsuredNoAndName claimCaseShuntClass);
 
-    List<PolicyListVo> selectPolicyList(ClaimFlowDTO claimFlowDTO);
+    public List<PolicyListVo> selectPolicyList(ClaimFlowDTO claimFlowDTO);
+
+    /**
+     * 提供GCC保单列表
+     * @param claimFlowDTO
+     * @return
+     */
+    public List<GCCPolicyListVo> queryPolicyListToGCC(ClaimFlowDTO claimFlowDTO);
+
+    /**
+     * GCC保单预授权信息
+     * @param riskCode
+     * @return
+     */
+    public List<GCCPreAuthorization> selectPreAuthorizationByRisk(String riskCode);
+
+    /**
+     * GCC等待期信息提取
+     * @return
+     */
+    public List<GCCHealthServiceWaitPeriod> queryRiskWaitPeriodToGCC(String riskCode);
+
+    /**
+     * GCC保单资料信息接口
+     * @param claimFlowDTO
+     * @return
+     */
+    public GCCPolicyInfoVo queryPolicyInfoToGCC(ClaimFlowDTO claimFlowDTO);
+
+    /**
+     * GCC分单责任信息
+     * @param claimFlowDTO
+     * @return
+     */
+    public GCCPolicyCertInfoVo queryDutyInfoToGCC(ClaimFlowDTO claimFlowDTO);
+
+    /**
+     * GCC服务信息
+     * @param claimFlowDTO
+     * @return
+     */
+    public GCCHealthServiceInfoVo queryHealthServiceToGCC(ClaimFlowDTO claimFlowDTO);
+
+
 
 }

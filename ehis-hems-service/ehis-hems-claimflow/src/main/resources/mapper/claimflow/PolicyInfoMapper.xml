@@ -110,11 +110,10 @@ SELECT a.policy_manage_com,a.policy_no,a.insured_no,b.birthday,b.occupation FROM
         <where>
             <if test="riskCode != null  and riskCode != ''"> and prr.risk_code = #{riskCode}</if>
             <if test="companyCode != null  and companyCode != ''"> and info.company_code = #{companyCode}</if>
-            <if test="status != null  and status != ''"> and prr.status = #{status}</if>
-            <if test="startTime != null  and startTime != ''"> and info.valid_start_date &gt;= #{startTime}</if>
+            <if test="startTime != null  and startTime != ''"> and info.valid_start_date >= #{startTime}</if>
             <if test="endTime != null  and endTime != ''"> and info.valid_start_date &lt;= #{endTime}</if>
             and prr.status = 'Y'
-            and (info.settle_flag = 'Y' or is null)
+            and (info.settle_flag = 'Y' or info.settle_flag is null)
         </where>
         group by
         prr.risk_code,
@@ -395,5 +394,146 @@ SELECT a.policy_manage_com,a.policy_no,a.insured_no,b.birthday,b.occupation FROM
             and pi2.birthday = #{birthday}
         </if>
     </select>
+
+
+    <resultMap id="GCCPolicyListVoMap" type="com.paic.ehis.claimflow.domain.vo.GCCPolicyListVo">
+        <result property="personalBenStsName" column="policy_status"/>
+        <result property="specialHostpitalRate" column="specialHostpitalRate"/>
+        <result property="customerNo" column="org_insured_no"/>
+        <result property="effDate" column="valid_start_date"/>
+        <result property="certno" column="policy_item_no"/>
+        <result property="firstEffDate" column="valid_start_date"/>
+        <result property="lbsPolNo" column="policy_no"/>
+        <result property="mainPlanName" column="risk_name"/>
+        <result property="regionCodeName" column="regionCodeName"/>
+        <result property="polno" column="policy_no"/>
+        <result property="threeClassHospitalRate" column="threeClassHospitalRate"/>
+        <result property="fourClassHospitalRate" column="fourClassHospitalRate"/>
+        <result property="mainPlanCoverageLevel" column="plan_code"/>
+        <result property="isRenewal" column="isRenewal"/>
+        <result property="appType" column="policy_type"/>
+        <result property="matuDate" column="valid_end_date"/>
+        <result property="regionCode" column="regionCode"/>
+        <result property="directPatientFlag" column="directPatientFlag"/>
+        <result property="havingPreAuthorizationFlag" column="havingPreAuthorizationFlag"/>
+        <result property="benMatuDate" column="valid_end_date"/>
+<!--        <result property="healthServiceInfoMap" column="regionCode"/>-->
+        <result property="insName" column="name"/>
+        <result property="directHospitalFlag" column="directHospitalFlag"/>
+        <result property="mainPlanCode" column="risk_code"/>
+        <result property="oneClassHospitalRate" column="oneClassHospitalRate"/>
+        <result property="certStsName" column="policy_status"/>
+        <result property="planCode" column="planCode"/>
+        <result property="twoClassHospitalRate" column="twoClassHospitalRate"/>
+        <collection property="healthServiceWaitPeriodList"
+            ofType="com.paic.ehis.claimflow.domain.vo.GCCHealthServiceWaitPeriod"
+            column="risk_code"
+            select="com.paic.ehis.claimflow.mapper.PolicyInfoMapper.queryRiskWaitPeriodToGCC"/>
+        <collection property="preAuthorizationList"
+            ofType="com.paic.ehis.claimflow.domain.vo.GCCPreAuthorization"
+            column="risk_code"
+            select="com.paic.ehis.claimflow.mapper.PolicyInfoMapper.selectPreAuthorizationByRisk"/>
+    </resultMap>
+
+    <select id="queryPolicyListToGCC" resultMap="GCCPolicyListVoMap">
+        select pi.policy_status,
+            '10' as specialHostpitalRate,
+            pid.org_insured_no,
+            pi.valid_start_date,
+            pi.policy_item_no,
+            pi.policy_no,
+            prr.risk_name,
+            prr.policy_no,
+            '40' as threeClassHospitalRate,
+            '20' as fourClassHospitalRate,
+            pi.plan_code,
+            'N' as isRenewal,
+            pi.policy_type,
+            pi.valid_end_date,
+            'H000000' as regionCode,
+            '总公司' as regionCodeName,
+            case when (
+            SELECT count(*) FROM
+            risk_info_direct_type WHERE risk_code=prr.risk_code and direct_type_name like '%门诊%'
+            ) >=1 then 'Y' else 'N' end as directPatientFlag,
+            'N' as havingPreAuthorizationFlag,
+            prr.risk_code,
+            '服务列表',
+            pid.name,
+            case when (
+            SELECT count(*) FROM
+            risk_info_direct_type WHERE risk_code=prr.risk_code and direct_type_name like '%住院%'
+            ) >=1 then 'Y' else 'N' end as directHospitalFlag,
+            '80' as oneClassHospitalRate,
+            prr.risk_code as planCode,
+            '60' as twoClassHospitalRate
+        from policy_info pi left join policy_insured pid on pi.insured_no=pid.insured_no
+            left join policy_risk_relation prr on pi.policy_no=pi.policy_no
+        where pid.org_insured_no = #{customerNo}
+    </select>
+
+    <resultMap id="GCCHealthServiceWaitPeriodMap" type="com.paic.ehis.claimflow.domain.vo.GCCHealthServiceWaitPeriod">
+        <result property="planCode" column="risk_code"/>
+        <result property="passedWaitPeriodFlag" column="passedWaitPeriodFlag"/>
+        <result property="waitPeriod" column="waiting_period"/>
+        <result property="waitPeriodTypeCode" column="waiting_unit"/>
+        <result property="serviceItemCode" column="medical_service_code"/>
+        <result property="serviceItemName" column="medical_service_name"/>
+    </resultMap>
+
+    <select id="queryRiskWaitPeriodToGCC" parameterType="String" resultMap="GCCHealthServiceWaitPeriodMap">
+        select distinct cp.risk_code, 'Y' as passedWaitPeriodFlag,
+            cp.waiting_period,cp.waiting_unit,
+            rims.medical_service_code,rims.medical_service_name
+        from claim_product cp,risk_info_medical_service rims
+        where cp.risk_code=rims.risk_code and cp.risk_code=#{riskCode}
+    </select>
+
+    <resultMap id="GCCPreAuthorizationMap" type="com.paic.ehis.claimflow.domain.vo.GCCPreAuthorization">
+        <result property="code" column="preauth_code"/>
+        <result property="name" column="preauth_name"/>
+    </resultMap>
+
+    <select id="selectPreAuthorizationByRisk" parameterType="String" resultMap="GCCPreAuthorizationMap">
+        select rip.preauth_code,rip.preauth_name
+        from  risk_info_preauth rip
+        where rip.risk_code= #{riskCode}
+    </select>
+
+    <resultMap id="GCCPolicyInfoVoMap" type="com.paic.ehis.claimflow.domain.vo.GCCPolicyInfoVo">
+        <result property="polno" column="policy_no"/>
+        <result property="customerNo" column="org_insured_no"/>
+        <result property="insName" column="name"/>
+        <result property="age" column="age"/>
+        <result property="polDesc" column="special_agreement"/>
+        <result property="effDate" column="valid_start_date"/>
+        <result property="matuDate" column="valid_end_date"/>
+        <result property="polYear" column="polYear"/>
+        <result property="claimTimes" column="claim_times"/>
+        <collection property="planList" ofType="com.paic.ehis.claimflow.domain.vo.GCCPlan"
+            column="policy_no"
+            select="com.paic.ehis.claimflow.mapper.PolicyRiskRelationMapper.selectRiskList"/>
+    </resultMap>
+
+    <select id="queryPolicyInfoToGCC" resultMap="GCCPolicyInfoVoMap">
+        select pi.policy_no,pid.org_insured_no,pi.name,
+           TIMESTAMPDIFF(YEAR, pid.birthday, CURDATE()) as age,pi.special_agreement,
+           pi.valid_start_date,pi.valid_end_date,(TIMESTAMPDIFF(YEAR,pi.valid_start_date,DATE_FORMAT(NOW(), '%Y-%m-%d'))+1) as polYear,
+            (select count(*) from claim_case_policy ccp where ccp.policy_no=pi.policy_no) as claim_times
+        from policy_info pi left join policy_insured pid
+            on pi.insured_no=pid.insured_no
+        where 1=1 and pi.policy_no =  #{policyNo}
+        <if test="certno != null  and certno != ''">
+            and pi.policy_item_no =  #{certno}
+        </if>
+    </select>
+
+    <select id="queryDutyInfoToGCC" resultType="com.paic.ehis.claimflow.domain.vo.GCCPolicyCertInfoVo">
+
+    </select>
+    <select id="queryHealthServiceToGCC" resultType="com.paic.ehis.claimflow.domain.vo.GCCHealthServiceInfoVo">
+
+    </select>
+
 
 </mapper>

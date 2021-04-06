@@ -9,23 +9,6 @@ import java.util.List;
 public class GCCPolicyInfoVo implements Serializable {
     private static final long serialVersionUID = 1L;
 
-//    // 客户信息对象
-//    private GCCCustomerInfo customerInfoMap;
-//    // 主险代码
-//    private String mainPlanCode;
-//    // 其他信息对象
-//    private GCCOtherInfo otherInfoMap;
-//    //保单信息
-//    private GCCPolInfo polInfoMap;
-//
-//    private List<GCCBen> benList;
-//
-//    private List<GCCInsured> insuredList;
-//    //主险名称
-//    private String mainPlanName;
-//
-//    private GCCDetailInfo detailInfoMap;
-
     //保单号
     private String polno;
     //客户号

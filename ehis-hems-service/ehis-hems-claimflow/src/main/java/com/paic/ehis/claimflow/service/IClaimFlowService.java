@@ -16,6 +16,8 @@ public interface IClaimFlowService {
 
     public GCCPolicyCertInfoVo queryDutyInfoToGCC(ClaimFlowDTO claimFlowDTO);
 
+    public GCCHealthServiceInfoVo queryHealthServiceToGCC(ClaimFlowDTO claimFlowDTO);
+
     public List<GCCClaimListVo> queryClaimListToGCC(ClaimFlowDTO claimFlowDTO);
 
     public GCCClaimAcceptVo queryClaimAcceptListToGCC(ClaimFlowDTO claimFlowDTO);

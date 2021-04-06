@@ -129,6 +129,7 @@ public class FinancePayInfoServiceImpl implements IFinancePayInfoService
             List<TransferfailedVo> transferfailedVos1=new ArrayList<>();
             for(TransferfailedVo transferfailedVo1:transferfailedVos) {
                 TransferfailedVo transferfailedVo=new TransferfailedVo();
+                BeanUtils.copyProperties(transferfailedVo1,transferfailedVo);
                 if(StringUtils.isNotEmpty(transferfailedVo1.getPayCurrency()) && transferfailedVo1.getPayCurrency().equals("CNY")){
                     if(null!=transferfailedVo1.getSumPayAmount()){
                         BigDecimal sumPayAmount= transferfailedVo1.getSumPayAmount();

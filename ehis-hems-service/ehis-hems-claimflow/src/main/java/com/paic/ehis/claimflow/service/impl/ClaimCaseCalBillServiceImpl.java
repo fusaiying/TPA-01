@@ -244,8 +244,8 @@ public class ClaimCaseCalBillServiceImpl implements IClaimCaseCalBillService
             BigDecimal billAmount1 = calConclusionVo.getSumBillAmount();
             BigDecimal discountAmount1 = calConclusionVo.getSumHosDiscountAmount();// 折扣金额
 
-//            BigDecimal voRate = calConclusionVo.getExchangeRate();
-//            voRate = voRate == null ? exchangeRate.getParities() : voRate;
+            BigDecimal voRate = calConclusionVo.getExchangeRate();
+            voRate = voRate == null ? exchangeRate.getParities() : voRate;
             //01-非全赔
             if("01".equals(claimFlag)) {
                 if(payAmount1 != null) {
@@ -263,13 +263,13 @@ public class ClaimCaseCalBillServiceImpl implements IClaimCaseCalBillService
             }
 
             /**
+             * 需要判断，是否申诉案件；若是 计算 本次支付差额
              * modify by  :  hjw   如果是申诉案件 ， 需要更新 payMount字段值为 本次支付差额
              * time:2021-06-29
              */
             /** start */
             ClaimCaseCal nowClaimCaseCal = claimCaseCalMapper.selectClaimCaseCalByRptNo(rptNo);
             if(rptNo.indexOf("-") > 0 && (nowClaimCaseCal.getCreateTime().getTime() == nowClaimCaseCal.getUpdateTime().getTime())) {
-                // 需要判断，是否申诉案件；若是 计算 本次支付差额
                 CalConclusionVo precalConclusionVo = claimCaseCalMapper.selectPreCalConclusionByRptNo(rptNo);
                 if(precalConclusionVo != null) {
                     precalConclusionVo = claimCaseCalMapper.selectClaimCaseCalInformation(precalConclusionVo.getRptNo());
@@ -297,27 +297,21 @@ public class ClaimCaseCalBillServiceImpl implements IClaimCaseCalBillService
                 if (billCurrency.equalsIgnoreCase("CNY")) {
                     // 全赔付
                     if (claimFlag.equals("01")) {
-                        calConclusionVo.setPaymentDifference(payAmount.subtract(prePayAmount));
+                        //calConclusionVo.setPaymentDifference(payAmount.subtract(prePayAmount));
+                        calConclusionVo.setPayAmount(payAmount.subtract(prePayAmount));
                     }
                     if (claimFlag.equals("02")) {
                         BigDecimal subtract = sumBillAmount.subtract(discountAmount); // 本次 折后金额
                         BigDecimal subtract1 = preSumBillAmount.subtract(preDiscountAmount); // 原案件 折后金额
-                        calConclusionVo.setPaymentDifference(subtract.subtract(subtract1));
+                       //calConclusionVo.setPaymentDifference(subtract.subtract(subtract1));
+                        calConclusionVo.setPayAmount(subtract.subtract(subtract1));
                     }
                 } else {
                     //本次支付差额（外币）=本次外币给付金额-申诉原案件外币给付金额；
-                    calConclusionVo.setPaymentDifference(calConclusionVo.getPayAmountForeign().subtract(precalConclusionVo.getPayAmountForeign()));
-                }
+                    BigDecimal diffValue = billAmount1.subtract(discountAmount1).subtract(precalConclusionVo.getPayAmountForeign());
+                    calConclusionVo.setPayAmountForeign(diffValue);
+                    calConclusionVo.setPayAmount(diffValue.multiply(voRate));
 
-                // 如果RMB，直接更新payAmount 为支付差额 否则  payAmouont 和  payAmountForeign 互换
-                BigDecimal nowPayAmount = nowClaimCaseCal.getPayAmount() == null ? defaultValue : nowClaimCaseCal.getPayAmount();
-                BigDecimal payAmountForeign = nowClaimCaseCal.getPayAmountForeign() == null ? defaultValue : nowClaimCaseCal.getPayAmountForeign();
-                if(nowClaimCaseCal.getBillCurrency().equals("CNY")) {
-                    claimCaseCal.setPayAmount(calConclusionVo.getPaymentDifference());
-                }  else {
-                    //BigDecimal exchangeRateValue = nowClaimCaseCal.getExchangeRate() == null ? new BigDecimal(1) : nowClaimCaseCal.getExchangeRate();
-                    claimCaseCal.setPayAmount(claimCaseCal.getPayAmountForeign());
-                    claimCaseCal.setPayAmountForeign(claimCaseCal.getPayAmountForeign());
                 }
             }
             /** end */

@@ -280,18 +280,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <where>
         1=1
             <if test="endCaseStartDate != null and endCaseStartDate != ''">
-                and woa.end_date <![CDATA[>=]]> DATE_FORMAT(#{endCaseStartDate},'%Y-%m-%d')
+                and DATE_FORMAT(woa.end_date,'%Y-%m-%d') <![CDATA[>=]]> #{endCaseStartDate}
             </if>
             <if test="endCaseEndDate != null and endCaseEndDate != ''">
-                and woa.end_date <![CDATA[<=]]> DATE_FORMAT(#{endCaseEndDate},'%Y-%m-%d')
+                and DATE_FORMAT(woa.end_date,'%Y-%m-%d') <![CDATA[<=]]> #{endCaseEndDate}
             </if>
-            <if test="endDate != null and endDate != ''"> and woa.end_date = #{endDate}</if>
+            <if test="endDate != null  and endDate != ''"> and woa.end_date = #{endDate}</if>
             <if test="updatedTime != null and updatedTime != ''"> and qia.created_time = #{updatedTime}</if>
             <if test="inspectionStartDate != null and inspectionStartDate != ''">
-                and qia.created_time <![CDATA[>=]]> DATE_FORMAT(#{inspectionStartDate},'%Y-%m-%d')
+                and DATE_FORMAT(qia.created_time,'%Y-%m-%d') <![CDATA[>=]]> #{inspectionStartDate}
             </if>
             <if test="inspectionEndDate != null and inspectionEndDate != ''">
-                and qia.created_time <![CDATA[<=]]> DATE_FORMAT(#{inspectionEndDate},'%Y-%m-%d')
+                and DATE_FORMAT(qia.created_time,'%Y-%m-%d') <![CDATA[<=]]> #{inspectionEndDate}
             </if>
             <if test="organCode != null and organCode != ''"> and woa.organ_code = #{organCode}</if>
             <if test="updatedBy != null and updatedBy != ''"> and qia.updated_by = #{updatedBy}</if>
@@ -383,7 +383,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         qia.inspection_id,
         qia.work_order_no,
         adi.organ_code,
-        woa.modify_by,
+        qia.updated_by modify_by,
         woa.end_date,
         qia.status,
         qia.result,
@@ -472,25 +472,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             1=1 and
             woa.business_type='03'
             <if test="endCaseStartDate != null and endCaseStartDate != ''">
-                and woa.end_date &gt; DATE_FORMAT(#{endCaseStartDate},'%Y-%m-%d')
-            </if>
-            <if test="endCaseEndDate != null and endCaseEndDate != ''">
-                and woa.end_date &lt; DATE_FORMAT(#{endCaseEndDate},'%Y-%m-%d')
-            </if>
-
-            <!--<if test="endCaseStartDate != null ">
                 and DATE_FORMAT(woa.end_date,'%Y-%m-%d') <![CDATA[>=]]> #{endCaseStartDate}
             </if>
-            <if test="endCaseEndDate != null ">
+            <if test="endCaseEndDate != null and endCaseEndDate != ''">
                 and DATE_FORMAT(woa.end_date,'%Y-%m-%d') <![CDATA[<=]]> #{endCaseEndDate}
-            </if>-->
+            </if>
             <if test="endDate != null  and endDate != ''"> and woa.end_date = #{endDate}</if>
             <if test="updatedTime != null and updatedTime != ''"> and qia.created_time = #{updatedTime}</if>
             <if test="inspectionStartDate != null and inspectionStartDate != ''">
-                and qia.created_time &gt; DATE_FORMAT(#{inspectionStartDate},'%Y-%m-%d')
+                and DATE_FORMAT(qia.created_time,'%Y-%m-%d') <![CDATA[>=]]> #{inspectionStartDate}
             </if>
             <if test="inspectionEndDate != null and inspectionEndDate != ''">
-                and qia.created_time &lt; DATE_FORMAT(#{inspectionEndDate},'%Y-%m-%d')
+                and DATE_FORMAT(qia.created_time,'%Y-%m-%d') <![CDATA[<=]]> #{inspectionEndDate}
             </if>
             <if test="organCode != null and organCode != ''"> and woa.organ_code = #{organCode}</if>
             <if test="updatedBy != null and updatedBy != ''"> and qia.updated_by = #{updatedBy}</if>
@@ -578,18 +571,18 @@ and cdd.code_type='cs_inspection_item_demand'*/
             1=1 and
              woa.business_type='01'
             <if test="endCaseStartDate != null and endCaseStartDate != ''">
-                and woa.end_date &gt;DATE_FORMAT(#{endCaseStartDate},'%Y-%m-%d')
+                and DATE_FORMAT(woa.end_date,'%Y-%m-%d') <![CDATA[>=]]> #{endCaseStartDate}
             </if>
             <if test="endCaseEndDate != null and endCaseEndDate != ''">
-                and woa.end_date &lt; DATE_FORMAT(#{endCaseEndDate},'%Y-%m-%d')
+                and DATE_FORMAT(woa.end_date,'%Y-%m-%d') <![CDATA[<=]]> #{endCaseEndDate}
             </if>
-            <if test="endDate != null "> and woa.end_date = #{endDate}</if>
+            <if test="endDate != null  and endDate != ''"> and woa.end_date = #{endDate}</if>
             <if test="updatedTime != null and updatedTime != ''"> and qia.created_time = #{updatedTime}</if>
             <if test="inspectionStartDate != null and inspectionStartDate != ''">
-                and qia.created_time &gt;  DATE_FORMAT(#{inspectionStartDate},'%Y-%m-%d')
+                and DATE_FORMAT(qia.created_time,'%Y-%m-%d') <![CDATA[>=]]> #{inspectionStartDate}
             </if>
             <if test="inspectionEndDate != null and inspectionEndDate != ''">
-                and qia.created_time &lt; DATE_FORMAT(#{inspectionEndDate},'%Y-%m-%d')
+                and DATE_FORMAT(qia.created_time,'%Y-%m-%d') <![CDATA[<=]]> #{inspectionEndDate}
             </if>
             <if test="organCode != null and organCode != ''"> and woa.organ_code = #{organCode}</if>
             <if test="updatedBy != null and updatedBy != ''"> and qia.updated_by = #{updatedBy}</if>

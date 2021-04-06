@@ -41,7 +41,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 
         SELECT
-        IFNULL( SUM( c.cal_amount ), 0 ) cal_amount
+        IFNULL( SUM( c.cal_amount ), 0 ) calAmount
         FROM
         (SELECT
         IFNULL( SUM( ccc.cal_amount ), 0 ) cal_amount

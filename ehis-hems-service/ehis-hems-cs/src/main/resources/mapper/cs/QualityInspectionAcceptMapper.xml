@@ -218,6 +218,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="policyItemNo" column="policy_item_no"/>
         <result property="num" column="num"/>
     </resultMap>
+    <resultMap type="com.paic.ehis.cs.domain.vo.QualityAcceptVo1" id="QualityResult1">
+        <result property="inspectionId" column="inspection_id"/>
+        <result property="workOrderNo" column="work_order_no"/>
+        <result property="organCode" column="organ_code"/>
+        <result property="modifyBy" column="modify_by"/>
+        <result property="endDate" column="end_date"/>
+        <result property="status" column="status"/>
+        <result property="result" column="result"/>
+        <result property="createdBy" column="created_dy"/>
+    </resultMap>
 
     <!--质检查询页面-->
     <select id="selectQualityVo" parameterType="com.paic.ehis.cs.domain.dto.QualityDTO" resultMap="QualityResult">
@@ -261,25 +271,27 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
     <select id="selectQualityVo2" parameterType="com.paic.ehis.cs.domain.dto.QualityDTO" resultMap="QualityResult">
         SELECT DISTINCT
-        count(*),
-        qia.updated_by
+        qia.updated_by,
+        count(*) num
         FROM
-        quality_inspection_accept qia left join work_order_accept woa on qia.work_order_no=woa.work_order_no
-        left join accept_detail_info adi on woa.work_order_no=adi.work_order_no
+        quality_inspection_accept qia
+        LEFT JOIN work_order_accept woa ON qia.work_order_no = woa.work_order_no
+        LEFT JOIN accept_detail_info adi ON woa.work_order_no = adi.work_order_no
         <where>
-            <if test="endCaseStartDate != null ">
-                and DATE_FORMAT(woa.end_date,'%Y-%m-%d') <![CDATA[>=]]> #{endCaseStartDate}
+        1=1
+            <if test="endCaseStartDate != null endCaseStartDate != ''">
+                and woa.end_date <![CDATA[>=]]> DATE_FORMAT(#{endCaseStartDate},'%Y-%m-%d')
             </if>
-            <if test="endCaseEndDate != null ">
-                and DATE_FORMAT(woa.end_date,'%Y-%m-%d') <![CDATA[<=]]> #{endCaseEndDate}
+            <if test="endCaseEndDate != null endCaseEndDate != ''">
+                and woa.end_date <![CDATA[<=]]> DATE_FORMAT(#{endCaseEndDate},'%Y-%m-%d')
             </if>
             <if test="endDate != null and endDate != ''"> and woa.end_date = #{endDate}</if>
             <if test="updatedTime != null and updatedTime != ''"> and qia.created_time = #{updatedTime}</if>
-            <if test="inspectionStartDate != null ">
-                and DATE_FORMAT(qia.created_time,'%Y-%m-%d') <![CDATA[>=]]> #{inspectionStartDate}
+            <if test="inspectionStartDate != null inspectionStartDate != ''">
+                and qia.created_time <![CDATA[>=]]> DATE_FORMAT(#{inspectionStartDate},'%Y-%m-%d')
             </if>
-            <if test="inspectionEndDate != null ">
-                and DATE_FORMAT(qia.created_time,'%Y-%m-%d') <![CDATA[<=]]> #{inspectionEndDate}
+            <if test="inspectionEndDate != null inspectionEndDate != ''">
+                and qia.created_time <![CDATA[<=]]> DATE_FORMAT(#{inspectionEndDate},'%Y-%m-%d')
             </if>
             <if test="organCode != null and organCode != ''"> and woa.organ_code = #{organCode}</if>
             <if test="updatedBy != null and updatedBy != ''"> and qia.updated_by = #{updatedBy}</if>
@@ -291,6 +303,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
     <resultMap type="com.paic.ehis.cs.domain.vo.ComplaintQualityInspectionVO" id="QualityComResult">
+        <result property="inspectionId" column="inspection_id"/>
         <result property="workOrderNo" column="work_order_no"/>
         <result property="organCode" column="organ_code"/>
         <result property="modifyBy" column="modify_by"/>
@@ -361,113 +374,103 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="handleProp19" column="handle_prop19"/>
         <result property="handleProp20" column="handle_prop20"/>
         <result property="score" column="score"/>
-
+        <result property="ztime" column="ztime"/>
         <result property="way" column="way"/>
     </resultMap>
     <!--投诉质检清单-->
     <select id="selectQualityVoCom" parameterType="com.paic.ehis.cs.domain.dto.QualityDTO" resultMap="QualityComResult">
-select qih.work_order_no,
+        SELECT DISTINCT
+        qia.inspection_id,
+        qia.work_order_no,
         adi.organ_code,
-				woa.modify_by,
-				woa.end_date,
-				qia.status,
-				qia.result,
-(case when (SUM( CASE WHEN qii.item_key = "02" THEN qii.value ELSE 0 END ))='01'then '是' else '否' end) "qwe02",
-SUM( CASE WHEN qii.item_key = "02" THEN qii.item_remark ELSE null END ) "asd02",
+        woa.modify_by,
+        woa.end_date,
+        qia.status,
+        qia.result,
+        (select qii.VALUE from quality_inspection_item qii,quality_inspection_handle qih WHERE qia.inspection_id=qih.inspection_id and qia.work_order_no = qih.work_order_no and qii.`status`= 'Y' and qii.inspection_handler_id = qih.inspection_handler_id and qii.inspection_id = qih.inspection_id and qii.item_key = '02') qwe02,
+        (select qii.item_remark from quality_inspection_item qii,quality_inspection_handle qih WHERE qia.inspection_id=qih.inspection_id and qia.work_order_no = qih.work_order_no and qii.`status`= 'Y' and qii.inspection_handler_id = qih.inspection_handler_id and qii.inspection_id = qih.inspection_id and qii.item_key = '02') asd02,
+        (select qii.VALUE from quality_inspection_item qii,quality_inspection_handle qih WHERE qia.inspection_id=qih.inspection_id and qia.work_order_no = qih.work_order_no and qii.`status`= 'Y' and qii.inspection_handler_id = qih.inspection_handler_id and qii.inspection_id = qih.inspection_id and qii.item_key = '10') qwe10,
+        (select qii.item_remark from quality_inspection_item qii,quality_inspection_handle qih WHERE qia.inspection_id=qih.inspection_id and qia.work_order_no = qih.work_order_no and qii.`status`= 'Y' and qii.inspection_handler_id = qih.inspection_handler_id and qii.inspection_id = qih.inspection_id and qii.item_key = '10') asd10,
+        (select qii.VALUE from quality_inspection_item qii,quality_inspection_handle qih WHERE qia.inspection_id=qih.inspection_id and qia.work_order_no = qih.work_order_no and qii.`status`= 'Y' and qii.inspection_handler_id = qih.inspection_handler_id and qii.inspection_id = qih.inspection_id and qii.item_key = '04') qwe04,
+        (select qii.item_remark from quality_inspection_item qii,quality_inspection_handle qih WHERE qia.inspection_id=qih.inspection_id and qia.work_order_no = qih.work_order_no and qii.`status`= 'Y' and qii.inspection_handler_id = qih.inspection_handler_id and qii.inspection_id = qih.inspection_id and qii.item_key = '04') asd04,
+        (select qii.VALUE from quality_inspection_item qii,quality_inspection_handle qih WHERE qia.inspection_id=qih.inspection_id and qia.work_order_no = qih.work_order_no and qii.`status`= 'Y' and qii.inspection_handler_id = qih.inspection_handler_id and qii.inspection_id = qih.inspection_id and qii.item_key = '14') qwe14,
+        (select qii.item_remark from quality_inspection_item qii,quality_inspection_handle qih WHERE qia.inspection_id=qih.inspection_id and qia.work_order_no = qih.work_order_no and qii.`status`= 'Y' and qii.inspection_handler_id = qih.inspection_handler_id and qii.inspection_id = qih.inspection_id and qii.item_key = '14') asd14,
+        (select qii.VALUE from quality_inspection_item qii,quality_inspection_handle qih WHERE qia.inspection_id=qih.inspection_id and qia.work_order_no = qih.work_order_no and qii.`status`= 'Y' and qii.inspection_handler_id = qih.inspection_handler_id and qii.inspection_id = qih.inspection_id and qii.item_key = '05') qwe05,
+        (select qii.item_remark from quality_inspection_item qii,quality_inspection_handle qih WHERE qia.inspection_id=qih.inspection_id and qia.work_order_no = qih.work_order_no and qii.`status`= 'Y' and qii.inspection_handler_id = qih.inspection_handler_id and qii.inspection_id = qih.inspection_id and qii.item_key = '05') asd05,
+        (select qii.VALUE from quality_inspection_item qii,quality_inspection_handle qih WHERE qia.inspection_id=qih.inspection_id and qia.work_order_no = qih.work_order_no and qii.`status`= 'Y' and qii.inspection_handler_id = qih.inspection_handler_id and qii.inspection_id = qih.inspection_id and qii.item_key = '11') qwe11,
+        (select qii.item_remark from quality_inspection_item qii,quality_inspection_handle qih WHERE qia.inspection_id=qih.inspection_id and qia.work_order_no = qih.work_order_no and qii.`status`= 'Y' and qii.inspection_handler_id = qih.inspection_handler_id and qii.inspection_id = qih.inspection_id and qii.item_key = '11') asd11,
+        (select qii.VALUE from quality_inspection_item qii,quality_inspection_handle qih WHERE qia.inspection_id=qih.inspection_id and qia.work_order_no = qih.work_order_no and qii.`status`= 'Y' and qii.inspection_handler_id = qih.inspection_handler_id and qii.inspection_id = qih.inspection_id and qii.item_key = '15') qwe15,
+        (select qii.item_remark from quality_inspection_item qii,quality_inspection_handle qih WHERE qia.inspection_id=qih.inspection_id and qia.work_order_no = qih.work_order_no and qii.`status`= 'Y' and qii.inspection_handler_id = qih.inspection_handler_id and qii.inspection_id = qih.inspection_id and qii.item_key = '15') asd15,
+        (select qii.VALUE from quality_inspection_item qii,quality_inspection_handle qih WHERE qia.inspection_id=qih.inspection_id and qia.work_order_no = qih.work_order_no and qii.`status`= 'Y' and qii.inspection_handler_id = qih.inspection_handler_id and qii.inspection_id = qih.inspection_id and qii.item_key = '08') qwe08,
+        (select qii.item_remark from quality_inspection_item qii,quality_inspection_handle qih WHERE qia.inspection_id=qih.inspection_id and qia.work_order_no = qih.work_order_no and qii.`status`= 'Y' and qii.inspection_handler_id = qih.inspection_handler_id and qii.inspection_id = qih.inspection_id and qii.item_key = '08') asd08,
+        (select qii.VALUE from quality_inspection_item qii,quality_inspection_handle qih WHERE qia.inspection_id=qih.inspection_id and qia.work_order_no = qih.work_order_no and qii.`status`= 'Y' and qii.inspection_handler_id = qih.inspection_handler_id and qii.inspection_id = qih.inspection_id and qii.item_key = '16') qwe16,
+        (select qii.item_remark from quality_inspection_item qii,quality_inspection_handle qih WHERE qia.inspection_id=qih.inspection_id and qia.work_order_no = qih.work_order_no and qii.`status`= 'Y' and qii.inspection_handler_id = qih.inspection_handler_id and qii.inspection_id = qih.inspection_id and qii.item_key = '16') asd16,
+        (select qii.VALUE from quality_inspection_item qii,quality_inspection_handle qih WHERE qia.inspection_id=qih.inspection_id and qia.work_order_no = qih.work_order_no and qii.`status`= 'Y' and qii.inspection_handler_id = qih.inspection_handler_id and qii.inspection_id = qih.inspection_id and qii.item_key = '13') qwe13,
+        (select qii.item_remark from quality_inspection_item qii,quality_inspection_handle qih WHERE qia.inspection_id=qih.inspection_id and qia.work_order_no = qih.work_order_no and qii.`status`= 'Y' and qii.inspection_handler_id = qih.inspection_handler_id and qii.inspection_id = qih.inspection_id and qii.item_key = '13') asd13,
+        (select qii.VALUE from quality_inspection_item qii,quality_inspection_handle qih WHERE qia.inspection_id=qih.inspection_id and qia.work_order_no = qih.work_order_no and qii.`status`= 'Y' and qii.inspection_handler_id = qih.inspection_handler_id and qii.inspection_id = qih.inspection_id and qii.item_key = '20') qwe20,
+        (select qii.item_remark from quality_inspection_item qii,quality_inspection_handle qih WHERE qia.inspection_id=qih.inspection_id and qia.work_order_no = qih.work_order_no and qii.`status`= 'Y' and qii.inspection_handler_id = qih.inspection_handler_id and qii.inspection_id = qih.inspection_id and qii.item_key = '20') asd20,
+        (select qii.VALUE from quality_inspection_item qii,quality_inspection_handle qih WHERE qia.inspection_id=qih.inspection_id and qia.work_order_no = qih.work_order_no and qii.`status`= 'Y' and qii.inspection_handler_id = qih.inspection_handler_id and qii.inspection_id = qih.inspection_id and qii.item_key = '01') qwe01,
+        (select qii.item_remark from quality_inspection_item qii,quality_inspection_handle qih WHERE qia.inspection_id=qih.inspection_id and qia.work_order_no = qih.work_order_no and qii.`status`= 'Y' and qii.inspection_handler_id = qih.inspection_handler_id and qii.inspection_id = qih.inspection_id and qii.item_key = '01') asd01,
+        (select qii.VALUE from quality_inspection_item qii,quality_inspection_handle qih WHERE qia.inspection_id=qih.inspection_id and qia.work_order_no = qih.work_order_no and qii.`status`= 'Y' and qii.inspection_handler_id = qih.inspection_handler_id and qii.inspection_id = qih.inspection_id and qii.item_key = '03') qwe03,
+        (select qii.item_remark from quality_inspection_item qii,quality_inspection_handle qih WHERE qia.inspection_id=qih.inspection_id and qia.work_order_no = qih.work_order_no and qii.`status`= 'Y' and qii.inspection_handler_id = qih.inspection_handler_id and qii.inspection_id = qih.inspection_id and qii.item_key = '03') asd03,
+        (select qii.VALUE from quality_inspection_item qii,quality_inspection_handle qih WHERE qia.inspection_id=qih.inspection_id and qia.work_order_no = qih.work_order_no and qii.`status`= 'Y' and qii.inspection_handler_id = qih.inspection_handler_id and qii.inspection_id = qih.inspection_id and qii.item_key = '17') qwe17,
+        (select qii.item_remark from quality_inspection_item qii,quality_inspection_handle qih WHERE qia.inspection_id=qih.inspection_id and qia.work_order_no = qih.work_order_no and qii.`status`= 'Y' and qii.inspection_handler_id = qih.inspection_handler_id and qii.inspection_id = qih.inspection_id and qii.item_key = '17') asd17,
+        (select qii.VALUE from quality_inspection_item qii,quality_inspection_handle qih WHERE qia.inspection_id=qih.inspection_id and qia.work_order_no = qih.work_order_no and qii.`status`= 'Y' and qii.inspection_handler_id = qih.inspection_handler_id and qii.inspection_id = qih.inspection_id and qii.item_key = '09') qwe09,
+        (select qii.item_remark from quality_inspection_item qii,quality_inspection_handle qih WHERE qia.inspection_id=qih.inspection_id and qia.work_order_no = qih.work_order_no and qii.`status`= 'Y' and qii.inspection_handler_id = qih.inspection_handler_id and qii.inspection_id = qih.inspection_id and qii.item_key = '09') asd09,
+        (select qii.VALUE from quality_inspection_item qii,quality_inspection_handle qih WHERE qia.inspection_id=qih.inspection_id and qia.work_order_no = qih.work_order_no and qii.`status`= 'Y' and qii.inspection_handler_id = qih.inspection_handler_id and qii.inspection_id = qih.inspection_id and qii.item_key = '06') qwe06,
+        (select qii.item_remark from quality_inspection_item qii,quality_inspection_handle qih WHERE qia.inspection_id=qih.inspection_id and qia.work_order_no = qih.work_order_no and qii.`status`= 'Y' and qii.inspection_handler_id = qih.inspection_handler_id and qii.inspection_id = qih.inspection_id and qii.item_key = '06') asd06,
+        (select qii.VALUE from quality_inspection_item qii,quality_inspection_handle qih WHERE qia.inspection_id=qih.inspection_id and qia.work_order_no = qih.work_order_no and qii.`status`= 'Y' and qii.inspection_handler_id = qih.inspection_handler_id and qii.inspection_id = qih.inspection_id and qii.item_key = '07') qwe07,
+        (select qii.item_remark from quality_inspection_item qii,quality_inspection_handle qih WHERE qia.inspection_id=qih.inspection_id and qia.work_order_no = qih.work_order_no and qii.`status`= 'Y' and qii.inspection_handler_id = qih.inspection_handler_id and qii.inspection_id = qih.inspection_id and qii.item_key = '07') asd07,
+        (select qii.VALUE from quality_inspection_item qii,quality_inspection_handle qih WHERE qia.inspection_id=qih.inspection_id and qia.work_order_no = qih.work_order_no and qii.`status`= 'Y' and qii.inspection_handler_id = qih.inspection_handler_id and qii.inspection_id = qih.inspection_id and qii.item_key = '12') qwe12,
+        (select qii.item_remark from quality_inspection_item qii,quality_inspection_handle qih WHERE qia.inspection_id=qih.inspection_id and qia.work_order_no = qih.work_order_no and qii.`status`= 'Y' and qii.inspection_handler_id = qih.inspection_handler_id and qii.inspection_id = qih.inspection_id and qii.item_key = '12') asd12,
+        (select qii.VALUE from quality_inspection_item qii,quality_inspection_handle qih WHERE qia.inspection_id=qih.inspection_id and qia.work_order_no = qih.work_order_no and qii.`status`= 'Y' and qii.inspection_handler_id = qih.inspection_handler_id and qii.inspection_id = qih.inspection_id and qii.item_key = '18') qwe18,
+        (select qii.item_remark from quality_inspection_item qii,quality_inspection_handle qih WHERE qia.inspection_id=qih.inspection_id and qia.work_order_no = qih.work_order_no and qii.`status`= 'Y' and qii.inspection_handler_id = qih.inspection_handler_id and qii.inspection_id = qih.inspection_id and qii.item_key = '18') asd18,
+        (select qii.VALUE from quality_inspection_item qii,quality_inspection_handle qih WHERE qia.inspection_id=qih.inspection_id and qia.work_order_no = qih.work_order_no and qii.`status`= 'Y' and qii.inspection_handler_id = qih.inspection_handler_id and qii.inspection_id = qih.inspection_id and qii.item_key = '19') qwe19,
+        (select qii.item_remark from quality_inspection_item qii,quality_inspection_handle qih WHERE qia.inspection_id=qih.inspection_id and qia.work_order_no = qih.work_order_no and qii.`status`= 'Y' and qii.inspection_handler_id = qih.inspection_handler_id and qii.inspection_id = qih.inspection_id and qii.item_key = '19') asd19,
 
-(case when (SUM( CASE WHEN qii.item_key = "10" THEN qii.value ELSE 0 END ))='01'then '是' else '否' end) "qwe10",
-SUM( CASE WHEN qii.item_key = "10" THEN qii.item_remark ELSE null END ) "asd10",
+        (SELECT appeal_flag from quality_inspection_handle where qia.inspection_id=quality_inspection_handle.inspection_id and qia.work_order_no = quality_inspection_handle.work_order_no order by quality_inspection_handle.inspection_handler_id desc LIMIT 1) appeal_flag,
+        (SELECT appeal_reason from quality_inspection_handle where qia.inspection_id=quality_inspection_handle.inspection_id and qia.work_order_no = quality_inspection_handle.work_order_no order by quality_inspection_handle.inspection_handler_id desc LIMIT 1) appeal_reason,
 
-(case when (SUM( CASE WHEN qii.item_key = "04" THEN qii.value ELSE 0 END ))='01'then '是' else '否' end) "qwe04",
-SUM( CASE WHEN qii.item_key = "04" THEN qii.item_remark ELSE null END ) "asd04",
+        (select cd.code_name from code_dict cd,quality_inspection_item qii,quality_inspection_handle qih WHERE qia.inspection_id=qih.inspection_id and qia.work_order_no = qih.work_order_no and qii.`status`= 'Y' and qii.inspection_handler_id = qih.inspection_handler_id and qii.inspection_id = qih.inspection_id and qii.item_key = cd.code and cd.code_type='cs_classify_level1' and qii.item_key = (select whi.handle_prop3 from work_handle_info whi where qia.work_order_no=whi.work_order_no and whi.status='Y' )
+        ) ccl1,
+        (select cd.code_name from code_dict cd,quality_inspection_item qii,quality_inspection_handle qih WHERE qia.inspection_id=qih.inspection_id and qia.work_order_no = qih.work_order_no and qii.`status`= 'Y' and qii.inspection_handler_id = qih.inspection_handler_id and qii.inspection_id = qih.inspection_id and qii.item_key = cd.code and cd.code_type='cs_classify_level2' and qii.item_key = (select whi.handle_prop4 from work_handle_info whi where qia.work_order_no=whi.work_order_no and whi.status='Y' ) ) ccl2,
 
-(case when (SUM( CASE WHEN qii.item_key = "14" THEN qii.value ELSE 0 END ))='01'then '是' else '否' end) "qwe14",
-SUM( CASE WHEN qii.item_key = "14" THEN qii.item_remark ELSE null END ) "asd14",
+        (select flag from work_handle_info whi WHERE whi.work_order_no = adi.work_order_no and whi.`status` = 'Y') flag,
+        (select handle_prop5 from work_handle_info whi WHERE whi.work_order_no = adi.work_order_no and whi.`status` = 'Y') handle_prop5,
+        (select handle_prop1 from work_handle_info whi WHERE whi.work_order_no = adi.work_order_no and whi.`status` = 'Y') handle_prop1 ,
+        (select handle_prop6 from work_handle_info whi WHERE whi.work_order_no = adi.work_order_no and whi.`status` = 'Y') handle_prop6,
+        (select cd.code_name from code_dict cd,quality_inspection_item qii,quality_inspection_handle qih WHERE qia.inspection_id=qih.inspection_id and qia.work_order_no = qih.work_order_no and qii.`status`= 'Y' and qii.inspection_handler_id = qih.inspection_handler_id and qii.inspection_id = qih.inspection_id and qii.item_key = cd.code and cd.code_type='cs_reason_level1' and qii.item_key = (select whi.handle_prop3 from work_handle_info whi where qia.work_order_no=whi.work_order_no and whi.status='Y' )
+        ) rlevel1,
+        (select cd.code_name from code_dict cd,quality_inspection_item qii,quality_inspection_handle qih WHERE qia.inspection_id=qih.inspection_id and qia.work_order_no = qih.work_order_no and qii.`status`= 'Y' and qii.inspection_handler_id = qih.inspection_handler_id and qii.inspection_id = qih.inspection_id and qii.item_key = cd.code and cd.code_type='cs_reason_level2' and qii.item_key = (select whi.handle_prop3 from work_handle_info whi where qia.work_order_no=whi.work_order_no and whi.status='Y' )
+        ) rlevel2,
+        (select cd.code_name from code_dict cd,quality_inspection_item qii,quality_inspection_handle qih WHERE qia.inspection_id=qih.inspection_id and qia.work_order_no = qih.work_order_no and qii.`status`= 'Y' and qii.inspection_handler_id = qih.inspection_handler_id and qii.inspection_id = qih.inspection_id and qii.item_key = cd.code and cd.code_type='cs_reason_level3' and qii.item_key = (select whi.handle_prop3 from work_handle_info whi where qia.work_order_no=whi.work_order_no and whi.status='Y' )
+        ) rlevel3,
 
-(case when (SUM( CASE WHEN qii.item_key = "05" THEN qii.value ELSE 0 END ))='01'then '是' else '否' end) "qwe05",
-SUM( CASE WHEN qii.item_key = "05" THEN qii.item_remark ELSE null END ) "asd05",
+        (select whi.handle_prop11 from work_handle_info whi WHERE  whi.work_order_no = adi.work_order_no and whi.`status` = 'Y') handle_prop11 ,
+        (select whi.handle_prop12 from work_handle_info whi WHERE whi.work_order_no = adi.work_order_no and whi.`status` = 'Y') handle_prop12 ,
+        (select whi.handle_prop14 from work_handle_info whi WHERE whi.work_order_no = adi.work_order_no and whi.`status` = 'Y') handle_prop14 ,
+        (select whi.handle_prop15 from work_handle_info whi WHERE whi.work_order_no = adi.work_order_no and whi.`status` = 'Y') handle_prop15 ,
+        (select whi.handle_prop16 from work_handle_info whi WHERE whi.work_order_no = adi.work_order_no and whi.`status` = 'Y') handle_prop16 ,
+        (select whi.handle_prop17 from work_handle_info whi WHERE whi.work_order_no = adi.work_order_no and whi.`status` = 'Y') handle_prop17 ,
+        (select whi.handle_prop30 from work_handle_info whi WHERE whi.work_order_no = adi.work_order_no and whi.`status` = 'Y') handle_prop30 ,
+        (select whi.remark from work_handle_info whi WHERE whi.work_order_no = adi.work_order_no and whi.`status` = 'Y') remark ,
+        (select whi.handle_prop2 from work_handle_info whi WHERE whi.work_order_no = adi.work_order_no and whi.`status` = 'Y') handle_prop2 ,
+        (select whi.handle_prop19 from work_handle_info whi WHERE whi.work_order_no = adi.work_order_no and whi.`status` = 'Y') handle_prop19 ,
+        (select whi.handle_prop20 from work_handle_info whi WHERE whi.work_order_no = adi.work_order_no and whi.`status` = 'Y') handle_prop20 ,
+        (SELECT score  from quality_inspection_handle where qia.inspection_id=quality_inspection_handle.inspection_id and qia.work_order_no = quality_inspection_handle.work_order_no order by quality_inspection_handle.inspection_handler_id desc LIMIT 1) score,
 
-(case when (SUM( CASE WHEN qii.item_key = "11" THEN qii.value ELSE 0 END ))='01'then '是' else '否' end) "qwe11",
-SUM( CASE WHEN qii.item_key = "11" THEN qii.item_remark ELSE null END ) "asd11",
-
-(case when (SUM( CASE WHEN qii.item_key = "15" THEN qii.value ELSE 0 END ))='01'then '是' else '否' end) "qwe15",
-SUM( CASE WHEN qii.item_key = "15" THEN qii.item_remark ELSE null END ) "asd15",
-
-(case when (SUM( CASE WHEN qii.item_key = "08" THEN qii.value ELSE 0 END ))='01'then '是' else '否' end) "qwe08",
-SUM( CASE WHEN qii.item_key = "08" THEN qii.item_remark ELSE null END ) "asd08",
-
-(case when (SUM( CASE WHEN qii.item_key = "16" THEN qii.value ELSE 0 END ))='01'then '是' else '否' end) "qwe16",
-SUM( CASE WHEN qii.item_key = "16" THEN qii.item_remark ELSE null END ) "asd16",
-
-(case when (SUM( CASE WHEN qii.item_key = "13" THEN qii.value ELSE 0 END ))='01'then '是' else '否' end) "qwe13",
-SUM( CASE WHEN qii.item_key = "13" THEN qii.item_remark ELSE null END ) "asd13",
-
-(case when (SUM( CASE WHEN qii.item_key = "20" THEN qii.value ELSE 0 END ))='01'then '是' else '否' end) "qwe20",
-SUM( CASE WHEN qii.item_key = "20" THEN qii.item_remark ELSE null END ) "asd20",
-
-(case when (SUM( CASE WHEN qii.item_key = "01" THEN qii.value ELSE 0 END ))='01'then '是' else '否' end) "qwe01",
-SUM( CASE WHEN qii.item_key = "01" THEN qii.item_remark ELSE null END ) "asd01",
-
-(case when (SUM( CASE WHEN qii.item_key = "03" THEN qii.value ELSE 0 END ))='01'then '是' else '否' end) "qwe03",
-SUM( CASE WHEN qii.item_key = "03" THEN qii.item_remark ELSE null END ) "asd03",
-
-(case when (SUM( CASE WHEN qii.item_key = "17" THEN qii.value ELSE 0 END ))='01'then '是' else '否' end) "qwe17",
-SUM( CASE WHEN qii.item_key = "17" THEN qii.item_remark ELSE null END ) "asd17",
-
-(case when (SUM( CASE WHEN qii.item_key = "09" THEN qii.value ELSE 0 END ))='01'then '是' else '否' end) "qwe09",
-SUM( CASE WHEN qii.item_key = "09" THEN qii.item_remark ELSE null END ) "asd09",
-
-(case when (SUM( CASE WHEN qii.item_key = "06" THEN qii.value ELSE 0 END ))='01'then '是' else '否' end) "qwe06",
-SUM( CASE WHEN qii.item_key = "06" THEN qii.item_remark ELSE null END ) "asd06",
-
-(case when (SUM( CASE WHEN qii.item_key = "07" THEN qii.value ELSE 0 END ))='01'then '是' else '否' end) "qwe07",
-SUM( CASE WHEN qii.item_key = "07" THEN qii.item_remark ELSE null END ) "asd07",
-
-(case when (SUM( CASE WHEN qii.item_key = "12" THEN qii.value ELSE 0 END ))='01'then '是' else '否' end) "qwe12",
-SUM( CASE WHEN qii.item_key = "12" THEN qii.item_remark ELSE null END ) "asd12",
-
-(case when (SUM( CASE WHEN qii.item_key = "18" THEN qii.value ELSE 0 END ))='01'then '是' else '否' end) "qwe18",
-SUM( CASE WHEN qii.item_key = "18" THEN qii.item_remark ELSE null END ) "asd18",
-
-(case when (SUM( CASE WHEN qii.item_key = "19" THEN qii.value ELSE 0 END ))='01'then '是' else '否' end) "qwe19",
-SUM( CASE WHEN qii.item_key = "19" THEN qii.item_remark ELSE null END ) "asd19",
-qih.appeal_flag,
-qih.appeal_reason,
-(select cd.code_name from code_dict cd where cd.code_type='cs_classify_level1' and cd.code=qii.item_key) "ccl1",
-(select cd.code_name from code_dict cd where cd.code_type='cs_classify_level2' and cd.code=qii.item_key) "ccl2",
-whi.flag,
-whi.handle_prop5,
-whi.handle_prop1,
-whi.handle_prop6,
-(select cd.code_name from code_dict cd where cd.code_type='cs_reason_level1' and cd.code=qii.item_key) "rlevel1",
-(select cd.code_name from code_dict cd where cd.code_type='cs_reason_level2' and cd.code=qii.item_key) "rlevel2",
-(select cd.code_name from code_dict cd where cd.code_type='cs_reason_level3' and cd.code=qii.item_key) "rlevel3",
-whi.handle_prop11,
-whi.handle_prop12,
-whi.handle_prop1,
-whi.handle_prop14,
-whi.handle_prop15,
-whi.handle_prop16,
-whi.handle_prop17,
-whi.handle_prop30,
-whi.remark,
-whi.handle_prop2,
-whi.handle_prop19,
-whi.handle_prop20,
-qih.score,
-qia.created_by,
-CASE WHEN qia.created_by like'SYSTEM%' THEN "自动抽检" else "手动抽检" end as way
-from quality_inspection_handle qih,quality_inspection_item qii,work_order_accept  woa, quality_inspection_accept qia ,accept_detail_info adi,work_handle_info whi,code_dict cdd
-/*where qih.inspection_handler_id=qii.inspection_handler_id and qih.work_order_no=woa.work_order_no and qia.inspection_id=qih.inspection_id and qih.work_order_no=adi.work_order_no
-and whi.`status`='Y'
-and qii.`status`='Y' and woa.business_type='03'
-and cdd.code_type='cs_inspection_class_complaint'*/
+        (SELECT TIMEDIFF(updated_time,created_time)  from quality_inspection_handle where qia.inspection_id=quality_inspection_handle.inspection_id and qia.work_order_no = quality_inspection_handle.work_order_no order by quality_inspection_handle.inspection_handler_id desc LIMIT 1) ztime,
+        CASE
+        WHEN qia.created_by LIKE 'SYSTEM%' THEN
+        "自动抽检" ELSE "手动抽检"
+        END AS way
+        FROM
+        quality_inspection_accept qia
+        LEFT JOIN work_order_accept woa ON qia.work_order_no = woa.work_order_no
+        LEFT JOIN accept_detail_info adi ON woa.work_order_no = adi.work_order_no
         <where>
-        1=1 and
-            qih.inspection_handler_id=qii.inspection_handler_id and qih.work_order_no=woa.work_order_no and qia.inspection_id=qih.inspection_id and qih.work_order_no=adi.work_order_no
-            and whi.`status`='Y'
-            and qii.`status`='Y' and woa.business_type='03'
-            and cdd.code_type='cs_inspection_class_complaint'
+            1=1 and
+            woa.business_type='03'
             <if test="endCaseStartDate != null and endCaseStartDate != ''">
                 and woa.end_date &gt; DATE_FORMAT(#{endCaseStartDate},'%Y-%m-%d')
             </if>
@@ -484,10 +487,10 @@ and cdd.code_type='cs_inspection_class_complaint'*/
             <if test="endDate != null  and endDate != ''"> and woa.end_date = #{endDate}</if>
             <if test="updatedTime != null and updatedTime != ''"> and qia.created_time = #{updatedTime}</if>
             <if test="inspectionStartDate != null and inspectionStartDate != ''">
-                and qia.created_time &gt;  #{inspectionStartDate}
+                and qia.created_time &gt; DATE_FORMAT(#{inspectionStartDate},'%Y-%m-%d')
             </if>
             <if test="inspectionEndDate != null and inspectionEndDate != ''">
-                and qia.created_time &lt; #{inspectionEndDate}
+                and qia.created_time &lt; DATE_FORMAT(#{inspectionEndDate},'%Y-%m-%d')
             </if>
             <if test="organCode != null and organCode != ''"> and woa.organ_code = #{organCode}</if>
             <if test="updatedBy != null and updatedBy != ''"> and qia.updated_by = #{updatedBy}</if>
@@ -495,7 +498,14 @@ and cdd.code_type='cs_inspection_class_complaint'*/
             <if test="status != null and status != ''"> and qia.status = #{status}</if>
             <if test="result != null and result != ''"> and qia.result = #{result}</if>
         </where>
-        GROUP BY qih.work_order_no
+
+
+
+        /*where qih.inspection_handler_id=qii.inspection_handler_id and qih.work_order_no=woa.work_order_no and qia.inspection_id=qih.inspection_id and qih.work_order_no=adi.work_order_no
+and whi.`status`='Y'
+and qii.`status`='Y' and woa.business_type='03'
+and cdd.code_type='cs_inspection_class_complaint'*/
+
     </select>
 
     <resultMap type="com.paic.ehis.cs.domain.vo.InformationNeedsQuality" id="InformationNeedsQuality">
@@ -528,63 +538,58 @@ and cdd.code_type='cs_inspection_class_complaint'*/
     </resultMap>
     <!--信息需求质检清单-->
     <select id="selectQualityVoComInformation" parameterType="com.paic.ehis.cs.domain.dto.QualityDTO" resultMap="InformationNeedsQuality">
-select qia.inspection_id,
+        select qia.inspection_id,
         qia.work_order_no,
-				woa.policy_no,
-				woa.policy_item_no,
-				woa.accept_by,
+        woa.policy_no,
+        woa.policy_item_no,
+        woa.accept_by,
+        woa.update_by cupdate_by,
+        qia.updated_by zupdated_by,
+        qia.status,
+        woa.accept_time,
+        woa.click_time,
+        qia.created_time ccreated_time,
+        qia.created_time zcreated_time,
+        (select qii.VALUE from quality_inspection_item qii,quality_inspection_handle qih WHERE qia.inspection_id=qih.inspection_id and qia.work_order_no = qih.work_order_no and qii.`status`= 'Y' and qii.inspection_handler_id = qih.inspection_handler_id and qii.inspection_id = qih.inspection_id and qii.item_key = '21') zxc21,
+        (select qii.VALUE from quality_inspection_item qii,quality_inspection_handle qih WHERE qia.inspection_id=qih.inspection_id and qia.work_order_no = qih.work_order_no and qii.`status`= 'Y' and qii.inspection_handler_id = qih.inspection_handler_id and qii.inspection_id = qih.inspection_id and qii.item_key = '22') zxc22,
+        (select qii.VALUE from quality_inspection_item qii,quality_inspection_handle qih WHERE qia.inspection_id=qih.inspection_id and qia.work_order_no = qih.work_order_no and qii.`status`= 'Y' and qii.inspection_handler_id = qih.inspection_handler_id and qii.inspection_id = qih.inspection_id and qii.item_key = '23') zxc23,
+        (select qii.VALUE from quality_inspection_item qii,quality_inspection_handle qih WHERE qia.inspection_id=qih.inspection_id and qia.work_order_no = qih.work_order_no and qii.`status`= 'Y' and qii.inspection_handler_id = qih.inspection_handler_id and qii.inspection_id = qih.inspection_id and qii.item_key = '24') zxc24,
+        (select qii.VALUE from quality_inspection_item qii,quality_inspection_handle qih WHERE qia.inspection_id=qih.inspection_id and qia.work_order_no = qih.work_order_no and qii.`status`= 'Y' and qii.inspection_handler_id = qih.inspection_handler_id and qii.inspection_id = qih.inspection_id and qii.item_key = '25') zxc25,
+        (select qii.VALUE from quality_inspection_item qii,quality_inspection_handle qih WHERE qia.inspection_id=qih.inspection_id and qia.work_order_no = qih.work_order_no and qii.`status`= 'Y' and qii.inspection_handler_id = qih.inspection_handler_id and qii.inspection_id = qih.inspection_id and qii.item_key = '26') zxc26,
+        (select qii.VALUE from quality_inspection_item qii,quality_inspection_handle qih WHERE qia.inspection_id=qih.inspection_id and qia.work_order_no = qih.work_order_no and qii.`status`= 'Y' and qii.inspection_handler_id = qih.inspection_handler_id and qii.inspection_id = qih.inspection_id and qii.item_key = '27') zxc27,
 
-				woa.update_by cupdate_by,
-				qia.updated_by zupdated_by,
-				qia.status,
-				woa.accept_time,
-				woa.click_time,
-				qia.created_time ccreated_time,
-
-				qia.created_time zcreated_time,
-				(case when (SUM( CASE WHEN qii.item_key = "21" THEN qii.value ELSE 0 END ))='01'then '是' else '否' end) "zxc21",
-				(case when (SUM( CASE WHEN qii.item_key = "22" THEN qii.value ELSE 0 END ))='01'then '是' else '否' end) "zxc22",
-				(case when (SUM( CASE WHEN qii.item_key = "23" THEN qii.value ELSE 0 END ))='01'then '是' else '否' end) "zxc23",
-				(case when (SUM( CASE WHEN qii.item_key = "24" THEN qii.value ELSE 0 END ))='01'then '是' else '否' end) "zxc24",
-				(case when (SUM( CASE WHEN qii.item_key = "25" THEN qii.value ELSE 0 END ))='01'then '是' else '否' end) "zxc25",
-				(case when (SUM( CASE WHEN qii.item_key = "26" THEN qii.value ELSE 0 END ))='01'then '是' else '否' end) "zxc26",
-				(case when (SUM( CASE WHEN qii.item_key = "27" THEN qii.value ELSE 0 END ))='01'then '是' else '否' end) "zxc27",
-				qih.appeal_flag,
-				qih.appeal_reason,
-				qia.result,
-
-				"电话中心处理" center,
-				adi.item_code,
-
-				adi.organ_code,
-				woa.activation_num
-from quality_inspection_handle qih,quality_inspection_item qii,work_order_accept woa,quality_inspection_accept qia ,accept_detail_info adi,work_handle_info whi,code_dict cdd
-/*where qih.inspection_handler_id=qii.inspection_handler_id and qih.work_order_no=woa.work_order_no and qia.inspection_id=qih.inspection_id and -- qih
+        (SELECT appeal_flag from quality_inspection_handle where qia.inspection_id=quality_inspection_handle.inspection_id and qia.work_order_no = quality_inspection_handle.work_order_no order by quality_inspection_handle.inspection_handler_id desc LIMIT 1) appeal_flag,
+        (SELECT appeal_reason from quality_inspection_handle where qia.inspection_id=quality_inspection_handle.inspection_id and qia.work_order_no = quality_inspection_handle.work_order_no order by quality_inspection_handle.inspection_handler_id desc LIMIT 1) appeal_reason,
+        qia.result,
+        "电话中心处理" center,
+        adi.item_code,
+        adi.organ_code,
+        woa.activation_num
+        FROM
+        quality_inspection_accept qia
+        LEFT JOIN work_order_accept woa ON qia.work_order_no = woa.work_order_no
+        LEFT JOIN accept_detail_info adi ON woa.work_order_no = adi.work_order_no
+        /*where qih.inspection_handler_id=qii.inspection_handler_id and qih.work_order_no=woa.work_order_no and qia.inspection_id=qih.inspection_id and -- qih
 qih.work_order_no=adi.work_order_no
 and whi.`status`='Y'
 and qii.`status`='Y' and woa.business_type='03'
 and cdd.code_type='cs_inspection_item_demand'*/
-
         <where>
             1=1 and
-            qih.inspection_handler_id=qii.inspection_handler_id and qih.work_order_no=woa.work_order_no and qia.inspection_id=qih.inspection_id and
-            qih.work_order_no=adi.work_order_no
-            and whi.`status`='Y'
-            and qii.`status`='Y' and woa.business_type='03'
-            and cdd.code_type='cs_inspection_item_demand'
+             woa.business_type='01'
             <if test="endCaseStartDate != null and endCaseStartDate != ''">
-                and woa.end_date &gt; #{endCaseStartDate}
+                and woa.end_date &gt;DATE_FORMAT(#{endCaseStartDate},'%Y-%m-%d')
             </if>
             <if test="endCaseEndDate != null and endCaseEndDate != ''">
-                and woa.end_date &lt; #{endCaseEndDate}
+                and woa.end_date &lt; DATE_FORMAT(#{endCaseEndDate},'%Y-%m-%d')
             </if>
             <if test="endDate != null "> and woa.end_date = #{endDate}</if>
             <if test="updatedTime != null and updatedTime != ''"> and qia.created_time = #{updatedTime}</if>
             <if test="inspectionStartDate != null and inspectionStartDate != ''">
-                and qia.created_time &gt;  #{inspectionStartDate}
+                and qia.created_time &gt;  DATE_FORMAT(#{inspectionStartDate},'%Y-%m-%d')
             </if>
             <if test="inspectionEndDate != null and inspectionEndDate != ''">
-                and qia.created_time &lt; #{inspectionEndDate}
+                and qia.created_time &lt; DATE_FORMAT(#{inspectionEndDate},'%Y-%m-%d')
             </if>
             <if test="organCode != null and organCode != ''"> and woa.organ_code = #{organCode}</if>
             <if test="updatedBy != null and updatedBy != ''"> and qia.updated_by = #{updatedBy}</if>
@@ -592,7 +597,6 @@ and cdd.code_type='cs_inspection_item_demand'*/
             <if test="status != null and status != ''"> and qia.status = #{status}</if>
             <if test="result != null and result != ''"> and qia.result = #{result}</if>
         </where>
-        GROUP BY qih.work_order_no
     </select>
     <resultMap type="com.paic.ehis.cs.domain.vo.ComplaintErrorRateVO" id="ComplaintErrorRateVO">
         <result property="closingTime" column="closing_time"/>
@@ -604,19 +608,18 @@ and cdd.code_type='cs_inspection_item_demand'*/
     </resultMap>
     <select id="selectError" parameterType="com.paic.ehis.cs.domain.dto.QualityDTO" resultMap="ComplaintErrorRateVO">
 select
-null closing_time,
+        "" closing_time,
 "上海分公司本部" adi.organ_code ,
 qia.updated_by,
-null sampling_quantity,
-null errors_number,
-null errors_rate
-from quality_inspection_handle qih,quality_inspection_item qii,work_order_accept  woa, quality_inspection_accept qia ,
+"" sampling_quantity,
+        "" errors_number,
+        "" errors_rate
+        "" quality_inspection_handle qih,quality_inspection_item qii,work_order_accept  woa, quality_inspection_accept qia ,
 accept_detail_info adi,work_handle_info whi,code_dict cdd
 where qih.inspection_handler_id=qii.inspection_handler_id and qih.work_order_no=woa.work_order_no and qia.inspection_id=qih.inspection_id and
 qih.work_order_no=adi.work_order_no
 and whi.`status`='Y'
 and qii.`status`='Y' and woa.business_type in("01","03")
-and cdd.code_type in("cs_inspection_item_demand","cs_inspection_class_complaint")
         <where>
         1=1 and
             qih.inspection_handler_id=qii.inspection_handler_id and qih.work_order_no=woa.work_order_no and qia.inspection_id=qih.inspection_id and -- qih
@@ -851,6 +854,86 @@ GROUP BY qia.updated_by
         </if>
         GROUP BY
             woa.update_by
+    </select>
+
+    <!--质检查询页面-->
+    <select id="selectQualityVo1" parameterType="com.paic.ehis.cs.domain.dto.QualityDTO" resultMap="QualityResult1">
+        SELECT DISTINCT
+        qia.inspection_id,
+        qia.work_order_no,
+        adi.organ_code,
+        woa.modify_by,
+        woa.end_date,
+        qia.STATUS,
+        qia.result,
+        qia.created_by,
+        CASE
+        WHEN qia.created_by LIKE 'SYSTEM%' THEN
+        "自动抽检" ELSE "手动抽检"
+        END AS way
+        FROM
+        quality_inspection_accept qia left join work_order_accept woa on qia.work_order_no=woa.work_order_no
+        left join accept_detail_info adi on woa.work_order_no=adi.work_order_no
+        <where>
+            <if test="endCaseStartDate != null ">
+                and DATE_FORMAT(woa.end_date,'%Y-%m-%d') <![CDATA[>=]]> #{endCaseStartDate}
+            </if>
+            <if test="endCaseEndDate != null ">
+                and DATE_FORMAT(woa.end_date,'%Y-%m-%d') <![CDATA[<=]]> #{endCaseEndDate}
+            </if>
+            <if test="endDate != null and endDate != ''"> and woa.end_date = #{endDate}</if>
+            <if test="updatedTime != null and updatedTime != ''"> and qia.created_time = #{updatedTime}</if>
+            <if test="inspectionStartDate != null ">
+                and DATE_FORMAT(qia.created_time,'%Y-%m-%d') <![CDATA[>=]]> #{inspectionStartDate}
+            </if>
+            <if test="inspectionEndDate != null ">
+                and DATE_FORMAT(qia.created_time,'%Y-%m-%d') <![CDATA[<=]]> #{inspectionEndDate}
+            </if>
+            <if test="organCode != null and organCode != ''"> and woa.organ_code = #{organCode}</if>
+            <if test="updatedBy != null and updatedBy != ''"> and qia.updated_by = #{updatedBy}</if>
+            <if test="itemCode != null and itemCode != ''"> and adi.item_code = #{itemCode}</if>
+            <if test="status != null and status != ''"> and qia.status = #{status}</if>
+            <if test="result != null and result != ''"> and qia.result = #{result}</if>
+        </where>
+    </select>
+    <select id="selectQualityVo11" parameterType="com.paic.ehis.cs.domain.dto.QualityDTO" resultMap="QualityResult1">
+        SELECT DISTINCT
+        qia.inspection_id,
+        qia.work_order_no,
+        adi.organ_code,
+        woa.modify_by,
+        woa.end_date,
+        qia.STATUS,
+        qia.result,
+        qia.created_by,
+        CASE
+        WHEN qia.created_by LIKE 'SYSTEM%' THEN
+        "自动抽检" ELSE "手动抽检"
+        END AS way
+        FROM
+        quality_inspection_accept qia left join work_order_accept woa on qia.work_order_no=woa.work_order_no
+        left join accept_detail_info adi on woa.work_order_no=adi.work_order_no
+        <where>
+            <if test="endCaseStartDate != null ">
+                and DATE_FORMAT(woa.end_date,'%Y-%m-%d') <![CDATA[>=]]> #{endCaseStartDate}
+            </if>
+            <if test="endCaseEndDate != null ">
+                and DATE_FORMAT(woa.end_date,'%Y-%m-%d') <![CDATA[<=]]> #{endCaseEndDate}
+            </if>
+            <if test="endDate != null and endDate != ''"> and woa.end_date = #{endDate}</if>
+            <if test="updatedTime != null and updatedTime != ''"> and qia.created_time = #{updatedTime}</if>
+            <if test="inspectionStartDate != null ">
+                and DATE_FORMAT(qia.created_time,'%Y-%m-%d') <![CDATA[>=]]> #{inspectionStartDate}
+            </if>
+            <if test="inspectionEndDate != null ">
+                and DATE_FORMAT(qia.created_time,'%Y-%m-%d') <![CDATA[<=]]> #{inspectionEndDate}
+            </if>
+            <if test="organCode != null and organCode != ''"> and woa.organ_code = #{organCode}</if>
+            <if test="updatedBy != null and updatedBy != ''"> and qia.updated_by = #{updatedBy}</if>
+            <if test="itemCode != null and itemCode != ''"> and adi.item_code = #{itemCode}</if>
+            <if test="status != null and status != ''"> and qia.status = #{status}</if>
+            <if test="result != null and result != ''"> and qia.result = #{result}</if>
+        </where>
     </select>
 
 

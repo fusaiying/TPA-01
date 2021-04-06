@@ -133,6 +133,7 @@ public class EditInfoServiceImpl implements IEditInfoService
 //        editInfoMapper.insertEditInfo(editInfo);
 
 
+        //工单表修改
         WorkOrderAccept workOrderAccept = workOrderAcceptMapper.selectWorkOrderAcceptById(demandAcceptVo.getWorkOrderNo());
 
         //轨迹表生成数据
@@ -150,6 +151,11 @@ public class EditInfoServiceImpl implements IEditInfoService
         flowLog.setUpdatedBy(SecurityUtils.getUsername());
         flowLog.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
         flowLogMapper.insertFlowLog(flowLog);
+
+        workOrderAccept.setUpdateBy(SecurityUtils.getUsername());
+        workOrderAccept.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
+        workOrderAccept.setStatus("05");//取消状态
+        workOrderAcceptMapper.updateWorkOrderAccept(workOrderAccept);
 
         demandAcceptVo.setStatus("05");
         return demandAcceptVoMapper.updateCancelStatus(demandAcceptVo.getWorkOrderNo());
@@ -173,6 +179,7 @@ public class EditInfoServiceImpl implements IEditInfoService
 //        editInfo.setEditRemark(reservationAcceptVo.getEditRemark());
 //        editInfoMapper.insertEditInfo(editInfo);
 
+        //工单表修改
         WorkOrderAccept workOrderAccept = workOrderAcceptMapper.selectWorkOrderAcceptById(reservationAcceptVo.getWorkOrderNo());
         //轨迹表生成数据
         FlowLog flowLog=new FlowLog();
@@ -189,6 +196,11 @@ public class EditInfoServiceImpl implements IEditInfoService
         flowLog.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
         flowLog.setWorkOrderNo(reservationAcceptVo.getWorkOrderNo());
         flowLogMapper.insertFlowLog(flowLog);
+
+        workOrderAccept.setUpdateBy(SecurityUtils.getUsername());
+        workOrderAccept.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
+        workOrderAccept.setStatus("05");//取消状态
+        workOrderAcceptMapper.updateWorkOrderAccept(workOrderAccept);
 
         reservationAcceptVo.setStatus("05");
         return reservationAcceptVoMapper.updateOrderCancelStatus(reservationAcceptVo.getWorkOrderNo());

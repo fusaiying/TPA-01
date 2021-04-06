@@ -107,106 +107,116 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
     </delete>
 
-    <select id="selectDebtInitList" resultMap="DebtInfoResult">
-        SELECT
-            a.rpt_no,
-            a.debt_amount,
-            SUM( b.col_amount ) col_amount,
-            (a.debt_amount - IFNULL(SUM( b.col_amount ),0)) residual_amount,
-            c.name insured_name,
-            c.id_no,
-            MIN( d.treatment_end_date ) treatment_end_date,
-            e.source,
-            e.hospital_code,
-            e.batch_no,
-            f.end_case_time,
-        CASE WHEN
-                b.debt_col_id is null
-            THEN
-                '02' ELSE '01'
-            END AS col_status,
-        CASE WHEN
-                g.debt_whitelist_id
-             is null THEN
-                '02' ELSE '01'
-            END AS white_status
-        FROM
-            claim_case_debt a
-            LEFT JOIN claim_case_debt_col b ON a.debt_id = b.debt_id AND a.STATUS = 'Y' and b.status = 'Y'
-            LEFT JOIN claim_case_insured c ON c.rpt_no = a.rpt_no and c.status = 'Y'
-            LEFT JOIN claim_case_bill d ON d.rpt_no = a.rpt_no and d.status = 'Y' and d.treatment_end_date in (SELECT min( treatment_end_date ) FROM claim_case_bill where a.rpt_no=rpt_no and status='Y')
-            LEFT JOIN claim_case f ON f.rpt_no = a.rpt_no and f.status = 'Y'
-            LEFT JOIN claim_batch e ON e.batch_no = f.batch_no and e.status ='Y'
-            LEFT JOIN claim_debt_whitelist g ON g.insured_no = a.insured_no  and g.status = 'Y'
-        WHERE
-            g.debt_whitelist_id is null
-          and f.case_status = '99'
-          and instr(a.rpt_no,'-') = 0
-        GROUP BY
-            b.debt_id,
-            a.rpt_no,
-            a.debt_amount,
-            b.debt_col_id,
-            g.debt_whitelist_id,
-            c.name,
-            c.id_no
-        having (a.debt_amount - IFNULL(SUM( b.col_amount ),0))&gt;0
+    <select id="selectDebtInitList" parameterType="com.paic.ehis.claimflow.domain.dto.DebtInfoDTO" resultMap="DebtInfoResult">
+     select t.* from (
+                         SELECT
+                             a.rpt_no,
+                             a.debt_amount,
+                             SUM( b.col_amount ) col_amount,
+                             (a.debt_amount - IFNULL(SUM( b.col_amount ),0)) residual_amount,
+                             c.name insured_name,
+                             c.id_no,
+                             MIN( d.treatment_end_date ) treatment_end_date,
+                             e.source,
+                             e.hospital_code,
+                             e.batch_no,
+                             f.end_case_time,
+                             CASE WHEN
+                                      b.debt_col_id is null
+                                      THEN
+                                      '02' ELSE '01'
+                                 END AS col_status,
+                             CASE WHEN
+                                      g.debt_whitelist_id
+                                          is null THEN
+                                      '02' ELSE '01'
+                                 END AS white_status
+                         FROM
+                             claim_case_debt a
+                                 LEFT JOIN claim_case_debt_col b ON a.debt_id = b.debt_id AND a.STATUS = 'Y' and b.status = 'Y'
+                                 LEFT JOIN claim_case_insured c ON c.rpt_no = a.rpt_no and c.status = 'Y'
+                                 LEFT JOIN claim_case_bill d ON d.rpt_no = a.rpt_no and d.status = 'Y' and d.treatment_end_date in (SELECT min( treatment_end_date ) FROM claim_case_bill where a.rpt_no=rpt_no and status='Y')
+                                 LEFT JOIN claim_case f ON f.rpt_no = a.rpt_no and f.status = 'Y'
+                                 LEFT JOIN claim_batch e ON e.batch_no = f.batch_no and e.status ='Y'
+                                 LEFT JOIN claim_debt_whitelist g ON g.insured_no = a.insured_no  and g.status = 'Y'
+                         WHERE
+                             g.debt_whitelist_id is null
+                           and f.case_status = '99'
+                           and instr(a.rpt_no,'-') = 0
+                         GROUP BY
+                             b.debt_id,
+                             a.rpt_no,
+                             a.debt_amount,
+                             b.debt_col_id,
+                             g.debt_whitelist_id,
+                             c.name,
+                             c.id_no
+                         having (a.debt_amount - IFNULL(SUM( b.col_amount ),0))&gt;0
+                         ) t
+        <where>
+            <if test="flag != null  and flag != '' and flag == '0'.toString()"> and t.residual_amount != 0</if>
+        </where>
     </select>
 
     <select id="selectDebtList" parameterType="com.paic.ehis.claimflow.domain.dto.DebtInfoDTO" resultMap="DebtInfoResult">
+       select t.* from (
         SELECT
-            a.rpt_no,
-            a.debt_amount,
-            SUM( b.col_amount ) col_amount,
-            CASE WHEN a.debt_amount - ifnull(SUM( b.col_amount ),0) > 0 THEN
-                (a.debt_amount - ifnull(SUM( b.col_amount ),0)) ELSE 0
-                END AS residual_amount,
-            c.name insured_name,
-            c.id_no,
-            MIN( d.treatment_end_date ) treatment_end_date,
-            e.source,
-            e.hospital_code,
-            e.batch_no,
-            f.end_case_time,
+        a.rpt_no,
+        f.case_status,
+        a.debt_amount,
+        SUM( b.col_amount ) col_amount,
+        CASE WHEN a.debt_amount - ifnull(SUM( b.col_amount ),0) > 0 THEN
+        (a.debt_amount - ifnull(SUM( b.col_amount ),0)) ELSE 0
+        END AS residual_amount,
+        c.name insured_name,
+        c.id_no,
+        MIN( d.treatment_end_date ) treatment_end_date,
+        e.source,
+        e.hospital_code,
+        e.batch_no,
+        f.end_case_time,
         CASE WHEN
-            b.debt_col_id is null
-            THEN
-            '02' ELSE '01'
-            END AS col_status,
+        b.debt_col_id is null
+        THEN
+        '02' ELSE '01'
+        END AS col_status,
         CASE WHEN
-            g.debt_whitelist_id
-            is null THEN
-            '02' ELSE '01'
-            END AS white_status
+        g.debt_whitelist_id
+        is null THEN
+        '02' ELSE '01'
+        END AS white_status
         FROM
-            claim_case_debt a
-            LEFT JOIN claim_case_debt_col b ON a.debt_id = b.debt_id AND a.status = 'Y' AND b.status = 'Y'
-            LEFT JOIN claim_case_insured c ON c.rpt_no = a.rpt_no and c.status = 'Y'
-            LEFT JOIN claim_case_bill d ON d.rpt_no = a.rpt_no and d.status = 'Y' and d.treatment_end_date in (SELECT min( treatment_end_date ) FROM claim_case_bill where a.rpt_no=rpt_no and status='Y')
-            LEFT JOIN claim_case f ON f.rpt_no = a.rpt_no and f.status = 'Y'
-            LEFT JOIN claim_batch e ON e.batch_no = f.batch_no and e.status = 'Y'
-            LEFT JOIN claim_debt_whitelist g ON g.insured_no = a.insured_no and g.status = 'Y'
-        <where>
-            f.case_status = '99'
-            and instr(a.rpt_no,'-') = 0
-            <if test="rptNo != null  and rptNo != ''"> and a.rpt_no = #{rptNo}</if>
-            <if test="policyNo != null  and policyNo != ''"> and EXISTS (select 1 from claim_case_policy h where h.rpt_no=a.rpt_no and h.policy_no=#{policyNo} and h.`status`='Y')</if>
-            <if test="hospitalCode != null and hospitalCode != ''"> and e.hospital_code = #{hospitalCode}</if>
-            <if test="insuredName != null  and insuredName != ''"> and c.name like concat('%', #{insuredName}, '%')</if>
-            <if test="idNo != null  and idNo != ''"> and c.id_no = #{idNo}</if>
-            <if test="startDate != null"> and f.end_case_time BETWEEN #{startDate} AND #{endDate} </if>
-            <if test="whiteStatus == '01'"> and g.debt_whitelist_id is not null </if>
-            <if test="whiteStatus == '02'"> and g.debt_whitelist_id is null </if>
-            <if test="policyItemNo != null  and policyItemNo != ''"> and EXISTS (select 1 from claim_case_policy h where h.rpt_no=a.rpt_no and h.policy_item_no = #{policyItemNo} and h.`status`='Y') </if>
-        </where>
+        claim_case_debt a
+        LEFT JOIN claim_case_debt_col b ON a.debt_id = b.debt_id AND a.status = 'Y' AND b.status = 'Y'
+        LEFT JOIN claim_case_insured c ON c.rpt_no = a.rpt_no and c.status = 'Y'
+        LEFT JOIN claim_case_bill d ON d.rpt_no = a.rpt_no and d.status = 'Y' and d.treatment_end_date in (SELECT min( treatment_end_date ) FROM claim_case_bill where a.rpt_no=rpt_no and status='Y')
+        LEFT JOIN claim_case f ON f.rpt_no = a.rpt_no and f.status = 'Y'
+        LEFT JOIN claim_batch e ON e.batch_no = f.batch_no and e.status = 'Y'
+        LEFT JOIN claim_debt_whitelist g ON g.insured_no = a.insured_no and g.status = 'Y'
         GROUP BY
-            a.rpt_no,
-            b.debt_id,
-            a.debt_amount,
-            b.debt_col_id,
-            g.debt_whitelist_id,
-            c.name,
-            c.id_no
+        a.rpt_no,
+        f.case_status,
+        b.debt_id,
+        a.debt_amount,
+        b.debt_col_id,
+        g.debt_whitelist_id,
+        c.name,
+        c.id_no
+        ) t
+        <where>
+            t.case_status = '99'
+            and instr(t.rpt_no,'-') = 0
+            <if test="rptNo != null  and rptNo != ''"> and t.rpt_no = #{rptNo}</if>
+            <if test="policyNo != null  and policyNo != ''"> and EXISTS (select 1 from claim_case_policy h where h.rpt_no=t.rpt_no and h.policy_no=#{policyNo} and h.`status`='Y')</if>
+            <if test="hospitalCode != null and hospitalCode != ''"> and t.hospital_code = #{hospitalCode}</if>
+            <if test="insuredName != null  and insuredName != ''"> and t.name like concat('%', #{insuredName}, '%')</if>
+            <if test="idNo != null  and idNo != ''"> and t.id_no = #{idNo}</if>
+            <if test="startDate != null"> and t.end_case_time BETWEEN #{startDate} AND #{endDate} </if>
+            <if test="whiteStatus == '01'"> and t.debt_whitelist_id is not null </if>
+            <if test="whiteStatus == '02'"> and t.debt_whitelist_id is null </if>
+            <if test="policyItemNo != null  and policyItemNo != ''"> and EXISTS (select 1 from claim_case_policy h where h.rpt_no=t.rpt_no and h.policy_item_no = #{policyItemNo} and h.`status`='Y') </if>
+            <if test="flag != null  and flag != '' and flag == '0'.toString()"> and t.residual_amount != 0</if>
+        </where>
     </select>
     
 </mapper>

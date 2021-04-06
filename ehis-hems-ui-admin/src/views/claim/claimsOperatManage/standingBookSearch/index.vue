@@ -414,6 +414,7 @@
               center: true,
               showClose: true
             })
+            this.search('form')
           }
         }).catch(res => {
           this.$message({
@@ -423,7 +424,7 @@
             showClose: true
           })
         })
-        this.search('form')
+
       },
       getUsers(val) {
         if (val != null && val != '' && val != undefined) {

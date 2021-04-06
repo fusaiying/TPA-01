@@ -407,7 +407,7 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
         workOrderAccept.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
         workOrderAccept.setActivationNum(workOrderAccept.getActivationNum()+1);
         //已处理案件修改后到个人池
-        if ("03".equals(workOrderAccept.getStatus())){
+        if ("03".equals(workOrderAccept.getStatus()) || "05".equals(workOrderAccept.getStatus())){
             workOrderAccept.setStatus("02");
         }
 

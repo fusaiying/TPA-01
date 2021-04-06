@@ -104,4 +104,6 @@ public interface QualityInspectionAcceptMapper {
      * @return
      */
     public List<ComplaintErrorRateVO> selectError(QualityDTO qualityDTO);
+
+
 }

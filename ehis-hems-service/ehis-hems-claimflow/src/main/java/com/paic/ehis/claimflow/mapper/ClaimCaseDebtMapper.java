@@ -76,7 +76,7 @@ public interface ClaimCaseDebtMapper
      *
      * @return
      */
-    public List<DebtInfoVO> selectDebtInitList();
+    public List<DebtInfoVO> selectDebtInitList(DebtInfoDTO debtInfoDTO);
 
     /**
      * 查询追讨信息

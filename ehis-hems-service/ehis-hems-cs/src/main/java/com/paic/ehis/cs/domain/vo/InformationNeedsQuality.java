@@ -48,25 +48,25 @@ public class InformationNeedsQuality {
     @Excel(name = "质检日期", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date zcreatedTime;
 
-    @Excel(name = "是否时效内响应客户")
+    @Excel(name = "是否时效内响应客户",readConverterExp = "01=是,02=否")
     private String zxc21;
 
-    @Excel(name = "是否符合短信结案规则")
+    @Excel(name = "是否符合短信结案规则",readConverterExp = "01=是,02=否")
     private String zxc22;
 
-    @Excel(name = "是否电话通知客户")
+    @Excel(name = "是否电话通知客户",readConverterExp = "01=是,02=否")
     private String zxc23;
 
-    @Excel(name = "是否满足客户诉求")
+    @Excel(name = "是否满足客户诉求",readConverterExp = "01=是,02=否")
     private String zxc24;
 
-    @Excel(name = "是否及时升级投诉")
+    @Excel(name = "是否及时升级投诉",readConverterExp = "01=是,02=否")
     private String zxc25;
 
-    @Excel(name = "是否规范记录")
+    @Excel(name = "是否规范记录",readConverterExp = "01=是,02=否")
     private String zxc26;
 
-    @Excel(name = "是否有其他错误")
+    @Excel(name = "是否有其他错误",readConverterExp = "01=是,02=否")
     private String zxc27;
 
     @Excel(name = "是否申诉",readConverterExp = "01=是,02=否")
@@ -81,10 +81,10 @@ public class InformationNeedsQuality {
     @Excel(name = "质检分组",readConverterExp = "01=增值服务类,02=理赔类,03=其他,04=VIP门诊预约,05=特殊门诊直接结算服务,06=门诊直接结算,07=住院直接结算,08=门诊中医治疗直接结算,B00006=投诉,B00034=根因改善")
     private String center;
 
-    @Excel(name = "服务项目")
+    @Excel(name = "服务项目",readConverterExp = "01=增值服务类,02=理赔类,03=其他,04=VIP门诊预约,05=特殊门诊直接结算服务,06=门诊直接结算,07=住院直接结算,08=门诊中医治疗直接结算,B00006=投诉,B00034=根因改善")
     private String itemCode;
 
-    @Excel(name = "服务提供结构",readConverterExp = "0000001=上海分公司本部,00000011=上海分公司")
+    @Excel(name = "服务提供机构",readConverterExp = "0000001=上海分公司本部,00000011=上海分公司")
     private String organCode;
 
     @Excel(name = "激活次数")

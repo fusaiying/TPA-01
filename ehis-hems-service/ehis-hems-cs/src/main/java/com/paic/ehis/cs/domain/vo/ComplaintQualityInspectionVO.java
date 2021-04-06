@@ -8,6 +8,8 @@ import java.util.Date;
 public class ComplaintQualityInspectionVO {
     //投诉质检清单
 
+    private String inspectionId;
+
     @Excel(name = "工单号")
     private String workOrderNo;
 
@@ -28,102 +30,102 @@ public class ComplaintQualityInspectionVO {
     private String result;
 
 
-    @Excel(name = "响应时效是否存在差错")
+    @Excel(name = "响应时效是否存在差错",readConverterExp = "01=是,02=否")
     private String qwe02;
     @Excel(name = "响应时效差错说明")
     private String asd02;
 
-    @Excel(name = "投诉损失是否存在差错")
+    @Excel(name = "投诉损失是否存在差错",readConverterExp = "01=是,02=否")
     private String qwe10;
     @Excel(name = "投诉损失是否存在差错说明")
     private String asd10;
 
-    @Excel(name = "受理渠道是否存在差错")
+    @Excel(name = "受理渠道是否存在差错",readConverterExp = "01=是,02=否")
     private String qwe04;
     @Excel(name = "受理渠道差错说明")
     private String asd04;
 
-    @Excel(name = "致诉根因是否存在差错")
+    @Excel(name = "致诉根因是否存在差错",readConverterExp = "01=是,02=否")
     private String qwe14;
     @Excel(name = "致诉根因差错说明")
     private String asd14;
 
-    @Excel(name = "投诉分类是否存在差错")
+    @Excel(name = "投诉分类是否存在差错",readConverterExp = "01=是,02=否")
     private String qwe05;
     @Excel(name = "投诉分类差错说明")
     private String asd05;
 
-    @Excel(name = "投诉是否成立是否存在差错")
+    @Excel(name = "投诉是否成立是否存在差错",readConverterExp = "01=是,02=否")
     private String qwe11;
     @Excel(name = "投诉是否成立差错说明")
     private String asd11;
 
-    @Excel(name = "处理结果是否存在差错")
+    @Excel(name = "处理结果是否存在差错",readConverterExp = "01=是,02=否")
     private String qwe15;
     @Excel(name = "处理结果差错说明")
     private String asd15;
 
-    @Excel(name = "投诉原因是否存在差错")
+    @Excel(name = "投诉原因是否存在差错",readConverterExp = "01=是,02=否")
     private String qwe08;
     @Excel(name = "投诉原因差错说明")
     private String asd08;
 
-    @Excel(name = "附件完整性是否存在差错")
+    @Excel(name = "附件完整性是否存在差错",readConverterExp = "01=是,02=否")
     private String qwe16;
     @Excel(name = "附件完整性差错说明")
     private String asd16;
 
-    @Excel(name = "根因改善是否存在差错")
+    @Excel(name = "根因改善是否存在差错",readConverterExp = "01=是,02=否")
     private String qwe13;
     @Excel(name = "根因改善差错说明")
     private String asd13;
 
-    @Excel(name = "案件真实性是否存在差错")
+    @Excel(name = "案件真实性是否存在差错",readConverterExp = "01=是,02=否")
     private String qwe20;
     @Excel(name = "案件真实性差错说明")
     private String asd20;
 
-    @Excel(name = "投诉件录入时效是否存在差错")
+    @Excel(name = "投诉件录入时效是否存在差错",readConverterExp = "01=是,02=否")
     private String qwe01;
     @Excel(name = "投诉件录入时效差错说明")
     private String asd01;
 
-    @Excel(name = "根因改善闭环时效是否存在差错")
+    @Excel(name = "根因改善闭环时效是否存在差错",readConverterExp = "01=是,02=否")
     private String qwe03;
     @Excel(name = "根因改善闭环时效差错说明")
     private String asd03;
 
-    @Excel(name = "征求处理意见是否存在差错")
+    @Excel(name = "征求处理意见是否存在差错",readConverterExp = "01=是,02=否")
     private String qwe17;
     @Excel(name = "征求处理意见差错说明")
     private String asd17;
 
-    @Excel(name = "客户反馈是否存在差错")
+    @Excel(name = "客户反馈是否存在差错",readConverterExp = "01=是,02=否")
     private String qwe09;
     @Excel(name = "客户反馈差错说明")
     private String asd09;
 
-    @Excel(name = "监管是否计件是否存在差错")
+    @Excel(name = "监管是否计件是否存在差错",readConverterExp = "01=是,02=否")
     private String qwe06;
     @Excel(name = "监管是否计件差错说明")
     private String asd06;
 
-    @Excel(name = "监管撤诉状态是否存在差错")
+    @Excel(name = "监管撤诉状态是否存在差错",readConverterExp = "01=是,02=否")
     private String qwe07;
     @Excel(name = "监管撤诉状态差错说明")
     private String asd07;
 
-    @Excel(name = "投诉根因部门是否存在差错")
+    @Excel(name = "投诉根因部门是否存在差错",readConverterExp = "01=是,02=否")
     private String qwe12;
     @Excel(name = "投诉根因部门差错说明")
     private String asd12;
 
-    @Excel(name = "处理意见是否存在差错")
+    @Excel(name = "处理意见是否存在差错",readConverterExp = "01=是,02=否")
     private String qwe18;
     @Excel(name = "处理意见差错说明")
     private String asd18;
 
-    @Excel(name = "行协调或外部鉴定状态是否存在差错")
+    @Excel(name = "行协调或外部鉴定状态是否存在差错",readConverterExp = "01=是,02=否")
     private String qwe19;
     @Excel(name = "行协调或外部鉴定状态差错说明")
     private String asd19;
@@ -138,9 +140,9 @@ public class ComplaintQualityInspectionVO {
     @Excel(name = "二级投诉分类")
     private String ccl2;
 
-    @Excel(name = "是否计件")
+    @Excel(name = "是否计件",readConverterExp = "01=是,02=否")
     private String flag;
-    @Excel(name = "撤诉状态")
+    @Excel(name = "撤诉状态",readConverterExp = "01=待撤诉,02=未撤诉,03=已撤诉")
     private String handleProp5;
     @Excel(name = "投诉是否成立",readConverterExp = "01=是,02=否")
     private String handleProp1;
@@ -154,15 +156,15 @@ public class ComplaintQualityInspectionVO {
     @Excel(name = "三级投诉原因")
     private String rlevel3;
 
-    @Excel(name = "投诉环节(报保监)")
+    @Excel(name = "投诉环节(报保监)",readConverterExp = "01=宣传展业,02=核保,03=承保,04=保全,05=续期,06=理赔给付,07=退保,08=其他")
     private String handleProp11;
-    @Excel(name = "投诉问题(报保监)")
+    @Excel(name = "投诉问题(报保监)",readConverterExp = "01=销售误导,02=续期服务,03=通知服务,04=理赔纠纷,05=服务态度,06=承保服务")
     private String handleProp12;
-    /*@Excel(name = "业务处理情况")
+    /*@Excel(name = "业务处理情况")  删除
     private String handleProp1;*/
-    @Excel(name = "险种类型")
+    @Excel(name = "险种类型",readConverterExp = "01=健康险,02=意外险")
     private String handleProp14;
-    @Excel(name = "营销渠道")
+    @Excel(name = "营销渠道",readConverterExp = "01=银保渠道,02=直销,03=兼业代理")
     private String handleProp15;
     @Excel(name = "投诉业务类别")
     private String handleProp16;
@@ -181,8 +183,8 @@ public class ComplaintQualityInspectionVO {
     @Excel(name = "质检评分(分)")
     private String score;
 
-    /*@Excel(name = "首次反馈时效")
-    private String ;*/
+    @Excel(name = "首次反馈时效")
+    private String ztime;
     @Excel(name = "质检方式")
     private String way;
 

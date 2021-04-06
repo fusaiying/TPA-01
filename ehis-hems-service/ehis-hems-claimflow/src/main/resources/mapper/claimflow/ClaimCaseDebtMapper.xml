@@ -54,7 +54,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectClaimCaseDebtByRptNo" parameterType="String" resultMap="ClaimCaseDebtResult">
         <include refid="selectClaimCaseDebtVo"/>
-        where rpt_no = #{rptNo}
+        where rpt_no = #{rptNo} and status = 'Y'
     </select>
         
     <insert id="insertClaimCaseDebt" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseDebt" useGeneratedKeys="true" keyProperty="debtId">

@@ -151,6 +151,8 @@ public class ClaimCaseCalBillServiceImpl implements IClaimCaseCalBillService
     public int billDetailsSave(BillDetailDTO billDetailDTO) {
 
         String rptNo = billDetailDTO.getBillDetailList().get(0).getRptNo();
+        int index = rptNo.indexOf("-");
+
         int size=0;
         String claimFlag = "";
         BigDecimal billTotalAmount=new BigDecimal(String.valueOf(0.00));
@@ -217,7 +219,9 @@ public class ClaimCaseCalBillServiceImpl implements IClaimCaseCalBillService
             exchangeRate.setParities(new BigDecimal(1));
         }
         if ("01".equals(claimFlag)){//非全赔,如果是全赔，默认是账单总金额不变，且cal表账单总金额字段未加
-            claimCaseCal.setCalAmount(pay);
+            if(index < 0 ) {
+                claimCaseCal.setCalAmount(pay);
+            }
             claimCaseCal.setPayAmount(pay);
             claimCaseCal.setDebtAmount(new BigDecimal(String.valueOf(0.00)));
             //外币给付金额   1、非全赔医院：根据账单币种及汇率对赔付金额进行汇率转换
@@ -227,7 +231,9 @@ public class ClaimCaseCalBillServiceImpl implements IClaimCaseCalBillService
             claimCaseCal.setCalAmount(pay);
             //追讨金额=账单金额-折扣金额-赔付金额-流水号自付额；
             claimCaseCal.setDebtAmount(billTotalAmount.subtract(totalDiscountAmount).subtract(totalSelfAmount).subtract(claimCaseCal.getCalAmount()));
-            claimCaseCal.setPayAmount(billTotalAmount.subtract(totalDiscountAmount));
+            if(index < 0 ) {
+                claimCaseCal.setPayAmount(billTotalAmount.subtract(totalDiscountAmount));
+            }
             //外币给付金额   2、全赔医院：根据账单币种及汇率对折后金额进行汇率转换
            // claimCaseCal.setPayAmountForeign((billTotalAmount.subtract(totalDiscountAmount)).divide(exchangeRate.getParities(),2,BigDecimal.ROUND_HALF_DOWN));
         }
@@ -244,32 +250,34 @@ public class ClaimCaseCalBillServiceImpl implements IClaimCaseCalBillService
             BigDecimal billAmount1 = calConclusionVo.getSumBillAmount();
             BigDecimal discountAmount1 = calConclusionVo.getSumHosDiscountAmount();// 折扣金额
 
-//            BigDecimal voRate = calConclusionVo.getExchangeRate();
-//            voRate = voRate == null ? exchangeRate.getParities() : voRate;
-            //01-非全赔
-            if("01".equals(claimFlag)) {
-                if(payAmount1 != null) {
-                    //BigDecimal payAmountForeign = payAmount1.divide(voRate,20,BigDecimal.ROUND_HALF_UP);
-                    claimCaseCal.setPayAmountForeign(payAmount1);
+            BigDecimal voRate = calConclusionVo.getExchangeRate();
+            voRate = voRate == null ? exchangeRate.getParities() : voRate;
+            if(index < 0) {
+                //01-非全赔
+                if("01".equals(claimFlag)) {
+                    if(payAmount1 != null) {
+                        //BigDecimal payAmountForeign = payAmount1.divide(voRate,20,BigDecimal.ROUND_HALF_UP);
+                        claimCaseCal.setPayAmountForeign(payAmount1);
+                    }
                 }
-            }
-           // 02-全赔
-            if("02".equals(claimFlag)) {
-                if(billAmount1 != null && discountAmount1 != null) {
-                    BigDecimal subtractVal = billAmount1.subtract(discountAmount1);
-                   // BigDecimal payAmountForeign = subtractVal.divide(voRate,20,BigDecimal.ROUND_HALF_UP);
-                    claimCaseCal.setPayAmountForeign(subtractVal);
+                // 02-全赔
+                if("02".equals(claimFlag)) {
+                    if(billAmount1 != null && discountAmount1 != null) {
+                        BigDecimal subtractVal = billAmount1.subtract(discountAmount1);
+                        // BigDecimal payAmountForeign = subtractVal.divide(voRate,20,BigDecimal.ROUND_HALF_UP);
+                        claimCaseCal.setPayAmountForeign(subtractVal);
+                    }
                 }
             }
 
             /**
+             * 需要判断，是否申诉案件；若是 计算 本次支付差额
              * modify by  :  hjw   如果是申诉案件 ， 需要更新 payMount字段值为 本次支付差额
              * time:2021-06-29
              */
             /** start */
             ClaimCaseCal nowClaimCaseCal = claimCaseCalMapper.selectClaimCaseCalByRptNo(rptNo);
-            if(rptNo.indexOf("-") > 0 && (nowClaimCaseCal.getCreateTime().getTime() == nowClaimCaseCal.getUpdateTime().getTime())) {
-                // 需要判断，是否申诉案件；若是 计算 本次支付差额
+            if(index > 0 && (nowClaimCaseCal.getCreateTime().getTime() == nowClaimCaseCal.getUpdateTime().getTime())) {
                 CalConclusionVo precalConclusionVo = claimCaseCalMapper.selectPreCalConclusionByRptNo(rptNo);
                 if(precalConclusionVo != null) {
                     precalConclusionVo = claimCaseCalMapper.selectClaimCaseCalInformation(precalConclusionVo.getRptNo());
@@ -297,27 +305,21 @@ public class ClaimCaseCalBillServiceImpl implements IClaimCaseCalBillService
                 if (billCurrency.equalsIgnoreCase("CNY")) {
                     // 全赔付
                     if (claimFlag.equals("01")) {
-                        calConclusionVo.setPaymentDifference(payAmount.subtract(prePayAmount));
+                        //calConclusionVo.setPaymentDifference(payAmount.subtract(prePayAmount));
+                        claimCaseCal.setPayAmount(payAmount.subtract(prePayAmount));
                     }
                     if (claimFlag.equals("02")) {
                         BigDecimal subtract = sumBillAmount.subtract(discountAmount); // 本次 折后金额
                         BigDecimal subtract1 = preSumBillAmount.subtract(preDiscountAmount); // 原案件 折后金额
-                        calConclusionVo.setPaymentDifference(subtract.subtract(subtract1));
+                       //calConclusionVo.setPaymentDifference(subtract.subtract(subtract1));
+                        claimCaseCal.setPayAmount(subtract.subtract(subtract1));
                     }
                 } else {
                     //本次支付差额（外币）=本次外币给付金额-申诉原案件外币给付金额；
-                    calConclusionVo.setPaymentDifference(calConclusionVo.getPayAmountForeign().subtract(precalConclusionVo.getPayAmountForeign()));
-                }
+                    BigDecimal diffValue = billAmount1.subtract(discountAmount1).subtract(precalConclusionVo.getPayAmountForeign());
+                    claimCaseCal.setPayAmountForeign(diffValue);
+                    claimCaseCal.setPayAmount(diffValue.multiply(voRate));
 
-                // 如果RMB，直接更新payAmount 为支付差额 否则  payAmouont 和  payAmountForeign 互换
-                BigDecimal nowPayAmount = nowClaimCaseCal.getPayAmount() == null ? defaultValue : nowClaimCaseCal.getPayAmount();
-                BigDecimal payAmountForeign = nowClaimCaseCal.getPayAmountForeign() == null ? defaultValue : nowClaimCaseCal.getPayAmountForeign();
-                if(nowClaimCaseCal.getBillCurrency().equals("CNY")) {
-                    claimCaseCal.setPayAmount(calConclusionVo.getPaymentDifference());
-                }  else {
-                    //BigDecimal exchangeRateValue = nowClaimCaseCal.getExchangeRate() == null ? new BigDecimal(1) : nowClaimCaseCal.getExchangeRate();
-                    claimCaseCal.setPayAmount(claimCaseCal.getPayAmountForeign());
-                    claimCaseCal.setPayAmountForeign(nowPayAmount);
                 }
             }
             /** end */

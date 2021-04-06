@@ -115,6 +115,7 @@ public class ClaimCaseController extends BaseController {
 
     /**
      * 查询悬挂中受理案件信息 列表
+     *
      */
     @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:case:list')")
     @PostMapping("/suspensionList")

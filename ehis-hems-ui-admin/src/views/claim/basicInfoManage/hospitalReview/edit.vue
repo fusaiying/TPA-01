@@ -302,7 +302,7 @@
               <el-row>
                 <el-form-item style="margin-right: 20px;" label="机构简介：" prop="introduction">
                   <el-input type="textarea" v-model="baseForm.introduction" clearable size="mini" placeholder="请输入"
-                            maxlength="500"/>
+                            maxlength="2000"/>
                 </el-form-item>
               </el-row>
               <el-row>

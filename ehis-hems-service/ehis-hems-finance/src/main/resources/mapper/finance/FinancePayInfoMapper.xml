@@ -158,6 +158,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="accNo"    column="acc_no"    />
         <result property="rptNo"    column="rpt_no"    />
         <result property="sumPayAmount"    column="sum_pay_amount"    />
+        <result property="sumPayAmountForeign"    column="sum_pay_amount_foreign"    />
+        <result property="payCurrency"    column="pay_currency"    />
         <result property="accName"    column="acc_name"    />
         <result property="payStatus"    column="pay_status"    />
         <result property="payDate"    column="pay_date"    />
@@ -171,6 +173,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         SELECT
         fpi.batch_no,
         fpi.sum_pay_amount,
+        fpi.pay_currency,
+        fpi.sum_pay_amount_foreign,
         fpi.payee_bank,
         fpi.acc_no,
         fpi.acc_name,
@@ -181,7 +185,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         fpi.pay_fail_reason
         FROM
         finance_pay_info fpi
-       <where>
+        <where>
             <if test="batchNo != null  and batchNo != ''"> and fpi.batch_no = #{batchNo}</if>
             <if test="payStartDate != null and payEndDate != null"> and fpi.pay_date between #{payStartDate} and DATE_ADD(#{payEndDate},INTERVAL 1 DAY)</if>
             and fpi.status='Y'  	AND ( fpi.pay_status = '04' OR fpi.pay_status = '05' )

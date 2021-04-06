@@ -83,13 +83,22 @@ public class CollaborativeFrom extends BaseEntity
     private String itemCode;
     private String organCode;
     private String businessType;
+    private String flag;
 
     /** 更新时间 */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Excel(name = "更新时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date updatedTime;
 
-    public void setCollaborativeId(Long collaborativeId) 
+    public String getFlag() {
+        return flag;
+    }
+
+    public void setFlag(String flag) {
+        this.flag = flag;
+    }
+
+    public void setCollaborativeId(Long collaborativeId)
     {
         this.collaborativeId = collaborativeId;
     }

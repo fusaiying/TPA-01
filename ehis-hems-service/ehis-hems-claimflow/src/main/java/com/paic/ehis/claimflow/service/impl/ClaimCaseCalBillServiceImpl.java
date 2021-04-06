@@ -298,19 +298,19 @@ public class ClaimCaseCalBillServiceImpl implements IClaimCaseCalBillService
                     // 全赔付
                     if (claimFlag.equals("01")) {
                         //calConclusionVo.setPaymentDifference(payAmount.subtract(prePayAmount));
-                        calConclusionVo.setPayAmount(payAmount.subtract(prePayAmount));
+                        claimCaseCal.setPayAmount(payAmount.subtract(prePayAmount));
                     }
                     if (claimFlag.equals("02")) {
                         BigDecimal subtract = sumBillAmount.subtract(discountAmount); // 本次 折后金额
                         BigDecimal subtract1 = preSumBillAmount.subtract(preDiscountAmount); // 原案件 折后金额
                        //calConclusionVo.setPaymentDifference(subtract.subtract(subtract1));
-                        calConclusionVo.setPayAmount(subtract.subtract(subtract1));
+                        claimCaseCal.setPayAmount(subtract.subtract(subtract1));
                     }
                 } else {
                     //本次支付差额（外币）=本次外币给付金额-申诉原案件外币给付金额；
                     BigDecimal diffValue = billAmount1.subtract(discountAmount1).subtract(precalConclusionVo.getPayAmountForeign());
-                    calConclusionVo.setPayAmountForeign(diffValue);
-                    calConclusionVo.setPayAmount(diffValue.multiply(voRate));
+                    claimCaseCal.setPayAmountForeign(diffValue);
+                    claimCaseCal.setPayAmount(diffValue.multiply(voRate));
 
                 }
             }

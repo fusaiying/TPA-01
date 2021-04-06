@@ -151,6 +151,8 @@ public class ClaimCaseCalBillServiceImpl implements IClaimCaseCalBillService
     public int billDetailsSave(BillDetailDTO billDetailDTO) {
 
         String rptNo = billDetailDTO.getBillDetailList().get(0).getRptNo();
+        int index = rptNo.indexOf("-");
+
         int size=0;
         String claimFlag = "";
         BigDecimal billTotalAmount=new BigDecimal(String.valueOf(0.00));
@@ -217,7 +219,9 @@ public class ClaimCaseCalBillServiceImpl implements IClaimCaseCalBillService
             exchangeRate.setParities(new BigDecimal(1));
         }
         if ("01".equals(claimFlag)){//非全赔,如果是全赔，默认是账单总金额不变，且cal表账单总金额字段未加
-            claimCaseCal.setCalAmount(pay);
+            if(index < 0 ) {
+                claimCaseCal.setCalAmount(pay);
+            }
             claimCaseCal.setPayAmount(pay);
             claimCaseCal.setDebtAmount(new BigDecimal(String.valueOf(0.00)));
             //外币给付金额   1、非全赔医院：根据账单币种及汇率对赔付金额进行汇率转换
@@ -227,7 +231,9 @@ public class ClaimCaseCalBillServiceImpl implements IClaimCaseCalBillService
             claimCaseCal.setCalAmount(pay);
             //追讨金额=账单金额-折扣金额-赔付金额-流水号自付额；
             claimCaseCal.setDebtAmount(billTotalAmount.subtract(totalDiscountAmount).subtract(totalSelfAmount).subtract(claimCaseCal.getCalAmount()));
-            claimCaseCal.setPayAmount(billTotalAmount.subtract(totalDiscountAmount));
+            if(index < 0 ) {
+                claimCaseCal.setPayAmount(billTotalAmount.subtract(totalDiscountAmount));
+            }
             //外币给付金额   2、全赔医院：根据账单币种及汇率对折后金额进行汇率转换
            // claimCaseCal.setPayAmountForeign((billTotalAmount.subtract(totalDiscountAmount)).divide(exchangeRate.getParities(),2,BigDecimal.ROUND_HALF_DOWN));
         }
@@ -246,19 +252,21 @@ public class ClaimCaseCalBillServiceImpl implements IClaimCaseCalBillService
 
             BigDecimal voRate = calConclusionVo.getExchangeRate();
             voRate = voRate == null ? exchangeRate.getParities() : voRate;
-            //01-非全赔
-            if("01".equals(claimFlag)) {
-                if(payAmount1 != null) {
-                    //BigDecimal payAmountForeign = payAmount1.divide(voRate,20,BigDecimal.ROUND_HALF_UP);
-                    claimCaseCal.setPayAmountForeign(payAmount1);
+            if(index < 0) {
+                //01-非全赔
+                if("01".equals(claimFlag)) {
+                    if(payAmount1 != null) {
+                        //BigDecimal payAmountForeign = payAmount1.divide(voRate,20,BigDecimal.ROUND_HALF_UP);
+                        claimCaseCal.setPayAmountForeign(payAmount1);
+                    }
                 }
-            }
-           // 02-全赔
-            if("02".equals(claimFlag)) {
-                if(billAmount1 != null && discountAmount1 != null) {
-                    BigDecimal subtractVal = billAmount1.subtract(discountAmount1);
-                   // BigDecimal payAmountForeign = subtractVal.divide(voRate,20,BigDecimal.ROUND_HALF_UP);
-                    claimCaseCal.setPayAmountForeign(subtractVal);
+                // 02-全赔
+                if("02".equals(claimFlag)) {
+                    if(billAmount1 != null && discountAmount1 != null) {
+                        BigDecimal subtractVal = billAmount1.subtract(discountAmount1);
+                        // BigDecimal payAmountForeign = subtractVal.divide(voRate,20,BigDecimal.ROUND_HALF_UP);
+                        claimCaseCal.setPayAmountForeign(subtractVal);
+                    }
                 }
             }
 
@@ -269,7 +277,7 @@ public class ClaimCaseCalBillServiceImpl implements IClaimCaseCalBillService
              */
             /** start */
             ClaimCaseCal nowClaimCaseCal = claimCaseCalMapper.selectClaimCaseCalByRptNo(rptNo);
-            if(rptNo.indexOf("-") > 0 && (nowClaimCaseCal.getCreateTime().getTime() == nowClaimCaseCal.getUpdateTime().getTime())) {
+            if(index > 0 && (nowClaimCaseCal.getCreateTime().getTime() == nowClaimCaseCal.getUpdateTime().getTime())) {
                 CalConclusionVo precalConclusionVo = claimCaseCalMapper.selectPreCalConclusionByRptNo(rptNo);
                 if(precalConclusionVo != null) {
                     precalConclusionVo = claimCaseCalMapper.selectClaimCaseCalInformation(precalConclusionVo.getRptNo());

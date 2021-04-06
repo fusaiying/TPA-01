@@ -317,7 +317,7 @@ public class ClaimCaseCalBillServiceImpl implements IClaimCaseCalBillService
                 }  else {
                     //BigDecimal exchangeRateValue = nowClaimCaseCal.getExchangeRate() == null ? new BigDecimal(1) : nowClaimCaseCal.getExchangeRate();
                     claimCaseCal.setPayAmount(claimCaseCal.getPayAmountForeign());
-                    claimCaseCal.setPayAmountForeign(nowPayAmount);
+                    claimCaseCal.setPayAmountForeign(claimCaseCal.getPayAmountForeign());
                 }
             }
             /** end */
